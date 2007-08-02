@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entrypoints>
+  <entrypoint>
+    <name>test-mod-template</name>
+    <uri>ffcpl:/test/mod-template-test/xunit</uri>
+    <indexable>
+      <title>PURLs Library Tests</title>
+      <desc>PURLs Template unit-test suite</desc>
+      <keywords/>
+    </indexable>
+    <categories>xunit</categories>
+    <group>OCLC</group>
+    <icon/>
+  </entrypoint>
+ </entrypoints>

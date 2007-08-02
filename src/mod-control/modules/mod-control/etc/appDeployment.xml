@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<appModules>
+<!--	<update>
+		<match>mod-control</match>
+		<uri>file:/Users/dwood/Documents/Zepheira/svn/repository/trunk/customers/OCLC/PURL2/src/deploy/mod-control-0.0.1.jar</uri>
+	</update> -->
+	<update>
+		<match>mod-session</match>
+		<uri>file:/Users/dwood/Documents/Zepheira/svn/repository/trunk/customers/OCLC/PURL2/src/deploy/mod-session-0.0.1.jar</uri>
+	</update>
+	<update>
+		<match>mod-template</match>
+		<uri>file:/Users/dwood/Documents/Zepheira/svn/repository/trunk/customers/OCLC/PURL2/src/deploy/mod-template-0.0.1.jar</uri>
+	</update>
+	<update>
+		<match>test-mod-template</match>
+		<uri>file:/Users/dwood/Documents/Zepheira/svn/repository/trunk/customers/OCLC/PURL2/src/deploy/test-mod-template-0.0.1.jar</uri>
+	</update>
+	<update>
+		<match>mod-admin</match>
+		<uri>file:/Users/dwood/Documents/Zepheira/svn/repository/trunk/customers/OCLC/PURL2/src/deploy/mod-admin-0.0.1.jar</uri>
+	</update>
+	<update>
+		<match>test-mod-admin</match>
+		<uri>file:/Users/dwood/Documents/Zepheira/svn/repository/trunk/customers/OCLC/PURL2/src/deploy/test-mod-admin-0.0.1.jar</uri>
+	</update>	
+	
+</appModules>

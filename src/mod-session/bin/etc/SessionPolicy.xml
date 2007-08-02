@@ -1,0 +1,16 @@
+<SessionPolicy>
+	<zone>
+		<match>.*/(template)/.*</match>
+		<path>/</path>
+		<token>cookie</token>
+		<type>
+			<simple />
+		</type>
+	</zone>
+	<meta>
+		<id>1060NetKernelSession</id>
+		<max-sessions>100</max-sessions>
+		<max-duration>7200000</max-duration>
+		<min-duration>3600000</min-duration>
+	</meta>
+</SessionPolicy>

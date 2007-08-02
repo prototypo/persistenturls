@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testlist title="PURL Unit Tests">
+  <desc>
+    <div>
+      This is the set of unit tests for the PURL Template Library.
+    </div>
+  </desc>
+  <group title="Template Accessor Tests">
+    <uri>ffcpl:/test/xunit/testlist-template.xml</uri>
+  </group>
+</testlist>
