@@ -2,7 +2,7 @@
 
 # Make HTML from XML and place into $OUTDIR.
 
-OUTDIR=../customer-area/requirements
+OUTDIR=../site/project/purl/documentation/requirements
 
 for i in *.xml; do
   STEM=`echo $i | sed -e 's/.xml//g'`;
