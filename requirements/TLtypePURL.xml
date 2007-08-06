@@ -24,7 +24,7 @@
 	<!-- items may have rel='new' or 'todo' -->
 	<!--
 	<functionality>
-		<item>TODO</item>
+		<item></item>
 	</functionality>
 	-->
 	
@@ -51,11 +51,9 @@
 	-->
 	
 	<implementedby>
-		<item>purlcreate</item>
-		<item>purlmodify</item>
+		<item>purl</item>
 		<item>PURLAccessor</item>
-		<item>purlscreate</item>
-		<item>purlsmodify</item>
+		<item>purls</item>
 		<item>PURLSAccessor</item>
 	</implementedby>
 	

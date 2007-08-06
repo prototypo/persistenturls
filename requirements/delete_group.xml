@@ -4,9 +4,7 @@
 	
 	<reference>delete_group</reference>
 		
-	<!--
-	<url></url>
-	-->
+	<url>http://purlz.org/admin/group.html</url>
 
 	<!--
 	<depiction>
@@ -18,7 +16,7 @@
 	-->
 
   
-	<history>None</history>
+	<history>Created for PURL 2.0</history>
 	
   
 	<!-- items may have rel='new' or 'todo' -->

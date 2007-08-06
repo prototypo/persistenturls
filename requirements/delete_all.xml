@@ -18,7 +18,7 @@
 	-->
 
   
-	<history>None</history>
+	<history>Created for PURL 2.0</history>
 	
   
 	<!-- items may have rel='new' or 'todo' -->
@@ -47,7 +47,7 @@
 	
 	<!--
 	<implementedby>
-		<item>TODO</item>
+		<item></item>
 	</implementedby>
 	-->
 	

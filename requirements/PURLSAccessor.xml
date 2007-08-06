@@ -50,9 +50,7 @@
 		<!--
 		<childof></childof>
 		-->
-		<childoflink>purlscreate</childoflink>
-		<childoflink>purlsmodify</childoflink>
-		<childoflink>purlsdelete</childoflink>
+		<childoflink>purls</childoflink>
 		
 	
 		<!--

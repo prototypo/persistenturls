@@ -50,10 +50,7 @@
 		<!--
 		<childof></childof>
 		-->
-		<childoflink>domainregister</childoflink>
-		<childoflink>domainmodify</childoflink>
-		<childoflink>domainsearch</childoflink>
-		<childoflink>domaindelete</childoflink>
+		<childoflink>domain</childoflink>
 		
 	
 		<!--

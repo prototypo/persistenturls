@@ -50,10 +50,7 @@
 		<!--
 		<childof></childof>
 		-->
-		<childoflink>purlcreate</childoflink>
-		<childoflink>purlmodify</childoflink>
-		<childoflink>purlsearch</childoflink>
-		<childoflink>purldelete</childoflink>
+		<childoflink>purl</childoflink>
 		
 	
 		<!--

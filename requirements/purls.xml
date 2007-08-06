@@ -1,13 +1,12 @@
 <document>
 
-	<name>Batch add PURLs</name>
+	<name>Batch PURL Administration Form</name>
 	
-	<reference>TLbatchAddPURLs</reference>
+	<reference>purls</reference>
 		
-	<!--
-	<url></url>
-	-->
-
+	
+	<url>http://purlz.org/admin/purls.html</url>
+	
 	<!--
 	<depiction>
 		<url>images/home.jpg</url>
@@ -18,17 +17,15 @@
 	-->
 
   
-	<history>Exists in PURL 1.0</history>
+	<history>Major changes for PURL 2.0</history>
 	
   
 	<!-- items may have rel='new' or 'todo' -->
-	<!--
 	<functionality>
-		<item></item>
+		<item>Collect batch PURL information via a form for further processing.</item>
+		<item rel='new'>Use AJAX methods to allow for any action on a group of purls (create, modify or delete).</item>
 	</functionality>
-	-->
 	
-	<!--
 	<graphics>	
 		<item>
 			<url>http://www.oclc.org/common/images/logos/oclclogo_gray.gif</url>
@@ -36,47 +33,19 @@
 			<linksto>http://www.oclc.org/</linksto>
 		</item>	
 	</graphics>
-	-->
 	
-	<!--
 	<assumptions>This page is served by a Web server and is URL addressable.</assumptions>
-	-->
 	
-	<!--
-	<preconditions>None</preconditions>
-	-->
+	<preconditions>Requests for modification or deletion require that PURLs already exist.</preconditions>
 	
-	<!--
-	<postconditions>None</postconditions>
-	-->
+	<postconditions>New PURLs may be created upon creation request.</postconditions>
 	
-	<implementedby>
-		<item>purls</item>
-		<item>PURLSAccessor</item>
-	</implementedby>
-	
-	<formerlyimplementedby>
-		<item>batch_add</item>
-		<item>batch.pl.cgi</item>
-		<item>power</item>
-	</formerlyimplementedby>
-	
-	<!--
 	<linksto>
 		
-		<parentof></parentof>
-		<parentoflink></parentoflink>
-		<childof></childof>
-		<childoflink>index</childoflink>
+		<parentoflink>PURLSAccessor</parentoflink>
+		<childoflink>home</childoflink>
 		
-		<external>Community links (TBD)</external>
-		<externallink>
-			<url></url>
-			<description></description>
-		</externallink>
-
 	</linksto>
-	-->
 	
 	<!--
 	<assignedto>

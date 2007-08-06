@@ -50,10 +50,7 @@
 		<!--
 		<childof></childof>
 		-->
-		<childoflink>userregister</childoflink>
-		<childoflink>usermodify</childoflink>
-		<childoflink>usersearch</childoflink>
-		<childoflink>userdelete</childoflink>
+		<childoflink>user</childoflink>
 		
 	
 		<!--

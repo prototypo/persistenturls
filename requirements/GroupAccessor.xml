@@ -50,10 +50,7 @@
 		<!--
 		<childof></childof>
 		-->
-		<childoflink>groupcreate</childoflink>
-		<childoflink>groupmodify</childoflink>
-		<childoflink>groupsearch</childoflink>
-		<childoflink>groupdelete</childoflink>
+		<childoflink>group</childoflink>
 		
 	
 		<!--

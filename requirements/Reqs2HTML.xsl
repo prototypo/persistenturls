@@ -38,7 +38,7 @@
 
 		<body>
 
-		 <a href="http://zepheira.com/"><img src="http://outreach.zepheira.com/oclc/requirements/images/zepheiralogo.png"
+		 <a href="http://zepheira.com/"><img src="/images/zepheiralogo.png"
 	align="right" border="0"/></a>
 
 		<h1>PURL 2: <xsl:value-of select="/document/name"/></h1>
