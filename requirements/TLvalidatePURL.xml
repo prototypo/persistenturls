@@ -4,9 +4,7 @@
 	
 	<reference>TLvalidatePURL</reference>
 		
-	<!--
-	<url></url>
-	-->
+	<url>http://purlz.org/admin/targeturl/</url>
 
 	<!--
 	<depiction>

@@ -25,7 +25,6 @@
 		<item>Collect PURL information via a form for further processing.</item>
 		<item rel='new'>Use AJAX methods to allow for any action on a PURL (create, modify, search, delete or validate).</item>
 		<item rel='new'>NB: Creation may take several forms, depending on parameters: simple, partial redirect, chain, clone.</item>
-		<item rel='new'>NB: Validation and searching both use the HTTP GET verb with differing parameters.</item>
 	</functionality>
 	
 	<graphics>	
