@@ -6,7 +6,7 @@
 	-->
     <identity>
 		<uri>urn:org:purl:admin</uri>
-		<version>0.0.13</version>
+		<version>0.0.14</version>
     </identity>
 	<info>
 		<name>PURL Admin Module</name>
@@ -19,6 +19,7 @@
     </publisher>
 	<export>
 		<uri>
+			<match>ffcpl:/docs/.*</match>
 			<match>ffcpl:/domain.*</match>
 			<match>ffcpl:/group.*</match>
 			<match>ffcpl:/purls.*</match>
@@ -43,6 +44,10 @@
 		<this>
 			<match>ffcpl:/resources/.*</match>
 		</this>
+		<rewrite>
+			<match>ffcpl:/docs/(.*)</match>
+			<to>ffcpl:/resources/$1</to>
+		</rewrite>
 		<rewrite>
 			<match>ffcpl:/admin/(.*.bsh.*)</match>
 			<to>active:beanshell+operator@ffcpl:/resources/$1</to>
