@@ -24,6 +24,10 @@
 	</export>
 	<rewrite>
 	    <rule>
+		    <match>ffcpl:/docs/</match>
+		    <to>ffcpl:/resources/index.html</to>
+        </rule>	    
+	    <rule>
 		    <match>ffcpl:/docs/(.*)</match>
 		    <to>ffcpl:/resources/$1</to>
         </rule>
