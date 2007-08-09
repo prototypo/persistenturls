@@ -1,17 +1,87 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!--                                                                            ==
+==  @(#)homepage.html.in  1.10  12/29/97 ==
+==  Copyright (c) 1996, 2007 OCLC Online Computer Library Center, Inc.          ==
+==  6565 Frantz Road, Dublin, Ohio 43017-0702.                                  ==
+==  OCLC is a registered trademark of OCLC Online Computer Library Center, Inc. ==
+==  Some rights reserved under the copyright laws of the United States.         ==
+==                                                                              -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-
-	<title>help</title>
-	
+	<title>Persistent URL Home Page</title>
+	<link href="http://www.oclc.org/common/css/basic_oclc.css" rel="stylesheet" type="text/css">
+	<link href="http://www.oclc.org/common/css/researchproject_oclc.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
+	<div align="center">
+		<table cellspacing="0" id="bnrResearch">
+			<tr>
+				<td id="tdResearch"><a href="http://www.oclc.org/research/">A Project of OCLC Research</a></td>
 
-	<p>Prototype index page</p>
+				<td id="tdOclc"><a href="http://www.oclc.org/">OCLC Online Computer Library Center</a></td>
+			</tr>
+
+			<tr>
+				<td id="tdProject">
+					<h2>PURLS</h2>
+				</td>
+
+				<td id="tdLogo"><a href="http://www.oclc.org/"><img src="http://www.oclc.org/common/images/logos/oclclogo_gray.gif" alt="OCLC" width="60" height="31"></a></td>
+			</tr>
+		</table>
+	</div>
+
+	<p>A PURL is a <b>P</b>ersistent <b>U</b>niform <b>R</b>esource <b>L</b>ocator. Functionally, a PURL is a URL. However, instead of pointing directly to the location of an Internet resource, a PURL points to an intermediate resolution service. The PURL resolution service associates the PURL with the actual URL and returns that URL to the client. The client can then complete the URL transaction in the normal fashion. In Web parlance, this is a standard HTTP <em>redirect</em>.</p>
+
+	<p>The OCLC PURL Service has been strongly influenced by the active participation of <a href="http://purl.oclc.org/OCLC/RSPD">OCLC's Office of Research</a> in the Internet Engineering Task Force Uniform Resource Identifier working groups. There is nothing incompatible between PURLs and the ongoing URN (Uniform Resource Name) work. PURLs satisfy many of the requirements of URNs using currently deployed technologies and can be transitioned smoothly into a URN architecture once it is deployed.</p>
+
+	<center>
+		<table cellspacing="16">
+			<tr>
+				<td halign="left" valign="top" width="50%">
+					<b>Further Information and Resources</b>
+
+					<ul>
+						<li>A <a href="brief_intro.html">brief</a> introduction to PURLs</li>
+
+						<li>A <a href="long_intro.html">longer</a> introduction to PURLs</li>
+
+						<li>Frequently Asked <a href="faq.html">Questions</a></li>
+
+						<li>The PURL <a href="http://www.purlz.org/">Community</a> site (downloads, mailing lists, documentation, etc)</li>
+					</ul>
+				</td>
+
+				<td></td>
+
+				<td halign="left" valign="top" width="50%">
+					<b>Interacting with this Resolver</b>
+
+					<ul>
+						<li>Create your <a href="/getting_started.html">first</a> PURL</li>
+
+						<li><a href="/user_register.html">Register</a> as a user</li>
+
+						<li>Administer <a href="/purl.html">individual PURLs</a></li>
+
+						<li>Administer <a href="/purls.html">batches of PURLs</a></li>
+
+						<li>Administer <a href="/domain.html">domains</a></li>
+
+						<li>Administer <a href="/user.html">users</a></li>
+
+						<li>Administer <a href="/group.html">groups</a></li>
+					</ul>
+				</td>
+			</tr>
+		</table>
+	</center>
+	<hr size="4">
+		<p>This resolver is a <font color="red">Prototype</font> of an upgraded PURL service.  It should be solely for <font color="red">TESTING</font> the compliance of the software to its specification.</p>
+	<hr size="4">
 
 </body>
 </html>
