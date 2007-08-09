@@ -6,7 +6,7 @@
 	-->
     <identity>
 		<uri>urn:org:purl:session</uri>
-		<version>0.0.2</version>
+		<version>0.0.4</version>
     </identity>
 	<info>
 		<name>PURL Session Module</name>
