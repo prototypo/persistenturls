@@ -1,0 +1,389 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<title>PURL User Administration</title>
+
+<!-- Prototype v1.5.0, Script.aculo.us v1.7.0 -->
+
+<!--
+<script src="javascripts/prototype.js" type="text/javascript">
+</script>
+<script src="javascripts/scriptaculous.js" type="text/javascript">
+</script>
+-->
+
+<!-- http://ajaxify.com/run/Lib/js/ajaxCaller.js and http://ajaxify.com/run/Lib/js/util.js -->
+
+<script type="text/javascript" src="javascripts/util.js">
+</script>
+
+<script type="text/javascript" src="javascripts/ajaxCaller.js">
+</script>
+
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+	<!--
+	
+	var actionelements=["create", "modify", "search", "delete"];
+	
+	function showAction()
+	{
+		userchoice = document.naviform.naviselect;
+		destination = userchoice.options[userchoice.selectedIndex].value;
+		clearResults();
+		// Hide action divs except the one we want.
+		for ( i=0 ; i < actionelements.length ; i++ ) {
+			if ( actionelements[i] == destination ) {
+				setVisibility(destination, 'inline');
+			} else {
+				setVisibility(actionelements[i], 'none');
+			}
+		}
+	}
+	
+	function setVisibility(id, visibility) {
+	document.getElementById(id).style.display = visibility;
+	}
+	
+	function signalLoadingResults() {
+	  resultBlock = $("results");
+	  resultBlock.innerHTML = "<p>Loading ...</p>";
+	}
+
+	function clearResults() {
+	  resultBlock = $("results");
+	  resultBlock.innerHTML = "<p>&nbsp;</p>";
+	}
+	
+	function onResponse(text, headers, callingContext) {
+	  var resultBlock = $("results");
+	  resultBlock.innerHTML =
+	    "<h3>Response Body</h3>"
+	    + "<pre class='response'>" + text + "</pre>";
+	 resultBlock.innerHTML +=
+	    "<h3>Response Headers:</h3>"
+	    + "<pre class='response'>" + getHeaderHTML(headers) + "</pre>";
+	  resultBlock.innerHTML +=
+	      "<h3>Calling Context:</h3>\n"
+	    + "<p class='explanation'>The calling context is a variable set "
+	    + "by the caller. It's not passed to the server.  It is stored at "
+	    + "the time of the call and matched back to the call when it "
+	    + "returns.</p>"
+	    + "<div class='response'>" + callingContext + "</div>";
+
+	}
+	
+	// In support of function onResponse, above.
+	function getHeaderHTML(headers) {
+	  if (ajaxCaller.shouldMakeHeaderMap) { // TODO check for array instead?
+	    message = "";
+	    for (key in headers) {
+	      message += "[" + key + "] -&gt; [" + headers[key] + "]<br/>";
+	    }
+	    return message;
+	  } else {
+	    return headers;
+	  }
+	}
+	
+	// For Modify requests via HTTP PUT, in support of function modifySubmit.
+	function getParametersForBodyRequest() {
+	  urlVars = {
+			name: $('m_name').value,
+			affiliation: $('m_affiliation').value,
+			email: $('m_email').value,
+			id: $('m_id').value,
+			passwd: $('m_passwd').value,
+			hint: $('m_hint').value,
+			justification: $('m_justification').value
+	  }
+	  bodyType = "text/html";
+	  body = "";
+	  parameters = {
+	    urlVars: urlVars,
+	    bodyType: bodyType,
+	    body: body
+	  };
+	  return parameters;
+	}
+	
+	function createSubmit() {
+		// TODO: Complete and test.
+		signalLoadingResults();
+		urlVars = {}
+		bodyVars = {
+			name: $('c_name').value,
+			affiliation: $('c_affiliation').value,
+			email: $('c_email').value,
+			id: $('c_id').value,
+			passwd: $('c_passwd').value,
+			hint: $('c_hint').value,
+			justification: $('c_justification').value
+		}
+		ajaxCaller.postVars("/admin/user/", bodyVars, urlVars, onResponse, false, "A POST request to create a new user.");
+		return false;
+	}
+	
+	function modifySubmit() {
+		// TODO: Complete and test.
+		signalLoadingResults();
+		bodyParameters = getParametersForBodyRequest();
+	  ajaxCaller.putBody("/admin/user/", bodyParameters.urlVars, onResponse, false, "A PUT request to modify a user.", bodyParameters.bodyType, bodyParameters.body);
+		return false;
+	}
+
+	function searchSubmit() {
+		// TODO: Complete and test.
+	  signalLoadingResults();
+		bodyVars =  {
+				name: $('s_name').value,
+				affiliation: $('s_affiliation').value,
+				email: $('s_email').value,
+				id: $('s_id').value
+	  }
+	  ajaxCaller.get("/admin/user/", bodyVars, onResponse, false, "A GET request to search for users.");
+		return false;
+	}
+
+	function deleteSubmit() {
+		// TODO: Complete and test.
+		signalLoadingResults();
+		bodyVars =  {
+				id: $('d_id').value
+	  }
+		ajaxCaller.deleteIt("/admin/user/", bodyVars, onResponse, false, "A DELETE request to delete a user.");
+		return false;
+	}
+
+	// -->
+//]]>
+</script>
+</head>
+
+   <body>
+	<div id="header">
+		<h1>PURL User Administration</h1>
+	</div>
+
+	<div id="content">	
+
+  	<div id="navigation">
+		<p class="actiontext">Choose an action to take on users:</p>
+
+		<form name="naviform" id="naviform">
+			<center>
+				<select name="naviselect" onchange="showAction()">
+					<option value="">
+						--- Select your action ---
+					</option>
+
+					<option value="create">
+						Register a new user
+					</option>
+
+					<option value="modify">
+						Modify an existing user
+					</option>
+
+					<option value="search">
+						Search for a user
+					</option>
+
+					<option value="delete">
+						Delete a user
+					</option>
+				</select>
+			</center>
+		</form>
+	</div>
+
+	<div id="create" style="display: none;">
+		<p class="actiontext">Register a new user:</p>
+
+		<form action="#" name="createForm" onsubmit="return createSubmit()" id="createForm">
+			<table class="actiontable" summary="action table">
+				<tbody><tr>
+					<td class="property">Full name:</td>
+
+					<td><input id="c_name" name="c_name" type="text" /></td>
+				</tr>
+
+				<tr>
+					<td class="property">Affiliation:</td>
+
+					<td class="value"><input id="c_affiliation" name="c_affiliation" type="text" /></td>
+				</tr>
+
+				<tr>
+					<td class="property">E-mail address:</td>
+
+					<td class="value"><input id="c_email" name="c_email" type="text" /></td>
+				</tr>
+
+				<tr>
+					<td class="property">User ID:</td>
+
+					<td class="value"><input id="c_id" name="c_id" type="text" /></td>
+				</tr>
+
+				<tr>
+					<td class="property">Password:</td>
+
+					<td class="value"><input id="c_passwd" name="c_passwd" type="text" /></td>
+				</tr>
+
+				<tr>
+					<td class="property">Password hint:</td>
+
+					<td class="value"><input id="c_hint" name="c_hint" type="text" /></td>
+				</tr>
+
+				<tr>
+					<td class="property">Justification:</td>
+
+					<td class="value">
+					<textarea rows="5" cols="40" id="c_justification" name="c_justification"></textarea></td>
+				</tr>
+
+				<tr colspan="2">
+					<td><input value="Register user" type="submit" /></td>
+				</tr>
+			</tbody></table>
+		</form>
+	</div>
+
+	<div id="modify" style="display: none;">
+		<p class="actiontext">Modify a user.</p><!-- TODO: Populate existing data from server before presentation to user. -->
+
+		<form action="#" name="modifyForm" onsubmit="return modifySubmit()" id="modifyForm">
+			<table class="actiontable" summary="action table">
+				<tbody><tr>
+					<td class="property">Full name:</td>
+
+					<td class="value"><input id="m_name" name="m_name" type="text" /></td>
+				</tr>
+
+				<tr>
+					<td class="property">Affiliation:</td>
+
+					<td class="value"><input id="m_affiliation" name="m_affiliation" type="text" /></td>
+				</tr>
+
+				<tr>
+					<td class="property">E-mail address:</td>
+
+					<td class="value"><input id="m_email" name="m_email" type="text" /></td>
+				</tr>
+
+				<tr>
+					<td class="property">User ID:</td>
+
+					<td class="value"><input id="m_id" name="m_id" type="text" /></td>
+				</tr>
+
+				<tr>
+					<td class="property">Password:</td>
+
+					<td class="value"><input id="m_passwd" name="m_passwd" type="text" /></td>
+				</tr>
+
+				<tr>
+					<td class="property">Password hint:</td>
+
+					<td class="value"><input id="m_hint" name="m_hint" type="text" /></td>
+				</tr>
+
+				<tr>
+					<td class="property">Justification:</td>
+
+					<td class="value">
+					<textarea rows="5" cols="40" id="m_justification" name="m_justification"></textarea></td>
+				</tr>
+
+				<tr colspan="2">
+					<td><input value="Modify user" type="submit" /></td>
+				</tr>
+			</tbody></table>
+		</form>
+	</div>
+
+	<div id="search" style="display: none;">
+		<p class="actiontext">Search for a user.</p>
+
+		<form action="#" name="searchForm" onsubmit="return searchSubmit()" id="searchForm">
+			<table class="actiontable" summary="action table">
+				<tbody><tr>
+					<td class="property">Full name:</td>
+
+					<td class="value"><input id="s_name" name="s_name" type="text" /></td>
+				</tr>
+
+				<tr colspan="2">
+					<td align="center"><b>or</b></td>
+				</tr>
+
+				<tr>
+					<td class="property">Affiliation:</td>
+
+					<td class="value"><input id="s_affiliation" name="s_affiliation" type="text" /></td>
+				</tr>
+
+				<tr colspan="2">
+					<td align="center"><b>or</b></td>
+				</tr>
+
+				<tr>
+					<td class="property">E-mail address:</td>
+
+					<td class="value"><input id="s_email" name="s_email" type="text" /></td>
+				</tr>
+
+				<tr colspan="2">
+					<td align="center"><b>or</b></td>
+				</tr>
+
+				<tr>
+					<td class="property">User ID:</td>
+
+					<td class="value"><input id="s_id" name="s_id" type="text" /></td>
+				</tr>
+
+				<tr colspan="2">
+					<td><input value="Search for user" type="submit" /></td>
+				</tr>
+			</tbody></table>
+		</form>
+	</div>
+
+	<div id="delete" style="display: none;">
+		<p class="actiontext">Delete a user.</p>
+
+		<form action="#" name="deleteForm" onsubmit="return deleteSubmit()" id="deleteForm">
+			<table class="actiontable" summary="action table">
+				<tbody><tr>
+					<td class="property">User ID:</td>
+
+					<td class="value"><input id="d_id" name="d_id" type="text" /></td>
+				</tr>
+
+				<tr colspan="2">
+					<td><input value="Delete user" type="submit" /></td>
+				</tr>
+			</tbody></table>
+		</form>
+	</div> <!-- navigation -->
+
+	</div><!-- content -->
+
+	<div id="results">
+	</div>
+		
+	<div id="footer">
+		<hr />
+		<p>NB: This page requires Javascript.</p>
+	</div>
+
+</body>
+</html>
