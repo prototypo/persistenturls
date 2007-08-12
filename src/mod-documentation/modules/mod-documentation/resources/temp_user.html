@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link type="text/css" rel="stylesheet" href="style.css" />
 
 <title>PURL User Administration</title>
 
@@ -169,12 +170,13 @@
 
 	<div id="content">	
 
-  	<div id="navigation">
-		<p class="actiontext">Choose an action to take on users:</p>
+    	<div id="navigation">
 
 		<form name="naviform" id="naviform">
-			<center>
-				<select name="naviselect" onchange="showAction()">
+		<fieldset>
+		<legend>Choose an action to take on users:</legend>
+
+			<select name="naviselect" onchange="showAction()">
 					<option value="">
 						--- Select your action ---
 					</option>
@@ -194,20 +196,23 @@
 					<option value="delete">
 						Delete a user
 					</option>
-				</select>
-			</center>
+			</select>
+		</fieldset>
 		</form>
 	</div>
 
 	<div id="create" style="display: none;">
-		<p class="actiontext">Register a new user:</p>
 
 		<form action="#" name="createForm" onsubmit="return createSubmit()" id="createForm">
-			<table class="actiontable" summary="action table">
+
+		<fieldset>
+		<legend>Register a new user</legend>
+	
+	 	<table class="actiontable" summary="action table">
 				<tbody><tr>
 					<td class="property">Full name:</td>
 
-					<td><input id="c_name" name="c_name" type="text" /></td>
+					<td class="value"><input id="c_name" name="c_name" type="text" /></td>
 				</tr>
 
 				<tr>
@@ -246,18 +251,21 @@
 					<td class="value">
 					<textarea rows="5" cols="40" id="c_justification" name="c_justification"></textarea></td>
 				</tr>
+			</tbody>
+			</table>
 
-				<tr colspan="2">
-					<td><input value="Register user" type="submit" /></td>
-				</tr>
-			</tbody></table>
+			<input value="Submit" type="submit" />
+		</fieldset>
 		</form>
 	</div>
 
 	<div id="modify" style="display: none;">
-		<p class="actiontext">Modify a user.</p><!-- TODO: Populate existing data from server before presentation to user. -->
+		<!-- TODO: Populate existing data from server before presentation to user. -->
 
 		<form action="#" name="modifyForm" onsubmit="return modifySubmit()" id="modifyForm">
+		<fieldset>
+		<legend>Modify a user</legend>
+
 			<table class="actiontable" summary="action table">
 				<tbody><tr>
 					<td class="property">Full name:</td>
@@ -302,17 +310,21 @@
 					<textarea rows="5" cols="40" id="m_justification" name="m_justification"></textarea></td>
 				</tr>
 
-				<tr colspan="2">
-					<td><input value="Modify user" type="submit" /></td>
-				</tr>
-			</tbody></table>
+			</tbody>
+			</table>
+
+			<input value="Submit" type="submit" />
+			</fieldset>
 		</form>
 	</div>
 
 	<div id="search" style="display: none;">
-		<p class="actiontext">Search for a user.</p>
 
 		<form action="#" name="searchForm" onsubmit="return searchSubmit()" id="searchForm">
+
+		<fieldset>
+		<legend>Search for a user</legend>
+
 			<table class="actiontable" summary="action table">
 				<tbody><tr>
 					<td class="property">Full name:</td>
@@ -350,28 +362,30 @@
 					<td class="value"><input id="s_id" name="s_id" type="text" /></td>
 				</tr>
 
-				<tr colspan="2">
-					<td><input value="Search for user" type="submit" /></td>
-				</tr>
-			</tbody></table>
+			</tbody>
+			</table>
+
+			<input value="Sumbit" type="submit" />
+			</fieldset>
 		</form>
 	</div>
 
 	<div id="delete" style="display: none;">
-		<p class="actiontext">Delete a user.</p>
-
 		<form action="#" name="deleteForm" onsubmit="return deleteSubmit()" id="deleteForm">
+
+		<fieldset>
+		<legend>Delete a user</legend>
 			<table class="actiontable" summary="action table">
 				<tbody><tr>
 					<td class="property">User ID:</td>
 
 					<td class="value"><input id="d_id" name="d_id" type="text" /></td>
 				</tr>
+			</tbody>
+			</table>
 
-				<tr colspan="2">
-					<td><input value="Delete user" type="submit" /></td>
-				</tr>
-			</tbody></table>
+			<input value="Submit" type="submit" />
+			</fieldset>
 		</form>
 	</div> <!-- navigation -->
 
@@ -381,8 +395,9 @@
 	</div>
 		
 	<div id="footer">
-		<hr />
-		<p>NB: This page requires Javascript.</p>
+	<a href = "http://www.oclc.org/"><img align="left" src = "http://www.oclc.org/common/images/logos/oclclogo.jpg" alt="oclc" /></a> 
+	<br />
+	<a  href = "http://zepheira.com/"><img align="right" src = "http://purlz.org/images/zepheiralogo.png" alt="zepheira" /></a>
 	</div>
 
 </body>
