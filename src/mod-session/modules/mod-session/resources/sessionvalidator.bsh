@@ -4,8 +4,7 @@ import com.ten60.netkernel.urii.aspect.*;
 
 void main()
 {
-	System.out.println("HELLO");
-	sessionURI=context.getThisRequest().getArgument("session");
+/*	sessionURI=context.getThisRequest().getArgument("session");
 	tokenURI=sessionURI+"+key@ffcpl:/credentials";
 	//See if credentials exist...
 	req=context.createSubRequest(tokenURI);
@@ -26,7 +25,8 @@ void main()
 
 		//If they're valid return true.
 		b=true;
-	}
+	} */
+	b=true;
 	resp=context.createResponseFrom(new BooleanAspect(b));
 	resp.setMimeType("text/plain");
 }
