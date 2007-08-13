@@ -95,7 +95,6 @@
 			name: $('m_name').value,
 			affiliation: $('m_affiliation').value,
 			email: $('m_email').value,
-			id: $('m_id').value,
 			passwd: $('m_passwd').value,
 			hint: $('m_hint').value,
 			justification: $('m_justification').value
@@ -112,26 +111,35 @@
 	
 	function createSubmit() {
 		// TODO: Complete and test.
-		signalLoadingResults();
-		urlVars = {}
-		bodyVars = {
-			name: $('c_name').value,
-			affiliation: $('c_affiliation').value,
-			email: $('c_email').value,
-			id: $('c_id').value,
-			passwd: $('c_passwd').value,
-			hint: $('c_hint').value,
-			justification: $('c_justification').value
+		var my_id = $('c_id').value;
+		if ( my_id == null ) {
+			alert("You must provide a user id to identify the user you wish to create.  Please enter a user id.");
+		} else {
+			signalLoadingResults();
+			urlVars = {}
+			bodyVars = {
+				name: $('c_name').value,
+				affiliation: $('c_affiliation').value,
+				email: $('c_email').value,
+				passwd: $('c_passwd').value,
+				hint: $('c_hint').value,
+				justification: $('c_justification').value
+			}
+			ajaxCaller.postVars("/admin/user/" + my_id, bodyVars, urlVars, onPostResponse, false, "A POST request to create a new user.");
 		}
-		ajaxCaller.postVars("/admin/user/", bodyVars, urlVars, onResponse, false, "A POST request to create a new user.");
 		return false;
 	}
 	
 	function modifySubmit() {
 		// TODO: Complete and test.
-		signalLoadingResults();
-		bodyParameters = getParametersForBodyRequest();
-	  ajaxCaller.putBody("/admin/user/", bodyParameters.urlVars, onResponse, false, "A PUT request to modify a user.", bodyParameters.bodyType, bodyParameters.body);
+		var my_id = $('m_id').value;
+		if ( my_id == null ) {
+			alert("You must provide a user id to identify the user you wish to modify.  Please enter a user id.");
+		} else {
+			signalLoadingResults();
+			bodyParameters = getParametersForBodyRequest();
+		  ajaxCaller.putBody("/admin/user/" + my_id, bodyParameters.urlVars, onPutResponse, false, "A PUT request to modify a user.", bodyParameters.bodyType, bodyParameters.body);
+		}
 		return false;
 	}
 
@@ -144,17 +152,20 @@
 				email: $('s_email').value,
 				id: $('s_id').value
 	  }
-	  ajaxCaller.get("/admin/user/", bodyVars, onResponse, false, "A GET request to search for users.");
+	  ajaxCaller.get("/admin/user/", bodyVars, onGetResponse, false, "A GET request to search for users.");
 		return false;
 	}
 
 	function deleteSubmit() {
 		// TODO: Complete and test.
-		signalLoadingResults();
-		bodyVars =  {
-				id: $('d_id').value
-	  }
-		ajaxCaller.deleteIt("/admin/user/", bodyVars, onResponse, false, "A DELETE request to delete a user.");
+		var my_id = $('d_id').value;
+		if ( my_id == null ) {
+			alert("You must provide a user id to identify the user you wish to delete.  Please enter a user id.");
+		} else {
+			signalLoadingResults();
+			bodyVars =  {}
+			ajaxCaller.deleteIt("/admin/user/" + my_id, bodyVars, onDeleteResponse, false, "A DELETE request to delete a user.");
+		}
 		return false;
 	}
 
