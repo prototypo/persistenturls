@@ -5,7 +5,7 @@ body {
 	min-width: 700px;
 	font-family: "Trebuchet MS", sans-serif;
 	text-align: justify;
-	line-height: 1.6em;
+	line-height: 1.4em;
 	font-size: 0.85em;
 }
 
@@ -113,8 +113,14 @@ form {
 	padding: 20px 0px 0px 0px;
 }
 
+form .instructions {
+ 	margin: 0.5em 0.5em;
+	padding: 10px 10px 10px 10px;
+	background-color: #E6E6FA;	/* cornsilk */
+	font-style: italic;
+}
+
 fieldset {
-	
 	border: 2px solid #C1DAD7;
 	width: 30em
 }

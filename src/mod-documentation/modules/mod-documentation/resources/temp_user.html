@@ -176,6 +176,8 @@
 		<fieldset>
 		<legend>Choose an action to take on users:</legend>
 
+		<div class="instructions">Select an action for user administration.</div>
+
 			<select name="naviselect" onchange="showAction()">
 					<option value="">
 						--- Select your action ---
@@ -208,6 +210,8 @@
 		<fieldset>
 		<legend>Register a new user</legend>
 	
+		<div class="instructions">Fill in the following user information to create a new user.</div>
+
 	 	<table class="actiontable" summary="action table">
 				<tbody><tr>
 					<td class="property">Full name:</td>
@@ -265,6 +269,8 @@
 		<form action="#" name="modifyForm" onsubmit="return modifySubmit()" id="modifyForm">
 		<fieldset>
 		<legend>Modify a user</legend>
+
+		<div class="instructions">Modify any of the following user information.</div>
 
 			<table class="actiontable" summary="action table">
 				<tbody><tr>
@@ -325,6 +331,8 @@
 		<fieldset>
 		<legend>Search for a user</legend>
 
+		<div class="instructions">Search users based on any of the following characteristics.</div>
+
 			<table class="actiontable" summary="action table">
 				<tbody><tr>
 					<td class="property">Full name:</td>
@@ -375,6 +383,9 @@
 
 		<fieldset>
 		<legend>Delete a user</legend>
+
+		<div class="instructions">Delete a user based on their User ID. You will be prompted for confirmation to complete this action.</div>
+
 			<table class="actiontable" summary="action table">
 				<tbody><tr>
 					<td class="property">User ID:</td>
