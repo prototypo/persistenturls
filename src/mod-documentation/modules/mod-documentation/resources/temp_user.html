@@ -166,7 +166,7 @@
 	function createSubmit() {
 		// TODO: Complete and test.
 		var my_id = $('c_id').value;
-		if ( my_id == "" ) {
+		if ( my_id == "" | my_id == null ) {
 			alert("You must provide a user id to identify the user you wish to create.  Please enter a user id.");
 		} else {
 			signalLoadingResults();
@@ -187,7 +187,7 @@
 	function modifySubmit() {
 		// TODO: Complete and test.
 		var my_id = $('m_id').value;
-		if ( my_id == "" ) {
+		if ( my_id == "" | my_id == null ) {
 			alert("You must provide a user id to identify the user you wish to modify.  Please enter a user id.");
 		} else {
 			signalLoadingResults();
@@ -199,21 +199,27 @@
 
 	function searchSubmit() {
 		// TODO: Complete and test.
+		var my_id = $('s_id').value;
 	  signalLoadingResults();
 		bodyVars =  {
 				name: $('s_name').value,
 				affiliation: $('s_affiliation').value,
-				email: $('s_email').value,
-				id: $('s_id').value
+				email: $('s_email').value
 	  }
-	  ajaxCaller.get("/admin/user/", bodyVars, onGetResponse, false, "A GET request to search for users.");
+		if ( my_id == "" | my_id == null ) {
+			// No user id is given, so we call the parent resource.
+		  ajaxCaller.get("/admin/user/", bodyVars, onGetResponse, false, "A GET request to search for users.");
+		} else {
+			// We have a user id, so we call that resource directly.
+		  ajaxCaller.get("/admin/user/" + my_id, bodyVars, onGetResponse, false, "A GET request to search for users.");
+		}
 		return false;
 	}
 
 	function deleteSubmit() {
 		// TODO: Complete and test.
 		var my_id = $('d_id').value;
-		if ( my_id == "" ) {
+		if ( my_id == "" | my_id == null ) {
 			alert("You must provide a user id to identify the user you wish to delete.  Please enter a user id.");
 		} else {
 			signalLoadingResults();
