@@ -57,8 +57,62 @@
 	  resultBlock = $("results");
 	  resultBlock.innerHTML = "<p>&nbsp;</p>";
 	}
+
+	function onPostResponse(text, headers, callingContext) {
+	  var resultBlock = $("results");
+	  resultBlock.innerHTML =
+	    "<h3>Response Body</h3>"
+	    + "<pre class='response'>" + text + "</pre>";
+	 resultBlock.innerHTML +=
+	    "<h3>Response Headers:</h3>"
+	    + "<pre class='response'>" + getHeaderHTML(headers) + "</pre>";
+	  resultBlock.innerHTML +=
+	      "<h3>Calling Context:</h3>\n"
+	    + "<p class='explanation'>The calling context is a variable set "
+	    + "by the caller. It's not passed to the server.  It is stored at "
+	    + "the time of the call and matched back to the call when it "
+	    + "returns.</p>"
+	    + "<div class='response'>" + callingContext + "</div>";
+
+	}
+
+	function onPutResponse(text, headers, callingContext) {
+	  var resultBlock = $("results");
+	  resultBlock.innerHTML =
+	    "<h3>Response Body</h3>"
+	    + "<pre class='response'>" + text + "</pre>";
+	 resultBlock.innerHTML +=
+	    "<h3>Response Headers:</h3>"
+	    + "<pre class='response'>" + getHeaderHTML(headers) + "</pre>";
+	  resultBlock.innerHTML +=
+	      "<h3>Calling Context:</h3>\n"
+	    + "<p class='explanation'>The calling context is a variable set "
+	    + "by the caller. It's not passed to the server.  It is stored at "
+	    + "the time of the call and matched back to the call when it "
+	    + "returns.</p>"
+	    + "<div class='response'>" + callingContext + "</div>";
+
+	}
+
+	function onGetResponse(text, headers, callingContext) {
+	  var resultBlock = $("results");
+	  resultBlock.innerHTML =
+	    "<h3>Response Body</h3>"
+	    + "<pre class='response'>" + text + "</pre>";
+	 resultBlock.innerHTML +=
+	    "<h3>Response Headers:</h3>"
+	    + "<pre class='response'>" + getHeaderHTML(headers) + "</pre>";
+	  resultBlock.innerHTML +=
+	      "<h3>Calling Context:</h3>\n"
+	    + "<p class='explanation'>The calling context is a variable set "
+	    + "by the caller. It's not passed to the server.  It is stored at "
+	    + "the time of the call and matched back to the call when it "
+	    + "returns.</p>"
+	    + "<div class='response'>" + callingContext + "</div>";
+
+	}
 	
-	function onResponse(text, headers, callingContext) {
+	function onDeleteResponse(text, headers, callingContext) {
 	  var resultBlock = $("results");
 	  resultBlock.innerHTML =
 	    "<h3>Response Body</h3>"
@@ -112,7 +166,7 @@
 	function createSubmit() {
 		// TODO: Complete and test.
 		var my_id = $('c_id').value;
-		if ( my_id == null ) {
+		if ( my_id == "" ) {
 			alert("You must provide a user id to identify the user you wish to create.  Please enter a user id.");
 		} else {
 			signalLoadingResults();
@@ -133,7 +187,7 @@
 	function modifySubmit() {
 		// TODO: Complete and test.
 		var my_id = $('m_id').value;
-		if ( my_id == null ) {
+		if ( my_id == "" ) {
 			alert("You must provide a user id to identify the user you wish to modify.  Please enter a user id.");
 		} else {
 			signalLoadingResults();
@@ -159,7 +213,7 @@
 	function deleteSubmit() {
 		// TODO: Complete and test.
 		var my_id = $('d_id').value;
-		if ( my_id == null ) {
+		if ( my_id == "" ) {
 			alert("You must provide a user id to identify the user you wish to delete.  Please enter a user id.");
 		} else {
 			signalLoadingResults();
@@ -384,7 +438,7 @@
 			</tbody>
 			</table>
 
-			<input value="Sumbit" type="submit" />
+			<input value="Submit" type="submit" />
 			</fieldset>
 		</form>
 	</div>
