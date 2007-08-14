@@ -6,15 +6,6 @@
 
 <title>PURL User Administration</title>
 
-<!-- Prototype v1.5.0, Script.aculo.us v1.7.0 -->
-
-<!--
-<script src="javascripts/prototype.js" type="text/javascript">
-</script>
-<script src="javascripts/scriptaculous.js" type="text/javascript">
-</script>
--->
-
 <!-- http://ajaxify.com/run/Lib/js/ajaxCaller.js and http://ajaxify.com/run/Lib/js/util.js -->
 
 <script type="text/javascript" src="javascripts/util.js">
@@ -27,7 +18,10 @@
 //<![CDATA[
 	<!--
 	
-	var actionelements=["create", "modify", "search", "delete"];
+	var debugThisPage = true;
+	
+	var actionElements = ["create", "modify", "search", "delete"];
+	var labelElements = ["c_name_label", "c_affiliation_label", "c_email_label", "c_id_label", "c_passwd_label", "c_hint_label", "c_justification_label", "m_name_label", "m_affiliation_label", "m_email_label", "m_id_label", "m_passwd_label", "m_hint_label", "m_justification_label", "s_name_label", "s_affiliation_label", "s_email_label", "s_id_label", "d_id_label"];
 	
 	function showAction()
 	{
@@ -35,17 +29,28 @@
 		destination = userchoice.options[userchoice.selectedIndex].value;
 		clearResults();
 		// Hide action divs except the one we want.
-		for ( i=0 ; i < actionelements.length ; i++ ) {
-			if ( actionelements[i] == destination ) {
+		// TODO: Fix this loop; it works but is not efficient.
+		for ( i=0 ; i < actionElements.length ; i++ ) {
+			if ( actionElements[i] == destination ) {
 				setVisibility(destination, 'inline');
 			} else {
-				setVisibility(actionelements[i], 'none');
+				setVisibility(actionElements[i], 'none');
 			}
 		}
 	}
 	
 	function setVisibility(id, visibility) {
-	document.getElementById(id).style.display = visibility;
+		document.getElementById(id).style.display = visibility;
+	}
+
+	function setClass(id, newClass) {
+		document.getElementById(id).className = newClass;
+	}
+	
+	function clearErrorIndications() {
+		for ( i=0 ; i < labelElements.length ; i++ ) {
+			document.getElementById(labelElements[i]).className = "";
+		}
 	}
 	
 	function signalLoadingResults() {
@@ -57,82 +62,71 @@
 	  resultBlock = $("results");
 	  resultBlock.innerHTML = "<p>&nbsp;</p>";
 	}
+	
+	function printHTTPDetails(resultBlock, headers, callingContext) {
+		if (debugThisPage) {
+			resultBlock.innerHTML +=
+		    "<h3>Response Headers:</h3>"
+		    + "<pre class='response'>" + getHeaderHTML(headers) + "</pre>";
+		  resultBlock.innerHTML +=
+		      "<h3>Calling Context:</h3>"
+		    + "<p class='explanation'>The calling context is a variable set "
+		    + "by the caller. It's not passed to the server.  It is stored at "
+		    + "the time of the call and matched back to the call when it "
+		    + "returns.</p>"
+		    + "<div class='response'>" + callingContext + "</div>";
+		}
+	}
 
 	function onPostResponse(text, headers, callingContext) {
+		// TODO: Handle errors, as in function onDeleteResponse.
 	  var resultBlock = $("results");
 	  resultBlock.innerHTML =
 	    "<h3>Response Body</h3>"
 	    + "<pre class='response'>" + text + "</pre>";
-	 resultBlock.innerHTML +=
-	    "<h3>Response Headers:</h3>"
-	    + "<pre class='response'>" + getHeaderHTML(headers) + "</pre>";
-	  resultBlock.innerHTML +=
-	      "<h3>Calling Context:</h3>\n"
-	    + "<p class='explanation'>The calling context is a variable set "
-	    + "by the caller. It's not passed to the server.  It is stored at "
-	    + "the time of the call and matched back to the call when it "
-	    + "returns.</p>"
-	    + "<div class='response'>" + callingContext + "</div>";
+		printHTTPDetails(resultBlock, headers, callingContext);
 
 	}
 
 	function onPutResponse(text, headers, callingContext) {
+		// TODO: Handle errors, as in function onDeleteResponse.
 	  var resultBlock = $("results");
 	  resultBlock.innerHTML =
 	    "<h3>Response Body</h3>"
 	    + "<pre class='response'>" + text + "</pre>";
-	 resultBlock.innerHTML +=
-	    "<h3>Response Headers:</h3>"
-	    + "<pre class='response'>" + getHeaderHTML(headers) + "</pre>";
-	  resultBlock.innerHTML +=
-	      "<h3>Calling Context:</h3>\n"
-	    + "<p class='explanation'>The calling context is a variable set "
-	    + "by the caller. It's not passed to the server.  It is stored at "
-	    + "the time of the call and matched back to the call when it "
-	    + "returns.</p>"
-	    + "<div class='response'>" + callingContext + "</div>";
+		printHTTPDetails(resultBlock, headers, callingContext);
 
 	}
 
 	function onGetResponse(text, headers, callingContext) {
+		// TODO: Handle errors, as in function onDeleteResponse.
 	  var resultBlock = $("results");
 	  resultBlock.innerHTML =
 	    "<h3>Response Body</h3>"
 	    + "<pre class='response'>" + text + "</pre>";
-	 resultBlock.innerHTML +=
-	    "<h3>Response Headers:</h3>"
-	    + "<pre class='response'>" + getHeaderHTML(headers) + "</pre>";
-	  resultBlock.innerHTML +=
-	      "<h3>Calling Context:</h3>\n"
-	    + "<p class='explanation'>The calling context is a variable set "
-	    + "by the caller. It's not passed to the server.  It is stored at "
-	    + "the time of the call and matched back to the call when it "
-	    + "returns.</p>"
-	    + "<div class='response'>" + callingContext + "</div>";
+		printHTTPDetails(resultBlock, headers, callingContext);
 
 	}
 	
 	function onDeleteResponse(text, headers, callingContext) {
 	  var resultBlock = $("results");
+		var message = text;
+		// If bad parameters were passed, highlight them via CSS.
+		if ( headers["Status"] == "400") {
+			// TODONEXT: split headers[X-bad-params] and get partial names of elements (need to prepend d_) to set to error color.
+			
+			setClass("d_id_label", "error");
+		}
 	  resultBlock.innerHTML =
-	    "<h3>Response Body</h3>"
-	    + "<pre class='response'>" + text + "</pre>";
-	 resultBlock.innerHTML +=
-	    "<h3>Response Headers:</h3>"
-	    + "<pre class='response'>" + getHeaderHTML(headers) + "</pre>";
-	  resultBlock.innerHTML +=
-	      "<h3>Calling Context:</h3>\n"
-	    + "<p class='explanation'>The calling context is a variable set "
-	    + "by the caller. It's not passed to the server.  It is stored at "
-	    + "the time of the call and matched back to the call when it "
-	    + "returns.</p>"
-	    + "<div class='response'>" + callingContext + "</div>";
-
+	    "<h3>Server Response</h3>"
+	    + "<pre class='response'>" + message + "</pre>";
+		printHTTPDetails(resultBlock, headers, callingContext);
 	}
 	
-	// In support of function onResponse, above.
+	// In support of functions on(POST|PUT|GET|DELETE)Response, above.
+	// TODO: Still needed?  If not, remove.
 	function getHeaderHTML(headers) {
-	  if (ajaxCaller.shouldMakeHeaderMap) { // TODO check for array instead?
+	  if (ajaxCaller.shouldMakeHeaderMap) {
 	    message = "";
 	    for (key in headers) {
 	      message += "[" + key + "] -&gt; [" + headers[key] + "]<br/>";
@@ -181,6 +175,7 @@
 			}
 			ajaxCaller.postVars("/admin/user/" + my_id, bodyVars, urlVars, onPostResponse, false, "A POST request to create a new user.");
 		}
+		clearErrorIndications();
 		return false;
 	}
 	
@@ -194,6 +189,7 @@
 			bodyParameters = getParametersForBodyRequest();
 		  ajaxCaller.putBody("/admin/user/" + my_id, bodyParameters.urlVars, onPutResponse, false, "A PUT request to modify a user.", bodyParameters.bodyType, bodyParameters.body);
 		}
+		clearErrorIndications();
 		return false;
 	}
 
@@ -213,6 +209,7 @@
 			// We have a user id, so we call that resource directly.
 		  ajaxCaller.get("/admin/user/" + my_id, bodyVars, onGetResponse, false, "A GET request to search for users.");
 		}
+		clearErrorIndications();
 		return false;
 	}
 
@@ -226,6 +223,7 @@
 			bodyVars =  {}
 			ajaxCaller.deleteIt("/admin/user/" + my_id, bodyVars, onDeleteResponse, false, "A DELETE request to delete a user.");
 		}
+		clearErrorIndications();
 		return false;
 	}
 
@@ -285,43 +283,43 @@
 
 	 	<table class="actiontable" summary="action table">
 				<tbody><tr>
-					<td class="property">Full name:</td>
+					<td class="property" id="c_name_label">Full name:</td>
 
 					<td class="value"><input id="c_name" name="c_name" type="text" /></td>
 				</tr>
 
 				<tr>
-					<td class="property">Affiliation:</td>
+					<td class="property" id="c_affiliation_label">Affiliation:</td>
 
 					<td class="value"><input id="c_affiliation" name="c_affiliation" type="text" /></td>
 				</tr>
 
 				<tr>
-					<td class="property">E-mail address:</td>
+					<td class="property" id="c_email_label">E-mail address:</td>
 
 					<td class="value"><input id="c_email" name="c_email" type="text" /></td>
 				</tr>
 
 				<tr>
-					<td class="property">User ID:</td>
+					<td class="property" id="c_id_label">User ID:</td>
 
 					<td class="value"><input id="c_id" name="c_id" type="text" /></td>
 				</tr>
 
 				<tr>
-					<td class="property">Password:</td>
+					<td class="property" id="c_passwd_label">Password:</td>
 
 					<td class="value"><input id="c_passwd" name="c_passwd" type="text" /></td>
 				</tr>
 
 				<tr>
-					<td class="property">Password hint:</td>
+					<td class="property" id="c_hint_label">Password hint:</td>
 
 					<td class="value"><input id="c_hint" name="c_hint" type="text" /></td>
 				</tr>
 
 				<tr>
-					<td class="property">Justification:</td>
+					<td class="property" id="c_justification_label">Justification:</td>
 
 					<td class="value">
 					<textarea rows="5" cols="40" id="c_justification" name="c_justification"></textarea></td>
@@ -345,43 +343,43 @@
 
 			<table class="actiontable" summary="action table">
 				<tbody><tr>
-					<td class="property">Full name:</td>
+					<td class="property" id="m_name_label">Full name:</td>
 
 					<td class="value"><input id="m_name" name="m_name" type="text" /></td>
 				</tr>
 
 				<tr>
-					<td class="property">Affiliation:</td>
+					<td class="property" id="m_affiliation_label">Affiliation:</td>
 
 					<td class="value"><input id="m_affiliation" name="m_affiliation" type="text" /></td>
 				</tr>
 
 				<tr>
-					<td class="property">E-mail address:</td>
+					<td class="property" id="m_email_label">E-mail address:</td>
 
 					<td class="value"><input id="m_email" name="m_email" type="text" /></td>
 				</tr>
 
 				<tr>
-					<td class="property">User ID:</td>
+					<td class="property" id="m_id_label">User ID:</td>
 
 					<td class="value"><input id="m_id" name="m_id" type="text" /></td>
 				</tr>
 
 				<tr>
-					<td class="property">Password:</td>
+					<td class="property" id="m_passwd_label">Password:</td>
 
 					<td class="value"><input id="m_passwd" name="m_passwd" type="text" /></td>
 				</tr>
 
 				<tr>
-					<td class="property">Password hint:</td>
+					<td class="property" id="m_hint_label">Password hint:</td>
 
 					<td class="value"><input id="m_hint" name="m_hint" type="text" /></td>
 				</tr>
 
 				<tr>
-					<td class="property">Justification:</td>
+					<td class="property" id="m_justification_label">Justification:</td>
 
 					<td class="value">
 					<textarea rows="5" cols="40" id="m_justification" name="m_justification"></textarea></td>
@@ -406,7 +404,7 @@
 
 			<table class="actiontable" summary="action table">
 				<tbody><tr>
-					<td class="property">Full name:</td>
+					<td class="property" id="s_name_label">Full name:</td>
 
 					<td class="value"><input id="s_name" name="s_name" type="text" /></td>
 				</tr>
@@ -416,7 +414,7 @@
 				</tr>
 
 				<tr>
-					<td class="property">Affiliation:</td>
+					<td class="property" id="s_affiliation_label">Affiliation:</td>
 
 					<td class="value"><input id="s_affiliation" name="s_affiliation" type="text" /></td>
 				</tr>
@@ -426,7 +424,7 @@
 				</tr>
 
 				<tr>
-					<td class="property">E-mail address:</td>
+					<td class="property" id="s_email_label">E-mail address:</td>
 
 					<td class="value"><input id="s_email" name="s_email" type="text" /></td>
 				</tr>
@@ -436,7 +434,7 @@
 				</tr>
 
 				<tr>
-					<td class="property">User ID:</td>
+					<td class="property" id="s_id_label">User ID:</td>
 
 					<td class="value"><input id="s_id" name="s_id" type="text" /></td>
 				</tr>
@@ -459,7 +457,7 @@
 
 			<table class="actiontable" summary="action table">
 				<tbody><tr>
-					<td class="property">User ID:</td>
+					<td class="property" id="d_id_label">User ID:</td>
 
 					<td class="value"><input id="d_id" name="d_id" type="text" /></td>
 				</tr>
