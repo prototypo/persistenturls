@@ -103,11 +103,36 @@ pre.code {
 #create {
 }
 
+div.noresults {
+}
+
+div.withresults {
+	color: #708090;
+	background: #FFFAFA;
+	border: 1px solid #5F9EA0; 
+	/* border-style: outset;  */
+	padding: 2px 5px 0px 5px;
+	margin: 0;
+	text-decoration: none;
+}
+
 p.actiontext {
 	font-size: 1.1em;
 	font-weight: bold;
 }
 
+p.response {
+	font-size: 1.1em;
+	font-weight: bold;
+	margin-left: 2.5em;
+}
+
+p.error {
+	font-size: 1.1em;
+	font-weight: bold;
+	color: red;
+	margin-left: 2.5em;
+}
 
 form {
 	padding: 20px 0px 0px 0px;

@@ -18,10 +18,12 @@
 //<![CDATA[
 	<!--
 	
-	var debugThisPage = true;
+	var debugThisPage = false;
 	
 	var actionElements = ["create", "modify", "search", "delete"];
 	var labelElements = ["c_name_label", "c_affiliation_label", "c_email_label", "c_id_label", "c_passwd_label", "c_hint_label", "c_justification_label", "m_name_label", "m_affiliation_label", "m_email_label", "m_id_label", "m_passwd_label", "m_hint_label", "m_justification_label", "s_name_label", "s_affiliation_label", "s_email_label", "s_id_label", "d_id_label"];
+	
+	var resultBlock = $("results");
 	
 	function showAction()
 	{
@@ -29,13 +31,13 @@
 		destination = userchoice.options[userchoice.selectedIndex].value;
 		clearResults();
 		// Hide action divs except the one we want.
-		// TODO: Fix this loop; it works but is not efficient.
 		for ( i=0 ; i < actionElements.length ; i++ ) {
-			if ( actionElements[i] == destination ) {
-				setVisibility(destination, 'inline');
-			} else {
+			if(document.getElementById(actionElements[i])) {
 				setVisibility(actionElements[i], 'none');
 			}
+		}
+		if(document.getElementById(destination)) {
+			setVisibility(destination, 'inline');
 		}
 	}
 	
@@ -59,72 +61,23 @@
 	}
 
 	function clearResults() {
+		setClass("results", "noresults");
 	  resultBlock = $("results");
 	  resultBlock.innerHTML = "<p>&nbsp;</p>";
 	}
 	
-	function printHTTPDetails(resultBlock, headers, callingContext) {
+	function printHTTPDetails(headers, callingContext) {
 		if (debugThisPage) {
 			resultBlock.innerHTML +=
 		    "<h3>Response Headers:</h3>"
 		    + "<pre class='response'>" + getHeaderHTML(headers) + "</pre>";
 		  resultBlock.innerHTML +=
 		      "<h3>Calling Context:</h3>"
-		    + "<p class='explanation'>The calling context is a variable set "
-		    + "by the caller. It's not passed to the server.  It is stored at "
-		    + "the time of the call and matched back to the call when it "
-		    + "returns.</p>"
 		    + "<div class='response'>" + callingContext + "</div>";
 		}
 	}
-
-	function onPostResponse(text, headers, callingContext) {
-		// TODO: Handle errors, as in function onDeleteResponse.
-	  var resultBlock = $("results");
-	  resultBlock.innerHTML =
-	    "<h3>Response Body</h3>"
-	    + "<pre class='response'>" + text + "</pre>";
-		printHTTPDetails(resultBlock, headers, callingContext);
-
-	}
-
-	function onPutResponse(text, headers, callingContext) {
-		// TODO: Handle errors, as in function onDeleteResponse.
-	  var resultBlock = $("results");
-	  resultBlock.innerHTML =
-	    "<h3>Response Body</h3>"
-	    + "<pre class='response'>" + text + "</pre>";
-		printHTTPDetails(resultBlock, headers, callingContext);
-
-	}
-
-	function onGetResponse(text, headers, callingContext) {
-		// TODO: Handle errors, as in function onDeleteResponse.
-	  var resultBlock = $("results");
-	  resultBlock.innerHTML =
-	    "<h3>Response Body</h3>"
-	    + "<pre class='response'>" + text + "</pre>";
-		printHTTPDetails(resultBlock, headers, callingContext);
-
-	}
 	
-	function onDeleteResponse(text, headers, callingContext) {
-	  var resultBlock = $("results");
-		var message = text;
-		// If bad parameters were passed, highlight them via CSS.
-		if ( headers["Status"] == "400") {
-			// TODONEXT: split headers[X-bad-params] and get partial names of elements (need to prepend d_) to set to error color.
-			
-			setClass("d_id_label", "error");
-		}
-	  resultBlock.innerHTML =
-	    "<h3>Server Response</h3>"
-	    + "<pre class='response'>" + message + "</pre>";
-		printHTTPDetails(resultBlock, headers, callingContext);
-	}
-	
-	// In support of functions on(POST|PUT|GET|DELETE)Response, above.
-	// TODO: Still needed?  If not, remove.
+	// In support of function printHTTPDetails(), above.
 	function getHeaderHTML(headers) {
 	  if (ajaxCaller.shouldMakeHeaderMap) {
 	    message = "";
@@ -135,6 +88,28 @@
 	  } else {
 	    return headers;
 	  }
+	}
+	
+	// Callback for Create/Modify/Search/Delete (POST/PUT/GET/DELETE) actions.
+	function onResponse(message, headers, callingContext) {
+		// If bad parameters were passed, highlight them via CSS.
+		if ( headers["Status"] == "400") {
+			var badParams = headers["X-bad-params"].split(",");
+			for ( i=0 ; i < badParams.length ; i++ ) {
+				setClass(callingContext + badParams[i] + "_label", "error");
+			}
+		}
+		setClass("results", "withresults");
+		resultHeader = "Response:";
+		resultClass = "response";
+		if ( headers["Status"] != "200" & headers["Status"] != "201" ) {
+			resultHeader = "Error:";
+			resultClass = "error";
+		}
+	  resultBlock.innerHTML =
+	    "<h3>" + resultHeader + "</h3>"
+	    + "<p class='" + resultClass + "'>" + message + "</p>";
+		printHTTPDetails(headers, callingContext);
 	}
 	
 	// For Modify requests via HTTP PUT, in support of function modifySubmit.
@@ -157,6 +132,7 @@
 	  return parameters;
 	}
 	
+	// Send a Create command via HTTP POST.
 	function createSubmit() {
 		// TODO: Complete and test.
 		var my_id = $('c_id').value;
@@ -173,12 +149,13 @@
 				hint: $('c_hint').value,
 				justification: $('c_justification').value
 			}
-			ajaxCaller.postVars("/admin/user/" + my_id, bodyVars, urlVars, onPostResponse, false, "A POST request to create a new user.");
+			ajaxCaller.postVars("/admin/user/" + my_id, bodyVars, urlVars, onResponse, false, "c_");
 		}
 		clearErrorIndications();
 		return false;
 	}
 	
+	// Send a Modify command via HTTP PUT.
 	function modifySubmit() {
 		// TODO: Complete and test.
 		var my_id = $('m_id').value;
@@ -187,12 +164,13 @@
 		} else {
 			signalLoadingResults();
 			bodyParameters = getParametersForBodyRequest();
-		  ajaxCaller.putBody("/admin/user/" + my_id, bodyParameters.urlVars, onPutResponse, false, "A PUT request to modify a user.", bodyParameters.bodyType, bodyParameters.body);
+		  ajaxCaller.putBody("/admin/user/" + my_id, bodyParameters.urlVars, onResponse, false, "m_", bodyParameters.bodyType, bodyParameters.body);
 		}
 		clearErrorIndications();
 		return false;
 	}
 
+	// Send a Search command via HTTP GET.
 	function searchSubmit() {
 		// TODO: Complete and test.
 		var my_id = $('s_id').value;
@@ -204,15 +182,16 @@
 	  }
 		if ( my_id == "" | my_id == null ) {
 			// No user id is given, so we call the parent resource.
-		  ajaxCaller.get("/admin/user/", bodyVars, onGetResponse, false, "A GET request to search for users.");
+		  ajaxCaller.get("/admin/user/", bodyVars, onResponse, false, "s_");
 		} else {
 			// We have a user id, so we call that resource directly.
-		  ajaxCaller.get("/admin/user/" + my_id, bodyVars, onGetResponse, false, "A GET request to search for users.");
+		  ajaxCaller.get("/admin/user/" + my_id, bodyVars, onResponse, false, "s_");
 		}
 		clearErrorIndications();
 		return false;
 	}
 
+	// Send a Delete command via HTTP DELETE.
 	function deleteSubmit() {
 		// TODO: Complete and test.
 		var my_id = $('d_id').value;
@@ -221,7 +200,7 @@
 		} else {
 			signalLoadingResults();
 			bodyVars =  {}
-			ajaxCaller.deleteIt("/admin/user/" + my_id, bodyVars, onDeleteResponse, false, "A DELETE request to delete a user.");
+			ajaxCaller.deleteIt("/admin/user/" + my_id, bodyVars, onResponse, false, "d_");
 		}
 		clearErrorIndications();
 		return false;
@@ -471,7 +450,7 @@
 
 	</div><!-- content -->
 
-	<div id="results">
+	<div id="results" class="noresults">
 	</div>
 		
 	<div id="footer">
