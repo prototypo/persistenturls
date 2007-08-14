@@ -18,12 +18,31 @@
 //<![CDATA[
 	<!--
 	
-	var debugThisPage = false;
+	var debugThisPage = true;
 	
 	var actionElements = ["create", "modify", "search", "delete"];
+	
+	// TODO: Refactor to build this from parts.  Then, test to ensure each exists upon use.
 	var labelElements = ["c_name_label", "c_affiliation_label", "c_email_label", "c_id_label", "c_passwd_label", "c_hint_label", "c_justification_label", "m_name_label", "m_affiliation_label", "m_email_label", "m_id_label", "m_passwd_label", "m_hint_label", "m_justification_label", "s_name_label", "s_affiliation_label", "s_email_label", "s_id_label", "d_id_label"];
 	
 	var resultBlock = $("results");
+	
+	function load() {
+		// Get the current URL and look for fragments.
+		// If found, attempt to show desired form.
+		var location = document.URL;
+		var urlFragment = "";
+		var urlFragmentIndex = location.indexOf("#");
+		if ( urlFragmentIndex > -1 ) {
+			// Our URL has a fragment identifier.
+			urlFragment = location.substring(urlFragmentIndex + 1, location.length);
+		}
+		for ( i=0 ; i < actionElements.length ; i++ ) {
+			if (actionElements[i] == urlFragment) {
+				setVisibility(urlFragment, 'inline');
+			}
+		}
+	}
 	
 	function showAction()
 	{
@@ -134,7 +153,6 @@
 	
 	// Send a Create command via HTTP POST.
 	function createSubmit() {
-		// TODO: Complete and test.
 		var my_id = $('c_id').value;
 		if ( my_id == "" | my_id == null ) {
 			alert("You must provide a user id to identify the user you wish to create.  Please enter a user id.");
@@ -157,7 +175,6 @@
 	
 	// Send a Modify command via HTTP PUT.
 	function modifySubmit() {
-		// TODO: Complete and test.
 		var my_id = $('m_id').value;
 		if ( my_id == "" | my_id == null ) {
 			alert("You must provide a user id to identify the user you wish to modify.  Please enter a user id.");
@@ -172,7 +189,6 @@
 
 	// Send a Search command via HTTP GET.
 	function searchSubmit() {
-		// TODO: Complete and test.
 		var my_id = $('s_id').value;
 	  signalLoadingResults();
 		bodyVars =  {
@@ -193,7 +209,6 @@
 
 	// Send a Delete command via HTTP DELETE.
 	function deleteSubmit() {
-		// TODO: Complete and test.
 		var my_id = $('d_id').value;
 		if ( my_id == "" | my_id == null ) {
 			alert("You must provide a user id to identify the user you wish to delete.  Please enter a user id.");
@@ -211,7 +226,7 @@
 </script>
 </head>
 
-   <body>
+   <body onload="load()">
 	<div id="header">
 		<h1>PURL User Administration</h1>
 	</div>
@@ -312,7 +327,7 @@
 	</div>
 
 	<div id="modify" style="display: none;">
-		<!-- TODO: Populate existing data from server before presentation to user. -->
+		<!-- TODO: Populate existing data from server before presentation to user? -->
 
 		<form action="#" name="modifyForm" onsubmit="return modifySubmit()" id="modifyForm">
 		<fieldset>
