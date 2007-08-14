@@ -183,7 +183,7 @@ var ajaxCaller = {
       var content = call.expectingXML ? xReq.responseXML : xReq.responseText;
       responseHeaders = xReq.getAllResponseHeaders();
       headersForCaller = this.shouldMakeHeaderMap ?
-        this._createHeaderMap(responseHeaders) : responseHeaders;
+        this._createHeaderMap(responseHeaders, xReq.status) : responseHeaders;
       callbackFunction(content, headersForCaller, call.callingContext);
     }
 
@@ -222,7 +222,7 @@ var ajaxCaller = {
    },
 
   /* Creates associative array from header type to header */
-  _createHeaderMap: function(headersText) {
+  _createHeaderMap: function(headersText, httpStatus) {
     extractedHeaders = headersText.split("\n");
     delete extractedHeaders[extractedHeaders.length]; // Del blank line at end
     headerMap = new Array();
@@ -234,6 +234,7 @@ var ajaxCaller = {
       value = value.replace(/\s$/, "");
       headerMap[field] = value;
     }
+	headerMap["Status"] = httpStatus;
     return headerMap;
   },
 
