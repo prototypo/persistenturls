@@ -2,7 +2,7 @@ body {
 	background: #FFF url(http://purlz.org/images/purl-128.png) fixed top right no-repeat;
 	padding: 15px 0px 0px 0px;
 	margin: 23px 28px;
-	min-width: 700px;
+	min-width: 800px;
 	font-family: "Trebuchet MS", sans-serif;
 	text-align: justify;
 	line-height: 1.4em;
@@ -79,7 +79,7 @@ pre.code {
 #content {
 	text-align: justify;
 	background: #F0F8FF;
-	padding: 20px;
+	padding: 10px;
 	border: 2px solid #6495ED;
 	z-index: 2;	
 	opacity: 0.90;
@@ -135,7 +135,7 @@ p.error {
 }
 
 form {
-	padding: 20px 0px 0px 0px;
+	padding: 10px 0px 0px 0px;
 }
 
 form .instructions {
@@ -147,7 +147,7 @@ form .instructions {
 
 fieldset {
 	border: 2px solid #C1DAD7;
-	width: 30em
+	/* width: 30em  */
 }
 
 legend {
@@ -180,12 +180,12 @@ input {
 table {
 	table-layout: fixed;
 	padding: 0;
-	margin: 10px 10px;
+	/* margin: 10px 10px; */
 }
 
 td {
-	border-bottom: 1px solid #C1DAD7;
-	padding: 6px 6px 6px 12px;
+	/* border-bottom: 1px solid #C1DAD7; */
+	/* padding: 6px 6px 6px 12px; */
 }
 
 td.property {
@@ -215,3 +215,6 @@ img {
   border: 0;
 }
 
+div#footer {
+	padding: 0px 30px 30px 0px;
+}
