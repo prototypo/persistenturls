@@ -235,15 +235,15 @@
 
 	<table class="navtable" summary="purl interface" width="100%">
 	<tr valign="top">
-	<td class="navtable_action" width="40%">
+	<td class="navtable_action" width="35%">
 
     	<div id="navigation">
 
 		<form name="naviform" id="naviform">
 		<fieldset>
-		<legend>Choose an action to take on users:</legend>
+		<legend>1) Choose an action to take on users</legend>
 
-		<div class="instructions">Select an action for user administration.</div>
+		<div class="instructions">User administration options.</div>
 
 			<select name="naviselect" onchange="showAction()">
 					<option value="">
@@ -268,7 +268,10 @@
 			</select>
 		</fieldset>
 		</form>
+
+		<img src = "http://purlz.org/images/users.png" alt="users" />
 	</div>
+
 
 	</td>
 	<td class="navtable_form">
@@ -278,7 +281,7 @@
 		<form action="#" name="createForm" onsubmit="return createSubmit()" id="createForm">
 
 		<fieldset>
-		<legend>Register a new user</legend>
+		<legend>2) Register a new user</legend>
 	
 		<div class="instructions">Fill in the following user information to create a new user.</div>
 
@@ -338,7 +341,7 @@
 
 		<form action="#" name="modifyForm" onsubmit="return modifySubmit()" id="modifyForm">
 		<fieldset>
-		<legend>Modify a user</legend>
+		<legend>2) Modify a user</legend>
 
 		<div class="instructions">Modify any of the following user information.</div>
 
@@ -399,7 +402,7 @@
 		<form action="#" name="searchForm" onsubmit="return searchSubmit()" id="searchForm">
 
 		<fieldset>
-		<legend>Search for a user</legend>
+		<legend>2) Search for a user</legend>
 
 		<div class="instructions">Search users based on any of the following characteristics.</div>
 
@@ -452,7 +455,7 @@
 		<form action="#" name="deleteForm" onsubmit="return deleteSubmit()" id="deleteForm">
 
 		<fieldset>
-		<legend>Delete a user</legend>
+		<legend>2) Delete a user</legend>
 
 		<div class="instructions">Delete a user based on their User ID. You will be prompted for confirmation to complete this action.</div>
 
