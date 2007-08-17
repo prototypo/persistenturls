@@ -84,6 +84,16 @@ public class UserAccessor extends NKFAccessorImpl {
 		context.setResponse(resp);
 	}
 
+	static protected void log(INKFConvenienceHelper context, String logMessage) {
+		try {
+			INKFRequest req = context.createSubRequest("active:application-log");
+			req.addArgument("operand", new StringAspect(logMessage));
+			context.issueAsyncSubRequest(req);
+		} catch (NKFException e) {
+			e.printStackTrace();
+		}
+	}
+
 	static abstract public class PURLCommand {
 		abstract INKFResponse execute(INKFConvenienceHelper context);
 
@@ -170,15 +180,18 @@ public class UserAccessor extends NKFAccessorImpl {
 				String id = getId(context);
 				if(userExists(id, context)) {
 					// Cannot create the same name
-					IURRepresentation rep = setResponseCode(context, new StringAspect("User: " + id + " already exists."), 409);
+					String message = "User: " + id + " already exists.";
+					IURRepresentation rep = setResponseCode(context, new StringAspect(message), 409);
 					retValue = context.createResponseFrom(rep);
 					retValue.setMimeType(TEXT);
+					log(context, message);
 				} else {
 					IURAspect iur = new StringAspect(generateUser(id, params));
 					context.sinkAspect(generateResourceURI(id), iur);
 					IURRepresentation rep = setResponseCode(context, iur, 201);
 					retValue = context.createResponseFrom(rep);
 					retValue.setMimeType(XML);
+					log(context, "Created new user: " + id);
 				}
 
 			} catch (NKFException e) {
@@ -233,14 +246,18 @@ public class UserAccessor extends NKFAccessorImpl {
 				if(userExists(id, context)) {
 					// Default response code of 200 is fine
 					context.delete(generateResourceURI(id));
-					IURRepresentation rep = setResponseCode(context, new StringAspect("Deleted user: " + id), 200);
+					String message = "Deleted user: " + id;
+					IURRepresentation rep = setResponseCode(context, new StringAspect(message), 200);
 					retValue = context.createResponseFrom(rep);
 					retValue.setMimeType(TEXT);
+					log(context,message);
 
 				} else {
-					IURRepresentation rep = setResponseCode(context, new StringAspect("No such user: " + id), 404);
+					String message = "No such user: " + id;
+					IURRepresentation rep = setResponseCode(context, new StringAspect(message), 404);
 					retValue = context.createResponseFrom(rep);
 					retValue.setMimeType(TEXT);
+					log(context,message);
 				}
 
 			} catch (NKFException e) {
@@ -266,13 +283,17 @@ public class UserAccessor extends NKFAccessorImpl {
 					// Update the user
 					IURAspect iur = new StringAspect(generateUser(id, params));
 					context.sinkAspect(generateResourceURI(id), iur);
-					IURRepresentation rep = setResponseCode(context, new StringAspect("Updated user: " + id), 200);
+					String message = "Updated user: " + id;
+					IURRepresentation rep = setResponseCode(context, new StringAspect(message), 200);
 					retValue = context.createResponseFrom(rep);
 					retValue.setMimeType(TEXT);
+					log(context,message);
 				} else {
-					IURRepresentation rep = setResponseCode(context, new StringAspect("No such user: " + id), 404);
+					String message = "Cannot update. No such user: " + id;
+					IURRepresentation rep = setResponseCode(context, new StringAspect(message), 404);
 					retValue = context.createResponseFrom(rep);
 					retValue.setMimeType(TEXT);
+					log(context,message);
 				}
 
 			} catch (NKFException e) {

@@ -6,7 +6,7 @@
 	-->
     <identity>
 		<uri>urn:org:purl:admin</uri>
-		<version>0.0.139</version>
+		<version>0.0.163</version>
     </identity>
 	<info>
 		<name>PURL Admin Module</name>
@@ -31,6 +31,7 @@
 			<match>active:purl-group\+.*</match>
 			<match>active:purl-user\+.*</match>
 			<match>ffcpl:/etc/HTTPBridgeConfig.xml</match>
+			<match>ffcpl:/etc/LogConfig.xml</match>
 			<match>ffcpl:/entrypoints.xml</match>
 			<match>ffcpl:/etc/CRONConfig.xml</match>
 		</uri>
