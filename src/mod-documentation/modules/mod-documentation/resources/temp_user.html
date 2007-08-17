@@ -1,156 +1,66 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!-- 
+
+user.html - Provides a Web UI for the administration of PURL users.
+
+version 1.0, 16 August 2007
+David Wood (david at http://zepheira.com/)
+
+=========================================================================
+
+Copyright (C) 2007 OCLC (http://oclc.org)
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+=========================================================================
+
+MAINTENANCE HINTS:
+1)  There are five HTML forms on this page: 'naviform' is used to choose
+at most ONE of the other forms to show at any moment.  Showing one of the
+others (create, modify, search or delete) will hide the others.
+2)  HTML forms are submitted via the functions createSubmit(), modifySubmit(),
+searchSubmit() and deleteSubmit() via AJAX (all defined on this page).  The
+remainder of the Javascript functions are in external Javascript files.
+Importantly, look for the callback function onResponse() in utilpurl.js, which
+handles results from the server in response to form submissions.
+
+-->
+
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link type="text/css" rel="stylesheet" href="style.css" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link type="text/css" rel="stylesheet" href="style.css" />
 
-<title>PURL User Administration</title>
-
-<!-- http://ajaxify.com/run/Lib/js/ajaxCaller.js and http://ajaxify.com/run/Lib/js/util.js -->
-
+	<title>PURL User Administration</title>
 <script type="text/javascript" src="javascripts/util.js">
 </script>
-
 <script type="text/javascript" src="javascripts/ajaxCaller.js">
+</script><!-- http://ajaxify.com/run/Lib/js/ -->
+
+<script type="text/javascript" src="javascripts/xmlsax.js">
 </script>
+<script type="text/javascript" src="javascripts/SaxEventHandler.js">
+</script><!-- http://xmljs.sourceforge.net -->
 
-<script language="javascript" type="text/javascript">
+<script type="text/javascript" src="javascripts/utilpurl.js">
+</script>
+<script type="text/javascript">
 //<![CDATA[
-	<!--
-	
-	var debugThisPage = true;
-	
-	var actionElements = ["create", "modify", "search", "delete"];
-	
-	// TODO: Refactor to build this from parts.  Then, test to ensure each exists upon use.
+
+	var debugThisPage = false;
+
+	// NB: This array contains the names of each element that represents a label for an HTML form item.  If you add a new form item and want it highlighted upon a "bad parameter" error, you MUST add it's id to this array.
 	var labelElements = ["c_name_label", "c_affiliation_label", "c_email_label", "c_id_label", "c_passwd_label", "c_hint_label", "c_justification_label", "m_name_label", "m_affiliation_label", "m_email_label", "m_id_label", "m_passwd_label", "m_hint_label", "m_justification_label", "s_name_label", "s_affiliation_label", "s_email_label", "s_id_label", "d_id_label"];
-	
-	var resultBlock = $("results");
-	
-	function load() {
-		// Get the current URL and look for fragments.
-		// If found, attempt to show desired form.
-		var location = document.URL;
-		var urlFragment = "";
-		var urlFragmentIndex = location.indexOf("#");
-		if ( urlFragmentIndex > -1 ) {
-			// Our URL has a fragment identifier.
-			urlFragment = location.substring(urlFragmentIndex + 1, location.length);
-		}
-		for ( i=0 ; i < actionElements.length ; i++ ) {
-			if (actionElements[i] == urlFragment) {
-				setVisibility(urlFragment, 'inline');
-			}
-		}
-	}
-	
-	function showAction()
-	{
-		userchoice = document.naviform.naviselect;
-		destination = userchoice.options[userchoice.selectedIndex].value;
-		clearResults();
-		// Hide action divs except the one we want.
-		for ( i=0 ; i < actionElements.length ; i++ ) {
-			if(document.getElementById(actionElements[i])) {
-				setVisibility(actionElements[i], 'none');
-			}
-		}
-		if(document.getElementById(destination)) {
-			setVisibility(destination, 'inline');
-		}
-	}
-	
-	function setVisibility(id, visibility) {
-		document.getElementById(id).style.display = visibility;
-	}
 
-	function setClass(id, newClass) {
-		document.getElementById(id).className = newClass;
-	}
-	
-	function clearErrorIndications() {
-		for ( i=0 ; i < labelElements.length ; i++ ) {
-			document.getElementById(labelElements[i]).className = "";
-		}
-	}
-	
-	function signalLoadingResults() {
-	  resultBlock = $("results");
-	  resultBlock.innerHTML = "<p>Loading ...</p>";
-	}
-
-	function clearResults() {
-		setClass("results", "noresults");
-	  resultBlock = $("results");
-	  resultBlock.innerHTML = "<p>&nbsp;</p>";
-	}
-	
-	function printHTTPDetails(headers, callingContext) {
-		if (debugThisPage) {
-			resultBlock.innerHTML +=
-		    "<h3>Response Headers:</h3>"
-		    + "<pre class='response'>" + getHeaderHTML(headers) + "</pre>";
-		  resultBlock.innerHTML +=
-		      "<h3>Calling Context:</h3>"
-		    + "<div class='response'>" + callingContext + "</div>";
-		}
-	}
-	
-	// In support of function printHTTPDetails(), above.
-	function getHeaderHTML(headers) {
-	  if (ajaxCaller.shouldMakeHeaderMap) {
-	    message = "";
-	    for (key in headers) {
-	      message += "[" + key + "] -&gt; [" + headers[key] + "]<br/>";
-	    }
-	    return message;
-	  } else {
-	    return headers;
-	  }
-	}
-	
-	// Callback for Create/Modify/Search/Delete (POST/PUT/GET/DELETE) actions.
-	function onResponse(message, headers, callingContext) {
-		// If bad parameters were passed, highlight them via CSS.
-		if ( headers["Status"] == "400") {
-			var badParams = headers["X-bad-params"].split(",");
-			for ( i=0 ; i < badParams.length ; i++ ) {
-				setClass(callingContext + badParams[i] + "_label", "error");
-			}
-		}
-		setClass("results", "withresults");
-		resultHeader = "Response:";
-		resultClass = "response";
-		if ( headers["Status"] != "200" & headers["Status"] != "201" ) {
-			resultHeader = "Error:";
-			resultClass = "error";
-		}
-	  resultBlock.innerHTML =
-	    "<h3>" + resultHeader + "</h3>"
-	    + "<p class='" + resultClass + "'>" + message + "</p>";
-		printHTTPDetails(headers, callingContext);
-	}
-	
-	// For Modify requests via HTTP PUT, in support of function modifySubmit.
-	function getParametersForBodyRequest() {
-	  urlVars = {
-			name: $('m_name').value,
-			affiliation: $('m_affiliation').value,
-			email: $('m_email').value,
-			passwd: $('m_passwd').value,
-			hint: $('m_hint').value,
-			justification: $('m_justification').value
-	  }
-	  bodyType = "text/html";
-	  body = "";
-	  parameters = {
-	    urlVars: urlVars,
-	    bodyType: bodyType,
-	    body: body
-	  };
-	  return parameters;
-	}
-	
 	// Send a Create command via HTTP POST.
 	function createSubmit() {
 		var my_id = $('c_id').value;
@@ -167,12 +77,12 @@
 				hint: $('c_hint').value,
 				justification: $('c_justification').value
 			}
-			ajaxCaller.postVars("/admin/user/" + my_id, bodyVars, urlVars, onResponse, false, "c_");
+			ajaxCaller.postVars("/admin/user/" + my_id, bodyVars, urlVars, onResponse, false, "Create");
 		}
 		clearErrorIndications();
 		return false;
 	}
-	
+
 	// Send a Modify command via HTTP PUT.
 	function modifySubmit() {
 		var my_id = $('m_id').value;
@@ -180,8 +90,22 @@
 			alert("You must provide a user id to identify the user you wish to modify.  Please enter a user id.");
 		} else {
 			signalLoadingResults();
-			bodyParameters = getParametersForBodyRequest();
-		  ajaxCaller.putBody("/admin/user/" + my_id, bodyParameters.urlVars, onResponse, false, "m_", bodyParameters.bodyType, bodyParameters.body);
+			urlVars = {
+				name: $('m_name').value,
+				affiliation: $('m_affiliation').value,
+				email: $('m_email').value,
+				passwd: $('m_passwd').value,
+				hint: $('m_hint').value,
+				justification: $('m_justification').value
+			}
+			bodyType = "text/html";
+			body = "";
+			parameters = {
+				urlVars: urlVars,
+				bodyType: bodyType,
+				body: body
+			};
+			ajaxCaller.putBody("/admin/user/" + my_id, parameters.urlVars, onResponse, false, "Modify", parameters.bodyType, parameters.body);
 		}
 		clearErrorIndications();
 		return false;
@@ -190,18 +114,18 @@
 	// Send a Search command via HTTP GET.
 	function searchSubmit() {
 		var my_id = $('s_id').value;
-	  signalLoadingResults();
+		signalLoadingResults();
 		bodyVars =  {
 				name: $('s_name').value,
 				affiliation: $('s_affiliation').value,
 				email: $('s_email').value
-	  }
+		}
 		if ( my_id == "" | my_id == null ) {
 			// No user id is given, so we call the parent resource.
-		  ajaxCaller.get("/admin/user/", bodyVars, onResponse, false, "s_");
+			ajaxCaller.get("/admin/user/", bodyVars, onResponse, false, "s_");
 		} else {
 			// We have a user id, so we call that resource directly.
-		  ajaxCaller.get("/admin/user/" + my_id, bodyVars, onResponse, false, "s_");
+			ajaxCaller.get("/admin/user/" + my_id, bodyVars, onResponse, false, "Search");
 		}
 		clearErrorIndications();
 		return false;
@@ -215,277 +139,262 @@
 		} else {
 			signalLoadingResults();
 			bodyVars =  {}
-			ajaxCaller.deleteIt("/admin/user/" + my_id, bodyVars, onResponse, false, "d_");
+			ajaxCaller.deleteIt("/admin/user/" + my_id, bodyVars, onResponse, false, "Delete");
 		}
 		clearErrorIndications();
 		return false;
 	}
 
-	// -->
 //]]>
 </script>
 </head>
 
-   <body onload="load()">
+<body onload="load()">
 	<div id="header">
 		<h1>PURL User Administration</h1>
 	</div>
 
-	<div id="content">	
+	<div id="content">
+		<table class="navtable" summary="purl interface" width="100%">
+			<tr valign="top">
+				<td class="navtable_action" width="35%">
+					<div id="navigation">
+						<form name="naviform" id="naviform">
+							<fieldset>
+								<legend>1) Choose an action to take on users</legend>
+
+								<div class="instructions">
+									User administration options.
+								</div><select name="naviselect" onchange="showAction()">
+									<option value="">
+										--- Select your action ---
+									</option>
+
+									<option value="create">
+										Register a new user
+									</option>
+
+									<option value="modify">
+										Modify an existing user
+									</option>
+
+									<option value="search">
+										Search for a user
+									</option>
+
+									<option value="delete">
+										Delete a user
+									</option>
+								</select>
+							</fieldset>
+						</form><img src="http://purlz.org/images/users.png" alt="users" />
+					</div>
+				</td>
+
+				<td class="navtable_form">
+					<div id="create" style="display: none;">
+						<form action="#" name="createForm" onsubmit="return createSubmit()" id="createForm">
+							<fieldset>
+								<legend>2) Register a new user</legend>
+
+								<div class="instructions">
+									Fill in the following user information to create a new user.
+								</div>
+
+								<table class="actiontable" summary="action table">
+									<tbody>
+										<tr>
+											<td class="property" id="c_name_label">Full name:</td>
+
+											<td class="value"><input id="c_name" name="c_name" type="text" /></td>
+										</tr>
+
+										<tr>
+											<td class="property" id="c_affiliation_label">Affiliation:</td>
+
+											<td class="value"><input id="c_affiliation" name="c_affiliation" type="text" /></td>
+										</tr>
+
+										<tr>
+											<td class="property" id="c_email_label">E-mail address:</td>
+
+											<td class="value"><input id="c_email" name="c_email" type="text" /></td>
+										</tr>
+
+										<tr>
+											<td class="property" id="c_id_label">User ID:</td>
+
+											<td class="value"><input id="c_id" name="c_id" type="text" /></td>
+										</tr>
+
+										<tr>
+											<td class="property" id="c_passwd_label">Password:</td>
+
+											<td class="value"><input id="c_passwd" name="c_passwd" type="text" /></td>
+										</tr>
+
+										<tr>
+											<td class="property" id="c_hint_label">Password hint:</td>
+
+											<td class="value"><input id="c_hint" name="c_hint" type="text" /></td>
+										</tr>
+
+										<tr>
+											<td class="property" id="c_justification_label">Justification:</td>
+
+											<td class="value">
+											<textarea rows="5" cols="40" id="c_justification" name="c_justification">
+</textarea></td>
+										</tr>
+									</tbody>
+								</table><input value="Submit" type="submit" />
+							</fieldset>
+						</form>
+					</div>
+
+					<div id="modify" style="display: none;">
+						<form action="#" name="modifyForm" onsubmit="return modifySubmit()" id="modifyForm">
+							<fieldset>
+								<legend>2) Modify a user</legend>
 
-	<table class="navtable" summary="purl interface" width="100%">
-	<tr valign="top">
-	<td class="navtable_action" width="35%">
+								<div class="instructions">
+									Modify any of the following user information.
+								</div>
 
-    	<div id="navigation">
+								<table class="actiontable" summary="action table">
+									<tbody>
+										<tr>
+											<td class="property" id="m_name_label">Full name:</td>
 
-		<form name="naviform" id="naviform">
-		<fieldset>
-		<legend>1) Choose an action to take on users</legend>
+											<td class="value"><input id="m_name" name="m_name" type="text" /></td>
+										</tr>
 
-		<div class="instructions">User administration options.</div>
+										<tr>
+											<td class="property" id="m_affiliation_label">Affiliation:</td>
 
-			<select name="naviselect" onchange="showAction()">
-					<option value="">
-						--- Select your action ---
-					</option>
+											<td class="value"><input id="m_affiliation" name="m_affiliation" type="text" /></td>
+										</tr>
 
-					<option value="create">
-						Register a new user
-					</option>
+										<tr>
+											<td class="property" id="m_email_label">E-mail address:</td>
 
-					<option value="modify">
-						Modify an existing user
-					</option>
+											<td class="value"><input id="m_email" name="m_email" type="text" /></td>
+										</tr>
 
-					<option value="search">
-						Search for a user
-					</option>
-
-					<option value="delete">
-						Delete a user
-					</option>
-			</select>
-		</fieldset>
-		</form>
-
-		<img src = "http://purlz.org/images/users.png" alt="users" />
-	</div>
-
-
-	</td>
-	<td class="navtable_form">
-
-	<div id="create" style="display: none;">
-
-		<form action="#" name="createForm" onsubmit="return createSubmit()" id="createForm">
-
-		<fieldset>
-		<legend>2) Register a new user</legend>
-	
-		<div class="instructions">Fill in the following user information to create a new user.</div>
-
-	 	<table class="actiontable" summary="action table">
-				<tbody><tr>
-					<td class="property" id="c_name_label">Full name:</td>
-
-					<td class="value"><input id="c_name" name="c_name" type="text" /></td>
-				</tr>
-
-				<tr>
-					<td class="property" id="c_affiliation_label">Affiliation:</td>
-
-					<td class="value"><input id="c_affiliation" name="c_affiliation" type="text" /></td>
-				</tr>
-
-				<tr>
-					<td class="property" id="c_email_label">E-mail address:</td>
-
-					<td class="value"><input id="c_email" name="c_email" type="text" /></td>
-				</tr>
-
-				<tr>
-					<td class="property" id="c_id_label">User ID:</td>
-
-					<td class="value"><input id="c_id" name="c_id" type="text" /></td>
-				</tr>
-
-				<tr>
-					<td class="property" id="c_passwd_label">Password:</td>
-
-					<td class="value"><input id="c_passwd" name="c_passwd" type="text" /></td>
-				</tr>
-
-				<tr>
-					<td class="property" id="c_hint_label">Password hint:</td>
-
-					<td class="value"><input id="c_hint" name="c_hint" type="text" /></td>
-				</tr>
-
-				<tr>
-					<td class="property" id="c_justification_label">Justification:</td>
-
-					<td class="value">
-					<textarea rows="5" cols="40" id="c_justification" name="c_justification"></textarea></td>
-				</tr>
-			</tbody>
-			</table>
-
-			<input value="Submit" type="submit" />
-		</fieldset>
-		</form>
-	</div>
-
-	<div id="modify" style="display: none;">
-		<!-- TODO: Populate existing data from server before presentation to user? -->
-
-		<form action="#" name="modifyForm" onsubmit="return modifySubmit()" id="modifyForm">
-		<fieldset>
-		<legend>2) Modify a user</legend>
-
-		<div class="instructions">Modify any of the following user information.</div>
-
-			<table class="actiontable" summary="action table">
-				<tbody><tr>
-					<td class="property" id="m_name_label">Full name:</td>
-
-					<td class="value"><input id="m_name" name="m_name" type="text" /></td>
-				</tr>
-
-				<tr>
-					<td class="property" id="m_affiliation_label">Affiliation:</td>
-
-					<td class="value"><input id="m_affiliation" name="m_affiliation" type="text" /></td>
-				</tr>
-
-				<tr>
-					<td class="property" id="m_email_label">E-mail address:</td>
-
-					<td class="value"><input id="m_email" name="m_email" type="text" /></td>
-				</tr>
-
-				<tr>
-					<td class="property" id="m_id_label">User ID:</td>
-
-					<td class="value"><input id="m_id" name="m_id" type="text" /></td>
-				</tr>
-
-				<tr>
-					<td class="property" id="m_passwd_label">Password:</td>
-
-					<td class="value"><input id="m_passwd" name="m_passwd" type="text" /></td>
-				</tr>
-
-				<tr>
-					<td class="property" id="m_hint_label">Password hint:</td>
-
-					<td class="value"><input id="m_hint" name="m_hint" type="text" /></td>
-				</tr>
-
-				<tr>
-					<td class="property" id="m_justification_label">Justification:</td>
-
-					<td class="value">
-					<textarea rows="5" cols="40" id="m_justification" name="m_justification"></textarea></td>
-				</tr>
-
-			</tbody>
-			</table>
-
-			<input value="Submit" type="submit" />
-			</fieldset>
-		</form>
-	</div>
-
-	<div id="search" style="display: none;">
-
-		<form action="#" name="searchForm" onsubmit="return searchSubmit()" id="searchForm">
-
-		<fieldset>
-		<legend>2) Search for a user</legend>
-
-		<div class="instructions">Search users based on any of the following characteristics.</div>
-
-			<table class="actiontable" summary="action table">
-				<tbody><tr>
-					<td class="property" id="s_name_label">Full name:</td>
-
-					<td class="value"><input id="s_name" name="s_name" type="text" /></td>
-				</tr>
-
-				<tr colspan="2">
-					<td align="center"><b>or</b></td>
-				</tr>
-
-				<tr>
-					<td class="property" id="s_affiliation_label">Affiliation:</td>
-
-					<td class="value"><input id="s_affiliation" name="s_affiliation" type="text" /></td>
-				</tr>
-
-				<tr colspan="2">
-					<td align="center"><b>or</b></td>
-				</tr>
-
-				<tr>
-					<td class="property" id="s_email_label">E-mail address:</td>
-
-					<td class="value"><input id="s_email" name="s_email" type="text" /></td>
-				</tr>
-
-				<tr colspan="2">
-					<td align="center"><b>or</b></td>
-				</tr>
-
-				<tr>
-					<td class="property" id="s_id_label">User ID:</td>
-
-					<td class="value"><input id="s_id" name="s_id" type="text" /></td>
-				</tr>
-
-			</tbody>
-			</table>
-
-			<input value="Submit" type="submit" />
-			</fieldset>
-		</form>
-	</div>
-
-	<div id="delete" style="display: none;">
-		<form action="#" name="deleteForm" onsubmit="return deleteSubmit()" id="deleteForm">
-
-		<fieldset>
-		<legend>2) Delete a user</legend>
-
-		<div class="instructions">Delete a user based on their User ID. You will be prompted for confirmation to complete this action.</div>
-
-			<table class="actiontable" summary="action table">
-				<tbody><tr>
-					<td class="property" id="d_id_label">User ID:</td>
-
-					<td class="value"><input id="d_id" name="d_id" type="text" /></td>
-				</tr>
-			</tbody>
-			</table>
-
-			<input value="Submit" type="submit" />
-			</fieldset>
-		</form>
-	</div> <!-- navigation -->
-
-	</td>
-	</table>
-
+										<tr>
+											<td class="property" id="m_id_label">User ID:</td>
+
+											<td class="value"><input id="m_id" name="m_id" type="text" /></td>
+										</tr>
+
+										<tr>
+											<td class="property" id="m_passwd_label">Password:</td>
+
+											<td class="value"><input id="m_passwd" name="m_passwd" type="text" /></td>
+										</tr>
+
+										<tr>
+											<td class="property" id="m_hint_label">Password hint:</td>
+
+											<td class="value"><input id="m_hint" name="m_hint" type="text" /></td>
+										</tr>
+
+										<tr>
+											<td class="property" id="m_justification_label">Justification:</td>
+
+											<td class="value">
+											<textarea rows="5" cols="40" id="m_justification" name="m_justification">
+</textarea></td>
+										</tr>
+									</tbody>
+								</table><input value="Submit" type="submit" />
+							</fieldset>
+						</form>
+					</div>
+
+					<div id="search" style="display: none;">
+						<form action="#" name="searchForm" onsubmit="return searchSubmit()" id="searchForm">
+							<fieldset>
+								<legend>2) Search for a user</legend>
+
+								<div class="instructions">
+									Search users based on any of the following characteristics.
+								</div>
+
+								<table class="actiontable" summary="action table">
+									<tbody>
+										<tr>
+											<td class="property" id="s_name_label">Full name:</td>
+
+											<td class="value"><input id="s_name" name="s_name" type="text" /></td>
+										</tr>
+
+										<tr colspan="2">
+											<td align="center"><b>or</b></td>
+										</tr>
+
+										<tr>
+											<td class="property" id="s_affiliation_label">Affiliation:</td>
+
+											<td class="value"><input id="s_affiliation" name="s_affiliation" type="text" /></td>
+										</tr>
+
+										<tr colspan="2">
+											<td align="center"><b>or</b></td>
+										</tr>
+
+										<tr>
+											<td class="property" id="s_email_label">E-mail address:</td>
+
+											<td class="value"><input id="s_email" name="s_email" type="text" /></td>
+										</tr>
+
+										<tr colspan="2">
+											<td align="center"><b>or</b></td>
+										</tr>
+
+										<tr>
+											<td class="property" id="s_id_label">User ID:</td>
+
+											<td class="value"><input id="s_id" name="s_id" type="text" /></td>
+										</tr>
+									</tbody>
+								</table><input value="Submit" type="submit" />
+							</fieldset>
+						</form>
+					</div>
+
+					<div id="delete" style="display: none;">
+						<form action="#" name="deleteForm" onsubmit="return deleteSubmit()" id="deleteForm">
+							<fieldset>
+								<legend>2) Delete a user</legend>
+
+								<div class="instructions">
+									Delete a user based on their User ID. You will be prompted for confirmation to complete this action.
+								</div>
+
+								<table class="actiontable" summary="action table">
+									<tbody>
+										<tr>
+											<td class="property" id="d_id_label">User ID:</td>
+
+											<td class="value"><input id="d_id" name="d_id" type="text" /></td>
+										</tr>
+									</tbody>
+								</table><input value="Submit" type="submit" />
+							</fieldset>
+						</form>
+					</div><!-- navigation -->
+				</td>
+			</tr>
+		</table>
 	</div><!-- content -->
 
-	<div id="results" class="noresults">
-	</div>
-		
-	<div id="footer">
-	<a href = "http://www.oclc.org/"><img align="left" src = "http://www.oclc.org/common/images/logos/oclclogo.jpg" alt="oclc" /></a> 
-	<br />
-	<a  href = "http://zepheira.com/"><img align="right" src = "http://purlz.org/images/zepheiralogo.png" alt="zepheira" /></a>
-	</div>
+	<div id="results" class="noresults"></div>
 
+	<div id="footer">
+		<a href="http://www.oclc.org/"><img align="left" src="http://www.oclc.org/common/images/logos/oclclogo.jpg" alt="oclc" /></a><br />
+		<a href="http://zepheira.com/"><img align="right" src="http://purlz.org/images/zepheiralogo.png" alt="zepheira" /></a>
+	</div>
 </body>
 </html>

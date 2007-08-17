@@ -120,6 +120,10 @@ div.withresults {
 	text-decoration: none;
 }
 
+h3.error {
+	font-weight: bold;
+	color: red;
+}
 p.actiontext {
 	font-size: 1.1em;
 	font-weight: bold;
