@@ -8,6 +8,13 @@ http://purl.org/maint/first_time_note.html
 http://purl.org/maint/validate/Manifest
 http://purl.org/problems.html
 
+Brief Intro: http://purl.oclc.org/OCLC/PURL/SUMMARY
+Longer Intro: http://purl.oclc.org/OCLC/PURL/INET96
+FAQ: http://purl.oclc.org/OCLC/PURL/FAQ
+Community:
+http://purl.oclc.org/OCLC/PURL/DOWNLOAD
+http://purl.oclc.org/OCLC/PURL/PURL-L
+index
 Actions (30)
 ------------
 http://purl.org/maint/batch.pl.cgi
