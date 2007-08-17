@@ -1,6 +1,24 @@
 package org.purl.accessor;
 
 /**
+ * version 1.0, 16 August 2007
+ * Brian Sletten (brian at http://zepheira.com/)
+ *
+ *=========================================================================
+ *
+ *  Copyright (C) 2007 OCLC (http://oclc.org)
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ *	=========================================================================
+ *
  * Success:
  * GET: 200 (OK)
  * POST: 201 (Created)
@@ -32,6 +50,10 @@ import com.ten60.netkernel.urii.aspect.StringAspect;
 public class UserAccessor extends NKFAccessorImpl {
 
 	private static Map<String, PURLCommand> commandMap = new HashMap<String, PURLCommand>();
+	private static final String
+		TEXT = "text/plain",
+		XML = "text/xml",
+		HTML = "text/html";
 
 	static {
 		commandMap.put("GET", new GetUserPURLCommand());
@@ -48,26 +70,22 @@ public class UserAccessor extends NKFAccessorImpl {
 	@Override
 	public void processRequest(INKFConvenienceHelper context) throws Exception {
 		INKFResponse resp = null;
-		IURRepresentation result = null;
 
 		String method = (((IAspectString)context.sourceAspect("literal:method", IAspectString.class)).getString());
-		System.out.println("method:" + method);
 
 		PURLCommand cmd = commandMap.get(method);
 
 		if(cmd != null) {
-			result = cmd.execute(context);
-			resp = context.createResponseFrom(result);
+			resp = cmd.execute(context);
+		} else {
+			// TODO: Generate an ERROR
 		}
 
-		resp.setMimeType("text/xml");
 		context.setResponse(resp);
 	}
 
 	static abstract public class PURLCommand {
-		abstract IURRepresentation execute(INKFConvenienceHelper context);
-
-
+		abstract INKFResponse execute(INKFConvenienceHelper context);
 
 		protected IAspectNVP getParams(INKFConvenienceHelper context) throws NKFException {
 			IAspectNVP retValue = null;
@@ -144,19 +162,23 @@ public class UserAccessor extends NKFAccessorImpl {
 			return sb.toString();
 		}
 
-		public IURRepresentation execute(INKFConvenienceHelper context) {
-			IURRepresentation retValue = null;
+		public INKFResponse execute(INKFConvenienceHelper context) {
+			INKFResponse retValue = null;
 
 			try {
 				IAspectNVP params = getParams(context);
 				String id = getId(context);
 				if(userExists(id, context)) {
 					// Cannot create the same name
-					retValue = setResponseCode(context, new StringAspect("User: " + id + " already exists."), 409);
+					IURRepresentation rep = setResponseCode(context, new StringAspect("User: " + id + " already exists."), 409);
+					retValue = context.createResponseFrom(rep);
+					retValue.setMimeType(TEXT);
 				} else {
 					IURAspect iur = new StringAspect(generateUser(id, params));
 					context.sinkAspect(generateResourceURI(id), iur);
-					retValue = setResponseCode(context, iur, 201);
+					IURRepresentation rep = setResponseCode(context, iur, 201);
+					retValue = context.createResponseFrom(rep);
+					retValue.setMimeType(XML);
 				}
 
 			} catch (NKFException e) {
@@ -171,18 +193,23 @@ public class UserAccessor extends NKFAccessorImpl {
 
 	static public class GetUserPURLCommand extends PURLCommand {
 
-		public IURRepresentation execute(INKFConvenienceHelper context) {
+		public INKFResponse execute(INKFConvenienceHelper context) {
 
-			IURRepresentation retValue = null;
+			INKFResponse retValue = null;
 
 			try {
 				IAspectNVP params = getParams(context);
 				String id = getId(context);
 				if(userExists(id, context)) {
 					// Default response code of 200 is fine
-					retValue = context.source(generateResourceURI(id));
+
+					IURRepresentation rep = setResponseCode(context, context.sourceAspect(generateResourceURI(id), IAspectString.class), 200);
+					retValue = context.createResponseFrom(rep);
+					retValue.setMimeType(XML);
 				} else {
-					retValue = setResponseCode(context, new StringAspect("No such user: " + id), 404);
+					IURRepresentation rep = setResponseCode(context, new StringAspect("No such user: " + id), 404);
+					retValue = context.createResponseFrom(rep);
+					retValue.setMimeType(TEXT);
 				}
 
 			} catch (NKFException e) {
@@ -197,8 +224,8 @@ public class UserAccessor extends NKFAccessorImpl {
 
 	static public class DeleteUserPURLCommand extends PURLCommand {
 
-		public IURRepresentation execute(INKFConvenienceHelper context) {
-			IURRepresentation retValue = null;
+		public INKFResponse execute(INKFConvenienceHelper context) {
+			INKFResponse retValue = null;
 
 			try {
 				IAspectNVP params = getParams(context);
@@ -206,10 +233,14 @@ public class UserAccessor extends NKFAccessorImpl {
 				if(userExists(id, context)) {
 					// Default response code of 200 is fine
 					context.delete(generateResourceURI(id));
-					retValue = setResponseCode(context, new StringAspect("Deleted user: " + id), 200);
+					IURRepresentation rep = setResponseCode(context, new StringAspect("Deleted user: " + id), 200);
+					retValue = context.createResponseFrom(rep);
+					retValue.setMimeType(TEXT);
 
 				} else {
-					retValue = setResponseCode(context, new StringAspect("No such user: " + id), 404);
+					IURRepresentation rep = setResponseCode(context, new StringAspect("No such user: " + id), 404);
+					retValue = context.createResponseFrom(rep);
+					retValue.setMimeType(TEXT);
 				}
 
 			} catch (NKFException e) {
@@ -225,8 +256,8 @@ public class UserAccessor extends NKFAccessorImpl {
 
 	static public class UpdateUserPURLCommand extends CreateUserPURLCommand {
 
-		public IURRepresentation execute(INKFConvenienceHelper context) {
-			IURRepresentation retValue = null;
+		public INKFResponse execute(INKFConvenienceHelper context) {
+			INKFResponse retValue = null;
 
 			try {
 				IAspectNVP params = getParams(context);
@@ -235,9 +266,13 @@ public class UserAccessor extends NKFAccessorImpl {
 					// Update the user
 					IURAspect iur = new StringAspect(generateUser(id, params));
 					context.sinkAspect(generateResourceURI(id), iur);
-					retValue = setResponseCode(context, new StringAspect("Updated user: " + id), 200);
+					IURRepresentation rep = setResponseCode(context, new StringAspect("Updated user: " + id), 200);
+					retValue = context.createResponseFrom(rep);
+					retValue.setMimeType(TEXT);
 				} else {
-					retValue = setResponseCode(context, new StringAspect("No such user: " + id), 404);
+					IURRepresentation rep = setResponseCode(context, new StringAspect("No such user: " + id), 404);
+					retValue = context.createResponseFrom(rep);
+					retValue.setMimeType(TEXT);
 				}
 
 			} catch (NKFException e) {
