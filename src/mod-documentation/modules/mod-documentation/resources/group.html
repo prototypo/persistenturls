@@ -59,7 +59,7 @@ handles results from the server in response to form submissions.
 	var debugThisPage = false;
 
 	// NB: This array contains the names of each element that represents a label for an HTML form item.  If you add a new form item and want it highlighted upon a "bad parameter" error, you MUST add it's id to this array.
-	var labelElements = ["c_name_label", "c_id_label", "m_name_label", "m_id_label", "s_name_label", "s_id_label", "d_id_label"];
+	var labelElements = ["c_name_label", "c_id_label", "c_maintainers_label", "c_members_label", "c_comments_label", "m_name_label", "m_id_label", "m_maintainers_label", "m_members_label", "m_comments_label", "s_name_label", "s_id_label", "s_maintainers_label", "s_members_label", "d_id_label"];
 
 	// Send a Create command via HTTP POST.
 	function createSubmit() {
@@ -71,11 +71,9 @@ handles results from the server in response to form submissions.
 			urlVars = {}
 			bodyVars = {
 				name: $('c_name').value,
-				affiliation: $('c_affiliation').value,
-				email: $('c_email').value,
-				passwd: $('c_passwd').value,
-				hint: $('c_hint').value,
-				justification: $('c_justification').value
+				maintainers: $('c_maintainers').value,
+				members: $('c_members').value,
+				comments: $('c_comments').value
 			}
 			ajaxCaller.postVars("/admin/group/" + my_id, bodyVars, urlVars, onResponse, false, "Create");
 		}
@@ -92,11 +90,9 @@ handles results from the server in response to form submissions.
 			signalLoadingResults();
 			urlVars = {
 				name: $('m_name').value,
-				affiliation: $('m_affiliation').value,
-				email: $('m_email').value,
-				passwd: $('m_passwd').value,
-				hint: $('m_hint').value,
-				justification: $('m_justification').value
+				maintainers: $('m_maintainers').value,
+				members: $('m_members').value,
+				comments: $('m_comments').value
 			}
 			bodyType = "text/html";
 			body = "";
@@ -117,8 +113,8 @@ handles results from the server in response to form submissions.
 		signalLoadingResults();
 		bodyVars =  {
 				name: $('s_name').value,
-				affiliation: $('s_affiliation').value,
-				email: $('s_email').value
+				maintainers: $('s_maintainers').value,
+				members: $('s_members').value
 		}
 		if ( my_id == "" | my_id == null ) {
 			// No group id is given, so we call the parent resource.
@@ -214,6 +210,31 @@ handles results from the server in response to form submissions.
 
 											<td class="value"><input id="c_id" name="c_id" type="text" /></td>
 										</tr>
+										
+										<tr>
+											<td class="property" id="c_maintainers_label">Maintainer IDs (one per line):</td>
+
+											<td class="value">
+												<textarea rows="5" cols="40" id="c_maintainers" name="c_maintainers"></textarea>
+											</td>
+										</tr>
+										
+										<tr>
+											<td class="property" id="c_members_label">Member IDs (one per line):</td>
+
+											<td class="value">
+												<textarea rows="5" cols="40" id="c_members" name="c_members"></textarea>
+											</td>
+										</tr>
+										
+										<tr>
+											<td class="property" id="c_comments_label">Public comments:</td>
+
+											<td class="value">
+												<textarea rows="5" cols="40" id="c_comments" name="c_comments"></textarea>
+											</td>
+										</tr>
+										
 									</tbody>
 								</table><input value="Submit" type="submit" />
 							</fieldset>
@@ -241,6 +262,30 @@ handles results from the server in response to form submissions.
 											<td class="property" id="m_id_label">Group ID:</td>
 
 											<td class="value"><input id="m_id" name="m_id" type="text" /></td>
+										</tr>
+										
+										<tr>
+											<td class="property" id="m_maintainers_label">Maintainer IDs (one per line):</td>
+
+											<td class="value">
+												<textarea rows="5" cols="40" id="m_maintainers" name="m_maintainers"></textarea>
+											</td>
+										</tr>
+										
+										<tr>
+											<td class="property" id="m_members_label">Member IDs (one per line):</td>
+
+											<td class="value">
+												<textarea rows="5" cols="40" id="m_members" name="m_members"></textarea>
+											</td>
+										</tr>
+										
+										<tr>
+											<td class="property" id="m_comments_label">Public comments:</td>
+
+											<td class="value">
+												<textarea rows="5" cols="40" id="m_comments" name="m_comments"></textarea>
+											</td>
 										</tr>
 									</tbody>
 								</table><input value="Submit" type="submit" />
@@ -273,6 +318,26 @@ handles results from the server in response to form submissions.
 											<td class="property" id="s_id_label">Group ID:</td>
 
 											<td class="value"><input id="s_id" name="s_id" type="text" /></td>
+										</tr>
+
+										<tr colspan="2">
+											<td align="center"><b>or</b></td>
+										</tr>
+
+										<tr>
+											<td class="property" id="s_maintainers_label">Maintainer ID:</td>
+
+											<td class="value"><input id="s_maintainers" name="s_maintainers" type="text" /></td>
+										</tr>
+
+										<tr colspan="2">
+											<td align="center"><b>or</b></td>
+										</tr>
+
+										<tr>
+											<td class="property" id="s_members_label">Member ID:</td>
+
+											<td class="value"><input id="s_members" name="s_members" type="text" /></td>
 										</tr>
 									</tbody>
 								</table><input value="Submit" type="submit" />
