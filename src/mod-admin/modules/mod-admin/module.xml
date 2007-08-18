@@ -6,7 +6,7 @@
 	-->
     <identity>
 		<uri>urn:org:purl:admin</uri>
-		<version>0.0.163</version>
+		<version>0.0.308</version>
     </identity>
 	<info>
 		<name>PURL Admin Module</name>
@@ -41,6 +41,8 @@
 			<match>ffcpl:/entrypoints.xml</match>
 			<match>ffcpl:/etc/.*</match>
 			<match>ffcpl:/users/.*</match>
+			<match>ffcpl:/groups/.*</match>
+			<match>ffcpl:/domains/.*</match>
 		</this>
 		<this>
 			<match>ffcpl:/resources/.*</match>

@@ -1,8 +1,8 @@
 package org.purl.accessor;
 
 /**
- * version 1.0, 16 August 2007
- * Brian Sletten (brian at http://zepheira.com/)
+ * @version 1.0, 16 August 2007
+ * @author Brian Sletten (brian at http://zepheira.com/)
  *
  *=========================================================================
  *
@@ -17,7 +17,37 @@ package org.purl.accessor;
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  *
- *	=========================================================================
+ *=========================================================================
+ *
+ * The UserAccessor manages user accounts and is part of the admin
+ * interface for the PURLS service
+ *
+ * Requests getting mapped to this accessor are expected to fall into the following
+ * categories:
+ *
+ * 1) Create a new user
+ * Returns a copy of the public information for the new user on success.
+ *
+ * Possible outcomes:
+ * Success - a 201 will be returned via the HTTP transport indicating the resource was
+ *             successfully created.
+ * Failure - a 409 will be returned if the user already exists
+ *           (other failure cases?)
+ * 2) Update an existing user
+ *
+ * Does not return a copy of the user on success.
+ * Success - a 200
+ * Failure - a 409
+ *
+ * 3) Delete an existing user
+ *
+ * Success - a 200
+ * Failure -
+ * 4) Search for users
+ *
+ * These are documented here:
+ *
+ * http://purlz.org/project/purl/documentation/requirements/index.html
  *
  * Success:
  * GET: 200 (OK)
@@ -31,279 +61,61 @@ package org.purl.accessor;
  * Attempt to modify an uncreated resource: 412 (Precondition Failed)
 */
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
-import org.ten60.netkernel.layer1.nkf.INKFRequest;
-import org.ten60.netkernel.layer1.nkf.INKFRequestReadOnly;
-import org.ten60.netkernel.layer1.nkf.INKFResponse;
 import org.ten60.netkernel.layer1.nkf.NKFException;
-import org.ten60.netkernel.layer1.nkf.impl.NKFAccessorImpl;
 import org.ten60.netkernel.layer1.representation.IAspectNVP;
 
 import com.ten60.netkernel.urii.IURAspect;
-import com.ten60.netkernel.urii.IURRepresentation;
-import com.ten60.netkernel.urii.aspect.IAspectString;
 import com.ten60.netkernel.urii.aspect.StringAspect;
 
-public class UserAccessor extends NKFAccessorImpl {
-
-	private static Map<String, PURLCommand> commandMap = new HashMap<String, PURLCommand>();
-	private static final String
-		TEXT = "text/plain",
-		XML = "text/xml",
-		HTML = "text/html";
+public class UserAccessor extends AbstractAccessor {
 
 	static {
-		commandMap.put("GET", new GetUserPURLCommand());
-		commandMap.put("POST", new CreateUserPURLCommand());
-		commandMap.put("DELETE", new DeleteUserPURLCommand());
-		commandMap.put("PUT", new UpdateUserPURLCommand());
+        // We use stateless command instances that are triggered
+        // based on the method of the HTTP request
+
+        URIResolver userResolver = new URIResolver() {
+            @Override
+            public String getURI(INKFConvenienceHelper context) {
+                String retValue = null;
+
+                try {
+                    retValue = "ffcpl:/users/" + NKHelper.getLastSegment(context);
+                } catch(NKFException nfe) {
+                    nfe.printStackTrace();
+                }
+
+                return retValue;
+            }
+
+        };
+
+        ResourceCreator userCreator = new UserCreator();
+
+		commandMap.put("GET", new GetResourceCommand(userResolver));
+		commandMap.put("POST", new CreateResourceCommand(userResolver, userCreator));
+		commandMap.put("DELETE", new DeleteResourceCommand(userResolver));
+		commandMap.put("PUT", new UpdateResourceCommand(userResolver, userCreator));
 	}
 
-	public UserAccessor() {
-		super(SAFE_FOR_CONCURRENT_USE, INKFRequestReadOnly.RQT_SOURCE);
+    static public class UserCreator implements ResourceCreator {
 
-	}
-
-	@Override
-	public void processRequest(INKFConvenienceHelper context) throws Exception {
-		INKFResponse resp = null;
-
-		String method = (((IAspectString)context.sourceAspect("literal:method", IAspectString.class)).getString());
-
-		PURLCommand cmd = commandMap.get(method);
-
-		if(cmd != null) {
-			resp = cmd.execute(context);
-		} else {
-			// TODO: Generate an ERROR
-		}
-
-		context.setResponse(resp);
-	}
-
-	static protected void log(INKFConvenienceHelper context, String logMessage) {
-		try {
-			INKFRequest req = context.createSubRequest("active:application-log");
-			req.addArgument("operand", new StringAspect(logMessage));
-			context.issueAsyncSubRequest(req);
-		} catch (NKFException e) {
-			e.printStackTrace();
-		}
-	}
-
-	static abstract public class PURLCommand {
-		abstract INKFResponse execute(INKFConvenienceHelper context);
-
-		protected IAspectNVP getParams(INKFConvenienceHelper context) throws NKFException {
-			IAspectNVP retValue = null;
-
-			if(context.exists("this:param:param")) {
-				retValue = (IAspectNVP) context.sourceAspect("this:param:param", IAspectNVP.class);
-				IAspectString param = (IAspectString) context.sourceAspect("this:param:param", IAspectString.class);
-				System.out.println(param.getString());
-			}
-
-			if(retValue == null) {
-				if(context.exists("this:param:param2")) {
-					retValue = (IAspectNVP) context.sourceAspect("this:param:param2", IAspectNVP.class);
-				}
-			}
-
-			return retValue;
-		}
-
-		protected String getId(INKFConvenienceHelper context) throws NKFException {
-			String retValue = null;
-			String path=context.getThisRequest().getArgument("path");
-			String[] parts=path.split("/");
-			if(!parts[parts.length-1].equals("user")) {
-				retValue = parts[parts.length-1];
-			}
-			return retValue;
-		}
-
-		protected String generateResourceURI(String id) {
-			return "ffcpl:/users/" + id;
-		}
-
-		protected boolean userExists(String id, INKFConvenienceHelper context) throws NKFException {
-			String resource = generateResourceURI(id);
-			System.out.println("Checking on... " + resource);
-			return context.exists(resource);
-		}
-
-		protected IURRepresentation setResponseCode(INKFConvenienceHelper context, IURAspect aspect, int code) throws NKFException {
-			StringBuffer sb = new StringBuffer("<HTTPResponseCode>");
-			sb.append("<code>");
-			sb.append(code);
-			sb.append("</code>");
-			sb.append("</HTTPResponseCode>");
-
-			System.out.println(sb.toString());
-
-			INKFRequest req = context.createSubRequest("active:HTTPResponseCode");
-			req.addArgument("operand", aspect);
-			req.addArgument("param", new StringAspect(sb.toString()));
-			IURRepresentation resp = context.issueSubRequest(req);
-			System.out.println(resp.toString());
-			return resp;
-		}
-	}
-
-	static public class CreateUserPURLCommand extends PURLCommand {
-		protected String generateUser(String id, IAspectNVP params) {
-			StringBuffer sb = new StringBuffer("<user>");
-			sb.append("<id>");
-			sb.append(id);
-			sb.append("</id>");
-			sb.append("<name>");
-			sb.append(params.getValue("name"));
-			sb.append("</name>");
-			sb.append("<affiliation>");
-			sb.append(params.getValue("affiliation"));
-			sb.append("</affiliation>");
-			sb.append("<email>");
-			sb.append(params.getValue("email"));
-			sb.append("</email>");
-			sb.append("</user>");
-			return sb.toString();
-		}
-
-		public INKFResponse execute(INKFConvenienceHelper context) {
-			INKFResponse retValue = null;
-
-			try {
-				IAspectNVP params = getParams(context);
-				String id = getId(context);
-				if(userExists(id, context)) {
-					// Cannot create the same name
-					String message = "User: " + id + " already exists.";
-					IURRepresentation rep = setResponseCode(context, new StringAspect(message), 409);
-					retValue = context.createResponseFrom(rep);
-					retValue.setMimeType(TEXT);
-					log(context, message);
-				} else {
-					IURAspect iur = new StringAspect(generateUser(id, params));
-					context.sinkAspect(generateResourceURI(id), iur);
-					IURRepresentation rep = setResponseCode(context, iur, 201);
-					retValue = context.createResponseFrom(rep);
-					retValue.setMimeType(XML);
-					log(context, "Created new user: " + id);
-				}
-
-			} catch (NKFException e) {
-				// TODO Handle
-				e.printStackTrace();
-			}
-
-			return retValue;
-		}
-
-	}
-
-	static public class GetUserPURLCommand extends PURLCommand {
-
-		public INKFResponse execute(INKFConvenienceHelper context) {
-
-			INKFResponse retValue = null;
-
-			try {
-				IAspectNVP params = getParams(context);
-				String id = getId(context);
-				if(userExists(id, context)) {
-					// Default response code of 200 is fine
-
-					IURRepresentation rep = setResponseCode(context, context.sourceAspect(generateResourceURI(id), IAspectString.class), 200);
-					retValue = context.createResponseFrom(rep);
-					retValue.setMimeType(XML);
-				} else {
-					IURRepresentation rep = setResponseCode(context, new StringAspect("No such user: " + id), 404);
-					retValue = context.createResponseFrom(rep);
-					retValue.setMimeType(TEXT);
-				}
-
-			} catch (NKFException e) {
-				// TODO Handle
-				e.printStackTrace();
-			}
-
-			return retValue;
-		}
-
-	}
-
-	static public class DeleteUserPURLCommand extends PURLCommand {
-
-		public INKFResponse execute(INKFConvenienceHelper context) {
-			INKFResponse retValue = null;
-
-			try {
-				IAspectNVP params = getParams(context);
-				String id = getId(context);
-				if(userExists(id, context)) {
-					// Default response code of 200 is fine
-					context.delete(generateResourceURI(id));
-					String message = "Deleted user: " + id;
-					IURRepresentation rep = setResponseCode(context, new StringAspect(message), 200);
-					retValue = context.createResponseFrom(rep);
-					retValue.setMimeType(TEXT);
-					log(context,message);
-
-				} else {
-					String message = "No such user: " + id;
-					IURRepresentation rep = setResponseCode(context, new StringAspect(message), 404);
-					retValue = context.createResponseFrom(rep);
-					retValue.setMimeType(TEXT);
-					log(context,message);
-				}
-
-			} catch (NKFException e) {
-				// TODO Handle
-				e.printStackTrace();
-			}
-
-			return retValue;
-
-		}
-
-	}
-
-	static public class UpdateUserPURLCommand extends CreateUserPURLCommand {
-
-		public INKFResponse execute(INKFConvenienceHelper context) {
-			INKFResponse retValue = null;
-
-			try {
-				IAspectNVP params = getParams(context);
-				String id = getId(context);
-				if(userExists(id, context)) {
-					// Update the user
-					IURAspect iur = new StringAspect(generateUser(id, params));
-					context.sinkAspect(generateResourceURI(id), iur);
-					String message = "Updated user: " + id;
-					IURRepresentation rep = setResponseCode(context, new StringAspect(message), 200);
-					retValue = context.createResponseFrom(rep);
-					retValue.setMimeType(TEXT);
-					log(context,message);
-				} else {
-					String message = "Cannot update. No such user: " + id;
-					IURRepresentation rep = setResponseCode(context, new StringAspect(message), 404);
-					retValue = context.createResponseFrom(rep);
-					retValue.setMimeType(TEXT);
-					log(context,message);
-				}
-
-			} catch (NKFException e) {
-				// TODO Handle
-				e.printStackTrace();
-			}
-
-			return retValue;
-		}
-
-	}
-
+        public IURAspect createResource(INKFConvenienceHelper context, IAspectNVP params) throws NKFException {
+            StringBuffer sb = new StringBuffer("<user>");
+            sb.append("<id>");
+            sb.append(NKHelper.getLastSegment(context));
+            sb.append("</id>");
+            sb.append("<name>");
+            sb.append(params.getValue("name"));
+            sb.append("</name>");
+            sb.append("<affiliation>");
+            sb.append(params.getValue("affiliation"));
+            sb.append("</affiliation>");
+            sb.append("<email>");
+            sb.append(params.getValue("email"));
+            sb.append("</email>");
+            sb.append("</user>");
+            return new StringAspect(sb.toString());
+        }
+    }
 }
