@@ -81,6 +81,7 @@ pre.code {
 	background: #F0F8FF;
 	padding: 10px;
 	border: 2px solid #6495ED;
+	border-top: none;
 	z-index: 2;	
 	opacity: 0.90;
 }
@@ -140,6 +141,12 @@ p.error {
 	font-weight: bold;
 	color: red;
 	margin-left: 2.5em;
+}
+
+p.warning {
+	font-size: 1.1em;
+	font-weight: bold;
+	color: red;
 }
 
 form {

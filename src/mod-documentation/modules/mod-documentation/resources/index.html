@@ -11,35 +11,33 @@
 <html>
 <head>
 	<title>Persistent URL Home Page</title>
+	<!--
 	<link href="http://www.oclc.org/common/css/basic_oclc.css" rel="stylesheet" type="text/css">
 	<link href="http://www.oclc.org/common/css/researchproject_oclc.css" rel="stylesheet" type="text/css">
+-->
+	<link type="text/css" rel="stylesheet" href="style.css" />
 </head>
 
 <body>
 	
-	<div align="center">
-		<table cellspacing="0" id="bnrResearch">
-			<tr>
-				<td id="tdResearch"><a href="http://www.oclc.org/research/">A Project of OCLC Research</a></td>
+	<div id="header">
+		<h1>Persistent URLs</h1>
 
-				<td id="tdOclc"><a href="http://www.oclc.org/">OCLC Online Computer Library Center</a></td>
-			</tr>
-
-			<tr>
-				<td id="tdProject">
-					<h2>PURLS</h2>
-				</td>
-
-				<td id="tdLogo"><a href="http://www.oclc.org/"><img src="http://www.oclc.org/common/images/logos/oclclogo_gray.gif" alt="OCLC" width="60" height="31"></a></td>
-			</tr>
-		</table>
+		<ul id="tabmenu">
+		<li><a class="active" href="index.html">Home</a></li>
+		<li><a class="inactive" href="purl.html">PURLs</a></li>
+		<li><a class="inactive" href="user.html">Users</a></li>
+		<li><a class="inactive" href="group.html">Groups</a></li>
+		<li><a class="inactive" href="domain.html">Domains</a></li>
+		</ul>
 	</div>
 
-	<p>A PURL is a <b>P</b>ersistent <b>U</b>niform <b>R</b>esource <b>L</b>ocator. Functionally, a PURL is a URL. However, instead of pointing directly to the location of an Internet resource, a PURL points to an intermediate resolution service. The PURL resolution service associates the PURL with the actual URL and returns that URL to the client. The client can then complete the URL transaction in the normal fashion. In Web parlance, this is a standard HTTP <em>redirect</em>.</p>
+	<div id="content">
+		
+		<p>A PURL is a <b>P</b>ersistent <b>U</b>niform <b>R</b>esource <b>L</b>ocator. Functionally, a PURL is a URL. However, instead of pointing directly to the location of an Internet resource, a PURL points to an intermediate resolution service. The PURL resolution service associates the PURL with the actual URL and returns that URL to the client. The client can then complete the URL transaction in the normal fashion. In Web parlance, this is a standard HTTP <em>redirect</em>.</p>
 
-	<p>The OCLC PURL Service has been strongly influenced by the active participation of <a href="http://purl.oclc.org/OCLC/RSPD">OCLC's Office of Research</a> in the Internet Engineering Task Force Uniform Resource Identifier working groups. There is nothing incompatible between PURLs and the ongoing URN (Uniform Resource Name) work. PURLs satisfy many of the requirements of URNs using currently deployed technologies and can be transitioned smoothly into a URN architecture once it is deployed.</p>
+		<p>The OCLC PURL Service has been strongly influenced by the active participation of <a href="http://purl.oclc.org/OCLC/RSPD">OCLC's Office of Research</a> in the Internet Engineering Task Force Uniform Resource Identifier working groups. There is nothing incompatible between PURLs and the ongoing URN (Uniform Resource Name) work. PURLs satisfy many of the requirements of URNs using currently deployed technologies and can be transitioned smoothly into a URN architecture once it is deployed.</p>
 
-	<center>
 		<table cellspacing="16">
 			<tr>
 				<td halign="left" valign="top" width="50%">
@@ -62,30 +60,32 @@
 					<b>Interacting with this Resolver</b>
 
 					<ul>
-						<li>Create your <a href="/getting_started.html">first</a> PURL</li>
+						<li>Create your <a href="getting_started.html">first</a> PURL</li>
 
-						<li><a href="/user_register.html">Register</a> as a user</li>
+						<li><a href="user.html#create">Register</a> as a user</li>
 
-						<li>Administer <a href="/purl.html">individual PURLs</a></li>
+						<li>Administer <a href="purl.html">individual PURLs</a></li>
 
-						<li>Administer <a href="/purls.html">batches of PURLs</a></li>
+						<li>Administer <a href="purls.html">batches of PURLs</a></li>
 
-						<li>Administer <a href="/domain.html">domains</a></li>
+						<li>Administer <a href="domain.html">domains</a></li>
 
-						<li>Administer <a href="/user.html">users</a></li>
+						<li>Administer <a href="user.html">users</a></li>
 
-						<li>Administer <a href="/group.html">groups</a></li>
+						<li>Administer <a href="group.html">groups</a></li>
 					</ul>
 				</td>
 			</tr>
 		</table>
-	</center>
-	<hr size="4">
 
-	<p>This resolver is a <font color="red">Prototype</font> of an upgraded PURL service. It should be used solely for <font color="red">TESTING</font> the compliance of the software to its specification.</p>
-	<hr size="4">
+		<p class="warning">NB: This resolver is a Prototype of an upgraded PURL service. It should be used solely for testing the compliance of the software to its <a href="http://www.purlz.org/project/purl/documentation/requirements/index.html">requirements</a>.</p>
+	
+	</div>
 
-	<p><a rel="license" href="http://creativecommons.org/licenses/by-nd/3.0/"><img alt="Creative Commons Attribution-No Derivative Works 3.0 License" style="border-width:0" src="http://i.creativecommons.org/l/by-nd/3.0/88x31.png"></a></p>
+	<div id="footer">
+		<a href="http://www.oclc.org/"><img align="left" src="http://www.oclc.org/common/images/logos/oclclogo.jpg" alt="oclc" /></a><br />
+		<a href="http://zepheira.com/"><img align="right" src="http://purlz.org/images/zepheiralogo.png" alt="zepheira" /></a>
+	</div>
 	
 </body>
 </html>
