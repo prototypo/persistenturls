@@ -61,7 +61,7 @@ handles results from the server in response to form submissions.
 	var debugThisPage = false;
 
 	// NB: This array contains the names of each element that represents a label for an HTML form item.  If you add a new form item and want it highlighted upon a "bad parameter" error, you MUST add it's id to this array.
-	var labelElements = ["c_id_label", "c_target_label", "c_maintainers_label", "m_id_label", "m_target_label", "m_maintainers_label", "s_id_label", "s_target_label", "s_maintainers_label", "s_explicitmaintainers_label", "d_id_label"];
+	var labelElements = ["c_id_label", "c_target_label", "c_maintainers_label", "m_id_label", "m_target_label", "m_maintainers_label", "s_id_label", "s_target_label", "s_maintainers_label", "s_explicitmaintainers_label", "d_id_label", "a_id", "a_maintainers", "a_type_label", "a_target", "a_seealso_label"];
 
 	// Send a Create command via HTTP POST.
 	function createSubmit() {
@@ -142,6 +142,29 @@ handles results from the server in response to form submissions.
 		}
 		clearErrorIndications();
 		return false;
+	}
+	
+	function showAdvancedPURLFields() {
+		var purlType = document.getElementById('a_type').value;
+		if ( purlType == 301 || purlType == 302 || purlType == 307 ) {
+			// Show element id '' to capture a Target URL.
+			setVisibility('a_seealso_label', 'none');
+			setVisibility('a_seealso', 'none');
+			setVisibility('a_target_label', 'inline');
+			setVisibility('a_target', 'inline');
+		} else if ( purlType == 303 ) {
+			// Show textarea to capture multiple URLs.
+			setVisibility('a_seealso_label', 'inline');
+			setVisibility('a_seealso', 'inline');
+			setVisibility('a_target_label', 'none');
+			setVisibility('a_target', 'none');
+		} else {
+			// Hide all optional form elements.
+			setVisibility('a_seealso_label', 'none');
+			setVisibility('a_seealso', 'none');
+			setVisibility('a_target_label', 'none');
+			setVisibility('a_target', 'none');
+		}
 	}
 
 //]]>
@@ -235,10 +258,12 @@ handles results from the server in response to form submissions.
 										</tr>
 									</tbody>
 								</table><input value="Submit" type="submit" />
+
 								<table class="docstable" summary="documentation table">
 									<tbody>
 										<tr>
 											<td align="right"><a href="help.html">Help</a></td>
+
 											<td align="right"><a href="javascript:showAction('AdvancedCreate')">Advanced</a></td>
 										</tr>
 									</tbody>
@@ -336,7 +361,7 @@ handles results from the server in response to form submissions.
 					</div>
 
 					<div id="delete" style="display: none;">
-						<form action="#" name="deleteForm" onsubmit="return deleteSubmit()" id="deleteForm">
+						<form action="#" name="deleteForm" onsubmit="return checkDeleteSubmit('PURL', 'd_id')" id="deleteForm">
 							<fieldset>
 								<legend>2) Delete a PURL</legend>
 
@@ -356,9 +381,10 @@ handles results from the server in response to form submissions.
 							</fieldset>
 						</form>
 					</div>
-					
+
 					<div id="advancedcreate" style="display: none;">
 						<!-- TODO: Submit to a different function! -->
+
 						<form action="#" name="advancedCreateForm" onsubmit="return createSubmit()" id="createForm">
 							<fieldset>
 								<legend>2) Advanced PURL Registration</legend>
@@ -370,30 +396,75 @@ handles results from the server in response to form submissions.
 								<table class="actiontable" summary="action table">
 									<tbody>
 										<tr>
-											<td class="property" id="c_id_label">Path:</td>
+											<td class="property" id="a_id_label">Path:</td>
 
-											<td class="value"><input id="c_id" name="c_id" type="text" size="40" /></td>
+											<td class="value"><input id="a_id" name="a_id" type="text" size="40" /></td>
 										</tr>
 
 										<tr>
-											<td class="property" id="c_target_label">Target URL:</td>
-
-											<td class="value"><input id="c_target" name="c_target" type="text" size="40" /></td>
-										</tr>
-
-										<tr>
-											<td class="property" id="c_maintainers_label">Maintainers IDs (one per line):</td>
+											<td class="property" id="a_maintainers_label">Maintainers IDs (one per line):</td>
 
 											<td class="value">
-											<textarea rows="5" cols="40" id="c_maintainers" name="c_maintainers">
+											<textarea rows="5" cols="40" id="a_maintainers" name="a_maintainers">
+</textarea></td>
+										</tr>
+
+										<tr>
+											<td class="property" id="a_type_label">Type of PURL:</td>
+
+											<td class="value"><select id="a_type" name="a_type" onchange="showAdvancedPURLFields()">
+												<option value="">
+													--- Select your type ---
+												</option>
+
+												<option value="302">
+													Simple redirection to a target URL
+												</option>
+
+												<option value="301">
+													Moved permanently to a target URL
+												</option>
+
+												<option value="303">
+													See other URLs (use for Semantic Web resources)
+												</option>
+
+												<option value="307">
+													Temporary redirect to a target URL
+												</option>
+
+												<option value="404">
+													Temporarily gone
+												</option>
+
+												<option value="410">
+													Permanently gone
+												</option>
+											</select></td>
+										</tr>
+
+										<!-- TODO: Maybe move the next two into separate tables to avoid formatting errors when displayed. -->
+										<tr>
+											<td class="property" id="a_target_label" style="display: none;">Target URL:</td>
+
+											<td class="value"><input id="a_target" name="a_target" type="text" size="40" style="display: none;" /></td>
+										</tr>
+
+										<tr>
+											<td class="property" id="a_seealso_label" style="display: none;">See Also URLs:</td>
+
+											<td class="value">
+											<textarea rows="5" cols="40" id="a_seealso" name="a_seealso" style="display: none;">
 </textarea></td>
 										</tr>
 									</tbody>
 								</table><input value="Submit" type="submit" />
+
 								<table class="docstable" summary="documentation table">
 									<tbody>
 										<tr>
 											<td align="right"><a href="help.html">Help</a></td>
+
 											<td align="right"><a href="javascript:showAction('Create')">Simple PURL Registration</a></td>
 										</tr>
 									</tbody>

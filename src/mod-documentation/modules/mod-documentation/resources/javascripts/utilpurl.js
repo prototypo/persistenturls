@@ -146,6 +146,15 @@ function startParser(xml) {
 	parser.setLexicalHandler(eventHandler);
 	parser.setErrorHandler(eventHandler);
 	parser.parse(xml);
+}	
+
+// Confirm a Delete command before proceeding with function deleteSubmit().
+function checkDeleteSubmit(typeOfObject, deletionObject) {
+	var answer = confirm("Are you certain that you want to delete the " + typeOfObject + " '" + document.getElementById(deletionObject).value + "'?");
+	if (answer){
+		deleteSubmit();
+	}
+	return false;
 }
 
 // Callback for Create/Modify/Search/Delete (POST/PUT/GET/DELETE) actions.

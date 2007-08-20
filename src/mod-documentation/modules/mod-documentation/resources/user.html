@@ -144,7 +144,6 @@ handles results from the server in response to form submissions.
 		clearErrorIndications();
 		return false;
 	}
-
 //]]>
 </script>
 </head>
@@ -373,7 +372,7 @@ handles results from the server in response to form submissions.
 					</div>
 
 					<div id="delete" style="display: none;">
-						<form action="#" name="deleteForm" onsubmit="return deleteSubmit()" id="deleteForm">
+						<form action="#" name="deleteForm" onsubmit="return checkDeleteSubmit('user', 'd_id')" id="deleteForm">
 							<fieldset>
 								<legend>2) Delete a user</legend>
 
