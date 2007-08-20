@@ -40,7 +40,7 @@ public class CreateResourceCommand extends PURLCommand {
                 IURRepresentation rep = setResponseCode(context, iur, 201);
                 retValue = context.createResponseFrom(rep);
                 retValue.setMimeType(NKHelper.MIME_XML);
-                NKHelper.log(context, "Created new user: " + id);
+                NKHelper.log(context, "Created new resource: " + id);
             }
 
         } catch (NKFException e) {
