@@ -29,7 +29,7 @@ public class DeleteResourceCommand extends PURLCommand {
                 NKHelper.log(context,message);
 
             } else {
-                String message = "No such user: " + id;
+                String message = "No such resource: " + id;
                 IURRepresentation rep = setResponseCode(context, new StringAspect(message), 404);
                 retValue = context.createResponseFrom(rep);
                 retValue.setMimeType(NKHelper.MIME_TEXT);
