@@ -122,7 +122,7 @@ handles results from the server in response to form submissions.
 		}
 		if ( my_id == "" | my_id == null ) {
 			// No user id is given, so we call the parent resource.
-			ajaxCaller.get("/admin/user/", bodyVars, onResponse, false, "s_");
+			ajaxCaller.get("/admin/user/", bodyVars, onResponse, false, "Search");
 		} else {
 			// We have a user id, so we call that resource directly.
 			ajaxCaller.get("/admin/user/" + my_id, bodyVars, onResponse, false, "Search");
@@ -206,7 +206,7 @@ handles results from the server in response to form submissions.
 								<legend>2) Register a new user</legend>
 
 								<div class="instructions">
-									Fill in the following user information to create a new user.
+									Fill in the following information to create a new user.
 								</div>
 
 								<table class="actiontable" summary="action table">
@@ -337,7 +337,7 @@ handles results from the server in response to form submissions.
 											<td class="value"><input id="s_name" name="s_name" type="text" /></td>
 										</tr>
 
-										<tr colspan="2">
+										<tr>
 											<td align="center"><b>or</b></td>
 										</tr>
 
@@ -347,7 +347,7 @@ handles results from the server in response to form submissions.
 											<td class="value"><input id="s_affiliation" name="s_affiliation" type="text" /></td>
 										</tr>
 
-										<tr colspan="2">
+										<tr>
 											<td align="center"><b>or</b></td>
 										</tr>
 
@@ -357,7 +357,7 @@ handles results from the server in response to form submissions.
 											<td class="value"><input id="s_email" name="s_email" type="text" /></td>
 										</tr>
 
-										<tr colspan="2">
+										<tr>
 											<td align="center"><b>or</b></td>
 										</tr>
 
@@ -378,7 +378,7 @@ handles results from the server in response to form submissions.
 								<legend>2) Delete a user</legend>
 
 								<div class="instructions">
-									Delete a user based on their User ID. You will be prompted for confirmation to complete this action.
+									Delete a user based on its User ID. You will be prompted for confirmation to complete this action.
 								</div>
 
 								<table class="actiontable" summary="action table">

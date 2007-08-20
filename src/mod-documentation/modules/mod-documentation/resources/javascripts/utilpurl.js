@@ -43,6 +43,7 @@ contextMap["Create"] = ["create", "c_"];
 contextMap["Modify"] = ["modify", "m_"];
 contextMap["Search"] = ["search", "s_"];
 contextMap["Delete"] = ["delete", "d_"];
+contextMap["AdvancedCreate"] = ["advancedcreate", "a_"];
 
 var resultBlock = $("results");
 
@@ -63,10 +64,14 @@ function load() {
 	}
 }
 
-function showAction()
+function showAction(directive)
 {
 	userchoice = document.naviform.naviselect;
-	destination = userchoice.options[userchoice.selectedIndex].value;
+	if (directive == null) {
+		destination = userchoice.options[userchoice.selectedIndex].value;
+	} else {
+		destination = contextMap[directive][0];
+	}
 	clearResults();
 	// Hide action divs except the one we want.
 	for ( key in contextMap ) {

@@ -116,7 +116,7 @@ handles results from the server in response to form submissions.
 		}
 		if ( my_id == "" | my_id == null ) {
 			// No domain id is given, so we call the parent resource.
-			ajaxCaller.get("/admin/domain/", bodyVars, onResponse, false, "s_");
+			ajaxCaller.get("/admin/domain/", bodyVars, onResponse, false, "Search");
 		} else {
 			// We have a domain id, so we call that resource directly.
 			ajaxCaller.get("/admin/domain/" + my_id, bodyVars, onResponse, false, "Search");
@@ -200,7 +200,7 @@ handles results from the server in response to form submissions.
 								<legend>2) Create a new domain</legend>
 
 								<div class="instructions">
-									Fill in the following domain information to create a new domain.
+									Fill in the following information to create a new domain.
 								</div>
 
 								<table class="actiontable" summary="action table">
@@ -300,7 +300,7 @@ handles results from the server in response to form submissions.
 											<td class="value"><input id="s_name" name="s_name" type="text" /></td>
 										</tr>
 
-										<tr colspan="2">
+										<tr>
 											<td align="center"><b>or</b></td>
 										</tr>
 										
@@ -310,7 +310,7 @@ handles results from the server in response to form submissions.
 											<td class="value"><input id="s_id" name="s_id" type="text" /></td>
 										</tr>
 
-										<tr colspan="2">
+										<tr>
 											<td align="center"><b>or</b></td>
 										</tr>
 
@@ -320,7 +320,7 @@ handles results from the server in response to form submissions.
 											<td class="value"><input id="s_maintainers" name="s_maintainers" type="text" /></td>
 										</tr>
 
-										<tr colspan="2">
+										<tr>
 											<td align="center"><b>or</b></td>
 										</tr>
 
@@ -341,7 +341,7 @@ handles results from the server in response to form submissions.
 								<legend>2) Delete a domain</legend>
 
 								<div class="instructions">
-									Delete a domain based on their Domain ID. You will be prompted for confirmation to complete this action.
+									Delete a domain based on its Domain ID. You will be prompted for confirmation to complete this action.
 								</div>
 
 								<table class="actiontable" summary="action table">

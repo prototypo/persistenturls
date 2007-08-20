@@ -198,6 +198,12 @@ table {
 	/* margin: 10px 10px; */
 }
 
+table.docstable {
+	table-layout: fixed;
+	padding: 0;
+	width: 100%;
+}
+
 td {
 	/* border-bottom: 1px solid #C1DAD7; */
 	/* padding: 6px 6px 6px 12px; */
