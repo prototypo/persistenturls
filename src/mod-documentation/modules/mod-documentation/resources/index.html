@@ -34,49 +34,40 @@
 
 	<div id="content">
 		
-		<p>A PURL is a <b>P</b>ersistent <b>U</b>niform <b>R</b>esource <b>L</b>ocator. Functionally, a PURL is a URL. However, instead of pointing directly to the location of an Internet resource, a PURL points to an intermediate resolution service. The PURL resolution service associates the PURL with the actual URL and returns that URL to the client. The client can then complete the URL transaction in the normal fashion. In Web parlance, this is a standard HTTP <em>redirect</em>.</p>
+		<p>A PURL is a <b>P</b>ersistent <b>U</b>niform <b>R</b>esource <b>L</b>ocator. Functionally, a PURL is a URL.  Instead of resolving directly to Web resources, PURLs provide a level of indirection that allows the underlying Web addresses of resources to change over time without negatively affecting systems that depend on them. This capability provides continuity of references to network resources that may migrate from machine to machine for business, social or technical reasons.</p>
 
-		<p>The OCLC PURL Service has been strongly influenced by the active participation of <a href="http://purl.oclc.org/OCLC/RSPD">OCLC's Office of Research</a> in the Internet Engineering Task Force Uniform Resource Identifier working groups. There is nothing incompatible between PURLs and the ongoing URN (Uniform Resource Name) work. PURLs satisfy many of the requirements of URNs using currently deployed technologies and can be transitioned smoothly into a URN architecture once it is deployed.</p>
+		<p>The PURL toolkit was strongly influenced by the active participation of <a href="http://purl.oclc.org/OCLC/RSPD">OCLC's Office of Research</a> in the early Internet Engineering Task Force Uniform Resource Identifier working groups and <a href = "http://zepheira.com/">Zepheira's</a> participation at W3C in defining a Web Architecture for managing decentralized resources.</p>
 
-		<table cellspacing="16">
-			<tr>
-				<td halign="left" valign="top" width="50%">
-					<b>Further Information and Resources</b>
-
-					<ul>
-						<li>A <a href="brief_intro.html">brief</a> introduction to PURLs</li>
-
-						<li>A <a href="long_intro.html">longer</a> introduction to PURLs</li>
-
-						<li>Frequently Asked <a href="faq.html">Questions</a></li>
-
-						<li>The PURL <a href="http://www.purlz.org/">Community</a> site (downloads, mailing lists, documentation, etc)</li>
-					</ul>
-				</td>
-
-				<td></td>
-
-				<td halign="left" valign="top" width="50%">
-					<b>Interacting with this Resolver</b>
-
-					<ul>
-						<li>Create your <a href="getting_started.html">first</a> PURL</li>
-
-						<li><a href="user.html#create">Register</a> as a user</li>
-
-						<li>Administer <a href="purl.html">individual PURLs</a></li>
-
-						<li>Administer <a href="purls.html">batches of PURLs</a></li>
-
-						<li>Administer <a href="domain.html">domains</a></li>
-
-						<li>Administer <a href="user.html">users</a></li>
-
-						<li>Administer <a href="group.html">groups</a></li>
-					</ul>
-				</td>
+		<table class="display" summary = "purl information" width = "70%" align="center"> 
+		      <tr valign="top">
+		       <th class="row">Interacting with this Resolver</th>
+		       <th class="row">Further Information and Resources</th>
+		       </tr>
+		      
+		      <tr valign="top">
+			<td>
+				<ul>
+				<li>Create your <a href="getting_started.html">first</a> PURL</li>
+				<li><a href="user.html#create">Register</a> as a user</li>
+				<li>Administer <a href="purl.html">individual PURLs</a></li>
+				<li>Administer <a href="purls.html">batches of PURLs</a></li>
+				<li>Administer <a href="domain.html">domains</a></li>
+				<li>Administer <a href="user.html">users</a></li>
+				<li>Administer <a href="group.html">groups</a></li>
+				</ul>
+			</td>
+		      <td width="50%">
+				<ul>
+				<li>A <a href="brief_intro.html">brief</a> introduction to PURLs</li>
+				<li>A <a href="long_intro.html">longer</a> introduction to PURLs</li>
+				<li>Frequently Asked <a href="faq.html">Questions</a></li>
+				<li><a href = "http://zepheira.com/news/releases/20070711.html">Press release</a> announcing PURL rearchitecture</li>
+				<li>The PURL <a href="http://www.purlz.org/">Community</a> site (downloads, mailing lists, documentation, etc)</li>
+				</ul>
+			</td>
 			</tr>
 		</table>
+		</div>
 
 		<p class="warning">NB: This resolver is a Prototype of an upgraded PURL service. It should be used solely for testing the compliance of the software to its <a href="http://www.purlz.org/project/purl/documentation/requirements/index.html">requirements</a>.</p>
 	
