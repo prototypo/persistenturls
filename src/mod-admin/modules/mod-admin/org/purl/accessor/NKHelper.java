@@ -2,6 +2,7 @@ package org.purl.accessor;
 
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFRequest;
+import org.ten60.netkernel.layer1.nkf.INKFRequestReadOnly;
 import org.ten60.netkernel.layer1.nkf.NKFException;
 
 import com.ten60.netkernel.urii.aspect.StringAspect;
@@ -16,6 +17,18 @@ public class NKHelper {
         String path=context.getThisRequest().getArgument("path");
         String[] parts=path.split("/");
         return parts[parts.length-1];
+    }
+
+    public static String getArgument(INKFConvenienceHelper context, String argument) throws NKFException {
+        String retValue = null;
+
+        INKFRequestReadOnly req = context.getThisRequest();
+
+        if(req.argumentExists(argument)) {
+            retValue = req.getArgument(argument);
+        }
+
+        return retValue;
     }
 
     /**
