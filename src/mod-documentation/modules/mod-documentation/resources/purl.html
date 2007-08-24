@@ -72,6 +72,7 @@ handles results from the server in response to form submissions.
 			signalLoadingResults();
 			urlVars = {}
 			bodyVars = {
+				target: "302",
 				target: $('c_target').value,
 				maintainers: $('c_maintainers').value
 			}
@@ -91,9 +92,9 @@ handles results from the server in response to form submissions.
 			signalLoadingResults();
 			urlVars = {}
 			bodyVars = {
-				target: $('a_type').value,
+				type: $('a_type').value,
 				target: $('a_target').value,
-				target: $('a_seealso').value,
+				seelalso: $('a_seealso').value,
 				maintainers: $('a_maintainers').value
 			}
 			// TODO: What is the URL to admin a PURL?  /admin/purl/<path>/<name>?  /<path>/<name>?
@@ -159,7 +160,7 @@ handles results from the server in response to form submissions.
 			signalLoadingResults();
 			bodyVars =  {}
 			// TODO: What is the URL to admin a PURL?  /admin/purl/<path>/<name>?  /<path>/<name>?
-			ajaxCaller.deleteIt("/admin/PURL/" + my_id, bodyVars, onResponse, false, "Delete");
+			ajaxCaller.deleteIt("/admin/purl/" + my_id, bodyVars, onResponse, false, "Delete");
 		}
 		clearErrorIndications();
 		return false;
