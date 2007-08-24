@@ -6,7 +6,7 @@
 	-->
     <identity>
 		<uri>urn:org:purl:admin</uri>
-		<version>0.0.320</version>
+		<version>0.0.344</version>
     </identity>
 	<info>
 		<name>PURL Admin Module</name>

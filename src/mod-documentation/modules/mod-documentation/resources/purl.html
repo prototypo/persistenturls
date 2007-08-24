@@ -77,7 +77,7 @@ handles results from the server in response to form submissions.
 				maintainers: $('c_maintainers').value
 			}
 			// TODO: What is the URL to admin a PURL?  /admin/purl/<path>/<name>?  /<path>/<name>?
-			ajaxCaller.postVars("/admin/purl/" + my_id, bodyVars, urlVars, onResponse, false, "Create");
+			ajaxCaller.postVars("/admin/purl" + my_id, bodyVars, urlVars, onResponse, false, "Create");
 		}
 		clearErrorIndications();
 		return false;
@@ -94,12 +94,12 @@ handles results from the server in response to form submissions.
 			bodyVars = {
 				type: $('a_type').value,
 				target: $('a_target').value,
-				seelalso: $('a_seealso').value,
+				seealso: $('a_seealso').value,
 				maintainers: $('a_maintainers').value,
 				existingpurl: $('a_existingpurl').value
 			}
 			// TODO: What is the URL to admin a PURL?  /admin/purl/<path>/<name>?  /<path>/<name>?
-			ajaxCaller.postVars("/admin/purl/" + my_id, bodyVars, urlVars, onResponse, false, "Create");
+			ajaxCaller.postVars("/admin/purl" + my_id, bodyVars, urlVars, onResponse, false, "Create");
 		}
 		clearErrorIndications();
 		return false;
@@ -161,7 +161,7 @@ handles results from the server in response to form submissions.
 			signalLoadingResults();
 			bodyVars =  {}
 			// TODO: What is the URL to admin a PURL?  /admin/purl/<path>/<name>?  /<path>/<name>?
-			ajaxCaller.deleteIt("/admin/purl/" + my_id, bodyVars, onResponse, false, "Delete");
+			ajaxCaller.deleteIt("/admin/purl" + my_id, bodyVars, onResponse, false, "Delete");
 		}
 		clearErrorIndications();
 		return false;
