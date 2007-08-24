@@ -61,7 +61,7 @@ handles results from the server in response to form submissions.
 	var debugThisPage = false;
 
 	// NB: This array contains the names of each element that represents a label for an HTML form item.  If you add a new form item and want it highlighted upon a "bad parameter" error, you MUST add it's id to this array.
-	var labelElements = ["c_id_label", "c_target_label", "c_maintainers_label", "m_id_label", "m_target_label", "m_maintainers_label", "s_id_label", "s_target_label", "s_seealso_label", "s_maintainers_label", "s_explicitmaintainers_label", "d_id_label", "a_id_label", "a_maintainers_label", "a_type_label", "a_target_label", "a_seealso_label"];
+	var labelElements = ["c_id_label", "c_target_label", "c_maintainers_label", "m_id_label", "m_target_label", "m_maintainers_label", "s_id_label", "s_target_label", "s_seealso_label", "s_maintainers_label", "s_explicitmaintainers_label", "d_id_label", "a_id_label", "a_maintainers_label", "a_type_label", "a_target_label", "a_seealso_label", "a_existingpurl_label"];
 
 	// Send a Create command via HTTP POST.
 	function createSubmit() {
@@ -95,7 +95,8 @@ handles results from the server in response to form submissions.
 				type: $('a_type').value,
 				target: $('a_target').value,
 				seelalso: $('a_seealso').value,
-				maintainers: $('a_maintainers').value
+				maintainers: $('a_maintainers').value,
+				existingpurl: $('a_existingpurl').value
 			}
 			// TODO: What is the URL to admin a PURL?  /admin/purl/<path>/<name>?  /<path>/<name>?
 			ajaxCaller.postVars("/admin/purl/" + my_id, bodyVars, urlVars, onResponse, false, "Create");
@@ -168,18 +169,32 @@ handles results from the server in response to form submissions.
 	
 	function showAdvancedPURLFields() {
 		var purlType = document.getElementById('a_type').value;
-		if ( purlType == 301 || purlType == 302 || purlType == 307 ) {
-			// Show element id '' to capture a Target URL.
+		if ( purlType == "301" || purlType == "302" || purlType == "307" || purlType == "partial") {
+			setVisibility('maintainerstable', 'inline');
 			setVisibility('seealsourltable', 'none');
 			setVisibility('targeturltable', 'inline');
-		} else if ( purlType == 303 ) {
-			// Show textarea to capture multiple URLs.
+			setVisibility('existingpurltable', 'none');
+		} else if ( purlType == "303" ) {
+			setVisibility('maintainerstable', 'inline');
 			setVisibility('seealsourltable', 'inline');
 			setVisibility('targeturltable', 'none');
-		} else {
-			// Hide all optional form elements.
+			setVisibility('existingpurltable', 'none');
+		} else if ( purlType == "clone" ) {
+			setVisibility('maintainerstable', 'none');
 			setVisibility('seealsourltable', 'none');
 			setVisibility('targeturltable', 'none');
+			setVisibility('existingpurltable', 'inline');
+		} else if ( purlType == "chain" ) {
+			setVisibility('maintainerstable', 'inline');
+			setVisibility('seealsourltable', 'none');
+			setVisibility('targeturltable', 'none');
+			setVisibility('existingpurltable', 'inline');
+		} else {
+			// The types are expected to be: 404, 410
+			setVisibility('maintainerstable', 'inline');
+			setVisibility('seealsourltable', 'none');
+			setVisibility('targeturltable', 'none');
+			setVisibility('existingpurltable', 'none');
 		}
 	}
 
@@ -428,14 +443,6 @@ handles results from the server in response to form submissions.
 										</tr>
 
 										<tr>
-											<td class="property" id="a_maintainers_label" width="120">Maintainers IDs<br>(one per line):</td>
-
-											<td class="value">
-											<textarea rows="5" cols="40" id="a_maintainers" name="a_maintainers">
-</textarea></td>
-										</tr>
-
-										<tr>
 											<td class="property" id="a_type_label" width="120">Type of PURL:</td>
 
 											<td class="value"><select id="a_type" name="a_type" onchange="showAdvancedPURLFields()">
@@ -483,7 +490,7 @@ handles results from the server in response to form submissions.
 									</tbody>
 								</table>
 
-								<table class="targeturltable" id="targeturltable" summary="target URL table" width="100%" style="display: none;">
+								<table id="targeturltable" summary="target URL table" width="100%" style="display: none;">
 									<tbody>
 										<tr>
 											<td class="property" id="a_target_label" width="120">Target URL:</td>
@@ -492,8 +499,21 @@ handles results from the server in response to form submissions.
 										</tr>
 									</tbody>
 								</table>
+								
 
-								<table class="seealsourltable" id="seealsourltable" summary="see also URL table" width="100%" style="display: none;">
+								<table id="maintainerstable" summary="maintainers table" width="100%" style="display: none;">
+									<tbody>
+										<tr>
+											<td class="property" id="a_maintainers_label" width="120">Maintainers IDs<br>(one per line):</td>
+
+											<td class="value">
+											<textarea rows="5" cols="40" id="a_maintainers" name="a_maintainers">
+		</textarea></td>
+										</tr>
+									</tbody>
+								</table>
+
+								<table id="seealsourltable" summary="see also URL table" width="100%" style="display: none;">
 									<tbody>
 										<tr>
 											<td class="property" id="a_seealso_label" width="120">See Also URLs:</td>
@@ -503,7 +523,18 @@ handles results from the server in response to form submissions.
 </textarea></td>
 										</tr>
 									</tbody>
-								</table><input value="Submit" type="submit" />
+								</table>
+
+								<table id="existingpurltable" summary="existing PURL table" width="100%" style="display: none;">
+									<tbody>
+										<tr>
+											<td class="property" id="a_existingpurl_label" width="120">Existing PURL path:</td>
+
+											<td class="value"><input id="a_existingpurl" name="a_existingpurl" type="text" size="40"/></td>
+										</tr>
+									</tbody>
+								</table>
+								<input value="Submit" type="submit" />
 
 								<table class="docstable" summary="documentation table">
 									<tbody>
