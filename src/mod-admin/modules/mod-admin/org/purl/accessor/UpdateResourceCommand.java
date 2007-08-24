@@ -26,17 +26,24 @@ public class UpdateResourceCommand extends PURLCommand {
             IAspectNVP params = getParams(context);
             String id = NKHelper.getLastSegment(context);
             if(resourceExists(context)) {
-                // Update the user
-                IURAspect iur = resCreator.createResource(context, params);
-                context.sinkAspect(uriResolver.getURI(context), iur);
-                String message = "Updated resource: " + id;
-                IURRepresentation rep = setResponseCode(context, new StringAspect(message), 200);
-                retValue = context.createResponseFrom(rep);
-                retValue.setMimeType(NKHelper.MIME_TEXT);
-                NKHelper.log(context,message);
+                try {
+                    // Update the user
+                    IURAspect iur = resCreator.createResource(context, params);
+                    context.sinkAspect(uriResolver.getURI(context), iur);
+                    String message = "Updated resource: " + id;
+                    IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect(message), 200);
+                    retValue = context.createResponseFrom(rep);
+                    retValue.setMimeType(NKHelper.MIME_TEXT);
+                    NKHelper.log(context,message);
+                } catch(PURLException p) {
+                    IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect(p.getMessage()), p.getResponseCode());
+                    retValue = context.createResponseFrom(rep);
+                    retValue.setMimeType(NKHelper.MIME_TEXT);
+                    NKHelper.log(context, p.getMessage());
+                }
             } else {
                 String message = "Cannot update. No such resource: " + id;
-                IURRepresentation rep = setResponseCode(context, new StringAspect(message), 404);
+                IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect(message), 404);
                 retValue = context.createResponseFrom(rep);
                 retValue.setMimeType(NKHelper.MIME_TEXT);
                 NKHelper.log(context,message);

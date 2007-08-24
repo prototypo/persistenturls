@@ -7,5 +7,5 @@ import org.ten60.netkernel.layer1.representation.IAspectNVP;
 import com.ten60.netkernel.urii.IURAspect;
 
 interface ResourceCreator {
-    public IURAspect createResource(INKFConvenienceHelper context, IAspectNVP params) throws NKFException;
+    public IURAspect createResource(INKFConvenienceHelper context, IAspectNVP params) throws PURLException, NKFException;
 }

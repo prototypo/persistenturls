@@ -23,14 +23,14 @@ public class DeleteResourceCommand extends PURLCommand {
                 // Default response code of 200 is fine
                 context.delete(uriResolver.getURI(context));
                 String message = "Deleted resource: " + id;
-                IURRepresentation rep = setResponseCode(context, new StringAspect(message), 200);
+                IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect(message), 200);
                 retValue = context.createResponseFrom(rep);
                 retValue.setMimeType(NKHelper.MIME_TEXT);
                 NKHelper.log(context,message);
 
             } else {
                 String message = "No such resource: " + id;
-                IURRepresentation rep = setResponseCode(context, new StringAspect(message), 404);
+                IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect(message), 404);
                 retValue = context.createResponseFrom(rep);
                 retValue.setMimeType(NKHelper.MIME_TEXT);
                 NKHelper.log(context,message);

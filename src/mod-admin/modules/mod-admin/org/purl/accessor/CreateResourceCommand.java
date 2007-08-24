@@ -29,18 +29,25 @@ public class CreateResourceCommand extends PURLCommand {
             if(resourceExists(context)) {
                 // Cannot create the same name
                 String message = "Resource: " + id + " already exists.";
-                IURRepresentation rep = setResponseCode(context, new StringAspect(message), 409);
+                IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect(message), 409);
                 retValue = context.createResponseFrom(rep);
                 retValue.setMimeType(NKHelper.MIME_TEXT);
                 NKHelper.log(context, message);
             } else {
-                IURAspect iur = resCreator.createResource(context, params);
-                System.out.println(uriResolver.getURI(context));
-                context.sinkAspect(uriResolver.getURI(context), iur);
-                IURRepresentation rep = setResponseCode(context, iur, 201);
-                retValue = context.createResponseFrom(rep);
-                retValue.setMimeType(NKHelper.MIME_XML);
-                NKHelper.log(context, "Created new resource: " + id);
+                try {
+                    IURAspect iur = resCreator.createResource(context, params);
+                    System.out.println(uriResolver.getURI(context));
+                    context.sinkAspect(uriResolver.getURI(context), iur);
+                    IURRepresentation rep = NKHelper.setResponseCode(context, iur, 201);
+                    retValue = context.createResponseFrom(rep);
+                    retValue.setMimeType(NKHelper.MIME_XML);
+                    NKHelper.log(context, "Created new resource: " + id);
+                } catch(PURLException p) {
+                    IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect(p.getMessage()), p.getResponseCode());
+                    retValue = context.createResponseFrom(rep);
+                    retValue.setMimeType(NKHelper.MIME_TEXT);
+                    NKHelper.log(context, p.getMessage());
+                }
             }
 
         } catch (NKFException e) {

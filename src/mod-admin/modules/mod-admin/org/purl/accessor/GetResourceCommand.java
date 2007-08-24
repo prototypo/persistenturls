@@ -22,11 +22,11 @@ public class GetResourceCommand extends PURLCommand {
             String id = NKHelper.getLastSegment(context);
             if(resourceExists(context)) {
                 // Default response code of 200 is fine
-                IURRepresentation rep = setResponseCode(context, context.sourceAspect(uriResolver.getURI(context), IAspectString.class), 200);
+                IURRepresentation rep = NKHelper.setResponseCode(context, context.sourceAspect(uriResolver.getURI(context), IAspectString.class), 200);
                 retValue = context.createResponseFrom(rep);
                 retValue.setMimeType(NKHelper.MIME_XML);
             } else {
-                IURRepresentation rep = setResponseCode(context, new StringAspect("No such resource: " + id), 404);
+                IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect("No such resource: " + id), 404);
                 retValue = context.createResponseFrom(rep);
                 retValue.setMimeType(NKHelper.MIME_TEXT);
             }

@@ -69,19 +69,4 @@ abstract public class PURLCommand {
 	protected boolean resourceExists(INKFConvenienceHelper context) throws NKFException {
 		return context.exists(uriResolver.getURI(context));
 	}
-
-	protected IURRepresentation setResponseCode(INKFConvenienceHelper context, IURAspect aspect, int code) throws NKFException {
-		StringBuffer sb = new StringBuffer("<HTTPResponseCode>");
-		sb.append("<code>");
-		sb.append(code);
-		sb.append("</code>");
-		sb.append("</HTTPResponseCode>");
-
-		INKFRequest req = context.createSubRequest("active:HTTPResponseCode");
-		req.addArgument("operand", aspect);
-		req.addArgument("param", new StringAspect(sb.toString()));
-		IURRepresentation resp = context.issueSubRequest(req);
-		System.out.println(resp.toString());
-		return resp;
-	}
 }

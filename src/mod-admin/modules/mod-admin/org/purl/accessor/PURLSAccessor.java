@@ -9,12 +9,17 @@ import com.ten60.netkernel.urii.aspect.StringAspect;
 
 public class PURLSAccessor extends NKFAccessorImpl {
 
+    static {
+
+    }
+
 	public PURLSAccessor() {
 		super(SAFE_FOR_CONCURRENT_USE, INKFRequestReadOnly.RQT_SOURCE);
 	}
 	@Override
 	public void processRequest(INKFConvenienceHelper context) throws Exception {
 		String path=context.getThisRequest().getArgument("path");
+        System.out.println("URI: " + context.getThisRequest().getURI());
 		INKFResponse resp = null;
 
 		String[] parts=path.split("/");
