@@ -72,7 +72,7 @@ handles results from the server in response to form submissions.
 			signalLoadingResults();
 			urlVars = {}
 			bodyVars = {
-				target: "302",
+				type: "302",
 				target: $('c_target').value,
 				maintainers: $('c_maintainers').value
 			}
@@ -465,6 +465,18 @@ handles results from the server in response to form submissions.
 
 												<option value="410">
 													Permanently gone
+												</option>
+
+												<option value="clone">
+													Clone an existing PURL
+												</option>
+
+												<option value="chain">
+													Chain an existing PURL
+												</option>
+
+												<option value="partial">
+													Partial-redirect PURL
 												</option>
 											</select></td>
 										</tr>
