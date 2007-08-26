@@ -3,6 +3,7 @@ package org.purl.accessor;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.purl.accessor.command.PURLCommand;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFRequestReadOnly;
 import org.ten60.netkernel.layer1.nkf.INKFResponse;

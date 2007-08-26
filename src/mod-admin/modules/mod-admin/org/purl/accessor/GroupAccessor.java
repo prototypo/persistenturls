@@ -61,6 +61,10 @@ package org.purl.accessor;
  * Attempt to modify an uncreated resource: 412 (Precondition Failed)
 */
 
+import org.purl.accessor.command.CreateResourceCommand;
+import org.purl.accessor.command.DeleteResourceCommand;
+import org.purl.accessor.command.GetResourceCommand;
+import org.purl.accessor.command.UpdateResourceCommand;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.NKFException;
 import org.ten60.netkernel.layer1.representation.IAspectNVP;

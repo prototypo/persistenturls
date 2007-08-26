@@ -1,15 +1,18 @@
-package org.purl.accessor;
+package org.purl.accessor.command;
 
+import org.purl.accessor.NKHelper;
+import org.purl.accessor.URIResolver;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFResponse;
 import org.ten60.netkernel.layer1.nkf.NKFException;
 
 import com.ten60.netkernel.urii.IURRepresentation;
+import com.ten60.netkernel.urii.aspect.IAspectString;
 import com.ten60.netkernel.urii.aspect.StringAspect;
 
-public class DeleteResourceCommand extends PURLCommand {
+public class GetResourceCommand extends PURLCommand {
 
-    public DeleteResourceCommand(URIResolver uriResolver) {
+    public GetResourceCommand(URIResolver uriResolver) {
         super(uriResolver);
     }
 
@@ -21,19 +24,13 @@ public class DeleteResourceCommand extends PURLCommand {
             String id = NKHelper.getLastSegment(context);
             if(resourceExists(context)) {
                 // Default response code of 200 is fine
-                context.delete(uriResolver.getURI(context));
-                String message = "Deleted resource: " + id;
-                IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect(message), 200);
+                IURRepresentation rep = NKHelper.setResponseCode(context, context.sourceAspect(uriResolver.getURI(context), IAspectString.class), 200);
                 retValue = context.createResponseFrom(rep);
-                retValue.setMimeType(NKHelper.MIME_TEXT);
-                NKHelper.log(context,message);
-
+                retValue.setMimeType(NKHelper.MIME_XML);
             } else {
-                String message = "No such resource: " + id;
-                IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect(message), 404);
+                IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect("No such resource: " + id), 404);
                 retValue = context.createResponseFrom(rep);
                 retValue.setMimeType(NKHelper.MIME_TEXT);
-                NKHelper.log(context,message);
             }
 
         } catch (NKFException e) {

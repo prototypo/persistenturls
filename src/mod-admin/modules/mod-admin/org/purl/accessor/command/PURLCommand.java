@@ -1,8 +1,9 @@
 /**
  *
  */
-package org.purl.accessor;
+package org.purl.accessor.command;
 
+import org.purl.accessor.URIResolver;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFRequest;
 import org.ten60.netkernel.layer1.nkf.INKFResponse;

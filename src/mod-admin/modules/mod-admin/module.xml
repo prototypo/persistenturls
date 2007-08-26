@@ -6,7 +6,7 @@
 	-->
     <identity>
 		<uri>urn:org:purl:admin</uri>
-		<version>0.0.344</version>
+		<version>0.0.432</version>
     </identity>
 	<info>
 		<name>PURL Admin Module</name>
@@ -26,6 +26,7 @@
 			<match>ffcpl:/user.*</match>
 			<match>ffcpl:/admin.*</match>
 			<match>active:purls\+.*</match>
+			<match>active:purl-resolver\+.*</match>
 			<match>active:purl\+.*</match>
 			<match>active:purl-domain\+.*</match>
 			<match>active:purl-group\+.*</match>
@@ -44,8 +45,6 @@
 			<match>ffcpl:/groups/.*</match>
 			<match>ffcpl:/domains/.*</match>
 			<match>ffcpl:/storedpurls/.*</match>
-		</this>
-		<this>
 			<match>ffcpl:/resources/.*</match>
 		</this>
 		<rewrite>
@@ -53,8 +52,8 @@
 			<to>active:beanshell+operator@ffcpl:/resources/$1</to>
 		</rewrite>
 		<rewrite>
-			<match>(ffcpl:/purl.*)</match>
-			<to>active:purl+path@$1</to>
+			<match>(ffcpl:/purl)(.*)</match>
+			<to>active:purl-resolver+path@$2</to>
 		</rewrite>
 		<rewrite>
 			<match>(ffcpl:/admin/purls.*)</match>
@@ -104,6 +103,10 @@
 		<ura>
       		<match>active:purls\+.*</match>
       		<class>org.purl.accessor.PURLSAccessor</class>
+    	</ura>
+		<ura>
+      		<match>active:purl-resolver\+.*</match>
+      		<class>org.purl.accessor.PURLResolverAccessor</class>
     	</ura>
 		<ura>
       		<match>active:purl\+.*</match>

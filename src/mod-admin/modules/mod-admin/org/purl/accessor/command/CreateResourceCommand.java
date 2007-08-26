@@ -1,5 +1,9 @@
-package org.purl.accessor;
+package org.purl.accessor.command;
 
+import org.purl.accessor.NKHelper;
+import org.purl.accessor.PURLException;
+import org.purl.accessor.ResourceCreator;
+import org.purl.accessor.URIResolver;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFResponse;
 import org.ten60.netkernel.layer1.nkf.NKFException;

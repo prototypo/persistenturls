@@ -19,7 +19,7 @@ public class PURLSAccessor extends NKFAccessorImpl {
 	@Override
 	public void processRequest(INKFConvenienceHelper context) throws Exception {
 		String path=context.getThisRequest().getArgument("path");
-        System.out.println("URI: " + context.getThisRequest().getURI());
+
 		INKFResponse resp = null;
 
 		String[] parts=path.split("/");

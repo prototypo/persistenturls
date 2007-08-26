@@ -76,7 +76,7 @@ public class NKHelper {
      * @param context
      * @param logMessage
      */
-    static protected void log(INKFConvenienceHelper context, String logMessage) {
+    public static void log(INKFConvenienceHelper context, String logMessage) {
         try {
             INKFRequest req = context.createSubRequest("active:application-log");
             req.addArgument("operand", new StringAspect(logMessage));
