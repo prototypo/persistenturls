@@ -150,7 +150,11 @@ function startParser(xml) {
 
 // Confirm a Delete command before proceeding with function deleteSubmit().
 function checkDeleteSubmit(typeOfObject, deletionObject) {
-	var answer = confirm("Are you certain that you want to delete the " + typeOfObject + " '" + document.getElementById(deletionObject).value + "'?");
+	var thingToBeDeleted = "";
+	if ( deletionObject != null ) {
+		thingToBeDeleted = " '" + document.getElementById(deletionObject).value + "'";
+	}
+	var answer = confirm("Are you certain that you want to delete the " + typeOfObject + thingToBeDeleted + "?");
 	if (answer){
 		deleteSubmit();
 	}

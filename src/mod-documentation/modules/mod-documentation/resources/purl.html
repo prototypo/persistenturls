@@ -124,7 +124,7 @@ handles results from the server in response to form submissions.
 				body: body
 			};
 				// TODO: What is the URL to admin a PURL?  /admin/purl/<path>/<name>?  /<path>/<name>?
-			ajaxCaller.putBody("/admin/purl/" + my_id, parameters.urlVars, onResponse, false, "Modify", parameters.bodyType, parameters.body);
+			ajaxCaller.putBody("/admin/purl" + my_id, parameters.urlVars, onResponse, false, "Modify", parameters.bodyType, parameters.body);
 		}
 		clearErrorIndications();
 		return false;
@@ -146,7 +146,7 @@ handles results from the server in response to form submissions.
 		} else {
 			// We have a PURL name, so we call that resource directly.
 			// TODO: What is the URL to admin a PURL?  /admin/purl/<path>/<name>?  /<path>/<name>?
-			ajaxCaller.get("/admin/purl/" + my_id, bodyVars, onResponse, false, "Search");
+			ajaxCaller.get("/admin/purl" + my_id, bodyVars, onResponse, false, "Search");
 		}
 		clearErrorIndications();
 		return false;
@@ -208,13 +208,10 @@ handles results from the server in response to form submissions.
 
 		<ul id="tabmenu">
 			<li><a class="inactive" href="index.html">Home</a></li>
-
 			<li><a class="active" href="purl.html">PURLs</a></li>
-
+			<li><a class="inactive" href="purls.html">Batches</a></li>
 			<li><a class="inactive" href="user.html">Users</a></li>
-
 			<li><a class="inactive" href="group.html">Groups</a></li>
-
 			<li><a class="inactive" href="domain.html">Domains</a></li>
 		</ul>
 	</div>
@@ -281,7 +278,8 @@ handles results from the server in response to form submissions.
 										</tr>
 
 										<tr>
-											<td class="property" id="c_maintainers_label">Maintainers IDs<br>(one per line):</td>
+											<td class="property" id="c_maintainers_label">Maintainers IDs<br />
+											(one per line):</td>
 
 											<td class="value">
 											<textarea rows="5" cols="40" id="c_maintainers" name="c_maintainers">
@@ -327,7 +325,8 @@ handles results from the server in response to form submissions.
 										</tr>
 
 										<tr>
-											<td class="property" id="m_maintainers_label">Maintainers IDs<br>(one per line):</td>
+											<td class="property" id="m_maintainers_label">Maintainers IDs<br />
+											(one per line):</td>
 
 											<td class="value">
 											<textarea rows="5" cols="40" id="m_maintainers" name="m_maintainers">
@@ -495,20 +494,20 @@ handles results from the server in response to form submissions.
 										<tr>
 											<td class="property" id="a_target_label" width="120">Target URL:</td>
 
-											<td class="value"><input id="a_target" name="a_target" type="text" size="40"/></td>
+											<td class="value"><input id="a_target" name="a_target" type="text" size="40" /></td>
 										</tr>
 									</tbody>
 								</table>
-								
 
 								<table id="maintainerstable" summary="maintainers table" width="100%" style="display: none;">
 									<tbody>
 										<tr>
-											<td class="property" id="a_maintainers_label" width="120">Maintainers IDs<br>(one per line):</td>
+											<td class="property" id="a_maintainers_label" width="120">Maintainers IDs<br />
+											(one per line):</td>
 
 											<td class="value">
 											<textarea rows="5" cols="40" id="a_maintainers" name="a_maintainers">
-		</textarea></td>
+</textarea></td>
 										</tr>
 									</tbody>
 								</table>
@@ -530,11 +529,10 @@ handles results from the server in response to form submissions.
 										<tr>
 											<td class="property" id="a_existingpurl_label" width="120">Existing PURL path:</td>
 
-											<td class="value"><input id="a_existingpurl" name="a_existingpurl" type="text" size="40"/></td>
+											<td class="value"><input id="a_existingpurl" name="a_existingpurl" type="text" size="40" /></td>
 										</tr>
 									</tbody>
-								</table>
-								<input value="Submit" type="submit" />
+								</table><input value="Submit" type="submit" />
 
 								<table class="docstable" summary="documentation table">
 									<tbody>
