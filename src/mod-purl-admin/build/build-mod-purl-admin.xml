@@ -5,11 +5,11 @@
 		<property environment="env"/>
 		<property file="./version.properties"/>
 		<property file="./build.properties"/>
-		<echo message="Building: ${mod-admin-name} version ${mod-admin-version}"/>
-		<property name="app" value="${mod-admin-name}"/>
-		<property name="version" value="${mod-admin-version}"/>
+		<echo message="Building: ${mod-purl-admin-name} version ${mod-purl-admin-version}"/>
+		<property name="app" value="${mod-purl-admin-name}"/>
+		<property name="version" value="${mod-purl-admin-version}"/>
 		<property name="base" value=".."/>
-		<property name="src" value="${base}/modules/mod-admin"/>
+		<property name="src" value="${base}/modules/mod-purl-admin"/>
 		<property name="dst" value="${src}"/>
 		<property name="lib" value="${base}/lib"/>
 		<property name="mod-admin-lib" value="${src}/lib"/>
@@ -20,9 +20,9 @@
         <javac debug="true" deprecation="true" destdir="${dst}" srcdir="${src}">
             <classpath>
 				<fileset dir="${netkernel.home.dir}">
-					<include name="lib/1060netkernel-2.8.3.jar"/>
-					<include name="modules/ext-layer1-1.3.3.jar"/>
-					<include name="modules/ext-xml-core-1.5.1.jar"/>
+					<include name="lib/1060netkernel-*.jar"/>
+					<include name="modules/ext-layer1-*.jar"/>
+					<include name="modules/ext-xml-core-*.jar"/>
 				</fileset>
             </classpath>
         </javac>

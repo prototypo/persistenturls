@@ -3,12 +3,12 @@
 	
 	<target name="init">
 		<property file="./version.properties"/>
-		<echo message="Building: ${test-mod-admin-name} version ${test-mod-admin-version}"/>
-		<property name="app" value="${test-mod-admin-name}"/>
-		<property name="version" value="${test-mod-admin-version}"/>
+		<echo message="Building: ${test-mod-purl-admin-name} version ${test-mod-purl-admin-version}"/>
+		<property name="app" value="${test-mod-purl-admin-name}"/>
+		<property name="version" value="${test-mod-purl-admin-version}"/>
 		<property name="base" value=".."/>
 		<property name="lib" value="${base}/lib"/>
-		<property name="src" value="${base}/modules/test-mod-admin/"/>
+		<property name="src" value="${base}/modules/test-mod-purl-admin/"/>
 		<property name="dst" value="${src}"/>
 		<property name="dist.dir" value="../../dist"/>
 	</target>
