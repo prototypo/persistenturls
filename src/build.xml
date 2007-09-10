@@ -5,7 +5,7 @@
         <property name="dist.dir" value="${basedir}/dist"/>
         <property name="deploy.dir" value="${basedir}/deploy"/>
         <property name="versions.properties" value="${basedir}/config/deploy.properties"/>
-        <property name="netkernel.home.dir" value="/Applications/1060-NKSEDK-3.2.0"/>
+        <property name="netkernel.home.dir" value="/Users/brian/1060-NKSEDK-3.2.0-Clean/"/>
     </target>
     
     <macrodef name="build-subdir">
@@ -23,9 +23,9 @@
     
 	<target description="Build everything." name="all" depends="init,prepare-app-deployment">
         <mkdir dir="${dist.dir}"/>
-        <build-subdir dir="mod-admin"/>         
-        <build-subdir dir="mod-control"/> 
-        <build-subdir dir="mod-documentation"/>         
+        <build-subdir dir="mod-control"/>         
+        <build-subdir dir="mod-purl-admin"/>         
+        <build-subdir dir="mod-purl-documentation"/>         
         <build-subdir dir="mod-session"/>               
         <build-subdir dir="mod-template"/>
     </target>
@@ -43,17 +43,17 @@
         <delete dir="${dist.dir}"/>
         <delete dir="${deploy.dir}"/>
         <delete file="mod-control/modules/mod-control/etc/appDeployment.xml"/>
-        <build-subdir dir="mod-admin" target="clean"/>                
+        <build-subdir dir="mod-purl-admin" target="clean"/>
+        <build-subdir dir="mod-purl-documentation" target="clean"/>        
         <build-subdir dir="mod-control" target="clean"/>
-        <build-subdir dir="mod-documentation" target="clean"/>        
         <build-subdir dir="mod-session" target="clean"/>
         <build-subdir dir="mod-template" target="clean"/>        
     </target>
     
     <target name="prepare-app-deployment">
-        <filter filtersFile="mod-admin/build/version.properties"/>        
+        <filter filtersFile="mod-purl-admin/build/version.properties"/>        
+        <filter filtersFile="mod-purl-documentation/build/version.properties"/>    
         <filter filtersFile="mod-control/build/version.properties"/>
-        <filter filtersFile="mod-documentation/build/version.properties"/>        
         <filter filtersFile="mod-session/build/version.properties"/>
         <filter filtersFile="mod-template/build/version.properties"/>                
         
