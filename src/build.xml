@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all" name="OCLC NetKernel Modules">
-    
+		
     <target name="init">
         <property name="dist.dir" value="${basedir}/dist"/>
         <property name="deploy.dir" value="${basedir}/deploy"/>
-        <property name="versions.properties" value="${basedir}/config/deploy.properties"/>
-        <property name="netkernel.home.dir" value="/Users/brian/1060-NKSEDK-3.2.0-Clean/"/>
+		    <property name="lib.dir" value="${basedir}/lib"/>
+			  <property name="test.dir" value="${basedir}/test"/>
+	      <property name="versions.properties" value="${basedir}/config/deploy.properties"/>
+        <property name="netkernel.home.dir" value="/Applications/1060-NKSEDK-3.2.0/"/>
+			  <property name="verbose" value="false" />
+				<path id="classpath.base">
+				</path>
+				<path id="classpath.test">
+				    <pathelement location="${test.dir}" />
+						<fileset dir="${lib.dir}" includes="**/*.jar"/>
+				    <path refid="classpath.base" />
+				</path>
     </target>
-    
+ 
     <macrodef name="build-subdir">
         <attribute name="dir"/>
         <attribute name="target" default="all"/>
@@ -68,6 +78,29 @@
     </target>
     
     <target name="reload" depends="deploy">
-		<get src="http://localhost:1060/ep+name@control_reload" dest="${deploy.dir}/server1-status.xml"/>
-	</target>
+			<get src="http://localhost:1060/ep+name@control_reload" dest="${deploy.dir}/server1-status.xml"/>
+		</target>
+	
+		<target name="build-test" depends="init">
+		    <javac srcdir="${test.dir}"
+		           verbose="${verbose}"
+		           >
+		      <classpath refid="classpath.test"/>
+		    </javac>
+		</target>
+		
+		<target name="clean-test" depends="init">
+		    <delete verbose="${verbose}">
+		      <fileset dir="${test.dir}" includes="**/*.class" />
+		    </delete>
+		</target>
+		
+		<target name="test" depends="init,build-test">
+		    <junit>
+		      <classpath refid="classpath.test" />
+		      <formatter type="brief" usefile="false" />
+		      <test name="org.purl.test.purlClientTestRunner" />
+		    </junit>
+		 </target>
+		
 </project>
