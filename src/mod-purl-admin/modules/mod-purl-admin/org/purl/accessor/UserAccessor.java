@@ -61,9 +61,13 @@ package org.purl.accessor;
  * Attempt to modify an uncreated resource: 412 (Precondition Failed)
 */
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.purl.accessor.command.CreateResourceCommand;
 import org.purl.accessor.command.DeleteResourceCommand;
 import org.purl.accessor.command.GetResourceCommand;
+import org.purl.accessor.command.PURLCommand;
 import org.purl.accessor.command.UpdateResourceCommand;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.NKFException;
@@ -73,8 +77,9 @@ import com.ten60.netkernel.urii.IURAspect;
 import com.ten60.netkernel.urii.aspect.StringAspect;
 
 public class UserAccessor extends AbstractAccessor {
+    private Map<String, PURLCommand> commandMap = new HashMap<String,PURLCommand>();
 
-	static {
+	public UserAccessor() {
         // We use stateless command instances that are triggered
         // based on the method of the HTTP request
 
@@ -101,6 +106,10 @@ public class UserAccessor extends AbstractAccessor {
 		commandMap.put("DELETE", new DeleteResourceCommand(userResolver));
 		commandMap.put("PUT", new UpdateResourceCommand(userResolver, userCreator));
 	}
+
+    protected PURLCommand getCommand(String method) {
+        return commandMap.get(method);
+    }
 
     static public class UserCreator implements ResourceCreator {
 

@@ -1,10 +1,13 @@
 package org.purl.accessor;
 
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 import org.purl.accessor.command.CreateResourceCommand;
 import org.purl.accessor.command.DeleteResourceCommand;
+import org.purl.accessor.command.PURLCommand;
 import org.purl.accessor.command.UpdateResourceCommand;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.NKFException;
@@ -21,8 +24,11 @@ import com.ten60.netkernel.urii.aspect.StringAspect;
 
 public class PURLAccessor extends AbstractAccessor {
 
+    private Map<String, PURLCommand> commandMap = new HashMap<String,PURLCommand>();
+
     private static URIResolver purlResolver;
-    static {
+
+    public PURLAccessor() {
         // We use stateless command instances that are triggered
         // based on the method of the HTTP request
 
@@ -50,6 +56,11 @@ public class PURLAccessor extends AbstractAccessor {
         commandMap.put("PUT", new UpdateResourceCommand(purlResolver, purlCreator));
         commandMap.put("DELETE", new DeleteResourceCommand(purlResolver));
     }
+
+    protected PURLCommand getCommand(String method) {
+        return commandMap.get(method);
+    }
+
 
     static public class PurlCreator implements ResourceCreator {
 

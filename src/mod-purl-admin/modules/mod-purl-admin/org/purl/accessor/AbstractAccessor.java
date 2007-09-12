@@ -13,7 +13,7 @@ import com.ten60.netkernel.urii.aspect.IAspectString;
 
 abstract public class AbstractAccessor extends NKFAccessorImpl {
 
-    protected static Map<String, PURLCommand> commandMap = new HashMap<String, PURLCommand>();
+//    private Map<String, PURLCommand> commandMap;
 
     /**
      * Default constructor to indicate that we are good for source requests
@@ -40,7 +40,7 @@ abstract public class AbstractAccessor extends NKFAccessorImpl {
         // execute it. These commands should not maintain any
         // state.
 
-        PURLCommand cmd = commandMap.get(method);
+        PURLCommand cmd = getCommand(method); //commandMap.get(method);
 
         if(cmd != null) {
             resp = cmd.execute(context);
@@ -51,4 +51,5 @@ abstract public class AbstractAccessor extends NKFAccessorImpl {
         context.setResponse(resp);
     }
 
+    protected abstract PURLCommand getCommand(String method);
 }
