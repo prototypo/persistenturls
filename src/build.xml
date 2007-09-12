@@ -4,8 +4,8 @@
     <target name="init">
         <property name="dist.dir" value="${basedir}/dist"/>
         <property name="deploy.dir" value="${basedir}/deploy"/>
-		    <property name="lib.dir" value="${basedir}/lib"/>
 			  <property name="test.dir" value="${basedir}/test"/>
+		    <property name="test.lib.dir" value="${basedir}/test/lib"/>
 	      <property name="versions.properties" value="${basedir}/config/deploy.properties"/>
         <property name="netkernel.home.dir" value="/Applications/1060-NKSEDK-3.2.0/"/>
 			  <property name="verbose" value="false" />
@@ -13,7 +13,7 @@
 				</path>
 				<path id="classpath.test">
 				    <pathelement location="${test.dir}" />
-						<fileset dir="${lib.dir}" includes="**/*.jar"/>
+						<fileset dir="${test.lib.dir}" includes="**/*.jar"/>
 				    <path refid="classpath.base" />
 				</path>
     </target>
