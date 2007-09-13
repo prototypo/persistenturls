@@ -89,7 +89,10 @@ public final class simplePurlClient {
 	public String resolvePurl(String url) throws IOException {
 
 		Client client = new Client(Protocol.HTTP);
-		return client.get(url).getEntity().getText();
+		Map<String,Object> responseAttrs = client.get(url).getAttributes();
+		Form headersForm = (Form) responseAttrs.get( "org.restlet.http.headers" );
+		String locationHeader = headersForm.getFirst("Location").getValue();
+		return locationHeader;
 	}
 
 	/**

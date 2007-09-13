@@ -54,7 +54,7 @@ public class simplePurlClientTest extends TestCase {
 	public void testModifyPurl() {
 
 	try {
-		String url = "http://localhost:8080/admin/user/testPURL";
+		String url = "http://localhost:8080/admin/purl/NET/test/testPURL";
 
 		String formParameters = "<purl>";
 		formParameters += "<type>302</type>";
@@ -111,7 +111,7 @@ public class simplePurlClientTest extends TestCase {
 
 			String result = client.resolvePurl(url);
 			assertEquals("Cannot resolve PURL.",
-						"TODO",
+						"http://www.your.abc.net.au/",
 						result);
 			} catch (Exception e) {
 				reportException("Failed to resolve URL: ", e);
@@ -386,7 +386,7 @@ public class simplePurlClientTest extends TestCase {
 	public void testModifyDomain() {
 
 			try {
-				String url = "http://localhost:8080/admin/user/testdomain";
+				String url = "http://localhost:8080/admin/domain/testdomain";
 
 				String formParameters = "<domain>";
 				formParameters += "<name>Test Domain Modified</name>";
@@ -407,7 +407,7 @@ public class simplePurlClientTest extends TestCase {
 	public void testSearchDomain() {
 		
 		try {
-			String url = "http://localhost:8080/admin/domain/NET/testdomain";
+			String url = "http://localhost:8080/admin/domain/testdomain";
 
 			String result = client.searchDomain(url);
 			assertEquals("Cannot search domain.",
@@ -422,7 +422,7 @@ public class simplePurlClientTest extends TestCase {
 	public void testDeleteDomain() {
 		
 		try {
-			String url = "http://localhost:8080/admin/domain/NET/test/testdomain";
+			String url = "http://localhost:8080/admin/domain/testdomain";
 		
 			String result = client.deleteDomain(url);
 			assertEquals("Cannot delete domain.",
