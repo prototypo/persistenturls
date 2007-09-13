@@ -7,10 +7,10 @@ import org.purl.accessor.URIResolver;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFResponse;
 import org.ten60.netkernel.layer1.nkf.NKFException;
-import org.ten60.netkernel.layer1.representation.IAspectNVP;
 
 import com.ten60.netkernel.urii.IURAspect;
 import com.ten60.netkernel.urii.IURRepresentation;
+import com.ten60.netkernel.urii.aspect.IAspectString;
 import com.ten60.netkernel.urii.aspect.StringAspect;
 
 public class UpdateResourceCommand extends PURLCommand {
@@ -27,12 +27,15 @@ public class UpdateResourceCommand extends PURLCommand {
         INKFResponse retValue = null;
 
         try {
-            IAspectNVP params = getParams(context);
+            //IAspectNVP params = getParams(context);
             String id = NKHelper.getLastSegment(context);
             if(resourceExists(context)) {
                 try {
                     // Update the user
-                    IURAspect iur = resCreator.createResource(context, params);
+                    //IURAspect iur = resCreator.createResource(context, params);
+                    IURAspect iur = context.sourceAspect("this:param:param", IAspectString.class);
+                    StringAspect sa = (StringAspect) iur;
+                    System.out.println(sa.getString());
                     context.sinkAspect(uriResolver.getURI(context), iur);
                     String message = "Updated resource: " + id;
                     IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect(message), 200);
