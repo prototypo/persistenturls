@@ -70,10 +70,12 @@ import org.purl.accessor.command.GetResourceCommand;
 import org.purl.accessor.command.PURLCommand;
 import org.purl.accessor.command.UpdateResourceCommand;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
+import org.ten60.netkernel.layer1.nkf.INKFRequest;
 import org.ten60.netkernel.layer1.nkf.NKFException;
 import org.ten60.netkernel.layer1.representation.IAspectNVP;
 
 import com.ten60.netkernel.urii.IURAspect;
+import com.ten60.netkernel.urii.aspect.IAspectString;
 import com.ten60.netkernel.urii.aspect.StringAspect;
 
 public class UserAccessor extends AbstractAccessor {
@@ -100,9 +102,10 @@ public class UserAccessor extends AbstractAccessor {
         };
 
         ResourceCreator userCreator = new UserCreator();
+        ResourceFilter userFilter = new UserPrivateDataFilter();
 
-		commandMap.put("GET", new GetResourceCommand(userResolver));
-		commandMap.put("POST", new CreateResourceCommand(userResolver, userCreator));
+		commandMap.put("GET", new GetResourceCommand(userResolver, userFilter));
+		commandMap.put("POST", new CreateResourceCommand(userResolver, userCreator, userFilter));
 		commandMap.put("DELETE", new DeleteResourceCommand(userResolver));
 		commandMap.put("PUT", new UpdateResourceCommand(userResolver, userCreator));
 	}
@@ -111,6 +114,13 @@ public class UserAccessor extends AbstractAccessor {
         return commandMap.get(method);
     }
 
+    /**
+     * A ResourceCreator instance to fill out a user instance
+     * from parameters that were passed in.
+     *
+     * @author brian
+     *
+     */
     static public class UserCreator implements ResourceCreator {
 
         public IURAspect createResource(INKFConvenienceHelper context, IAspectNVP params) throws NKFException {
@@ -127,8 +137,46 @@ public class UserAccessor extends AbstractAccessor {
             sb.append("<email>");
             sb.append(params.getValue("email"));
             sb.append("</email>");
+            sb.append("<password>");
+            sb.append(params.getValue("passwd"));
+            sb.append("</password>");
+            sb.append("<hint>");
+            sb.append(params.getValue("hint"));
+            sb.append("</hint>");
+            sb.append("<justification>");
+            sb.append(params.getValue("justification"));
+            sb.append("</justification>");
             sb.append("</user>");
             return new StringAspect(sb.toString());
         }
+    }
+
+    /**
+     * An implementation of the ResourceFilter to prevent sensitive
+     * user information from being returned.
+     *
+     * @author brian
+     *
+     */
+    static public class UserPrivateDataFilter implements ResourceFilter {
+
+        public IURAspect filter(INKFConvenienceHelper context, IURAspect iur) {
+            IURAspect retValue = null;
+
+            try {
+                INKFRequest req = context.createSubRequest();
+                req.setURI("active:xslt");
+                req.addArgument("operand", iur);
+                req.addArgument("operator", "ffcpl:/filters/user.xsl");
+                req.setAspectClass(IAspectString.class);
+                retValue = context.issueSubRequestForAspect(req);
+            } catch(NKFException nfe) {
+                // TODO: return something other than the raw user
+                nfe.printStackTrace();
+            }
+
+            return retValue;
+        }
+
     }
 }

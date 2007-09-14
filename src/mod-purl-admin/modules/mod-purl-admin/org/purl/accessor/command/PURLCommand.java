@@ -5,15 +5,11 @@ package org.purl.accessor.command;
 
 import org.purl.accessor.URIResolver;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
-import org.ten60.netkernel.layer1.nkf.INKFRequest;
 import org.ten60.netkernel.layer1.nkf.INKFResponse;
 import org.ten60.netkernel.layer1.nkf.NKFException;
 import org.ten60.netkernel.layer1.representation.IAspectNVP;
 
-import com.ten60.netkernel.urii.IURAspect;
-import com.ten60.netkernel.urii.IURRepresentation;
 import com.ten60.netkernel.urii.aspect.IAspectString;
-import com.ten60.netkernel.urii.aspect.StringAspect;
 
 /**
  * @version 1.0, 16 August 2007
