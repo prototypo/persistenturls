@@ -6,9 +6,15 @@
 	</div>
     </desc>
     <test>
-        <uri>active:beanshell+operator@ffcpl:/test/accessor/test.bsh</uri>
-		<assert>
-			<xpath>count(//hello) = 1</xpath>
+        <uri>active:beanshell+operator@ffcpl:/test/accessor/createUser.bsh</uri>
+		<assert name="User Created">
+			<uri>active:javascript+operator@ffcpl:/test/something.js</uri>
+		</assert>
+    </test>
+    <test>
+        <uri>active:beanshell+operator@ffcpl:/test/accessor/deleteUser.bsh</uri>
+		<assert name="User Deleted">
+			<uri>active:javascript+operator@ffcpl:/test/something.js</uri>
 		</assert>
     </test>
 <!--  <test>
