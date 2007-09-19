@@ -2,7 +2,7 @@
 		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<!-- 
+<!--
 
 user.html - Provides a Web UI for the administration of PURL users.
 
@@ -118,15 +118,13 @@ handles results from the server in response to form submissions.
 		bodyVars =  {
 				name: $('s_name').value,
 				affiliation: $('s_affiliation').value,
-				email: $('s_email').value
+				email: $('s_email').value,
+				id: $('s_id').value
 		}
-		if ( my_id == "" | my_id == null ) {
-			// No user id is given, so we call the parent resource.
-			ajaxCaller.get("/admin/user/", bodyVars, onResponse, false, "Search");
-		} else {
-			// We have a user id, so we call that resource directly.
-			ajaxCaller.get("/admin/user/" + my_id, bodyVars, onResponse, false, "Search");
-		}
+
+		// Perform the search against parent node
+		ajaxCaller.get("/admin/user/", bodyVars, onResponse, false, "Search");
+
 		clearErrorIndications();
 		return false;
 	}
