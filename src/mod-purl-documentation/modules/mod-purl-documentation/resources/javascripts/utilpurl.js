@@ -53,9 +53,13 @@ function load() {
 	var location = document.URL;
 	var urlFragment = "";
 	var urlFragmentIndex = location.indexOf("#");
-	if ( urlFragmentIndex > -1 ) {
-		// Our URL has a fragment identifier.
+	var queryStringIndex = location.indexOf("?");
+	if ( urlFragmentIndex > -1 && queryStringIndex == -1 ) {
+		// Our URL has a fragment identifier, but no query string.
 		urlFragment = location.substring(urlFragmentIndex + 1, location.length);
+	} else if ( urlFragmentIndex > -1 && queryStringIndex > -1 ) {
+		// Our URL has a fragment identifier and a query string.
+		urlFragment = location.substring(urlFragmentIndex + 1, queryStringIndex);
 	}
 	for ( key in contextMap ) {
 		if (contextMap[key][0] == urlFragment) {
@@ -159,6 +163,29 @@ function checkDeleteSubmit(typeOfObject, deletionObject) {
 		deleteSubmit();
 	}
 	return false;
+}	
+	
+// Pre-populate a Modify form with data from a Search.
+function loadModify(recordData) {
+	// Un-Webify the input.  TODO: This is rather hackish and should be refactored.
+	var entries = new Array();
+	var elements = new Array();
+	var records = new Array();
+	entries = recordData.split('&');
+	for (entry in entries) {
+		elements = entries[entry].split('=');
+		records[elements[0]] = elements[1];
+	}
+	for ( key in records ) {
+		if (key.length > 0) {
+			// TODO: Test for existence of the element first!
+			records[key] = records[key].replace(/%LINEBREAK%/g, "\n");
+			document.getElementById("m_" + key).value = records[key];
+			//document.getElementById("m_comments").value += key + " : " + records[key] + "\n";
+		}
+	}
+	showAction('Modify');
+	return false;
 }
 
 // Callback for Create/Modify/Search/Delete (POST/PUT/GET/DELETE) actions.
@@ -189,11 +216,28 @@ function onResponse(message, headers, callingContext) {
 	if ( headers["Content-Type"] == "text/plain" || headers["Content-Type"] == "text/html") {
 		resultBlock.innerHTML += "<p class='" + resultClass + "'>" + message + "<\/p>";
 		
-	} else if ( headers["Content-Type"] == "text/xml" ) {
+	} else if ( headers["Content-Type"] == "text/xml" ||
+				headers["Content-Type"] == "application/xml" ) {
+		
+		// Parse the XML
 		startParser(message);
+		
+		// Create a serialization of the data to allow easy passing to the Modify feature.
+		dataString = "";
+		for ( key in elementMap ) {
+			escapedValue = elementMap[key].replace(/\n/g, "%LINEBREAK%");
+			dataString += key + "=" + escapedValue + "&";
+		}
+		
 		resultBlock.innerHTML += "<dl>";
 		for ( key in elementMap ) {
-			resultBlock.innerHTML += "<dd>" + key + ": " + elementMap[key] + "<\/dd>";
+			// Write pretty-printed result to the results area.
+			if ( key == "id" || key == "pid" ) {
+				// TODONEXT: This will NOT handle multiple results yet.
+				resultBlock.innerHTML += "<dd>" + key + ": " + elementMap[key] + " <a href='#modify' onClick='return loadModify(\"" + dataString + "\")'><img src='http://purlz.org/images/edit.png' alt='Modify record'></a> " + "<\/dd>";
+			} else {
+				resultBlock.innerHTML += "<dd>" + key + ": " + elementMap[key] + "<\/dd>";
+			}
 		}
 		resultBlock.innerHTML += "<\/dl>";
 		
