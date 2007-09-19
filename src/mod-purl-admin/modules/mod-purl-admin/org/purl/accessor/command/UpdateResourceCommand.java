@@ -18,13 +18,17 @@ package org.purl.accessor.command;
  *
  */
 
+import java.util.Iterator;
+
 import org.purl.accessor.NKHelper;
 import org.purl.accessor.PURLException;
 import org.purl.accessor.ResourceCreator;
+import org.purl.accessor.ResourceStorage;
 import org.purl.accessor.URIResolver;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFResponse;
 import org.ten60.netkernel.layer1.nkf.NKFException;
+import org.ten60.netkernel.layer1.representation.IAspectNVP;
 
 import com.ten60.netkernel.urii.IURAspect;
 import com.ten60.netkernel.urii.IURRepresentation;
@@ -32,34 +36,53 @@ import com.ten60.netkernel.urii.aspect.IAspectString;
 import com.ten60.netkernel.urii.aspect.StringAspect;
 
 public class UpdateResourceCommand extends PURLCommand {
-
     private ResourceCreator resCreator;
 
-    public UpdateResourceCommand(URIResolver uriResolver, ResourceCreator resCreator) {
-        super(uriResolver);
+    public UpdateResourceCommand(String type, URIResolver uriResolver, ResourceCreator resCreator, ResourceStorage resStorage) {
+        super(type, uriResolver, resStorage);
         this.resCreator = resCreator;
     }
 
     @Override
     public INKFResponse execute(INKFConvenienceHelper context) {
         INKFResponse retValue = null;
+        String id = null;
 
         try {
             //IAspectNVP params = getParams(context);
-            String id = NKHelper.getLastSegment(context);
-            if(resourceExists(context)) {
+            id = NKHelper.getLastSegment(context);
+            if(resStorage.resourceExists(context,uriResolver)) {
                 try {
                     // Update the user
                     //IURAspect iur = resCreator.createResource(context, params);
-                    IURAspect iur = context.sourceAspect("this:param:param", IAspectString.class);
-                    StringAspect sa = (StringAspect) iur;
-                    System.out.println(sa.getString());
-                    context.sinkAspect(uriResolver.getURI(context), iur);
-                    String message = "Updated resource: " + id;
-                    IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect(message), 200);
-                    retValue = context.createResponseFrom(rep);
-                    retValue.setMimeType(NKHelper.MIME_TEXT);
-                    NKHelper.log(context,message);
+                    IAspectNVP params = (IAspectNVP) context.sourceAspect("this:param:param", IAspectNVP.class);
+                    IURAspect iur = resCreator.createResource(context, params);
+
+                    Iterator itor = params.getNames().iterator();
+                    while(itor.hasNext()) {
+                        String next = (String) itor.next();
+                        System.out.println("Key: " + next);
+                        System.out.println("Value: " + params.getValue(next));
+                    }
+
+
+                    System.out.println("-------");
+                    System.out.println(((IAspectString) iur).getString());
+                    System.out.println("-------");
+
+                    if(resStorage.storeResource(context, uriResolver, iur)) {
+//                      context.sinkAspect(uriResolver.getURI(context), iur);
+                        String message = "Updated resource: " + id;
+                        IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect(message), 200);
+                        retValue = context.createResponseFrom(rep);
+                        retValue.setMimeType(NKHelper.MIME_TEXT);
+                        NKHelper.log(context,message);
+                    } else {
+                        // TODO: Handle failed update
+                        System.out.println("ERROR! FAILED TO UPDATE RESOURCE");
+                        NKHelper.log(context, "ERROR UPDATING RESOURCE");
+                    }
+
                 } catch(PURLException p) {
                     IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect(p.getMessage()), p.getResponseCode());
                     retValue = context.createResponseFrom(rep);
@@ -77,6 +100,10 @@ public class UpdateResourceCommand extends PURLCommand {
         } catch (NKFException e) {
             // TODO Handle
             e.printStackTrace();
+        }
+
+        if(id != null) {
+            NKHelper.cutGoldenThread(context, "gt:" + type + ":" + id);
         }
 
         return retValue;

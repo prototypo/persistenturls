@@ -22,6 +22,7 @@ import org.purl.accessor.NKHelper;
 import org.purl.accessor.PURLException;
 import org.purl.accessor.ResourceCreator;
 import org.purl.accessor.ResourceFilter;
+import org.purl.accessor.ResourceStorage;
 import org.purl.accessor.URIResolver;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFResponse;
@@ -37,12 +38,12 @@ public class CreateResourceCommand extends PURLCommand {
     private ResourceCreator resCreator;
     private ResourceFilter resFilter;
 
-    public CreateResourceCommand(URIResolver uriResolver, ResourceCreator resCreator) {
-        this(uriResolver, resCreator, null);
+    public CreateResourceCommand(String type, URIResolver uriResolver, ResourceCreator resCreator) {
+        this(type, uriResolver, resCreator, null, null);
     }
 
-    public CreateResourceCommand(URIResolver uriResolver, ResourceCreator resCreator, ResourceFilter resFilter) {
-        super(uriResolver);
+    public CreateResourceCommand(String type, URIResolver uriResolver, ResourceCreator resCreator, ResourceFilter resFilter, ResourceStorage resStorage) {
+        super(type, uriResolver, resStorage);
         this.resCreator = resCreator;
         this.resFilter = resFilter;
     }
@@ -55,7 +56,7 @@ public class CreateResourceCommand extends PURLCommand {
             IAspectNVP params = getParams(context);
             String id = NKHelper.getLastSegment(context);
 
-            if(resourceExists(context)) {
+            if(resStorage.resourceExists(context, uriResolver)) {
                 // Cannot create the same name
                 String message = "Resource: " + id + " already exists.";
                 IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect(message), 409);
@@ -65,18 +66,26 @@ public class CreateResourceCommand extends PURLCommand {
             } else {
                 try {
                     IURAspect iur = resCreator.createResource(context, params);
+
                     // Store the full resource
-                    context.sinkAspect(uriResolver.getURI(context), iur);
+                    if(resStorage.storeResource(context, uriResolver, iur)) {
 
-                    // Filter it if there is one
-                    if(resFilter!=null) {
-                        iur = resFilter.filter(context, iur);
+                        //context.sinkAspect(uriResolver.getURI(context), iur);
+
+                        NKHelper.indexResource(context, "ffcpl:/index/purls", uriResolver.getURI(context), iur);
+
+                        // Filter it if there is one
+                        if(resFilter!=null) {
+                            iur = resFilter.filter(context, iur);
+                        }
+
+                        IURRepresentation rep = NKHelper.setResponseCode(context, iur, 201);
+                        retValue = context.createResponseFrom(rep);
+                        retValue.setMimeType(NKHelper.MIME_XML);
+                        NKHelper.log(context, "Created new resource: " + id);
+                    } else {
+                        System.out.println("ERROR CREATING NEW RESOURCE");
                     }
-
-                    IURRepresentation rep = NKHelper.setResponseCode(context, iur, 201);
-                    retValue = context.createResponseFrom(rep);
-                    retValue.setMimeType(NKHelper.MIME_XML);
-                    NKHelper.log(context, "Created new resource: " + id);
                 } catch(PURLException p) {
                     IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect(p.getMessage()), p.getResponseCode());
                     retValue = context.createResponseFrom(rep);

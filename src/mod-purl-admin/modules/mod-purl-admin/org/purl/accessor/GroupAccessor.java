@@ -78,6 +78,8 @@ import com.ten60.netkernel.urii.aspect.StringAspect;
 
 public class GroupAccessor extends AbstractAccessor {
 
+    public static final String TYPE = "group";
+
     private Map<String, PURLCommand> commandMap = new HashMap<String,PURLCommand>();
 
     public GroupAccessor() {
@@ -101,11 +103,12 @@ public class GroupAccessor extends AbstractAccessor {
         };
 
         ResourceCreator groupCreator = new GroupCreator();
+        ResourceStorage groupStorage = new DefaultResourceStorage();
 
-        commandMap.put("GET", new GetResourceCommand(groupResolver));
-        commandMap.put("POST", new CreateResourceCommand(groupResolver, groupCreator));
-        commandMap.put("DELETE", new DeleteResourceCommand(groupResolver));
-        commandMap.put("PUT", new UpdateResourceCommand(groupResolver, groupCreator));
+        commandMap.put("http:GET", new GetResourceCommand(TYPE, groupResolver, groupStorage));
+        commandMap.put("http:POST", new CreateResourceCommand(TYPE, groupResolver, groupCreator, null, groupStorage));
+        commandMap.put("http:DELETE", new DeleteResourceCommand(TYPE, groupResolver, groupStorage));
+        commandMap.put("http:PUT", new UpdateResourceCommand(TYPE, groupResolver, groupCreator, groupStorage));
     }
 
     protected PURLCommand getCommand(String method) {

@@ -79,6 +79,8 @@ import com.ten60.netkernel.urii.aspect.IAspectString;
 import com.ten60.netkernel.urii.aspect.StringAspect;
 
 public class UserAccessor extends AbstractAccessor {
+    public static final String TYPE = "user";
+
     private Map<String, PURLCommand> commandMap = new HashMap<String,PURLCommand>();
 
 	public UserAccessor() {
@@ -101,13 +103,15 @@ public class UserAccessor extends AbstractAccessor {
 
         };
 
+        // TODO: External this
         ResourceCreator userCreator = new UserCreator();
         ResourceFilter userFilter = new UserPrivateDataFilter();
+        ResourceStorage userStorage = new DefaultResourceStorage();
 
-		commandMap.put("GET", new GetResourceCommand(userResolver, userFilter));
-		commandMap.put("POST", new CreateResourceCommand(userResolver, userCreator, userFilter));
-		commandMap.put("DELETE", new DeleteResourceCommand(userResolver));
-		commandMap.put("PUT", new UpdateResourceCommand(userResolver, userCreator));
+		commandMap.put("http:GET", new GetResourceCommand(TYPE, userResolver, userStorage, userFilter));
+		commandMap.put("http:POST", new CreateResourceCommand(TYPE, userResolver, userCreator, userFilter, userStorage));
+		commandMap.put("http:DELETE", new DeleteResourceCommand(TYPE, userResolver, userStorage));
+		commandMap.put("http:PUT", new UpdateResourceCommand(TYPE, userResolver, userCreator, userStorage));
 	}
 
     protected PURLCommand getCommand(String method) {

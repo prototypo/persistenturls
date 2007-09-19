@@ -6,7 +6,7 @@
 	-->
     <identity>
 		<uri>urn:org:purl:admin</uri>
-		<version>0.0.471</version>
+		<version>0.0.582</version>
     </identity>
 	<info>
 		<name>PURL Admin Module</name>
@@ -19,6 +19,7 @@
     </publisher>
 	<export>
 		<uri>
+			<match>ffcpl:/httptest.*</match>
 			<match>ffcpl:/domain.*</match>
 			<match>ffcpl:/group.*</match>
 			<match>ffcpl:/purls.*</match>
@@ -31,6 +32,7 @@
 			<match>active:purl-domain\+.*</match>
 			<match>active:purl-group\+.*</match>
 			<match>active:purl-user\+.*</match>
+			<match>active:purl-initialize</match>
 			<match>ffcpl:/etc/HTTPBridgeConfig.xml</match>
 			<match>ffcpl:/etc/LogConfig.xml</match>
 			<match>ffcpl:/entrypoints.xml</match>
@@ -47,7 +49,13 @@
 			<match>ffcpl:/storedpurls/.*</match>
 			<match>ffcpl:/resources/.*</match>
 			<match>ffcpl:/filters/.*</match>
+			<match>ffcpl:/scripts/.*</match>
+			<match>ffcpl:/index/.*</match>
 		</this>
+		<rewrite>
+			<match>(ffcpl:/admin/)(domain|group|purl|purls|user)(/.*)</match>
+			<to>active:purl-http+type@$2+path@$1$2$3</to>
+		</rewrite>
 		<rewrite>
 			<match>ffcpl:/admin/(.*.bsh.*)</match>
 			<to>active:beanshell+operator@ffcpl:/resources/$1</to>
@@ -57,6 +65,10 @@
 			<to>active:purl-resolver+path@$2</to>
 		</rewrite>
 		<rewrite>
+			<match>active:purl-initialize</match>
+			<to>active:beanshell+operator@ffcpl:/scripts/initialize.bsh</to>
+		</rewrite>
+<!-- 		<rewrite>
 			<match>(ffcpl:/admin/purls.*)</match>
 			<to>active:purls+path@$1</to>
 		</rewrite>
@@ -87,8 +99,11 @@
 		<rewrite>
 			<match>(ffcpl:/admin/user.*)</match>
 			<to>active:purl-user+path@$1</to>
-		</rewrite>
-
+		</rewrite> -->
+		<ura>
+			<match>active:purl-http\+.*</match>
+			<class>org.purl.accessor.HttpMethodAccessor</class>
+		</ura>
 		<ura>
       		<match>active:purl-user\+.*</match>
       		<class>org.purl.accessor.UserAccessor</class>
@@ -122,6 +137,9 @@
 		<import>
 			<uri>urn:org:ten60:netkernel:ext:sys</uri>
 		</import>
+	    <import>
+	      <uri>urn:org:ten60:netkernel:mod:lucene</uri>
+	    </import>
 		<import>
 			<uri>urn:org:ten60:netkernel:ext:xml:core</uri>
 		</import>

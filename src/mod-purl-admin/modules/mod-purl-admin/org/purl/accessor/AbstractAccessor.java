@@ -1,15 +1,10 @@
 package org.purl.accessor;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.purl.accessor.command.PURLCommand;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFRequestReadOnly;
 import org.ten60.netkernel.layer1.nkf.INKFResponse;
 import org.ten60.netkernel.layer1.nkf.impl.NKFAccessorImpl;
-
-import com.ten60.netkernel.urii.aspect.IAspectString;
 
 abstract public class AbstractAccessor extends NKFAccessorImpl {
 
@@ -34,7 +29,15 @@ abstract public class AbstractAccessor extends NKFAccessorImpl {
         INKFResponse resp = null;
 
         // TODO: Can this fail?
-        String method = (((IAspectString)context.sourceAspect("literal:method", IAspectString.class)).getString());
+
+        String method = context.getThisRequest().getArgument("method");
+        //if(context.exists("literal:method")) {
+           // method = (((IAspectString)context.sourceAspect("literal:method", IAspectString.class)).getString());
+        /*} else {
+            if(context.getThisRequest().argumentExists("method")) {
+                method = context.getThisRequest().getArgument("method").substring(7);
+            }
+        } */
 
         // Retrieve the command associated with the method and
         // execute it. These commands should not maintain any

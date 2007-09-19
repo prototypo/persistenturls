@@ -3,6 +3,7 @@
  */
 package org.purl.accessor.command;
 
+import org.purl.accessor.ResourceStorage;
 import org.purl.accessor.URIResolver;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFResponse;
@@ -33,14 +34,18 @@ import com.ten60.netkernel.urii.aspect.IAspectString;
  */
 abstract public class PURLCommand {
 
+    protected String type;
     protected URIResolver uriResolver;
+    protected ResourceStorage resStorage;
 
     /**
      *
      * @param uriResolver
      */
-    protected PURLCommand(URIResolver uriResolver) {
+    protected PURLCommand(String type, URIResolver uriResolver, ResourceStorage resStorage) {
+        this.type = type;
         this.uriResolver = uriResolver;
+        this.resStorage = resStorage;
     }
 
 	abstract public INKFResponse execute(INKFConvenienceHelper context);
@@ -61,9 +66,5 @@ abstract public class PURLCommand {
 		}
 
 		return retValue;
-	}
-
-	protected boolean resourceExists(INKFConvenienceHelper context) throws NKFException {
-		return context.exists(uriResolver.getURI(context));
 	}
 }

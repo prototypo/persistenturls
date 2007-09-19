@@ -19,6 +19,7 @@ package org.purl.accessor.command;
  */
 
 import org.purl.accessor.NKHelper;
+import org.purl.accessor.ResourceStorage;
 import org.purl.accessor.URIResolver;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFResponse;
@@ -29,17 +30,19 @@ import com.ten60.netkernel.urii.aspect.StringAspect;
 
 public class DeleteResourceCommand extends PURLCommand {
 
-    public DeleteResourceCommand(URIResolver uriResolver) {
-        super(uriResolver);
+
+    public DeleteResourceCommand(String type, URIResolver uriResolver, ResourceStorage resStorage) {
+        super(type, uriResolver, resStorage);
     }
 
     @Override
     public INKFResponse execute(INKFConvenienceHelper context) {
         INKFResponse retValue = null;
+        String id = null;
 
         try {
-            String id = NKHelper.getLastSegment(context);
-            if(resourceExists(context)) {
+            id = NKHelper.getLastSegment(context);
+            if(resStorage.resourceExists(context,uriResolver)) {
                 // Default response code of 200 is fine
                 context.delete(uriResolver.getURI(context));
                 String message = "Deleted resource: " + id;
@@ -59,6 +62,10 @@ public class DeleteResourceCommand extends PURLCommand {
         } catch (NKFException e) {
             // TODO Handle
             e.printStackTrace();
+        }
+
+        if(id != null) {
+            NKHelper.cutGoldenThread(context, "gt:" + type + ":" + id);
         }
 
         return retValue;

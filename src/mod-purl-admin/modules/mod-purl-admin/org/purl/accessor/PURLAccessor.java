@@ -24,6 +24,8 @@ import com.ten60.netkernel.urii.aspect.StringAspect;
 
 public class PURLAccessor extends AbstractAccessor {
 
+    public static final String TYPE = "purl";
+
     private Map<String, PURLCommand> commandMap = new HashMap<String,PURLCommand>();
 
     private static URIResolver purlResolver;
@@ -51,10 +53,11 @@ public class PURLAccessor extends AbstractAccessor {
         }; */
 
         ResourceCreator purlCreator = new PurlCreator();
+        ResourceStorage purlStorage = new DefaultResourceStorage();
 
-        commandMap.put("POST", new CreateResourceCommand(purlResolver, purlCreator));
-        commandMap.put("PUT", new UpdateResourceCommand(purlResolver, purlCreator));
-        commandMap.put("DELETE", new DeleteResourceCommand(purlResolver));
+        commandMap.put("http:POST", new CreateResourceCommand(TYPE, purlResolver, purlCreator, null, purlStorage));
+        commandMap.put("http:PUT", new UpdateResourceCommand(TYPE, purlResolver, purlCreator, purlStorage));
+        commandMap.put("http:DELETE", new DeleteResourceCommand(TYPE, purlResolver, purlStorage));
     }
 
     protected PURLCommand getCommand(String method) {

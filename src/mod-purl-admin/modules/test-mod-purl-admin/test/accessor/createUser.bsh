@@ -7,7 +7,7 @@ main() {
 	req=context.createSubRequest();
 	req.setURI("active:purl-user");
 	req.addArgument("param",new StringAspect(nvp));
-	req.addArgument("method", "method:POST");
+	req.addArgument("method", "http:POST");
 	req.addArgument("path", "ffcpl:/admin/user/unittestguy");
   	response = context.issueSubRequest(req);
   	context.setResponse(response);

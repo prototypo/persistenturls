@@ -85,4 +85,113 @@ public class NKHelper {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Attach a Golden Thread to a representation.
+     */
+    public static IURRepresentation attachGoldenThread(INKFConvenienceHelper context, String goldenThreadName, IURRepresentation representation){
+        IURRepresentation retValue = null;
+
+        try {
+            INKFRequest req = context.createSubRequest("active:attachGoldenThread");
+            req.addArgument("operand", representation);
+            req.addArgument("param", goldenThreadName);
+            retValue = context.issueSubRequest(req);
+        } catch (NKFException e) {
+            e.printStackTrace();
+        }
+
+        return retValue;
+    }
+
+    /**
+     * Attach a Golden Thread to a resource.
+     */
+    public static IURRepresentation attachGoldenThread(INKFConvenienceHelper context, String goldenThreadName, IURAspect resource){
+        IURRepresentation retValue = null;
+
+        try {
+            INKFRequest req = context.createSubRequest("active:attachGoldenThread");
+            req.addArgument("operand", resource);
+            req.addArgument("param", goldenThreadName);
+            retValue = context.issueSubRequest(req);
+        } catch (NKFException e) {
+            e.printStackTrace();
+        }
+
+        return retValue;
+    }
+
+    /**
+     * Delete a Golden Thread to a representation.
+     */
+    public static void cutGoldenThread(INKFConvenienceHelper context, String goldenThreadName){
+        try {
+            INKFRequest req = context.createSubRequest("active:cutGoldenThread");
+            req.addArgument("param", goldenThreadName);
+            context.issueSubRequest(req);
+        } catch (NKFException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void initializeLuceneIndex(INKFConvenienceHelper context, String indexName) {
+        try {
+            StringBuffer sb = new StringBuffer("<luceneIndex><index>");
+            sb.append(indexName);
+            sb.append("</index><reset/><close/></luceneIndex>");
+            INKFRequest req = context.createSubRequest("active:luceneIndex");
+            req.addArgument("operator", new StringAspect(sb.toString()));
+            context.issueSubRequest(req);
+
+        } catch(NKFException nfe) {
+            nfe.printStackTrace();
+        }
+    }
+
+    public static void indexResource(INKFConvenienceHelper context, String indexName, String id, IURAspect res) {
+        try {
+            StringAspect sa = (StringAspect) res;
+            System.out.println("INDEXING... " + sa.getString());
+            StringBuffer sb = new StringBuffer("<luceneIndex><index>");
+            sb.append(indexName);
+            sb.append("</index><id>");
+            sb.append(id);
+            sb.append("</id></luceneIndex>");
+            INKFRequest req = context.createSubRequest("active:luceneIndex");
+            req.addArgument("operand", res);
+            req.addArgument("operator", new StringAspect(sb.toString()));
+            context.issueSubRequest(req);
+
+            sb = new StringBuffer("<luceneIndex><index>");
+            sb.append(indexName);
+            sb.append("</index></luceneIndex>");
+            req=context.createSubRequest("active:luceneIndex");
+            req.addArgument("operator", new StringAspect(sb.toString()));
+            context.issueSubRequest(req);
+        } catch(NKFException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static IURRepresentation search(INKFConvenienceHelper context, String indexName, String query) {
+        IURRepresentation retValue = null;
+
+        try {
+            INKFRequest req = context.createSubRequest("active:luceneSearch");
+            StringBuffer sb = new StringBuffer("<luceneSearch><index>");
+            sb.append(indexName);
+            sb.append("</index><query>");
+            sb.append(query);
+            sb.append("</query>");
+            sb.append("</luceneSearch>");
+            req.addArgument("operator", new StringAspect(sb.toString()));
+            retValue = context.issueSubRequest(req);
+
+        } catch(NKFException e) {
+            e.printStackTrace();
+        }
+
+        return retValue;
+    }
 }
