@@ -75,10 +75,13 @@ function showAction(directive)
 		destination = userchoice.options[userchoice.selectedIndex].value;
 	} else {
 		destination = contextMap[directive][0];
-		// TODO: Validate this line.
+		// Explicitly set the location of the menu pulldown since
+		// it is not always set by the user (as in a Modify from a Search).
 		userchoice.options[contextMap[directive][2]].selected = true;
 	}
-	clearResults();
+	// TODO: Leave results in place?
+	//clearResults();
+	
 	// Hide action divs except the one we want.
 	for ( key in contextMap ) {
 		if(document.getElementById(contextMap[key][0])) {
