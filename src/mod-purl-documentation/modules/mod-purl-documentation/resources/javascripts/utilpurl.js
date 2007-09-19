@@ -39,11 +39,11 @@ HttpResponseCodes["409"] = "Conflict";
 HttpResponseCodes["412"] = "Precondition Failed";
 
 var contextMap = new Object();
-contextMap["Create"] = ["create", "c_"];
-contextMap["Modify"] = ["modify", "m_"];
-contextMap["Search"] = ["search", "s_"];
-contextMap["Delete"] = ["delete", "d_"];
-contextMap["AdvancedCreate"] = ["advancedcreate", "a_"];
+contextMap["Create"] = ["create", "c_", 1];
+contextMap["Modify"] = ["modify", "m_", 2];
+contextMap["Search"] = ["search", "s_", 3];
+contextMap["Delete"] = ["delete", "d_", 4];
+contextMap["AdvancedCreate"] = ["advancedcreate", "a_", 5];
 
 var resultBlock = $("results");
 
@@ -75,6 +75,8 @@ function showAction(directive)
 		destination = userchoice.options[userchoice.selectedIndex].value;
 	} else {
 		destination = contextMap[directive][0];
+		// TODO: Validate this line.
+		userchoice.options[contextMap[directive][2]].selected = true;
 	}
 	clearResults();
 	// Hide action divs except the one we want.
