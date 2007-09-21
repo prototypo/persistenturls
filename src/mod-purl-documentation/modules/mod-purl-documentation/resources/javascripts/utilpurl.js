@@ -229,19 +229,25 @@ function onResponse(message, headers, callingContext) {
 		
 		// Create a serialization of the data to allow easy passing to the Modify feature.
 		dataString = "";
+		keyCount = 0;
 		for ( key in elementMap ) {
 			escapedValue = elementMap[key].replace(/\n/g, "%LINEBREAK%");
 			dataString += key + "=" + escapedValue + "&";
+			keyCount++;
 		}
 		
 		resultBlock.innerHTML += "<dl>";
-		for ( key in elementMap ) {
-			// Write pretty-printed result to the results area.
-			if ( key == "id" || key == "pid" ) {
-				// TODONEXT: This will NOT handle multiple results yet.
-				resultBlock.innerHTML += "<dd>" + key + ": " + elementMap[key] + " <a href='#modify' onClick='return loadModify(\"" + dataString + "\")'><img src='http://purlz.org/images/edit.png' alt='Modify record'></a> " + "<\/dd>";
-			} else {
-				resultBlock.innerHTML += "<dd>" + key + ": " + elementMap[key] + "<\/dd>";
+		if ( keyCount == 0 ) {
+			resultBlock.innerHTML += "<dd>No results found<\/dd>";
+		} else {
+			for ( key in elementMap ) {
+				// Write pretty-printed result to the results area.
+				if ( key == "id" || key == "pid" ) {
+					// TODONEXT: This will NOT handle multiple results yet.
+					resultBlock.innerHTML += "<dd>" + key + ": " + elementMap[key] + " <a href='#modify' onClick='return loadModify(\"" + dataString + "\")'><img src='http://purlz.org/images/edit.png' alt='Modify record'></a> " + "<\/dd>";
+				} else {
+					resultBlock.innerHTML += "<dd>" + key + ": " + elementMap[key] + "<\/dd>";
+				}
 			}
 		}
 		resultBlock.innerHTML += "<\/dl>";
