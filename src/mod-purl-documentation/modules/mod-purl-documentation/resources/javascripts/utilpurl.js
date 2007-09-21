@@ -43,7 +43,7 @@ contextMap["Create"] = ["create", "c_", 1];
 contextMap["Modify"] = ["modify", "m_", 2];
 contextMap["Search"] = ["search", "s_", 3];
 contextMap["Delete"] = ["delete", "d_", 4];
-contextMap["AdvancedCreate"] = ["advancedcreate", "a_", 5];
+contextMap["AdvancedCreate"] = ["advancedcreate", "a_", 1];
 
 var resultBlock = $("results");
 
