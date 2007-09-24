@@ -271,7 +271,7 @@ function onResponse(message, headers, callingContext) {
 	// Show the result header and allow results to be duplicated in a new window.
 	resultBlock.innerHTML = "<h3 class='" + resultClass + "'>" +
 							"<a href='#' onClick='return showResultsWindow()'>" +
-							"<img src='http://purlz.org/images/new_window.png' alt='Open results in a new window'></a>" +
+							"<img src='http://purlz.org/images/tearoff_icon.png' alt='Open results in a new window'></a>" +
 							" " + resultHeader + "<\/h3>";
 
 	// Style the results based on their Content-Type.
