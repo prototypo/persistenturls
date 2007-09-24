@@ -46,6 +46,7 @@ contextMap["Delete"] = ["delete", "d_", 4];
 contextMap["AdvancedCreate"] = ["advancedcreate", "a_", 1];
 
 var resultBlock = $("results");
+var htmlResults = "";
 
 function load() {
 	// Get the current URL and look for fragments.
@@ -172,7 +173,7 @@ function checkDeleteSubmit(typeOfObject, deletionObject) {
 	
 // Pre-populate a Modify form with data from a Search.
 function loadModify(recordData) {
-	// Un-Webify the input.  TODO: This is rather hackish and should be refactored.
+	// Un-Pseudo-Webify the input.  TODO: This is rather hackish and should be refactored.
 	var entries = new Array();
 	var elements = new Array();
 	var records = new Array();
@@ -186,11 +187,62 @@ function loadModify(recordData) {
 			// TODO: Test for existence of the element first!
 			records[key] = records[key].replace(/%LINEBREAK%/g, "\n");
 			document.getElementById("m_" + key).value = records[key];
-			//document.getElementById("m_comments").value += key + " : " + records[key] + "\n";
 		}
 	}
 	showAction('Modify');
 	return false;
+}
+
+// Open results in a separate window.
+function showResultsWindow() {
+	
+	// TODO: Modify the HTML shown in this window so that clicking the "modify"
+	// link will open the correct function in the main window (the 'opener')
+	// instead of this newly-created window.
+	localHtmlResults = htmlResults.replace(/return loadModify/, "return opener.loadModify");
+	
+	resultsWindow = window.open('','','width=350,height=400,status=yes,scrollbars=yes,resizable=yes');
+	var resultsDoc = resultsWindow.document;
+	htmlDoc = "<html>";
+	htmlDoc += "<head><link type='text/css' rel='stylesheet' href='style.css' /></head>";
+	htmlDoc += "<div class='withresults'>";
+	htmlDoc += localHtmlResults;
+	htmlDoc += "</div></html>";
+	resultsDoc.write(htmlDoc);
+	resultsDoc.close();
+	if (window.focus) {
+		resultsWindow.focus();
+	}
+	return false;
+}
+
+// Create an HTML list from an array of XML elements and their values.
+function getHTMLFromXMLArray(xmlArray) {
+		
+	// Create a serialization of the data to allow easy passing to the Modify feature.
+	dataString = "";
+	keyCount = 0;
+	for ( key in elementMap ) {
+		escapedValue = elementMap[key].replace(/\n/g, "%LINEBREAK%");
+		dataString += key + "=" + escapedValue + "&";
+		keyCount++;
+	}
+	
+	var htmlList = "<dl>";
+	if ( keyCount == 0 ) {
+		htmlList += "<dd>No results found<\/dd>";
+	} else {
+		for ( key in elementMap ) {
+			if ( key == "id" || key == "pid" ) {
+				// TODONEXT: This will NOT handle multiple results yet.
+				htmlList += "<dd>" + key + ": " + elementMap[key] + " <a href='#modify' onClick='return loadModify(\"" + dataString + "\")'><img src='http://purlz.org/images/edit.png' alt='Modify record'></a> " + "<\/dd>";
+			} else {
+				htmlList += "<dd>" + key + ": " + elementMap[key] + "<\/dd>";
+			}
+		}
+	}
+	htmlList += "<\/dl></div>";
+	return htmlList;
 }
 
 // Callback for Create/Modify/Search/Delete (POST/PUT/GET/DELETE) actions.
@@ -215,7 +267,12 @@ function onResponse(message, headers, callingContext) {
 		resultHeader = callingContext + " Failed: " + explanation + " (" + headers["Status"] + ")";
 		resultClass = "error";
 	}
-	resultBlock.innerHTML = "<h3 class='" + resultClass + "'>" + resultHeader + "<\/h3>";
+	
+	// Show the result header and allow results to be duplicated in a new window.
+	resultBlock.innerHTML = "<h3 class='" + resultClass + "'>" +
+							"<a href='#' onClick='return showResultsWindow()'>" +
+							"<img src='http://purlz.org/images/new_window.png' alt='Open results in a new window'></a>" +
+							" " + resultHeader + "<\/h3>";
 
 	// Style the results based on their Content-Type.
 	if ( headers["Content-Type"] == "text/plain" || headers["Content-Type"] == "text/html") {
@@ -226,31 +283,11 @@ function onResponse(message, headers, callingContext) {
 		
 		// Parse the XML
 		startParser(message);
-		
-		// Create a serialization of the data to allow easy passing to the Modify feature.
-		dataString = "";
-		keyCount = 0;
-		for ( key in elementMap ) {
-			escapedValue = elementMap[key].replace(/\n/g, "%LINEBREAK%");
-			dataString += key + "=" + escapedValue + "&";
-			keyCount++;
-		}
-		
-		resultBlock.innerHTML += "<dl>";
-		if ( keyCount == 0 ) {
-			resultBlock.innerHTML += "<dd>No results found<\/dd>";
-		} else {
-			for ( key in elementMap ) {
-				// Write pretty-printed result to the results area.
-				if ( key == "id" || key == "pid" ) {
-					// TODONEXT: This will NOT handle multiple results yet.
-					resultBlock.innerHTML += "<dd>" + key + ": " + elementMap[key] + " <a href='#modify' onClick='return loadModify(\"" + dataString + "\")'><img src='http://purlz.org/images/edit.png' alt='Modify record'></a> " + "<\/dd>";
-				} else {
-					resultBlock.innerHTML += "<dd>" + key + ": " + elementMap[key] + "<\/dd>";
-				}
-			}
-		}
-		resultBlock.innerHTML += "<\/dl>";
+		xmlResults = elementMap;
+		htmlResults = getHTMLFromXMLArray(xmlResults);  // NB: A global (yuck!) var, but appropriate for this usage.
+				
+		// Write the results to the results area.
+		resultBlock.innerHTML += htmlResults;
 		
 	} else {
 		resultBlock.innerHTML += "<p class='error'>Warning: Content-Type of results not supported.  Trying anyway:<\/p>";
