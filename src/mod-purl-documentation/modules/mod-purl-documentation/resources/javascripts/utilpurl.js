@@ -235,7 +235,12 @@ function getHTMLFromXMLArray(xmlArray) {
 		for ( key in elementMap ) {
 			if ( key == "id" || key == "pid" ) {
 				// TODONEXT: This will NOT handle multiple results yet.
-				htmlList += "<dd>" + key + ": " + elementMap[key] + " <a href='#modify' onClick='return loadModify(\"" + dataString + "\")'><img src='http://purlz.org/images/edit.png' alt='Modify record'></a> " + "<\/dd>";
+				htmlList += "<dd>" + key + ": " + elementMap[key] +
+						 	" <a href='#modify' class='tooltip' onClick='return loadModify(\"" + 
+							dataString +
+							"\")'><img src='http://purlz.org/images/edit.png' alt='Modify record'>" +
+							"<span>Modify record</span></a>" + 
+							"<\/dd>";
 			} else {
 				htmlList += "<dd>" + key + ": " + elementMap[key] + "<\/dd>";
 			}
@@ -270,8 +275,9 @@ function onResponse(message, headers, callingContext) {
 	
 	// Show the result header and allow results to be duplicated in a new window.
 	resultBlock.innerHTML = "<h3 class='" + resultClass + "'>" +
-							"<a href='#' onClick='return showResultsWindow()'>" +
-							"<img src='http://purlz.org/images/tearoff_icon.png' alt='Open results in a new window'></a>" +
+							"<a href='#' class='tooltip' onClick='return showResultsWindow()'>" +
+							"<img src='http://purlz.org/images/tearoff_icon.png' alt='Open results in a new window' />" +
+							"<span>Open results in a new window</span></a>" +
 							" " + resultHeader + "<\/h3>";
 
 	// Style the results based on their Content-Type.
