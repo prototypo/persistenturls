@@ -165,7 +165,7 @@ public class NKHelper {
 
             sb = new StringBuffer("<luceneIndex><index>");
             sb.append(indexName);
-            sb.append("</index></luceneIndex>");
+            sb.append("</index><close/></luceneIndex>");
             req=context.createSubRequest("active:luceneIndex");
             req.addArgument("operator", new StringAspect(sb.toString()));
             context.issueSubRequest(req);
