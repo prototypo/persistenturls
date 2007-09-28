@@ -199,7 +199,7 @@ function showResultsWindow() {
 	// TODO: Modify the HTML shown in this window so that clicking the "modify"
 	// link will open the correct function in the main window (the 'opener')
 	// instead of this newly-created window.
-	localHtmlResults = htmlResults.replace(/return loadModify/, "return opener.loadModify");
+	localHtmlResults = htmlResults.replace(/return loadModify/g, "return opener.loadModify");
 	
 	resultsWindow = window.open('','','width=350,height=400,status=yes,scrollbars=yes,resizable=yes');
 	var resultsDoc = resultsWindow.document;
@@ -219,30 +219,34 @@ function showResultsWindow() {
 // Create an HTML list from an array of XML elements and their values.
 function getHTMLFromXMLArray(xmlArray) {
 		
-	// Create a serialization of the data to allow easy passing to the Modify feature.
-	dataString = "";
+	var htmlList = "<dl>";
 	keyCount = 0;
-	for ( key in elementMap ) {
-		escapedValue = elementMap[key].replace(/\n/g, "%LINEBREAK%");
-		dataString += key + "=" + escapedValue + "&";
+	for ( outerKey in xmlArray ) {
 		keyCount++;
 	}
-	
-	var htmlList = "<dl>";
 	if ( keyCount == 0 ) {
 		htmlList += "<dd>No results found<\/dd>";
 	} else {
-		for ( key in elementMap ) {
-			if ( key == "id" || key == "pid" ) {
-				// TODONEXT: This will NOT handle multiple results yet.
-				htmlList += "<dd>" + key + ": " + elementMap[key] +
-						 	" <a href='#modify' class='tooltip' onClick='return loadModify(\"" + 
-							dataString +
-							"\")'><img src='http://purlz.org/images/edit.png' alt='Modify record'>" +
-							"<span>Modify record</span></a>" + 
-							"<\/dd>";
-			} else {
-				htmlList += "<dd>" + key + ": " + elementMap[key] + "<\/dd>";
+		for ( outerKey in xmlArray ) {
+			// Create a serialization of the data to allow easy passing to the Modify feature.
+			dataString = "";
+			for ( innerKey in xmlArray[outerKey] ) {
+				escapedValue = xmlArray[outerKey][innerKey][1].replace(/\n/g, "%LINEBREAK%");
+				dataString += xmlArray[outerKey][innerKey][0] + "=" + escapedValue + "&";
+			}
+			for ( innerKey in xmlArray[outerKey] ) {
+				if ( xmlArray[outerKey][innerKey][0] == "id" || xmlArray[outerKey][innerKey][0] == "pid" ) {
+					// TODONEXT: This will NOT handle multiple results yet.
+					// The dataString passed needs to be different for each record.
+					htmlList += "<dd><br>" + xmlArray[outerKey][innerKey][0] + ": " + xmlArray[outerKey][innerKey][1] +
+							 	" <a href='#modify' class='tooltip' onClick='return loadModify(\"" + 
+								dataString +
+								"\")'><img src='http://purlz.org/images/edit.png' alt='Modify record'>" +
+								"<span>Modify record</span></a>" + 
+								"<\/dd>";
+				} else {
+					htmlList += "<dd>" + xmlArray[outerKey][innerKey][0] + ": " + xmlArray[outerKey][innerKey][1] + "<\/dd>";
+				}
 			}
 		}
 	}
@@ -288,9 +292,8 @@ function onResponse(message, headers, callingContext) {
 				headers["Content-Type"] == "application/xml" ) {
 		
 		// Parse the XML
-		startParser(message);
-		xmlResults = elementMap;
-		htmlResults = getHTMLFromXMLArray(xmlResults);  // NB: A global (yuck!) var, but appropriate for this usage.
+		startParser(message);		
+		htmlResults = getHTMLFromXMLArray(resultsMap);  // resultsMap is in SaxEventHandler.js.
 				
 		// Write the results to the results area.
 		resultBlock.innerHTML += htmlResults;

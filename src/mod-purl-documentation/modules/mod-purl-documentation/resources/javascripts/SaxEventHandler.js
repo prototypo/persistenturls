@@ -35,7 +35,10 @@
 // TODO: Trim this file down by removing null-implementations and functions not used.
 
 // DHW
-var elementMap = new Array();
+var elementMap;
+var elementMapIndex;
+var resultsMap;
+var resultsMapIndex;
 var currentElement = '';
 
 /*****************************************************************************
@@ -125,6 +128,9 @@ SAXEventHandler.prototype.endDocument = function() {
 
     //place endDocument event handling code below this line
 
+	// DHW: TODO: Keep more than one doc's worth of data until manually cleared?
+	// 		Add a new method to clear the array contents?
+
 }  // end function endDocument
 
 
@@ -143,6 +149,11 @@ SAXEventHandler.prototype.endElement = function(name) {
     this._handleCharacterData();
 
     //place endElement event handling code below this line
+	if ( name == 'user' || name == 'group' || name == 'domain' || name == 'purl' ) {
+		// Write the working array into the results.
+		resultsMap[resultsMapIndex] = elementMap;
+		resultsMapIndex++;
+	}
 
 
 }  // end function endElement
@@ -219,6 +230,14 @@ SAXEventHandler.prototype.startElement = function(name, atts) {
     //place startElement event handling code below this line
 	// DHW
 	currentElement = name;
+	// DBG TODO REMOVE
+	//alert(currentElement);
+	// TODONEXT: 
+	if ( name == 'user' || name == 'group' || name == 'domain' || name == 'purl' ) {
+		// Clear the working array.
+		elementMap = new Array();
+		elementMapIndex = 0;
+	}
 
 }  // end function startElement
 
@@ -233,11 +252,13 @@ SAXEventHandler.prototype.startDocument = function() {
         Fires at the start of the document
     *****************************************************************************/
 
-	elementMap = new Array();
-    this._handleCharacterData();
-
     //place startDocument event handling code below this line
-
+	// DHW
+    this._handleCharacterData();
+	// Initialize the result array.
+	resultsMap = new Array();
+	resultsMapIndex = 0;
+	
 
 }  // end function startDocument
 
@@ -398,10 +419,8 @@ SAXEventHandler.prototype._fullCharacterDataReceived = function(fullCharacterDat
 
     //place character (text) event handling code below this line
 	// DHW
-	elementMap[currentElement] = fullCharacterData;
-	
-	// DBG DHW
-	//alert(currentElement + ": " + fullCharacterData);
+	elementMap[elementMapIndex] = [currentElement, fullCharacterData];
+	elementMapIndex++;
 
 }  // end function _fullCharacterDataReceived
 
