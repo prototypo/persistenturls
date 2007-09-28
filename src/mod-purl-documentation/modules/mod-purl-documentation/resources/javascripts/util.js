@@ -1,5 +1,6 @@
 // Originally from http://ajaxify.com/run/Lib/js/
-// and used without modifications other than this comment.
+// and originally called 'util.js';
+// used without modifications other than this comment and the name change.
 // Licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 2.5 license
 // by Michael Mahemoff.
 
