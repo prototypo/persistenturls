@@ -227,17 +227,18 @@ function getHTMLFromXMLArray(xmlArray) {
 	if ( keyCount == 0 ) {
 		htmlList += "<dd>No results found<\/dd>";
 	} else {
+		// Found results, so create HTML for each record.
 		for ( outerKey in xmlArray ) {
 			// Create a serialization of the data to allow easy passing to the Modify feature.
+			// The dataString passed needs to be different for each record.
 			dataString = "";
 			for ( innerKey in xmlArray[outerKey] ) {
 				escapedValue = xmlArray[outerKey][innerKey][1].replace(/\n/g, "%LINEBREAK%");
 				dataString += xmlArray[outerKey][innerKey][0] + "=" + escapedValue + "&";
 			}
+			// Write an HTML list item for each element in a record.
 			for ( innerKey in xmlArray[outerKey] ) {
 				if ( xmlArray[outerKey][innerKey][0] == "id" || xmlArray[outerKey][innerKey][0] == "pid" ) {
-					// TODONEXT: This will NOT handle multiple results yet.
-					// The dataString passed needs to be different for each record.
 					htmlList += "<dd><br>" + xmlArray[outerKey][innerKey][0] + ": " + xmlArray[outerKey][innerKey][1] +
 							 	" <a href='#modify' class='tooltip' onClick='return loadModify(\"" + 
 								dataString +
