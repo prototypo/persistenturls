@@ -63,6 +63,7 @@ package org.purl.accessor;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import org.purl.accessor.command.CreateResourceCommand;
 import org.purl.accessor.command.DeleteResourceCommand;
@@ -92,7 +93,7 @@ public class GroupAccessor extends AbstractAccessor {
                 String retValue = null;
 
                 try {
-                    retValue = "ffcpl:/groups/" + NKHelper.getLastSegment(context);
+                    retValue = getURI(NKHelper.getLastSegment(context));
                 } catch(NKFException nfe) {
                     nfe.printStackTrace();
                 }
@@ -100,10 +101,16 @@ public class GroupAccessor extends AbstractAccessor {
                 return retValue;
             }
 
+            @Override
+            public String getURI(String id) {
+                return "ffcpl:/groups/" + id;
+            }
+
         };
 
-        ResourceCreator groupCreator = new GroupCreator();
         ResourceStorage groupStorage = new DefaultResourceStorage();
+        ResourceCreator groupCreator = new GroupCreator(new UserResolver(), new DefaultResourceStorage());
+
 
         commandMap.put("http:GET", new GetResourceCommand(TYPE, groupResolver, groupStorage));
         commandMap.put("http:POST", new CreateResourceCommand(TYPE, groupResolver, groupCreator, null, groupStorage));
@@ -117,7 +124,35 @@ public class GroupAccessor extends AbstractAccessor {
 
     static public class GroupCreator implements ResourceCreator {
 
+        private ResourceStorage userStorage;
+        private URIResolver userResolver;
+
+        public GroupCreator(URIResolver userResolver, ResourceStorage userStorage) {
+            this.userResolver = userResolver;
+            this.userStorage = userStorage;
+        }
+
         public IURAspect createResource(INKFConvenienceHelper context, IAspectNVP params) throws NKFException {
+
+            String maintainers = params.getValue("maintainers");
+            String members = params.getValue("members");
+
+            StringTokenizer st = new StringTokenizer(maintainers, "\n");
+            while(st.hasMoreTokens()) {
+                String next = st.nextToken();
+                if(!userStorage.resourceExists(context, userResolver.getURI(next))) {
+                    throw new PURLException("User " + next + " does not exist", 400);
+                }
+            }
+
+            st = new StringTokenizer(members, "\n");
+            while(st.hasMoreTokens()) {
+                String next = st.nextToken();
+                if(!userStorage.resourceExists(context, userResolver.getURI(next))) {
+                    throw new PURLException("User " + next + " does not exist", 400);
+                }
+            }
+
             StringBuffer sb = new StringBuffer("<group>");
             sb.append("<id>");
             sb.append(NKHelper.getLastSegment(context));

@@ -18,7 +18,9 @@ package org.purl.accessor.command;
  *
  */
 
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 import org.purl.accessor.NKHelper;
 import org.purl.accessor.ResourceFilter;
@@ -111,19 +113,30 @@ public class GetResourceCommand extends PURLCommand {
 
                 sb = new StringBuffer("<results>");
 
+                Set<String> alreadyDoneSet = new HashSet<String>();
+
                 try {
-                    IXDAReadOnlyIterator roXDAItor = roSearchXDA.readOnlyIterator("//docid");
+                    IXDAReadOnlyIterator roXDAItor = roSearchXDA.readOnlyIterator("//match");
+
                     while(roXDAItor.hasNext()) {
-                        String str = roXDAItor.getCurrentXPath();
-                        String uri = roSearchXDA.getText(str, true);
-
-                        IURAspect iur = resStorage.getResource(context, uri);
-                        if(iur != null) {
-                            StringAspect sa = (StringAspect) context.transrept(iur, IAspectString.class);
-                            sb.append(sa.getString());
-                        }
-
                         roXDAItor.next();
+                        String uri = roXDAItor.getText("docid", true);
+                        String scoreStr = roXDAItor.getText("score", true);
+                        double score = Double.valueOf(scoreStr).doubleValue();
+
+                        if(!alreadyDoneSet.contains(uri) && (score > 0.5)) {
+                            IURAspect iur = resStorage.getResource(context, uri);
+                            if(iur != null) {
+                                // Filter the response if we have a filter
+                                if(filter!=null) {
+                                    iur = filter.filter(context, iur);
+                                }
+
+                                StringAspect sa = (StringAspect) context.transrept(iur, IAspectString.class);
+                                sb.append(sa.getString());
+                            }
+                            alreadyDoneSet.add(uri);
+                        }
                     }
                 } catch (XPathLocationException e) {
                     // TODO Auto-generated catch block

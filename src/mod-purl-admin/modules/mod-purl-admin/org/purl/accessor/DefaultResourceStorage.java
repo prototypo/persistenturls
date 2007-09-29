@@ -28,4 +28,8 @@ public class DefaultResourceStorage implements ResourceStorage {
     public boolean resourceExists(INKFConvenienceHelper context, URIResolver resolver) throws NKFException {
         return context.exists(resolver.getURI(context));
     }
+
+    public boolean resourceExists(INKFConvenienceHelper context, String uri) throws NKFException {
+        return context.exists(uri);
+    }
 }

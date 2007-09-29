@@ -63,6 +63,7 @@ package org.purl.accessor;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import org.purl.accessor.command.CreateResourceCommand;
 import org.purl.accessor.command.DeleteResourceCommand;
@@ -92,7 +93,7 @@ public class DomainAccessor extends AbstractAccessor {
                 String retValue = null;
 
                 try {
-                    retValue = "ffcpl:/domains/" + NKHelper.getLastSegment(context);
+                    retValue = getURI(NKHelper.getLastSegment(context));
                 } catch(NKFException nfe) {
                     nfe.printStackTrace();
                 }
@@ -100,9 +101,14 @@ public class DomainAccessor extends AbstractAccessor {
                 return retValue;
             }
 
+            @Override
+            public String getURI(String id) {
+                return "ffcpl:/domains/" + id;
+            }
+
         };
 
-        ResourceCreator domainCreator = new DomainCreator();
+        ResourceCreator domainCreator = new DomainCreator(new UserResolver(), new DefaultResourceStorage());
         ResourceStorage domainStorage = new DefaultResourceStorage();
 
         commandMap.put("http:GET", new GetResourceCommand(TYPE, domainResolver, domainStorage));
@@ -117,7 +123,37 @@ public class DomainAccessor extends AbstractAccessor {
 
     static public class DomainCreator implements ResourceCreator {
 
+        private ResourceStorage userStorage;
+        private URIResolver userResolver;
+
+        public DomainCreator(URIResolver userResolver, ResourceStorage userStorage) {
+            this.userResolver = userResolver;
+            this.userStorage = userStorage;
+        }
+
         public IURAspect createResource(INKFConvenienceHelper context, IAspectNVP params) throws NKFException {
+
+            String maintainers = params.getValue("maintainers");
+            String writers = params.getValue("writers");
+
+            StringTokenizer st = new StringTokenizer(maintainers, "\n");
+            while(st.hasMoreTokens()) {
+                String next = st.nextToken();
+                System.out.println("Checking: " + next);
+                if(!userStorage.resourceExists(context, userResolver.getURI(next))) {
+                    throw new PURLException("User " + next + " does not exist", 400);
+                }
+            }
+
+            st = new StringTokenizer(writers, "\n");
+            while(st.hasMoreTokens()) {
+                String next = st.nextToken();
+                System.out.println("Checking: " + next);
+                if(!userStorage.resourceExists(context, userResolver.getURI(next))) {
+                    throw new PURLException("User " + next + " does not exist", 400);
+                }
+            }
+
             StringBuffer sb = new StringBuffer("<domain>");
             sb.append("<id>");
             sb.append(NKHelper.getLastSegment(context));

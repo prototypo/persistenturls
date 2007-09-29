@@ -52,7 +52,7 @@ public class PURLAccessor extends AbstractAccessor {
 
         }; */
 
-        ResourceCreator purlCreator = new PurlCreator();
+        ResourceCreator purlCreator = new PurlCreator(new UserResolver(), new DefaultResourceStorage());
         ResourceStorage purlStorage = new DefaultResourceStorage();
 
         commandMap.put("http:POST", new CreateResourceCommand(TYPE, purlResolver, purlCreator, null, purlStorage));
@@ -66,6 +66,13 @@ public class PURLAccessor extends AbstractAccessor {
 
 
     static public class PurlCreator implements ResourceCreator {
+        private URIResolver userResolver;
+        private ResourceStorage userStorage;
+
+        public PurlCreator( URIResolver userResolver, ResourceStorage userStorage) {
+            this.userResolver = userResolver;
+            this.userStorage = userStorage;
+        }
 
         private static IURAspect createChainedPURL(INKFConvenienceHelper context, IAspectNVP params) {
             IURAspect retValue = null;
@@ -174,6 +181,17 @@ public class PURLAccessor extends AbstractAccessor {
             System.out.println("ARGUMENTS:");
             while(itor.hasNext()) {
                 System.out.println((String)itor.next());
+            }
+
+            String maintainers = params.getValue("maintainers");
+
+            StringTokenizer st = new StringTokenizer(maintainers, "\n");
+            while(st.hasMoreTokens()) {
+                String next = st.nextToken();
+                System.out.println("Checking: " + next);
+                if(!userStorage.resourceExists(context, userResolver.getURI(next))) {
+                    throw new PURLException("User " + next + " does not exist", 400);
+                }
             }
 
             String type = params.getValue("type");

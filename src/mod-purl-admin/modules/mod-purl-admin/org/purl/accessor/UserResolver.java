@@ -3,15 +3,11 @@ package org.purl.accessor;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.NKFException;
 
-public class PURLURIResolver extends URIResolver {
-
-    @Override
+public class UserResolver extends URIResolver {
     public String getURI(INKFConvenienceHelper context) {
         String retValue = null;
-
         try {
-            String path = NKHelper.getArgument(context, "path");
-            retValue =  getURI((!path.startsWith("/") ? ("/"+path) : path));
+            retValue = getURI(NKHelper.getLastSegment(context));
         } catch(NKFException nfe) {
             nfe.printStackTrace();
         }
@@ -19,10 +15,7 @@ public class PURLURIResolver extends URIResolver {
         return retValue;
     }
 
-    @Override
     public String getURI(String id) {
-        return "ffcpl:/storedpurls" + id;
+        return "ffcpl:/users/" + id;
     }
-
-
 }

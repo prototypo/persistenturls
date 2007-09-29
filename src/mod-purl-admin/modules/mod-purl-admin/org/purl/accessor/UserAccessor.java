@@ -87,23 +87,7 @@ public class UserAccessor extends AbstractAccessor {
         // We use stateless command instances that are triggered
         // based on the method of the HTTP request
 
-        URIResolver userResolver = new URIResolver() {
-            @Override
-            public String getURI(INKFConvenienceHelper context) {
-                String retValue = null;
-
-                try {
-                    retValue = "ffcpl:/users/" + NKHelper.getLastSegment(context);
-                } catch(NKFException nfe) {
-                    nfe.printStackTrace();
-                }
-
-                return retValue;
-            }
-
-        };
-
-        // TODO: External this
+        URIResolver userResolver = new UserResolver();
         ResourceCreator userCreator = new UserCreator();
         ResourceFilter userFilter = new UserPrivateDataFilter();
         ResourceStorage userStorage = new DefaultResourceStorage();
