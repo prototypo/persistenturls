@@ -236,6 +236,10 @@ handles results from the server in response to form submissions.
 										Register a new PURL
 									</option>
 
+									<option value="advancedcreate">
+										Advanced PURL Registration
+									</option>
+
 									<option value="modify">
 										Modify an existing PURL
 									</option>
@@ -370,7 +374,7 @@ handles results from the server in response to form submissions.
 										</tr>
 
 										<tr>
-											<td class="property" id="s_seealso_label">See Also URLs:</td>
+											<td class="property" id="s_seealso_label">See Also URL:</td>
 
 											<td class="value"><input id="s_seealso" name="s_seealso" type="text" size="40" /></td>
 										</tr>
@@ -515,11 +519,10 @@ handles results from the server in response to form submissions.
 								<table id="seealsourltable" summary="see also URL table" width="100%" style="display: none;">
 									<tbody>
 										<tr>
-											<td class="property" id="a_seealso_label" width="120">See Also URLs:</td>
+											<td class="property" id="a_seealso_label" width="120">See Also URL:</td>
 
 											<td class="value">
-											<textarea rows="5" cols="40" id="a_seealso" name="a_seealso">
-</textarea></td>
+											<input type="text" size="40" id="a_seealso" name="a_seealso"></td>
 										</tr>
 									</tbody>
 								</table>
@@ -532,7 +535,7 @@ handles results from the server in response to form submissions.
 											<td class="value"><input id="a_existingpurl" name="a_existingpurl" type="text" size="40" /></td>
 										</tr>
 									</tbody>
-								</table><input value="Submit" type="submit" />
+								</table><br><input value="Submit" type="submit" />
 
 								<table class="docstable" summary="documentation table">
 									<tbody>
