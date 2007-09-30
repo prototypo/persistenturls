@@ -1,10 +1,8 @@
 // Originally from http://ajaxify.com/run/Lib/js/
 // and originally called 'util.js';
 // used without modifications other than this comment and the name change.
-// Licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 2.5 license
-// by Michael Mahemoff.
-
-// TODO: Request removal of NonCommercial clause from Michael Mahemoff.
+// Licensed under the Creative Commons Attribution-ShareAlike 3.0 license
+// by Michael Mahemoff by email to allow use for this project.
 
 var util = {
 
