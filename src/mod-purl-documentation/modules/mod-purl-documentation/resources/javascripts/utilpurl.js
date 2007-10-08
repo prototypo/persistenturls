@@ -258,7 +258,7 @@ function getHTMLFromXMLArray(xmlArray) {
 // Callback for Create/Modify/Search/Delete (POST/PUT/GET/DELETE) actions.
 function onResponse(message, headers, callingContext) {
 	// If bad parameters were passed, highlight them via CSS.
-	if ( headers["Status"] == "400") {
+	if ( headers["Status"] == "400" && headers["X-bad-params"] ) {
 		var badParams = headers["X-bad-params"].split(",");
 		for ( i=0 ; i < badParams.length ; i++ ) {
 			setClass(contextMap[callingContext][1] + badParams[i] + "_label", "error");
