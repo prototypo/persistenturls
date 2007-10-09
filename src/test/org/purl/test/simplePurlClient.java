@@ -21,12 +21,12 @@ public final class simplePurlClient {
 	/****************** Single PURLs **************************/
 	
 	/**
-	 * Register a new PURL via an HTTP POST.
+	 * Create a new PURL via an HTTP POST.
 	 *
 	 * @param  
 	 * @return 
 	 */
-	public String registerPurl (String url, Map<String, String> formParameters) throws IOException {
+	public String createPurl (String url, Map<String, String> formParameters) throws IOException {
 		
 		Client client = new Client(Protocol.HTTP);
 		
@@ -102,9 +102,9 @@ public final class simplePurlClient {
 	 * @return 
 	 */
 	public String deletePurl (String url) throws IOException {
-		
+
 		Client client = new Client(Protocol.HTTP);
-		
+
 		// Request the resource and return its textual content.		
 		return client.delete(url).getEntity().getText();
 	}
@@ -113,19 +113,17 @@ public final class simplePurlClient {
 	/****************** Batch PURLs **************************/
 	
 	/**
-	 * Register a batch of PURLs via an HTTP POST.
+	 * Create a batch of PURLs via an HTTP POST.
 	 *
 	 * @param  
 	 * @return 
 	 */
-	// TODO: Take a File as input?
-	public String registerPurls (String url, Map<String, String> formParameters) throws IOException {
+	public String createPurls (String url, File file) throws IOException {
 		
 		Client client = new Client(Protocol.HTTP);
 		
 		// Convert the form data to a RESTlet Representation.
-		String form = urlEncode(formParameters);
-		Representation rep = new StringRepresentation( form, MediaType.APPLICATION_WWW_FORM );
+		Representation rep = new FileRepresentation( file, MediaType.APPLICATION_XML, 3600 );
 		
 		// Request the resource and return its textual content.		
 		return client.post(url, rep).getEntity().getText();
@@ -138,26 +136,15 @@ public final class simplePurlClient {
 	 * @return 
 	 */
 	// TODO: Take a File as input?
-	public String modifyPurls (String url, String formParameters) throws IOException {
+	public String modifyPurls (String url, File file) throws IOException {
 		
 		Client client = new Client(Protocol.HTTP);
 		
 		// Convert the form data to a RESTlet Representation.
-		Representation rep = new StringRepresentation( formParameters, MediaType.APPLICATION_XML );
+		Representation rep = new FileRepresentation( file, MediaType.APPLICATION_XML, 3600 );
 		
 		// Request the resource and return its textual content.		
 		return client.put(url, rep).getEntity().getText();
-	}
-
-	/**
-	 * Delete a batch of PURLs via an HTTP DELETE.
-	 *
-	 * @param  
-	 * @return 
-	 */
-	// TODO: Take a File as input?
-	public String deletePurls() {
-		return "Delete a batch PURLs via an HTTP DELETE. Not implemented yet.";
 	}
 
 	/**
@@ -238,12 +225,12 @@ public final class simplePurlClient {
 	/****************** Groups **************************/
 	
 	/**
-	 * Register a new group via an HTTP POST.
+	 * Create a new group via an HTTP POST.
 	 *
 	 * @param  
 	 * @return 
 	 */
-	public String registerGroup (String url, Map<String, String> formParameters) throws IOException {
+	public String createGroup (String url, Map<String, String> formParameters) throws IOException {
 		
 		Client client = new Client(Protocol.HTTP);
 		
@@ -302,12 +289,12 @@ public final class simplePurlClient {
 	/****************** Domains **************************/
 	
 	/**
-	 * Register a new domain via an HTTP POST.
+	 * Create a new domain via an HTTP POST.
 	 *
 	 * @param  
 	 * @return 
 	 */
-	public String registerDomain (String url, Map<String, String> formParameters) throws IOException {
+	public String createDomain (String url, Map<String, String> formParameters) throws IOException {
 		
 		Client client = new Client(Protocol.HTTP);
 		

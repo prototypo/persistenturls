@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<purls>
+	 <purl>
+	   <pid>/tld/oclc/test303/</pid>
+	   <type>303</type>
+	   <maintainers>
+	     <uid>uche</uid>
+			 <uid/>
+	   </maintainers>
+	   <target>
+	     <url>http://example.com/test307/</url>
+	   </target>
+		 <seealso>
+		   <url>http://example.com/see/also/some/more.xml</url>
+		   <description>This is the first description.</description>
+			 <url/>
+			 <description/>
+		 </seealso>
+	   <basepurl>/NET/an/old/PURL</basepurl>
+	 </purl>
+</purls>

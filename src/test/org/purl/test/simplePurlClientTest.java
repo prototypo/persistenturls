@@ -30,8 +30,8 @@ public class simplePurlClientTest extends TestCase {
 
 	/****************** Single PURLs **************************/
 
-	// Test registering a new PURL via an HTTP POST.
-	public void testRegisterPurl() {
+	// Test creating a new PURL via an HTTP POST.
+	public void testCreatePurl() {
 
 		try {
 			String url = "http://localhost:8080/admin/purl/NET/test/testPURL";
@@ -41,8 +41,8 @@ public class simplePurlClientTest extends TestCase {
 			formParameters.put("target", "http://bbc.co.uk/");
 			formParameters.put("maintainers", "david,eric,brian");
 
-			String result = client.registerPurl(url, formParameters);
-			assertEquals("Cannot register a new PURL.",
+			String result = client.createPurl(url, formParameters);
+			assertEquals("Cannot create a new PURL.",
 						"<purl><pid>/NET/test/testPURL</pid><type>302</type><target><url>http://bbc.co.uk/</url></target><maintainers><uid>david,eric,brian</uid></maintainers></purl>",
 						result);
 		} catch (Exception e) {
@@ -104,6 +104,7 @@ public class simplePurlClientTest extends TestCase {
 */
 
 	// Test resolving an existing PURL via an HTTP GET.
+	// TODO: Presumes a PURL type of "302".  Is that OK?  Probably not.
 	public void testResolvePurl() {
 
 		try {
@@ -136,42 +137,57 @@ public class simplePurlClientTest extends TestCase {
 
 
 	/****************** Batch PURLs **************************/
-/*	TODO: Implement.
-	// Test registering a batch of PURLs via an HTTP POST.
-	public void testRegisterPurls() {
+	// Test creating a batch of PURLs via an HTTP POST.
+	public void testCreatePurls() {
 
 		try {
-			URL url = new URL("http://localhost:8080/admin/purl/NET/test/testPURL");
+			String url = "http://localhost:8080/admin/purls/";
 
-			Map<String, String> formParameters = new HashMap<String, String>();
-			formParameters.put("file", "TODO");
+			File file = new File(System.getProperty("user.dir") + 
+								System.getProperty("file.separator") +
+								"test" + 
+								System.getProperty("file.separator") + 
+								"testdata" + 
+								System.getProperty("file.separator"), 
+								"purlscreate.xml");
+			
+			// DBG
+			//System.err.println("Current directory: " + System.getProperty("user.dir") );
+			//System.err.println("Input file: " + file.getPath() );
 
-			String result = client.registerPurls(url, formParameters);
-			assertEquals("Cannot register a batch of PURLs.",
+			String result = client.createPurls(url, file);
+			assertEquals("Cannot create a batch of PURLs.",
 						"TODO",
 						result);
 		} catch (Exception e) {
 			reportException("Failed to resolve URL: ", e);
 		}
 	}
-
+	
 	// Test modifying a batch of PURLs via an HTTP PUT.
 	public void testModifyPurls() {
-		String result = client.modifyPurls();
-		assertEquals("Cannot modify a batch of PURLs.",
-					"Modify a batch of PURLs via an HTTP PUT. Not implemented yet.",
-					result);
-	}
 
-	// Test deleting a batch of PURLs via an HTTP DELETE.
-	// TODO: DELETE requests can't hold bodies??
-	public void testDeletePurls() {
-		String result = client.deletePurls();
-		assertEquals("Cannot delete a batch of PURLs.",
-					"Delete a batch PURLs via an HTTP DELETE. Not implemented yet.",
-					result);
-	}
+		try {
+			String url = "http://localhost:8080/admin/purls/";
 
+			File file = new File(System.getProperty("user.dir") + 
+								System.getProperty("file.separator") +
+								"test" + 
+								System.getProperty("file.separator") + 
+								"testdata" + 
+								System.getProperty("file.separator"), 
+								"purlsmodify.xml");
+
+			String result = client.modifyPurls(url, file);
+			assertEquals("Cannot modify a batch of PURLs.",
+						"TODO",
+						result);
+		} catch (Exception e) {
+			reportException("Failed to resolve URL: ", e);
+		}
+	}
+	
+/*	TODO: Implement.
 	// Test validating a batch of PURLs via an HTTP GET.
 	// TODO: Provide XML to validatePurls().
 	public void testValidatePurls() {
@@ -286,8 +302,8 @@ public class simplePurlClientTest extends TestCase {
 	
 	/****************** Groups **************************/
 	
-	// Test registering a new group via an HTTP POST.
-	public void testRegisterGroup() {
+	// Test creating a new group via an HTTP POST.
+	public void testCreateGroup() {
 		
 		try {
 			String url = "http://localhost:8080/admin/group/testgroup";
@@ -298,8 +314,8 @@ public class simplePurlClientTest extends TestCase {
 			formParameters.put("members", "zepheira,david,eric,brian");
 			formParameters.put("comments", "A group used for unit tests.");
 							
-			String result = client.registerGroup(url, formParameters);
-			assertEquals("Cannot register a new group.",
+			String result = client.createGroup(url, formParameters);
+			assertEquals("Cannot create a new group.",
 						"<group><id>testgroup</id><name>Test Group</name><maintainers>david,brian</maintainers><members>zepheira,david,eric,brian</members><comments>A group used for unit tests.</comments></group>",
 						result);
 		} catch (Exception e) {
@@ -362,8 +378,8 @@ public class simplePurlClientTest extends TestCase {
 	
 	/****************** Domains **************************/
 	
-	// Test registering a new domain via an HTTP POST.
-	public void testRegisterDomain() {
+	// Test creating a new domain via an HTTP POST.
+	public void testCreateDomain() {
 		
 		try {
 			String url = "http://localhost:8080/admin/domain/testdomain";
@@ -373,8 +389,8 @@ public class simplePurlClientTest extends TestCase {
 			formParameters.put("maintainers", "eric,brian");
 			formParameters.put("writers", "zepheira,david,eric");
 			
-			String result = client.registerDomain(url, formParameters);
-			assertEquals("Cannot register a new domain.",
+			String result = client.createDomain(url, formParameters);
+			assertEquals("Cannot create a new domain.",
 						"<domain><id>testdomain</id><name>Test Domain</name><maintainers>eric,brian</maintainers><writers>zepheira,david,eric</writers></domain>",
 						result);
 		} catch (Exception e) {

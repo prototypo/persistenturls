@@ -15,7 +15,7 @@ public class purlClientTestRunner {
         TestSuite suite = new TestSuite();
 
 		// User actions
-        suite.addTest(new simplePurlClientTest("testRegisterUser"));
+/*        suite.addTest(new simplePurlClientTest("testRegisterUser"));
         suite.addTest(new simplePurlClientTest("testModifyUser"));
         suite.addTest(new simplePurlClientTest("testSearchUser"));
         suite.addTest(new simplePurlClientTest("testDeleteUser"));
@@ -39,13 +39,11 @@ public class purlClientTestRunner {
         //suite.addTest(new simplePurlClientTest("testValidatePurl"));
         suite.addTest(new simplePurlClientTest("testResolvePurl"));
         suite.addTest(new simplePurlClientTest("testDeletePurl"));
-
+*/
 		// Batch PURL actions
-        //suite.addTest(new simplePurlClientTest("testRegisterPurls"));
-        //suite.addTest(new simplePurlClientTest("testModifyPurls"));
-        //suite.addTest(new simplePurlClientTest("testSearchPurls"));
+        suite.addTest(new simplePurlClientTest("testRegisterPurls"));
+        suite.addTest(new simplePurlClientTest("testModifyPurls"));
         //suite.addTest(new simplePurlClientTest("testValidatePurls"));
-        //suite.addTest(new simplePurlClientTest("testDeletePurls"));
 
         return suite;
   }
