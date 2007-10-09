@@ -18,7 +18,7 @@
   
 	<!-- items may have rel='new' or 'todo' -->
 	<functionality>
-		<item>Accept a batch PURL-related form (from purlsKEY.html, where KEY is one of 'create, modify, delete') via  a matching HTTP verb (POST, PUT, DELETE) and takes appropriate action.  This script is a state machine.</item>
+		<item>Accept a batch PURL-related form (from a RESTful API where available commands are 'create, modify, validate') via  a matching HTTP verb (POST, PUT) and takes appropriate action.  This script is a state machine.</item>
 		<item>Return a confirmation page as appropriate.</item>
 		<item>Return an error page on error.</item>
 	</functionality>
