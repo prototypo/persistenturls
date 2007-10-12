@@ -65,6 +65,12 @@ abstract public class PURLCommand {
 			}
 		}
 
+        if(retValue == null ) {
+             //retValue = (IAspectNVP) context.sourceAspect("this:param:params", IAspectNVP.class);
+            String paramsArg = context.getThisRequest().getArgument("params");
+            retValue = (IAspectNVP) context.sourceAspect(paramsArg, IAspectNVP.class);
+        }
+
 		return retValue;
 	}
 }

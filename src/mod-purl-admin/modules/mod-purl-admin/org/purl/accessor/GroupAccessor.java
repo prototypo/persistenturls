@@ -87,35 +87,16 @@ public class GroupAccessor extends AbstractAccessor {
         // We use stateless command instances that are triggered
         // based on the method of the HTTP request
 
-        URIResolver groupResolver = new URIResolver() {
-            @Override
-            public String getURI(INKFConvenienceHelper context) {
-                String retValue = null;
-
-                try {
-                    retValue = getURI(NKHelper.getLastSegment(context));
-                } catch(NKFException nfe) {
-                    nfe.printStackTrace();
-                }
-
-                return retValue;
-            }
-
-            @Override
-            public String getURI(String id) {
-                return "ffcpl:/groups/" + id;
-            }
-
-        };
+        URIResolver groupResolver = new GroupResolver();
 
         ResourceStorage groupStorage = new DefaultResourceStorage();
         ResourceCreator groupCreator = new GroupCreator(new UserResolver(), new DefaultResourceStorage());
 
 
-        commandMap.put("http:GET", new GetResourceCommand(TYPE, groupResolver, groupStorage));
-        commandMap.put("http:POST", new CreateResourceCommand(TYPE, groupResolver, groupCreator, null, groupStorage));
-        commandMap.put("http:DELETE", new DeleteResourceCommand(TYPE, groupResolver, groupStorage));
-        commandMap.put("http:PUT", new UpdateResourceCommand(TYPE, groupResolver, groupCreator, groupStorage));
+        commandMap.put("GET", new GetResourceCommand(TYPE, groupResolver, groupStorage));
+        commandMap.put("POST", new CreateResourceCommand(TYPE, groupResolver, groupCreator, null, groupStorage));
+        commandMap.put("DELETE", new DeleteResourceCommand(TYPE, groupResolver, groupStorage));
+        commandMap.put("PUT", new UpdateResourceCommand(TYPE, groupResolver, groupCreator, groupStorage));
     }
 
     protected PURLCommand getCommand(String method) {

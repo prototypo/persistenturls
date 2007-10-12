@@ -111,10 +111,10 @@ public class DomainAccessor extends AbstractAccessor {
         ResourceCreator domainCreator = new DomainCreator(new UserResolver(), new DefaultResourceStorage());
         ResourceStorage domainStorage = new DefaultResourceStorage();
 
-        commandMap.put("http:GET", new GetResourceCommand(TYPE, domainResolver, domainStorage));
-        commandMap.put("http:POST", new CreateResourceCommand(TYPE, domainResolver, domainCreator, null, domainStorage));
-        commandMap.put("http:DELETE", new DeleteResourceCommand(TYPE, domainResolver, domainStorage));
-        commandMap.put("http:PUT", new UpdateResourceCommand(TYPE, domainResolver, domainCreator, domainStorage));
+        commandMap.put("GET", new GetResourceCommand(TYPE, domainResolver, domainStorage));
+        commandMap.put("POST", new CreateResourceCommand(TYPE, domainResolver, domainCreator, null, domainStorage));
+        commandMap.put("DELETE", new DeleteResourceCommand(TYPE, domainResolver, domainStorage));
+        commandMap.put("PUT", new UpdateResourceCommand(TYPE, domainResolver, domainCreator, domainStorage));
     }
 
     protected PURLCommand getCommand(String method) {

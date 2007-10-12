@@ -59,8 +59,14 @@ public class GetResourceCommand extends PURLCommand {
 
         try {
             String path = context.getThisRequest().getArgument("path");
+            Iterator itor = context.getThisRequest().getArguments();
 
+            System.out.println("uri: " + context.getThisRequest().getURI());
             System.out.println("path:" + path);
+
+            while(itor.hasNext()) {
+                System.out.println(itor.next());
+            }
 
             if(!path.endsWith("/")) {
                 String id = NKHelper.getLastSegment(context);
@@ -121,21 +127,24 @@ public class GetResourceCommand extends PURLCommand {
                     while(roXDAItor.hasNext()) {
                         roXDAItor.next();
                         String uri = roXDAItor.getText("docid", true);
-                        String scoreStr = roXDAItor.getText("score", true);
-                        double score = Double.valueOf(scoreStr).doubleValue();
+                        // We only care about appropriately typed results
+                        if(uri.startsWith("ffcpl:/" + this.type)) {
+                            String scoreStr = roXDAItor.getText("score", true);
+                            double score = Double.valueOf(scoreStr).doubleValue();
 
-                        if(!alreadyDoneSet.contains(uri) && (score > 0.5)) {
-                            IURAspect iur = resStorage.getResource(context, uri);
-                            if(iur != null) {
-                                // Filter the response if we have a filter
-                                if(filter!=null) {
-                                    iur = filter.filter(context, iur);
+                            if(!alreadyDoneSet.contains(uri) && (score > 0.5)) {
+                                IURAspect iur = resStorage.getResource(context, uri);
+                                if(iur != null) {
+                                    // Filter the response if we have a filter
+                                    if(filter!=null) {
+                                        iur = filter.filter(context, iur);
+                                    }
+
+                                    StringAspect sa = (StringAspect) context.transrept(iur, IAspectString.class);
+                                    sb.append(sa.getString());
                                 }
-
-                                StringAspect sa = (StringAspect) context.transrept(iur, IAspectString.class);
-                                sb.append(sa.getString());
+                                alreadyDoneSet.add(uri);
                             }
-                            alreadyDoneSet.add(uri);
                         }
                     }
                 } catch (XPathLocationException e) {

@@ -51,7 +51,11 @@ public class PURLResolverAccessor extends NKFAccessorImpl {
     @Override
     public void processRequest(INKFConvenienceHelper context) throws Exception {
 
-        String method = (((IAspectString)context.sourceAspect("literal:method", IAspectString.class)).getString());
+//        String method = (((IAspectString)context.sourceAspect("method", IAspectString.class)).getString());
+
+        String methodArg = context.getThisRequest().getArgument("method");
+        String method = (((IAspectString)context.sourceAspect(methodArg, IAspectString.class)).getString());
+        System.out.println(method);
 
         String purlloc = purlResolver.getURI(context);
         INKFResponse resp = null;

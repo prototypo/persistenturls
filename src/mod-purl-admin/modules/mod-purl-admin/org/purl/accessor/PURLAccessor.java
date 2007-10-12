@@ -1,7 +1,10 @@
 package org.purl.accessor;
 
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -52,12 +55,15 @@ public class PURLAccessor extends AbstractAccessor {
 
         }; */
 
-        ResourceCreator purlCreator = new PurlCreator(new UserResolver(), new DefaultResourceStorage());
+        URIResolver userResolver = new UserResolver();
+        URIResolver groupResolver = new GroupResolver();
+
+        ResourceCreator purlCreator = new PurlCreator(new URIResolver[] { userResolver, groupResolver }, new DefaultResourceStorage());
         ResourceStorage purlStorage = new DefaultResourceStorage();
 
-        commandMap.put("http:POST", new CreateResourceCommand(TYPE, purlResolver, purlCreator, null, purlStorage));
-        commandMap.put("http:PUT", new UpdateResourceCommand(TYPE, purlResolver, purlCreator, purlStorage));
-        commandMap.put("http:DELETE", new DeleteResourceCommand(TYPE, purlResolver, purlStorage));
+        commandMap.put("POST", new CreateResourceCommand(TYPE, purlResolver, purlCreator, null, purlStorage));
+        commandMap.put("PUT", new UpdateResourceCommand(TYPE, purlResolver, purlCreator, purlStorage));
+        commandMap.put("DELETE", new DeleteResourceCommand(TYPE, purlResolver, purlStorage));
     }
 
     protected PURLCommand getCommand(String method) {
@@ -66,12 +72,12 @@ public class PURLAccessor extends AbstractAccessor {
 
 
     static public class PurlCreator implements ResourceCreator {
-        private URIResolver userResolver;
-        private ResourceStorage userStorage;
+        private URIResolver[] maintainerResolvers;
+        private ResourceStorage maintainerStorage;
 
-        public PurlCreator( URIResolver userResolver, ResourceStorage userStorage) {
-            this.userResolver = userResolver;
-            this.userStorage = userStorage;
+        public PurlCreator( URIResolver[] maintainerResolvers, ResourceStorage maintainerStorage) {
+            this.maintainerResolvers = maintainerResolvers;
+            this.maintainerStorage = maintainerStorage;
         }
 
         private static IURAspect createChainedPURL(INKFConvenienceHelper context, IAspectNVP params) {
@@ -114,7 +120,7 @@ public class PURLAccessor extends AbstractAccessor {
             return retValue;
         }
 
-        private static IURAspect createNumericPURL(INKFConvenienceHelper context, IAspectNVP params, int type) throws NKFException {
+        private static IURAspect createNumericPURL(INKFConvenienceHelper context, IAspectNVP params, int type) throws NKFException, UnsupportedEncodingException {
             IURAspect retValue = null;
 
             StringBuffer sb = new StringBuffer("<purl>");
@@ -132,6 +138,10 @@ public class PURLAccessor extends AbstractAccessor {
             case 302:
             case 307:
                 sb.append("<target><url>");
+                //sb.append(java.net.URLEncoder.encode(target, "UTF-8"));
+                System.out.println("BEFORE URL: " + target);
+                target = target.replaceAll("&", "&amp;");
+                System.out.println("AFTER URL: " + target);
                 sb.append(target);
                 sb.append("</url></target>");
                 break;
@@ -186,12 +196,47 @@ public class PURLAccessor extends AbstractAccessor {
             String maintainers = params.getValue("maintainers");
 
             StringTokenizer st = new StringTokenizer(maintainers, "\n");
-            while(st.hasMoreTokens()) {
+            boolean permitted = false;
+            List<String> notFoundList = null;
+
+            while(!permitted && st.hasMoreTokens()) {
                 String next = st.nextToken();
-                System.out.println("Checking: " + next);
-                if(!userStorage.resourceExists(context, userResolver.getURI(next))) {
-                    throw new PURLException("User " + next + " does not exist", 400);
+                String uri = null;
+
+                for(URIResolver ur : maintainerResolvers) {
+                    uri = ur.getURI(next);
+                    permitted = maintainerStorage.resourceExists(context, uri);
+
+                    if(permitted) {
+                        break;
+                    }
                 }
+
+                if(!permitted) {
+                    if(notFoundList == null) {
+                        notFoundList = new ArrayList<String>();
+                    }
+
+                    notFoundList.add(next);
+                }
+            }
+
+            if(!permitted) {
+                String errorMessage = null;
+
+                if(notFoundList.size() == 1) {
+                    errorMessage = "Maintainer not found: " + notFoundList.get(0);
+                } else {
+                    StringBuffer sb = new StringBuffer("Maintainers not found: ");
+                    Iterator <String> nfItor = notFoundList.iterator();
+                    sb.append(nfItor.next());
+
+                    while(nfItor.hasNext()) {
+                        sb.append(",");
+                        sb.append(nfItor.next());
+                    }
+                }
+                throw new PURLException(errorMessage, 400);
             }
 
             String type = params.getValue("type");
@@ -220,6 +265,9 @@ public class PURLAccessor extends AbstractAccessor {
                         retValue = createNumericPURL(context, params, typeInt);
                     } catch(NumberFormatException nfe){
                         // TODO: Handle
+                    } catch (UnsupportedEncodingException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
                     }
                 }
 

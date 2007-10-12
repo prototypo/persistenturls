@@ -54,6 +54,8 @@ public class CreateResourceCommand extends PURLCommand {
 
         try {
             IAspectNVP params = getParams(context);
+
+            System.out.println(params.getValue("type"));
             String id = NKHelper.getLastSegment(context);
 
             if(resStorage.resourceExists(context, uriResolver)) {

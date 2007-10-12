@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<purls>
+  <purl type="301" pid="/article/2007-08-13/39/">
+    <maintainers>
+      <maintainer id="uche"/>
+    </maintainers>
+    <target url="http://www.semanticreport.com/index.php?option=com_content&amp;task=view&amp;id=39&amp;Itemid=79"/>
+  </purl>
+  <purl type="301" pid="/data/article/2007-08-13/39/">
+    <maintainers>
+      <maintainer id="uche"/>
+    </maintainers>
+    <target url="http://semanticreport.zepheira.com/data/article/2007-08-13/39/"/>
+  </purl>
+  <purl type="301" pid="/article/2007-08-13/41/">
+    <maintainers>
+      <maintainer id="uche"/>
+    </maintainers>
+    <target url="http://www.semanticreport.com/index.php?option=com_content&amp;task=view&amp;id=41&amp;Itemid=79"/>
+  </purl>
+  <purl type="301" pid="/data/article/2007-08-13/41/">
+    <maintainers>
+      <maintainer id="uche"/>
+    </maintainers>
+    <target url="http://semanticreport.zepheira.com/data/article/2007-08-13/41/"/>
+  </purl>
+</purls>
+

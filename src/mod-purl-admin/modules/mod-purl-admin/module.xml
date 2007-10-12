@@ -6,7 +6,7 @@
 	-->
     <identity>
 		<uri>urn:org:purl:admin</uri>
-		<version>0.0.582</version>
+		<version>0.0.758</version>
     </identity>
 	<info>
 		<name>PURL Admin Module</name>
@@ -19,8 +19,7 @@
     </publisher>
 	<export>
 		<uri>
-			<match>ffcpl:/httptest.*</match>
-			<match>ffcpl:/domain.*</match>
+ 			<match>ffcpl:/domain.*</match>
 			<match>ffcpl:/group.*</match>
 			<match>ffcpl:/purls.*</match>
 			<match>ffcpl:/purl.*</match>
@@ -37,6 +36,7 @@
 			<match>ffcpl:/etc/LogConfig.xml</match>
 			<match>ffcpl:/entrypoints.xml</match>
 			<match>ffcpl:/etc/CRONConfig.xml</match>
+			<match>ffcpl:/.*</match>
 		</uri>
 	</export>
 	<mapping>
@@ -51,11 +51,12 @@
 			<match>ffcpl:/filters/.*</match>
 			<match>ffcpl:/scripts/.*</match>
 			<match>ffcpl:/index/.*</match>
+			<match>ffcpl:/schemas/.*</match>
 		</this>
-		<rewrite>
-			<match>(ffcpl:/admin/)(domain|group|purl|purls|user)(/.*)</match>
-			<to>active:purl-http+type@$2+path@$1$2$3</to>
-		</rewrite>
+<!-- 		<rewrite>
+			<match>ffcpl:(/admin/)(domain|group|purl|purls|user)(/.*)</match>
+			<to>active:purl-http+type@$2+path@$1$2$e3</to>
+		</rewrite>-->
 		<rewrite>
 			<match>ffcpl:/admin/(.*.bsh.*)</match>
 			<to>active:beanshell+operator@ffcpl:/resources/$1</to>
@@ -68,7 +69,8 @@
 			<match>active:purl-initialize</match>
 			<to>active:beanshell+operator@ffcpl:/scripts/initialize.bsh</to>
 		</rewrite>
-<!-- 		<rewrite>
+
+ 		<rewrite>
 			<match>(ffcpl:/admin/purls.*)</match>
 			<to>active:purls+path@$1</to>
 		</rewrite>
@@ -99,11 +101,8 @@
 		<rewrite>
 			<match>(ffcpl:/admin/user.*)</match>
 			<to>active:purl-user+path@$1</to>
-		</rewrite> -->
-		<ura>
-			<match>active:purl-http\+.*</match>
-			<class>org.purl.accessor.HttpMethodAccessor</class>
-		</ura>
+		</rewrite>
+
 		<ura>
       		<match>active:purl-user\+.*</match>
       		<class>org.purl.accessor.UserAccessor</class>
@@ -128,6 +127,10 @@
       		<match>active:purl\+.*</match>
       		<class>org.purl.accessor.PURLAccessor</class>
     	</ura>
+ 		<rewrite>
+			<match>(ffcpl:/.*)</match>
+			<to>active:beanshell+operator@ffcpl:/scripts/main.bsh+base@$1</to>
+		</rewrite>
 		<import>
 			<uri>urn:org:ten60:netkernel:ext:session</uri>
 		</import>
@@ -149,6 +152,7 @@
 		<import>
 			<uri>urn:org:ten60:netkernel:ext:layer1</uri>
 		</import>
+
 		<super/>
     </mapping>
 </module>

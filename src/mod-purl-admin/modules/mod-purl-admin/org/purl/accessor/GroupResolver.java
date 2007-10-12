@@ -3,18 +3,14 @@ package org.purl.accessor;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.NKFException;
 
-public class PURLURIResolver extends URIResolver {
+public class GroupResolver extends URIResolver {
 
     @Override
     public String getURI(INKFConvenienceHelper context) {
         String retValue = null;
 
         try {
-            String path = NKHelper.getArgument(context, "path");
-            if(path.startsWith("ffcpl:")) {
-                path=path.substring(6);
-            }
-            retValue =  getURI((!path.startsWith("/") ? ("/"+path) : path));
+            retValue = getURI(NKHelper.getLastSegment(context));
         } catch(NKFException nfe) {
             nfe.printStackTrace();
         }
@@ -24,8 +20,7 @@ public class PURLURIResolver extends URIResolver {
 
     @Override
     public String getURI(String id) {
-        return "ffcpl:/storedpurls" + id;
+        return "ffcpl:/groups/" + id;
     }
-
 
 }

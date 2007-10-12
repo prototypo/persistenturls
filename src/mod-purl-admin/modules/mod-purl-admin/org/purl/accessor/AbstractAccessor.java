@@ -6,6 +6,9 @@ import org.ten60.netkernel.layer1.nkf.INKFRequestReadOnly;
 import org.ten60.netkernel.layer1.nkf.INKFResponse;
 import org.ten60.netkernel.layer1.nkf.impl.NKFAccessorImpl;
 
+import com.ten60.netkernel.urii.aspect.IAspectString;
+import com.ten60.netkernel.urii.aspect.StringAspect;
+
 abstract public class AbstractAccessor extends NKFAccessorImpl {
 
 //    private Map<String, PURLCommand> commandMap;
@@ -29,8 +32,12 @@ abstract public class AbstractAccessor extends NKFAccessorImpl {
         INKFResponse resp = null;
 
         // TODO: Can this fail?
+        String path = context.getThisRequest().getArgument("path");
+        System.out.println("path:" + path);
+        String methodArg = context.getThisRequest().getArgument("method");
+        String method = ((StringAspect)context.sourceAspect(methodArg, IAspectString.class)).getString();
+        System.out.println("param: " + context.exists("this:param:param"));
 
-        String method = context.getThisRequest().getArgument("method");
         //if(context.exists("literal:method")) {
            // method = (((IAspectString)context.sourceAspect("literal:method", IAspectString.class)).getString());
         /*} else {

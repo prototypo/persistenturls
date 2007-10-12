@@ -5,7 +5,7 @@ import com.ten60.netkernel.urii.aspect.*;
 main() {
 	req=context.createSubRequest();
 	req.setURI("active:purl-user");
-	req.addArgument("method", "http:DELETE");
+	req.addArgument("method", "data:text/plain,DELETE");
 	req.addArgument("path", "ffcpl:/admin/user/unittestguy");
   	response = context.issueSubRequest(req);
   	context.setResponse(response);

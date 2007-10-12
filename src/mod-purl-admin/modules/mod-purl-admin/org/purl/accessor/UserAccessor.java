@@ -92,10 +92,10 @@ public class UserAccessor extends AbstractAccessor {
         ResourceFilter userFilter = new UserPrivateDataFilter();
         ResourceStorage userStorage = new DefaultResourceStorage();
 
-		commandMap.put("http:GET", new GetResourceCommand(TYPE, userResolver, userStorage, userFilter));
-		commandMap.put("http:POST", new CreateResourceCommand(TYPE, userResolver, userCreator, userFilter, userStorage));
-		commandMap.put("http:DELETE", new DeleteResourceCommand(TYPE, userResolver, userStorage));
-		commandMap.put("http:PUT", new UpdateResourceCommand(TYPE, userResolver, userCreator, userStorage));
+		commandMap.put("GET", new GetResourceCommand(TYPE, userResolver, userStorage, userFilter));
+		commandMap.put("POST", new CreateResourceCommand(TYPE, userResolver, userCreator, userFilter, userStorage));
+		commandMap.put("DELETE", new DeleteResourceCommand(TYPE, userResolver, userStorage));
+		commandMap.put("PUT", new UpdateResourceCommand(TYPE, userResolver, userCreator, userStorage));
 	}
 
     protected PURLCommand getCommand(String method) {
