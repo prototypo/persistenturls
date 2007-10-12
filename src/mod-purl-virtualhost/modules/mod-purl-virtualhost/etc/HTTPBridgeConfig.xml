@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<HTTPBridgeConfig>
+	<zone>
+		<match>.*</match>
+		<processQueries/>
+		<passCookies/>
+		<passRequestURL/>
+		<passMethod/>
+		<passByURI/>
+	</zone>
+  	<zone>
+		<match>.*.(html|js|css|png)</match>
+	</zone>
+</HTTPBridgeConfig>
