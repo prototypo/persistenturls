@@ -59,7 +59,7 @@ handles results from the server in response to form submissions.
 	var debugThisPage = false;
 
 	// NB: This array contains the names of each element that represents a label for an HTML form item.  If you add a new form item and want it highlighted upon a "bad parameter" error, you MUST add it's id to this array.
-	var labelElements = ["c_name_label", "c_id_label", "c_maintainers_label", "c_writers_label", "m_name_label", "m_id_label", "m_maintainers_label", "m_writers_label", "s_name_label", "s_id_label", "s_maintainers_label", "s_writers_label", "d_id_label"];
+	var labelElements = ["c_name_label", "c_id_label", "c_maintainers_label", "c_writers_label", "m_name_label", "m_id_label", "m_maintainers_label", "m_writers_label", "s_name_label", "s_id_label", "s_maintainers_label", "s_writers_label", "s_tombstone_label", "d_id_label"];
 
 	// Send a Create command via HTTP POST.
 	function createSubmit() {
@@ -112,7 +112,8 @@ handles results from the server in response to form submissions.
 		bodyVars =  {
 				name: $('s_name').value,
 				maintainers: $('s_maintainers').value,
-				writers: $('s_writers').value
+				writers: $('s_writers').value,
+				tombstone: $('s_tombstone').checked
 		}
 		if ( my_id == "" | my_id == null ) {
 			// No domain id is given, so we call the parent resource.
@@ -345,6 +346,12 @@ handles results from the server in response to form submissions.
 											<td class="property" id="s_writers_label">Writer ID:</td>
 
 											<td class="value"><input id="s_writers" name="s_writers" type="text" /></td>
+										</tr>
+
+										<tr>
+											<td class="property" id="s_tombstone_label">Search tombstoned domains:</td>
+
+											<td class="value"><input id="s_tombstone" name="s_tombstone" type="checkbox" value="true" /></td>
 										</tr>
 									</tbody>
 								</table><input value="Submit" type="submit" />

@@ -61,7 +61,7 @@ handles results from the server in response to form submissions.
 	var debugThisPage = false;
 
 	// NB: This array contains the names of each element that represents a label for an HTML form item.  If you add a new form item and want it highlighted upon a "bad parameter" error, you MUST add it's id to this array.
-	var labelElements = ["c_id_label", "c_target_label", "c_maintainers_label", "m_id_label", "m_target_label", "m_maintainers_label", "s_id_label", "s_target_label", "s_seealso_label", "s_maintainers_label", "s_explicitmaintainers_label", "d_id_label", "a_id_label", "a_maintainers_label", "a_type_label", "a_target_label", "a_seealso_label", "a_existingpurl_label"];
+	var labelElements = ["c_id_label", "c_target_label", "c_maintainers_label", "m_id_label", "m_target_label", "m_maintainers_label", "s_id_label", "s_target_label", "s_seealso_label", "s_maintainers_label", "s_explicitmaintainers_label", "s_tombstone_label", "d_id_label", "a_id_label", "a_maintainers_label", "a_type_label", "a_target_label", "a_seealso_label", "a_existingpurl_label"];
 
 	// Send a Create command via HTTP POST.
 	function createSubmit() {
@@ -135,9 +135,11 @@ handles results from the server in response to form submissions.
 		var my_id = $('s_id').value;
 		signalLoadingResults();
 		bodyVars =  {
-			target: $('c_target').value,
-			maintainers: $('c_maintainers').value,
-			explicitmaintainers: $('c_explicitmaintainers').value
+			target: $('s_target').value,
+			seealso: $('s_seealso').value,
+			maintainers: $('s_maintainers').value,
+			explicitmaintainers: $('s_explicitmaintainers').value,
+			tombstone: $('s_tombstone').checked
 		}
 		if ( my_id == "" | my_id == null ) {
 			// No PURL name is given, so we call the parent resource.
@@ -404,6 +406,12 @@ handles results from the server in response to form submissions.
 											<td class="property" id="s_explicitmaintainers_label">Explicit Maintainers IDs (does not expand groups):</td>
 
 											<td class="value"><input id="s_explicitmaintainers" name="s_explicitmaintainers" type="text" /></td>
+										</tr>
+
+										<tr>
+											<td class="property" id="s_tombstone_label">Search tombstoned PURLs:</td>
+
+											<td class="value"><input id="s_tombstone" name="s_tombstone" type="checkbox" value="true" /></td>
 										</tr>
 									</tbody>
 								</table><input value="Submit" type="submit" />

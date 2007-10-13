@@ -59,7 +59,7 @@ handles results from the server in response to form submissions.
 	var debugThisPage = false;
 
 	// NB: This array contains the names of each element that represents a label for an HTML form item.  If you add a new form item and want it highlighted upon a "bad parameter" error, you MUST add it's id to this array.
-	var labelElements = ["c_name_label", "c_affiliation_label", "c_email_label", "c_id_label", "c_passwd_label", "c_hint_label", "c_justification_label", "m_name_label", "m_affiliation_label", "m_email_label", "m_id_label", "m_passwd_label", "m_hint_label", "m_justification_label", "s_name_label", "s_affiliation_label", "s_email_label", "s_id_label", "d_id_label"];
+	var labelElements = ["c_name_label", "c_affiliation_label", "c_email_label", "c_id_label", "c_passwd_label", "c_hint_label", "c_justification_label", "m_name_label", "m_affiliation_label", "m_email_label", "m_id_label", "m_passwd_label", "m_hint_label", "m_justification_label", "s_name_label", "s_affiliation_label", "s_email_label", "s_id_label", "s_tombstone_label", "d_id_label"];
 
 	// Send a Create command via HTTP POST.
 	function createSubmit() {
@@ -119,7 +119,8 @@ handles results from the server in response to form submissions.
 				name: $('s_name').value,
 				affiliation: $('s_affiliation').value,
 				email: $('s_email').value,
-				id: $('s_id').value
+				id: $('s_id').value,
+				tombstone: $('s_tombstone').checked
 		}
 
 		// Perform the search against parent node
@@ -379,6 +380,12 @@ handles results from the server in response to form submissions.
 											<td class="property" id="s_id_label">User ID:</td>
 
 											<td class="value"><input id="s_id" name="s_id" type="text" /></td>
+										</tr>
+
+										<tr>
+											<td class="property" id="s_tombstone_label">Search tombstoned users:</td>
+
+											<td class="value"><input id="s_tombstone" name="s_tombstone" type="checkbox" value="true" /></td>
 										</tr>
 									</tbody>
 								</table><input value="Submit" type="submit" />
