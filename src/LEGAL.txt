@@ -1,5 +1,7 @@
 PURL Server Legal Statements
 
+Source code developed for this project is licensed under the Apache License, Version 2.0.  See the file LICENSE.txt for details.
+
 This project includes source code and/or binary distributions from other
 projects and companies. It is our intent to list each of them here. If
 we forgot to give credit where credit is due, please send electronic
