@@ -93,7 +93,7 @@ public class DomainAccessor extends AbstractAccessor {
                 String retValue = null;
 
                 try {
-                    retValue = getURI(NKHelper.getLastSegment(context));
+                    retValue = getURI(NKHelper.getLastSegment(context)).toLowerCase();
                 } catch(NKFException nfe) {
                     nfe.printStackTrace();
                 }
@@ -117,7 +117,7 @@ public class DomainAccessor extends AbstractAccessor {
         commandMap.put("PUT", new UpdateResourceCommand(TYPE, domainResolver, domainCreator, domainStorage));
     }
 
-    protected PURLCommand getCommand(String method) {
+    protected PURLCommand getCommand(INKFConvenienceHelper context, String method) {
         return commandMap.get(method);
     }
 

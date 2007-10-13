@@ -73,6 +73,9 @@ import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFRequest;
 import org.ten60.netkernel.layer1.nkf.NKFException;
 import org.ten60.netkernel.layer1.representation.IAspectNVP;
+import org.ten60.netkernel.xml.representation.IAspectXDA;
+import org.ten60.netkernel.xml.xda.IXDAReadOnly;
+import org.ten60.netkernel.xml.xda.XPathLocationException;
 
 import com.ten60.netkernel.urii.IURAspect;
 import com.ten60.netkernel.urii.aspect.IAspectString;
@@ -83,23 +86,53 @@ public class UserAccessor extends AbstractAccessor {
 
     private Map<String, PURLCommand> commandMap = new HashMap<String,PURLCommand>();
 
+    // This is used in the UserResourceStorage
+    private URIResolver userResolver;
+    private URIResolver userRequestResolver;
+
 	public UserAccessor() {
         // We use stateless command instances that are triggered
         // based on the method of the HTTP request
 
-        URIResolver userResolver = new UserResolver();
+        userResolver = new UserResolver();
+        userRequestResolver = new UserRequestResolver();
         ResourceCreator userCreator = new UserCreator();
         ResourceFilter userFilter = new UserPrivateDataFilter();
         ResourceStorage userStorage = new DefaultResourceStorage();
 
 		commandMap.put("GET", new GetResourceCommand(TYPE, userResolver, userStorage, userFilter));
-		commandMap.put("POST", new CreateResourceCommand(TYPE, userResolver, userCreator, userFilter, userStorage));
+        // TODO: Wrap the POST requests to put the results into a request queue
+        commandMap.put("POST", new CreateResourceCommand(TYPE, userResolver, userCreator, userFilter, userStorage));
+        commandMap.put("REQUEST", new CreateResourceCommand(TYPE, userRequestResolver, userCreator, userFilter, new UserResourceStorage()));
 		commandMap.put("DELETE", new DeleteResourceCommand(TYPE, userResolver, userStorage));
 		commandMap.put("PUT", new UpdateResourceCommand(TYPE, userResolver, userCreator, userStorage));
 	}
 
-    protected PURLCommand getCommand(String method) {
-        return commandMap.get(method);
+    protected PURLCommand getCommand(INKFConvenienceHelper context, String method) {
+        PURLCommand retValue = null;
+
+        try {
+            IAspectXDA config = (IAspectXDA) context.sourceAspect("ffcpl:/etc/PURLConfig.xml", IAspectXDA.class);
+
+            if(method.equals("POST")) {
+                IXDAReadOnly configXDA = config.getXDA();
+                if(configXDA.isTrue("/purl-config/allowUserAutoCreation")) {
+                    retValue = commandMap.get(method);
+                } else {
+                    retValue = commandMap.get("REQUEST");
+                }
+            } else {
+                retValue = commandMap.get(method);
+            }
+        } catch (NKFException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (XPathLocationException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return retValue;
     }
 
     /**
@@ -112,30 +145,60 @@ public class UserAccessor extends AbstractAccessor {
     static public class UserCreator implements ResourceCreator {
 
         public IURAspect createResource(INKFConvenienceHelper context, IAspectNVP params) throws NKFException {
-            StringBuffer sb = new StringBuffer("<user>");
-            sb.append("<id>");
-            sb.append(NKHelper.getLastSegment(context));
-            sb.append("</id>");
-            sb.append("<name>");
-            sb.append(params.getValue("name"));
-            sb.append("</name>");
-            sb.append("<affiliation>");
-            sb.append(params.getValue("affiliation"));
-            sb.append("</affiliation>");
-            sb.append("<email>");
-            sb.append(params.getValue("email"));
-            sb.append("</email>");
-            sb.append("<password>");
-            sb.append(params.getValue("passwd"));
-            sb.append("</password>");
-            sb.append("<hint>");
-            sb.append(params.getValue("hint"));
-            sb.append("</hint>");
-            sb.append("<justification>");
-            sb.append(params.getValue("justification"));
-            sb.append("</justification>");
-            sb.append("</user>");
-            return new StringAspect(sb.toString());
+            IAspectXDA config = (IAspectXDA)  context.sourceAspect("ffcpl:/etc/PURLConfig.xml", IAspectXDA.class);
+            IXDAReadOnly configXDA = config.getXDA();
+            StringAspect retValue = null;
+
+            try {
+                boolean createUser = false;
+
+                if(configXDA.isTrue("/purl-config/allowUserAutoCreation")) {
+                    createUser = true;
+                }
+
+                StringBuffer sb = new StringBuffer( createUser ? "<user>" : "<user-request>");
+                sb.append("<id>");
+                sb.append(NKHelper.getLastSegment(context));
+                sb.append("</id>");
+                sb.append("<name>");
+                sb.append(params.getValue("name"));
+                sb.append("</name>");
+                sb.append("<affiliation>");
+                sb.append(params.getValue("affiliation"));
+                sb.append("</affiliation>");
+                sb.append("<email>");
+                sb.append(params.getValue("email"));
+                sb.append("</email>");
+                sb.append("<password>");
+                sb.append(params.getValue("passwd"));
+                sb.append("</password>");
+                sb.append("<hint>");
+                sb.append(params.getValue("hint"));
+                sb.append("</hint>");
+                sb.append("<justification>");
+                sb.append(params.getValue("justification"));
+                sb.append("</justification>");
+                sb.append(createUser ? "</user>" : "</user-request>");
+                retValue = new StringAspect(sb.toString());
+            } catch (XPathLocationException e) {
+                // TODO What should the error code be?
+                throw new PURLException("Unable to create user: " + NKHelper.getLastSegment(context), 500);
+            }
+
+            return retValue;
+        }
+    }
+
+    class UserResourceStorage extends DefaultResourceStorage {
+        public boolean resourceExists(INKFConvenienceHelper context, URIResolver resolver) throws NKFException {
+            boolean retValue = super.resourceExists(context, resolver);
+            // First check to see if the is an existing user-request
+            if(!retValue) {
+                // If not, check to see if there is a user
+                retValue = super.resourceExists(context, userResolver);
+            }
+
+            return retValue;
         }
     }
 

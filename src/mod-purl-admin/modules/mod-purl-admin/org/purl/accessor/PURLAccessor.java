@@ -37,23 +37,7 @@ public class PURLAccessor extends AbstractAccessor {
         // We use stateless command instances that are triggered
         // based on the method of the HTTP request
 
-        purlResolver = new PURLURIResolver(); /*new URIResolver() {
-
-            @Override
-            public String getURI(INKFConvenienceHelper context) {
-                String retValue = null;
-
-                try {
-                    String path = NKHelper.getArgument(context, "path");
-                    retValue = "ffcpl:/storedpurls" + (!path.startsWith("/") ? ("/"+path) : path);
-                } catch(NKFException nfe) {
-                    nfe.printStackTrace();
-                }
-
-                return retValue;
-            }
-
-        }; */
+        purlResolver = new PURLURIResolver();
 
         URIResolver userResolver = new UserResolver();
         URIResolver groupResolver = new GroupResolver();
@@ -66,7 +50,7 @@ public class PURLAccessor extends AbstractAccessor {
         commandMap.put("DELETE", new DeleteResourceCommand(TYPE, purlResolver, purlStorage));
     }
 
-    protected PURLCommand getCommand(String method) {
+    protected PURLCommand getCommand(INKFConvenienceHelper context, String method) {
         return commandMap.get(method);
     }
 
@@ -88,7 +72,7 @@ public class PURLAccessor extends AbstractAccessor {
 
         private static IURAspect createClonedPURL(INKFConvenienceHelper context, IAspectNVP params) throws NKFException {
             IURAspect retValue = null;
-            String purl = NKHelper.getArgument(context, "path");
+            String purl = NKHelper.getArgument(context, "path").toLowerCase();
             String existingPurl = params.getValue("existingpurl");
             String newURI = purlResolver.getURI(context);
             String oldURI = newURI.replace(purl, existingPurl);

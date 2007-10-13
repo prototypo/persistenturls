@@ -18,9 +18,6 @@ package org.purl.accessor.command;
  *
  */
 
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFRequest;
 import org.ten60.netkernel.layer1.nkf.INKFResponse;
@@ -38,18 +35,9 @@ public class PURLRedirectResolveCommand extends PURLResolveCommand {
         IXDAReadOnly purlXDARO = purl.getXDA();
         try {
             String type = purlXDARO.getText("/purl/type", true);
-            //String url = URLDecoder.decode(purlXDARO.getText("/purl/target/url", true), "UTF-8");
             String url = purlXDARO.getText("/purl/target/url", true);
             url = url.replaceAll("&", "&amp;");
-            System.out.println("URL: " + url);
-            /*int idx = url.indexOf("?");
-            if(idx > 0) {
-                url = url.substring(0, idx+1) + URLEncoder.encode(url.substring(idx+1), "UTF-8");
-            }*/
 
-
-
-            System.out.println("URL: " + url);
             INKFRequest req=context.createSubRequest();
             req.setURI("active:HTTPResponseCode");
             StringBuffer respCode = new StringBuffer("<HTTPResponseCode><code>");

@@ -62,6 +62,7 @@ package org.purl.accessor;
 */
 
 import java.util.HashMap;
+
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -99,7 +100,7 @@ public class GroupAccessor extends AbstractAccessor {
         commandMap.put("PUT", new UpdateResourceCommand(TYPE, groupResolver, groupCreator, groupStorage));
     }
 
-    protected PURLCommand getCommand(String method) {
+    protected PURLCommand getCommand(INKFConvenienceHelper context, String method) {
         return commandMap.get(method);
     }
 

@@ -5,6 +5,8 @@ import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFRequestReadOnly;
 import org.ten60.netkernel.layer1.nkf.INKFResponse;
 import org.ten60.netkernel.layer1.nkf.impl.NKFAccessorImpl;
+import org.ten60.netkernel.xml.representation.IAspectXDA;
+import org.ten60.netkernel.xml.xda.IXDA;
 
 import com.ten60.netkernel.urii.aspect.IAspectString;
 import com.ten60.netkernel.urii.aspect.StringAspect;
@@ -50,7 +52,7 @@ abstract public class AbstractAccessor extends NKFAccessorImpl {
         // execute it. These commands should not maintain any
         // state.
 
-        PURLCommand cmd = getCommand(method); //commandMap.get(method);
+        PURLCommand cmd = getCommand(context, method); //commandMap.get(method);
 
         if(cmd != null) {
             resp = cmd.execute(context);
@@ -61,5 +63,5 @@ abstract public class AbstractAccessor extends NKFAccessorImpl {
         context.setResponse(resp);
     }
 
-    protected abstract PURLCommand getCommand(String method);
+    protected abstract PURLCommand getCommand(INKFConvenienceHelper ctx, String method);
 }

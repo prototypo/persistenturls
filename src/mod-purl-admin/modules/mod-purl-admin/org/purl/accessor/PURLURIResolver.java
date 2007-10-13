@@ -10,7 +10,7 @@ public class PURLURIResolver extends URIResolver {
         String retValue = null;
 
         try {
-            String path = NKHelper.getArgument(context, "path");
+            String path = NKHelper.getArgument(context, "path").toLowerCase();
             if(path.startsWith("ffcpl:")) {
                 path=path.substring(6);
             }
