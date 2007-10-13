@@ -1,0 +1,7 @@
+<purl-config>
+	<!--<allowUserAutoCreation/>-->
+	<allowPublicDomains/>
+	<publicDomains>
+		<domain>/net</domain>
+	</publicDomains>
+</purl-config>
