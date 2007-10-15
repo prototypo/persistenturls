@@ -37,6 +37,10 @@
 		Route all requests to echo script - could have different routing for each host
 		*************
 		-->
+		<this>
+			<match>ffcpl:/etc/HTTPBridgeConfig.xml</match>
+        <!-- 			<match>ffcpl:/sometest/.*</match>-->
+		</this>		
   		<rewrite>
 		    <match>jetty://.*?(/.*.(html|css|png))</match>
             <to>ffcpl:$1</to>
@@ -69,10 +73,7 @@
 		<import>
 			<uri>urn:org:ten60:netkernel:ext:layer1</uri>
 		</import>
-		<this>
-			<match>ffcpl:/etc/HTTPBridgeConfig.xml</match>
-<!-- 			<match>ffcpl:/sometest/.*</match>-->
-		</this>
+
 		<super/>
     </mapping>
 </module>
