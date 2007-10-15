@@ -97,6 +97,11 @@ public class GetResourceCommand extends PURLCommand {
 
                 while(namesItor.hasNext()) {
                     String key = namesItor.next();
+
+                    if(key.equals("tombstone")) {
+                        continue;
+                    }
+
                     String value = params.getValue(key);
 
                     if(!value.equals("")) {
