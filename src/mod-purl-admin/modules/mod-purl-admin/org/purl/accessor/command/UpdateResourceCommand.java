@@ -54,24 +54,13 @@ public class UpdateResourceCommand extends PURLCommand {
             if(resStorage.resourceExists(context,uriResolver)) {
                 try {
                     // Update the user
-                    //IURAspect iur = resCreator.createResource(context, params);
-                    IAspectNVP params = (IAspectNVP) context.sourceAspect("this:param:param", IAspectNVP.class);
+
+                    //PUT should come across on the param2 param
+
+                    IAspectNVP params = (IAspectNVP) context.sourceAspect("this:param:param2", IAspectNVP.class);
                     IURAspect iur = resCreator.createResource(context, params);
 
-                    Iterator itor = params.getNames().iterator();
-                    while(itor.hasNext()) {
-                        String next = (String) itor.next();
-                        System.out.println("Key: " + next);
-                        System.out.println("Value: " + params.getValue(next));
-                    }
-
-
-                    System.out.println("-------");
-                    System.out.println(((IAspectString) iur).getString());
-                    System.out.println("-------");
-
                     if(resStorage.storeResource(context, uriResolver, iur)) {
-//                      context.sinkAspect(uriResolver.getURI(context), iur);
                         String message = "Updated resource: " + id;
                         IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect(message), 200);
                         retValue = context.createResponseFrom(rep);
@@ -79,7 +68,6 @@ public class UpdateResourceCommand extends PURLCommand {
                         NKHelper.log(context,message);
                     } else {
                         // TODO: Handle failed update
-                        System.out.println("ERROR! FAILED TO UPDATE RESOURCE");
                         NKHelper.log(context, "ERROR UPDATING RESOURCE");
                     }
 
