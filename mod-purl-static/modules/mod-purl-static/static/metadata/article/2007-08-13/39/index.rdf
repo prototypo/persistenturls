@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:doap="http://usefulinc.com/ns/doap#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:z="http://purl.zepheira.com/community/content-description/">
+  <rdf:Description rdf:about="http://purl.semanticreport.com/article/2007-08-13/39/">
+    <dc:title>SemanticReport.com - The Future of the Web is:</dc:title>
+    <dc:subject>future of the Web</dc:subject>
+    <dc:subject>identifiers</dc:subject>
+    <dc:subject>relationships</dc:subject>
+    <dc:subject>services</dc:subject>
+    <dc:subject>information age</dc:subject>
+    <dc:subject>URLs</dc:subject>
+    <dc:subject>links</dc:subject>
+    <dc:subject>Web feeds</dc:subject>
+    <dc:subject>Atom</dc:subject>
+    <dc:subject>IT departments</dc:subject>
+    <dc:subject>Semantic technology</dc:subject>
+    <z:relatedPerson>
+      <foaf:Person>
+        <foaf:homepage rdf:resource="http://www.w3.org/People/Berners-Lee/"/>
+        <foaf:name>Tim Berners-Lee</foaf:name>
+      </foaf:Person>
+    </z:relatedPerson>
+    <z:relatedOrganization>
+      <foaf:Organization>
+        <foaf:homepage rdf:resource="http://www.w3.org"/>
+        <foaf:name>World Wide Web Consortium</foaf:name>
+      </foaf:Organization>
+    </z:relatedOrganization>
+    <z:relatedProject>
+      <doap:Project>
+        <doap:homepage rdf:resource="http://www.ncsa.uiuc.edu/Projects/mosaic.html"/>
+        <doap:name>NCSA Mosaic</doap:name>
+      </doap:Project>
+    </z:relatedProject>
+    <z:eventDate>
+      <z:date>2008-05-18</z:date>
+      <z:note>First day of Semantic Technology Conference '08</z:note>
+    </z:eventDate>
+    <z:eventDate>
+      <z:date>2008-05-22</z:date>
+      <z:note>Last day of Semantic Technology Conference '08</z:note>
+    </z:eventDate>
+    <dc:subject>
+      <z:Geo rdf:about="http://www.geonames.org/5392171/san-jose.html">
+        <z:note>San Jose</z:note>
+      </z:Geo>
+    </dc:subject>
+  </rdf:Description>
+</rdf:RDF>

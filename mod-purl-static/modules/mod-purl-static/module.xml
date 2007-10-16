@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?><module>
+	<!--
+	***********
+	PURLs Static Module
+	***********
+	-->
+    <identity>
+		<uri>urn:org:purl:static</uri>
+		<version>0.0.12</version>
+    </identity>
+	<info>
+		<name>PURL Static Module</name>
+        <description>A module containing the PURLS 2 static modules.</description>
+		<dynamic/>
+    </info>
+    <publisher>
+        <name>OCLC</name>
+		<uri>http://www.oclc.org</uri>
+    </publisher>
+	<export>
+		<uri>
+ 			<match>ffcpl:/static.*</match>
+		</uri>
+	</export>
+	<mapping>
+ 		<rewrite>
+			<match>(ffcpl:/static/metadata/article/.*)</match>
+			<to>$1/index.rdf</to>
+		</rewrite>
+		<this>
+			<match>ffcpl:/static.*</match>
+		</this>
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:session</uri>
+		</import>
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:script</uri>
+		</import>
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:sys</uri>
+		</import>
+	    <import>
+	      <uri>urn:org:ten60:netkernel:mod:lucene</uri>
+	    </import>
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:xml:core</uri>
+		</import>
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:xml:ura</uri>
+		</import>
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:layer1</uri>
+		</import>
+		<super/>
+    </mapping>
+</module>

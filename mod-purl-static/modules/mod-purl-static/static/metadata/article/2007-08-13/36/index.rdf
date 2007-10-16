@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:doap="http://usefulinc.com/ns/doap#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:z="http://purl.zepheira.com/community/content-description/">
+  <rdf:Description rdf:about="http://purl.semanticreport.com/article/2007-08-13/36/">
+    <dc:title>SemanticReport.com - Six Weeks to the Semantic Web</dc:title>
+    <dc:subject>SemanticReport</dc:subject>
+    <dc:subject>Semantic technology</dc:subject>
+    <dc:subject>Simile Project</dc:subject>
+    <dc:subject>LDAP</dc:subject>
+    <dc:subject>MIT's Simile Piggy Bank</dc:subject>
+    <dc:subject>RDF-izers</dc:subject>
+    <dc:subject>RDF</dc:subject>
+    <dc:subject>RDFa</dc:subject>
+    <dc:subject>MindSwap</dc:subject>
+    <dc:subject>Semantic Web wiki</dc:subject>
+    <z:relatedPerson>
+      <foaf:Person>
+        <foaf:homepage rdf:resource="http://www.semanticreport.com"/>
+        <foaf:name>Kevin Lynch</foaf:name>
+      </foaf:Person>
+    </z:relatedPerson>
+    <z:relatedPerson>
+      <foaf:Person>
+        <foaf:homepage rdf:resource="http://www.semanticreport.com"/>
+        <foaf:name>Christine Connors</foaf:name>
+      </foaf:Person>
+    </z:relatedPerson>
+    <z:relatedOrganization>
+      <foaf:Organization>
+        <foaf:homepage rdf:resource="http://www.mit.edu"/>
+        <foaf:name>MIT</foaf:name>
+      </foaf:Organization>
+    </z:relatedOrganization>
+    <z:relatedOrganization>
+      <foaf:Organization>
+        <foaf:homepage rdf:resource="http://www.raytheon.com"/>
+        <foaf:name>Raytheon</foaf:name>
+      </foaf:Organization>
+    </z:relatedOrganization>
+    <z:relatedOrganization>
+      <foaf:Organization>
+        <foaf:homepage rdf:resource="http://www.intuit.com"/>
+        <foaf:name>Intuit</foaf:name>
+      </foaf:Organization>
+    </z:relatedOrganization>
+    <z:relatedOrganization>
+      <foaf:Organization>
+        <foaf:homepage rdf:resource="http://www.semanticreport.com"/>
+        <foaf:name>SemanticReport</foaf:name>
+      </foaf:Organization>
+    </z:relatedOrganization>
+    <z:relatedProject>
+      <doap:Project>
+        <doap:homepage rdf:resource="http://simile.mit.edu/"/>
+        <doap:name>Simile Project</doap:name>
+      </doap:Project>
+    </z:relatedProject>
+  </rdf:Description>
+</rdf:RDF>
