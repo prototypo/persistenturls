@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <HTTPBridgeConfig>
   	<zone>
-		<match>.*.(html|js|css|png)</match>
-	</zone>    
+		<match>.*.(html|js|css|png|ico)</match>
+	</zone>
 	<zone>
 		<match>..*</match>
 		<processQueries/>
