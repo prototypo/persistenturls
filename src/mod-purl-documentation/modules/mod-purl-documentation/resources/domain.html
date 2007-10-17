@@ -57,9 +57,11 @@ handles results from the server in response to form submissions.
 //<![CDATA[
 
 	var debugThisPage = false;
+	
+	var context = "domain";
 
 	// NB: This array contains the names of each element that represents a label for an HTML form item.  If you add a new form item and want it highlighted upon a "bad parameter" error, you MUST add it's id to this array.
-	var labelElements = ["c_name_label", "c_id_label", "c_maintainers_label", "c_writers_label", "m_name_label", "m_id_label", "m_maintainers_label", "m_writers_label", "s_name_label", "s_id_label", "s_maintainers_label", "s_writers_label", "s_tombstone_label", "d_id_label"];
+	var labelElements = ["c_name_label", "c_id_label", "c_maintainers_label", "c_writers_label", "c_public_label", "m_name_label", "m_id_label", "m_maintainers_label", "m_writers_label", "m_public_label", "s_name_label", "s_id_label", "s_maintainers_label", "s_writers_label", "s_tombstone_label", "d_id_label"];
 
 	// Send a Create command via HTTP POST.
 	function createSubmit() {
@@ -72,7 +74,8 @@ handles results from the server in response to form submissions.
 			bodyVars = {
 				name: $('c_name').value,
 				maintainers: $('c_maintainers').value,
-				writers: $('c_writers').value
+				writers: $('c_writers').value,
+				public: $('c_public').checked
 			}
 			ajaxCaller.postVars("/admin/domain/" + my_id, bodyVars, urlVars, onResponse, false, "Create");
 		}
@@ -90,7 +93,8 @@ handles results from the server in response to form submissions.
 			urlVars = {
 				name: $('m_name').value,
 				maintainers: $('m_maintainers').value,
-				writers: $('m_writers').value
+				writers: $('m_writers').value,
+				public: $('c_public').checked
 			}
 			bodyType = "text/html";
 			body = "";
@@ -234,6 +238,12 @@ handles results from the server in response to form submissions.
 												<textarea rows="5" cols="40" id="c_writers" name="c_writers"></textarea>
 											</td>
 										</tr>
+
+										<tr>
+											<td class="property" id="c_public_label">Public?  (Applies solely to top-level domains):</td>
+
+											<td class="value"><input id="c_public" name="c_public" type="checkbox" value="true" /></td>
+										</tr>
 										
 									</tbody>
 								</table><input value="Submit" type="submit" />
@@ -286,6 +296,12 @@ handles results from the server in response to form submissions.
 											<td class="value">
 												<textarea rows="5" cols="40" id="m_writers" name="m_writers"></textarea>
 											</td>
+										</tr>
+
+										<tr>
+											<td class="property" id="m_public_label">Public?  (Applies solely to top-level domains):</td>
+
+											<td class="value"><input id="m_public" name="m_public" type="checkbox" value="true" /></td>
 										</tr>
 									</tbody>
 								</table><input value="Submit" type="submit" />

@@ -57,6 +57,8 @@ handles results from the server in response to form submissions.
 //<![CDATA[
 
 	var debugThisPage = false;
+	
+	var context = "group";
 
 	// NB: This array contains the names of each element that represents a label for an HTML form item.  If you add a new form item and want it highlighted upon a "bad parameter" error, you MUST add it's id to this array.
 	var labelElements = ["c_name_label", "c_id_label", "c_maintainers_label", "c_members_label", "c_comments_label", "m_name_label", "m_id_label", "m_maintainers_label", "m_members_label", "m_comments_label", "s_name_label", "s_id_label", "s_maintainers_label", "s_members_label", "s_tombstone_label", "d_id_label"];

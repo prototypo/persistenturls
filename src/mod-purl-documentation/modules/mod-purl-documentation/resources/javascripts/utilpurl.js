@@ -38,12 +38,19 @@ HttpResponseCodes["405"] = "Method Not Allowed";
 HttpResponseCodes["409"] = "Conflict";
 HttpResponseCodes["412"] = "Precondition Failed";
 
+// The contextMap provides a container for information about the current
+// computing context.  It maps actions that are taken by a user to hints
+// for variable names and the location of the navigation pulldown menu.
+// contextMap[key][2] provides the order in the navigation pulldown for
+// PURLs and contextMap[key][3] provides the order for other nouns (i.e.
+// users/groups/domains).
 var contextMap = new Object();
-contextMap["Create"] = ["create", "c_", 1];
-contextMap["Modify"] = ["modify", "m_", 2];
-contextMap["Search"] = ["search", "s_", 3];
-contextMap["Delete"] = ["delete", "d_", 4];
-contextMap["AdvancedCreate"] = ["advancedcreate", "a_", 1];
+contextMap["Create"] = ["create", "c_", 1, 1];
+contextMap["AdvancedCreate"] = ["advancedcreate", "a_", 2, 0];
+contextMap["Modify"] = ["modify", "m_", 3, 2];
+contextMap["Search"] = ["search", "s_", 4, 3];
+contextMap["Validate"] = ["validate", "v_", 5, 0];
+contextMap["Delete"] = ["delete", "d_", 6, 4];
 
 var resultBlock = $("results");
 var htmlResults = "";
@@ -64,7 +71,7 @@ function load() {
 	}
 	for ( key in contextMap ) {
 		if (contextMap[key][0] == urlFragment) {
-			setVisibility(urlFragment, 'inline');
+			showAction(key);
 		}
 	}
 }
@@ -77,8 +84,14 @@ function showAction(directive)
 	} else {
 		destination = contextMap[directive][0];
 		// Explicitly set the location of the menu pulldown since
-		// it is not always set by the user (as in a Modify from a Search).
-		userchoice.options[contextMap[directive][2]].selected = true;
+		// it is not always set by the user (as in a Modify hyperlink from a Search).
+		// Because the menus are of different lengths on different pages,
+		// we need to refer to the var 'context' that is set on each page.
+		if ( context == "purl" ) {
+			userchoice.options[contextMap[directive][2]].selected = true;
+		} else {
+			userchoice.options[contextMap[directive][3]].selected = true;
+		}
 	}
 	// TODO: Leave results in place?
 	//clearResults();
@@ -173,7 +186,7 @@ function checkDeleteSubmit(typeOfObject, deletionObject) {
 	
 // Pre-populate a Modify form with data from a Search.
 function loadModify(recordData) {
-	// Un-Pseudo-Webify the input.  TODO: This is rather hackish and should be refactored.
+	// Un-Pseudo-Webify the input.
 	var entries = new Array();
 	var elements = new Array();
 	var records = new Array();
@@ -184,9 +197,14 @@ function loadModify(recordData) {
 	}
 	for ( key in records ) {
 		if (key.length > 0) {
-			// TODO: Test for existence of the element first!
 			records[key] = records[key].replace(/%LINEBREAK%/g, "\n");
-			document.getElementById("m_" + key).value = records[key];
+			currentElement = document.getElementById("m_" + key);
+			if ( currentElement.type == "checkbox" ) {
+				// TODONEXT: Is this sufficient?  Check to ensure that this works.
+				currentElement.checked = records[key];
+			} else {
+				currentElement.value = records[key];
+			}
 		}
 	}
 	showAction('Modify');
