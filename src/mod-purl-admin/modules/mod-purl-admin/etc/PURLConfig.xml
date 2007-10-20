@@ -1,7 +1,10 @@
 <purl-config>
-	<!--<allowUserAutoCreation/>-->
+<!--  <allowUserAutoCreation/>-->
 	<allowPublicDomains/>
 	<publicDomains>
 		<domain>/net</domain>
 	</publicDomains>
+	<topLevelRedirects>
+<!-- 		<redirect from="ffcpl:/metadata" to="ffcpl:/static/metadata"/>-->
+	</topLevelRedirects>
 </purl-config>
