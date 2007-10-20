@@ -6,7 +6,7 @@
 	-->
     <identity>
 		<uri>urn:org:purl:admin</uri>
-		<version>0.0.809</version>
+		<version>0.0.840</version>
     </identity>
 	<info>
 		<name>PURL Admin Module</name>
@@ -129,9 +129,12 @@
       		<class>org.purl.accessor.PURLAccessor</class>
     	</ura>
  		<rewrite>
-			<match>(ffcpl:/.*)</match>
+			<match>(ffcpl:/(?!static).*)</match>
 			<to>active:beanshell+operator@ffcpl:/scripts/main.bsh+base@$1</to>
 		</rewrite>
+		<import>
+			<uri>urn:org:purl:static</uri>
+		</import>
 		<import>
 			<uri>urn:org:ten60:netkernel:ext:session</uri>
 		</import>
