@@ -42,15 +42,16 @@ public final class simplePurlClient {
 	/**
 	 * Modify an existing PURL via an HTTP PUT.
 	 *
-	 * @param  
+	 * @param A URL addressing a modify service for PURLs.
+	 * @param An XML file containing the new PURL parameters.
 	 * @return 
 	 */
-	public String modifyPurl (String url, String formParameters) throws IOException {
+	public String modifyPurl (String url, File file) throws IOException {
 		
 		Client client = new Client(Protocol.HTTP);
 		
 		// Convert the form data to a RESTlet Representation.
-		Representation rep = new StringRepresentation( formParameters, MediaType.APPLICATION_XML );
+		Representation rep = new FileRepresentation( file, MediaType.APPLICATION_XML, 3600 );
 		
 		// Request the resource and return its textual content.		
 		return client.put(url, rep).getEntity().getText();
@@ -132,10 +133,9 @@ public final class simplePurlClient {
 	/**
 	 * Modify a batch of PURLs via an HTTP PUT.
 	 *
-	 * @param  
+	 * @param  url, a String representation of a URL to 
 	 * @return 
 	 */
-	// TODO: Take a File as input?
 	public String modifyPurls (String url, File file) throws IOException {
 		
 		Client client = new Client(Protocol.HTTP);
@@ -145,17 +145,6 @@ public final class simplePurlClient {
 		
 		// Request the resource and return its textual content.		
 		return client.put(url, rep).getEntity().getText();
-	}
-
-	/**
-	 * Validate a batch of PURLs via an HTTP GET.
-	 *
-	 * @param A URL addressing a validation service for batches of PURLs.
-	 * @return The response from the server (a String of XML or text).
-	 */
-	// TODO: Take a File as input?
-	public String validatePurls() {
-		return "Validate a batch PURLs via an HTTP GET. Not implemented yet.";
 	}
 	
 	/****************** Users **************************/
@@ -181,15 +170,16 @@ public final class simplePurlClient {
 	/**
 	 * Modify an existing user via an HTTP PUT.
 	 *
-	 * @param  
+	 * @param  A URL addressing a modify service for users.
+	 * @param  An XML file containing parameters for the new user.
 	 * @return 
 	 */
-	public String modifyUser (String url, String formParameters) throws IOException {
+	public String modifyUser (String url, File file) throws IOException {
 		
 		Client client = new Client(Protocol.HTTP);
 		
 		// Convert the form data to a RESTlet Representation.
-		Representation rep = new StringRepresentation( formParameters, MediaType.APPLICATION_XML );
+		Representation rep = new FileRepresentation( file, MediaType.APPLICATION_XML, 3600 );
 		
 		// Request the resource and return its textual content.		
 		return client.put(url, rep).getEntity().getText();
@@ -245,15 +235,16 @@ public final class simplePurlClient {
 	/**
 	 * Modify an existing group via an HTTP PUT.
 	 *
-	 * @param  
+	 * @param  A URL addressing a modify service for groups.
+	 * @param  An XML file containing parameters for the new group.
 	 * @return 
 	 */
-	public String modifyGroup (String url, String formParameters) throws IOException {
+	public String modifyGroup (String url, File file) throws IOException {
 		
 		Client client = new Client(Protocol.HTTP);
 		
 		// Convert the form data to a RESTlet Representation.
-		Representation rep = new StringRepresentation( formParameters, MediaType.APPLICATION_XML );
+		Representation rep = new FileRepresentation( file, MediaType.APPLICATION_XML, 3600 );
 		
 		// Request the resource and return its textual content.		
 		return client.put(url, rep).getEntity().getText();
@@ -309,15 +300,16 @@ public final class simplePurlClient {
 	/**
 	 * Modify an existing domain via an HTTP PUT.
 	 *
-	 * @param  
+	 * @param  A URL addressing a modify service for domains.
+	 * @param  An XML file containing parameters for the new domain.
 	 * @return 
 	 */
-	public String modifyDomain (String url, String formParameters) throws IOException {
+	public String modifyDomain (String url, File file) throws IOException {
 		
 		Client client = new Client(Protocol.HTTP);
 		
 		// Convert the form data to a RESTlet Representation.
-		Representation rep = new StringRepresentation( formParameters, MediaType.APPLICATION_XML );
+		Representation rep = new FileRepresentation( file, MediaType.APPLICATION_XML, 3600 );
 		
 		// Request the resource and return its textual content.		
 		return client.put(url, rep).getEntity().getText();

@@ -14,36 +14,38 @@ public class purlClientTestRunner {
   public static Test suite() {
         TestSuite suite = new TestSuite();
 
-		// User actions
-/*        suite.addTest(new simplePurlClientTest("testRegisterUser"));
-        suite.addTest(new simplePurlClientTest("testModifyUser"));
+		// Set up.
+		// Create a test user, group, domain so the other tests can proceed.
+        suite.addTest(new simplePurlClientTest("testRegisterUser"));
+        suite.addTest(new simplePurlClientTest("testCreateGroup"));
+        suite.addTest(new simplePurlClientTest("testCreateDomain"));
+		
+		// Modify the user, group and domain
+        //READY suite.addTest(new simplePurlClientTest("testModifyUser"));
+        //READY suite.addTest(new simplePurlClientTest("testModifyGroup"));
+        //READY suite.addTest(new simplePurlClientTest("testModifyDomain"));
+
+		// Search the user, group and domain.
         suite.addTest(new simplePurlClientTest("testSearchUser"));
-        suite.addTest(new simplePurlClientTest("testDeleteUser"));
-
-		// Group actions
-        suite.addTest(new simplePurlClientTest("testRegisterGroup"));
-        suite.addTest(new simplePurlClientTest("testModifyGroup"));
         suite.addTest(new simplePurlClientTest("testSearchGroup"));
-        suite.addTest(new simplePurlClientTest("testDeleteGroup"));
-
-		// Domain actions
-        suite.addTest(new simplePurlClientTest("testRegisterDomain"));
-        suite.addTest(new simplePurlClientTest("testModifyDomain"));
         suite.addTest(new simplePurlClientTest("testSearchDomain"));
-        suite.addTest(new simplePurlClientTest("testDeleteDomain"));
 
 		// Single PURL actions
-        suite.addTest(new simplePurlClientTest("testRegisterPurl"));
-        suite.addTest(new simplePurlClientTest("testModifyPurl"));
-        //suite.addTest(new simplePurlClientTest("testSearchPurl"));
-        //suite.addTest(new simplePurlClientTest("testValidatePurl"));
+        suite.addTest(new simplePurlClientTest("testCreatePurl"));
+        // READY? Check with Brian re 'param2 missing arg. suite.addTest(new simplePurlClientTest("testModifyPurl"));
+        // READY: suite.addTest(new simplePurlClientTest("testSearchPurl"));
+        // NOTYET: suite.addTest(new simplePurlClientTest("testValidatePurl"));
         suite.addTest(new simplePurlClientTest("testResolvePurl"));
         suite.addTest(new simplePurlClientTest("testDeletePurl"));
-*/
+
 		// Batch PURL actions
-        suite.addTest(new simplePurlClientTest("testRegisterPurls"));
-        suite.addTest(new simplePurlClientTest("testModifyPurls"));
-        //suite.addTest(new simplePurlClientTest("testValidatePurls"));
+        // READY, but fix control var: suite.addTest(new simplePurlClientTest("testCreatePurls"));
+        // NOTYET?, but fix control var and purlsmodify file: suite.addTest(new simplePurlClientTest("testModifyPurls"));
+
+		// Remove the test user, group and domain.
+        suite.addTest(new simplePurlClientTest("testDeleteDomain"));
+        suite.addTest(new simplePurlClientTest("testDeleteGroup"));
+        suite.addTest(new simplePurlClientTest("testDeleteUser"));
 
         return suite;
   }

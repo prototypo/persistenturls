@@ -1,21 +1,72 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <purls>
-	 <purl>
-	   <pid>/tld/oclc/test303/</pid>
-	   <type>303</type>
-	   <maintainers>
-	     <uid>uche</uid>
-			 <uid/>
-	   </maintainers>
-	   <target>
-	     <url>http://example.com/test307/</url>
-	   </target>
-		 <seealso>
-		   <url>http://example.com/see/also/some/more.xml</url>
-		   <description>This is the first description.</description>
-			 <url/>
-			 <description/>
-		 </seealso>
-	   <basepurl>/NET/an/old/PURL</basepurl>
-	 </purl>
+	
+		<!-- Type 301.  Moved Permanently to a target URL -->
+    <purl pid="/testdomain/test301" type="301">
+      <maintainers>
+      	<maintainer id="testuser"/>
+    	</maintainers>
+    	<target url="http://example.com/test301target/"/>
+    </purl>
+	
+    <!-- Type 302.  Simple redirection to a target URL -->
+		<purl pid="/testdomain/test302" type="302">
+      <maintainers>
+      	<maintainer id="testuser"/>
+    	</maintainers>
+    	<target url="http://example.com/test302target/"/>
+    </purl>
+
+    <!-- Type 303.  See Also URL -->
+		<purl pid="/testdomain/test303/" type="303">
+      <maintainers>
+      	<maintainer id="testuser"/>
+    	</maintainers>
+      <seealso url="http://example.com/see/also/some/more.xml"/>
+    </purl>
+
+    <!-- Type 307.  Temporary redirect to a target URL -->
+		<purl pid="/testdomain/test307" type="307">
+      <maintainers>
+      	<maintainer id="testuser"/>
+    	</maintainers>
+    	<target url="http://example.com/test307target/"/>
+    </purl>
+
+    <!-- Type 404.  Temporarily gone -->
+		<purl pid="/testdomain/test404" type="404">
+      <maintainers>
+      	<maintainer id="testuser"/>
+    	</maintainers>
+    </purl>
+
+    <!-- Type 410.  Permanently gone -->
+		<purl pid="/testdomain/test410" type="410">
+      <maintainers>
+      	<maintainer id="testuser"/>
+    	</maintainers>
+    </purl>
+
+    <!-- Type clone.  Clone an existing PURL -->
+		<purl pid="/testdomain/testClone" type="clone">
+			<basepurl path="/NET/an/old/PURL"/>
+    </purl>
+
+    <!-- Type chain.  Chain an existing PURL -->
+		<purl pid="/testdomain/testChain" type="chain">
+      <maintainers>
+      	<maintainer id="testuser"/>
+    	</maintainers>
+			<basepurl path="/NET/an/old/PURL"/>
+    </purl>
+
+    <!-- Type partial.  Partial-redirect PURL -->
+		<purl pid="/testdomain/testPartial" type="partial">
+      <maintainers>
+      	<maintainer id="testuser"/>
+    	</maintainers>
+    	<target url="http://example.com/testPartialtarget/"/>
+    </purl>
+
 </purls>
+
