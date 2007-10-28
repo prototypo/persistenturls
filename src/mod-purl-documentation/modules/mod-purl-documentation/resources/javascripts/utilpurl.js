@@ -273,6 +273,13 @@ function getHTMLFromXMLArray(xmlArray) {
 	return htmlList;
 }
 
+// Scrub whitespace from textarea inputs and replace linebreaks with commas.
+function scrubTextareaInput (input) {
+	output = input.replace(/^\s*|\s*$/g,'');
+	output = output.replace(/\n/g, ',');
+	return output;
+}
+
 // Callback for Create/Modify/Search/Delete (POST/PUT/GET/DELETE) actions.
 function onResponse(message, headers, callingContext) {
 	// If bad parameters were passed, highlight them via CSS.

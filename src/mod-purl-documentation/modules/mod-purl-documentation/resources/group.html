@@ -70,10 +70,11 @@ handles results from the server in response to form submissions.
 			alert("You must provide a group id to identify the group you wish to create.  Please enter a group id.");
 		} else {
 			signalLoadingResults();
+			maintainers = scrubTextareaInput($('c_maintainers').value);
 			urlVars = {}
 			bodyVars = {
 				name: $('c_name').value,
-				maintainers: $('c_maintainers').value,
+				maintainers: maintainers,
 				members: $('c_members').value,
 				comments: $('c_comments').value
 			}
@@ -90,9 +91,10 @@ handles results from the server in response to form submissions.
 			alert("You must provide a group id to identify the group you wish to modify.  Please enter a group id.");
 		} else {
 			signalLoadingResults();
+			maintainers = scrubTextareaInput($('m_maintainers').value);
 			urlVars = {
 				name: $('m_name').value,
-				maintainers: $('m_maintainers').value,
+				maintainers: maintainers,
 				members: $('m_members').value,
 				comments: $('m_comments').value
 			}

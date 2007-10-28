@@ -72,11 +72,12 @@ handles results from the server in response to form submissions.
 			alert("You must provide a path to identify the PURL you wish to create.  Please enter a path.");
 		} else {
 			signalLoadingResults();
+			maintainers = scrubTextareaInput($('c_maintainers').value);
 			urlVars = {}
 			bodyVars = {
 				type: "302",
 				target: $('c_target').value,
-				maintainers: $('c_maintainers').value
+				maintainers: maintainers
 			}
 			// TODO: What is the URL to admin a PURL?  /admin/purl/<path>/<name>?  /<path>/<name>?
 			ajaxCaller.postVars("/admin/purl" + my_id, bodyVars, urlVars, onResponse, false, "Create");
@@ -92,12 +93,13 @@ handles results from the server in response to form submissions.
 			alert("You must provide a path to identify the PURL you wish to create.  Please enter a path.");
 		} else {
 			signalLoadingResults();
+			maintainers = scrubTextareaInput($('a_maintainers').value);
 			urlVars = {}
 			bodyVars = {
 				type: $('a_type').value,
 				target: $('a_target').value,
 				seealso: $('a_seealso').value,
-				maintainers: $('a_maintainers').value,
+				maintainers: maintainers,
 				existingpurl: $('a_existingpurl').value
 			}
 			// TODO: What is the URL to admin a PURL?  /admin/purl/<path>/<name>?  /<path>/<name>?
@@ -108,15 +110,16 @@ handles results from the server in response to form submissions.
 	}
 
 	// Send a Modify command via HTTP PUT.
-	function modifySubmit() {
+	function modifySubmit() {		
 		var my_id = $('m_id').value;
 		if ( my_id == "" | my_id == null ) {
 			alert("You must provide a path to identify the PURL you wish to modify.  Please enter a path.");
 		} else {
 			signalLoadingResults();
+			maintainers = scrubTextareaInput($('m_maintainers').value);
 			urlVars = {
 				target: $('m_target').value,
-				maintainers: $('m_maintainers').value
+				maintainers: maintainers
 			}
 			bodyType = "text/html";
 			body = "";

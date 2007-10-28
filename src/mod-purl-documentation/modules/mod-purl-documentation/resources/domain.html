@@ -70,11 +70,13 @@ handles results from the server in response to form submissions.
 			alert("You must provide a domain id to identify the domain you wish to create.  Please enter a domain id.");
 		} else {
 			signalLoadingResults();
+			maintainers = scrubTextareaInput($('c_maintainers').value);
+			writers = scrubTextareaInput($('c_writers').value);
 			urlVars = {}
 			bodyVars = {
 				name: $('c_name').value,
-				maintainers: $('c_maintainers').value,
-				writers: $('c_writers').value,
+				maintainers: maintainers,
+				writers: writers,
 				public: $('c_public').checked
 			}
 			ajaxCaller.postVars("/admin/domain/" + my_id, bodyVars, urlVars, onResponse, false, "Create");
@@ -90,10 +92,12 @@ handles results from the server in response to form submissions.
 			alert("You must provide a domain id to identify the domain you wish to modify.  Please enter a domain id.");
 		} else {
 			signalLoadingResults();
+			maintainers = scrubTextareaInput($('m_maintainers').value);
+			writers = scrubTextareaInput($('m_writers').value);
 			urlVars = {
 				name: $('m_name').value,
-				maintainers: $('m_maintainers').value,
-				writers: $('m_writers').value,
+				maintainers: maintainers,
+				writers: writers,
 				public: $('c_public').checked
 			}
 			bodyType = "text/html";
