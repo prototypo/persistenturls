@@ -24,7 +24,7 @@ public class PURLURIResolver extends URIResolver {
 
     @Override
     public String getURI(String id) {
-        return "ffcpl:/storedpurls" + id;
+        return "ffcpl:/storedpurls/" + (id.startsWith("/") ? id.substring(1) : id);
     }
 
 

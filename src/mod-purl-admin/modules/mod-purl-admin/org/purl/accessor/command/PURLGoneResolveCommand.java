@@ -19,13 +19,11 @@ package org.purl.accessor.command;
  */
 
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
-import org.ten60.netkernel.layer1.nkf.INKFRequest;
 import org.ten60.netkernel.layer1.nkf.INKFResponse;
 import org.ten60.netkernel.xml.representation.IAspectXDA;
 import org.ten60.netkernel.xml.xda.IXDAReadOnly;
 
 import com.ten60.netkernel.urii.IURRepresentation;
-import com.ten60.netkernel.urii.aspect.StringAspect;
 
 public class PURLGoneResolveCommand extends PURLResolveCommand {
 
@@ -35,18 +33,12 @@ public class PURLGoneResolveCommand extends PURLResolveCommand {
         IXDAReadOnly purlXDARO = purl.getXDA();
         try {
             String type = purlXDARO.getText("/purl/type", true);
-            INKFRequest req=context.createSubRequest();
-            IURRepresentation page = context.source("ffcpl:/resources/" + type + "-gone.html");
-            //StringAspect page = new StringAspect("<html><body>Goone Daddy Gone</body></html>");
-            req.setURI("active:HTTPResponseCode");
-            StringBuffer respCode = new StringBuffer("<HTTPResponseCode><code>");
-            respCode.append(type);
-            respCode.append("</code></HTTPResponseCode>");
-            req.addArgument("param", new StringAspect(respCode.toString()));
-            req.addArgument("operand", page);
-            IURRepresentation result=context.issueSubRequest(req);
-            resp=context.createResponseFrom(result);
-            resp.setMimeType("text/html");
+            IAspectXDA configXDA = (IAspectXDA) context.sourceAspect("ffcpl:/etc/PURLConfig.xml", IAspectXDA.class);
+            // Find out how this installation wants us to indicate missing resources
+            String xpath="/purl-config/goneURIs/gone-uri[@type=\"" + type + "\"]";
+            String uri = configXDA.getXDA().getText(xpath, true);
+            IURRepresentation page = context.source(uri);
+            resp = generateResponseCode(context, type, null, page, "text/html");
         } catch(Throwable t) {
             t.printStackTrace();
         }

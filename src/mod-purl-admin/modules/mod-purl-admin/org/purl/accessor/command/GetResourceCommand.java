@@ -61,9 +61,6 @@ public class GetResourceCommand extends PURLCommand {
             String path = context.getThisRequest().getArgument("path");
             Iterator itor = context.getThisRequest().getArguments();
 
-            System.out.println("uri: " + context.getThisRequest().getURI());
-            System.out.println("path:" + path);
-
             while(itor.hasNext()) {
                 System.out.println(itor.next());
             }
@@ -91,12 +88,12 @@ public class GetResourceCommand extends PURLCommand {
                 }
             } else {
                 IAspectNVP params = (IAspectNVP) context.sourceAspect( "this:param:param", IAspectNVP.class);
-                Iterator<String> namesItor = params.getNames().iterator();
+                Iterator namesItor = params.getNames().iterator();
 
                 StringBuffer sb = new StringBuffer();
 
                 while(namesItor.hasNext()) {
-                    String key = namesItor.next();
+                    String key = (String) namesItor.next();
 
                     if(key.equals("tombstone")) {
                         continue;

@@ -18,10 +18,73 @@ package org.purl.accessor.command;
  *
  */
 
+import org.purl.accessor.NKHelper;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
+import org.ten60.netkernel.layer1.nkf.INKFRequest;
 import org.ten60.netkernel.layer1.nkf.INKFResponse;
+import org.ten60.netkernel.layer1.nkf.NKFException;
 import org.ten60.netkernel.xml.representation.IAspectXDA;
+import org.ten60.netkernel.xml.xda.XPathLocationException;
+
+import com.ten60.netkernel.urii.IURRepresentation;
+import com.ten60.netkernel.urii.aspect.StringAspect;
 
 abstract public class PURLResolveCommand {
     abstract public INKFResponse execute(INKFConvenienceHelper context, IAspectXDA purl);
+
+    INKFResponse generateResponseCode(INKFConvenienceHelper context, String responseCode, String url) throws NKFException {
+        return generateResponseCode(context, responseCode, url, null, "application/void");
+    }
+
+    INKFResponse generateResponseCode(INKFConvenienceHelper context, String responseCode, String url, IURRepresentation body, String mimeType) throws NKFException {
+
+        String path = NKHelper.getArgument(context, "path").toLowerCase();
+
+        IAspectXDA configXDA = (IAspectXDA) context.sourceAspect("ffcpl:/etc/PURLConfig.xml", IAspectXDA.class);
+        String serverInfo = null;
+
+        try {
+            serverInfo = configXDA.getXDA().getText("/purl-config/serverInfo", true);
+        } catch (XPathLocationException e) {
+            // TODO: Handle this
+        }
+
+        INKFResponse resp = null;
+        INKFRequest req=context.createSubRequest();
+        req.setURI("active:HTTPResponseCode");
+        StringBuffer respCode = new StringBuffer("<HTTPResponseCode><code>");
+        respCode.append(responseCode);
+        respCode.append("</code>");
+
+        respCode.append("<header><name>X-Purl</name><value>");
+        respCode.append(serverInfo);
+        respCode.append("</value></header>");
+
+        if(url!=null) {
+            respCode.append("<header><name>Location</name><value>");
+            respCode.append(url);
+            respCode.append("</value></header>");
+        }
+
+        respCode.append("</HTTPResponseCode>");
+        req.addArgument("param", new StringAspect(respCode.toString()));
+
+        if(body != null) {
+            req.addArgument("operand", body);
+        }
+
+        IURRepresentation result=context.issueSubRequest(req);
+
+        // Cache the result
+
+        req = context.createSubRequest("active:attachGoldenThread");
+        req.addArgument("operand", result);
+        req.addArgument("param", "gt:" + path);
+        result=context.issueSubRequest(req);
+
+        resp=context.createResponseFrom(result);
+        resp.setCacheable();
+        resp.setMimeType(mimeType);
+        return resp;
+    }
 }

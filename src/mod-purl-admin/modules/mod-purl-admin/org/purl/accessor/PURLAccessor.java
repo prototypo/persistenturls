@@ -1,6 +1,8 @@
 package org.purl.accessor;
 
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -64,8 +66,55 @@ public class PURLAccessor extends AbstractAccessor {
             this.maintainerStorage = maintainerStorage;
         }
 
-        private static IURAspect createChainedPURL(INKFConvenienceHelper context, IAspectNVP params) {
+        private static IURAspect createChainedPURL(INKFConvenienceHelper context, IAspectNVP params) throws NKFException {
             IURAspect retValue = null;
+
+            String purl = NKHelper.getArgument(context, "path").toLowerCase();
+            String existingPurl = params.getValue("basepurl").toLowerCase();
+            String oldURI = purlResolver.getURI(existingPurl);
+
+            System.out.println(context.getThisRequest().getURI());
+
+            if(context.exists(oldURI)) {
+                StringBuffer sb = new StringBuffer("<purl>");
+                sb.append("<pid>");
+                sb.append(purl);
+                sb.append("</pid>");
+                sb.append("<type>302</type>");
+
+                String requestURL = context.getThisRequest().getArgument("requestURL");
+                int slashIdx = requestURL.indexOf("/", 7);
+                String target = requestURL.substring(0, slashIdx) + existingPurl;
+                sb.append("<target><url>");
+                //sb.append(java.net.URLEncoder.encode(target, "UTF-8"));
+                System.out.println("BEFORE URL: " + target);
+                target = target.replaceAll("&", "&amp;");
+                System.out.println("AFTER URL: " + target);
+                sb.append(target);
+                sb.append("</url></target>");
+
+                String maintainers=params.getValue("maintainers");
+                System.out.println("maintainers: " + maintainers);
+                if(maintainers!=null) {
+                    sb.append("<maintainers>");
+                    StringTokenizer st = new StringTokenizer(maintainers, ",");
+                    while(st.hasMoreElements()) {
+                        sb.append("<uid>");
+                        sb.append(st.nextToken().trim());
+                        sb.append("</uid>");
+                    }
+                    sb.append("</maintainers>");
+                }
+
+                sb.append("</purl>");
+
+                System.out.println(sb.toString());
+                retValue = new StringAspect(sb.toString());
+
+
+            } else {
+                // TODO: Throw a failure
+            }
 
             return retValue;
         }
@@ -73,9 +122,8 @@ public class PURLAccessor extends AbstractAccessor {
         private static IURAspect createClonedPURL(INKFConvenienceHelper context, IAspectNVP params) throws NKFException {
             IURAspect retValue = null;
             String purl = NKHelper.getArgument(context, "path").toLowerCase();
-            String existingPurl = params.getValue("existingpurl");
-            String newURI = purlResolver.getURI(context);
-            String oldURI = newURI.replace(purl, existingPurl);
+            String existingPurl = params.getValue("basepurl").toLowerCase();
+            String oldURI = purlResolver.getURI(existingPurl);
 
             if(context.exists(oldURI)) {
 
@@ -98,8 +146,39 @@ public class PURLAccessor extends AbstractAccessor {
             return retValue;
         }
 
-        private static IURAspect createPartialRedirectPURL(INKFConvenienceHelper context, IAspectNVP params) {
+        private static IURAspect createPartialRedirectPURL(INKFConvenienceHelper context, IAspectNVP params) throws NKFException {
             IURAspect retValue = null;
+
+            StringBuffer sb = new StringBuffer("<purl>");
+            String target = params.getValue("target");
+
+            sb.append("<pid>");
+            sb.append(NKHelper.getArgument(context, "path"));
+            sb.append("</pid>");
+            sb.append("<type>partial</type>");
+
+            sb.append("<target><url>");
+            target = target.replaceAll("&", "&amp;");
+            sb.append(target);
+            sb.append("</url></target>");
+
+            String maintainers=params.getValue("maintainers");
+            System.out.println("maintainers: " + maintainers);
+            if(maintainers!=null) {
+                sb.append("<maintainers>");
+                StringTokenizer st = new StringTokenizer(maintainers, ",");
+                while(st.hasMoreElements()) {
+                    sb.append("<uid>");
+                    sb.append(st.nextToken().trim());
+                    sb.append("</uid>");
+                }
+                sb.append("</maintainers>");
+            }
+
+            sb.append("</purl>");
+
+            System.out.println(sb.toString());
+            retValue = new StringAspect(sb.toString());
 
             return retValue;
         }
@@ -151,7 +230,7 @@ public class PURLAccessor extends AbstractAccessor {
             System.out.println("maintainers: " + maintainers);
             if(maintainers!=null) {
                 sb.append("<maintainers>");
-                StringTokenizer st = new StringTokenizer(maintainers, " \n");
+                StringTokenizer st = new StringTokenizer(maintainers, ",");
                 while(st.hasMoreElements()) {
                     sb.append("<uid>");
                     sb.append(st.nextToken().trim());
@@ -169,18 +248,12 @@ public class PURLAccessor extends AbstractAccessor {
             return retValue;
         }
 
-        public IURAspect createResource(INKFConvenienceHelper context, IAspectNVP params) throws NKFException {
-            IURAspect retValue = null;
-            Iterator itor = context.getThisRequest().getArguments();
-            System.out.println("ARGUMENTS:");
-            while(itor.hasNext()) {
-                System.out.println((String)itor.next());
-            }
-
+        public boolean checkMaintainersList(INKFConvenienceHelper context, IAspectNVP params) throws NKFException {
+            boolean permitted = false;
             String maintainers = params.getValue("maintainers");
 
-            StringTokenizer st = new StringTokenizer(maintainers, "\n");
-            boolean permitted = false;
+            StringTokenizer st = new StringTokenizer(maintainers, ",");
+
             List<String> notFoundList = null;
 
             while(!permitted && st.hasMoreTokens()) {
@@ -223,6 +296,21 @@ public class PURLAccessor extends AbstractAccessor {
                 throw new PURLException(errorMessage, 400);
             }
 
+            return permitted;
+        }
+
+        public IURAspect createResource(INKFConvenienceHelper context, IAspectNVP params) throws NKFException {
+            IURAspect retValue = null;
+            Iterator itor = context.getThisRequest().getArguments();
+            System.out.println("ARGUMENTS:");
+            while(itor.hasNext()) {
+                System.out.println((String)itor.next());
+            }
+
+            System.out.println("**URL: " + context.getThisRequest().getArgument("requestURL"));
+
+            // TODO: Validate the PURLs against the existing character restrictions
+
             String type = params.getValue("type");
             String target = params.getValue("target");
 
@@ -230,6 +318,10 @@ public class PURLAccessor extends AbstractAccessor {
                 if(target!=null) {
                     type = "302";
                 }
+            }
+
+            if(!type.equals("clone")) {
+                checkMaintainersList(context, params);
             }
 
             if(type != null) {

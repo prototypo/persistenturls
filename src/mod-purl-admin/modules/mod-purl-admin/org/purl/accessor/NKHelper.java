@@ -7,6 +7,7 @@ import org.ten60.netkernel.layer1.nkf.NKFException;
 
 import com.ten60.netkernel.urii.IURAspect;
 import com.ten60.netkernel.urii.IURRepresentation;
+import com.ten60.netkernel.urii.aspect.IAspectString;
 import com.ten60.netkernel.urii.aspect.StringAspect;
 
 public class NKHelper {
@@ -151,7 +152,7 @@ public class NKHelper {
 
     public static void indexResource(INKFConvenienceHelper context, String indexName, String id, IURAspect res) {
         try {
-            StringAspect sa = (StringAspect) res;
+            StringAspect sa = (StringAspect) context.transrept(res, IAspectString.class);
             System.out.println("INDEXING... " + sa.getString());
             StringBuffer sb = new StringBuffer("<luceneIndex><index>");
             sb.append(indexName);

@@ -39,6 +39,7 @@ abstract public class AbstractAccessor extends NKFAccessorImpl {
         String methodArg = context.getThisRequest().getArgument("method");
         String method = ((StringAspect)context.sourceAspect(methodArg, IAspectString.class)).getString();
         System.out.println("param: " + context.exists("this:param:param"));
+        System.out.println("method: " + method);
 
         //if(context.exists("literal:method")) {
            // method = (((IAspectString)context.sourceAspect("literal:method", IAspectString.class)).getString());

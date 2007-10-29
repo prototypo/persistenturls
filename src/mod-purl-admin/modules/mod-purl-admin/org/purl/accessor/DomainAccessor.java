@@ -136,7 +136,7 @@ public class DomainAccessor extends AbstractAccessor {
             String maintainers = params.getValue("maintainers");
             String writers = params.getValue("writers");
 
-            StringTokenizer st = new StringTokenizer(maintainers, "\n");
+            StringTokenizer st = new StringTokenizer(maintainers, ",");
             while(st.hasMoreTokens()) {
                 String next = st.nextToken();
                 System.out.println("Checking: " + next);
@@ -145,7 +145,7 @@ public class DomainAccessor extends AbstractAccessor {
                 }
             }
 
-            st = new StringTokenizer(writers, "\n");
+            st = new StringTokenizer(writers, ",");
             while(st.hasMoreTokens()) {
                 String next = st.nextToken();
                 System.out.println("Checking: " + next);

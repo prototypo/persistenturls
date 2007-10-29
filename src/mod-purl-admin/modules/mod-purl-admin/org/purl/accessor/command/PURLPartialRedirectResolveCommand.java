@@ -21,13 +21,33 @@ package org.purl.accessor.command;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFResponse;
 import org.ten60.netkernel.xml.representation.IAspectXDA;
+import org.ten60.netkernel.xml.xda.IXDAReadOnly;
 
 public class PURLPartialRedirectResolveCommand extends PURLResolveCommand {
 
     @Override
     public INKFResponse execute(INKFConvenienceHelper context, IAspectXDA purl) {
-        // TODO Auto-generated method stub
-        return null;
+        INKFResponse resp = null;
+        IXDAReadOnly purlXDARO = purl.getXDA();
+        try {
+            String path = context.getThisRequest().getArgument("path");
+            String pid = purlXDARO.getText("/purl/pid", true).toLowerCase();
+            String url = purlXDARO.getText("/purl/target/url", true);
+
+            if(!path.startsWith(pid)) {
+                // TODO : handle exception
+            }
+
+            url = url + path.substring(pid.length() + 1);
+            url = url.replaceAll("&", "&amp;");
+
+            // We treat the partial redirect as a 302
+            resp = generateResponseCode(context, "302", url);
+
+        } catch(Throwable t) {
+            t.printStackTrace();
+        }
+        return resp;
     }
 
 }

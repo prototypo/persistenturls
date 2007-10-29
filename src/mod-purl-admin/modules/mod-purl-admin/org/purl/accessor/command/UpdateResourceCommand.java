@@ -18,21 +18,19 @@ package org.purl.accessor.command;
  *
  */
 
-import java.util.Iterator;
-
 import org.purl.accessor.NKHelper;
 import org.purl.accessor.PURLException;
 import org.purl.accessor.ResourceCreator;
 import org.purl.accessor.ResourceStorage;
 import org.purl.accessor.URIResolver;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
+import org.ten60.netkernel.layer1.nkf.INKFRequest;
 import org.ten60.netkernel.layer1.nkf.INKFResponse;
 import org.ten60.netkernel.layer1.nkf.NKFException;
 import org.ten60.netkernel.layer1.representation.IAspectNVP;
 
 import com.ten60.netkernel.urii.IURAspect;
 import com.ten60.netkernel.urii.IURRepresentation;
-import com.ten60.netkernel.urii.aspect.IAspectString;
 import com.ten60.netkernel.urii.aspect.StringAspect;
 
 public class UpdateResourceCommand extends PURLCommand {
@@ -57,15 +55,20 @@ public class UpdateResourceCommand extends PURLCommand {
 
                     //PUT should come across on the param2 param
 
-                    IAspectNVP params = (IAspectNVP) context.sourceAspect("this:param:param2", IAspectNVP.class);
+                    IAspectNVP params = getParams(context);
                     IURAspect iur = resCreator.createResource(context, params);
-
                     if(resStorage.storeResource(context, uriResolver, iur)) {
                         String message = "Updated resource: " + id;
                         IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect(message), 200);
                         retValue = context.createResponseFrom(rep);
                         retValue.setMimeType(NKHelper.MIME_TEXT);
                         NKHelper.log(context,message);
+
+                        // Cut golden thread for the resource
+                        INKFRequest req = context.createSubRequest("active:cutGoldenThread");
+                        String path = NKHelper.getArgument(context, "path").toLowerCase();
+                        req.addArgument("param", "gt:" + path);
+                        context.issueSubRequest(req);
                     } else {
                         // TODO: Handle failed update
                         NKHelper.log(context, "ERROR UPDATING RESOURCE");

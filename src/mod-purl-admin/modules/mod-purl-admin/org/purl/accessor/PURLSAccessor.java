@@ -27,6 +27,7 @@ public class PURLSAccessor extends NKFAccessorImpl {
 	public void processRequest(INKFConvenienceHelper context) throws Exception {
 //		String path=context.getThisRequest().getArgument("path");
         IAspectXDA xdaParam = (IAspectXDA) context.sourceAspect("this:param:param", IAspectXDA.class);
+        System.out.println("**URI: " + context.getThisRequest().getURI());
 
         // Validate the input document against the batch schema
         INKFRequest req = context.createSubRequest("active:validateRNG");
@@ -68,7 +69,10 @@ public class PURLSAccessor extends NKFAccessorImpl {
                 if(type.equals("303")) {
                     String seeAlso = xdaROItor.getText("seealso/@url", true);
                     nvp.addNVP("seealso", seeAlso);
-                } else {
+                } else if(type.equals("clone") || type.equals("chain")) {
+                    String basepurl = xdaROItor.getText("basepurl/@path", true);
+                    nvp.addNVP("basepurl", basepurl);
+                } else if(!type.equals("404") && !type.equals("410")) {
                     String target = xdaROItor.getText("target/@url", true);
                     System.out.println("target: " + target);
                     nvp.addNVP("target", target);
@@ -78,7 +82,10 @@ public class PURLSAccessor extends NKFAccessorImpl {
                 req.addArgument("path", "ffcpl:" + pid );
                 req.addArgument("method", context.source(context.getThisRequest().getArgument("method")));
                 req.addArgument("params", new NVPAspect(nvp));
+                req.addArgument("requestURL", context.getThisRequest().getArgument("requestURL"));
                 IURRepresentation iur=context.issueSubRequest(req);
+                IAspectString sa = (IAspectString) context.transrept(iur,IAspectString.class);
+                System.out.println(sa.getString());
                 createdPurlList.add(pid);
             }
 
