@@ -1,28 +1,73 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <purls>
-  <purl type="301" pid="/article/2007-08-13/39/">
-    <maintainers>
-      <maintainer id="uche"/>
-    </maintainers>
-    <target url="http://www.semanticreport.com/index.php?option=com_content&amp;task=view&amp;id=39&amp;Itemid=79"/>
-  </purl>
-  <purl type="301" pid="/data/article/2007-08-13/39/">
-    <maintainers>
-      <maintainer id="uche"/>
-    </maintainers>
-    <target url="http://semanticreport.zepheira.com/data/article/2007-08-13/39/"/>
-  </purl>
-  <purl type="301" pid="/article/2007-08-13/41/">
-    <maintainers>
-      <maintainer id="uche"/>
-    </maintainers>
-    <target url="http://www.semanticreport.com/index.php?option=com_content&amp;task=view&amp;id=41&amp;Itemid=79"/>
-  </purl>
-  <purl type="301" pid="/data/article/2007-08-13/41/">
-    <maintainers>
-      <maintainer id="uche"/>
-    </maintainers>
-    <target url="http://semanticreport.zepheira.com/data/article/2007-08-13/41/"/>
-  </purl>
+
+		<!-- Type 301.  Moved Permanently to a target URL -->
+    <purl pid="/tld/subdomain/test301" type="301">
+      <maintainers>
+      	<maintainer id="uche"/>
+    	</maintainers>
+    	<target url="http://example.com/test301target/"/>
+    </purl>
+
+    <!-- Type 302.  Simple redirection to a target URL -->
+		<purl pid="/tld/subdomain/test302" type="302">
+      <maintainers>
+      	<maintainer id="uche"/>
+    	</maintainers>
+    	<target url="http://example.com/test302target/"/>
+    </purl>
+
+    <!-- Type 303.  See Also URL -->
+		<purl pid="/tld/subdomain/test303/" type="303">
+      <maintainers>
+      	<maintainer id="uche"/>
+    	</maintainers>
+      <seealso url="http://example.com/see/also/some/more.xml"/>
+    </purl>
+
+    <!-- Type 307.  Temporary redirect to a target URL -->
+		<purl pid="/tld/subdomain/test307" type="307">
+      <maintainers>
+      	<maintainer id="uche"/>
+    	</maintainers>
+    	<target url="http://example.com/test307target/"/>
+    </purl>
+
+    <!-- Type 404.  Temporarily gone -->
+		<purl pid="/tld/subdomain/test404" type="404">
+      <maintainers>
+      	<maintainer id="uche"/>
+    	</maintainers>
+    </purl>
+
+    <!-- Type 410.  Permanently gone -->
+		<purl pid="/tld/subdomain/test410" type="410">
+      <maintainers>
+      	<maintainer id="uche"/>
+    	</maintainers>
+    </purl>
+
+    <!-- Type clone.  Clone an existing PURL -->
+		<purl pid="/tld/subdomain/testClone" type="clone">
+			<basepurl path="/NET/an/old/PURL"/>
+    </purl>
+
+    <!-- Type chain.  Chain an existing PURL -->
+		<purl pid="/tld/subdomain/testChain" type="chain">
+      <maintainers>
+      	<maintainer id="uche"/>
+    	</maintainers>
+			<basepurl path="/NET/an/old/PURL"/>
+    </purl>
+
+    <!-- Type partial.  Partial-redirect PURL -->
+		<purl pid="/tld/subdomain/testPartial" type="partial">
+      <maintainers>
+      	<maintainer id="uche"/>
+    	</maintainers>
+    	<target url="http://example.com/testPartialtarget/"/>
+    </purl>
+
 </purls>
+
 

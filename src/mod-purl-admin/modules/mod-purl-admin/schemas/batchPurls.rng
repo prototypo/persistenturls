@@ -4,7 +4,7 @@ Relax NG schema generated from an Examplotron schema.
 
 Version of the compiler: "$Header: /home/xmlschemata/cvs/downloads/examplotron/compile.xsl,v 1.14 2004/09/21 14:25:09 vdv Exp $"
 
-About Examplotron: http://examplotron.org 
+About Examplotron: http://examplotron.org
 Bug reports: http://bugzilla.xmlschemata.org/cgi-bin/bugzilla/buglist.cgi?product=Examplotron
 Mailing list: http://lists.xmlschemata.org/examplotron/
 CVS: http://cvs.xmlschemata.org/cvsweb.cgi/downloads/examplotron/
@@ -107,7 +107,9 @@ CVS: http://cvs.xmlschemata.org/cvsweb.cgi/downloads/examplotron/
         <value>chain</value>
     </choice>
   </attribute>
-  <ref name="maintainers"/>
+  <zeroOrMore>
+    <ref name="maintainers"/>
+  </zeroOrMore>
   <zeroOrMore>
     <ref name="target"/>
   </zeroOrMore>
@@ -115,6 +117,22 @@ CVS: http://cvs.xmlschemata.org/cvsweb.cgi/downloads/examplotron/
     <ref name="seealso"/>
   </zeroOrMore>
   <ref name="basepurl"/>
+</define>
+
+<define name="type404">
+  <attribute name="type">
+    <choice>
+      <value>404</value>
+      <value>410</value>
+    </choice>
+  </attribute>
+  <ref name="maintainers"/>
+  <zeroOrMore>
+    <ref name="target"/>
+  </zeroOrMore>
+  <zeroOrMore>
+    <ref name="basepurl"/>
+  </zeroOrMore>
 </define>
 
   <start>
@@ -130,6 +148,7 @@ CVS: http://cvs.xmlschemata.org/cvsweb.cgi/downloads/examplotron/
               <ref name="type301"/>
               <ref name="type303"/>
               <ref name="type401"/>
+              <ref name="type404"/>
           </choice>
         </element>
       </oneOrMore>
