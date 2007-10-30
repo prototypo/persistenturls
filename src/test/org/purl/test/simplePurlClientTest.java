@@ -226,7 +226,7 @@ public class simplePurlClientTest extends TestCase {
 								"test" + 
 								System.getProperty("file.separator") + 
 								"testdata" + 
-								System.getProperty("file.separator"), 
+								System.getProperty("file.separator") +
 								"purlsvalidatecontrol.xml";
 			String control = readFile(controlFileName);
 			String test = client.validatePurls(url, file);
@@ -901,12 +901,12 @@ public class simplePurlClientTest extends TestCase {
 
     public static String readFile(String filename) throws IOException {
         RandomAccessFile file = new RandomAccessFile(filename, "r");
-        int rem = file.length();
+        int rem = (int)file.length();
         if (rem > 1000000) throw new IOException("file exceeds 1MB");
 
-        byte[] b = new byte[rem];
+        byte[] bytes = new byte[rem];
         while (rem > 0)
-            rem -= file.read(b, b.length - rem, rem);
+            rem -= file.read(bytes, bytes.length - rem, rem);
         file.close();
 
         return new String(bytes);
