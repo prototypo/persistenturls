@@ -98,8 +98,8 @@ public class purlClientTestRunner {
         suite.addTest(new simplePurlClientTest("testDeleteChainPurl"));
         suite.addTest(new simplePurlClientTest("testDeletePartialPurl"));
 
-		suite.addTest(new simplePurlClientTest("testCreateBadClonePurl"));
-		// suite.addTest(new simplePurlClientTest("testCreateBadClonePurl"));
+		// READY, but update control text: suite.addTest(new simplePurlClientTest("testCreateBadClonePurl"));
+		// READY, but update control text: suite.addTest(new simplePurlClientTest("testCreateBadChainPurl"));
 
 		/*
 			Batch PURL actions
@@ -114,7 +114,7 @@ public class purlClientTestRunner {
         suite.addTest(new simplePurlClientTest("testCreateChainPurls"));
         suite.addTest(new simplePurlClientTest("testCreatePartialRedirectPurls"));
         suite.addTest(new simplePurlClientTest("testCreatePurls"));
-        // NOTYET?, but fix control var and purlsmodify file: suite.addTest(new simplePurlClientTest("testModifyPurls"));
+        // NOTYET?, but fix control var: suite.addTest(new simplePurlClientTest("testModifyPurls"));
         // TODO: Create sample data and document.
 		// NOTYET: suite.addTest(new simplePurlClientTest("testValidatePurls"));
 		

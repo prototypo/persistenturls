@@ -321,6 +321,11 @@ public class simplePurlClientTest extends TestCase {
 	public void testCreateChainPurl() {
 		createPurl("/testdomain/testChainPURL", "chain", "testuser", null, null, true);
 	}
+
+	// Test creating a new *bad* Chain PURL via an HTTP POST.
+	public void testCreateBadChainPurl() {
+		createPurl("/testdomain/testBadChainPURL", "chain", "testuser", null, null, false);
+	}
 	
 	// Test resolving an existing Chain PURL via an HTTP GET.
 	public void testResolveChainPurl() {
@@ -670,12 +675,12 @@ public class simplePurlClientTest extends TestCase {
 				formParameters.put("seealso", seealso);
 				control += "<seealso>" + seealso + "</seealso>";
 			}
-			if ( useBasepurl && maintainers == null ) {
+			if ( type == "clone" ) {
 				// For cloning.
 				// Note use of hardcoded basePURL, which must be created first.
 				formParameters.put("basepurl", "/testdomain/test302PURL");
 				control += "<target><url>http://example.com/test302PURL</url></target><maintainers><uid>testuser</uid></maintainers>";
-			} else if ( useBasepurl ) {
+			} else if ( type == "chain" ) {
 				// For chaining.
 				// Note use of hardcoded basePURL, which must be created first.
 				formParameters.put("basepurl", "/testdomain/test302PURL");
@@ -694,7 +699,7 @@ public class simplePurlClientTest extends TestCase {
 				// This test expects to succeed.
 				// XML response, so use assertXMLEqual.
 				XMLAssert.assertXMLEqual(errMsg + test, controlLC, testLC);
-			} else if ( !expectSuccess && useBasepurl && maintainers == null ) {
+			} else if ( type == "chain" && !expectSuccess ) {
 				// This is a chain PURL that expects to fail its test.
 				//TODONEXT: Change the control text once Brian fixes this.
 				// Override the control text:
@@ -702,7 +707,7 @@ public class simplePurlClientTest extends TestCase {
 				controlLC = control.toLowerCase();
 				// Textual response, so use assertEquals().
 				assertEquals(errMsg, controlLC, testLC);
-			} else if ( !expectSuccess && useBasepurl ) {
+			} else if ( type == "clone" && !expectSuccess ) {
 				// This is a clone PURL that expects to fail its test.
 				//TODONEXT: Change the control text once Brian fixes this.
 				// Override the control text:
@@ -740,7 +745,7 @@ public class simplePurlClientTest extends TestCase {
 			String controlLC = control.toLowerCase();
 			
 			// Textual response, so use assertEquals().
-			assertEquals(errMsg, controlLC, testLC);
+			assertEquals(errMsg + test, controlLC, testLC);
 			
 		} catch (Exception e) {
 			reportException("Failed to resolve URL: ", e);
