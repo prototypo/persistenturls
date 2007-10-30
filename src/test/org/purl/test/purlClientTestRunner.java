@@ -79,13 +79,13 @@ public class purlClientTestRunner {
         suite.addTest(new simplePurlClientTest("testCreate410Purl"));
         // READY: suite.addTest(new simplePurlClientTest("testResolve410Purl"));
 
-        // READY: suite.addTest(new simplePurlClientTest("testCreateClonePurl"));
-        // READY: suite.addTest(new simplePurlClientTest("testResolveClonePurl"));
+        suite.addTest(new simplePurlClientTest("testCreateClonePurl"));
+        suite.addTest(new simplePurlClientTest("testResolveClonePurl"));
 
-        // READY: suite.addTest(new simplePurlClientTest("testCreateChainPurl"));
-        // READY: suite.addTest(new simplePurlClientTest("testResolveChainPurl"));
+        suite.addTest(new simplePurlClientTest("testCreateChainPurl"));
+        suite.addTest(new simplePurlClientTest("testResolveChainPurl"));
 
-        // READY: suite.addTest(new simplePurlClientTest("testCreatePartialPurl"));
+        suite.addTest(new simplePurlClientTest("testCreatePartialPurl"));
         // READY: suite.addTest(new simplePurlClientTest("testResolvePartialPurl"));
 
         suite.addTest(new simplePurlClientTest("testDelete301Purl"));
@@ -94,9 +94,12 @@ public class purlClientTestRunner {
         suite.addTest(new simplePurlClientTest("testDelete307Purl"));
         suite.addTest(new simplePurlClientTest("testDelete404Purl"));
         suite.addTest(new simplePurlClientTest("testDelete410Purl"));
-        // READY: suite.addTest(new simplePurlClientTest("testDeleteClonePurl"));
-        // READY: suite.addTest(new simplePurlClientTest("testDeleteChainPurl"));
-        // READY: suite.addTest(new simplePurlClientTest("testDeletePartialPurl"));
+        suite.addTest(new simplePurlClientTest("testDeleteClonePurl"));
+        suite.addTest(new simplePurlClientTest("testDeleteChainPurl"));
+        suite.addTest(new simplePurlClientTest("testDeletePartialPurl"));
+
+		suite.addTest(new simplePurlClientTest("testCreateBadClonePurl"));
+		// suite.addTest(new simplePurlClientTest("testCreateBadClonePurl"));
 
 		/*
 			Batch PURL actions
@@ -112,6 +115,8 @@ public class purlClientTestRunner {
         suite.addTest(new simplePurlClientTest("testCreatePartialRedirectPurls"));
         suite.addTest(new simplePurlClientTest("testCreatePurls"));
         // NOTYET?, but fix control var and purlsmodify file: suite.addTest(new simplePurlClientTest("testModifyPurls"));
+        // TODO: Create sample data and document.
+		// NOTYET: suite.addTest(new simplePurlClientTest("testValidatePurls"));
 		
 		/*
 			Remove the test user, group and domain.

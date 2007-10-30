@@ -301,10 +301,15 @@ public class simplePurlClientTest extends TestCase {
 	public void testCreateClonePurl() {
 		createPurl("/testdomain/testClonePURL", "clone", null, null, null, true);
 	}
+
+	// Test creating a *bad* Clone PURL via an HTTP POST.
+	public void testCreateBadClonePurl() {
+		createPurl("/testdomain/testBadClonePURL", "clone", null, null, null, false);
+	}
 	
 	// Test resolving an existing Clone PURL via an HTTP GET.
 	public void testResolveClonePurl() {
-		resolvePurl("/testdomain/testClonePURL", "http://example.com/test301PURL");
+		resolvePurl("/testdomain/testClonePURL", "http://example.com/test302PURL");
 	}
 
 	// Test deleting an existing Clone PURL via an HTTP DELETE.
@@ -319,7 +324,7 @@ public class simplePurlClientTest extends TestCase {
 	
 	// Test resolving an existing Chain PURL via an HTTP GET.
 	public void testResolveChainPurl() {
-		resolvePurl("/testdomain/testChainPURL", "http://example.com/test301PURL");
+		resolvePurl("/testdomain/testChainPURL", "http://localhost:8080/testdomain/test302PURL");
 	}
 
 	// Test deleting an existing Chain PURL via an HTTP DELETE.
@@ -638,7 +643,15 @@ public class simplePurlClientTest extends TestCase {
 
 		try {
 			String url = "http://" + host + ":" + port + "/admin/purl" + path;
-			String control = "<purl><pid>" + path + "</pid><type>" + type + "</type>";
+			String control = "<purl><pid>" + path + "</pid>";
+			if ( useBasepurl ) {
+				// For chaining and cloning PURLs.
+				// NB: Presumes use of the hard-coded test data!
+				control += "<type>302</type>";                                                      
+			} else {
+				// For most types of PURLS.
+				control += "<type>" + type + "</type>";
+			}
 			
 			String purlName = path.substring(path.lastIndexOf('/') + 1, path.length() );
 
@@ -660,28 +673,50 @@ public class simplePurlClientTest extends TestCase {
 			if ( useBasepurl && maintainers == null ) {
 				// For cloning.
 				// Note use of hardcoded basePURL, which must be created first.
-				formParameters.put("basepurl", "/testdomain/test301PURL");
-				control += "<target><url>http://example.com/test301PURL</url></target><maintainers><uid>testuser</uid></maintainers>";
+				formParameters.put("basepurl", "/testdomain/test302PURL");
+				control += "<target><url>http://example.com/test302PURL</url></target><maintainers><uid>testuser</uid></maintainers>";
 			} else if ( useBasepurl ) {
 				// For chaining.
 				// Note use of hardcoded basePURL, which must be created first.
-				formParameters.put("basepurl", "/testdomain/test301PURL");
-				control += "<target><url>http://example.com/test301PURL</url></target>";
+				formParameters.put("basepurl", "/testdomain/test302PURL");
+				control += "<target><url>http://localhost:8080/testdomain/test302PURL</url></target>";
 			}
 			control += "</purl>";
 
 			String errMsg = "Cannot create a new " + type + " PURL: ";
 			String test = client.createPurl(url, formParameters);
 			
+			// Convert the test and control values to lower case for clean comparison.
+			String testLC = test.toLowerCase();
+			String controlLC = control.toLowerCase();
+			
 			if (expectSuccess) {
 				// This test expects to succeed.
 				// XML response, so use assertXMLEqual.
-				XMLAssert.assertXMLEqual(errMsg + test, control, test);
-			} else {
+				XMLAssert.assertXMLEqual(errMsg + test, controlLC, testLC);
+			} else if ( !expectSuccess && useBasepurl && maintainers == null ) {
+				// This is a chain PURL that expects to fail its test.
+				//TODONEXT: Change the control text once Brian fixes this.
 				// Override the control text:
 				control = "Resource: " + purlName + " already exists.";
+				controlLC = control.toLowerCase();
 				// Textual response, so use assertEquals().
-				assertEquals(errMsg, control, test);
+				assertEquals(errMsg, controlLC, testLC);
+			} else if ( !expectSuccess && useBasepurl ) {
+				// This is a clone PURL that expects to fail its test.
+				//TODONEXT: Change the control text once Brian fixes this.
+				// Override the control text:
+				control = "Resource: " + purlName + " already exists.";
+				controlLC = control.toLowerCase();
+				// Textual response, so use assertEquals().
+				assertEquals(errMsg, controlLC, testLC);
+			} else {
+				// This test expects to fail (and is not a chain or a clone PURL).
+				// Override the control text:
+				control = "Resource: " + purlName + " already exists.";
+				controlLC = control.toLowerCase();
+				// Textual response, so use assertEquals().
+				assertEquals(errMsg, controlLC, testLC);
 			}
 			
 		} catch (Exception e) {
@@ -697,11 +732,15 @@ public class simplePurlClientTest extends TestCase {
 		try {
 			String url = "http://" + host + ":" + port + path;
 
-			String errMsg = "Cannot resolve PURL.";
+			String errMsg = "Cannot resolve PURL: ";
 			String test = client.resolvePurl(url);
 			
+			// Convert the test and control values to lower case for clean comparison.
+			String testLC = test.toLowerCase();
+			String controlLC = control.toLowerCase();
+			
 			// Textual response, so use assertEquals().
-			assertEquals(errMsg, control, test);
+			assertEquals(errMsg, controlLC, testLC);
 			
 		} catch (Exception e) {
 			reportException("Failed to resolve URL: ", e);
