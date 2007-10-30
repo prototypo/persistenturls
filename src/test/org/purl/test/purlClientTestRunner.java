@@ -22,7 +22,7 @@ public class purlClientTestRunner {
 		
 		// Modify the user, group and domain
         //READY suite.addTest(new simplePurlClientTest("testModifyUser"));
-        //READY suite.addTest(new simplePurlClientTest("testModifyGroup"));
+        suite.addTest(new simplePurlClientTest("testModifyGroup"));
         //READY suite.addTest(new simplePurlClientTest("testModifyDomain"));
 
 		// Search the user, group and domain.
@@ -32,7 +32,7 @@ public class purlClientTestRunner {
 
 		// Single PURL actions
         suite.addTest(new simplePurlClientTest("testCreatePurl"));
-        // READY? Check with Brian re 'param2 missing arg. suite.addTest(new simplePurlClientTest("testModifyPurl"));
+        // READY: suite.addTest(new simplePurlClientTest("testModifyPurl"));
         // READY: suite.addTest(new simplePurlClientTest("testSearchPurl"));
         // NOTYET: suite.addTest(new simplePurlClientTest("testValidatePurl"));
         suite.addTest(new simplePurlClientTest("testResolvePurl"));
