@@ -216,7 +216,7 @@ public class simplePurlClientTest extends TestCase {
 								"test" + 
 								System.getProperty("file.separator") + 
 								"testdata" + 
-								System.getProperty("file.separator"), 
+								System.getProperty("file.separator") +
 								"purlsvalidate.xml");
 
 			String errMsg = "Cannot validate a batch of PURLs: ";
