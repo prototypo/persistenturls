@@ -6,7 +6,7 @@
 	-->
     <identity>
 		<uri>urn:org:purl:admin</uri>
-		<version>0.0.840</version>
+		<version>0.0.973</version>
     </identity>
 	<info>
 		<name>PURL Admin Module</name>
@@ -48,7 +48,7 @@
 			<match>ffcpl:/groups/.*</match>
 			<match>ffcpl:/domains/.*</match>
 			<match>ffcpl:/storedpurls/.*</match>
-			<match>ffcpl:/resources/.*</match>
+			<match>ffcpl:/pub/.*</match>
 			<match>ffcpl:/filters/.*</match>
 			<match>ffcpl:/scripts/.*</match>
 			<match>ffcpl:/index/.*</match>
@@ -78,6 +78,10 @@
 		<rewrite>
 			<match>(ffcpl:/admin/purl)(.*)</match>
 			<to>active:purl+path@$2</to>
+		</rewrite>
+		<rewrite>
+			<match>(ffcpl:/admin/targeturl)(.*)</match>
+			<to>active:purl-validate+mode@mode:validate+path@ffcpl:$2</to>
 		</rewrite>
 		<rewrite>
 			<match>(ffcpl:/domain.*)</match>
@@ -117,6 +121,10 @@
       		<class>org.purl.accessor.DomainAccessor</class>
     	</ura>
 		<ura>
+      		<match>active:purl-validate\+.*</match>
+      		<class>org.purl.accessor.PURLResolverAccessor</class>
+    	</ura>
+		<ura>
       		<match>active:purls\+.*</match>
       		<class>org.purl.accessor.PURLSAccessor</class>
     	</ura>
@@ -129,11 +137,14 @@
       		<class>org.purl.accessor.PURLAccessor</class>
     	</ura>
  		<rewrite>
-			<match>(ffcpl:/(?!static).*)</match>
+			<match>(ffcpl:/(?!static|pub|xlib).*)</match>
 			<to>active:beanshell+operator@ffcpl:/scripts/main.bsh+base@$1</to>
 		</rewrite>
 		<import>
 			<uri>urn:org:purl:static</uri>
+		</import>
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:http:client</uri>
 		</import>
 		<import>
 			<uri>urn:org:ten60:netkernel:ext:session</uri>

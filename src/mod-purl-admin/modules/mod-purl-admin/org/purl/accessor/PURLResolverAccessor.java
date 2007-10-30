@@ -8,6 +8,7 @@ import org.purl.accessor.command.PURLPartialRedirectResolveCommand;
 import org.purl.accessor.command.PURLRedirectResolveCommand;
 import org.purl.accessor.command.PURLResolveCommand;
 import org.purl.accessor.command.PURLSeeAlsoResolveCommand;
+import org.purl.accessor.command.PURLValidatorCommand;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFRequestReadOnly;
 import org.ten60.netkernel.layer1.nkf.INKFResponse;
@@ -30,6 +31,7 @@ public class PURLResolverAccessor extends NKFAccessorImpl {
         PURLResolveCommand goneResolver = new PURLGoneResolveCommand();
         PURLResolveCommand seeAlsoResolver = new PURLSeeAlsoResolveCommand();
         PURLResolveCommand partialRedirectResolver = new PURLPartialRedirectResolveCommand();
+        PURLResolveCommand purlValidator = new PURLValidatorCommand();
 
         commandMap.put("301", redirectResolver);
         commandMap.put("302", redirectResolver);
@@ -38,6 +40,7 @@ public class PURLResolverAccessor extends NKFAccessorImpl {
         commandMap.put("404", goneResolver);
         commandMap.put("410", goneResolver);
         commandMap.put("partial", partialRedirectResolver);
+        commandMap.put("validate", purlValidator);
     }
 
     public PURLResolverAccessor() {
@@ -48,10 +51,12 @@ public class PURLResolverAccessor extends NKFAccessorImpl {
     public void processRequest(INKFConvenienceHelper context) throws Exception {
 
         IAspectXDA configXDA = (IAspectXDA) context.sourceAspect("ffcpl:/etc/PURLConfig.xml", IAspectXDA.class);
-        String path = NKHelper.getArgument(context, "path").toLowerCase();
+        String path = NKHelper.getArgument(context, "path");
+        String mode = NKHelper.getArgument(context, "mode");
 
-        String purlloc = purlResolver.getURI(context);
+        String purlloc = path.substring(6);
         String origPurlLoc = purlloc;
+        String errMsg = null;
 
         INKFResponse resp = null;
         IAspectXDA purlXDA = null;
@@ -63,55 +68,68 @@ public class PURLResolverAccessor extends NKFAccessorImpl {
         // Partial redirects require some special handling
 
         while(!found && !done) {
-            found = context.exists(purlloc);
+            found = context.exists(purlResolver.getURI(purlloc));
 
             if(!found) {
                 purlloc = extractNextPurlLevel(purlloc);
-                done = (purlloc == null);
+                done = (purlloc == null) || (purlloc.equals("ffcpl:"));
             }
         }
 
         if(found) {
-            purlXDA = (IAspectXDA) context.sourceAspect(purlloc, IAspectXDA.class);
-            IXDAReadOnly purlXDARO = purlXDA.getXDA();
-            String type = purlXDARO.getText("/purl/type", true);
-            cmd = commandMap.get(type);
+            try {
+                purlXDA = (IAspectXDA) context.sourceAspect(purlResolver.getURI(purlloc), IAspectXDA.class);
+                IXDAReadOnly purlXDARO = purlXDA.getXDA();
+                String type = mode.equals("mode:validate") ? "validate" : purlXDARO.getText("/purl/type", true);
+                cmd = commandMap.get(type);
 
-            if(cmd != null) {
-                try {
-                    resp = cmd.execute(context, purlXDA);
-
-
-                } catch(Throwable t){
-                    //TODO: handle
-                    t.printStackTrace();
+                if(cmd != null) {
+                    try {
+                        resp = cmd.execute(context, purlXDA);
+                    } catch(Throwable t){
+                        errMsg = "<purl-error>Error Resolving PURL "+ path.substring(6) + ". Please try again later.</purl-error>";
+                    }
+                } else {
+                    errMsg = "<purl-error>Invalid PURL "+ path.substring(6) +"</purl-error>";
                 }
-            } else {
-                resp = context.createResponseFrom(new StringAspect("<purl-error> Invalid PURL "+ path +"</purl-error>"));
+            } catch(Throwable t) {
+                errMsg = "<purl-error>Invalid PURL "+ path.substring(6) +"</purl-error>";
+            }
+
+            if(errMsg!=null) {
+                resp = context.createResponseFrom(new StringAspect(errMsg));
+                resp.setMimeType("text/xml");
             }
 
         } else {
+            if(!mode.equals("mode:validate")) {
+                // TODO: This may go away
+                IXDAReadOnly xdaRO = (IXDAReadOnly) configXDA.getClonedXDA();
+                IXDAReadOnlyIterator xdaItor = xdaRO.readOnlyIterator("/purl-config/topLevelRedirects/redirect");
+                boolean matched = false;
 
-            // TODO: This may go away
-            IXDAReadOnly xdaRO = (IXDAReadOnly) configXDA.getClonedXDA();
-            IXDAReadOnlyIterator xdaItor = xdaRO.readOnlyIterator("/purl-config/topLevelRedirects/redirect");
-            boolean matched = false;
-
-            // TODO: Optimize this
-            while(xdaItor.hasNext() && !matched) {
-                xdaItor.next();
-                String from = xdaItor.getText("@from", true);
-                String to = null;
-                if(path.startsWith(from)) {
-                    to = xdaItor.getText("@to", true);
-                    path = path.replace(from, to);
-                    matched = true;
+                // TODO: Optimize this
+                while(xdaItor.hasNext() && !matched) {
+                    xdaItor.next();
+                    String from = xdaItor.getText("@from", true);
+                    String to = null;
+                    if(path.startsWith(from)) {
+                        to = xdaItor.getText("@to", true);
+                        path = path.replace(from, to);
+                        matched = true;
+                    }
                 }
-            }
 
-            if(matched) {
-                IURRepresentation iur = context.source(path);
-                resp = context.createResponseFrom(iur);
+                if(matched) {
+                    IURRepresentation iur = context.source(path);
+                    resp = context.createResponseFrom(iur);
+                } else {
+                    resp = context.createResponseFrom(new StringAspect("<purl-error>Could not resolve PURL "+ path.substring(6) +"</purl-error>"));
+                    resp.setMimeType("text/xml");
+                }
+            } else {
+                cmd = commandMap.get("validate");
+                resp = cmd.execute(context, null);
             }
         }
 

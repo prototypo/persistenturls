@@ -60,7 +60,8 @@ public class CreateResourceCommand extends PURLCommand {
 
             if(resStorage.resourceExists(context, uriResolver)) {
                 // Cannot create the same name
-                String message = "Resource: " + id + " already exists.";
+                String path = context.getThisRequest().getArgument("path");
+                String message = "Resource: " + path + " already exists.";
                 IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect(message), 409);
                 retValue = context.createResponseFrom(rep);
                 retValue.setMimeType(NKHelper.MIME_TEXT);

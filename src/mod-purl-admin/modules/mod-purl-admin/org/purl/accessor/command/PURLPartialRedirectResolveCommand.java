@@ -30,15 +30,19 @@ public class PURLPartialRedirectResolveCommand extends PURLResolveCommand {
         INKFResponse resp = null;
         IXDAReadOnly purlXDARO = purl.getXDA();
         try {
-            String path = context.getThisRequest().getArgument("path");
-            String pid = purlXDARO.getText("/purl/pid", true).toLowerCase();
+            String path = context.getThisRequest().getArgument("path").substring(6);
+
+            String pid = purlXDARO.getText("/purl/pid", true);
             String url = purlXDARO.getText("/purl/target/url", true);
 
             if(!path.startsWith(pid)) {
                 // TODO : handle exception
             }
 
-            url = url + path.substring(pid.length() + 1);
+            if(!path.equals(pid)) {
+                url = url + path.substring(pid.length());
+            }
+
             url = url.replaceAll("&", "&amp;");
 
             // We treat the partial redirect as a 302

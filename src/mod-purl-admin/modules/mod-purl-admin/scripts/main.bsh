@@ -8,6 +8,7 @@ main() {
 	base=context.getThisRequest().getArgument("base");
     String method = context.getThisRequest().getArgument("method");
 	req=context.createSubRequest("active:purl-resolver");
+	req.addArgument("mode", "mode:resolve");
 	req.addArgument("path", base);
 	req.addArgument("method", method);
 	resp=context.issueSubRequest(req);

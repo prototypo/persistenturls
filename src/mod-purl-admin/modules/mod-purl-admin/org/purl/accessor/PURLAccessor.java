@@ -1,8 +1,6 @@
 package org.purl.accessor;
 
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -69,8 +67,8 @@ public class PURLAccessor extends AbstractAccessor {
         private static IURAspect createChainedPURL(INKFConvenienceHelper context, IAspectNVP params) throws NKFException {
             IURAspect retValue = null;
 
-            String purl = NKHelper.getArgument(context, "path").toLowerCase();
-            String existingPurl = params.getValue("basepurl").toLowerCase();
+            String purl = NKHelper.getArgument(context, "path");
+            String existingPurl = params.getValue("basepurl");
             String oldURI = purlResolver.getURI(existingPurl);
 
             System.out.println(context.getThisRequest().getURI());
@@ -86,10 +84,7 @@ public class PURLAccessor extends AbstractAccessor {
                 int slashIdx = requestURL.indexOf("/", 7);
                 String target = requestURL.substring(0, slashIdx) + existingPurl;
                 sb.append("<target><url>");
-                //sb.append(java.net.URLEncoder.encode(target, "UTF-8"));
-                System.out.println("BEFORE URL: " + target);
                 target = target.replaceAll("&", "&amp;");
-                System.out.println("AFTER URL: " + target);
                 sb.append(target);
                 sb.append("</url></target>");
 
@@ -113,7 +108,8 @@ public class PURLAccessor extends AbstractAccessor {
 
 
             } else {
-                // TODO: Throw a failure
+                throw new PURLException("Cannot chain non-existent PURL: "
+                    + existingPurl, 400);
             }
 
             return retValue;
@@ -121,8 +117,8 @@ public class PURLAccessor extends AbstractAccessor {
 
         private static IURAspect createClonedPURL(INKFConvenienceHelper context, IAspectNVP params) throws NKFException {
             IURAspect retValue = null;
-            String purl = NKHelper.getArgument(context, "path").toLowerCase();
-            String existingPurl = params.getValue("basepurl").toLowerCase();
+            String purl = NKHelper.getArgument(context, "path");
+            String existingPurl = params.getValue("basepurl");
             String oldURI = purlResolver.getURI(existingPurl);
 
             if(context.exists(oldURI)) {
@@ -140,7 +136,8 @@ public class PURLAccessor extends AbstractAccessor {
                     e.printStackTrace();
                 }
             } else {
-                // TODO: Handle missing existing PURL
+                throw new PURLException("Cannot clone non-existent PURL: "
+                        + existingPurl, 400);
             }
 
             return retValue;
@@ -201,10 +198,7 @@ public class PURLAccessor extends AbstractAccessor {
             case 302:
             case 307:
                 sb.append("<target><url>");
-                //sb.append(java.net.URLEncoder.encode(target, "UTF-8"));
-                System.out.println("BEFORE URL: " + target);
                 target = target.replaceAll("&", "&amp;");
-                System.out.println("AFTER URL: " + target);
                 sb.append(target);
                 sb.append("</url></target>");
                 break;

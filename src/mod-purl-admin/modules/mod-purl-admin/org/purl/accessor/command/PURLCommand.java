@@ -3,6 +3,8 @@
  */
 package org.purl.accessor.command;
 
+import java.util.Iterator;
+
 import org.purl.accessor.ResourceStorage;
 import org.purl.accessor.URIResolver;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;

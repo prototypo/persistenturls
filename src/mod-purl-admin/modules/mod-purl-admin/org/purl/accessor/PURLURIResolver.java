@@ -1,5 +1,10 @@
 package org.purl.accessor;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.NKFException;
 
@@ -10,7 +15,7 @@ public class PURLURIResolver extends URIResolver {
         String retValue = null;
 
         try {
-            String path = NKHelper.getArgument(context, "path").toLowerCase();
+            String path = NKHelper.getArgument(context, "path");
             if(path.startsWith("ffcpl:")) {
                 path=path.substring(6);
             }
@@ -24,7 +29,24 @@ public class PURLURIResolver extends URIResolver {
 
     @Override
     public String getURI(String id) {
-        return "ffcpl:/storedpurls/" + (id.startsWith("/") ? id.substring(1) : id);
+        String retValue = null;
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA");
+            byte [] idBytes = id.getBytes("UTF-8");
+            md.update(idBytes);
+            String s = new sun.misc.BASE64Encoder().encode(md.digest());
+            s = URLEncoder.encode(s, "8859_1");
+            System.out.println("id:" + s);
+            retValue = "ffcpl:/storedpurls/" + s;//(id.startsWith("/") ? id.substring(1) : id);
+        } catch (NoSuchAlgorithmException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return retValue;
     }
 
 
