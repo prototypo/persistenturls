@@ -7,7 +7,7 @@
 			  <property name="test.dir" value="${basedir}/test"/>
 		    <property name="test.lib.dir" value="${basedir}/test/lib"/>
 	      <property name="versions.properties" value="${basedir}/config/deploy.properties"/>
-        <property name="netkernel.home.dir" value="/usr/local/Deploy-PURLS-NK"/>
+        <property name="netkernel.home.dir" value="/Applications/1060-NKSEDK-3.3.alpha.34_clean/"/>
 			  <property name="verbose" value="false" />
 				<path id="classpath.base">
 				</path>
@@ -99,6 +99,8 @@
 		</target>
 		
 		<target name="test" depends="init,build-test">
+                   <!-- Clean out the NetKernel persistence layer before the tests -->
+                    <delete dir="${netkernel.home.dir}/scratch/file*"/>
 		    <junit>
 		      <classpath refid="classpath.test" />
 		      <formatter type="brief" usefile="false" />
