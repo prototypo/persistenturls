@@ -65,6 +65,7 @@
 					<dt>6.3 <a href="#domainsearch">Search for Domain Information</a></dt>
 					<dt>6.4 <a href="#domaindelete">Delete a Domain</a></dt>
 				</dl>
+				<li><a href="#rest">Creating RESTful PURL Clients</a></li>
 			</ol>
 
 		<hr>
@@ -136,7 +137,7 @@
 
 				<p>The single most important task that one can accomplish on a PURL server is the creation of a new PURL.  Other administrative actions, from user, group or domain maintenance to the other operations on the PURLs themselves are secondary to that main task.  This section addresses the creation of simple (HTTP redirection) PURLs and advanced PURLs, along with the other things that may be done to a PURL.</p>
 
-				<p>Six actions may be taken on a PURL: Creation, Advanced Creation, Modification, Searching, Validation or Deletion.  These six actions may be accessed in the PURL Web user interface as shown in Figure 3.  A RESTful API also provides the same six actions.</p>
+				<p>Six actions may be taken on a PURL: Creation, Advanced Creation, Modification, Searching, Validation or Deletion.  These six actions may be accessed in the PURL Web user interface as shown in Figure 3.  The same six actions may be taken by other PURL clients.  See <a href="#rest">Creating RESTful PURL Clients</a> for details.</p>
 
 				<p>Creating a simple or advanced PURL creates a record for that PURL on a PURL server.  A simple PURL merely redirects to a given URL.  An advanced PURL may return any of the HTTP response codes listed in <a href="#table1">Table 1</a>, including the 303 response code used to return information about physical or conceptual resources.  Modification allows the group record to be updated.  Group records may be searched by the general public.  Finally, group records may be deleted.  These six actions are described in detail below.</p>
 			
@@ -153,13 +154,11 @@
 		
 		<p>Simple PURLs may be created via the <a href="purl.html#create">PURL Creation Form</a>.</p>
 		
-		<p>Figure 4(a) shows the creation of an example simple PURL.  A target URL is the URL to which the PURL will redirect.  A maintainer is a user or group authorized to administer a PURL.  Figure 4(b) shows a typical response upon success.  In this case, a PURL will be created on a PURL server with the path &quot;/zepheira/examples/BBC&quot;.  If the PURL server was running on a machine called purlz.org, then the resolution of http://purlz.org/zepheira/examples/BBC would result in an HTTP 302 response directing the user (or Web browser, or other computer application) to look for the desired resource at http://bbc.co.uk/, the British Broadcasting Service&apos;s Web site.  Three maintainers are listed for this PURL; the users &quot;david&quot; and &quot;brian&quot; and the group &quot;examplegroup&quot;.</p>
+		<p>Figure 4(a) shows the creation of an example simple PURL.  A target URL is the URL to which the PURL will redirect.  A maintainer is a user or group authorized to administer a PURL.  Figure 4(b) shows a typical response upon success.  Search results may be "torn off" for later use by selecting the icon labeled <b>A</b> in Figure 4(b). Individual records may be brought into the <a href="purl.html#modify">PURL Modification Form</a> by selecting any of the icons labeled <b>B</b> in Figure 4(b).</p>
+			
+		<p>In this case, a PURL will be created on a PURL server with the path &quot;/zepheira/examples/BBC&quot;.  If the PURL server was running on a machine called purlz.org, then the resolution of http://purlz.org/zepheira/examples/BBC would result in an HTTP 302 response directing the user (or Web browser, or other computer application) to look for the desired resource at http://bbc.co.uk/, the British Broadcasting Service&apos;s Web site.  Three maintainers are listed for this PURL; the users &quot;david&quot; and &quot;brian&quot; and the group &quot;examplegroup&quot;.</p>
 			
 			<p align="center"><img src="images/purlcreate.png">&nbsp;<img src="images/purlcreateresults.png"><br><b>Figures 4(a) and 4(b). Creating a PURL</b></p>
-
-			<h4>RESTful API</h4>
-
-			<p>TODO: REST</p>
 
 			<a name="purladvcreate">
 			<h3>2.2 Create an Advanced PURL</h3>
@@ -182,10 +181,6 @@
 			
 			<p align="center"><img src="images/purladvcreateRDF.png"><br><b>Figure 6(c). Directing a &quot;See Also&quot; (303) PURL to an RDF Document</b></p>
 
-			<h4>RESTful API</h4>
-
-			<p>TODO: REST</p>
-
 			<a name="purlmodify">
 			<h3>2.3 Modify an Existing PURL</h3>
 
@@ -196,10 +191,6 @@
 			<p>It may be tedious or even impossible to complete a modification form by hand.  To reduce the need to do so, PURL records may be discovered by a search and the modification form automatically filled in with data from the current record.  See <a href="#purlsearch">2.4 Search for PURL Information</a> for more information.</p>
 			
 			<p align="center"><img src="images/purlmodify.png">&nbsp;<img src="images/purlmodifyresults.png"><br><b>Figures 7(a) and 7(b). Modifying a PURL</b></p>
-
-			<h4>RESTful API</h4>
-
-			<p>TODO: REST</p>
 
 			<a name="purlsearch">
 			<h3>2.4 Search for PURL Information</h3>
@@ -214,10 +205,6 @@
 			
 			<p align="center"><img src="images/purlsearch.png">&nbsp;<img src="images/purlsearchresults.png"><br><b>Figures 8(a) and 8(b). Searching for PURLs</b></p>
 
-			<h4>RESTful API</h4>
-
-			<p>TODO: REST</p>
-
 			<a name="purlvalidate">
 			<h3>2.5 Validate a PURL</h3>
 
@@ -231,10 +218,6 @@
 			
 			<p align="center"><img src="images/purlvalidate.png">&nbsp;<img src="images/purlvalidateresults.png"><br><b>Figures 9(a) and 9(b). Validating a PURL</b></p>
 
-			<h4>RESTful API</h4>
-
-			<p>TODO: REST</p>
-
 			<a name="purldelete">
 			<h3>2.6 Delete a PURL</h3>
 
@@ -245,10 +228,6 @@
 		<p>Figure 10(a) shows an example deletion request and Figure 10(b) shows a typical response upon success.</p>
 			
 			<p align="center"><img src="images/purldelete.png">&nbsp;<img src="images/purldeleteresults.png"><br><b>Figures 10(a) and 10(b). Deleting a PURL</b></p>
-
-			<h4>RESTful API</h4>
-
-			<p>TODO: REST</p>
 		
 		<a name="purls">
 		<h2>3. Administering Batches of PURLs</h2>
@@ -262,17 +241,19 @@
 			<a name="purlscreate">
 			<h3>3.1 Create a Batch of PURLs</h3>
 
-			<p>TODO: REST</p>
+			<p>Batches of PURLs may be created by send an HTTP POST request to the RESTful API at http://$PURL_SERVER$/admin/purls.  The input needs to be an XML document (see an <a href="http://purlz.org/project/purl/documentation/batchPurlsExample.xml">example</a>) using a <a href="http://purlz.org/project/purl/documentation/batchPurls.rng">RELAX NG Schema</a>.  The input XML file will be validated against the schema before processing by the PURL server.</p>
 
 			<a name="purlsmodify">
 			<h3>3.2 Modify a Batch of PURLs</h3>
 
-			<p>TODO: REST</p>
+			<p>Batches of PURLs may be modified by send an HTTP POST request to the RESTful API at http://$PURL_SERVER$/admin/purls.  The input needs to be an XML document (see an <a href="http://purlz.org/project/purl/documentation/batchPurlsExample.xml">example</a>) using a <a href="http://purlz.org/project/purl/documentation/batchPurls.rng">RELAX NG Schema</a>.  The input XML file will be validated against the schema before processing by the PURL server.</p>
+			
+			<p>The input schema for batch modifications is the same as for batch creation, except that is not possible to modify a PURL of type &quot;clone&quot;, &quot;chain&quot; or &quot;partial&quot; since they will be turned into type &quot;302&quot; upon creation.  The created type &quot;302&quot; PURLs may naturally be modified.</p>
 		
 		<a name="user">
 		<h2>4. Administering Users</h2>
 
-			<p>Four actions may be taken on a user: Registration, Modification, Searching or Deletion.  These four actions may be accessed in the PURL Web user interface as shown in Figure 11.  A RESTful API also provides the same four actions.</p>
+			<p>Four actions may be taken on a user: Registration, Modification, Searching or Deletion.  These four actions may be accessed in the PURL Web user interface as shown in Figure 11.  The same four actions may be taken by other PURL clients.  See <a href="#rest">Creating RESTful PURL Clients</a> for details.</p>
 			
 			<p>Registering a user creates a record for that user on a PURL server and allows the user to create PURLs (subject to the security limitations of the PURL server and any restrictions on writing to specific domains).  Modification allows the user record to be updated.  User records may be searched by the general public, although private information is naturally withheld.  Finally, user records may be deleted.  These four actions are described in detail below.</p>
 			
@@ -293,10 +274,6 @@
 			
 			<p align="center"><img src="images/usercreate.png">&nbsp;<img src="images/usercreateresults.png"><br><b>Figures 12(a) and 12(b). Registering a User</b></p>
 
-			<h4>RESTful API</h4>
-
-			<p>TODO: REST</p>
-
 			<a name="usermodify">
 			<h3>4.2 Modify an Existing User</h3>
 
@@ -307,10 +284,6 @@
 			<p>It may be tedious or even impossible to complete a modification form by hand.  To reduce the need to do so, user records may be discovered by a search and the modification form automatically filled in with data from the current record.  See <a href="#usersearch">4.3 Search for User Information</a> for more information.</p>
 			
 			<p align="center"><img src="images/usermodify.png">&nbsp;<img src="images/usermodifyresults.png"><br><b>Figures 13(a) and 13(b). Modifying a User</b></p>
-
-			<h4>RESTful API</h4>
-
-			<p>TODO: REST</p>
 
 			<a name="usersearch">
 			<h3>4.3 Search for User Information</h3>
@@ -325,10 +298,6 @@
 			
 			<p align="center"><img src="images/usersearch.png">&nbsp;<img src="images/usersearchresults.png"><br><b>Figures 14(a) and 14(b). Searching User Records</b></p>
 
-			<h4>RESTful API</h4>
-
-			<p>TODO: REST</p>
-
 			<a name="userdelete">
 			<h3>4.4 Delete a User</h3>
 
@@ -339,17 +308,13 @@
 			<p>Figure 15(a) shows an example deletion request and Figure 15(b) shows a typical response upon success.</p>
 			
 			<p align="center"><img src="images/userdelete.png">&nbsp;<img src="images/userdeleteresults.png"><br><b>Figures 15(a) and 15(b). Deleting a User</b></p>
-
-			<h4>RESTful API</h4>
-
-			<p>TODO: REST</p>
 		
 		<a name="group">
 		<h2>5. Administering Groups of Users</h2>	
 
 			<p>It can be convenient to create groups of users to facilitate administration.  For example, if you create a large number of PURLs and each PURL may be changed by the same list of people, it will be easier to create a single group to represent those people than to individually list all people as maintainers.</p>
 
-			<p>Four actions may be taken on a group: Creation, Modification, Searching or Deletion.  These four actions may be accessed in the PURL Web user interface as shown in Figure 16.  A RESTful API also provides the same four actions.</p>
+			<p>Four actions may be taken on a group: Creation, Modification, Searching or Deletion.  These four actions may be accessed in the PURL Web user interface as shown in Figure 16.  The same four actions may be taken by other PURL clients.  See <a href="#rest">Creating RESTful PURL Clients</a> for details.</p>
 			
 			<p>Creating a group creates a record for that user on a PURL server.  Modification allows the group record to be updated.  Group records may be searched by the general public.  Finally, group records may be deleted.  These four actions are described in detail below.</p>
 			
@@ -366,10 +331,6 @@
 			
 			<p align="center"><img src="images/groupcreate.png">&nbsp;<img src="images/groupcreateresults.png"><br><b>Figures 17(a) and 17(b). Creating a Group</b></p>
 
-			<h4>RESTful API</h4>
-
-			<p>TODO: REST</p>
-
 			<a name="groupmodify">
 			<h3>5.2 Modify an Existing Group</h3>
 
@@ -380,10 +341,6 @@
 				<p>It may be tedious or even impossible to complete a modification form by hand.  To reduce the need to do so, group records may be discovered by a search and the modification form automatically filled in with data from the current record.  See <a href="#groupsearch">5.3 Search for Group Information</a> for more information.</p>
 			
 			<p align="center"><img src="images/groupmodify.png">&nbsp;<img src="images/groupmodifyresults.png"><br><b>Figures 18(a) and 18(b). Modifying a Group</b></p>
-
-			<h4>RESTful API</h4>
-
-			<p>TODO: REST</p>
 
 			<a name="groupsearch">
 			<h3>5.3 Search for Group Information</h3>
@@ -398,10 +355,6 @@
 			
 			<p align="center"><img src="images/groupsearch.png">&nbsp;<img src="images/groupsearchresults.png"><br><b>Figures 19(a) and 19(b). Searching for Group Information</b></p>
 
-			<h4>RESTful API</h4>
-
-			<p>TODO: REST</p>
-
 			<a name="groupdelete">
 			<h3>5.4 Delete a Group</h3>	
 			
@@ -412,10 +365,6 @@
 			<p>TODO: Web UI</p>
 			
 			<p align="center"><img src="images/groupdelete.png">&nbsp;<img src="images/groupdeleteresults.png"><br><b>Figures 20(a) and 20(b). Deleting a Group</b></p>
-
-			<h4>RESTful API</h4>
-
-			<p>TODO: REST</p>
 		
 		<a name="domain">
 		<h2>6. Administering PURL Domains</h2>
@@ -424,7 +373,7 @@
 				
 				<p>Some PURL servers allow one or more domains to act as public spaces.  This is the case with the /NET domain on the oldest PURL server at <a href="http://purl.org/">http://purl.org/</a>.  Public domains allow for subdomains and PURLs to be created within them by the general public.  Most domains, however, will be private and writing to them requires that you are either a maintainer or a writer of those domains.</p>
 
-				<p>Four actions may be taken on a domain: Creation, Modification, Searching or Deletion.  These four actions may be accessed in the PURL Web user interface as shown in Figure 21.  A RESTful API also provides the same four actions.</p>
+				<p>Four actions may be taken on a domain: Creation, Modification, Searching or Deletion.  These four actions may be accessed in the PURL Web user interface as shown in Figure 21.  The same four actions may be taken by other PURL clients.  See <a href="#rest">Creating RESTful PURL Clients</a> for details.</p>
 
 				<p>Creating a domain creates a record for that domain on a PURL server.  Note that the creation of top-level domains generally requires permission from a PURL server administrator and may not complete immediately.  Modification allows the domain record to be updated.  Domain records may be searched by the general public.  Finally, domain records may be deleted.  These four actions are described in detail below.</p>
 			
@@ -442,10 +391,6 @@
 			<p>Figure 22(a) shows the creation of a sample domain.  A maintainer is a user or group authorized to administer a domain and a writer is a user or group authorized to create PURLs within a domain.  Figure 22(b) shows a typical response upon success.</p>
 			
 			<p align="center"><img src="images/domaincreate.png">&nbsp;<img src="images/domaincreateresults.png"><br><b>Figures 22(a) and 22(b). Creating a Domain</b></p>
-
-			<h4>RESTful API</h4>
-
-			<p>TODO: REST</p>
 		
 			<a name="domainmodify">
 			<h3>6.2 Modify an Existing Domain</h3>
@@ -457,10 +402,6 @@
 				<p>It may be tedious or even impossible to complete a modification form by hand.  To reduce the need to do so, domain records may be discovered by a search and the modification form automatically filled in with data from the current record.  See <a href="#domainsearch">6.3 Search for Domain Information</a> for more information.</p>
 			
 			<p align="center"><img src="images/domainmodify.png">&nbsp;<img src="images/domainmodifyresults.png"><br><b>Figures 23(a) and 23(b). Modifying a Domain</b></p>
-
-			<h4>RESTful API</h4>
-
-			<p>TODO: REST</p>
 		
 			<a name="domainsearch">
 			<h3>6.3 Search for Domain Information</h3>
@@ -474,10 +415,6 @@
 			<p>Tombstoned domain records may be searched by selecting the checkbox labeled &quot;Search tombstoned domains&quot; in the <a href="domain.html#search">Domain Search Form</a> as shown in Figure 24(a).  Domain records become tombstoned if they are deleted via the <a href="domain.html#delete">Domain Deletion Form</a>.  More information about tombstoning may be found under <a href="#domaindelete">6.4 Delete a Domain</a>.</p>
 			
 			<p align="center"><img src="images/domainsearch.png">&nbsp;<img src="images/domainsearchresults.png"><br><b>Figures 24(a) and 24(b). Searching for Domain Information</b></p>
-
-			<h4>RESTful API</h4>
-
-			<p>TODO: REST</p>
 		
 			<a name="domaindelete">
 			<h3>6.4 Delete a Domain</h3>
@@ -490,9 +427,10 @@
 			
 			<p align="center"><img src="images/domaindelete.png">&nbsp;<img src="images/domaindeleteresults.png"><br><b>Figures 25(a) and 25(b). Deleting a Domain</b></p>
 
-			<h4>RESTful API</h4>
-
-			<p>TODO: REST</p>
+		<a name="rest">
+		<h2>7. RESTful PURL Clients</h2>
+		
+		<p>Clients for PURL servers may be easily created using the available API.  PURL servers expose services with an interface based on Representational State Transfer (<a href="http://en.wikipedia.org/wiki/REST">REST</a>) architecture.  Examples of code in the Java programming language are provided for all PURL actions in the unit tests of the source code distribution.  See particularly the file <u>src/test/org/purl/test/simplePurlClient.java</u>.  That file used the <a href="http://www.restlet.org/">RESTlet</a> API to make calls to PURL servers.  Additional illustrative code may be found in the <a href="http://www.junit.org/">JUnit</a> tests located in <u>src/test/org/purl/test/simplePurlClientTest.java</u> and called from <u>src/test/org/purl/test/purlClientTestRunner.java</u>.
 	
 	</div>
 
