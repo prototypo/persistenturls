@@ -24,8 +24,8 @@ public final class simplePurlClient {
 	/**
 	 * Create a new PURL via an HTTP POST.
 	 *
-	 * @param  
-	 * @return 
+	 * @param  url, A URL addressing a creation service for PURLs.
+	 * @return The response from the server.
 	 */
 	public String createPurl (String url, Map<String, String> formParameters) throws IOException {
 		
@@ -43,9 +43,9 @@ public final class simplePurlClient {
 	/**
 	 * Modify an existing PURL via an HTTP PUT.
 	 *
-	 * @param A URL addressing a modify service for PURLs.
+	 * @param url, A URL addressing a modify service for PURLs.
 	 * @param An XML file containing the new PURL parameters.
-	 * @return 
+	 * @return The response from the server.
 	 */
 	public String modifyPurl (String url, Map<String, String> formParameters) throws IOException {
 		
@@ -62,7 +62,7 @@ public final class simplePurlClient {
 	/**
 	 * Search for PURLs via an HTTP GET.
 	 *
-	 * @param A URL addressing a search service for PURLs.
+	 * @param url, A URL addressing a search service for PURLs.
 	 * @return The response from the server (a String of XML or text).
 	 */
 	public String searchPurl(String url) throws IOException {
@@ -74,40 +74,44 @@ public final class simplePurlClient {
 	/**
 	 * Validate an existing PURL via an HTTP GET.
 	 *
-	 * @param A URL addressing a validation service for PURLs.
+	 * @param url, A URL addressing a validation service for PURLs.
 	 * @return The response from the server (a String of XML or text).
 	 */
 	public String validatePurl(String url) throws IOException {
 
-		// TODO.
-		return "Not implemented yet.";
+		Client client = new Client(Protocol.HTTP);
+		return client.get(url).getEntity().getText();
 	}
 
 	/**
 	 * Resolve an existing PURL via an HTTP GET.
 	 *
-	 * @param A URL addressing a validation service for PURLs.
+	 * @param url, A URL addressing a validation service for PURLs.
 	 * @return The Location header from the server, if provided, or the status description if not.
 	 */
 	public String resolvePurl(String url) throws IOException {
-
+		
 		Client client = new Client(Protocol.HTTP);
 		Response response = client.get(url);
 		Map<String,Object> responseAttrs = response.getAttributes();
-		Form headersForm = (Form) responseAttrs.get( "org.restlet.http.headers" );
-		String locationHeader = headersForm.getFirst("Location").getValue();
-		if ( locationHeader != "" & locationHeader != null ) {
-			return locationHeader;
-		} else {
-			return response.getStatus().getDescription();
+		String result = null;
+		try {		
+			Form headersForm = (Form) responseAttrs.get( "org.restlet.http.headers" );
+			result = headersForm.getFirst("Location").getValue();
+		} catch (Exception e){
+			// Map<K,V>.get() will throw a NullPointerException if it
+			// can't find the key.  This will occur for PURLs of type 404 and 410.
+			// In that case, we return the HTTP status description (e.g. "Gone").
+			result = response.getStatus().getDescription();
 		}
+		return result;
 	}
 
 	/**
 	 * Delete an existing PURL via an HTTP DELETE.
 	 *
-	 * @param  
-	 * @return 
+	 * @param  url, A URL addressing a validation service for PURLs.
+	 * @return The response from the server.
 	 */
 	public String deletePurl (String url) throws IOException {
 
@@ -123,8 +127,8 @@ public final class simplePurlClient {
 	/**
 	 * Create a batch of PURLs via an HTTP POST.
 	 *
-	 * @param  
-	 * @return 
+	 * @param  url, a String representation of a URL to a batch creation service.
+	 * @return The response from the server in XML.
 	 */
 	public String createPurls (String url, File file) throws IOException {
 		
@@ -140,8 +144,8 @@ public final class simplePurlClient {
 	/**
 	 * Modify a batch of PURLs via an HTTP PUT.
 	 *
-	 * @param  url, a String representation of a URL to 
-	 * @return 
+	 * @param  url, a String representation of a URL to a batch modification service.
+	 * @return The response from the server in XML.
 	 */
 	public String modifyPurls (String url, File file) throws IOException {
 		
@@ -150,6 +154,23 @@ public final class simplePurlClient {
 		// Convert the form data to a RESTlet Representation.
 		Representation rep = new FileRepresentation( file, MediaType.APPLICATION_XML, 3600 );
 		
+		// Request the resource and return its textual content.		
+		return client.put(url, rep).getEntity().getText();
+	}
+
+	/**
+	 * Validate a batch of PURLs via an HTTP PUT.
+	 *
+	 * @param  url, a String representation of a URL to a batch validation service.
+	 * @return The response from the server in XML.
+	 */
+	public String validatePurls (String url, File file) throws IOException {
+
+		Client client = new Client(Protocol.HTTP);
+
+		// Convert the form data to a RESTlet Representation.
+		Representation rep = new FileRepresentation( file, MediaType.APPLICATION_XML, 3600 );
+
 		// Request the resource and return its textual content.		
 		return client.put(url, rep).getEntity().getText();
 	}

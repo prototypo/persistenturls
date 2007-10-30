@@ -97,11 +97,13 @@ public class simplePurlClientTest extends TestCase {
 	public void testValidatePurl() {
 
 		try {
-			String url = "http://" + host + ":" + port + "/admin/validate/testdomain/testPURL";
+			String url = "http://" + host + ":" + port + "/admin/targeturl/testdomain/testPURL";
 
 			String result = client.validatePurl(url);
+			// TODO: The server should add a closing tag!
+			String control = "<purl><id>/testdomain/testPURL</id>";
 			assertEquals("Cannot validate PURL.",
-						"TODO",
+						control,
 						result);
 			} catch (Exception e) {
 				reportException("Failed to resolve URL: ", e);
@@ -190,14 +192,48 @@ public class simplePurlClientTest extends TestCase {
 								System.getProperty("file.separator"), 
 								"purlsmodify.xml");
 
-			String errMsg = "Cannot modify a batch of PURLs.";
+			String errMsg = "Cannot modify a batch of PURLs: ";
 			// TODO: Fix the control as soon as we know what comes back from a success!
 			String control = "<purl><pid>/tld/oclc/test303/</pid></purl>";
 			String test = client.modifyPurls(url, file);
 			
 			// XML response, so use assertXMLEqual.
-			XMLAssert.assertXMLEqual(errMsg, control, test);
+			XMLAssert.assertXMLEqual(errMsg + test, control, test);
 			
+		} catch (Exception e) {
+			reportException("Failed to resolve URL: ", e);
+		}
+	}
+
+	// Test modifying a batch of PURLs via an HTTP PUT.
+	public void testValidatePurls() {
+
+		try {
+			String url = "http://" + host + ":" + port + "/admin/targeturls/";
+
+			File file = new File(System.getProperty("user.dir") + 
+								System.getProperty("file.separator") +
+								"test" + 
+								System.getProperty("file.separator") + 
+								"testdata" + 
+								System.getProperty("file.separator"), 
+								"purlsvalidate.xml");
+
+			String errMsg = "Cannot validate a batch of PURLs: ";
+			// TODO: Fix the control as soon as we know what comes back from a success!
+			String controlFileName = System.getProperty("user.dir") + 
+								System.getProperty("file.separator") +
+								"test" + 
+								System.getProperty("file.separator") + 
+								"testdata" + 
+								System.getProperty("file.separator"), 
+								"purlsvalidatecontrol.xml";
+			String control = readFile(controlFileName);
+			String test = client.validatePurls(url, file);
+
+			// XML response, so use assertXMLEqual.
+			XMLAssert.assertXMLEqual(errMsg + test, control, test);
+
 		} catch (Exception e) {
 			reportException("Failed to resolve URL: ", e);
 		}
@@ -301,11 +337,6 @@ public class simplePurlClientTest extends TestCase {
 	public void testCreateClonePurl() {
 		createPurl("/testdomain/testClonePURL", "clone", null, null, null, true);
 	}
-
-	// Test creating a *bad* Clone PURL via an HTTP POST.
-	public void testCreateBadClonePurl() {
-		createPurl("/testdomain/testBadClonePURL", "clone", null, null, null, false);
-	}
 	
 	// Test resolving an existing Clone PURL via an HTTP GET.
 	public void testResolveClonePurl() {
@@ -320,11 +351,6 @@ public class simplePurlClientTest extends TestCase {
 	// Test creating a new Chain PURL via an HTTP POST.
 	public void testCreateChainPurl() {
 		createPurl("/testdomain/testChainPURL", "chain", "testuser", null, null, true);
-	}
-
-	// Test creating a new *bad* Chain PURL via an HTTP POST.
-	public void testCreateBadChainPurl() {
-		createPurl("/testdomain/testBadChainPURL", "chain", "testuser", null, null, false);
 	}
 	
 	// Test resolving an existing Chain PURL via an HTTP GET.
@@ -645,7 +671,7 @@ public class simplePurlClientTest extends TestCase {
 	  * @param expectSuccess Whether the test should expect to succeed.  If false, it will expect to fail.
 	*/
 	public void createPurl(String path, String type, String maintainers, String target, String seealso, boolean useBasepurl, boolean expectSuccess) {
-
+		
 		try {
 			String url = "http://" + host + ":" + port + "/admin/purl" + path;
 			String control = "<purl><pid>" + path + "</pid>";
@@ -657,9 +683,7 @@ public class simplePurlClientTest extends TestCase {
 				// For most types of PURLS.
 				control += "<type>" + type + "</type>";
 			}
-			
-			String purlName = path.substring(path.lastIndexOf('/') + 1, path.length() );
-
+						
 			Map<String, String> formParameters = new HashMap<String,String> ();
 			formParameters.put("type", type);
 			
@@ -689,36 +713,29 @@ public class simplePurlClientTest extends TestCase {
 			control += "</purl>";
 
 			String errMsg = "Cannot create a new " + type + " PURL: ";
-			String test = client.createPurl(url, formParameters);
 			
+			String test = client.createPurl(url, formParameters);
+						
 			// Convert the test and control values to lower case for clean comparison.
 			String testLC = test.toLowerCase();
 			String controlLC = control.toLowerCase();
 			
 			if (expectSuccess) {
 				// This test expects to succeed.
-				// XML response, so use assertXMLEqual.
-				XMLAssert.assertXMLEqual(errMsg + test, controlLC, testLC);
-			} else if ( type == "chain" && !expectSuccess ) {
-				// This is a chain PURL that expects to fail its test.
-				//TODONEXT: Change the control text once Brian fixes this.
-				// Override the control text:
-				control = "Resource: " + purlName + " already exists.";
-				controlLC = control.toLowerCase();
-				// Textual response, so use assertEquals().
-				assertEquals(errMsg, controlLC, testLC);
-			} else if ( type == "clone" && !expectSuccess ) {
-				// This is a clone PURL that expects to fail its test.
-				//TODONEXT: Change the control text once Brian fixes this.
-				// Override the control text:
-				control = "Resource: " + purlName + " already exists.";
-				controlLC = control.toLowerCase();
-				// Textual response, so use assertEquals().
-				assertEquals(errMsg, controlLC, testLC);
+				try {
+					// XML response, so use assertXMLEqual.
+					XMLAssert.assertXMLEqual(errMsg + test, controlLC, testLC);
+				} catch (Throwable e){
+					// XMLUnit can throw an error if the test or control are not XML.
+					// Unfortunately, the error is very poorly described
+					// ("Content is not allowed in prolog."), so we change
+					// it here to avoid confusion.
+					throw new Exception ("Bad input.  XMLUnit expected XML, but received plain text.");
+				}
 			} else {
-				// This test expects to fail (and is not a chain or a clone PURL).
+				// This test expects to fail.
 				// Override the control text:
-				control = "Resource: " + purlName + " already exists.";
+				control = "Resource: " + path + " already exists.";
 				controlLC = control.toLowerCase();
 				// Textual response, so use assertEquals().
 				assertEquals(errMsg, controlLC, testLC);
@@ -734,6 +751,7 @@ public class simplePurlClientTest extends TestCase {
 	  * @param control An expected response string from the resolution.  Generally, this will be a URL from a PURL's Location header.
 	*/
 	public void resolvePurl(String path, String control) {
+		
 		try {
 			String url = "http://" + host + ":" + port + path;
 
@@ -741,11 +759,15 @@ public class simplePurlClientTest extends TestCase {
 			String test = client.resolvePurl(url);
 			
 			// Convert the test and control values to lower case for clean comparison.
-			String testLC = test.toLowerCase();
-			String controlLC = control.toLowerCase();
+			if ( test != null ) {
+				test = test.toLowerCase();
+			}
+			if ( control != null ) {
+				control = control.toLowerCase();
+			}
 			
 			// Textual response, so use assertEquals().
-			assertEquals(errMsg + test, controlLC, testLC);
+			assertEquals(errMsg + test, control, test);
 			
 		} catch (Exception e) {
 			reportException("Failed to resolve URL: ", e);
@@ -876,6 +898,19 @@ public class simplePurlClientTest extends TestCase {
 			reportException("Failed to resolve URL: ", e);
 		}
 	}		
+
+    public static String readFile(String filename) throws IOException {
+        RandomAccessFile file = new RandomAccessFile(filename, "r");
+        int rem = file.length();
+        if (rem > 1000000) throw new IOException("file exceeds 1MB");
+
+        byte[] b = new byte[rem];
+        while (rem > 0)
+            rem -= file.read(b, b.length - rem, rem);
+        file.close();
+
+        return new String(bytes);
+    }
 
 	// Handle any exceptions encountered above.  For JUnit tests, it
 	// is enough to call JUnit's fail() method.

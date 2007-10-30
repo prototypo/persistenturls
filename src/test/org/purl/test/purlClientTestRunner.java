@@ -53,7 +53,7 @@ public class purlClientTestRunner {
         suite.addTest(new simplePurlClientTest("testRecreatePurl"));
         suite.addTest(new simplePurlClientTest("testModifyPurl"));
         // READY: suite.addTest(new simplePurlClientTest("testSearchPurl"));
-        // NOTYET: suite.addTest(new simplePurlClientTest("testValidatePurl"));
+        suite.addTest(new simplePurlClientTest("testValidatePurl"));
         suite.addTest(new simplePurlClientTest("testResolvePurl"));
         suite.addTest(new simplePurlClientTest("testDeletePurl"));
         suite.addTest(new simplePurlClientTest("testRedeletePurl"));
@@ -74,10 +74,10 @@ public class purlClientTestRunner {
         suite.addTest(new simplePurlClientTest("testResolve307Purl"));
 
         suite.addTest(new simplePurlClientTest("testCreate404Purl"));
-        // READY: suite.addTest(new simplePurlClientTest("testResolve404Purl"));
+        suite.addTest(new simplePurlClientTest("testResolve404Purl"));
 
         suite.addTest(new simplePurlClientTest("testCreate410Purl"));
-        // READY: suite.addTest(new simplePurlClientTest("testResolve410Purl"));
+        suite.addTest(new simplePurlClientTest("testResolve410Purl"));
 
         suite.addTest(new simplePurlClientTest("testCreateClonePurl"));
         suite.addTest(new simplePurlClientTest("testResolveClonePurl"));
@@ -86,7 +86,7 @@ public class purlClientTestRunner {
         suite.addTest(new simplePurlClientTest("testResolveChainPurl"));
 
         suite.addTest(new simplePurlClientTest("testCreatePartialPurl"));
-        // READY: suite.addTest(new simplePurlClientTest("testResolvePartialPurl"));
+        suite.addTest(new simplePurlClientTest("testResolvePartialPurl"));
 
         suite.addTest(new simplePurlClientTest("testDelete301Purl"));
         suite.addTest(new simplePurlClientTest("testDelete302Purl"));
@@ -97,9 +97,6 @@ public class purlClientTestRunner {
         suite.addTest(new simplePurlClientTest("testDeleteClonePurl"));
         suite.addTest(new simplePurlClientTest("testDeleteChainPurl"));
         suite.addTest(new simplePurlClientTest("testDeletePartialPurl"));
-
-		// READY, but update control text: suite.addTest(new simplePurlClientTest("testCreateBadClonePurl"));
-		// READY, but update control text: suite.addTest(new simplePurlClientTest("testCreateBadChainPurl"));
 
 		/*
 			Batch PURL actions
