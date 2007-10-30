@@ -1,5 +1,7 @@
 package org.purl.accessor.command;
 
+import java.net.UnknownHostException;
+
 import org.purl.accessor.NKHelper;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFRequest;
@@ -10,6 +12,7 @@ import org.ten60.netkernel.xml.xda.XPathLocationException;
 
 import com.ten60.netkernel.urii.IURRepresentation;
 import com.ten60.netkernel.urii.aspect.StringAspect;
+import com.ten60.netkernel.util.NetKernelException;
 
 public class PURLValidatorCommand extends PURLResolveCommand {
 
@@ -25,6 +28,7 @@ public class PURLValidatorCommand extends PURLResolveCommand {
             if(purl!=null) {
                 try {
                     String type = purl.getXDA().getText("/purl/type", true);
+                    String pid = purl.getXDA().getText("/purl/pid", true);
 
                     if(type.equals("404") || type.equals("410")) {
                         sb.append("<status result=\"validated\">Validated</status></purl>");
@@ -37,13 +41,37 @@ public class PURLValidatorCommand extends PURLResolveCommand {
                             url = purl.getXDA().getText("/purl/target/url", true);
                         }
 
-                        INKFRequest req = context.createSubRequest("active:httpGet");
-                        req.addArgument("url", url);
-                        IURRepresentation iur = context.issueSubRequest(req);
+                        try {
+                            INKFRequest req = context.createSubRequest("active:httpGet");
+                            req.addArgument("url", url);
+                            IURRepresentation iur = context.issueSubRequest(req);
 
-                        req = context.createSubRequest("active:httpResponseCodeFilter");
-                        req.addArgument("operand", iur);
-                        context.issueSubRequest(req);
+                            req = context.createSubRequest("active:httpResponseCodeFilter");
+                            req.addArgument("operand", iur);
+
+                            context.issueSubRequest(req);
+                        } catch(NKFException e) {
+                            String error = null;
+                            Throwable t = e.getCause();
+                            if(t instanceof NetKernelException) {
+                                t=t.getCause();
+                                if(t instanceof UnknownHostException) {
+                                    error = "Cannot find host: " + url;
+                                } else if(t instanceof NetKernelException) {
+                                    error = "Error resolving PURL target: " + url;
+                                }
+                            }
+
+                            if(error==null) {
+                                error = "Could not validate purl: " + pid;
+                            }
+
+                            sb.append("<status result=\"failure\">ERROR: ");
+                            sb.append(error);
+                            sb.append("</status></purl>");
+                        }
+
+                        sb.append("</purl>");
 
                     } else {
                         System.out.println("**********");
