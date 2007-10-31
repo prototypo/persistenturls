@@ -6,7 +6,7 @@
 			<maintainer id="testuser"/>
 			<maintainer id="testuser2"/>
 		</maintainers>
-		<target url="http://example.com/test301target/"/>
+		<target url="http://zepheira.com/"/>
 	</purl>
 <!-- Type 302.  Simple redirection to a target URL -->
 	<purl pid="/testdomain/test302" type="302">

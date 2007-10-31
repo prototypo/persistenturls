@@ -1,9 +1,27 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<purls>
-	<purl pid="/testdomain/test301" type="301" />
-	<purl pid="/testdomain/test302" type="302" />
-	<purl pid="/testdomain/test303/" type="303" />
-	<purl pid="/testdomain/test307" type="307" />
-	<purl pid="/testdomain/test404" type="404" />
-	<purl pid="/testdomain/test410" type="410" />
-</purls>
+<purl-batch-validate>
+	<purl>
+		<id>/testdomain/test301</id>
+		<status results="success">Success</status>
+	</purl>
+	<purl>
+		<id>/testdomain/test302</id>
+		<status result="failure">ERROR: Error resolving PURL target: http://example.com/test302target/</status>
+	</purl>
+	<purl>
+		<id>/testdomain/test303/</id>
+		<status result="failure">ERROR: Error resolving PURL target: http://example.com/see/also/some/more.xml</status>
+	</purl>
+	<purl>
+		<id>/testdomain/test307</id>
+		<status result="failure">ERROR: Error resolving PURL target: http://example.com/test307target/</status>
+	</purl>
+	<purl>
+		<id>/testdomain/test404</id>
+		<status result="failure">ERROR: PURL does not exist.</status>
+	</purl>
+	<purl>
+		<id>/testdomain/test410</id>
+		<status result="failure">ERROR: PURL does not exist.</status>
+	</purl>
+</purl-batch-validate>
