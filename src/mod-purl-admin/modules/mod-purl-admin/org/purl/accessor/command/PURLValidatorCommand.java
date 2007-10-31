@@ -48,8 +48,10 @@ public class PURLValidatorCommand extends PURLResolveCommand {
 
                             req = context.createSubRequest("active:httpResponseCodeFilter");
                             req.addArgument("operand", iur);
-
                             context.issueSubRequest(req);
+
+                            sb.append("<status results=\"success\">Success</status>");
+
                         } catch(NKFException e) {
                             String error = null;
                             Throwable t = e.getCause();
