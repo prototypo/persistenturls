@@ -18,10 +18,10 @@
 	</purl>
 	<purl>
 		<id>/testdomain/test404</id>
-		<status result="failure">ERROR: PURL does not exist.</status>
+		<status results="success">Success</status>
 	</purl>
 	<purl>
 		<id>/testdomain/test410</id>
-		<status result="failure">ERROR: PURL does not exist.</status>
+		<status results="success">Success</status>
 	</purl>
 </purl-batch-validate>
