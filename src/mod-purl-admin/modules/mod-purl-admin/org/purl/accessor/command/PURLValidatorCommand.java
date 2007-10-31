@@ -70,7 +70,7 @@ public class PURLValidatorCommand extends PURLResolveCommand {
 
                             sb.append("<status result=\"failure\">ERROR: ");
                             sb.append(error);
-                            sb.append("</status></purl>");
+                            sb.append("</status>");
                         }
 
                         sb.append("</purl>");
