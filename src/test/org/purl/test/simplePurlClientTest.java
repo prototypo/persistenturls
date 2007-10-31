@@ -19,8 +19,6 @@ import java.util.*;
  * @version $Rev$
  */
 public class simplePurlClientTest extends TestCase {
-    
-	// TODO: Include test results in all error messages.
 	
 	private simplePurlClient client;
 	
@@ -100,8 +98,7 @@ public class simplePurlClientTest extends TestCase {
 			String url = "http://" + host + ":" + port + "/admin/targeturl/testdomain/testPURL";
 
 			String result = client.validatePurl(url);
-			// TODO: The server should add a closing tag!
-			String control = "<purl><id>/testdomain/testPURL</id>";
+			String control = "<purl><id>/testdomain/testPURL</id><status results=\"success\">Success</status></purl>";
 			assertEquals("Cannot validate PURL.",
 						control,
 						result);
