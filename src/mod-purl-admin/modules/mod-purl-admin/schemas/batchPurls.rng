@@ -10,148 +10,132 @@ Mailing list: http://lists.xmlschemata.org/examplotron/
 CVS: http://cvs.xmlschemata.org/cvsweb.cgi/downloads/examplotron/
 
 -->
-<grammar
-    xmlns="http://relaxng.org/ns/structure/1.0"
-    xmlns:ega="http://examplotron.org/annotations/"
-    xmlns:sch="http://www.ascc.net/xml/schematron"
-    datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
-
-<define name="target">
-    <element name="target">
-      <optional>
-        <attribute name="url">
-          <ega:example url="http://example.com/test307/"/>
-        </attribute>
-      </optional>
-    </element>
-</define>
-
-<define name="seealso">
-    <element name="seealso">
-        <optional>
-          <attribute name="url">
-                <ega:example url="http://example.com/see/also/some/more.xml"/>
-          </attribute>
-        </optional>
-        <text>
-          <ega:example>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:ega="http://examplotron.org/annotations/" xmlns:sch="http://www.ascc.net/xml/schematron" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+	<define name="target">
+		<element name="target">
+			<optional>
+				<attribute name="url">
+					<ega:example url="http://example.com/test307/"/>
+				</attribute>
+			</optional>
+		</element>
+	</define>
+	<define name="seealso">
+		<element name="seealso">
+			<optional>
+				<attribute name="url">
+					<ega:example url="http://example.com/see/also/some/more.xml"/>
+				</attribute>
+			</optional>
+			<text>
+				<ega:example>
         This is the first description.
         </ega:example>
-        </text>
-    </element>
-</define>
-
-<define name="basepurl">
-    <element name="basepurl">
-      <optional>
-        <attribute name="path">
-          <ega:example path="/NET/an/old/PURL"/>
-        </attribute>
-      </optional>
-    </element>
-</define>
-
-<define name="maintainers">
-    <element name="maintainers">
-      <oneOrMore>
-        <element name="maintainer">
-          <optional>
-            <attribute name="id">
-              <ega:example id="uche"/>
-            </attribute>
-          </optional>
-        </element>
-      </oneOrMore>
-    </element>
-</define>
-
-<define name="type301">
-  <attribute name="type">
-    <choice>
-      <value>301</value>
-      <value>302</value>
-      <value>307</value>
-      <value>partial</value>
-    </choice>
-  </attribute>
-  <ref name="maintainers"/>
-  <ref name="target"/>
-  <zeroOrMore>
-    <ref name="seealso"/>
-  </zeroOrMore>
-  <zeroOrMore>
-    <ref name="basepurl"/>
-  </zeroOrMore>
-</define>
-
-<define name="type303">
-  <attribute name="type">
-    <choice>
-      <value>303</value>
-    </choice>
-  </attribute>
-  <ref name="maintainers"/>
-  <zeroOrMore>
-    <ref name="target"/>
-  </zeroOrMore>
-  <ref name="seealso"/>
-  <zeroOrMore>
-    <ref name="basepurl"/>
-  </zeroOrMore>
-</define>
-
-<define name="type401">
-  <attribute name="type">
-    <choice>
-        <value>clone</value>
-        <value>chain</value>
-    </choice>
-  </attribute>
-  <zeroOrMore>
-    <ref name="maintainers"/>
-  </zeroOrMore>
-  <zeroOrMore>
-    <ref name="target"/>
-  </zeroOrMore>
-  <zeroOrMore>
-    <ref name="seealso"/>
-  </zeroOrMore>
-  <ref name="basepurl"/>
-</define>
-
-<define name="type404">
-  <attribute name="type">
-    <choice>
-      <value>404</value>
-      <value>410</value>
-    </choice>
-  </attribute>
-  <ref name="maintainers"/>
-  <zeroOrMore>
-    <ref name="target"/>
-  </zeroOrMore>
-  <zeroOrMore>
-    <ref name="basepurl"/>
-  </zeroOrMore>
-</define>
-
-  <start>
-    <element name="purls">
-      <oneOrMore>
-        <element name="purl">
-          <optional>
-            <attribute name="pid">
-                <ega:example pid="/tld/oclc/test303/"/>
-            </attribute>
-          </optional>
-          <choice>
-              <ref name="type301"/>
-              <ref name="type303"/>
-              <ref name="type401"/>
-              <ref name="type404"/>
-          </choice>
-        </element>
-      </oneOrMore>
-    </element>
-  </start>
+			</text>
+		</element>
+	</define>
+	<define name="basepurl">
+		<element name="basepurl">
+			<optional>
+				<attribute name="path">
+					<ega:example path="/NET/an/old/PURL"/>
+				</attribute>
+			</optional>
+		</element>
+	</define>
+	<define name="maintainers">
+		<element name="maintainers">
+			<oneOrMore>
+				<element name="maintainer">
+					<optional>
+						<attribute name="id">
+							<ega:example id="uche"/>
+						</attribute>
+					</optional>
+				</element>
+			</oneOrMore>
+		</element>
+	</define>
+	<define name="type301">
+		<attribute name="type">
+			<choice>
+				<value>301</value>
+				<value>302</value>
+				<value>307</value>
+				<value>partial</value>
+			</choice>
+		</attribute>
+		<ref name="maintainers"/>
+		<ref name="target"/>
+		<zeroOrMore>
+			<ref name="seealso"/>
+		</zeroOrMore>
+		<zeroOrMore>
+			<ref name="basepurl"/>
+		</zeroOrMore>
+	</define>
+	<define name="type303">
+		<attribute name="type">
+			<choice>
+				<value>303</value>
+			</choice>
+		</attribute>
+		<ref name="maintainers"/>
+		<zeroOrMore>
+			<ref name="target"/>
+		</zeroOrMore>
+		<ref name="seealso"/>
+		<zeroOrMore>
+			<ref name="basepurl"/>
+		</zeroOrMore>
+	</define>
+	<define name="type401">
+		<attribute name="type">
+			<choice>
+				<value>clone</value>
+				<value>chain</value>
+			</choice>
+		</attribute>
+		<ref name="maintainers"/>
+		<zeroOrMore>
+			<ref name="target"/>
+		</zeroOrMore>
+		<zeroOrMore>
+			<ref name="seealso"/>
+		</zeroOrMore>
+		<ref name="basepurl"/>
+	</define>
+	<define name="validation">
+		<zeroOrMore>
+			<attribute name="type">
+				<choice>
+					<value>301</value>
+					<value>302</value>
+					<value>303</value>
+					<value>307</value>
+					<value>404</value>
+					<value>410</value>
+				</choice>
+			</attribute>
+		</zeroOrMore>
+	</define>
+	<start>
+		<element name="purls">
+			<oneOrMore>
+				<element name="purl">
+					<optional>
+						<attribute name="pid">
+							<ega:example pid="/tld/oclc/test303/"/>
+						</attribute>
+					</optional>
+					<choice>
+						<ref name="type301"/>
+						<ref name="type303"/>
+						<ref name="type401"/>
+						<ref name="validation"/>
+					</choice>
+				</element>
+			</oneOrMore>
+		</element>
+	</start>
 </grammar>

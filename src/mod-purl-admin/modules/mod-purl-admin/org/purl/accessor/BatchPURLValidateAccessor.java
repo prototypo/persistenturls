@@ -35,8 +35,8 @@ public class BatchPURLValidateAccessor extends NKFAccessorImpl {
 
         // TODO: Make this more declarative
         // TODO: What's the best way to do this?
-       // if(xdaRO.isTrue("/b/text()='t'")) {
-        if(true) {
+        if(xdaRO.isTrue("/b/text()='t'")) {
+        //if(true) {
             StringBuffer sb = new StringBuffer("<purl-batch-validate>");
 
             IXDAReadOnlyIterator xdaROItor = xdaParam.getXDA().readOnlyIterator("/purls/purl");

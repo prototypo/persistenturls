@@ -77,7 +77,7 @@ public class GetResourceCommand extends PURLCommand {
 
                     // Default response code of 200 is fine
                     IURRepresentation rep = NKHelper.setResponseCode(context, asp, 200);
-                    rep = NKHelper.attachGoldenThread(context, "gt:" + type + ":" + id , rep);
+                    rep = NKHelper.attachGoldenThread(context, "gt:" + path , rep);
                     retValue = context.createResponseFrom(rep);
                     retValue.setCacheable();
                     retValue.setMimeType(NKHelper.MIME_XML);

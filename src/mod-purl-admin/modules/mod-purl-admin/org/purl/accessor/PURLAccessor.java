@@ -246,7 +246,7 @@ public class PURLAccessor extends AbstractAccessor {
             boolean permitted = false;
             String maintainers = params.getValue("maintainers");
 
-            StringTokenizer st = new StringTokenizer(maintainers, ",");
+            StringTokenizer st = new StringTokenizer(maintainers, ",\n");
 
             List<String> notFoundList = null;
 

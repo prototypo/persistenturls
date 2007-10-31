@@ -36,7 +36,7 @@ public class PURLValidatorCommand extends PURLResolveCommand {
 
                         String url = null;
                         if(type.equals("303")) {
-                            url = purl.getXDA().getText("/purl/seealso/url", true);
+                            url = purl.getXDA().getText("/purl/seealso", true);
                         } else {
                             url = purl.getXDA().getText("/purl/target/url", true);
                         }
@@ -86,7 +86,6 @@ public class PURLValidatorCommand extends PURLResolveCommand {
             }
 
             System.out.println(sb.toString());
-
             retValue = context.createResponseFrom(new StringAspect(sb.toString()));
             retValue.setMimeType("text/xml");
 
