@@ -10,6 +10,7 @@ import org.ten60.netkernel.layer1.nkf.NKFException;
 import org.ten60.netkernel.xml.representation.IAspectXDA;
 import org.ten60.netkernel.xml.xda.XPathLocationException;
 
+import com.ten60.netkernel.urii.IURAspect;
 import com.ten60.netkernel.urii.IURRepresentation;
 import com.ten60.netkernel.urii.aspect.StringAspect;
 import com.ten60.netkernel.util.NetKernelException;
@@ -85,9 +86,12 @@ public class PURLValidatorCommand extends PURLResolveCommand {
                 sb.append("<status result=\"failure\">ERROR: PURL does not exist.</status></purl>");
             }
 
-            System.out.println(sb.toString());
-            retValue = context.createResponseFrom(new StringAspect(sb.toString()));
-            retValue.setMimeType("text/xml");
+            IURAspect asp = new StringAspect(sb.toString());
+            IURRepresentation rep = NKHelper.setResponseCode(context, asp, 200);
+            rep = NKHelper.attachGoldenThread(context, "gt:" + path , rep);
+            retValue = context.createResponseFrom(rep);
+            retValue.setCacheable();
+            retValue.setMimeType(NKHelper.MIME_XML);
 
         } catch(NKFException nfe) {
             nfe.printStackTrace();
