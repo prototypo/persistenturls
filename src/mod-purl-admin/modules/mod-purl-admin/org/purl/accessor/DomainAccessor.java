@@ -113,7 +113,7 @@ public class DomainAccessor extends AbstractAccessor {
 
         commandMap.put("GET", new GetResourceCommand(TYPE, domainResolver, domainStorage));
         commandMap.put("POST", new CreateResourceCommand(TYPE, domainResolver, domainCreator, null, domainStorage));
-        commandMap.put("DELETE", new DeleteResourceCommand(TYPE, domainResolver, domainStorage));
+        commandMap.put("DELETE", new DeleteResourceCommand(TYPE, domainResolver, new DefaultResourceDeleter(domainResolver), domainStorage));
         commandMap.put("PUT", new UpdateResourceCommand(TYPE, domainResolver, domainCreator, domainStorage));
     }
 

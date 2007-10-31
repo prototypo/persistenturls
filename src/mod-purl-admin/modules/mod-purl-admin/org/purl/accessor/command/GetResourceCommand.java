@@ -130,20 +130,22 @@ public class GetResourceCommand extends PURLCommand {
                         roXDAItor.next();
                         String uri = roXDAItor.getText("docid", true);
                         // We only care about appropriately typed results
-                        if(uri.startsWith("ffcpl:/" + this.type)) {
+                        if(uri.startsWith("ffcpl:/" + this.type) || (uri.startsWith("ffcpl:/storedpurls") && this.type.equals("purl"))) {
                             String scoreStr = roXDAItor.getText("score", true);
                             double score = Double.valueOf(scoreStr).doubleValue();
 
                             if(!alreadyDoneSet.contains(uri) && (score > 0.5)) {
-                                IURAspect iur = resStorage.getResource(context, uri);
-                                if(iur != null) {
-                                    // Filter the response if we have a filter
-                                    if(filter!=null) {
-                                        iur = filter.filter(context, iur);
-                                    }
+                                if(resStorage.resourceExists(context, uri)) {
+                                    IURAspect iur = resStorage.getResource(context, uri);
+                                    if(iur != null) {
+                                        // Filter the response if we have a filter
+                                        if(filter!=null) {
+                                            iur = filter.filter(context, iur);
+                                        }
 
-                                    StringAspect sa = (StringAspect) context.transrept(iur, IAspectString.class);
-                                    sb.append(sa.getString());
+                                        StringAspect sa = (StringAspect) context.transrept(iur, IAspectString.class);
+                                        sb.append(sa.getString());
+                                    }
                                 }
                                 alreadyDoneSet.add(uri);
                             }

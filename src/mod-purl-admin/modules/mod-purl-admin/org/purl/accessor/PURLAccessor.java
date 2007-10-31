@@ -10,6 +10,7 @@ import java.util.StringTokenizer;
 
 import org.purl.accessor.command.CreateResourceCommand;
 import org.purl.accessor.command.DeleteResourceCommand;
+import org.purl.accessor.command.GetResourceCommand;
 import org.purl.accessor.command.PURLCommand;
 import org.purl.accessor.command.UpdateResourceCommand;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
@@ -47,7 +48,8 @@ public class PURLAccessor extends AbstractAccessor {
 
         commandMap.put("POST", new CreateResourceCommand(TYPE, purlResolver, purlCreator, null, purlStorage));
         commandMap.put("PUT", new UpdateResourceCommand(TYPE, purlResolver, purlCreator, purlStorage));
-        commandMap.put("DELETE", new DeleteResourceCommand(TYPE, purlResolver, purlStorage));
+        commandMap.put("DELETE", new DeleteResourceCommand(TYPE, purlResolver, new PURLDeleter(purlResolver), purlStorage));
+        commandMap.put("GET", new GetResourceCommand(TYPE, purlResolver, new DefaultResourceStorage()));
     }
 
     protected PURLCommand getCommand(INKFConvenienceHelper context, String method) {
@@ -68,6 +70,10 @@ public class PURLAccessor extends AbstractAccessor {
             IURAspect retValue = null;
 
             String purl = NKHelper.getArgument(context, "path");
+            if(purl.startsWith("ffcpl:")) {
+                purl = purl.substring(6);
+            }
+
             String existingPurl = params.getValue("basepurl");
             String oldURI = purlResolver.getURI(existingPurl);
 
@@ -118,6 +124,9 @@ public class PURLAccessor extends AbstractAccessor {
         private static IURAspect createClonedPURL(INKFConvenienceHelper context, IAspectNVP params) throws NKFException {
             IURAspect retValue = null;
             String purl = NKHelper.getArgument(context, "path");
+            if(purl.startsWith("ffcpl:")) {
+                purl = purl.substring(6);
+            }
             String existingPurl = params.getValue("basepurl");
             String oldURI = purlResolver.getURI(existingPurl);
 
@@ -148,9 +157,13 @@ public class PURLAccessor extends AbstractAccessor {
 
             StringBuffer sb = new StringBuffer("<purl>");
             String target = params.getValue("target");
+            String purl = NKHelper.getArgument(context, "path");
+            if(purl.startsWith("ffcpl:")) {
+                purl = purl.substring(6);
+            }
 
             sb.append("<pid>");
-            sb.append(NKHelper.getArgument(context, "path"));
+            sb.append(purl);
             sb.append("</pid>");
             sb.append("<type>partial</type>");
 
@@ -185,9 +198,13 @@ public class PURLAccessor extends AbstractAccessor {
 
             StringBuffer sb = new StringBuffer("<purl>");
             String target = params.getValue("target");
+            String purl = NKHelper.getArgument(context, "path");
+            if(purl.startsWith("ffcpl:")) {
+                purl = purl.substring(6);
+            }
 
             sb.append("<pid>");
-            sb.append(NKHelper.getArgument(context, "path"));
+            sb.append(purl);
             sb.append("</pid>");
             sb.append("<type>");
             sb.append(type);
@@ -295,13 +312,6 @@ public class PURLAccessor extends AbstractAccessor {
 
         public IURAspect createResource(INKFConvenienceHelper context, IAspectNVP params) throws NKFException {
             IURAspect retValue = null;
-            Iterator itor = context.getThisRequest().getArguments();
-            System.out.println("ARGUMENTS:");
-            while(itor.hasNext()) {
-                System.out.println((String)itor.next());
-            }
-
-            System.out.println("**URL: " + context.getThisRequest().getArgument("requestURL"));
 
             // TODO: Validate the PURLs against the existing character restrictions
 

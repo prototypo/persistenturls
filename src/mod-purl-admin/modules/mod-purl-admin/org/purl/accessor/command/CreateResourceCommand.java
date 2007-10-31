@@ -55,12 +55,15 @@ public class CreateResourceCommand extends PURLCommand {
         try {
             IAspectNVP params = getParams(context);
 
-            System.out.println(params.getValue("type"));
             String id = NKHelper.getLastSegment(context);
 
             if(resStorage.resourceExists(context, uriResolver)) {
                 // Cannot create the same name
                 String path = context.getThisRequest().getArgument("path");
+                if(path.startsWith("ffcpl:")) {
+                    path = path.substring(6);
+                }
+
                 String message = "Resource: " + path + " already exists.";
                 IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect(message), 409);
                 retValue = context.createResponseFrom(rep);

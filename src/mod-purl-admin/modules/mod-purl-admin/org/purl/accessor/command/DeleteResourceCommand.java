@@ -19,6 +19,7 @@ package org.purl.accessor.command;
  */
 
 import org.purl.accessor.NKHelper;
+import org.purl.accessor.ResourceDeleter;
 import org.purl.accessor.ResourceStorage;
 import org.purl.accessor.URIResolver;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
@@ -31,9 +32,11 @@ import com.ten60.netkernel.urii.aspect.StringAspect;
 
 public class DeleteResourceCommand extends PURLCommand {
 
+    ResourceDeleter resDeleter;
 
-    public DeleteResourceCommand(String type, URIResolver uriResolver, ResourceStorage resStorage) {
+    public DeleteResourceCommand(String type, URIResolver uriResolver, ResourceDeleter resDeleter, ResourceStorage resStorage) {
         super(type, uriResolver, resStorage);
+        this.resDeleter = resDeleter;
     }
 
     @Override
@@ -46,18 +49,20 @@ public class DeleteResourceCommand extends PURLCommand {
             if(resStorage.resourceExists(context,uriResolver)) {
                 // Default response code of 200 is fine
                 // TODO: Cut golden thread for the resource
-                context.delete(uriResolver.getURI(context));
-                String message = "Deleted resource: " + id;
-                IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect(message), 200);
-                retValue = context.createResponseFrom(rep);
-                retValue.setMimeType(NKHelper.MIME_TEXT);
-                NKHelper.log(context,message);
 
-                // Cut golden thread for the resource
-                INKFRequest req = context.createSubRequest("active:cutGoldenThread");
-                String path = NKHelper.getArgument(context, "path").toLowerCase();
-                req.addArgument("param", "gt:" + path);
-                context.issueSubRequest(req);
+                if(resDeleter.deleteResource(context)) {
+                    String message = "Deleted resource: " + id;
+                    IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect(message), 200);
+                    retValue = context.createResponseFrom(rep);
+                    retValue.setMimeType(NKHelper.MIME_TEXT);
+                    NKHelper.log(context,message);
+
+                    // Cut golden thread for the resource
+                    INKFRequest req = context.createSubRequest("active:cutGoldenThread");
+                    String path = NKHelper.getArgument(context, "path");
+                    req.addArgument("param", "gt:" + path);
+                    context.issueSubRequest(req);
+                }
 
             } else {
                 String message = "No such resource: " + id;

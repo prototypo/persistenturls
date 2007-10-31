@@ -62,7 +62,6 @@ package org.purl.accessor;
 */
 
 import java.util.HashMap;
-
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -96,7 +95,7 @@ public class GroupAccessor extends AbstractAccessor {
 
         commandMap.put("GET", new GetResourceCommand(TYPE, groupResolver, groupStorage));
         commandMap.put("POST", new CreateResourceCommand(TYPE, groupResolver, groupCreator, null, groupStorage));
-        commandMap.put("DELETE", new DeleteResourceCommand(TYPE, groupResolver, groupStorage));
+        commandMap.put("DELETE", new DeleteResourceCommand(TYPE, groupResolver, new DefaultResourceDeleter(groupResolver), groupStorage));
         commandMap.put("PUT", new UpdateResourceCommand(TYPE, groupResolver, groupCreator, groupStorage));
     }
 

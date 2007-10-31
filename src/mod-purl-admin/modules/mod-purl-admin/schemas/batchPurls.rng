@@ -89,14 +89,31 @@ CVS: http://cvs.xmlschemata.org/cvsweb.cgi/downloads/examplotron/
 			<ref name="basepurl"/>
 		</zeroOrMore>
 	</define>
-	<define name="type401">
+	<define name="type404">
+		<attribute name="type">
+			<choice>
+				<value>404</value>
+				<value>410</value>
+			</choice>
+		</attribute>
+		<ref name="maintainers"/>
+		<zeroOrMore>
+			<ref name="target"/>
+		</zeroOrMore>
+		<zeroOrMore>
+			<ref name="seealso"/>
+		</zeroOrMore>
+	</define>
+	<define name="typeChainClone">
 		<attribute name="type">
 			<choice>
 				<value>clone</value>
 				<value>chain</value>
 			</choice>
 		</attribute>
+		<zeroOrMore>
 		<ref name="maintainers"/>
+		</zeroOrMore>
 		<zeroOrMore>
 			<ref name="target"/>
 		</zeroOrMore>
@@ -131,7 +148,8 @@ CVS: http://cvs.xmlschemata.org/cvsweb.cgi/downloads/examplotron/
 					<choice>
 						<ref name="type301"/>
 						<ref name="type303"/>
-						<ref name="type401"/>
+						<ref name="type404"/>
+						<ref name="typeChainClone"/>
 						<ref name="validation"/>
 					</choice>
 				</element>

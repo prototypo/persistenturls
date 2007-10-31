@@ -104,7 +104,7 @@ public class UserAccessor extends AbstractAccessor {
         // TODO: Wrap the POST requests to put the results into a request queue
         commandMap.put("POST", new CreateResourceCommand(TYPE, userResolver, userCreator, userFilter, userStorage));
         commandMap.put("REQUEST", new CreateResourceCommand(TYPE, userRequestResolver, userCreator, userFilter, new UserResourceStorage()));
-		commandMap.put("DELETE", new DeleteResourceCommand(TYPE, userResolver, userStorage));
+		commandMap.put("DELETE", new DeleteResourceCommand(TYPE, userResolver, new DefaultResourceDeleter(userResolver), userStorage));
 		commandMap.put("PUT", new UpdateResourceCommand(TYPE, userResolver, userCreator, userStorage));
 	}
 

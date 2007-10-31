@@ -20,9 +20,7 @@ public class BatchPURLValidateAccessor extends NKFAccessorImpl {
     }
     @Override
     public void processRequest(INKFConvenienceHelper context) throws Exception {
-//      String path=context.getThisRequest().getArgument("path");
         IAspectXDA xdaParam = (IAspectXDA) context.sourceAspect("this:param:param", IAspectXDA.class);
-        System.out.println("**URI: " + context.getThisRequest().getURI());
 
         // Validate the input document against the batch schema
         INKFRequest req = context.createSubRequest("active:validateRNG");
@@ -47,7 +45,6 @@ public class BatchPURLValidateAccessor extends NKFAccessorImpl {
                 String pid = xdaROItor.getText("@pid", true);
                 req=context.createSubRequest("active:purl-validate");
                 req.addArgument("path", "ffcpl:" + pid );
-                req.addArgument("method", context.source(context.getThisRequest().getArgument("method")));
                 req.addArgument("mode", "mode:validate");
                 req.addArgument("requestURL", context.getThisRequest().getArgument("requestURL"));
 
