@@ -15,7 +15,7 @@ import java.util.*;
  *
  * NB: To ensure proper ordering of tests, run via purlClientTestRunner.java.
  *
- * @author David Hyland-Wood.  david at http://zepheira.com
+ * @author David Wood.  david at http://zepheira.com
  * @version $Rev$
  */
 public class simplePurlClientTest extends TestCase {
@@ -98,6 +98,7 @@ public class simplePurlClientTest extends TestCase {
 			String url = "http://" + host + ":" + port + "/admin/targeturl/testdomain/testPURL";
 
 			String result = client.validatePurl(url);
+						
 			String control = "<purl><id>/testdomain/testPURL</id><status results=\"success\">Success</status></purl>";
 			assertEquals("Cannot validate PURL.",
 						control,

@@ -15,7 +15,7 @@ import junit.framework.TestSuite;
  *     'tombstone' them, running these tests will leave created resources
  *     on your server.
  *
- * @author David Hyland-Wood.  david at http://zepheira.com
+ * @author David Wood.  david at http://zepheira.com
  * @version $Rev$
  */
 public class purlClientTestRunner {

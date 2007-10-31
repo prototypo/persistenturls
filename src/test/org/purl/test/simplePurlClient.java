@@ -14,7 +14,7 @@ import org.restlet.data.Form;
  * Provides a RESTful test harness for a PURL service.
  * Also serves as example code demonstrating the PURL client API.
  *
- * @author David Hyland-Wood.  david at http://zepheira.com
+ * @author David Wood.  david at http://zepheira.com
  * @version $Rev$
  */
 public final class simplePurlClient {
