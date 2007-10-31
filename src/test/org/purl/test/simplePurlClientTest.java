@@ -191,8 +191,8 @@ public class simplePurlClientTest extends TestCase {
 								"purlsmodify.xml");
 
 			String errMsg = "Cannot modify a batch of PURLs: ";
-			// TODO: Fix the control as soon as we know what comes back from a success!
-			String control = "<purl><pid>/tld/oclc/test303/</pid></purl>";
+			// NB: Change the number below (6) if the number of PURLs defined in the input file changes.
+			String control = "<purl-batch-success numCreated=\"6\"/>";
 			String test = client.modifyPurls(url, file);
 			
 			// XML response, so use assertXMLEqual.
@@ -218,7 +218,9 @@ public class simplePurlClientTest extends TestCase {
 								"purlsvalidate.xml");
 
 			String errMsg = "Cannot validate a batch of PURLs: ";
-			// TODO: Fix the control as soon as we know what comes back from a success!
+			String control;
+			// TODO: Reading from a file seems to generate an XMLUnit comparison error...
+			/*
 			String controlFileName = System.getProperty("user.dir") + 
 								System.getProperty("file.separator") +
 								"test" + 
@@ -226,7 +228,28 @@ public class simplePurlClientTest extends TestCase {
 								"testdata" + 
 								System.getProperty("file.separator") +
 								"purlsvalidatecontrol.xml";
-			String control = readFile(controlFileName);
+			control = readFile(controlFileName);
+			*/
+			
+			// TODO: Remove this once file comparison works.
+			control = "<purl-batch-validate>" +
+					"<purl><id>/testdomain/test301</id>" +
+					"<status results=\"success\">Success</status></purl>" +
+					"<purl><id>/testdomain/test302</id>" +
+					"<status result=\"failure\">" +
+					"ERROR: Error resolving PURL target: http://example.com/test302target/</status></purl>" +
+					"<purl><id>/testdomain/test303/</id>" +
+					"<status result=\"failure\">" +
+					"ERROR: Error resolving PURL target: http://example.com/see/also/some/more.xml</status></purl>" +
+					"<purl><id>/testdomain/test307</id>" +
+					"<status result=\"failure\">" +
+					"ERROR: Error resolving PURL target: http://example.com/test307target/</status></purl>" +
+					"<purl><id>/testdomain/test404</id>" +
+					"<status result=\"validated\">Validated</status></purl>" +
+					"<purl><id>/testdomain/test410</id>" +
+					"<status result=\"validated\">Validated</status></purl>" +
+					"</purl-batch-validate>";
+			
 			String test = client.validatePurls(url, file);
 
 			// XML response, so use assertXMLEqual.
@@ -897,17 +920,32 @@ public class simplePurlClientTest extends TestCase {
 		}
 	}		
 
-    public static String readFile(String filename) throws IOException {
-        RandomAccessFile file = new RandomAccessFile(filename, "r");
-        int rem = (int)file.length();
-        if (rem > 1000000) throw new IOException("file exceeds 1MB");
+	/** Read in the contents of a file and return them.
+	  *
+	  * @param filename The name of a file to read.
+	  * @return The contents of the file.
+	  */
+    public static String readFile(String filename) throws FileNotFoundException, IOException {
+	
+		File file = new File(filename);
+		String content = "";
+		FileInputStream fis = null;
+		BufferedInputStream bis = null;
+		DataInputStream dis = null;
 
-        byte[] bytes = new byte[rem];
-        while (rem > 0)
-            rem -= file.read(bytes, bytes.length - rem, rem);
-        file.close();
+		fis = new FileInputStream(file);
+		bis = new BufferedInputStream(fis);
+		dis = new DataInputStream(bis);
 
-        return new String(bytes);
+		while (dis.available() != 0) {
+			content += dis.readLine();
+		}
+
+		fis.close();
+		bis.close();
+		dis.close();
+		
+		return content;
     }
 
 	// Handle any exceptions encountered above.  For JUnit tests, it

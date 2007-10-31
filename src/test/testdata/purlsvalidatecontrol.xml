@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0"?>
 <purl-batch-validate>
 	<purl>
 		<id>/testdomain/test301</id>
@@ -18,10 +18,10 @@
 	</purl>
 	<purl>
 		<id>/testdomain/test404</id>
-		<status results="success">Success</status>
+		<status result="validated">Validated</status>
 	</purl>
 	<purl>
 		<id>/testdomain/test410</id>
-		<status results="success">Success</status>
+		<status result="validated">Validated</status>
 	</purl>
 </purl-batch-validate>

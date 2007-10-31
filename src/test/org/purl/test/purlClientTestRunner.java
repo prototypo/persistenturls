@@ -52,7 +52,7 @@ public class purlClientTestRunner {
         suite.addTest(new simplePurlClientTest("testCreatePurl"));
         suite.addTest(new simplePurlClientTest("testRecreatePurl"));
         suite.addTest(new simplePurlClientTest("testModifyPurl"));
-        // READY: suite.addTest(new simplePurlClientTest("testSearchPurl"));
+        suite.addTest(new simplePurlClientTest("testSearchPurl"));
         suite.addTest(new simplePurlClientTest("testValidatePurl"));
         suite.addTest(new simplePurlClientTest("testResolvePurl"));
         suite.addTest(new simplePurlClientTest("testDeletePurl"));
@@ -111,9 +111,8 @@ public class purlClientTestRunner {
         suite.addTest(new simplePurlClientTest("testCreateChainPurls"));
         suite.addTest(new simplePurlClientTest("testCreatePartialRedirectPurls"));
         suite.addTest(new simplePurlClientTest("testCreatePurls"));
-        // NOTYET?, but fix control var: suite.addTest(new simplePurlClientTest("testModifyPurls"));
-        // TODO: Create sample data and document.
-		// NOTYET: suite.addTest(new simplePurlClientTest("testValidatePurls"));
+        suite.addTest(new simplePurlClientTest("testModifyPurls"));
+		suite.addTest(new simplePurlClientTest("testValidatePurls"));
 		
 		/*
 			Remove the test user, group and domain.
