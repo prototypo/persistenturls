@@ -36,8 +36,7 @@ public class PURLURIResolver extends URIResolver {
             md.update(idBytes);
             String s = new sun.misc.BASE64Encoder().encode(md.digest());
             s = URLEncoder.encode(s, "8859_1");
-            System.out.println("id:" + s);
-            retValue = "ffcpl:/storedpurls/" + s;//(id.startsWith("/") ? id.substring(1) : id);
+            retValue = "ffcpl:/storedpurls/" + s;
         } catch (NoSuchAlgorithmException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
