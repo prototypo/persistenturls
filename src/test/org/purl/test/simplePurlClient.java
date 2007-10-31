@@ -8,6 +8,11 @@ import org.restlet.*;
 import org.restlet.data.*;
 import org.restlet.util.*;
 import org.restlet.resource.*;
+import org.restlet.data.Form;
+
+import javax.xml.parsers.*;
+import org.w3c.dom.*;
+import org.xml.sax.SAXException;
 
 /**
  * Provides a RESTful test harness for a PURL service.
@@ -217,8 +222,9 @@ public final class simplePurlClient {
 	/**
 	 * Create a new group via an HTTP POST.
 	 *
-	 * @param  
-	 * @return 
+	 * @param url A URL addressing a creation service for groups.
+	 * @param formParameters A Map of name-value pairs specifying a group.
+	 * @return the result from either the server or an error message.
 	 */
 	public String createGroup (String url, Map<String, String> formParameters) throws IOException {
 		
@@ -235,6 +241,30 @@ public final class simplePurlClient {
 	/**
 	 * Modify an existing group via an HTTP PUT.
 	 *
+	 * @param url A URL addressing a creation service for groups.
+	 * @param formParameters A Map of name-value pairs specifying a group.
+	 * @return the result from either the server or an error message.
+	 */
+	public String modifyGroup (String url, Map<String, String> formParameters) throws IOException {
+		
+		Client client = new Client(Protocol.HTTP);
+		
+		// Convert the form data to a RESTlet Representation.
+		String form = urlEncode(formParameters);
+		Representation rep = new StringRepresentation( form, MediaType.APPLICATION_WWW_FORM );
+		
+		// DBG
+		System.err.println("The representation available: " + rep.isAvailable());
+		System.err.println("The representation transient: " + rep.isTransient());
+		System.err.println("Representation = " + rep.getText());
+		
+		// Request the resource and return its textual content.		
+		return client.put(url, rep).getEntity().getText();
+	}
+	
+	/**
+	 * Modify an existing group via an HTTP PUT.
+	 *
 	 * @param  A URL addressing a modify service for groups.
 	 * @param  An XML file containing parameters for the new group.
 	 * @return 
@@ -242,9 +272,47 @@ public final class simplePurlClient {
 	public String modifyGroup (String url, File file) throws IOException {
 		
 		Client client = new Client(Protocol.HTTP);
+	
+		// Create a Web form.
+		Form input = new Form();
 		
-		// Convert the form data to a RESTlet Representation.
-		Representation rep = new FileRepresentation( file, MediaType.APPLICATION_XML, 3600 );
+		try {
+			// Create an XML parser.
+		    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		    DocumentBuilder builder = factory.newDocumentBuilder();
+		    Document document = builder.parse(file);
+			
+			// Add each parameter to the form.
+			Node container = document.getFirstChild();
+			NodeList nodes = container.getChildNodes();
+			/* for ( int i = 0; i < nodes.getLength(); i++ ) {
+			 	Node element = nodes.item(i);
+				input.createEntry(element.getNodeName(), element.getNodeValue());
+				
+				// DBG
+				System.err.println(element.getNodeName() + " : " + element.getNodeValue());
+			} */
+			//DBG
+			input.createEntry("name", "Test Group Modified");
+			input.createEntry("maintainers", "testuser");
+			input.createEntry("writers", "testuser");
+			input.createEntry("comments", "Because we like lots of unit tests.");
+		}
+		catch (FactoryConfigurationError e) {
+		    // unable to get a document builder factory
+			return("Unable to get a document builder factory: " + e);
+		} 
+		catch (Exception e) {
+			// Could be a ParserConfigurationException, SAXException or IOException.
+			return("Couldn't parse document: " + e);
+		}
+		
+		Representation rep = input.getWebRepresentation();
+		
+		// DBG
+		System.err.println("The representation available: " + rep.isAvailable());
+		System.err.println("The representation transient: " + rep.isTransient());
+		System.err.println("Representation = " + rep.getText());
 		
 		// Request the resource and return its textual content.		
 		return client.put(url, rep).getEntity().getText();
@@ -383,135 +451,5 @@ public final class simplePurlClient {
 		return encodedValue;
 	}
 	
-	
-	/**
-	 * Perform an HTTP GET and return the result.
-	 *
-	 * @param  A Uniform Resource Locator, presumed to use the HTTP scheme.
-	 * @return The response from the URL's server (a String of XML or text).
-	 */
-	public String getURL(URL url)
-		throws MalformedURLException, IOException {
-	
-		String result = "Not connected";
-		try {
-		    URLConnection urlConnection = url.openConnection();
-		    urlConnection.connect();
-		
-			InputStreamReader inputStream = new InputStreamReader(urlConnection.getInputStream());
-			BufferedReader in = new BufferedReader(inputStream);
-			result = "";  // Clear to help debugging.
-			String inputLine = "";
-			while ((inputLine = in.readLine()) != null) {
-			            result += inputLine;
-			}
-			inputStream.close();
-			in.close();
-		
-		} finally {
-		}
-	
-		return result;
-	}
-	
-	/**
-	* Perform an HTTP request with the supplied method (GET, POST, PUT, DELETE)
-	* on the supplied URL with the supplied requestHeaders, formParameters and
-	* contents.
-	* @return String the response contents
-	* @param requestMethod the HTTP request method (one of GET, POST, PUT, DELETE)
-	* @param url the URL to resolve
-	* @param requestHeaders a Map of the request headernames and values to
-	* be placed into the request
-	* @param formParameters a Map of form parameters and values to be placed
-	* into the request
-	* @param contents the contents of the HTTP request
-	* @throws ProtocolException reports problems performing an HTTP request
-	* @throws IOException reports I/O sending and/or retrieving data over HTTP
-	* @throws UnsupportedEncodingException reports a problem with URL encoding
-*/
-	public static String resolveURL ( String requestMethod,
-					URL url,
-	                Map requestHeaders,
-	                Map formParameters,
-	                String requestContents )
-					throws ProtocolException, IOException, UnsupportedEncodingException {
-
-		// Check the request method.
-		if ( requestMethod != "GET" && requestMethod != "POST" && requestMethod != "PUT" && requestMethod != "DELETE" ) {
-			throw new ProtocolException("Unsupported request method.  Only GET, POST, PUT or DELETE accepted.");
-		}
-
-		// Open a connection to the URL.
-		HttpURLConnection con = (HttpURLConnection) url.openConnection();
-
-		// Set up URL connection to pass and retrieve information.
-		con.setRequestMethod( requestMethod );
-		con.setDoInput( true );
-		if ( requestMethod == "GET" || requestMethod == "POST" || requestMethod == "PUT" ) {
-			con.setDoOutput( true );
-		}
-
-		// add all the request headers
-		if( requestHeaders != null ) {
-			Set headers = requestHeaders.keySet();
-			for( Iterator it = headers.iterator(); it.hasNext(); ) {
-				String headerName = (String) it.next();
-				String headerValue = (String) requestHeaders.get( headerName );
-				con.setRequestProperty( headerName, headerValue );
-			}  // for
-		} // if
-
-		// add url form parameters
-		if ( requestMethod == "GET" || requestMethod == "POST" || requestMethod == "PUT" ) {
-			DataOutputStream ostream = null;
-			try {
-				ostream = new DataOutputStream( con.getOutputStream() );
-				if( formParameters != null ) {
-					Set parameters = formParameters.keySet();
-					Iterator it = parameters.iterator();
-					StringBuffer buf = new StringBuffer();
-
-					for( int i = 0, paramCount = 0; it.hasNext(); i++ ) {
-						String parameterName = (String) it.next();
-						String parameterValue = (String) formParameters.get( parameterName );
-
-						if( parameterValue != null ) {
-							parameterValue = URLEncoder.encode( parameterValue, "UTF-8" );
-							if( paramCount > 0 ) {
-								buf.append( "&" );
-							} //if
-							buf.append( parameterName );
-							buf.append( "=" );
-							buf.append( parameterValue );
-							++paramCount;
-						} // if
-					} // for
-					//System.out.println( "adding post parameters: " + buf.toString() );
-					ostream.writeBytes( buf.toString() );
-				} // if
-
-				if( requestContents != null ) {
-					ostream.writeBytes( requestContents );
-				} // if
-
-			} finally {
-				if( ostream != null ) {
-					ostream.flush();
-					ostream.close();
-				} // if
-			} // try/finally
-		} // if
-
-		Object contents = con.getContent();
-		InputStream is = (InputStream) contents;
-		StringBuffer buf = new StringBuffer();
-		int c;
-		while( ( c = is.read() ) != -1 ) {
-			buf.append( (char) c );
-		} // while
-		con.disconnect();
-		return buf.toString();
-	} // method resolveURL()
 
 } // class

@@ -22,6 +22,10 @@ public class simplePurlClientTest extends TestCase {
 	
 	private simplePurlClient client;
 	
+	// Set the host and port for all subsequent URLs.
+	private String host = "localhost";
+	private String port = "8080";
+	
 	// Constructor
 	public simplePurlClientTest (String name) {
 	    super(name);
@@ -40,7 +44,7 @@ public class simplePurlClientTest extends TestCase {
 	public void testCreatePurl() {
 
 		try {
-			String url = "http://localhost:8080/admin/purl/testdomain/testPURL";
+			String url = "http://" + host + ":" + port + "/admin/purl/testdomain/testPURL";
 
 			Map<String, String> formParameters = new HashMap<String,String> ();
 			formParameters.put("type", "302");
@@ -63,7 +67,7 @@ public class simplePurlClientTest extends TestCase {
 	public void testModifyPurl() {
 
 		try {
-			String url = "http://localhost:8080/admin/purl/testdomain/testPURL";
+			String url = "http://" + host + ":" + port + "/admin/purl/testdomain/testPURL";
 
 			File file = new File(System.getProperty("user.dir") + 
 								System.getProperty("file.separator") +
@@ -89,7 +93,7 @@ public class simplePurlClientTest extends TestCase {
 	public void testSearchPurl() {
 
 		try {
-			String url = "http://localhost:8080/admin/purl/testdomain/testPURL";
+			String url = "http://" + host + ":" + port + "/admin/purl/testdomain/testPURL";
 
 			String errMsg = "Cannot search PURL.  Returned message was: ";
 			String control = "<purl><pid>/testdomain/testPURL</pid><type>302</type><target><url>http://bbc.co.uk/</url></target><maintainers><uid>testuser</uid></maintainers></purl>";
@@ -107,7 +111,7 @@ public class simplePurlClientTest extends TestCase {
 	public void testValidatePurl() {
 
 		try {
-			String url = "http://localhost:8080/admin/validate/testdomain/testPURL";
+			String url = "http://" + host + ":" + port + "/admin/validate/testdomain/testPURL";
 
 			String result = client.validatePurl(url);
 			assertEquals("Cannot validate PURL.",
@@ -123,7 +127,7 @@ public class simplePurlClientTest extends TestCase {
 	public void testResolvePurl() {
 
 		try {
-			String url = "http://localhost:8080/purl/testdomain/testPURL";
+			String url = "http://" + host + ":" + port + "/purl/testdomain/testPURL";
 
 			String errMsg = "Cannot resolve PURL.";
 			String control = "http://bbc.co.uk/";
@@ -141,7 +145,7 @@ public class simplePurlClientTest extends TestCase {
 	public void testDeletePurl() {
 
 		try {
-			String url = "http://localhost:8080/admin/purl/testdomain/testPURL";
+			String url = "http://" + host + ":" + port + "/admin/purl/testdomain/testPURL";
 
 			String errMsg = "Cannot delete PURL.";
 			String control = "Deleted resource: testPURL";
@@ -161,7 +165,7 @@ public class simplePurlClientTest extends TestCase {
 	public void testCreatePurls() {
 
 		try {
-			String url = "http://localhost:8080/admin/purls/";
+			String url = "http://" + host + ":" + port + "/admin/purls/";
 
 			File file = new File(System.getProperty("user.dir") + 
 								System.getProperty("file.separator") +
@@ -188,7 +192,7 @@ public class simplePurlClientTest extends TestCase {
 	public void testModifyPurls() {
 
 		try {
-			String url = "http://localhost:8080/admin/purls/";
+			String url = "http://" + host + ":" + port + "/admin/purls/";
 
 			File file = new File(System.getProperty("user.dir") + 
 								System.getProperty("file.separator") +
@@ -218,7 +222,7 @@ public class simplePurlClientTest extends TestCase {
 	public void testRegisterUser() {
 
 		try {
-			String url = "http://localhost:8080/admin/user/testuser";
+			String url = "http://" + host + ":" + port + "/admin/user/testuser";
 
 			Map<String, String> formParameters = new HashMap<String, String>();
 			formParameters.put("name", "Test User");
@@ -244,7 +248,7 @@ public class simplePurlClientTest extends TestCase {
 	public void testModifyUser() {
 
 		try {
-			String url = "http://localhost:8080/admin/user/testuser";
+			String url = "http://" + host + ":" + port + "/admin/user/testuser";
 
 			File file = new File(System.getProperty("user.dir") + 
 								System.getProperty("file.separator") +
@@ -270,7 +274,7 @@ public class simplePurlClientTest extends TestCase {
 	public void testSearchUser() {
 
 		try {
-			String url = "http://localhost:8080/admin/user/testuser";
+			String url = "http://" + host + ":" + port + "/admin/user/testuser";
 
 			String errMsg = "Cannot search user.";
 			String control = "<user><id>testuser</id><name>Test User</name><affiliation>Zepheira</affiliation><email>test.user@example.com</email></user>";
@@ -289,7 +293,7 @@ public class simplePurlClientTest extends TestCase {
 	public void testDeleteUser() {
 
 		try {
-			String url = "http://localhost:8080/admin/user/testuser";
+			String url = "http://" + host + ":" + port + "/admin/user/testuser";
 
 			String errMsg = "Cannot delete User.";
 			String control = "Deleted resource: testuser";
@@ -310,7 +314,7 @@ public class simplePurlClientTest extends TestCase {
 	public void testCreateGroup() {
 		
 		try {
-			String url = "http://localhost:8080/admin/group/testgroup";
+			String url = "http://" + host + ":" + port + "/admin/group/testgroup";
 			
 			Map<String, String> formParameters = new HashMap<String, String>();
 			formParameters.put("name", "Test Group");
@@ -332,9 +336,35 @@ public class simplePurlClientTest extends TestCase {
 	
 	// Test modifying an existing group via an HTTP PUT.
 	public void testModifyGroup() {
+		
+		try {
+			String url = "http://" + host + ":" + port + "/admin/group/testgroup";
+			
+			Map<String, String> formParameters = new HashMap<String, String>();
+			formParameters.put("name", "Test Group Modified");
+			formParameters.put("maintainers", "testuser");
+			formParameters.put("members", "testuser");
+			formParameters.put("comments", "A modified group used for unit tests.");
+							
+			String errMsg = "Cannot modify a group.";
+			String control = "Updated resource: testgroup";
+			//String control = "<group><id>testgroup</id><name>Test Group Modified</name><maintainers>testuser</maintainers><members>testuser</members><comments>A modified group used for unit tests.</comments></group>";
+			String test = client.modifyGroup(url, formParameters);
+			
+			// Textual response, so use assertEquals.
+			assertEquals(errMsg + test, control, test);
+						
+		} catch (Exception e) {
+			reportException("Failed to resolve URL: ", e);
+		}
+	}
+	
+	// Test modifying an existing group via an HTTP PUT.
+	// TODO: Replace/remove?
+	public void testModifyGroupWithFile() {
 
 			try {
-				String url = "http://localhost:8080/admin/group/testgroup";
+				String url = "http://" + host + ":" + port + "/admin/group/testgroup";
 
 				File file = new File(System.getProperty("user.dir") + 
 									System.getProperty("file.separator") +
@@ -344,7 +374,7 @@ public class simplePurlClientTest extends TestCase {
 									System.getProperty("file.separator"), 
 									"groupmodify.xml");
 
-				String errMsg = "Cannot modify a Group: ";
+				String errMsg = "Cannot modify a group: ";
 				String control = "Updated resource: testgroup";
 				String test = client.modifyGroup(url, file);
 
@@ -360,7 +390,7 @@ public class simplePurlClientTest extends TestCase {
 	public void testSearchGroup() {
 		
 		try {
-			String url = "http://localhost:8080/admin/group/testgroup";
+			String url = "http://" + host + ":" + port + "/admin/group/testgroup";
 
 			String errMsg = "Cannot search group.";
 			String control = "<group><id>testgroup</id><name>Test Group</name><maintainers>testuser</maintainers><members>testuser</members><comments>A group used for unit tests.</comments></group>";
@@ -379,7 +409,7 @@ public class simplePurlClientTest extends TestCase {
 	public void testDeleteGroup() {
 		
 		try {
-			String url = "http://localhost:8080/admin/group/testgroup";
+			String url = "http://" + host + ":" + port + "/admin/group/testgroup";
 		
 			String errMsg = "Cannot create a new group.";
 			String control = "Deleted resource: testgroup";
@@ -400,7 +430,7 @@ public class simplePurlClientTest extends TestCase {
 	public void testCreateDomain() {
 		
 		try {
-			String url = "http://localhost:8080/admin/domain/testdomain";
+			String url = "http://" + host + ":" + port + "/admin/domain/testdomain";
 			
 			Map<String, String> formParameters = new HashMap<String, String>();
 			formParameters.put("name", "Test Domain");
@@ -424,7 +454,7 @@ public class simplePurlClientTest extends TestCase {
 	public void testModifyDomain() {
 
 			try {
-				String url = "http://localhost:8080/admin/domain/testdomain";
+				String url = "http://" + host + ":" + port + "/admin/domain/testdomain";
 
 				File file = new File(System.getProperty("user.dir") + 
 									System.getProperty("file.separator") +
@@ -450,7 +480,7 @@ public class simplePurlClientTest extends TestCase {
 	public void testSearchDomain() {
 		
 		try {
-			String url = "http://localhost:8080/admin/domain/testdomain";
+			String url = "http://" + host + ":" + port + "/admin/domain/testdomain";
 
 			String errMsg = "Cannot search domain.";
 			String control = "<domain><id>testdomain</id><name>Test Domain</name><maintainers>testuser</maintainers><writers>testuser</writers></domain>";
@@ -470,7 +500,7 @@ public class simplePurlClientTest extends TestCase {
 	public void testDeleteDomain() {
 		
 		try {
-			String url = "http://localhost:8080/admin/domain/testdomain";
+			String url = "http://" + host + ":" + port + "/admin/domain/testdomain";
 		
 			String errMsg = "Cannot delete domain.";
 			String control = "Deleted resource: testdomain";
