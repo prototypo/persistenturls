@@ -130,7 +130,7 @@ public class PURLAccessor extends AbstractAccessor {
                 IAspectXDA oldPurlXDAOrig = (IAspectXDA) context.sourceAspect(oldURI, IAspectXDA.class);
                 IXDA oldPurlXDA = oldPurlXDAOrig.getClonedXDA();
                 try {
-                    oldPurlXDA.replaceByText("/purl/pid", purl);
+                    oldPurlXDA.replaceByText("/purl/pid/text()", purl);
                     retValue = new DOMXDAAspect((DOMXDA)oldPurlXDA);
                 } catch (XPathLocationException e) {
                     // TODO Auto-generated catch block
