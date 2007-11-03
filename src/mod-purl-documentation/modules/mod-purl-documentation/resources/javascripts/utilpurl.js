@@ -93,8 +93,7 @@ function showAction(directive)
 			userchoice.options[contextMap[directive][3]].selected = true;
 		}
 	}
-	// TODO: Leave results in place?
-	//clearResults();
+	clearResults();
 	
 	// Hide action divs except the one we want.
 	for ( key in contextMap ) {
