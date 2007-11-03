@@ -49,7 +49,7 @@
 
     <!-- Type clone.  Clone an existing PURL -->
 		<purl pid="/testdomain/testClone" type="clone">
-			<basepurl path="/NET/an/old/PURL"/>
+			<basepurl path="/testdomain/test301"/>
     </purl>
 
     <!-- Type chain.  Chain an existing PURL -->
@@ -57,7 +57,7 @@
       <maintainers>
       	<maintainer id="testuser"/>
     	</maintainers>
-			<basepurl path="/NET/an/old/PURL"/>
+			<basepurl path="/testdomain/test301"/>
     </purl>
 
     <!-- Type partial.  Partial-redirect PURL -->

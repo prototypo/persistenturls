@@ -10,10 +10,6 @@ import org.restlet.util.*;
 import org.restlet.resource.*;
 import org.restlet.data.Form;
 
-import javax.xml.parsers.*;
-import org.w3c.dom.*;
-import org.xml.sax.SAXException;
-
 /**
  * Provides a RESTful test harness for a PURL service.
  * Also serves as example code demonstrating the PURL client API.
@@ -51,15 +47,16 @@ public final class simplePurlClient {
 	 * @param An XML file containing the new PURL parameters.
 	 * @return 
 	 */
-	public String modifyPurl (String url, File file) throws IOException {
+	public String modifyPurl (String url, Map<String, String> formParameters) throws IOException {
 		
 		Client client = new Client(Protocol.HTTP);
 		
 		// Convert the form data to a RESTlet Representation.
-		Representation rep = new FileRepresentation( file, MediaType.APPLICATION_XML, 3600 );
+		String form = urlEncode(formParameters);
 		
 		// Request the resource and return its textual content.		
-		return client.put(url, rep).getEntity().getText();
+		return client.put(url + "?" + form, null).getEntity().getText();
+		
 	}
 
 	/**
@@ -90,15 +87,20 @@ public final class simplePurlClient {
 	 * Resolve an existing PURL via an HTTP GET.
 	 *
 	 * @param A URL addressing a validation service for PURLs.
-	 * @return The response from the server (a String of XML or text).
+	 * @return The Location header from the server, if provided, or the status description if not.
 	 */
 	public String resolvePurl(String url) throws IOException {
 
 		Client client = new Client(Protocol.HTTP);
-		Map<String,Object> responseAttrs = client.get(url).getAttributes();
+		Response response = client.get(url);
+		Map<String,Object> responseAttrs = response.getAttributes();
 		Form headersForm = (Form) responseAttrs.get( "org.restlet.http.headers" );
 		String locationHeader = headersForm.getFirst("Location").getValue();
-		return locationHeader;
+		if ( locationHeader != "" & locationHeader != null ) {
+			return locationHeader;
+		} else {
+			return response.getStatus().getDescription();
+		}
 	}
 
 	/**
@@ -129,7 +131,7 @@ public final class simplePurlClient {
 		Client client = new Client(Protocol.HTTP);
 		
 		// Convert the form data to a RESTlet Representation.
-		Representation rep = new FileRepresentation( file, MediaType.APPLICATION_XML, 3600 );
+		Representation rep = new FileRepresentation( file, MediaType.TEXT_XML, 3600 );
 		
 		// Request the resource and return its textual content.		
 		return client.post(url, rep).getEntity().getText();
@@ -179,15 +181,16 @@ public final class simplePurlClient {
 	 * @param  An XML file containing parameters for the new user.
 	 * @return 
 	 */
-	public String modifyUser (String url, File file) throws IOException {
+	public String modifyUser (String url, Map<String, String> formParameters) throws IOException {
 		
 		Client client = new Client(Protocol.HTTP);
+				
+		// Encode the form so it will pass on a URL.
+		String form = urlEncode(formParameters);
 		
-		// Convert the form data to a RESTlet Representation.
-		Representation rep = new FileRepresentation( file, MediaType.APPLICATION_XML, 3600 );
+		// Request the resource and return its textual content.	
+		return client.put(url + "?" + form, null).getEntity().getText();
 		
-		// Request the resource and return its textual content.		
-		return client.put(url, rep).getEntity().getText();
 	}
 
 	/**
@@ -248,18 +251,12 @@ public final class simplePurlClient {
 	public String modifyGroup (String url, Map<String, String> formParameters) throws IOException {
 		
 		Client client = new Client(Protocol.HTTP);
-		
-		// Convert the form data to a RESTlet Representation.
+				
+		// Encode the form so it will pass on a URL.
 		String form = urlEncode(formParameters);
-		Representation rep = new StringRepresentation( form, MediaType.APPLICATION_WWW_FORM );
 		
-		// DBG
-		System.err.println("The representation available: " + rep.isAvailable());
-		System.err.println("The representation transient: " + rep.isTransient());
-		System.err.println("Representation = " + rep.getText());
-		
-		// Request the resource and return its textual content.		
-		return client.put(url, rep).getEntity().getText();
+		// Request the resource and return its textual content.	
+		return client.put(url + "?" + form, null).getEntity().getText();
 	}
 	
 	/**
@@ -269,53 +266,18 @@ public final class simplePurlClient {
 	 * @param  An XML file containing parameters for the new group.
 	 * @return 
 	 */
+	// TODO: This fails with NetKernel as a server, possibly because it doesn't expect
+	//       PUT bodies with this type of content type.
 	public String modifyGroup (String url, File file) throws IOException {
 		
 		Client client = new Client(Protocol.HTTP);
-	
-		// Create a Web form.
-		Form input = new Form();
 		
-		try {
-			// Create an XML parser.
-		    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		    DocumentBuilder builder = factory.newDocumentBuilder();
-		    Document document = builder.parse(file);
+		// Turn the file into a Representation.
+		Representation rep = new FileRepresentation( file, MediaType.TEXT_XML, 3600 );
 			
-			// Add each parameter to the form.
-			Node container = document.getFirstChild();
-			NodeList nodes = container.getChildNodes();
-			/* for ( int i = 0; i < nodes.getLength(); i++ ) {
-			 	Node element = nodes.item(i);
-				input.createEntry(element.getNodeName(), element.getNodeValue());
-				
-				// DBG
-				System.err.println(element.getNodeName() + " : " + element.getNodeValue());
-			} */
-			//DBG
-			input.createEntry("name", "Test Group Modified");
-			input.createEntry("maintainers", "testuser");
-			input.createEntry("writers", "testuser");
-			input.createEntry("comments", "Because we like lots of unit tests.");
-		}
-		catch (FactoryConfigurationError e) {
-		    // unable to get a document builder factory
-			return("Unable to get a document builder factory: " + e);
-		} 
-		catch (Exception e) {
-			// Could be a ParserConfigurationException, SAXException or IOException.
-			return("Couldn't parse document: " + e);
-		}
-		
-		Representation rep = input.getWebRepresentation();
-		
-		// DBG
-		System.err.println("The representation available: " + rep.isAvailable());
-		System.err.println("The representation transient: " + rep.isTransient());
-		System.err.println("Representation = " + rep.getText());
-		
-		// Request the resource and return its textual content.		
+		// Request the resource and return its textual content.
 		return client.put(url, rep).getEntity().getText();
+
 	}
 
 	/**
@@ -372,15 +334,15 @@ public final class simplePurlClient {
 	 * @param  An XML file containing parameters for the new domain.
 	 * @return 
 	 */
-	public String modifyDomain (String url, File file) throws IOException {
+	public String modifyDomain (String url, Map<String, String> formParameters) throws IOException {
 		
 		Client client = new Client(Protocol.HTTP);
+				
+		// Encode the form so it will pass on a URL.
+		String form = urlEncode(formParameters);
 		
-		// Convert the form data to a RESTlet Representation.
-		Representation rep = new FileRepresentation( file, MediaType.APPLICATION_XML, 3600 );
-		
-		// Request the resource and return its textual content.		
-		return client.put(url, rep).getEntity().getText();
+		// Request the resource and return its textual content.	
+		return client.put(url + "?" + form, null).getEntity().getText();
 	}
 
 	/**
