@@ -63,7 +63,7 @@ handles results from the server in response to form submissions.
 	var context = "purl";
 
 	// NB: This array contains the names of each element that represents a label for an HTML form item.  If you add a new form item and want it highlighted upon a "bad parameter" error, you MUST add it's id to this array.
-	var labelElements = ["c_id_label", "c_target_label", "c_maintainers_label", "a_id_label", "a_maintainers_label", "a_type_label", "a_target_label", "a_seealso_label", "a_existingpurl_label", "m_id_label", "m_target_label", "m_maintainers_label", "s_id_label", "s_target_label", "s_seealso_label", "s_maintainers_label", "s_explicitmaintainers_label", "s_tombstone_label", "v_id_label", "d_id_label"];
+	var labelElements = ["c_id_label", "c_target_label", "c_maintainers_label", "a_id_label", "a_maintainers_label", "a_type_label", "a_target_label", "a_seealso_label", "a_basepurl_label", "m_id_label", "m_target_label", "m_maintainers_label", "s_id_label", "s_target_label", "s_seealso_label", "s_maintainers_label", "s_explicitmaintainers_label", "s_tombstone_label", "v_id_label", "d_id_label"];
 
 	// Send a Create command via HTTP POST.
 	function createSubmit() {
@@ -100,7 +100,7 @@ handles results from the server in response to form submissions.
 				target: $('a_target').value,
 				seealso: $('a_seealso').value,
 				maintainers: maintainers,
-				existingpurl: $('a_existingpurl').value
+				basepurl: $('a_basepurl').value
 			}
 			// TODO: What is the URL to admin a PURL?  /admin/purl/<path>/<name>?  /<path>/<name>?
 			ajaxCaller.postVars("/admin/purl" + my_id, bodyVars, urlVars, onResponse, false, "Create");
@@ -194,28 +194,28 @@ handles results from the server in response to form submissions.
 			setVisibility('maintainerstable', 'inline');
 			setVisibility('seealsourltable', 'none');
 			setVisibility('targeturltable', 'inline');
-			setVisibility('existingpurltable', 'none');
+			setVisibility('basepurltable', 'none');
 		} else if ( purlType == "303" ) {
 			setVisibility('maintainerstable', 'inline');
 			setVisibility('seealsourltable', 'inline');
 			setVisibility('targeturltable', 'none');
-			setVisibility('existingpurltable', 'none');
+			setVisibility('basepurltable', 'none');
 		} else if ( purlType == "clone" ) {
 			setVisibility('maintainerstable', 'none');
 			setVisibility('seealsourltable', 'none');
 			setVisibility('targeturltable', 'none');
-			setVisibility('existingpurltable', 'inline');
+			setVisibility('basepurltable', 'inline');
 		} else if ( purlType == "chain" ) {
 			setVisibility('maintainerstable', 'inline');
 			setVisibility('seealsourltable', 'none');
 			setVisibility('targeturltable', 'none');
-			setVisibility('existingpurltable', 'inline');
+			setVisibility('basepurltable', 'inline');
 		} else {
 			// The types are expected to be: 404, 410
 			setVisibility('maintainerstable', 'inline');
 			setVisibility('seealsourltable', 'none');
 			setVisibility('targeturltable', 'none');
-			setVisibility('existingpurltable', 'none');
+			setVisibility('basepurltable', 'none');
 		}
 	}
 
@@ -430,12 +430,12 @@ handles results from the server in response to form submissions.
 									</tbody>
 								</table>
 
-								<table id="existingpurltable" summary="existing PURL table" width="100%" style="display: none;">
+								<table id="basepurltable" summary="existing PURL table" width="100%" style="display: none;">
 									<tbody>
 										<tr>
-											<td class="property" id="a_existingpurl_label" width="120">Existing PURL path:</td>
+											<td class="property" id="a_basepurl_label" width="120">Existing PURL path:</td>
 
-											<td class="value"><input id="a_existingpurl" name="a_existingpurl" type="text" size="40" /></td>
+											<td class="value"><input id="a_basepurl" name="a_basepurl" type="text" size="40" /></td>
 										</tr>
 									</tbody>
 								</table><br><input value="Submit" type="submit" />
