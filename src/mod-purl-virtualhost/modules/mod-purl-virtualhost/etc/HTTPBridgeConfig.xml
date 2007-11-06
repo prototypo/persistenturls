@@ -12,7 +12,7 @@
 		<match>ffcpl:/static.*</match>
 	</zone>
   	<zone>
-		<match>.*.(html|js|css|png|ico)</match>
+		<match>.*.(html|js|css|png|ico|jpg)</match>
 	</zone>
 	<zone>
 		<match>..*</match>
