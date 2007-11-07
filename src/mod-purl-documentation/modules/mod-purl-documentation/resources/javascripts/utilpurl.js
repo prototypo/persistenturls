@@ -198,10 +198,10 @@ function loadModify(recordData) {
 		if (key.length > 0) {
 			records[key] = records[key].replace(/%LINEBREAK%/g, "\n");
 			currentElement = document.getElementById("m_" + key);
-			if ( currentElement.type == "checkbox" ) {
+			if ( currentElement != null && currentElement.type == "checkbox" ) {
 				// TODONEXT: Is this sufficient?  Check to ensure that this works.
 				currentElement.checked = records[key];
-			} else {
+			} else if (currentElement != null ) {
 				currentElement.value = records[key];
 			}
 		}
