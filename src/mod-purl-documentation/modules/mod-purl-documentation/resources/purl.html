@@ -66,7 +66,7 @@ handles results from the server in response to form submissions.
 	var context = "purl";
 
 	// NB: This array contains the names of each element that represents a label for an HTML form item.  If you add a new form item and want it highlighted upon a "bad parameter" error, you MUST add it's id to this array.
-	var labelElements = ["c_id_label", "c_target_label", "c_maintainers_label", "a_id_label", "a_maintainers_label", "a_type_label", "a_target_label", "a_seealso_label", "a_basepurl_label", "m_id_label", "m_target_label", "m_maintainers_label", "s_id_label", "s_target_label", "s_seealso_label", "s_maintainers_label", "s_explicitmaintainers_label", "s_tombstone_label", "v_id_label", "d_id_label"];
+	var labelElements = ["c_id_label", "c_target_label", "c_maintainers_label", "a_id_label", "a_maintainers_label", "a_type_label", "a_target_label", "a_seealso_label", "a_basepurl_label", "m_id_label", "m_type_label", "m_target_label", "m_seealso_label", "m_basepurl_label", "m_maintainers_label", "s_id_label", "s_target_label", "s_seealso_label", "s_maintainers_label", "s_explicitmaintainers_label", "s_tombstone_label", "v_id_label", "d_id_label"];
 
 	// Send a Create command via HTTP POST.
 	function createSubmit() {
@@ -121,8 +121,11 @@ handles results from the server in response to form submissions.
 			signalLoadingResults();
 			maintainers = scrubTextareaInput($('m_maintainers').value);
 			urlVars = {
+				type: $('m_type').value,
 				target: $('m_target').value,
-				maintainers: maintainers
+				seealso: $('m_seealso').value,
+				maintainers: maintainers,
+				basepurl: $('m_basepurl').value
 			}
 			bodyType = "text/html";
 			body = "";
@@ -360,27 +363,27 @@ handles results from the server in response to form submissions.
 												</option>
 
 												<option value="302">
-													Simple redirection to a target URL
+													Simple redirection to a target URL (302)
 												</option>
 
 												<option value="301">
-													Moved permanently to a target URL
+													Moved permanently to a target URL (301)
 												</option>
 
 												<option value="303">
-													See other URLs (use for Semantic Web resources)
+													See other URLs (use for Semantic Web resources) (303)
 												</option>
 
 												<option value="307">
-													Temporary redirect to a target URL
+													Temporary redirect to a target URL (307)
 												</option>
 
 												<option value="404">
-													Temporarily gone
+													Temporarily gone (404)
 												</option>
 
 												<option value="410">
-													Permanently gone
+													Permanently gone (410)
 												</option>
 
 												<option value="clone">
@@ -471,11 +474,39 @@ handles results from the server in response to form submissions.
 
 											<td class="value"><input id="m_id" name="m_id" type="text" size="40" /></td>
 										</tr>
-
+										
 										<tr>
-											<td class="property" id="m_target_label">Target URL:</td>
+											<td class="property" id="m_type_label" width="120">Type of PURL:</td>
 
-											<td class="value"><input id="m_target" name="m_target" type="text" size="40" /></td>
+											<td class="value"><select id="m_type" name="m_type" onchange="showAdvancedPURLFields()">
+												<option value="">
+													--- Select your type ---
+												</option>
+
+												<option value="302">
+													Simple redirection to a target URL (302)
+												</option>
+
+												<option value="301">
+													Moved permanently to a target URL (301)
+												</option>
+
+												<option value="303">
+													See other URLs (use for Semantic Web resources) (303)
+												</option>
+
+												<option value="307">
+													Temporary redirect to a target URL (307)
+												</option>
+
+												<option value="404">
+													Temporarily gone (404)
+												</option>
+
+												<option value="410">
+													Permanently gone (410)
+												</option>
+											</select></td>
 										</tr>
 
 										<tr>
@@ -485,6 +516,26 @@ handles results from the server in response to form submissions.
 											<td class="value">
 											<textarea rows="5" cols="40" id="m_maintainers" name="m_maintainers">
 </textarea></td>
+										</tr>
+										
+										<tr>
+											<td><hr></td>
+										</tr>
+
+										<tr>
+											<td class="property" id="m_target_label">Target URL:</td>
+
+											<td class="value"><input id="m_target" name="m_target" type="text" size="40" /></td>
+										</tr>
+										
+										<tr>
+											<td colspan="2"><b>or</b></td>
+										</tr>
+
+										<tr>
+											<td class="property" id="m_seealso_label">SeeAlso URL:</td>
+
+											<td class="value"><input id="m_seealso" name="m_seealso" type="text" size="40" /></td>
 										</tr>
 									</tbody>
 								</table><input value="Submit" type="submit" />
