@@ -66,7 +66,7 @@ handles results from the server in response to form submissions.
 	var context = "purl";
 
 	// NB: This array contains the names of each element that represents a label for an HTML form item.  If you add a new form item and want it highlighted upon a "bad parameter" error, you MUST add it's id to this array.
-	var labelElements = ["c_id_label", "c_target_label", "c_maintainers_label", "a_id_label", "a_maintainers_label", "a_type_label", "a_target_label", "a_seealso_label", "a_basepurl_label", "m_id_label", "m_type_label", "m_target_label", "m_seealso_label", "m_basepurl_label", "m_maintainers_label", "s_id_label", "s_target_label", "s_seealso_label", "s_maintainers_label", "s_explicitmaintainers_label", "s_tombstone_label", "v_id_label", "d_id_label"];
+	var labelElements = ["c_id_label", "c_target_label", "c_maintainers_label", "a_id_label", "a_maintainers_label", "a_type_label", "a_target_label", "a_seealso_label", "a_basepurl_label", "m_id_label", "m_type_label", "m_target_label", "m_seealso_label", "m_maintainers_label", "s_id_label", "s_target_label", "s_seealso_label", "s_maintainers_label", "s_explicitmaintainers_label", "s_tombstone_label", "v_id_label", "d_id_label"];
 
 	// Send a Create command via HTTP POST.
 	function createSubmit() {
@@ -124,8 +124,7 @@ handles results from the server in response to form submissions.
 				type: $('m_type').value,
 				target: $('m_target').value,
 				seealso: $('m_seealso').value,
-				maintainers: maintainers,
-				basepurl: $('m_basepurl').value
+				maintainers: maintainers
 			}
 			bodyType = "text/html";
 			body = "";
