@@ -218,13 +218,14 @@ function showResultsWindow() {
 	// instead of this newly-created window.
 	localHtmlResults = htmlResults.replace(/return loadModify/g, "return opener.loadModify");
 	
-	resultsWindow = window.open('','','width=350,height=400,status=yes,scrollbars=yes,resizable=yes');
+	resultsWindow = window.open('','resultsWindow','status=yes,toolbar=yes,scrollbars=yes,resizable=yes');
 	var resultsDoc = resultsWindow.document;
 	htmlDoc = "<html>";
 	htmlDoc += "<head><link type='text/css' rel='stylesheet' href='style.css' /></head>";
+	htmlDoc += "<body><h1>Results</h1>";
 	htmlDoc += "<div class='withresults'>";
 	htmlDoc += localHtmlResults;
-	htmlDoc += "</div></html>";
+	htmlDoc += "</div></body></html>";
 	resultsDoc.write(htmlDoc);
 	resultsDoc.close();
 	if (window.focus) {
