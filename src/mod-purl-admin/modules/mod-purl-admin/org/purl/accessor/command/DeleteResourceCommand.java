@@ -45,12 +45,20 @@ public class DeleteResourceCommand extends PURLCommand {
         String id = null;
 
         try {
+            String path = context.getThisRequest().getArgument("path").toLowerCase();
+
+            if(path.startsWith("ffcpl:")) {
+                path = path.substring(6);
+            }
+
             id = NKHelper.getLastSegment(context);
             if(resStorage.resourceExists(context,uriResolver)) {
                 // Default response code of 200 is fine
                 // TODO: Cut golden thread for the resource
 
                 if(resDeleter.deleteResource(context)) {
+                    recordCommandState(context, "DELETE", path);
+
                     String message = "Deleted resource: " + id;
                     IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect(message), 200);
                     retValue = context.createResponseFrom(rep);
@@ -59,7 +67,6 @@ public class DeleteResourceCommand extends PURLCommand {
 
                     // Cut golden thread for the resource
                     INKFRequest req = context.createSubRequest("active:cutGoldenThread");
-                    String path = NKHelper.getArgument(context, "path");
                     req.addArgument("param", "gt:" + path);
                     context.issueSubRequest(req);
                 }

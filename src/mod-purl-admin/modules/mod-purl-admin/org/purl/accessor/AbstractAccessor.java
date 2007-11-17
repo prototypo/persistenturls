@@ -40,12 +40,19 @@ abstract public class AbstractAccessor extends NKFAccessorImpl {
         // execute it. These commands should not maintain any
         // state.
 
-        PURLCommand cmd = getCommand(context, method);
+        PURLCommand cmd = null;
 
-        if(cmd != null) {
-            resp = cmd.execute(context);
-        } else {
-            // TODO: Generate an ERROR
+        try {
+            cmd = getCommand(context, method);
+
+            if(cmd != null) {
+                resp = cmd.execute(context);
+            } else {
+                // TODO: Generate an ERROR
+            }
+
+        } catch(Throwable t) {
+            t.printStackTrace();
         }
 
         context.setResponse(resp);

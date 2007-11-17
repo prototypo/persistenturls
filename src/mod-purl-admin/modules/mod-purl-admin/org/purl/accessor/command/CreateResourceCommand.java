@@ -25,6 +25,7 @@ import org.purl.accessor.ResourceFilter;
 import org.purl.accessor.ResourceStorage;
 import org.purl.accessor.URIResolver;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
+import org.ten60.netkernel.layer1.nkf.INKFRequest;
 import org.ten60.netkernel.layer1.nkf.INKFResponse;
 import org.ten60.netkernel.layer1.nkf.NKFException;
 import org.ten60.netkernel.layer1.representation.IAspectNVP;
@@ -56,14 +57,14 @@ public class CreateResourceCommand extends PURLCommand {
             IAspectNVP params = getParams(context);
 
             String id = NKHelper.getLastSegment(context);
+            String path = context.getThisRequest().getArgument("path");
+
+            if(path.startsWith("ffcpl:")) {
+                path = path.substring(6);
+            }
 
             if(resStorage.resourceExists(context, uriResolver)) {
                 // Cannot create the same name
-                String path = context.getThisRequest().getArgument("path");
-                if(path.startsWith("ffcpl:")) {
-                    path = path.substring(6);
-                }
-
                 String message = "Resource: " + path + " already exists.";
                 IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect(message), 409);
                 retValue = context.createResponseFrom(rep);
@@ -75,10 +76,16 @@ public class CreateResourceCommand extends PURLCommand {
 
                     // Store the full resource
                     if(resStorage.storeResource(context, uriResolver, iur)) {
+                        recordCommandState(context, "CREATE", path);
 
-                        //context.sinkAspect(uriResolver.getURI(context), iur);
-
-                        NKHelper.indexResource(context, "ffcpl:/index/purls", uriResolver.getURI(context), iur);
+                        // TODO: Should we block on this?
+                        INKFRequest req = context.createSubRequest("active:purl-index");
+                        req.addArgument("path", uriResolver.getURI(context));
+                        req.addArgument("index", "ffcpl:/index/" + type);
+                        req.addArgument("operand", iur);
+                        context.issueAsyncSubRequest(req);
+                        
+                        //NKHelper.indexResource(context, "ffcpl:/index/purls", uriResolver.getURI(context), iur);
 
                         // Filter it if there is one
                         if(resFilter!=null) {

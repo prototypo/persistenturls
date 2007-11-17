@@ -49,6 +49,13 @@ public class UpdateResourceCommand extends PURLCommand {
         try {
             //IAspectNVP params = getParams(context);
             id = NKHelper.getLastSegment(context);
+
+            String path = context.getThisRequest().getArgument("path").toLowerCase();
+
+            if(path.startsWith("ffcpl:")) {
+                path = path.substring(6);
+            }
+
             if(resStorage.resourceExists(context,uriResolver)) {
                 try {
                     // Update the user
@@ -58,6 +65,15 @@ public class UpdateResourceCommand extends PURLCommand {
                     IAspectNVP params = getParams(context);
                     IURAspect iur = resCreator.createResource(context, params);
                     if(resStorage.storeResource(context, uriResolver, iur)) {
+                        recordCommandState(context, "UPDATE", path);
+                        
+                        // TODO: Should we block on this?
+                        INKFRequest req = context.createSubRequest("active:purl-index");
+                        req.addArgument("path", uriResolver.getURI(context));
+                        req.addArgument("index", "ffcpl:/index/" + type);
+                        req.addArgument("operand", iur);
+                        context.issueAsyncSubRequest(req);
+
                         String message = "Updated resource: " + id;
                         IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect(message), 200);
                         retValue = context.createResponseFrom(rep);
@@ -65,8 +81,7 @@ public class UpdateResourceCommand extends PURLCommand {
                         NKHelper.log(context,message);
 
                         // Cut golden thread for the resource
-                        INKFRequest req = context.createSubRequest("active:cutGoldenThread");
-                        String path = NKHelper.getArgument(context, "path").toLowerCase();
+                        req = context.createSubRequest("active:cutGoldenThread");
                         req.addArgument("param", "gt:" + path);
                         context.issueSubRequest(req);
                     } else {

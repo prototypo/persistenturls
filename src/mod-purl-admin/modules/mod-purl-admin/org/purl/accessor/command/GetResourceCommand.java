@@ -26,7 +26,9 @@ import org.purl.accessor.NKHelper;
 import org.purl.accessor.ResourceFilter;
 import org.purl.accessor.ResourceStorage;
 import org.purl.accessor.URIResolver;
+import org.ten60.netkernel.layer1.nkf.INKFAsyncRequestHandle;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
+import org.ten60.netkernel.layer1.nkf.INKFRequest;
 import org.ten60.netkernel.layer1.nkf.INKFResponse;
 import org.ten60.netkernel.layer1.nkf.NKFException;
 import org.ten60.netkernel.layer1.representation.IAspectNVP;
@@ -89,52 +91,61 @@ public class GetResourceCommand extends PURLCommand {
             } else {
                 IAspectNVP params = (IAspectNVP) context.sourceAspect( "this:param:param", IAspectNVP.class);
                 Iterator namesItor = params.getNames().iterator();
+                INKFAsyncRequestHandle handles[] = new INKFAsyncRequestHandle[params.getNames().size()];
+                IURRepresentation results[] = new IURRepresentation[params.getNames().size()];
 
-                StringBuffer sb = new StringBuffer();
+                int idx = 0;
 
                 while(namesItor.hasNext()) {
+                    // TODO: Make this more efficient
                     String key = (String) namesItor.next();
 
                     if(key.equals("tombstone")) {
                         continue;
                     }
-
+                    
                     String value = params.getValue(key);
-
-                    if(!value.equals("")) {
-                        if(sb.length() > 0) {
-                            sb.append(" and " );
-                        }
-
-                        sb.append("(" + value + " and basis:/" + type + "/" + key + ")\n");
+                    
+                    if(value.length() == 0) {
+                        continue;
                     }
+
+                    System.out.println("key: " + key);
+                    System.out.println("value: " + value);
+                    
+                    INKFRequest req = context.createSubRequest("active:purl-search");
+                    req.addArgument("index", "ffcpl:/index/" + type);
+                    // TODO: don't directly reference the values... they may need URL decoding?
+                    req.addArgument("query", new StringAspect("<query>" + params.getValue(key) + "</query>"));
+                    // TODO: Add basis references if you can get it to constrain properly
+                    handles[idx++] = context.issueAsyncSubRequest(req);
                 }
-
-                System.out.println(sb.toString());
-
-                IURRepresentation rep = NKHelper.search(context, "ffcpl:/index/purls", sb.toString());
-
-                IAspectString searchResults = (IAspectString) context.transrept(rep, IAspectString.class);
-                System.out.println(searchResults.getString());
-                IAspectXDA searchXDA = (IAspectXDA) context.transrept(rep, IAspectXDA.class);
-                IXDAReadOnly roSearchXDA = searchXDA.getXDA();
-
-                sb = new StringBuffer("<results>");
-
+                
+                for(int i = 0; i < idx; i++ ) {
+                    try {
+                        results[i] = handles[i].join();
+                    } catch (InterruptedException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    } 
+                }
+                
                 Set<String> alreadyDoneSet = new HashSet<String>();
+                StringBuffer sb = new StringBuffer("<results>");
+                
+                for(int i = 0; i < idx; i++ ) {
+                    if(results[i] != null) {
+                        IAspectXDA searchXDA = (IAspectXDA) context.transrept(results[i], IAspectXDA.class);
+                        IXDAReadOnly roSearchXDA = searchXDA.getXDA();
+                        
+                        try {
+                        IXDAReadOnlyIterator roXDAItor = roSearchXDA.readOnlyIterator("//match");
 
-                try {
-                    IXDAReadOnlyIterator roXDAItor = roSearchXDA.readOnlyIterator("//match");
-
-                    while(roXDAItor.hasNext()) {
-                        roXDAItor.next();
-                        String uri = roXDAItor.getText("docid", true);
-                        // We only care about appropriately typed results
-                        if(uri.startsWith("ffcpl:/" + this.type) || (uri.startsWith("ffcpl:/storedpurls") && this.type.equals("purl"))) {
-                            String scoreStr = roXDAItor.getText("score", true);
-                            double score = Double.valueOf(scoreStr).doubleValue();
-
-                            if(!alreadyDoneSet.contains(uri) && (score > 0.5)) {
+                        while(roXDAItor.hasNext()) {
+                            roXDAItor.next();
+                            String uri = roXDAItor.getText("docid", true);
+                            
+                            if(!alreadyDoneSet.contains(uri)) {
                                 if(resStorage.resourceExists(context, uri)) {
                                     IURAspect iur = resStorage.getResource(context, uri);
                                     if(iur != null) {
@@ -150,12 +161,13 @@ public class GetResourceCommand extends PURLCommand {
                                 alreadyDoneSet.add(uri);
                             }
                         }
+                        } catch (XPathLocationException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        } 
                     }
-                } catch (XPathLocationException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
                 }
-
+                
                 sb.append("</results>");
 
                 System.out.println(sb.toString());

@@ -6,7 +6,7 @@
 	-->
     <identity>
 		<uri>urn:org:purl:admin</uri>
-		<version>0.0.1022</version>
+		<version>0.0.1068</version>
     </identity>
 	<info>
 		<name>PURL Admin Module</name>
@@ -151,6 +151,9 @@
 		</rewrite>
 		<import>
 			<uri>urn:org:purl:static</uri>
+		</import>
+		<import>
+			<uri>urn:org:purl:search</uri>
 		</import>
 		<import>
 			<uri>urn:org:ten60:netkernel:ext:http:client</uri>

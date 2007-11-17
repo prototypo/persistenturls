@@ -12,6 +12,7 @@
 	</goneURIs>
 	<invalidPURLURI>ffcpl:/pub/invalid-purl.html</invalidPURLURI>
 	<errorResolvingPURL>ffcpl:/pub/error-resolving-purl.html</errorResolvingPURL>
+	<dateFormat>yyyy/MM/dd HH:mm:ss</dateFormat>
 	<!-- Do we still need this?? -->
 	<topLevelRedirects>
 	<!-- 		<redirect from="ffcpl:/metadata" to="ffcpl:/static/metadata"/>-->

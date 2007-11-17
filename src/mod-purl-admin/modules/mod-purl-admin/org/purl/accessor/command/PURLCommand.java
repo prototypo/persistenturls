@@ -3,7 +3,8 @@
  */
 package org.purl.accessor.command;
 
-import java.util.Iterator;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.purl.accessor.ResourceStorage;
 import org.purl.accessor.URIResolver;
@@ -39,6 +40,11 @@ abstract public class PURLCommand {
     protected String type;
     protected URIResolver uriResolver;
     protected ResourceStorage resStorage;
+    protected static SimpleDateFormat sdf;
+
+    static {
+        sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+    }
 
     /**
      *
@@ -51,6 +57,15 @@ abstract public class PURLCommand {
     }
 
 	abstract public INKFResponse execute(INKFConvenienceHelper context);
+
+    protected void recordCommandState(INKFConvenienceHelper context, String command, String resource ) {
+        StringBuffer sb = new StringBuffer(sdf.format(new Date()));
+        sb.append(" ");
+        sb.append(command);
+        sb.append(" ");
+        sb.append(resource);
+        System.out.println(sb.toString());
+    }
 
 	protected IAspectNVP getParams(INKFConvenienceHelper context) throws NKFException {
 		IAspectNVP retValue = null;
