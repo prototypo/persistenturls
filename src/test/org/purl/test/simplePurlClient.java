@@ -24,7 +24,7 @@ public final class simplePurlClient {
 	/**
 	 * Create a new PURL via an HTTP POST.
 	 *
-	 * @param  url, A URL addressing a creation service for PURLs.
+	 * @param  url A URL addressing a creation service for PURLs.
 	 * @return The response from the server.
 	 */
 	public String createPurl (String url, Map<String, String> formParameters) throws IOException {
@@ -43,8 +43,8 @@ public final class simplePurlClient {
 	/**
 	 * Modify an existing PURL via an HTTP PUT.
 	 *
-	 * @param url, A URL addressing a modify service for PURLs.
-	 * @param An XML file containing the new PURL parameters.
+	 * @param url A URL addressing a modify service for PURLs.
+	 * @param formParameters An XML file containing the new PURL parameters.
 	 * @return The response from the server.
 	 */
 	public String modifyPurl (String url, Map<String, String> formParameters) throws IOException {
@@ -62,7 +62,7 @@ public final class simplePurlClient {
 	/**
 	 * Search for PURLs via an HTTP GET.
 	 *
-	 * @param url, A URL addressing a search service for PURLs.
+	 * @param url A URL addressing a search service for PURLs.
 	 * @return The response from the server (a String of XML or text).
 	 */
 	public String searchPurl(String url) throws IOException {
@@ -74,7 +74,7 @@ public final class simplePurlClient {
 	/**
 	 * Validate an existing PURL via an HTTP GET.
 	 *
-	 * @param url, A URL addressing a validation service for PURLs.
+	 * @param url A URL addressing a validation service for PURLs.
 	 * @return The response from the server (a String of XML or text).
 	 */
 	public String validatePurl(String url) throws IOException {
@@ -86,7 +86,7 @@ public final class simplePurlClient {
 	/**
 	 * Resolve an existing PURL via an HTTP GET.
 	 *
-	 * @param url, A URL addressing a validation service for PURLs.
+	 * @param url A URL addressing a validation service for PURLs.
 	 * @return The Location header from the server, if provided, or the status description if not.
 	 */
 	public String resolvePurl(String url) throws IOException {
@@ -110,7 +110,7 @@ public final class simplePurlClient {
 	/**
 	 * Delete an existing PURL via an HTTP DELETE.
 	 *
-	 * @param  url, A URL addressing a validation service for PURLs.
+	 * @param  url A URL addressing a validation service for PURLs.
 	 * @return The response from the server.
 	 */
 	public String deletePurl (String url) throws IOException {
@@ -127,7 +127,7 @@ public final class simplePurlClient {
 	/**
 	 * Create a batch of PURLs via an HTTP POST.
 	 *
-	 * @param  url, a String representation of a URL to a batch creation service.
+	 * @param  url a String representation of a URL to a batch creation service.
 	 * @return The response from the server in XML.
 	 */
 	public String createPurls (String url, File file) throws IOException {
@@ -144,7 +144,7 @@ public final class simplePurlClient {
 	/**
 	 * Modify a batch of PURLs via an HTTP PUT.
 	 *
-	 * @param  url, a String representation of a URL to a batch modification service.
+	 * @param  url a String representation of a URL to a batch modification service.
 	 * @return The response from the server in XML.
 	 */
 	public String modifyPurls (String url, File file) throws IOException {
@@ -161,7 +161,7 @@ public final class simplePurlClient {
 	/**
 	 * Validate a batch of PURLs via an HTTP PUT.
 	 *
-	 * @param  url, a String representation of a URL to a batch validation service.
+	 * @param  url a String representation of a URL to a batch validation service.
 	 * @return The response from the server in XML.
 	 */
 	public String validatePurls (String url, File file) throws IOException {
@@ -180,8 +180,8 @@ public final class simplePurlClient {
 	/**
 	 * Register a new user via an HTTP POST.
 	 *
-	 * @param  
-	 * @return 
+	 * @param  url A URL addressing a user registration service.
+	 * @return The response from the server.
 	 */
 	public String registerUser (String url, Map<String, String> formParameters) throws IOException {
 		
@@ -198,9 +198,9 @@ public final class simplePurlClient {
 	/**
 	 * Modify an existing user via an HTTP PUT.
 	 *
-	 * @param  A URL addressing a modify service for users.
-	 * @param  An XML file containing parameters for the new user.
-	 * @return 
+	 * @param  url A URL addressing a modify service for users.
+	 * @param  formParameters An XML file containing parameters for the new user.
+	 * @return The response from the server.
 	 */
 	public String modifyUser (String url, Map<String, String> formParameters) throws IOException {
 		
@@ -217,7 +217,7 @@ public final class simplePurlClient {
 	/**
 	 * Search for users via an HTTP GET.
 	 *
-	 * @param A URL addressing a search service for users.
+	 * @param url A URL addressing a search service for users.
 	 * @return The response from the server (a String of XML or text).
 	 */
 	public String searchUser(String url) throws IOException {
@@ -229,8 +229,8 @@ public final class simplePurlClient {
 	/**
 	 * Delete an existing user via an HTTP DELETE.
 	 *
-	 * @param  
-	 * @return 
+	 * @param  url A URL addressing a deletion service for users.
+	 * @return The response from the server.
 	 */
 	public String deleteUser (String url) throws IOException {
 		
@@ -283,9 +283,9 @@ public final class simplePurlClient {
 	/**
 	 * Modify an existing group via an HTTP PUT.
 	 *
-	 * @param  A URL addressing a modify service for groups.
-	 * @param  An XML file containing parameters for the new group.
-	 * @return 
+	 * @param  url A URL addressing a modify service for groups.
+	 * @param  file An XML file containing parameters for the new group.
+	 * @return The response from the server.
 	 */
 	// TODO: This fails with NetKernel as a server, possibly because it doesn't expect
 	//       PUT bodies with this type of content type.
@@ -304,7 +304,7 @@ public final class simplePurlClient {
 	/**
 	 * Search for groups via an HTTP GET.
 	 *
-	 * @param A URL addressing a search service for groups.
+	 * @param url A URL addressing a search service for groups.
 	 * @return The response from the server (a String of XML or text).
 	 */
 	public String searchGroup(String url) throws IOException {
@@ -316,8 +316,8 @@ public final class simplePurlClient {
 	/**
 	 * Delete an existing group via an HTTP DELETE.
 	 *
-	 * @param  
-	 * @return 
+	 * @param  url A URL addressing a deletion service for groups.
+	 * @return The response from the server.
 	 */
 	public String deleteGroup (String url) throws IOException {
 		
@@ -333,8 +333,9 @@ public final class simplePurlClient {
 	/**
 	 * Create a new domain via an HTTP POST.
 	 *
-	 * @param  
-	 * @return 
+	 * @param  url A URL addressing a creation service for domains.
+	 * @param formParameters A Map of name-value pairs specifying a domain.
+	 * @return The response from the server.
 	 */
 	public String createDomain (String url, Map<String, String> formParameters) throws IOException {
 		
@@ -351,9 +352,9 @@ public final class simplePurlClient {
 	/**
 	 * Modify an existing domain via an HTTP PUT.
 	 *
-	 * @param  A URL addressing a modify service for domains.
-	 * @param  An XML file containing parameters for the new domain.
-	 * @return 
+	 * @param  url A URL addressing a modify service for domains.
+	 * @param  formParameters An XML map containing parameters for the domain.
+	 * @return The response from the server.
 	 */
 	public String modifyDomain (String url, Map<String, String> formParameters) throws IOException {
 		
@@ -369,7 +370,7 @@ public final class simplePurlClient {
 	/**
 	 * Search for domains via an HTTP GET.
 	 *
-	 * @param A URL addressing a search service for domains.
+	 * @param url A URL addressing a search service for domains.
 	 * @return The response from the server (a String of XML or text).
 	 */
 	public String searchDomain(String url) throws IOException {
@@ -381,8 +382,8 @@ public final class simplePurlClient {
 	/**
 	 * Delete an existing domain via an HTTP DELETE.
 	 *
-	 * @param  
-	 * @return 
+	 * @param  url A URL addressing a deletion service for domains.
+	 * @return The response from the server (a String of XML or text).
 	 */
 	public String deleteDomain (String url) throws IOException {
 		
@@ -397,7 +398,7 @@ public final class simplePurlClient {
 	/**
 	 * URL encode a series of name-value pairs so they may be used in HTTP requests.
 	 *
-	 * @param  A Map of Strings representing name-value pairs.
+	 * @param  formParameters A Map of Strings representing name-value pairs.
 	 * @return A URL-encoded "query string" representing the input.
 	 */
 	public String urlEncode(Map<String, String> formParameters) {

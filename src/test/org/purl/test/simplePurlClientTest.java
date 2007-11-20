@@ -483,7 +483,7 @@ public class simplePurlClientTest extends TestCase {
 			formParameters.put("comments", "A group used for unit tests.");
 							
 			String errMsg = "Cannot create a new group.";
-			String control = "<group><id>testgroup</id><name>Test Group</name><maintainers>testuser</maintainers><members>testuser</members><comments>A group used for unit tests.</comments></group>";
+			String control = "<group><id>testgroup</id><name>Test Group</name><maintainers><uid>testuser</uid></maintainers><members><uid>testuser</uid></members><comments>A group used for unit tests.</comments></group>";
 			String test = client.createGroup(url, formParameters);
 			
 			// XML response, so use assertXMLEqual.
@@ -553,7 +553,7 @@ public class simplePurlClientTest extends TestCase {
 			String url = "http://" + host + ":" + port + "/admin/group/testgroup";
 
 			String errMsg = "Cannot search group.";
-			String control = "<group><id>testgroup</id><name>Test Group Modified</name><maintainers>testuser</maintainers><members>testuser</members><comments>A modified group used for unit tests.</comments></group>";
+			String control = "<group><id>testgroup</id><name>Test Group Modified</name><maintainers><uid>testuser</uid></maintainers><members><uid>testuser</uid></members><comments>A modified group used for unit tests.</comments></group>";
 			String test = client.searchGroup(url);
 			
 			// XML response, so use assertXMLEqual.
@@ -598,7 +598,7 @@ public class simplePurlClientTest extends TestCase {
 			formParameters.put("public", "false");
 			
 			String errMsg = "Cannot create a new domain.";
-			String control = "<domain><id>testdomain</id><name>Test Domain</name><maintainers>testuser</maintainers><writers>testuser</writers></domain>";
+			String control = "<domain><id>testdomain</id><name>Test Domain</name><maintainers><uid>testuser</uid></maintainers><writers><uid>testuser</uid></writers></domain>";
 			String test = client.createDomain(url, formParameters);
 			
 			// XML response, so use assertXMLEqual.
@@ -640,7 +640,7 @@ public class simplePurlClientTest extends TestCase {
 			String url = "http://" + host + ":" + port + "/admin/domain/testdomain";
 
 			String errMsg = "Cannot search domain.";
-			String control = "<domain><id>testdomain</id><name>Test Domain Modified</name><maintainers>testuser,testuser2</maintainers><writers>testuser</writers></domain>";
+			String control = "<domain><id>testdomain</id><name>Test Domain Modified</name><maintainers><uid>testuser</uid><uid>testuser2</uid></maintainers><writers><uid>testuser</uid></writers></domain>";
 			String test = client.searchDomain(url);
 			
 			// XML response, so use assertXMLEqual.
