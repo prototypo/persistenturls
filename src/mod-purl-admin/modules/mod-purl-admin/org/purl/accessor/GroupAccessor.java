@@ -70,6 +70,16 @@ import org.purl.accessor.command.DeleteResourceCommand;
 import org.purl.accessor.command.GetResourceCommand;
 import org.purl.accessor.command.PURLCommand;
 import org.purl.accessor.command.UpdateResourceCommand;
+import org.purl.accessor.util.DefaultResourceDeleter;
+import org.purl.accessor.util.DefaultResourceStorage;
+import org.purl.accessor.util.GroupResolver;
+import org.purl.accessor.util.GroupSearchHelper;
+import org.purl.accessor.util.NKHelper;
+import org.purl.accessor.util.PURLException;
+import org.purl.accessor.util.ResourceCreator;
+import org.purl.accessor.util.ResourceStorage;
+import org.purl.accessor.util.URIResolver;
+import org.purl.accessor.util.UserResolver;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.NKFException;
 import org.ten60.netkernel.layer1.representation.IAspectNVP;
@@ -92,8 +102,7 @@ public class GroupAccessor extends AbstractAccessor {
         ResourceStorage groupStorage = new DefaultResourceStorage();
         ResourceCreator groupCreator = new GroupCreator(new UserResolver(), new DefaultResourceStorage());
 
-
-        commandMap.put("GET", new GetResourceCommand(TYPE, groupResolver, groupStorage));
+        commandMap.put("GET", new GetResourceCommand(TYPE, groupResolver, groupStorage, new GroupSearchHelper()));
         commandMap.put("POST", new CreateResourceCommand(TYPE, groupResolver, groupCreator, null, groupStorage));
         commandMap.put("DELETE", new DeleteResourceCommand(TYPE, groupResolver, new DefaultResourceDeleter(groupResolver), groupStorage));
         commandMap.put("PUT", new UpdateResourceCommand(TYPE, groupResolver, groupCreator, groupStorage));
@@ -118,7 +127,7 @@ public class GroupAccessor extends AbstractAccessor {
             String maintainers = params.getValue("maintainers");
             String members = params.getValue("members");
 
-            StringTokenizer st = new StringTokenizer(maintainers, "\n");
+            StringTokenizer st = new StringTokenizer(maintainers, "\n,");
             while(st.hasMoreTokens()) {
                 String next = st.nextToken();
                 if(!userStorage.resourceExists(context, userResolver.getURI(next))) {
@@ -126,7 +135,7 @@ public class GroupAccessor extends AbstractAccessor {
                 }
             }
 
-            st = new StringTokenizer(members, "\n");
+            st = new StringTokenizer(members, "\n,");
             while(st.hasMoreTokens()) {
                 String next = st.nextToken();
                 if(!userStorage.resourceExists(context, userResolver.getURI(next))) {
@@ -134,24 +143,44 @@ public class GroupAccessor extends AbstractAccessor {
                 }
             }
 
+            String groupId = NKHelper.getLastSegment(context); 
             StringBuffer sb = new StringBuffer("<group>");
             sb.append("<id>");
-            sb.append(NKHelper.getLastSegment(context));
+            sb.append(groupId);
             sb.append("</id>");
             sb.append("<name>");
             sb.append(params.getValue("name"));
             sb.append("</name>");
             sb.append("<maintainers>");
-            sb.append(params.getValue("maintainers"));
+            
+            st = new StringTokenizer(maintainers, ",");
+            while(st.hasMoreElements()) {
+                sb.append("<uid>");
+                sb.append(st.nextToken().trim());
+                sb.append("</uid>");
+            }
+            
             sb.append("</maintainers>");
             sb.append("<members>");
-            sb.append(params.getValue("members"));
+            st = new StringTokenizer(members, ",");
+            while(st.hasMoreElements()) {
+                sb.append("<uid>");
+                String userId = st.nextToken().trim(); 
+                sb.append(userId);
+                addGroupForUser(context, groupId, userId);
+                sb.append("</uid>");
+            }
             sb.append("</members>");
             sb.append("<comments>");
             sb.append(params.getValue("comments"));
             sb.append("</comments>");
             sb.append("</group>");
+            
             return new StringAspect(sb.toString());
         }
+    }
+    
+    private static void addGroupForUser(INKFConvenienceHelper context, String group, String user) throws NKFException {
+        context.sinkAspect("active:purl-groups-for-user+user@user:" + user, new StringAspect("<groups><group id=\"" + group + "\"/></groups>"));
     }
 }

@@ -70,6 +70,15 @@ import org.purl.accessor.command.DeleteResourceCommand;
 import org.purl.accessor.command.GetResourceCommand;
 import org.purl.accessor.command.PURLCommand;
 import org.purl.accessor.command.UpdateResourceCommand;
+import org.purl.accessor.util.DefaultResourceDeleter;
+import org.purl.accessor.util.DefaultResourceStorage;
+import org.purl.accessor.util.DomainSearchHelper;
+import org.purl.accessor.util.NKHelper;
+import org.purl.accessor.util.PURLException;
+import org.purl.accessor.util.ResourceCreator;
+import org.purl.accessor.util.ResourceStorage;
+import org.purl.accessor.util.URIResolver;
+import org.purl.accessor.util.UserResolver;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.NKFException;
 import org.ten60.netkernel.layer1.representation.IAspectNVP;
@@ -111,7 +120,7 @@ public class DomainAccessor extends AbstractAccessor {
         ResourceCreator domainCreator = new DomainCreator(new UserResolver(), new DefaultResourceStorage());
         ResourceStorage domainStorage = new DefaultResourceStorage();
 
-        commandMap.put("GET", new GetResourceCommand(TYPE, domainResolver, domainStorage));
+        commandMap.put("GET", new GetResourceCommand(TYPE, domainResolver, domainStorage, new DomainSearchHelper()));
         commandMap.put("POST", new CreateResourceCommand(TYPE, domainResolver, domainCreator, null, domainStorage));
         commandMap.put("DELETE", new DeleteResourceCommand(TYPE, domainResolver, new DefaultResourceDeleter(domainResolver), domainStorage));
         commandMap.put("PUT", new UpdateResourceCommand(TYPE, domainResolver, domainCreator, domainStorage));
@@ -162,10 +171,22 @@ public class DomainAccessor extends AbstractAccessor {
             sb.append(params.getValue("name"));
             sb.append("</name>");
             sb.append("<maintainers>");
-            sb.append(params.getValue("maintainers"));
+            
+            st = new StringTokenizer(maintainers, ",");
+            while(st.hasMoreElements()) {
+                sb.append("<uid>");
+                sb.append(st.nextToken().trim());
+                sb.append("</uid>");
+            }
+            
             sb.append("</maintainers>");
             sb.append("<writers>");
-            sb.append(params.getValue("writers"));
+            st = new StringTokenizer(writers, ",");
+            while(st.hasMoreElements()) {
+                sb.append("<uid>");
+                sb.append(st.nextToken().trim());
+                sb.append("</uid>");
+            }
             sb.append("</writers>");
             sb.append("</domain>");
             return new StringAspect(sb.toString());

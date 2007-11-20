@@ -21,11 +21,13 @@ package org.purl.accessor.command;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.StringTokenizer;
 
-import org.purl.accessor.NKHelper;
 import org.purl.accessor.ResourceFilter;
-import org.purl.accessor.ResourceStorage;
-import org.purl.accessor.URIResolver;
+import org.purl.accessor.util.NKHelper;
+import org.purl.accessor.util.ResourceStorage;
+import org.purl.accessor.util.SearchHelper;
+import org.purl.accessor.util.URIResolver;
 import org.ten60.netkernel.layer1.nkf.INKFAsyncRequestHandle;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFRequest;
@@ -44,14 +46,16 @@ import com.ten60.netkernel.urii.aspect.StringAspect;
 
 public class GetResourceCommand extends PURLCommand {
 
+    private SearchHelper search;
     private ResourceFilter filter;
 
-    public GetResourceCommand(String type, URIResolver uriResolver, ResourceStorage resStorage) {
-        this(type, uriResolver, resStorage, null);
+    public GetResourceCommand(String type, URIResolver uriResolver, ResourceStorage resStorage, SearchHelper search) {
+        this(type, uriResolver, resStorage, search, null);
     }
 
-    public GetResourceCommand(String type, URIResolver uriResolver, ResourceStorage resStorage, ResourceFilter filter) {
+    public GetResourceCommand(String type, URIResolver uriResolver, ResourceStorage resStorage, SearchHelper search, ResourceFilter filter) {
         super(type, uriResolver, resStorage);
+        this.search = search;
         this.filter = filter;
     }
 
@@ -93,6 +97,7 @@ public class GetResourceCommand extends PURLCommand {
                 Iterator namesItor = params.getNames().iterator();
                 INKFAsyncRequestHandle handles[] = new INKFAsyncRequestHandle[params.getNames().size()];
                 IURRepresentation results[] = new IURRepresentation[params.getNames().size()];
+                String keys[] = new String[params.getNames().size()];
 
                 int idx = 0;
 
@@ -106,19 +111,44 @@ public class GetResourceCommand extends PURLCommand {
                     
                     String value = params.getValue(key);
                     
+                    System.out.println("key: " + key);
+                    
                     if(value.length() == 0) {
                         continue;
                     }
 
-                    System.out.println("key: " + key);
                     System.out.println("value: " + value);
                     
                     INKFRequest req = context.createSubRequest("active:purl-search");
                     req.addArgument("index", "ffcpl:/index/" + type);
-                    // TODO: don't directly reference the values... they may need URL decoding?
-                    req.addArgument("query", new StringAspect("<query>" + params.getValue(key) + "</query>"));
+
+                    // See if the keyword values need any processing or filtering
+                    
+                    StringTokenizer st = new StringTokenizer(value, " ,");
+                    int kwidx = 0;
+                    
+                    // We build up arguments this way to encourage caching of the search results
+                    
+                    while(st.hasMoreTokens()) {
+                        String next = search.processKeyword(context, key, st.nextToken());
+                        
+                        // If we've expanded the list, we'll add in each of the new keywords
+                        
+                        if(next.contains(" ")) {
+                            StringTokenizer st1 = new StringTokenizer(next, " ");
+                            while(st1.hasMoreTokens()) {
+                                req.addArgument(getKeywordName(kwidx++), "keyword:" + st1.nextToken()); 
+                            }
+                            
+                        } else {
+                            req.addArgument(getKeywordName(kwidx++), "keyword:" + next); 
+                        }
+                    }
+                    
                     // TODO: Add basis references if you can get it to constrain properly
-                    handles[idx++] = context.issueAsyncSubRequest(req);
+                    handles[idx] = context.issueAsyncSubRequest(req);
+                    keys[idx] = key;
+                    idx++;
                 }
                 
                 for(int i = 0; i < idx; i++ ) {
@@ -135,16 +165,12 @@ public class GetResourceCommand extends PURLCommand {
                 
                 for(int i = 0; i < idx; i++ ) {
                     if(results[i] != null) {
-                        IAspectXDA searchXDA = (IAspectXDA) context.transrept(results[i], IAspectXDA.class);
-                        IXDAReadOnly roSearchXDA = searchXDA.getXDA();
+                        // This assumes XML search results, if that isn't always going to be the case
+                        // this might break.
                         
-                        try {
-                        IXDAReadOnlyIterator roXDAItor = roSearchXDA.readOnlyIterator("//match");
-
-                        while(roXDAItor.hasNext()) {
-                            roXDAItor.next();
-                            String uri = roXDAItor.getText("docid", true);
-                            
+                        String uris[] = search.processResults(context, keys[i], results[i]);
+                        
+                        for(String uri: uris) {
                             if(!alreadyDoneSet.contains(uri)) {
                                 if(resStorage.resourceExists(context, uri)) {
                                     IURAspect iur = resStorage.getResource(context, uri);
@@ -159,12 +185,8 @@ public class GetResourceCommand extends PURLCommand {
                                     }
                                 }
                                 alreadyDoneSet.add(uri);
-                            }
+                            }                           
                         }
-                        } catch (XPathLocationException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        } 
                     }
                 }
                 
@@ -182,5 +204,11 @@ public class GetResourceCommand extends PURLCommand {
         }
 
         return retValue;
+    }
+    
+    private String getKeywordName(int kwidx) {
+        // TODO: Optimize this to avoid object creation for, say up to ten keywords
+        // and then return dynamically generated names for pathological cases.
+        return "keyword" + kwidx;
     }
 }

@@ -1,4 +1,4 @@
-package org.purl.accessor;
+package org.purl.accessor.util;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;

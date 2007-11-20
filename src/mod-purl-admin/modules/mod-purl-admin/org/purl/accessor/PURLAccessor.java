@@ -13,6 +13,17 @@ import org.purl.accessor.command.DeleteResourceCommand;
 import org.purl.accessor.command.GetResourceCommand;
 import org.purl.accessor.command.PURLCommand;
 import org.purl.accessor.command.UpdateResourceCommand;
+import org.purl.accessor.util.DefaultResourceStorage;
+import org.purl.accessor.util.GroupResolver;
+import org.purl.accessor.util.NKHelper;
+import org.purl.accessor.util.PURLDeleter;
+import org.purl.accessor.util.PURLException;
+import org.purl.accessor.util.PURLURIResolver;
+import org.purl.accessor.util.PurlSearchHelper;
+import org.purl.accessor.util.ResourceCreator;
+import org.purl.accessor.util.ResourceStorage;
+import org.purl.accessor.util.URIResolver;
+import org.purl.accessor.util.UserResolver;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.NKFException;
 import org.ten60.netkernel.layer1.representation.IAspectNVP;
@@ -45,11 +56,12 @@ public class PURLAccessor extends AbstractAccessor {
 
         ResourceCreator purlCreator = new PurlCreator(new URIResolver[] { userResolver, groupResolver }, new DefaultResourceStorage());
         ResourceStorage purlStorage = new DefaultResourceStorage();
+        ResourceStorage groupStorage = new DefaultResourceStorage();
 
         commandMap.put("POST", new CreateResourceCommand(TYPE, purlResolver, purlCreator, null, purlStorage));
         commandMap.put("PUT", new UpdateResourceCommand(TYPE, purlResolver, purlCreator, purlStorage));
         commandMap.put("DELETE", new DeleteResourceCommand(TYPE, purlResolver, new PURLDeleter(purlResolver), purlStorage));
-        commandMap.put("GET", new GetResourceCommand(TYPE, purlResolver, new DefaultResourceStorage()));
+        commandMap.put("GET", new GetResourceCommand(TYPE, purlResolver, new DefaultResourceStorage(), new PurlSearchHelper(groupResolver, groupStorage)));
     }
 
     protected PURLCommand getCommand(INKFConvenienceHelper context, String method) {
@@ -223,9 +235,9 @@ public class PURLAccessor extends AbstractAccessor {
                 String seealsos=params.getValue("seealso");
                 StringTokenizer st = new StringTokenizer(seealsos, " \n");
                 while(st.hasMoreElements()) {
-                    sb.append("<seealso>");
+                    sb.append("<seealso><url>");
                     sb.append(st.nextToken());
-                    sb.append("</seealso>");
+                    sb.append("</url></seealso>");
                 }
 
                 break;

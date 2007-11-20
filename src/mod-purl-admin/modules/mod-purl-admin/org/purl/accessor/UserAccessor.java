@@ -69,6 +69,17 @@ import org.purl.accessor.command.DeleteResourceCommand;
 import org.purl.accessor.command.GetResourceCommand;
 import org.purl.accessor.command.PURLCommand;
 import org.purl.accessor.command.UpdateResourceCommand;
+import org.purl.accessor.util.DefaultResourceDeleter;
+import org.purl.accessor.util.DefaultResourceStorage;
+import org.purl.accessor.util.NKHelper;
+import org.purl.accessor.util.PURLException;
+import org.purl.accessor.util.ResourceCreator;
+import org.purl.accessor.util.ResourceStorage;
+import org.purl.accessor.util.SearchHelper;
+import org.purl.accessor.util.URIResolver;
+import org.purl.accessor.util.UserRequestResolver;
+import org.purl.accessor.util.UserResolver;
+import org.purl.accessor.util.UserSearchHelper;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFRequest;
 import org.ten60.netkernel.layer1.nkf.NKFException;
@@ -99,8 +110,9 @@ public class UserAccessor extends AbstractAccessor {
         ResourceCreator userCreator = new UserCreator();
         ResourceFilter userFilter = new UserPrivateDataFilter();
         ResourceStorage userStorage = new DefaultResourceStorage();
+        SearchHelper userSearchHelper = new UserSearchHelper();
 
-		commandMap.put("GET", new GetResourceCommand(TYPE, userResolver, userStorage, userFilter));
+		commandMap.put("GET", new GetResourceCommand(TYPE, userResolver, userStorage, userSearchHelper, userFilter));
         // TODO: Wrap the POST requests to put the results into a request queue
         commandMap.put("POST", new CreateResourceCommand(TYPE, userResolver, userCreator, userFilter, userStorage));
         commandMap.put("REQUEST", new CreateResourceCommand(TYPE, userRequestResolver, userCreator, userFilter, new UserResourceStorage()));

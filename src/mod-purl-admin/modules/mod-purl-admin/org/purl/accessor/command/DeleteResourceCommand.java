@@ -18,10 +18,10 @@ package org.purl.accessor.command;
  *
  */
 
-import org.purl.accessor.NKHelper;
-import org.purl.accessor.ResourceDeleter;
-import org.purl.accessor.ResourceStorage;
-import org.purl.accessor.URIResolver;
+import org.purl.accessor.util.NKHelper;
+import org.purl.accessor.util.ResourceDeleter;
+import org.purl.accessor.util.ResourceStorage;
+import org.purl.accessor.util.URIResolver;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFRequest;
 import org.ten60.netkernel.layer1.nkf.INKFResponse;

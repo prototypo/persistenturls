@@ -9,6 +9,8 @@ import org.purl.accessor.command.PURLRedirectResolveCommand;
 import org.purl.accessor.command.PURLResolveCommand;
 import org.purl.accessor.command.PURLSeeAlsoResolveCommand;
 import org.purl.accessor.command.PURLValidatorCommand;
+import org.purl.accessor.util.NKHelper;
+import org.purl.accessor.util.PURLURIResolver;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFRequestReadOnly;
 import org.ten60.netkernel.layer1.nkf.INKFResponse;
