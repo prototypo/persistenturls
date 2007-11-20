@@ -17,6 +17,24 @@
 			<uri>active:javascript+operator@ffcpl:/test/something.js</uri>
 		</assert>
     </test>
+    <test>
+        <uri>active:beanshell+operator@ffcpl:/test/accessor/noGroupForNonExistentUser.bsh</uri>
+		<assert name="No Groups For Non-Existent User">
+			<uri>active:javascript+operator@ffcpl:/test/isTrue.js</uri>
+		</assert>
+    </test>
+    <test>
+        <uri>active:beanshell+operator@ffcpl:/test/accessor/newGroupForUser.bsh</uri>
+		<assert>
+			<xpath>count(/groups/group) = 2</xpath>
+		</assert>
+    </test>
+    <test>
+        <uri>active:beanshell+operator@ffcpl:/test/accessor/deleteGroupsForUser.bsh</uri>
+		<assert name="Delete Groups For User">
+			<uri>active:javascript+operator@ffcpl:/test/something.js</uri>
+		</assert>    
+    </test>  
 <!--  <test>
       <uri>active:javascript+operator@ffcpl:/test/accessor/template-test1.js</uri>
 		<assert>
