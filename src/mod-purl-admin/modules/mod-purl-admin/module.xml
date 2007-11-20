@@ -6,7 +6,7 @@
 	-->
     <identity>
 		<uri>urn:org:purl:admin</uri>
-		<version>0.0.1068</version>
+		<version>0.0.1212</version>
     </identity>
 	<info>
 		<name>PURL Admin Module</name>
@@ -30,6 +30,7 @@
 			<match>active:purl\+.*</match>
 			<match>active:purl-domain\+.*</match>
 			<match>active:purl-group\+.*</match>
+			<match>active:purl-groups-for-user\+.*</match>
 			<match>active:purl-user\+.*</match>
 			<match>active:purl-initialize</match>
 			<match>ffcpl:/etc/HTTPBridgeConfig.xml</match>
@@ -46,9 +47,13 @@
 			<match>ffcpl:/users/.*</match>
 			<match>ffcpl:/user-requests/.*</match>
 			<match>ffcpl:/groups/.*</match>
+			<match>ffcpl:/groups-for-user/.*</match>			
 			<match>ffcpl:/domains/.*</match>
 			<match>ffcpl:/storedpurls/.*</match>
+			<match>ffcpl:/tombstoneddomains/.*</match>
+			<match>ffcpl:/tombstonedgroups/.*</match>			
 			<match>ffcpl:/tombstonedpurls/.*</match>
+			<match>ffcpl:/tombstonedusers/.*</match>			
 			<match>ffcpl:/pub/.*</match>
 			<match>ffcpl:/filters/.*</match>
 			<match>ffcpl:/scripts/.*</match>
@@ -116,6 +121,10 @@
 		<ura>
       		<match>active:purl-user\+.*</match>
       		<class>org.purl.accessor.UserAccessor</class>
+    	</ura>
+    	<ura>
+      		<match>active:purl-groups-for-user\+.*</match>
+      		<class>org.purl.accessor.GroupsForUserAccessor</class>
     	</ura>
 		<ura>
       		<match>active:purl-group\+.*</match>
