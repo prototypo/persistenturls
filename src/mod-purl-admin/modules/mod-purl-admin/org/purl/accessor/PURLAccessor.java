@@ -145,7 +145,7 @@ public class PURLAccessor extends AbstractAccessor {
                 IAspectXDA oldPurlXDAOrig = (IAspectXDA) context.sourceAspect(oldURI, IAspectXDA.class);
                 IXDA oldPurlXDA = oldPurlXDAOrig.getClonedXDA();
                 try {
-                    oldPurlXDA.replaceByText("/purl/pid/text()", purl);
+                    oldPurlXDA.replaceByText("/purl/id/text()", purl);
                     retValue = new DOMXDAAspect((DOMXDA)oldPurlXDA);
                 } catch (XPathLocationException e) {
                     // TODO Auto-generated catch block
@@ -172,9 +172,9 @@ public class PURLAccessor extends AbstractAccessor {
                 purl = purl.substring(6);
             }
 
-            sb.append("<pid>");
+            sb.append("<id>");
             sb.append(purl);
-            sb.append("</pid>");
+            sb.append("</id>");
             sb.append("<type>partial</type>");
 
             sb.append("<target><url>");
@@ -213,9 +213,9 @@ public class PURLAccessor extends AbstractAccessor {
                 purl = purl.substring(6);
             }
 
-            sb.append("<pid>");
+            sb.append("<id>");
             sb.append(purl);
-            sb.append("</pid>");
+            sb.append("</id>");
             sb.append("<type>");
             sb.append(type);
             sb.append("</type>");
