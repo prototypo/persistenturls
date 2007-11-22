@@ -31,7 +31,7 @@ public class PURLSeeAlsoResolveCommand extends PURLResolveCommand {
         IXDAReadOnly purlXDARO = purl.getXDA();
         try {
             String type = purlXDARO.getText("/purl/type", true);
-            String url = purlXDARO.getText("/purl/seealso", true);
+            String url = purlXDARO.getText("/purl/seealso/url", true);
             url = url.replaceAll("&", "&amp;");
 
             // TODO: Customize the response body?
