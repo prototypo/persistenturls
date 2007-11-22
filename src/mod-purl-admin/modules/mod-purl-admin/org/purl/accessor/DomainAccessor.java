@@ -148,7 +148,6 @@ public class DomainAccessor extends AbstractAccessor {
             StringTokenizer st = new StringTokenizer(maintainers, ",");
             while(st.hasMoreTokens()) {
                 String next = st.nextToken();
-                System.out.println("Checking: " + next);
                 if(!userStorage.resourceExists(context, userResolver.getURI(next))) {
                     throw new PURLException("User " + next + " does not exist", 400);
                 }
@@ -164,6 +163,9 @@ public class DomainAccessor extends AbstractAccessor {
             }
 
             StringBuffer sb = new StringBuffer("<domain>");
+            sb.append("<public>");
+            sb.append(params.getValue("public"));
+            sb.append("</public>");
             sb.append("<id>");
             sb.append(NKHelper.getLastSegment(context));
             sb.append("</id>");
