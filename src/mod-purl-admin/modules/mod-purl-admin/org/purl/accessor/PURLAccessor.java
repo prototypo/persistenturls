@@ -93,9 +93,9 @@ public class PURLAccessor extends AbstractAccessor {
 
             if(context.exists(oldURI)) {
                 StringBuffer sb = new StringBuffer("<purl>");
-                sb.append("<pid>");
+                sb.append("<id>");
                 sb.append(purl);
-                sb.append("</pid>");
+                sb.append("</id>");
                 sb.append("<type>302</type>");
 
                 String requestURL = context.getThisRequest().getArgument("requestURL");
