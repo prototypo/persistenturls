@@ -107,7 +107,6 @@ public class PURLAccessor extends AbstractAccessor {
                 sb.append("</url></target>");
 
                 String maintainers=params.getValue("maintainers");
-                System.out.println("maintainers: " + maintainers);
                 if(maintainers!=null) {
                     sb.append("<maintainers>");
                     StringTokenizer st = new StringTokenizer(maintainers, ",");
@@ -121,7 +120,6 @@ public class PURLAccessor extends AbstractAccessor {
 
                 sb.append("</purl>");
 
-                System.out.println(sb.toString());
                 retValue = new StringAspect(sb.toString());
 
 
