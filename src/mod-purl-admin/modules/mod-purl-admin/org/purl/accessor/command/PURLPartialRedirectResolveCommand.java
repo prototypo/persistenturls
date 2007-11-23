@@ -32,7 +32,7 @@ public class PURLPartialRedirectResolveCommand extends PURLResolveCommand {
         try {
             String path = context.getThisRequest().getArgument("path").substring(6);
 
-            String pid = purlXDARO.getText("/purl/pid", true);
+            String pid = purlXDARO.getText("/purl/id", true);
             String url = purlXDARO.getText("/purl/target/url", true);
 
             if(!path.startsWith(pid)) {
