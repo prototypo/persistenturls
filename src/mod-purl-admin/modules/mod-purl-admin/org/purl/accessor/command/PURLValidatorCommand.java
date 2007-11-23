@@ -29,7 +29,7 @@ public class PURLValidatorCommand extends PURLResolveCommand {
             if(purl!=null) {
                 try {
                     String type = purl.getXDA().getText("/purl/type", true);
-                    String pid = purl.getXDA().getText("/purl/pid", true);
+                    String pid = purl.getXDA().getText("/purl/id", true);
 
                     if(type.equals("404") || type.equals("410")) {
                         sb.append("<status result=\"validated\">Validated</status></purl>");
@@ -37,7 +37,7 @@ public class PURLValidatorCommand extends PURLResolveCommand {
 
                         String url = null;
                         if(type.equals("303")) {
-                            url = purl.getXDA().getText("/purl/seealso", true);
+                            url = purl.getXDA().getText("/purl/seealso/url", true);
                         } else {
                             url = purl.getXDA().getText("/purl/target/url", true);
                         }
