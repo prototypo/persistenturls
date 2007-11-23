@@ -184,6 +184,7 @@ function checkDeleteSubmit(typeOfObject, deletionObject) {
 }	
 	
 // Pre-populate a Modify form with data from a Search.
+// TODONEXT: Fix this to handle PURL search results; check others for completeness.
 function loadModify(recordData) {
 	// Un-Pseudo-Webify the input.
 	var entries = new Array();
@@ -197,12 +198,15 @@ function loadModify(recordData) {
 	for ( key in records ) {
 		if (key.length > 0) {
 			records[key] = records[key].replace(/%LINEBREAK%/g, "\n");
+			// TODO: m_ + key is not sufficient.
 			currentElement = document.getElementById("m_" + key);
-			if ( currentElement != null && currentElement.type == "checkbox" ) {
+			if ( currentElement != null ) {
+				if ( currentElement.type == "checkbox" ) {
 				// TODONEXT: Is this sufficient?  Check to ensure that this works.
 				currentElement.checked = records[key];
-			} else if (currentElement != null ) {
+				} else {
 				currentElement.value = records[key];
+				}
 			}
 		}
 	}

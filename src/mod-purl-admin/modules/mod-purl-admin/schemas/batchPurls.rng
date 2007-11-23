@@ -4,7 +4,7 @@ Relax NG schema generated from an Examplotron schema.
 
 Version of the compiler: "$Header: /home/xmlschemata/cvs/downloads/examplotron/compile.xsl,v 1.14 2004/09/21 14:25:09 vdv Exp $"
 
-About Examplotron: http://examplotron.org
+About Examplotron: http://examplotron.org 
 Bug reports: http://bugzilla.xmlschemata.org/cgi-bin/bugzilla/buglist.cgi?product=Examplotron
 Mailing list: http://lists.xmlschemata.org/examplotron/
 CVS: http://cvs.xmlschemata.org/cvsweb.cgi/downloads/examplotron/
@@ -67,12 +67,6 @@ CVS: http://cvs.xmlschemata.org/cvsweb.cgi/downloads/examplotron/
 		</attribute>
 		<ref name="maintainers"/>
 		<ref name="target"/>
-		<zeroOrMore>
-			<ref name="seealso"/>
-		</zeroOrMore>
-		<zeroOrMore>
-			<ref name="basepurl"/>
-		</zeroOrMore>
 	</define>
 	<define name="type303">
 		<attribute name="type">
@@ -81,13 +75,7 @@ CVS: http://cvs.xmlschemata.org/cvsweb.cgi/downloads/examplotron/
 			</choice>
 		</attribute>
 		<ref name="maintainers"/>
-		<zeroOrMore>
-			<ref name="target"/>
-		</zeroOrMore>
 		<ref name="seealso"/>
-		<zeroOrMore>
-			<ref name="basepurl"/>
-		</zeroOrMore>
 	</define>
 	<define name="type404">
 		<attribute name="type">
@@ -97,12 +85,6 @@ CVS: http://cvs.xmlschemata.org/cvsweb.cgi/downloads/examplotron/
 			</choice>
 		</attribute>
 		<ref name="maintainers"/>
-		<zeroOrMore>
-			<ref name="target"/>
-		</zeroOrMore>
-		<zeroOrMore>
-			<ref name="seealso"/>
-		</zeroOrMore>
 	</define>
 	<define name="typeChainClone">
 		<attribute name="type">
@@ -110,15 +92,9 @@ CVS: http://cvs.xmlschemata.org/cvsweb.cgi/downloads/examplotron/
 				<value>clone</value>
 				<value>chain</value>
 			</choice>
-		</attribute>
+		</attribute>	
 		<zeroOrMore>
 		<ref name="maintainers"/>
-		</zeroOrMore>
-		<zeroOrMore>
-			<ref name="target"/>
-		</zeroOrMore>
-		<zeroOrMore>
-			<ref name="seealso"/>
 		</zeroOrMore>
 		<ref name="basepurl"/>
 	</define>
@@ -141,8 +117,8 @@ CVS: http://cvs.xmlschemata.org/cvsweb.cgi/downloads/examplotron/
 			<oneOrMore>
 				<element name="purl">
 					<optional>
-						<attribute name="pid">
-							<ega:example pid="/tld/oclc/test303/"/>
+						<attribute name="id">
+							<ega:example id="/tld/oclc/test303/"/>
 						</attribute>
 					</optional>
 					<choice>
