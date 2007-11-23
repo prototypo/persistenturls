@@ -51,7 +51,7 @@ public class PURLSAccessor extends NKFAccessorImpl {
 
                 NVPImpl nvp = new NVPImpl();
 
-                String pid = xdaROItor.getText("@pid", true);
+                String pid = xdaROItor.getText("@id", true);
                 String type = xdaROItor.getText("@type", true);
                 System.out.println(xdaROItor.getCurrentXPath());
                 IXDAReadOnlyIterator maintainerXdaROItor = xdaParam.getXDA().readOnlyIterator( xdaROItor.getCurrentXPath() + "/maintainers/maintainer");
