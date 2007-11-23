@@ -10,7 +10,7 @@
 // =========================================================================
 //
 // Modifications Copyright (C) 2007 OCLC (http://oclc.org/) and denoted by
-// "DHW".
+// "DHW".  David Wood (david at http://zepheira.com/)
 //
 // Original license:
 // Copyright (C) 2001 - 2002 David Joham (djoham@yahoo.com)
@@ -40,6 +40,7 @@ var elementMapIndex;
 var resultsMap;
 var resultsMapIndex;
 var currentElement = '';
+var previousElement = '';
 
 /*****************************************************************************
                     SAXEventHandler Object
@@ -229,10 +230,14 @@ SAXEventHandler.prototype.startElement = function(name, atts) {
 
     //place startElement event handling code below this line
 	// DHW
+	// Update the previous element indicator as needed.  Avoid updating in the case
+	// where we are processing several elements of the same name (e.g. <uid>) so
+	// we maintain a reference to the parent element type (e.g. <maintainers>).
+	if ( currentElement != "uid" ) {
+		previousElement = currentElement;
+	}
 	currentElement = name;
-	// DBG TODO REMOVE
-	//alert(currentElement);
-	// TODONEXT: 
+	
 	if ( name == 'user' || name == 'group' || name == 'domain' || name == 'purl' ) {
 		// Clear the working array.
 		elementMap = new Array();
@@ -258,6 +263,8 @@ SAXEventHandler.prototype.startDocument = function() {
 	// Initialize the result array.
 	resultsMap = new Array();
 	resultsMapIndex = 0;
+	previousElement = '';
+	currentElement = '';
 	
 
 }  // end function startDocument
@@ -419,7 +426,30 @@ SAXEventHandler.prototype._fullCharacterDataReceived = function(fullCharacterDat
 
     //place character (text) event handling code below this line
 	// DHW
-	elementMap[elementMapIndex] = [currentElement, fullCharacterData];
+	
+	// DHW: For those of you wondering: Yes, this method was the one that convinced
+	// me that I should have used a DOM parser instead of SAX.  It is on my list :)
+	
+	// Create entries in elementMap that relate to the names of the fields on
+	// the "modify" forms in the files purl|user|group|domain.html; this facilitates
+	// population of the modify forms with record data.	
+	if ( currentElement == "url" && ( previousElement == "target" || previousElement == "seealso" ) ) {
+		elementMap[elementMapIndex] = [previousElement, fullCharacterData];
+	} else if ( currentElement == "uid" && ( previousElement == "maintainers" || previousElement == "writers" || previousElement == "members" ) ) {
+		// Append as necessary to account for possible multiple maintainers, writers and members.
+		if ( elementMap[elementMapIndex-1][0] == previousElement ) {
+			// This is a follow-on uid field.  To prevent duplicate entries, we write backward.
+			elementMapIndex--;
+			elementMap[elementMapIndex] = [previousElement, elementMap[elementMapIndex][1] + "%LINEBREAK%" + fullCharacterData];
+			//alert("Appended " + previousElement + " : " + elementMap[elementMapIndex][1] );
+		} else {
+			// This is the first uid field.	
+			elementMap[elementMapIndex] = [previousElement, fullCharacterData];
+			//alert("Added " + previousElement + " : " + fullCharacterData );
+		}
+	} else {
+		elementMap[elementMapIndex] = [currentElement, fullCharacterData];
+	}
 	elementMapIndex++;
 
 }  // end function _fullCharacterDataReceived

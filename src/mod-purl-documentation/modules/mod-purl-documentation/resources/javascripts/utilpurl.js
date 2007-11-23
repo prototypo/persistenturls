@@ -183,8 +183,7 @@ function checkDeleteSubmit(typeOfObject, deletionObject) {
 	return false;
 }	
 	
-// Pre-populate a Modify form with data from a Search.
-// TODONEXT: Fix this to handle PURL search results; check others for completeness.
+// Pre-populate a "modify" form with data from a Search.
 function loadModify(recordData) {
 	// Un-Pseudo-Webify the input.
 	var entries = new Array();
@@ -195,10 +194,32 @@ function loadModify(recordData) {
 		elements = entries[entry].split('=');
 		records[elements[0]] = elements[1];
 	}
+	
+	// TODO: Clear all existing text entry fields in the form.  THIS IS STILL BROKEN.
+	// Iterate through all names in var labelElements looking for names starting with 'm_'
+	// then set those field values to empty.
+	for ( field in labelElements ) {
+		fieldName = labelElements[field];
+		// If this is a field on the modify form...
+		if ( fieldName.indexOf("m_") == 0 ) {
+			fieldName = fieldName.substring( 0, fieldName.indexOf("_label") );
+			// clear its value.
+			currentElement = document.getElementById(fieldName);
+			if ( currentElement != null ) {
+				if ( currentElement.type == "checkbox" ) {
+				// TODONEXT: Is this sufficient?  Check to ensure that this works.
+				currentElement.checked = false;
+				} else {
+				currentElement.value = null;
+				}
+			}
+		}
+	}
+	
+	// Fill in the fields with appropriate data.
 	for ( key in records ) {
 		if (key.length > 0) {
 			records[key] = records[key].replace(/%LINEBREAK%/g, "\n");
-			// TODO: m_ + key is not sufficient.
 			currentElement = document.getElementById("m_" + key);
 			if ( currentElement != null ) {
 				if ( currentElement.type == "checkbox" ) {
@@ -217,9 +238,7 @@ function loadModify(recordData) {
 // Open results in a separate window.
 function showResultsWindow() {
 	
-	// TODO: Modify the HTML shown in this window so that clicking the "modify"
-	// link will open the correct function in the main window (the 'opener')
-	// instead of this newly-created window.
+	// This will open a "modify" form in the opening window, not the results window.
 	localHtmlResults = htmlResults.replace(/return loadModify/g, "return opener.loadModify");
 	
 	resultsWindow = window.open('','resultsWindow','status=yes,toolbar=yes,scrollbars=yes,resizable=yes');
@@ -260,7 +279,7 @@ function getHTMLFromXMLArray(xmlArray) {
 			}
 			// Write an HTML list item for each element in a record.
 			for ( innerKey in xmlArray[outerKey] ) {
-				if ( xmlArray[outerKey][innerKey][0] == "id" || xmlArray[outerKey][innerKey][0] == "pid" ) {
+				if ( xmlArray[outerKey][innerKey][0] == "id" ) {
 					htmlList += "<dd><br>" + xmlArray[outerKey][innerKey][0] + ": " + xmlArray[outerKey][innerKey][1] +
 							 	" <a href='#modify' class='tooltip' onClick='return loadModify(\"" + 
 								dataString +
@@ -268,7 +287,8 @@ function getHTMLFromXMLArray(xmlArray) {
 								"<span>Modify record</span></a>" + 
 								"<\/dd>";
 				} else {
-					htmlList += "<dd>" + xmlArray[outerKey][innerKey][0] + ": " + xmlArray[outerKey][innerKey][1] + "<\/dd>";
+					fieldValue = xmlArray[outerKey][innerKey][1].replace(/%LINEBREAK%/g, ", ");
+					htmlList += "<dd>" + xmlArray[outerKey][innerKey][0] + ": " + fieldValue + "<\/dd>";
 				}
 			}
 		}
@@ -279,8 +299,8 @@ function getHTMLFromXMLArray(xmlArray) {
 
 // Scrub whitespace from textarea inputs and replace linebreaks with commas.
 function scrubTextareaInput (input) {
-	output = input.replace(/^\s*|\s*$/g,'');
-	output = output.replace(/\n/g, ',');
+	output = input.replace(/\n/g, ',');
+	output = output.replace(/^\s*(.*)\s*$/,"$1");
 	return output;
 }
 

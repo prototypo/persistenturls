@@ -95,10 +95,11 @@ handles results from the server in response to form submissions.
 		} else {
 			signalLoadingResults();
 			maintainers = scrubTextareaInput($('m_maintainers').value);
+			members = scrubTextareaInput($('m_members').value);
 			urlVars = {
 				name: $('m_name').value,
 				maintainers: maintainers,
-				members: $('m_members').value,
+				members: members,
 				comments: $('m_comments').value
 			}
 			bodyType = "text/html";
