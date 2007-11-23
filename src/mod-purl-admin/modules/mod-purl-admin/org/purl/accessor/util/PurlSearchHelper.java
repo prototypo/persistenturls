@@ -19,11 +19,11 @@ public class PurlSearchHelper extends AbstractSearchHelper {
     
     static {
         // TODO: Turn this into a configuration file
-        keywordBasisMap.put("path", "/purl/pid");
+        keywordBasisMap.put("path", "/purl/id");
         keywordBasisMap.put("maintainers", "/purl/maintainers/uid");
         keywordBasisMap.put("explicitmaintainers", "/purl/maintainers/uid");        
         keywordBasisMap.put("target", "/purl/target/url");
-        keywordBasisMap.put("seealso", "/purl/seealso");
+        keywordBasisMap.put("seealso", "/purl/seealso/url");
     }
 
     public PurlSearchHelper(URIResolver groupResolver, ResourceStorage groupStorage) {
