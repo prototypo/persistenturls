@@ -2,7 +2,7 @@
 <purls>
 	
     <!-- Type 302.  Simple redirection to a target URL -->
-		<purl pid="/testdomain/test302-1" type="302">
+		<purl id="/testdomain/test302-1" type="302">
       <maintainers>
       	<maintainer id="testuser"/>
     	</maintainers>
@@ -10,7 +10,7 @@
     </purl>
 
     <!-- Type 302.  Simple redirection to a target URL -->
-		<purl pid="/testdomain/test302-2" type="302">
+		<purl id="/testdomain/test302-2" type="302">
       <maintainers>
       	<maintainer id="testuser"/>
     	</maintainers>

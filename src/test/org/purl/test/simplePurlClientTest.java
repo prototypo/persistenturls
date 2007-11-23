@@ -80,7 +80,7 @@ public class simplePurlClientTest extends TestCase {
 			String url = "http://" + host + ":" + port + "/admin/purl/testdomain/testPURL";
 
 			String errMsg = "Cannot search PURL.  Returned message was: ";
-			String control = "<purl><pid>/testdomain/testPURL</pid><type>302</type><target><url>http://bbc.co.uk/</url></target><maintainers><uid>testuser</uid></maintainers></purl>";
+			String control = "<purl><id>/testdomain/testPURL</id><type>302</type><target><url>http://bbc.co.uk/</url></target><maintainers><uid>testuser</uid></maintainers></purl>";
 			String test = client.searchPurl(url);
 			
 			// XML response, so use assertXMLEqual.
@@ -294,7 +294,7 @@ public class simplePurlClientTest extends TestCase {
 		deletePurl("/testdomain/test302PURL");
 	}
 	
-	// Test creating a new 302 PURL via an HTTP POST.
+	// Test creating a new 303 PURL via an HTTP POST.
 	public void testCreate303Purl() {
 		createPurl("/testdomain/test303PURL", "303", "testuser", null, "http://example.com/test303PURL", false);
 	}
@@ -683,7 +683,7 @@ public class simplePurlClientTest extends TestCase {
 	}
 	
 	/** Create a new PURL via an HTTP POST.
-	  * @param path A PURL path or pid (starting with a '/' and containing its domains and name, e.g. /testdomain/subdomain/purlName).
+	  * @param path A PURL path or id (starting with a '/' and containing its domains and name, e.g. /testdomain/subdomain/purlName).
 	  * @param type The type of PURL (one of "301", "302", "303", "307", "404", "410", "clone", "chain", "partial").
 	  * @param maintainers A comma-separated list of user or group names that are allowed to maintain the named PURL.
 	  * @param target A URL to redirect to; used for PURLs of type 301, 302, 307 and partial.
@@ -695,7 +695,7 @@ public class simplePurlClientTest extends TestCase {
 		
 		try {
 			String url = "http://" + host + ":" + port + "/admin/purl" + path;
-			String control = "<purl><pid>" + path + "</pid>";
+			String control = "<purl><id>" + path + "</id>";
 			if ( useBasepurl ) {
 				// For chaining and cloning PURLs.
 				// NB: Presumes use of the hard-coded test data!
@@ -768,7 +768,7 @@ public class simplePurlClientTest extends TestCase {
 	}
 	
 	/** Resolve a PURL via HTTP GET.
-	  * @param path A PURL path or pid (starting with a '/' and containing its domains and name, e.g. /testdomain/subdomain/purlName).
+	  * @param path A PURL path or id (starting with a '/' and containing its domains and name, e.g. /testdomain/subdomain/purlName).
 	  * @param control An expected response string from the resolution.  Generally, this will be a URL from a PURL's Location header.
 	*/
 	public void resolvePurl(String path, String control) {
@@ -801,7 +801,7 @@ public class simplePurlClientTest extends TestCase {
 	}
 	
 	/** Delete a PURL via HTTP DELETE.
-	  * @param path A PURL path or pid (starting with a '/' and containing its domains and name, e.g. /testdomain/subdomain/purlName).
+	  * @param path A PURL path or id (starting with a '/' and containing its domains and name, e.g. /testdomain/subdomain/purlName).
 	  * @param expectSuccess Whether the test should expect to succeed.  If false, it will expect to fail.
 	*/
 	public void deletePurl(String path, boolean expectSuccess) {

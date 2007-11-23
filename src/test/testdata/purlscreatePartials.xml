@@ -2,7 +2,7 @@
 <purls>
 
     <!-- Type partial.  Partial-redirect PURL -->
-		<purl pid="/testdomain/testPartial-1" type="partial">
+		<purl id="/testdomain/testPartial-1" type="partial">
       <maintainers>
       	<maintainer id="testuser"/>
     	</maintainers>
@@ -10,7 +10,7 @@
     </purl>
 
     <!-- Type partial.  Partial-redirect PURL -->
-		<purl pid="/testdomain/testPartial-2" type="partial">
+		<purl id="/testdomain/testPartial-2" type="partial">
       <maintainers>
       	<maintainer id="testuser"/>
     	</maintainers>

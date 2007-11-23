@@ -2,7 +2,7 @@
 <purls>
 	
 		<!-- Type 301.  Moved Permanently to a target URL -->
-    <purl pid="/testdomain/test301-1" type="301">
+    <purl id="/testdomain/test301-1" type="301">
       <maintainers>
       	<maintainer id="testuser"/>
     	</maintainers>
@@ -10,7 +10,7 @@
     </purl>
 
 		<!-- Type 301.  Moved Permanently to a target URL -->
-    <purl pid="/testdomain/test301-2" type="301">
+    <purl id="/testdomain/test301-2" type="301">
       <maintainers>
       	<maintainer id="testuser"/>
     	</maintainers>

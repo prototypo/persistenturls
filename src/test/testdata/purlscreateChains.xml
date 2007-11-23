@@ -3,7 +3,7 @@
 
     <!-- Type chain.  Chain an existing PURL -->
 		<!-- PURL /testdomain/test301-1 must exist first! -->
-		<purl pid="/testdomain/testChain-1" type="chain">
+		<purl id="/testdomain/testChain-1" type="chain">
       <maintainers>
       	<maintainer id="testuser"/>
     	</maintainers>
@@ -12,7 +12,7 @@
 
     <!-- Type chain.  Chain an existing PURL -->
 		<!-- PURL /testdomain/test301-2 must exist first! -->
-		<purl pid="/testdomain/testChain-2" type="chain">
+		<purl id="/testdomain/testChain-2" type="chain">
       <maintainers>
       	<maintainer id="testuser"/>
     	</maintainers>

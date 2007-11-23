@@ -2,7 +2,7 @@
 <purls>
 
     <!-- Type 303.  See Also URL -->
-		<purl pid="/testdomain/test303-1/" type="303">
+		<purl id="/testdomain/test303-1/" type="303">
       <maintainers>
       	<maintainer id="testuser"/>
     	</maintainers>
@@ -10,7 +10,7 @@
     </purl>
 
     <!-- Type 303.  See Also URL -->
-		<purl pid="/testdomain/test303-2/" type="303">
+		<purl id="/testdomain/test303-2/" type="303">
       <maintainers>
       	<maintainer id="testuser"/>
     	</maintainers>

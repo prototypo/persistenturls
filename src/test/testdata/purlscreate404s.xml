@@ -2,14 +2,14 @@
 <purls>
 
     <!-- Type 404.  Temporarily gone -->
-		<purl pid="/testdomain/test404-1" type="404">
+		<purl id="/testdomain/test404-1" type="404">
       <maintainers>
       	<maintainer id="testuser"/>
     	</maintainers>
     </purl>
 
 		<!-- Type 404.  Temporarily gone -->
-		<purl pid="/testdomain/test404-2" type="404">
+		<purl id="/testdomain/test404-2" type="404">
       <maintainers>
       	<maintainer id="testuser"/>
     	</maintainers>
