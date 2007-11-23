@@ -42,7 +42,7 @@ public class BatchPURLValidateAccessor extends NKFAccessorImpl {
 
                 //TODO: Handle transactions
 
-                String pid = xdaROItor.getText("@pid", true);
+                String pid = xdaROItor.getText("@id", true);
                 req=context.createSubRequest("active:purl-validate");
                 req.addArgument("path", "ffcpl:" + pid );
                 req.addArgument("mode", "mode:validate");
