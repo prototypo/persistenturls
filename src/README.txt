@@ -1,7 +1,9 @@
 Installing and Running a PURL Server
 ------------------------------------
 
-0) This write up assumes that you have NetKernel 3.3 installed somewhere.  We will refer to the NetKernel installation directory as $NETKERNEL_INSTALLATION_DIRECTORY.  At the time of this writing, we are using http://www.1060.org/upload/beta/1060-NetKernel-SE-DK3.3-Beta-1.jar
+Welcome.  This document explains how to install and run a Persistent URL (PURL) server.  See http://purlz.org for community information.
+
+0) Install NetKernel 3.3 somewhere.  We will refer to the NetKernel installation directory as $NETKERNEL_INSTALLATION_DIRECTORY.  At the time of this writing, we are using http://www.1060.org/upload/beta/1060-NetKernel-SE-DK3.3-Beta-1.jar
 
 
 1) Next do an svn checkout if you haven't done one already:
@@ -101,6 +103,7 @@ BUILD SUCCESSFUL
 Total time: 5 seconds
 ------------------------------%<-------------------------------------
 
+Note that the client-side tests presume a clean (empty) database on the PURL server.  If you run the tests on a PURL server containing existing data, errors may result due to conflicts (e.g. a user/domain/group/PURL of a given name already exists).
 
 9) You should now be able to hit the Front End Fulcrum to interact with the PURL server:
 
