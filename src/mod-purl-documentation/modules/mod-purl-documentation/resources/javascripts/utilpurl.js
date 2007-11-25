@@ -120,9 +120,20 @@ function clearErrorIndications() {
 	}
 }
 
+// TODO: Refactor signalLoadingResults() and signalLoadingPendingList() to be one function.
 function signalLoadingResults() {
 	resultBlock = $("results");
 	resultBlock.innerHTML = "<p>Loading ...<\/p>";
+}
+
+function signalLoadingPendingList() {
+	resultBlock = $("pending");
+	resultBlock.innerHTML = "<p>Loading ...<\/p>";
+}
+
+function signalLoadingPendingResults(id) {
+	resultBlock = $( id + "_results" );
+	resultBlock.innerHTML = "<p>Accessing record ...<\/p>";
 }
 
 function clearResults() {
@@ -160,7 +171,8 @@ function getHeaderHTML(headers) {
 	}
 }
 
-// Parse XML results, if required.
+// TODO: Refactor startParser() and startParserForPending() into one function.
+// Parse XML results for User/Group/Domain/PURL actions.
 function startParser(xml) {
 	var parser = new SAXDriver();
 	var eventHandler = new SAXEventHandler();
@@ -168,7 +180,17 @@ function startParser(xml) {
 	parser.setLexicalHandler(eventHandler);
 	parser.setErrorHandler(eventHandler);
 	parser.parse(xml);
-}	
+}
+
+// Parse XML results for pending User/Domain requests.
+function startParserForPending(xml) {
+	var parser = new SAXDriver();
+	var eventHandler = new SAXEventHandlerForPending();
+	parser.setDocumentHandler(eventHandler);
+	parser.setLexicalHandler(eventHandler);
+	parser.setErrorHandler(eventHandler);
+	parser.parse(xml);
+}
 
 // Confirm a Delete command before proceeding with function deleteSubmit().
 function checkDeleteSubmit(typeOfObject, deletionObject) {
@@ -195,7 +217,7 @@ function loadModify(recordData) {
 		records[elements[0]] = elements[1];
 	}
 	
-	// TODO: Clear all existing text entry fields in the form.  THIS IS STILL BROKEN.
+	// Clear all existing text entry fields in the form.
 	// Iterate through all names in var labelElements looking for names starting with 'm_'
 	// then set those field values to empty.
 	for ( field in labelElements ) {
@@ -258,6 +280,7 @@ function showResultsWindow() {
 }
 
 // Create an HTML list from an array of XML elements and their values.
+// Used for User/Group/Domain/PURL actions.
 function getHTMLFromXMLArray(xmlArray) {
 		
 	var htmlList = "<dl>";
@@ -297,12 +320,127 @@ function getHTMLFromXMLArray(xmlArray) {
 	return htmlList;
 }
 
+
+// Create a series of HTML forms from an array of XML elements and their values.
+// Used for User/Domain approval screens.
+function formatPendingResults(xmlArray) {
+	
+	// Find the ids of all the pending User/Domain requests.
+	var html = ""; // The HTML content created.
+	var id = new Object();  // An array of ids of the pending Users/Domains.
+	var recordCount = 0;  // The number of records to process.
+	for ( outerKey in xmlArray ) {
+		recordCount++;
+		for ( innerKey in xmlArray[outerKey] ) {
+			if ( xmlArray[outerKey][innerKey][0] == "id" ) {
+				id[outerKey] = xmlArray[outerKey][innerKey][1];
+			}
+		}
+	}
+	if ( recordCount == 0 ) {
+		html = "<p>No pending records found.<\/p>";
+	}
+
+	// Found results, so create HTML for each record.
+	for ( outerKey in xmlArray ) {
+		
+		html += "<form name=\"" + id[outerKey] + "_form\" id=\"" + id[outerKey] + "_form\">";
+		html += "<table border=\"0\"><tr>";
+	
+		// Create two submit buttons; one to approve and one to deny.
+		// Give an id to the <div>s so we can overwrite them later.
+		// The radio buttons are the only place where we use names instead of ids.
+		html += "<td>";
+		html += "<div id=\"" + id[outerKey] + "_submit\">";
+		html += "<input name=\"" + id[outerKey] + "_decision\" type=\"radio\" value=\"approve\" checked> Approve";
+		html += "<input name=\"" + id[outerKey] + "_decision\" type=\"radio\" value=\"deny\"> Deny &nbsp;";
+		html += "<input type=\"button\" value=\"Submit\" onClick=\"return resolvePendingSubmit('" + id[outerKey] + "')\" />";
+		html += "</div>";
+		html += "<div id=\"" + id[outerKey] + "_results\"></div>";
+		html += "</td>";
+	
+		// Create an HTML list containing the record.
+		html += "<td>";
+	
+		// Write an HTML list item for each element in a record.
+		for ( innerKey in xmlArray[outerKey] ) {
+			fieldName = xmlArray[outerKey][innerKey][0];
+			fieldValue = xmlArray[outerKey][innerKey][1];
+			if ( fieldName == "email" ) {
+				fieldValue = "<a href=\"mailto:" + fieldValue + "\">" + fieldValue + "</a>";
+			}				
+			html += "<dd>" + fieldName + ": " + fieldValue + "<\/dd>";
+		}
+		html += "<\/dl></td>";
+	
+		html += "</tr></table></form><hr>"
+	}
+	
+	return html;
+}
+
+
 // Scrub whitespace from textarea inputs and replace linebreaks with commas.
 function scrubTextareaInput (input) {
 	output = input.replace(/\n/g, ',');
 	output = output.replace(/^\s*(.*)\s*$/,"$1");
 	return output;
 }
+
+
+// Callback for User/Domain pending list GET actions.
+function onPendingResponse(message, headers, callingContext) {
+	// Fill the 'pending' div with a series of HTML forms; one per User/Domain
+	// pending approval.
+	var pendingBlock = $("pending");
+	
+	if ( headers["Content-Type"] == "text/xml" ||
+				headers["Content-Type"] == "application/xml" ) {
+		
+		// Parse the XML
+		startParserForPending(message);
+		// Format the results into an HTML form.
+		htmlResults = formatPendingResults(resultsMap);  // resultsMap is in SaxEventHandlerForPending.js.
+				
+		// Write the results to the results area.
+		pendingBlock.innerHTML = htmlResults;
+		
+	} else {
+		pendingBlock.innerHTML += "<p class='error'>ERROR: Content-Type of results not supported.  Expected an XML message from the PURL server.<\/p>";
+	}
+	
+}
+
+// Callback for User/Domain pending list POST actions.
+function onPendingResultsResponse(message, headers, callingContext) {
+	// Fill the appropriate User/Domain 'pending' div with a status indication.
+	var submitBlockId = callingContext + "_submit";
+	var submitBlock = $(submitBlockId);
+	var resultsBlock = $(callingContext + "_results");
+	
+	if ( headers["Content-Type"] == "text/xml" ||
+				headers["Content-Type"] == "application/xml" ) {
+
+		// "Parse" the XML
+		if ( message.indexOf("rejected") > -1 ) {
+			// The User/Domain has been successfully rejected (denied).
+			setVisibility(submitBlockId, 'none');
+			resultsBlock.innerHTML = "<p class=\"rejected\">Denied</p>";
+		} else if ( message.indexOf("approved") > -1 ) {
+			// The User/Domain has been successfully approved.
+			setVisibility(submitBlockId, 'none');
+			resultsBlock.innerHTML = "<p class=\"approved\">Approved</p>";
+		} else {
+			// Something is strange about the message.
+			resultsBlock.innerHTML = "<p class=\"error\">Error: Server response unreadable.</p>";
+		}
+	} else {	
+		setVisibility(submitBlockId, 'none');
+		resultsBlock.innerHTML += "<p class='error'>ERROR: Content-Type of results not supported.  Expected an XML message from the PURL server.<\/p>";
+	}
+	
+}
+
 
 // Callback for Create/Modify/Search/Delete (POST/PUT/GET/DELETE) actions.
 function onResponse(message, headers, callingContext) {
@@ -355,5 +493,20 @@ function onResponse(message, headers, callingContext) {
 	
 	// Provide debugging information, if requested.
 	printHTTPDetails(message, headers, callingContext);
+}
+
+// Get the selected value of a radio button group with a given *name*.
+function getSelectedRadio(name) {
+	
+	radio = document.getElementsByName(name);
+	radioNum = radio.length;
+	
+	value = "";
+	for ( i=0; i<radioNum ; i++ ) {
+		if (radio[i].checked) {
+			value = radio[i].value;
+		}
+	}
+	return value;
 }
 

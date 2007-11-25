@@ -166,6 +166,19 @@ p.error {
 	margin-left: 2.5em;
 }
 
+p.approved {
+	font-size: 1.1em;
+	font-weight: bold;
+	margin-left: 2.5em;
+}
+
+p.rejected {
+	font-size: 1.1em;
+	font-weight: bold;
+	color: red;
+	margin-left: 2.5em;
+}
+
 p.warning {
 	font-size: 1.1em;
 	font-weight: bold;

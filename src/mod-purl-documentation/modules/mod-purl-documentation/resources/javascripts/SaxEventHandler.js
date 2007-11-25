@@ -2,6 +2,7 @@
 //
 // SaxEventHandler.js - an event handler for XML for <SCRIPT>'s SAX Parser
 //                      for use on the PURL project.
+// This event handler is used for User/Group/Domain/PURL actions.
 //
 // Based upon:
 // preMadeSaxEventHandler.js - a pre-built event handler for XML for <SCRIPT>'s SAX Parser
