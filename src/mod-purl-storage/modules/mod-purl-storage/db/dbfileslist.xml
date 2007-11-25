@@ -1,12 +1,17 @@
 <dbfiles>
 	<file>links.xml</file>
     <file>createDB.idoc</file>
-    <file>destroyDB.idoc</file>    
+    <file>destroyDB.idoc</file>
+    <file>resourceExists.bsh</file>
+    <file>userExists.idoc</file>  
     <file>createUser.idoc</file>
     <file>updateUser.idoc</file>
     <file>deleteUser.idoc</file>
     <file>queryUser.idoc</file>
+    <file>pendingUsers.idoc</file>    
     <file>approveUser.idoc</file>
+    <file>rejectUser.idoc</file>  
+    <file>groupExists.idoc</file>        
     <file>createGroup.idoc</file>
     <file>updateGroup.idoc</file>
     <file>deleteGroup.idoc</file>    
@@ -14,12 +19,14 @@
     <file>queryGroupMaintainers.idoc</file>
     <file>queryGroupMembers.idoc</file>    
     <file>queryAll.xml</file>   
+    <file>domainExists.idoc</file>            
     <file>createDomain.idoc</file>
     <file>updateDomain.idoc</file>
     <file>deleteDomain.idoc</file>
     <file>queryDomain.idoc</file>    
     <file>queryDomainMaintainers.idoc</file>
-    <file>queryDomainWriters.idoc</file>        
+    <file>queryDomainWriters.idoc</file>
+    <file>purlExists.idoc</file>                    
     <file>createPURL.idoc</file>
     <file>deletePURL.idoc</file>
     <file>queryPURL.idoc</file>

@@ -12,9 +12,19 @@
 		<args>all</args>
 	</link>
 	<link>
+		<name>Resource Exists</name>
+		
+	</link>
+	<link>
 		<name>Destroy DB</name>
 		<ext>/destroy-db</ext>
 		<int>active:dpml+operand@ffcpl:/sql/db/destroyDB.idoc</int>
+		<args>all</args>
+	</link>
+	<link>
+		<name>User Exists</name>
+		<ext>/user-exists</ext>
+		<int>active:beanshell+operator@ffcpl:/sql/db/resourceExists.bsh+type@data:text/plain,user</int>
 		<args>all</args>
 	</link>
 	<link>
@@ -42,11 +52,29 @@
 		<args>all</args>
 	</link>
 	<link>
+		<name>Pending Users</name>
+		<ext>/pending-users</ext>
+		<int>active:dpml+operand@ffcpl:/sql/db/pendingUsers.idoc</int>
+		<args>all</args>
+	</link>	
+	<link>
 		<name>Approve User</name>
 		<ext>/approve-user</ext>
 		<int>active:dpml+operand@ffcpl:/sql/db/approveUser.idoc</int>
 		<args>all</args>
 	</link>
+	<link>
+		<name>Reject User</name>
+		<ext>/reject-user</ext>
+		<int>active:dpml+operand@ffcpl:/sql/db/rejectUser.idoc</int>
+		<args>all</args>
+	</link>
+	<link>
+		<name>Group Exists</name>
+		<ext>/group-exists</ext>
+		<int>active:beanshell+operator@ffcpl:/sql/db/resourceExists.bsh+type@data:text/plain,group</int>
+		<args>all</args>
+	</link>		
 	<link>
 		<name>Create Group</name>
 		<ext>/create-group</ext>
@@ -84,6 +112,12 @@
 		<args>all</args>		
 	</link>
 	<link>
+		<name>Domain Exists</name>
+		<ext>/domain-exists</ext>
+		<int>active:beanshell+operator@ffcpl:/sql/db/resourceExists.bsh+type@data:text/plain,domain</int>
+		<args>all</args>
+	</link>		
+	<link>
 		<name>Create Domain</name>
 		<ext>/create-domain</ext>
 		<int>active:dpml+operand@ffcpl:/sql/db/createDomain.idoc</int>
@@ -119,6 +153,12 @@
 		<int>active:dpml+operand@ffcpl:/sql/db/queryDomainWriters.idoc</int>
 		<args>all</args>		
 	</link>
+	<link>
+		<name>PURL Exists</name>
+		<ext>/purl-exists</ext>
+		<int>active:beanshell+operator@ffcpl:/sql/db/resourceExists.bsh+type@data:text/plain,purl</int>
+		<args>all</args>
+	</link>		
 	<link>
 		<name>Create PURL</name>
 		<ext>/create-purl</ext>

@@ -1,0 +1,36 @@
+import org.ten60.netkernel.xml.representation.*;
+import com.ten60.netkernel.urii.aspect.*;
+
+main() {
+	type = context.sourceAspect("this:param:type", IAspectString.class).getString();
+	value = context.sourceAspect("this:param:value", IAspectString.class).getString();
+	
+	System.out.println("type: " + type);
+	System.out.println("value: " + value);
+	
+	query = new StringAspect("<query><id>" + value + "</id></query>");
+	uri = null;
+	
+	switch(type) {
+		case "purl":
+		uri = "ffcpl:/sql/db/purlExists.idoc";
+		break;
+		case "domain":
+		uri = "ffcpl:/sql/db/domainExists.idoc";
+		break;
+		case "group":
+		uri = "ffcpl:/sql/db/groupExists.idoc";
+		break;
+		case "user":
+		uri = "ffcpl:/sql/db/userExists.idoc";
+		break;
+	}
+	
+	System.out.println("uri: " + uri );
+	
+	req = context.createSubRequest("active:dpml");
+	req.addArgument("operand", uri);
+	req.addArgument("param", query);
+	resp = context.issueSubRequest(req);
+	context.setResponse(resp);
+}

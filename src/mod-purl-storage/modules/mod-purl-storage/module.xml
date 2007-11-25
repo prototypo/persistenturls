@@ -29,7 +29,8 @@
 		<this>
 			<match>ffcpl:/entrypoints.xml</match>
 			<match>ffcpl:/etc/CRONConfig.xml</match>
-			<match>ffcpl:/etc/ConfigPURLSDB.xml</match>			
+			<match>ffcpl:/etc/ConfigPURLSDB.xml</match>
+			<match>ffcpl:/filters/.*</match>			
 			<match>ffcpl:/tables/.*</match>
 		</this>
 		<this>
