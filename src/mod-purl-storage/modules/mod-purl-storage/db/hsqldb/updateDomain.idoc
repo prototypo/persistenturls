@@ -1,0 +1,302 @@
+<idoc>
+	<seq>
+		<instr>
+			<type>stm</type>
+			<operand><todo><domain><did/></domain></todo></operand>
+			<operator>
+				<stm:group xmlns:stm="http://1060.org/stm">
+					<stm:append xpath="/todo">
+						<stm:param xpath="/domain/maintainers"/>
+					</stm:append>
+					<stm:append xpath="/todo">
+						<stm:param xpath="/domain/writers"/>
+					</stm:append>					
+				</stm:group>			
+			</operator>
+			<param>this:param</param>
+			<target>var:todo</target>
+		</instr>	
+		<instr>
+			<type>stm</type>
+			<operand><sql/></operand>
+			<operator>
+			<stm:group xmlns:stm="http://1060.org/stm">
+				<stm:set xpath="/sql">
+					update domains set 
+						"name" = '<stm:param xpath="/domain/name/text()"/>',
+						"public" = '<stm:param xpath="/domain/public/text()"/>',
+						"lastmodified" = NOW  
+					where "d_id" = '<stm:param xpath="/domain/id/text()"/>';						
+				</stm:set>
+			</stm:group>
+			</operator>
+			<param>this:param</param>
+      		<target>var:sql</target>
+		</instr>
+		<instr>
+			<type>sqlUpdate</type>
+			<operand>var:sql</operand>
+			<target>var:results</target>
+		</instr>
+		<instr>
+			<type>purl-storage-query-domain</type>
+			<param>this:param</param>
+			<target>var:domain</target>
+		</instr>
+		<instr>
+			<type>stm</type>
+			<operand><sql/></operand>
+			<operator>
+				<stm:group xmlns:stm="http://1060.org/stm">
+					<stm:set xpath="/sql">
+						delete from domainmaintainers
+							where "d_id" = '<stm:param xpath="/domain/z_id/text()"/>';
+					</stm:set>					
+				</stm:group>
+			</operator>
+			<param>var:domain</param>
+			<target>var:sql</target>
+		</instr>
+		<instr>
+			<type>sqlUpdate</type>
+			<operand>var:sql</operand>
+			<target>var:response</target>
+		</instr>
+		<instr>
+			<type>stm</type>
+			<operand><sql/></operand>
+			<operator>
+				<stm:group xmlns:stm="http://1060.org/stm">
+					<stm:set xpath="/sql">				
+						delete from domainwriters
+							where "d_id" = '<stm:param xpath="/domain/z_id/text()"/>';
+					</stm:set>					
+				</stm:group>
+			</operator>
+			<param>var:domain</param>
+			<target>var:sql</target>
+		</instr>
+		<instr>
+			<type>sqlUpdate</type>
+			<operand>var:sql</operand>
+			<target>var:response</target>
+		</instr>							
+		<instr>
+			<type>stm</type>
+			<operand>var:todo</operand>
+			<operator>
+				<stm:group xmlns:stm="http://1060.org/stm">
+					<stm:set xpath="/todo/domain/did">
+						<stm:param xpath="/domain/z_id/text()"/>
+					</stm:set>
+				</stm:group>			
+			</operator>
+			<param>var:domain</param>
+			<target>var:todo</target>			
+		</instr>
+      	<instr>
+      		<type>copy</type>
+      		<operand><maintainers/></operand>
+      		<target>var:maintainers</target>
+      	</instr>
+	<while>
+      <cond>
+        <instr>
+          <type>xpatheval</type>
+          <operand>var:todo</operand>
+          <operator>
+            <xpath>count(/todo/maintainers/uid)&gt;= 1</xpath>
+          </operator>
+          <target>this:cond</target>
+        </instr>
+      </cond>
+      <seq>
+      	<instr>
+      		<type>stm</type>
+      		<operand><user><id/></user></operand>
+      		<operator>
+      			<stm:group xmlns:stm="http://1060.org/stm">
+      				<stm:set xpath="/user/id">
+      					<stm:param xpath="/todo/maintainers/uid/text()"/>
+      				</stm:set>
+      			</stm:group>
+      		</operator>
+      		<target>var:maintainer</target>
+      		<param>var:todo</param>
+      	</instr>
+      	<instr>
+      		<type>purl-storage-query-user</type>
+      		<param>var:maintainer</param>
+      		<target>var:maintainer</target>
+      	</instr>
+      	<instr>
+      		<type>stm</type>
+      		<operand><entry><maintainer/></entry></operand>
+      		<operator>
+      			<stm:group xmlns:stm="http://1060.org/stm">
+      				<stm:append xpath="/entry">
+      					<stm:param xpath="/todo/domain/did"/>
+      				</stm:append>
+      			</stm:group>
+      		</operator>
+      		<param>var:todo</param>
+      		<target>var:entry</target>
+      	</instr>
+      	<instr>
+      		<type>stm</type>
+      		<operand>var:entry</operand>
+      		<operator>
+      			<stm:group xmlns:stm="http://1060.org/stm">
+      				<stm:set xpath="/entry/maintainer">
+      					<stm:param xpath="/user/z_id/text()"/>
+      				</stm:set>
+      			</stm:group>
+      		</operator>
+      		<param>var:maintainer</param>
+      		<target>var:entry</target>
+      	</instr>      	
+      	<instr>
+      		<type>stm</type>
+      		<operand><sql/></operand>
+      		<operator>
+      			<stm:group xmlns:stm="http://1060.org/stm">
+      				<stm:set xpath="/sql">
+      				INSERT INTO domainmaintainers VALUES ( null,
+							'<stm:param xpath="/entry/did/text()"/>',
+							'<stm:param xpath="/entry/maintainer/text()"/>'
+							);
+					</stm:set>		
+      			</stm:group>
+      		</operator>
+      		<param>var:entry</param>
+      		<target>var:sql</target>
+      	</instr>
+      	<instr>
+      		<type>sqlUpdate</type>
+      		<operand>var:sql</operand>
+      		<target>var:result</target>
+      	</instr>
+        <instr>
+          <type>stm</type>
+          <operand>var:todo</operand>
+          <operator>
+            <stm:group xmlns:stm="http://1060.org/stm">
+              <stm:delete xpath="/todo/maintainers/uid[1]" />
+            </stm:group>
+          </operator>
+          <target>var:todo</target>
+        </instr>
+      </seq>
+    </while>
+    
+    <instr>
+      		<type>copy</type>
+      		<operand><writers/></operand>
+      		<target>var:writers</target>
+      	</instr>
+	<while>
+      <cond>
+        <instr>
+          <type>xpatheval</type>
+          <operand>var:todo</operand>
+          <operator>
+            <xpath>count(/todo/writers/uid)&gt;= 1</xpath>
+          </operator>
+          <target>this:cond</target>
+        </instr>
+      </cond>
+      <seq>
+      	<instr>
+      		<type>stm</type>
+      		<operand><user><id/></user></operand>
+      		<operator>
+      			<stm:group xmlns:stm="http://1060.org/stm">
+      				<stm:set xpath="/user/id">
+      					<stm:param xpath="/todo/writers/uid/text()"/>
+      				</stm:set>
+      			</stm:group>
+      		</operator>
+      		<target>var:writer</target>
+      		<param>var:todo</param>
+      	</instr>
+      	<instr>
+      		<type>purl-storage-query-user</type>
+      		<param>var:writer</param>
+      		<target>var:writer</target>
+      	</instr>
+      	<instr>
+      		<type>stm</type>
+      		<operand><entry><writer/></entry></operand>
+      		<operator>
+      			<stm:group xmlns:stm="http://1060.org/stm">
+      				<stm:append xpath="/entry">
+      					<stm:param xpath="/todo/domain/did"/>
+      				</stm:append>
+      			</stm:group>
+      		</operator>
+      		<param>var:todo</param>
+      		<target>var:entry</target>
+      	</instr>
+      	<instr>
+      		<type>stm</type>
+      		<operand>var:entry</operand>
+      		<operator>
+      			<stm:group xmlns:stm="http://1060.org/stm">
+      				<stm:set xpath="/entry/writer">
+      					<stm:param xpath="/user/z_id/text()"/>
+      				</stm:set>
+      			</stm:group>
+      		</operator>
+      		<param>var:writer</param>
+      		<target>var:entry</target>
+      	</instr>      	
+      	<instr>
+      		<type>stm</type>
+      		<operand><sql/></operand>
+      		<operator>
+      			<stm:group xmlns:stm="http://1060.org/stm">
+      				<stm:set xpath="/sql">
+      				INSERT INTO domainwriters VALUES ( null,
+							'<stm:param xpath="/entry/did/text()"/>',
+							'<stm:param xpath="/entry/writer/text()"/>'
+							);
+					</stm:set>		
+      			</stm:group>
+      		</operator>
+      		<param>var:entry</param>
+      		<target>var:sql</target>
+      	</instr>
+      	<instr>
+      		<type>sqlUpdate</type>
+      		<operand>var:sql</operand>
+      		<target>var:result</target>
+      	</instr>
+        <instr>
+          <type>stm</type>
+          <operand>var:todo</operand>
+          <operator>
+            <stm:group xmlns:stm="http://1060.org/stm">
+              <stm:delete xpath="/todo/writers/uid[1]" />
+            </stm:group>
+          </operator>
+          <target>var:todo</target>
+        </instr>
+      </seq>
+    </while>
+    <instr>
+    	<type>purl-storage-query-domain</type>
+    	<param>this:param</param>
+    	<target>var:domain</target>
+   	</instr>
+		<instr>
+			<type>copy</type>
+			<operand>var:domain</operand>
+			<target>this:response</target>
+		</instr>
+		<instr>
+			<type>expire</type>
+			<operand>this:response</operand>
+		</instr>	
+	</seq>
+</idoc>
+		

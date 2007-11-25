@@ -90,6 +90,12 @@
 		<args>all</args>
 	</link>
 	<link>
+		<name>Update Domain</name>
+		<ext>/update-domain</ext>
+		<int>active:dpml+operand@ffcpl:/sql/db/updateDomain.idoc</int>
+		<args>all</args>
+	</link>	
+	<link>
 		<name>Delete Domain</name>
 		<ext>/delete-domain</ext>
 		<int>active:dpml+operand@ffcpl:/sql/db/deleteDomain.idoc</int>

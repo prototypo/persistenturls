@@ -117,6 +117,16 @@
     	</assert>
     </test>
     <test>
+    	<uri>active:beanshell+operator@ffcpl:/test/accessor/createDomain.bsh+domain@ffcpl:/testdata/testdomain2.xml</uri>
+    	<assert>
+    		<xpath>count(/domain) = 1</xpath>
+    		<xpath>/domain/id = 'zoo'</xpath>
+    		<xpath>/domain/name = 'My Private Domain'</xpath>
+    		<xpath>count(/domain/maintainers/uid) = 2</xpath>
+    		<xpath>count(/domain/writers/uid) = 1</xpath>    		
+    	</assert>
+    </test>    
+    <test>
     	<uri>active:beanshell+operator@ffcpl:/test/accessor/queryDomainMaintainers.bsh+domain@data:text/plain,boo</uri>
     	<assert>
     		<xpath>count(/maintainers) = 1</xpath>
@@ -130,6 +140,19 @@
     		<xpath>/writers/uid[1] = 'brian-test'</xpath>
     	</assert>
     </test>
+    <test>
+    	<uri>active:beanshell+operator@ffcpl:/test/accessor/updateDomain.bsh+domain@ffcpl:/testdata/testdomain2-mod.xml</uri>
+    	<assert>
+    		<xpath>count(/domain) = 1</xpath>
+    		<xpath>/domain/id = 'zoo'</xpath>
+    		<xpath>/domain/name = 'My Other Private Domain'</xpath>
+    		<xpath>count(/domain/maintainers/uid) = 1</xpath>
+    		<xpath>/domain/maintainers/uid[1] = 'brian-test'</xpath>
+    		<xpath>count(/domain/writers/uid) = 2</xpath>
+    		<xpath>/domain/writers/uid[1] = 'brian-test'</xpath>
+    		<xpath>/domain/writers/uid[2] = 'david-test'</xpath>    		
+    	</assert>
+    </test>    
     <test>
     	<uri>active:beanshell+operator@ffcpl:/test/accessor/createPURL.bsh+purl@ffcpl:/testdata/testpurl301.xml</uri>
     	<assert>
