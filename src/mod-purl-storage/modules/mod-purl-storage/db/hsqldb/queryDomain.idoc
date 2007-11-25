@@ -1,0 +1,76 @@
+<idoc>
+	<seq>
+		<instr>
+			<type>stm</type>
+			<operand><sql/></operand>
+			<operator>
+			<stm:group xmlns:stm="http://1060.org/stm">
+				<stm:set xpath="/sql">
+					SELECT * from domains
+						where "d_id" = '<stm:param xpath="/domain/id/text()"/>';
+				</stm:set>
+			</stm:group>
+		</operator>
+		<param>this:param</param>
+      	<target>var:sql</target>
+		</instr>
+		<instr>
+			<type>sqlQuery</type>
+			<operand>var:sql</operand>
+			<target>var:results</target>
+		</instr>
+		<instr>
+			<type>purl-storage-query-domainmaintainers</type>
+			<param>this:param</param>
+			<target>var:maintainers</target>
+		</instr>
+		<instr>
+			<type>purl-storage-query-domainwriters</type>
+			<param>this:param</param>
+			<target>var:members</target>
+		</instr>
+		<instr>
+			<type>stm</type>
+			<operand>
+				<domain>
+					<z_id/>
+					<id/>
+					<name/>
+					<public/>
+				</domain>
+			</operand>
+			<operator>
+				<stm:group xmlns:stm="http://1060.org/stm">
+					<stm:set xpath="/domain/z_id"><stm:param xpath="/results/row/z_id/text()"/></stm:set>				
+					<stm:set xpath="/domain/id"><stm:param xpath="/results/row/d_id/text()"/></stm:set>
+					<stm:set xpath="/domain/name"><stm:param xpath="/results/row/name/text()"/></stm:set>
+					<stm:set xpath="/domain/public"><stm:param xpath="/results/row/public/text()"/></stm:set>
+				</stm:group>
+			</operator>
+			<param>var:results</param>
+			<target>var:results</target>
+		</instr>
+		<instr>
+			<type>stm</type>
+			<operand>var:results</operand>
+			<operator>
+				<stm:group xmlns:stm="http://1060.org/stm">
+					<stm:append xpath="/domain"><stm:param xpath="/maintainers"/></stm:append>				
+				</stm:group>				
+			</operator>
+			<param>var:maintainers</param>
+			<target>var:results</target>
+		</instr>
+		<instr>
+			<type>stm</type>
+			<operand>var:results</operand>
+			<operator>
+				<stm:group xmlns:stm="http://1060.org/stm">
+					<stm:append xpath="/domain"><stm:param xpath="/writers"/></stm:append>				
+				</stm:group>				
+			</operator>
+			<param>var:members</param>
+			<target>this:response</target>
+		</instr>		
+	</seq>
+</idoc>

@@ -1,0 +1,9 @@
+<config>
+	<rdbms>
+		<jdbcDriver>org.hsqldb.jdbcDriver</jdbcDriver>
+		<jdbcConnection>jdbc:hsqldb:purlstoragetest</jdbcConnection>
+		<user>sa</user>
+		<password/>
+		<shutdown>true</shutdown>
+	</rdbms>
+</config>

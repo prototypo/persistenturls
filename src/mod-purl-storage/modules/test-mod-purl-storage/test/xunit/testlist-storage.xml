@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testlist  title="Storage Accessor Unit Tests">
+    <desc>
+	<div>
+	<b>Storage</b> accessor unit tests for the <b>PURLs</b> service.
+	</div>
+    </desc>
+ 	<test>
+      	<uri>active:purl-storage-destroy-db</uri>
+		<assert name="Test DB Deleted">
+			<xpath>count(/db) = 1</xpath>
+		</assert> 
+    </test>     
+ 	<test>
+      <uri>active:purl-storage-create-db</uri>
+	  <assert name="Test DB Created">
+		<xpath>count(/db) = 1</xpath>
+	  </assert> 
+    </test>
+    <test>
+    	<uri>active:beanshell+operator@ffcpl:/test/accessor/createUser.bsh+user@ffcpl:/testdata/testuser1.xml</uri>
+		<assert name="User 1 Created">
+			<xpath>count(/user) = 1</xpath>
+		</assert>    
+    </test>
+    <test>
+        <uri>active:beanshell+operator@ffcpl:/test/accessor/createUser.bsh+user@ffcpl:/testdata/testuser2.xml</uri>
+		<assert name="User 2 Created">
+			<xpath>count(/user) = 1</xpath>
+			<xpath>/user/id = 'brian-test'</xpath>
+			<xpath>/user/affiliation = 'Zepheira'</xpath>
+			<xpath>/user/email = 'brian@zepheira.com'</xpath>			
+		</assert>    
+    </test>
+    <test>
+        <uri>active:beanshell+operator@ffcpl:/test/accessor/queryUser.bsh+user@data:text/plain,brian-test</uri>
+		<assert name="User 1 Query">
+			<xpath>count(/user) = 1</xpath>
+		</assert>    
+    </test>
+    <test>
+        <uri>active:beanshell+operator@ffcpl:/test/accessor/approveUser.bsh+user@data:text/plain,brian-test</uri>
+		<assert name="Approve User 1">
+			<xpath>count(/user) = 1</xpath>
+		</assert>    
+    </test>    
+    <test>
+        <uri>active:beanshell+operator@ffcpl:/test/accessor/queryUser.bsh+user@data:text/plain,david-test</uri>
+		<assert name="User 1 Query Validation">
+			<xpath>/user/id = 'david-test'</xpath>
+		</assert>    
+    </test>    
+    <test>
+        <uri>active:beanshell+operator@ffcpl:/test/accessor/queryUser.bsh+user@data:text/plain,brian-test</uri>
+		<assert name="User 2 Query Validation">
+			<xpath>count(/user) = 1</xpath>
+			<xpath>/user/id = 'brian-test'</xpath>
+			<xpath>/user/affiliation = 'Zepheira'</xpath>
+			<xpath>/user/email = 'brian@zepheira.com'</xpath>
+		</assert>    
+    </test>
+    <test>
+        <uri>active:beanshell+operator@ffcpl:/test/accessor/updateUser.bsh+user@ffcpl:/testdata/testuser2-mod.xml</uri>
+		<assert name="User 2 Updated">
+			<xpath>/user/id = 'brian-test'</xpath>		
+			<xpath>count(/user) = 1</xpath>
+			<xpath>/user/affiliation = 'Some Other Org'</xpath>
+			<xpath>/user/email = 'brian@someother.org'</xpath>
+		</assert>    
+    </test>
+    <test>
+    	<uri>active:beanshell+operator@ffcpl:/test/accessor/createGroup.bsh+group@ffcpl:/testdata/testgroup1.xml</uri>
+    	<assert>
+    		<xpath>count(/group) = 1</xpath>
+    		<xpath>/group/id = 'purlworkers'</xpath>
+    		<xpath>/group/name = 'My Group'</xpath>
+    		<xpath>count(/group/maintainers/uid) = 2</xpath>
+    		<xpath>count(/group/members/uid) = 2</xpath>    		
+    	</assert>
+    </test>
+    <test>
+    	<uri>active:beanshell+operator@ffcpl:/test/accessor/queryGroupMaintainers.bsh+group@data:text/plain,purlworkers</uri>
+    	<assert>
+    		<xpath>count(/maintainers) = 1</xpath>
+    		<xpath>/maintainers/uid[1] = 'brian-test'</xpath>
+    		<xpath>/maintainers/uid[2] = 'david-test'</xpath>    		
+    	</assert>
+    </test>
+    <test>
+    	<uri>active:beanshell+operator@ffcpl:/test/accessor/queryGroupMembers.bsh+group@data:text/plain,purlworkers</uri>
+    	<assert>
+    		<xpath>count(/members) = 1</xpath>
+    		<xpath>/members/uid[1] = 'brian-test'</xpath>
+    		<xpath>/members/uid[2] = 'david-test'</xpath>    		
+    	</assert>
+    </test>
+    <test>
+    	<uri>active:beanshell+operator@ffcpl:/test/accessor/createDomain.bsh+domain@ffcpl:/testdata/testdomain1.xml</uri>
+    	<assert>
+    		<xpath>count(/domain) = 1</xpath>
+    		<xpath>/domain/id = 'boo'</xpath>
+    		<xpath>/domain/name = 'My Public Domain'</xpath>
+    		<xpath>count(/domain/maintainers/uid) = 1</xpath>
+    		<xpath>count(/domain/writers/uid) = 1</xpath>    		
+    	</assert>
+    </test>
+    <test>
+    	<uri>active:beanshell+operator@ffcpl:/test/accessor/queryDomainMaintainers.bsh+domain@data:text/plain,boo</uri>
+    	<assert>
+    		<xpath>count(/maintainers) = 1</xpath>
+    		<xpath>/maintainers/uid[1] = 'brian-test'</xpath>
+    	</assert>
+    </test>
+    <test>
+    	<uri>active:beanshell+operator@ffcpl:/test/accessor/queryDomainWriters.bsh+domain@data:text/plain,boo</uri>
+    	<assert>
+    		<xpath>count(/writers) = 1</xpath>
+    		<xpath>/writers/uid[1] = 'brian-test'</xpath>
+    	</assert>
+    </test>
+    <test>
+    	<uri>active:beanshell+operator@ffcpl:/test/accessor/createPURL.bsh+purl@ffcpl:/testdata/testpurl1.xml</uri>
+    	<assert>
+    		<xpath>count(/purl) = 1</xpath>
+    		<xpath>/purl/id = '/net/foo/brian/foaf'</xpath>
+    		<xpath>/purl/type = '302'</xpath>
+    		<xpath>count(/purl/maintainers/uid) = 1</xpath>
+    	</assert>
+    </test>
+    <test>
+    	<uri>active:beanshell+operator@ffcpl:/test/accessor/queryPURLMaintainers.bsh+purl@data:text/plain,/net/foo/brian/foaf</uri>
+    	<assert>
+    		<xpath>count(/maintainers) = 1</xpath>
+    		<xpath>/maintainers/uid[1] = 'brian-test'</xpath>
+    	</assert>
+    </test>            
+ 	<test>
+      	<uri>active:purl-storage-destroy-db</uri>
+		<assert name="Test DB Deleted">
+			<xpath>count(/db) = 1</xpath>
+		</assert> 
+    </test>                       
+</testlist>

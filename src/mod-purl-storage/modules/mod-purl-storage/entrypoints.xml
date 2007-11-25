@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entrypoints>
+ <!-- <entrypoint>
+    <name>mod_purl_storage_cron_config</name>
+    <uri>ffcpl:/etc/CRONConfig.xml</uri>
+    <indexable>
+      <title>config for initializing the purl data store</title>
+      <desc></desc>
+      <keywords/>
+    </indexable>
+    <categories>cron hidden</categories>
+    <group>Init</group>
+    <icon/>
+  </entrypoint> -->
+</entrypoints>
