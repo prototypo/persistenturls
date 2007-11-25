@@ -42,14 +42,40 @@
 				</stm:group>
 			</operator>
 			<param>var:results</param>
-			<target>var:results</target>
+			<target>var:purl</target>
 		</instr>		
 		<choose>
+			<!-- 301 PURLS -->
+			<cond>
+				<instr>
+          			<type>xpatheval</type>
+          			<operand>var:purl</operand>
+          			<operator>
+            			<xpath>/purl/type='301'</xpath>
+          			</operator>
+          			<target>this:cond</target>
+        		</instr>				
+			</cond>
+			<then>
+				<instr>
+					<type>stm</type>
+					<operand>var:purl</operand>
+					<operator>
+						<stm:group xmlns:stm="http://1060.org/stm">
+							<stm:create-path newpath="/target/url" select="." xpath="/purl">
+								<stm:param xpath="/results/row/target/text()"/>
+							</stm:create-path>
+						</stm:group>
+					</operator>
+					<param>var:results</param>
+					<target>var:purl</target>
+				</instr>
+			</then>		
 			<!-- 302 PURLS -->
 			<cond>
 				<instr>
           			<type>xpatheval</type>
-          			<operand>this:param</operand>
+          			<operand>var:purl</operand>
           			<operator>
             			<xpath>/purl/type='302'</xpath>
           			</operator>
@@ -59,7 +85,7 @@
 			<then>
 				<instr>
 					<type>stm</type>
-					<operand>var:results</operand>
+					<operand>var:purl</operand>
 					<operator>
 						<stm:group xmlns:stm="http://1060.org/stm">
 							<stm:create-path newpath="/target/url" select="." xpath="/purl">
@@ -68,13 +94,67 @@
 						</stm:group>
 					</operator>
 					<param>var:results</param>
-					<target>var:results</target>
+					<target>var:purl</target>
 				</instr>
 			</then>
+			
+			<!-- 303 PURLS -->
+			<cond>
+				<instr>
+          			<type>xpatheval</type>
+          			<operand>var:purl</operand>
+          			<operator>
+            			<xpath>/purl/type='303'</xpath>
+          			</operator>
+          			<target>this:cond</target>
+        		</instr>				
+			</cond>
+			<then>
+				<instr>
+					<type>stm</type>
+					<operand>var:purl</operand>
+					<operator>
+						<stm:group xmlns:stm="http://1060.org/stm">
+							<stm:create-path newpath="/seealso/url" select="." xpath="/purl">
+								<stm:param xpath="/results/row/target/text()"/>
+							</stm:create-path>
+						</stm:group>
+					</operator>
+					<param>var:results</param>
+					<target>var:purl</target>
+				</instr>
+			</then>	
+			
+			<!-- 307 PURLS -->
+			<cond>
+				<instr>
+          			<type>xpatheval</type>
+          			<operand>var:purl</operand>
+          			<operator>
+            			<xpath>/purl/type='307'</xpath>
+          			</operator>
+          			<target>this:cond</target>
+        		</instr>				
+			</cond>
+			<then>
+				<instr>
+					<type>stm</type>
+					<operand>var:purl</operand>
+					<operator>
+						<stm:group xmlns:stm="http://1060.org/stm">
+							<stm:create-path newpath="/target/url" select="." xpath="/purl">
+								<stm:param xpath="/results/row/target/text()"/>
+							</stm:create-path>
+						</stm:group>
+					</operator>
+					<param>var:results</param>
+					<target>var:purl</target>
+				</instr>
+			</then>					
 		</choose>
 		<instr>
 			<type>stm</type>
-			<operand>var:results</operand>
+			<operand>var:purl</operand>
 			<operator>
 				<stm:group xmlns:stm="http://1060.org/stm">
 					<stm:append xpath="/purl"><stm:param xpath="/maintainers"/></stm:append>				

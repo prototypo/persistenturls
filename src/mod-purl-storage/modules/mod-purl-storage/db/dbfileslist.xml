@@ -8,6 +8,7 @@
     <file>queryUser.idoc</file>
     <file>approveUser.idoc</file>
     <file>createGroup.idoc</file>
+    <file>updateGroup.idoc</file>
     <file>deleteGroup.idoc</file>    
     <file>queryGroup.idoc</file>    
     <file>queryGroupMaintainers.idoc</file>

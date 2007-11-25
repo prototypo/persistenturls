@@ -58,7 +58,13 @@
 		<ext>/delete-group</ext>
 		<int>active:dpml+operand@ffcpl:/sql/db/deleteGroup.idoc</int>
 		<args>all</args>
-	</link>	
+	</link>
+	<link>
+		<name>Update Group</name>
+		<ext>/update-group</ext>
+		<int>active:dpml+operand@ffcpl:/sql/db/updateGroup.idoc</int>
+		<args>all</args>
+	</link>		
 	<link>
 		<name>Query Group</name>
 		<ext>/query-group</ext>

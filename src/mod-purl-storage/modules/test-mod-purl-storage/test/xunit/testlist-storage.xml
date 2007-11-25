@@ -95,6 +95,18 @@
     	</assert>
     </test>
     <test>
+    	<uri>active:beanshell+operator@ffcpl:/test/accessor/updateGroup.bsh+group@ffcpl:/testdata/testgroup1-mod.xml</uri>
+    	<assert>
+    		<xpath>count(/group) = 1</xpath>
+    		<xpath>/group/id = 'purlworkers'</xpath>
+    		<xpath>/group/name = 'My Other Group'</xpath>
+    		<xpath>count(/group/maintainers/uid) = 1</xpath>
+    		<xpath>count(/group/members/uid) = 1</xpath>
+    		<xpath>/group/maintainers/uid[1] = 'brian-test'</xpath>
+    		<xpath>/group/members/uid[1] = 'brian-test'</xpath>    		
+    	</assert>
+    </test>       
+    <test>
     	<uri>active:beanshell+operator@ffcpl:/test/accessor/createDomain.bsh+domain@ffcpl:/testdata/testdomain1.xml</uri>
     	<assert>
     		<xpath>count(/domain) = 1</xpath>
@@ -119,16 +131,73 @@
     	</assert>
     </test>
     <test>
-    	<uri>active:beanshell+operator@ffcpl:/test/accessor/createPURL.bsh+purl@ffcpl:/testdata/testpurl1.xml</uri>
+    	<uri>active:beanshell+operator@ffcpl:/test/accessor/createPURL.bsh+purl@ffcpl:/testdata/testpurl301.xml</uri>
     	<assert>
     		<xpath>count(/purl) = 1</xpath>
-    		<xpath>/purl/id = '/net/foo/brian/foaf'</xpath>
-    		<xpath>/purl/type = '302'</xpath>
+    		<xpath>/purl/id = '/net/purl/301'</xpath>
+    		<xpath>/purl/type = '301'</xpath>
+    		<xpath>/purl/target/url = 'http://zepheira.com/301'</xpath>
     		<xpath>count(/purl/maintainers/uid) = 1</xpath>
+    		<xpath>/purl/maintainers/uid = 'brian-test'</xpath>    		
     	</assert>
     </test>
     <test>
-    	<uri>active:beanshell+operator@ffcpl:/test/accessor/queryPURLMaintainers.bsh+purl@data:text/plain,/net/foo/brian/foaf</uri>
+    	<uri>active:beanshell+operator@ffcpl:/test/accessor/createPURL.bsh+purl@ffcpl:/testdata/testpurl302.xml</uri>
+    	<assert>
+    		<xpath>count(/purl) = 1</xpath>
+    		<xpath>/purl/id = '/net/purl/302'</xpath>
+    		<xpath>/purl/type = '302'</xpath>
+    		<xpath>/purl/target/url = 'http://zepheira.com/302'</xpath>
+    		<xpath>count(/purl/maintainers/uid) = 1</xpath>
+    		<xpath>/purl/maintainers/uid = 'brian-test'</xpath>    		
+    	</assert>
+    </test> 
+    <test>
+    	<uri>active:beanshell+operator@ffcpl:/test/accessor/createPURL.bsh+purl@ffcpl:/testdata/testpurl303.xml</uri>
+    	<assert>
+    		<xpath>count(/purl) = 1</xpath>
+    		<xpath>/purl/id = '/net/purl/303'</xpath>
+    		<xpath>/purl/type = '303'</xpath>
+    		<xpath>/purl/seealso/url = 'http://zepheira.com/team/brian/brian.rdf'</xpath>
+    		<xpath>count(/purl/maintainers/uid) = 1</xpath>
+    		<xpath>/purl/maintainers/uid = 'brian-test'</xpath>    		
+    	</assert>
+    </test>
+    <test>
+    	<uri>active:beanshell+operator@ffcpl:/test/accessor/createPURL.bsh+purl@ffcpl:/testdata/testpurl307.xml</uri>
+    	<assert>
+    		<xpath>count(/purl) = 1</xpath>
+    		<xpath>/purl/id = '/net/purl/307'</xpath>
+    		<xpath>/purl/type = '307'</xpath>
+    		<xpath>/purl/target/url = 'http://zepheira.com/307'</xpath>
+    		<xpath>count(/purl/maintainers/uid) = 1</xpath>
+    		<xpath>/purl/maintainers/uid = 'brian-test'</xpath>    		
+    	</assert>
+    </test>
+    <test>
+    	<uri>active:beanshell+operator@ffcpl:/test/accessor/createPURL.bsh+purl@ffcpl:/testdata/testpurl404.xml</uri>
+    	<assert>
+    		<xpath>count(/purl) = 1</xpath>
+    		<xpath>/purl/id = '/net/purl/404'</xpath>
+    		<xpath>/purl/type = '404'</xpath>
+    		<xpath>count(/purl/target/url) = 0</xpath>
+    		<xpath>count(/purl/maintainers/uid) = 1</xpath>
+    		<xpath>/purl/maintainers/uid = 'brian-test'</xpath>    		
+    	</assert>
+    </test>
+    <test>
+    	<uri>active:beanshell+operator@ffcpl:/test/accessor/createPURL.bsh+purl@ffcpl:/testdata/testpurl410.xml</uri>
+    	<assert>
+    		<xpath>count(/purl) = 1</xpath>
+    		<xpath>/purl/id = '/net/purl/410'</xpath>
+    		<xpath>/purl/type = '410'</xpath>
+    		<xpath>count(/purl/target/url) = 0</xpath>
+    		<xpath>count(/purl/maintainers/uid) = 1</xpath>
+    		<xpath>/purl/maintainers/uid = 'brian-test'</xpath>    		
+    	</assert>
+    </test>                       
+    <test>
+    	<uri>active:beanshell+operator@ffcpl:/test/accessor/queryPURLMaintainers.bsh+purl@data:text/plain,/net/purl/301</uri>
     	<assert>
     		<xpath>count(/maintainers) = 1</xpath>
     		<xpath>/maintainers/uid[1] = 'brian-test'</xpath>

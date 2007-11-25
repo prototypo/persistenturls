@@ -14,6 +14,39 @@
 			<target>var:todo</target>
 		</instr>
 		<choose>
+			<!-- 301 PURLS -->
+			<cond>
+				<instr>
+          			<type>xpatheval</type>
+          			<operand>this:param</operand>
+          			<operator>
+            			<xpath>/purl/type='301'</xpath>
+          			</operator>
+          			<target>this:cond</target>
+        		</instr>				
+			</cond>
+			<then>
+				<instr>
+					<type>stm</type>
+					<operand><sql/></operand>
+					<operator>
+						<stm:group xmlns:stm="http://1060.org/stm">
+						<stm:set xpath="/sql">
+							INSERT INTO purls VALUES ( null,
+								'<stm:param xpath="/purl/id/text()"/>',
+								'<stm:param xpath="/purl/type/text()"/>',								
+								'<stm:param xpath="/purl/target/url/text()"/>',
+								NOW,
+								NOW,
+								1
+								);																				
+						</stm:set>
+						</stm:group>
+					</operator>
+					<param>this:param</param>
+					<target>var:sql</target>
+				</instr>
+			</then>		
 			<!-- 302 PURLS -->
 			<cond>
 				<instr>
@@ -47,6 +80,139 @@
 					<target>var:sql</target>
 				</instr>
 			</then>
+			<!-- 303 PURLS -->
+			<cond>
+				<instr>
+          			<type>xpatheval</type>
+          			<operand>this:param</operand>
+          			<operator>
+            			<xpath>/purl/type='303'</xpath>
+          			</operator>
+          			<target>this:cond</target>
+        		</instr>				
+			</cond>
+			<then>
+				<instr>
+					<type>stm</type>
+					<operand><sql/></operand>
+					<operator>
+						<stm:group xmlns:stm="http://1060.org/stm">
+						<stm:set xpath="/sql">
+							INSERT INTO purls VALUES ( null,
+								'<stm:param xpath="/purl/id/text()"/>',
+								'<stm:param xpath="/purl/type/text()"/>',								
+								'<stm:param xpath="/purl/seealso/url/text()"/>',
+								NOW,
+								NOW,
+								1
+								);																				
+						</stm:set>
+						</stm:group>
+					</operator>
+					<param>this:param</param>
+					<target>var:sql</target>
+				</instr>
+			</then>
+			<!-- 307 PURLS -->
+			<cond>
+				<instr>
+          			<type>xpatheval</type>
+          			<operand>this:param</operand>
+          			<operator>
+            			<xpath>/purl/type='307'</xpath>
+          			</operator>
+          			<target>this:cond</target>
+        		</instr>				
+			</cond>
+			<then>
+				<instr>
+					<type>stm</type>
+					<operand><sql/></operand>
+					<operator>
+						<stm:group xmlns:stm="http://1060.org/stm">
+						<stm:set xpath="/sql">
+							INSERT INTO purls VALUES ( null,
+								'<stm:param xpath="/purl/id/text()"/>',
+								'<stm:param xpath="/purl/type/text()"/>',								
+								'<stm:param xpath="/purl/target/url/text()"/>',
+								NOW,
+								NOW,
+								1
+								);																				
+						</stm:set>
+						</stm:group>
+					</operator>
+					<param>this:param</param>
+					<target>var:sql</target>
+				</instr>
+			</then>
+			<!-- 404 PURLS -->
+			<cond>
+				<instr>
+          			<type>xpatheval</type>
+          			<operand>this:param</operand>
+          			<operator>
+            			<xpath>/purl/type='404'</xpath>
+          			</operator>
+          			<target>this:cond</target>
+        		</instr>				
+			</cond>
+			<then>
+				<instr>
+					<type>stm</type>
+					<operand><sql/></operand>
+					<operator>
+						<stm:group xmlns:stm="http://1060.org/stm">
+						<stm:set xpath="/sql">
+							INSERT INTO purls VALUES ( null,
+								'<stm:param xpath="/purl/id/text()"/>',
+								'<stm:param xpath="/purl/type/text()"/>',
+								'',								
+								NOW,
+								NOW,
+								1
+								);																				
+						</stm:set>
+						</stm:group>
+					</operator>
+					<param>this:param</param>
+					<target>var:sql</target>
+				</instr>
+			</then>
+				
+			<!-- 410 PURLS -->
+			<cond>
+				<instr>
+          			<type>xpatheval</type>
+          			<operand>this:param</operand>
+          			<operator>
+            			<xpath>/purl/type='410'</xpath>
+          			</operator>
+          			<target>this:cond</target>
+        		</instr>				
+			</cond>
+			<then>
+				<instr>
+					<type>stm</type>
+					<operand><sql/></operand>
+					<operator>
+						<stm:group xmlns:stm="http://1060.org/stm">
+						<stm:set xpath="/sql">
+							INSERT INTO purls VALUES ( null,
+								'<stm:param xpath="/purl/id/text()"/>',
+								'<stm:param xpath="/purl/type/text()"/>',
+								'',								
+								NOW,
+								NOW,
+								1
+								);																				
+						</stm:set>
+						</stm:group>
+					</operator>
+					<param>this:param</param>
+					<target>var:sql</target>
+				</instr>
+			</then>										
 		</choose>
 		<instr>
 			<type>sqlUpdate</type>
