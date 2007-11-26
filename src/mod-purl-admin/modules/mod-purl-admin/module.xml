@@ -6,7 +6,7 @@
 	-->
     <identity>
 		<uri>urn:org:purl:admin</uri>
-		<version>0.0.1212</version>
+		<version>0.0.1277</version>
     </identity>
 	<info>
 		<name>PURL Admin Module</name>
@@ -69,8 +69,8 @@
 			<to>active:beanshell+operator@ffcpl:/resources/$1</to>
 		</rewrite>
 		<rewrite>
-			<match>(ffcpl:/purl)(.*)</match>
-			<to>active:purl-resolver+path@$2</to>
+			<match>(ffcpl:/purl.*)</match>
+			<to>active:purl-resolver+path@$1</to>
 		</rewrite>
 		<rewrite>
 			<match>active:purl-initialize</match>
@@ -117,6 +117,14 @@
 			<match>(ffcpl:/admin/user.*)</match>
 			<to>active:purl-user+path@$1</to>
 		</rewrite>
+		<rewrite>
+			<match>(ffcpl:/admin/pending/user.*)</match>
+			<to>active:purl-storage-pending-users+type@data:text/plain,user+path@$1</to>
+		</rewrite>
+		<rewrite>
+			<match>(ffcpl:/admin/pending/domain.*)</match>
+			<to>active:purl-storage-pending-domains+type@data:text/plain,domain+path@$1</to>
+		</rewrite>		
 
 		<ura>
       		<match>active:purl-user\+.*</match>
@@ -150,6 +158,14 @@
       		<match>active:purl-resolver\+.*</match>
       		<class>org.purl.accessor.PURLResolverAccessor</class>
     	</ura>
+    	<ura>
+    		<match>active:purl-pending-user\+.*</match>
+    		<class>org.purl.accessor.PendingAccessor</class>
+    	</ura>
+    	<ura>
+    		<match>active:purl-pending-user\+.*</match>
+    		<class>org.purl.accessor.PendingAccessor</class>
+    	</ura>    	
 		<ura>
       		<match>active:purl\+.*</match>
       		<class>org.purl.accessor.PURLAccessor</class>
@@ -160,6 +176,9 @@
 		</rewrite>
 		<import>
 			<uri>urn:org:purl:static</uri>
+		</import>
+		<import>
+			<uri>urn:org:purl:storage</uri>
 		</import>
 		<import>
 			<uri>urn:org:purl:search</uri>
@@ -179,6 +198,9 @@
 	    <import>
 	      <uri>urn:org:ten60:netkernel:mod:lucene</uri>
 	    </import>
+	    <import>
+	      <uri>urn:org:ten60:netkernel:ext:xsecurity</uri>
+	    </import>	    
 		<import>
 			<uri>urn:org:ten60:netkernel:ext:xml:core</uri>
 		</import>

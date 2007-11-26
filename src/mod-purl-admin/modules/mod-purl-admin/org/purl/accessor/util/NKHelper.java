@@ -4,6 +4,7 @@ import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFRequest;
 import org.ten60.netkernel.layer1.nkf.INKFRequestReadOnly;
 import org.ten60.netkernel.layer1.nkf.NKFException;
+import org.ten60.netkernel.xml.representation.IAspectXDA;
 
 import com.ten60.netkernel.urii.IURAspect;
 import com.ten60.netkernel.urii.IURRepresentation;
@@ -193,6 +194,22 @@ public class NKHelper {
             e.printStackTrace();
         }
 
+        return retValue;
+    }
+    
+    public static String getMD5Value(INKFConvenienceHelper context, String value) {
+        String retValue = null;
+        
+        try {
+            INKFRequest req = context.createSubRequest("active:md5");
+            req.addArgument("operand", new StringAspect("<key>" + value + "</key>"));
+            req.setAspectClass(IAspectXDA.class);
+            IAspectXDA result = (IAspectXDA) context.issueSubRequestForAspect(req);
+            retValue = result.getXDA().getText("/md5", true);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        
         return retValue;
     }
 }

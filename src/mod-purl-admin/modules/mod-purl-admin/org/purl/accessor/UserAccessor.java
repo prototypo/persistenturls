@@ -168,7 +168,7 @@ public class UserAccessor extends AbstractAccessor {
                     createUser = true;
                 }
 
-                StringBuffer sb = new StringBuffer( createUser ? "<user>" : "<user-request>");
+                StringBuffer sb = new StringBuffer( "<user>" );
                 sb.append("<id>");
                 sb.append(NKHelper.getLastSegment(context));
                 sb.append("</id>");
@@ -182,7 +182,7 @@ public class UserAccessor extends AbstractAccessor {
                 sb.append(params.getValue("email"));
                 sb.append("</email>");
                 sb.append("<password>");
-                sb.append(params.getValue("passwd"));
+                sb.append(NKHelper.getMD5Value(context, params.getValue("passwd")));
                 sb.append("</password>");
                 sb.append("<hint>");
                 sb.append(params.getValue("hint"));
@@ -190,7 +190,7 @@ public class UserAccessor extends AbstractAccessor {
                 sb.append("<justification>");
                 sb.append(params.getValue("justification"));
                 sb.append("</justification>");
-                sb.append(createUser ? "</user>" : "</user-request>");
+                sb.append("</user>");
                 retValue = new StringAspect(sb.toString());
             } catch (XPathLocationException e) {
                 // TODO What should the error code be?
