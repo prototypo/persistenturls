@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <entrypoints>
- <!-- <entrypoint>
+  <entrypoint>
     <name>mod_purl_storage_cron_config</name>
     <uri>ffcpl:/etc/CRONConfig.xml</uri>
     <indexable>
@@ -11,5 +11,5 @@
     <categories>cron hidden</categories>
     <group>Init</group>
     <icon/>
-  </entrypoint> -->
+  </entrypoint>
 </entrypoints>
