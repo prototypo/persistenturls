@@ -14,12 +14,24 @@
 		<param>this:param</param>
 		<target>var:sql</target>
 		</instr>
-		<instr>
+	 	<instr>
 			<type>sqlQuery</type>
 			<operand>var:sql</operand>
 			<target>var:purl</target>
-		</instr> 		
-		<instr>
+		</instr>
+		<if>
+		<cond>
+        <instr>
+          <type>xpatheval</type>
+          <operand>var:purl</operand>
+          <operator>
+            <xpath>count(/results/row) >= 1</xpath>
+          </operator>
+          <target>this:cond</target>
+        </instr>		
+		</cond>
+		<then>
+			<instr>
 			<type>stm</type>
 			<operand><sql/></operand>
 			<operator>
@@ -29,16 +41,16 @@
 						where "p_id" = <stm:param xpath="/results/row/z_id/text()"/>;
 				</stm:set>
 			</stm:group>
-		</operator>
-		<param>var:purl</param>
-      	<target>var:sql</target>
-		</instr>
-		<instr>
+			</operator>
+			<param>var:purl</param>
+      		<target>var:sql</target>
+			</instr>
+			<instr>
 			<type>sqlQuery</type>
 			<operand>var:sql</operand>
 			<target>var:results</target>
-		</instr> 
-		<instr>
+			</instr> 
+			<instr>
 			<type>stm</type>
 			<operand>
 				<maintainers/>
@@ -52,8 +64,8 @@
 			</operator>
 			<param>this:param</param>
 			<target>var:maintainers</target>
-		</instr>
-	<while>
+			</instr>
+			<while>
       <cond>
         <instr>
           <type>xpatheval</type>
@@ -108,11 +120,43 @@
           <target>var:results</target>
         </instr>
       </seq>
-    </while>
+    </while> 					
+			<instr>
+				<type>copy</type>
+				<operand>var:maintainers</operand>
+				<target>var:purl</target>
+			</instr>
+		</then>
+		<else>
+			<instr>
+				<type>copy</type>
+				<operand><maintainers/></operand>
+				<target>var:purl</target>
+			</instr>		
+		</else> 
+		</if>		
+<!--		
+		
+	
+    </then>
+		<else>
+			<instr>
+				<type>copy</type>
+				<operand><maintainers/></operand>
+				<target>var:maintainers</target>
+			</instr>
+		</else>
+    
+    </if>
     <instr>
     	<type>copy</type>
     	<operand>var:maintainers</operand>
     	<target>this:response</target>
-    </instr>		
+    </instr>		-->
+    <instr>
+    	<type>copy</type>
+    	<operand>var:purl</operand>
+    	<target>this:response</target>
+    </instr>
 	</seq>
 </idoc>

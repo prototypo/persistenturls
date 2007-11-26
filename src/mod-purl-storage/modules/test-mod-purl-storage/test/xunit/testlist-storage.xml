@@ -18,7 +18,7 @@
 	  </assert> 
     </test>
     <test>
-    	<uri>active:purl-storage-user-exists+value@data:text/plain,david-test+testrun@data:text/plain,prerun</uri>
+    	<uri>active:purl-storage-user-exists+uri@ffcpl:/user/david-test+testrun@data:text/plain,prerun</uri>
     	<assert name="User 1 Doesn't Pre-Exist">
     		<uri>active:javascript+operator@ffcpl:/test/accessor/isFalse.js</uri>
     	</assert>
@@ -33,7 +33,7 @@
 		</assert>    
     </test>
     <test>
-    	<uri>active:purl-storage-user-exists+value@data:text/plain,david-test</uri>
+    	<uri>active:purl-storage-user-exists+uri@ffcpl:/user/david-test</uri>
     	<assert name="User 1 Exists">
     		<uri>active:javascript+operator@ffcpl:/test/accessor/isTrue.js</uri>
     	</assert>
@@ -49,7 +49,7 @@
 		</assert>    
     </test>
     <test>
-    	<uri>active:purl-storage-user-exists+value@data:text/plain,brian-test</uri>
+    	<uri>active:purl-storage-user-exists+uri@ffcpl:/user/brian-test</uri>
     	<assert name="User 2 Exists">
     		<uri>active:javascript+operator@ffcpl:/test/accessor/isTrue.js</uri>
     	</assert>
@@ -61,11 +61,17 @@
 		</assert>       	
     </test>
     <test>
-        <uri>active:beanshell+operator@ffcpl:/test/accessor/queryUser.bsh+user@data:text/plain,brian-test</uri>
+        <uri>active:purl-storage-query-user+uri@ffcpl:/user/brian-test</uri>
 		<assert name="User 1 Query">
 			<xpath>count(/user) = 1</xpath>
 		</assert>    
     </test>
+ <!--   <test>
+        <uri>active:beanshell+operator@ffcpl:/test/accessor/queryUser.bsh+user@data:text/plain,brian-test</uri>
+		<assert name="User 1 Query">
+			<xpath>count(/user) = 1</xpath>
+		</assert>    
+    </test>    --> 
     <test>
         <uri>active:beanshell+operator@ffcpl:/test/accessor/approveUser.bsh+user@data:text/plain,brian-test</uri>
 		<assert name="Approve User 1">
@@ -79,13 +85,13 @@
 		</assert>       	
     </test>        
     <test>
-        <uri>active:beanshell+operator@ffcpl:/test/accessor/queryUser.bsh+user@data:text/plain,david-test</uri>
+        <uri>active:purl-storage-query-user+uri@ffcpl:/user/david-test</uri>
 		<assert name="User 1 Query Validation">
 			<xpath>/user/id = 'david-test'</xpath>
 		</assert>    
     </test>    
     <test>
-        <uri>active:beanshell+operator@ffcpl:/test/accessor/queryUser.bsh+user@data:text/plain,brian-test</uri>
+        <uri>active:purl-storage-query-user+uri@ffcpl:/user/brian-test</uri>
 		<assert name="User 2 Query Validation">
 			<xpath>count(/user) = 1</xpath>
 			<xpath>/user/id = 'brian-test'</xpath>
@@ -103,7 +109,7 @@
 		</assert>    
     </test>
     <test>
-    	<uri>active:purl-storage-group-exists+value@data:text/plain,purlworkers+testrun@data:text/plain,prerun</uri>
+    	<uri>active:purl-storage-group-exists+uri@ffcpl:/group/purlworkers+testrun@data:text/plain,prerun</uri>
     	<assert name="Group Doesn't Pre-Exist">
     		<uri>active:javascript+operator@ffcpl:/test/accessor/isFalse.js</uri>
     	</assert>
@@ -119,7 +125,7 @@
     	</assert>
     </test>
     <test>
-    	<uri>active:purl-storage-group-exists+value@data:text/plain,purlworkers</uri>
+    	<uri>active:purl-storage-group-exists+uri@ffcpl:/group/purlworkers</uri>
     	<assert name="Group Exists">
     		<uri>active:javascript+operator@ffcpl:/test/accessor/isTrue.js</uri>
     	</assert>
@@ -153,7 +159,7 @@
     	</assert>
     </test>
     <test>
-    	<uri>active:purl-storage-domain-exists+value@data:text/plain,boo+testrun@data:text/plain,prerun</uri>
+    	<uri>active:purl-storage-domain-exists+uri@ffcpl:/domain/boo+testrun@data:text/plain,prerun</uri>
     	<assert name="Domain Doesn't Pre-Exist">
     		<uri>active:javascript+operator@ffcpl:/test/accessor/isFalse.js</uri>
     	</assert>
@@ -169,7 +175,7 @@
     	</assert>
     </test>
     <test>
-    	<uri>active:purl-storage-domain-exists+value@data:text/plain,boo</uri>
+    	<uri>active:purl-storage-domain-exists+uri@ffcpl:/domain/boo</uri>
     	<assert name="Domain Exists">
     		<uri>active:javascript+operator@ffcpl:/test/accessor/isTrue.js</uri>
     	</assert>
@@ -212,9 +218,15 @@
     	</assert>
     </test>
     <test>
-    	<uri>active:purl-storage-purl-exists+value@data:text/plain,/net/purl/301+testrun@data:text/plain,prerun</uri>
+    	<uri>active:purl-storage-purl-exists+uri@ffcpl:/purl/net/purl/301+testrun@data:text/plain,prerun</uri>
     	<assert name="PURL Doesn't Pre-Exist">
     		<uri>active:javascript+operator@ffcpl:/test/accessor/isFalse.js</uri>
+    	</assert>
+    </test>
+    <test>
+    	<uri>active:purl-storage-query-purl+uri@ffcpl:/purl/net/purl/301</uri>
+    	<assert name="Query PURL">
+    		<xpath>count(/purl) = 1</xpath>
     	</assert>
     </test>        
     <test>
@@ -229,7 +241,7 @@
     	</assert>
     </test>
     <test>
-    	<uri>active:purl-storage-purl-exists+value@data:text/plain,/net/purl/301</uri>
+    	<uri>active:purl-storage-purl-exists+uri@ffcpl:/purl/net/purl/301</uri>
     	<assert name="PURL Exists">
     		<uri>active:javascript+operator@ffcpl:/test/accessor/isTrue.js</uri>
     	</assert>

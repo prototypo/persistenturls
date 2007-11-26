@@ -12,10 +12,6 @@
 		<args>all</args>
 	</link>
 	<link>
-		<name>Resource Exists</name>
-		
-	</link>
-	<link>
 		<name>Destroy DB</name>
 		<ext>/destroy-db</ext>
 		<int>active:dpml+operand@ffcpl:/sql/db/destroyDB.idoc</int>
@@ -24,7 +20,7 @@
 	<link>
 		<name>User Exists</name>
 		<ext>/user-exists</ext>
-		<int>active:beanshell+operator@ffcpl:/sql/db/resourceExists.bsh+type@data:text/plain,user</int>
+		<int>active:beanshell+operator@ffcpl:/sql/db/resourceExists.bsh</int>
 		<args>all</args>
 	</link>
 	<link>
@@ -48,7 +44,8 @@
 	<link>
 		<name>Query User</name>
 		<ext>/query-user</ext>
-		<int>active:dpml+operand@ffcpl:/sql/db/queryUser.idoc</int>
+		<int>active:beanshell+operator@ffcpl:/sql/db/queryResource.bsh</int>
+<!--		<int>active:dpml+operand@ffcpl:/sql/db/queryUser.idoc</int>-->
 		<args>all</args>
 	</link>
 	<link>
@@ -72,7 +69,7 @@
 	<link>
 		<name>Group Exists</name>
 		<ext>/group-exists</ext>
-		<int>active:beanshell+operator@ffcpl:/sql/db/resourceExists.bsh+type@data:text/plain,group</int>
+		<int>active:beanshell+operator@ffcpl:/sql/db/resourceExists.bsh</int>
 		<args>all</args>
 	</link>		
 	<link>
@@ -114,7 +111,7 @@
 	<link>
 		<name>Domain Exists</name>
 		<ext>/domain-exists</ext>
-		<int>active:beanshell+operator@ffcpl:/sql/db/resourceExists.bsh+type@data:text/plain,domain</int>
+		<int>active:beanshell+operator@ffcpl:/sql/db/resourceExists.bsh</int>
 		<args>all</args>
 	</link>		
 	<link>
@@ -156,7 +153,7 @@
 	<link>
 		<name>PURL Exists</name>
 		<ext>/purl-exists</ext>
-		<int>active:beanshell+operator@ffcpl:/sql/db/resourceExists.bsh+type@data:text/plain,purl</int>
+		<int>active:beanshell+operator@ffcpl:/sql/db/resourceExists.bsh</int>
 		<args>all</args>
 	</link>		
 	<link>
@@ -174,7 +171,8 @@
 	<link>
 		<name>Query PURL</name>
 		<ext>/query-purl</ext>
-		<int>active:dpml+operand@ffcpl:/sql/db/queryPURL.idoc</int>
+		<int>active:beanshell+operator@ffcpl:/sql/db/queryResource.bsh</int>
+		<!--<int>active:dpml+operand@ffcpl:/sql/db/queryPURL.idoc</int>-->
 		<args>all</args>
 	</link>
 	<link>

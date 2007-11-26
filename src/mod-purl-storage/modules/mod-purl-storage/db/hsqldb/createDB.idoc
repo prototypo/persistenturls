@@ -18,6 +18,7 @@
 		"created"		TIMESTAMP,
 		"lastmodified"	TIMESTAMP,
 		"status"		SMALLINT,
+		"indexed"		BOOLEAN,
 		UNIQUE( "z_id" )
 	);
 
@@ -28,7 +29,8 @@
 		"public"		BOOLEAN,		
 		"created"		TIMESTAMP,
 		"lastmodified"	TIMESTAMP,
-		"status"		SMALLINT,		
+		"status"		SMALLINT,
+		"indexed"		BOOLEAN,	
 		UNIQUE( "z_id" )
 	);
 	
@@ -53,7 +55,8 @@
 		"comments"		VARCHAR(300),
 		"created"		TIMESTAMP,
 		"lastmodified"	TIMESTAMP,
-		"status"		SMALLINT,						
+		"status"		SMALLINT,
+		"indexed"		BOOLEAN,					
 		UNIQUE( "z_id" )
 	);
 	
@@ -79,7 +82,8 @@
 		"target"		VARCHAR(4000),
 		"created"		TIMESTAMP,
 		"lastmodified"	TIMESTAMP,
-		"status"		SMALLINT,				
+		"status"		SMALLINT,
+		"indexed"		BOOLEAN,				
 		UNIQUE( "z_id" )
 	);
 	

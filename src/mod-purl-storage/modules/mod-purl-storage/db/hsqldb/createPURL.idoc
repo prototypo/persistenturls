@@ -14,7 +14,6 @@
 			<target>var:todo</target>
 		</instr>
 		<choose>
-			<!-- 301 PURLS -->
 			<cond>
 				<instr>
           			<type>xpatheval</type>
@@ -47,7 +46,6 @@
 					<target>var:sql</target>
 				</instr>
 			</then>		
-			<!-- 302 PURLS -->
 			<cond>
 				<instr>
           			<type>xpatheval</type>
@@ -80,7 +78,6 @@
 					<target>var:sql</target>
 				</instr>
 			</then>
-			<!-- 303 PURLS -->
 			<cond>
 				<instr>
           			<type>xpatheval</type>
@@ -113,7 +110,6 @@
 					<target>var:sql</target>
 				</instr>
 			</then>
-			<!-- 307 PURLS -->
 			<cond>
 				<instr>
           			<type>xpatheval</type>
@@ -146,7 +142,6 @@
 					<target>var:sql</target>
 				</instr>
 			</then>
-			<!-- 404 PURLS -->
 			<cond>
 				<instr>
           			<type>xpatheval</type>
@@ -179,8 +174,6 @@
 					<target>var:sql</target>
 				</instr>
 			</then>
-				
-			<!-- 410 PURLS -->
 			<cond>
 				<instr>
           			<type>xpatheval</type>
@@ -220,10 +213,18 @@
 			<target>var:response</target>
 		</instr>
 		<instr>
-			<type>purl-storage-query-purl</type>
+			<type>dpml</type>
+			<operand>ffcpl:/sql/db/queryPURL.idoc</operand>
 			<param>this:param</param>
 			<target>var:purl</target>
-		</instr>			
+		</instr>
+		
+		<instr>
+			<type>copy</type>
+			<operand>var:purl</operand>
+			<target>this:response</target>
+		</instr>
+					
 		<instr>
 			<type>stm</type>
 			<operand>var:todo</operand>
@@ -267,11 +268,35 @@
       		<target>var:maintainer</target>
       		<param>var:todo</param>
       	</instr>
-      	<instr>
-      		<type>purl-storage-query-user</type>
-      		<param>var:maintainer</param>
-      		<target>var:maintainer</target>
-      	</instr>
+ 
+  				<instr>
+					<type>stm</type>
+					<operand>
+						<idoc>
+							<seq>
+								<instr>
+									<type>purl-storage-query-user</type>
+									<uri/>
+									<target>this:response</target>
+								</instr>
+							</seq>
+						</idoc>
+					</operand>
+					<operator>
+						<stm:group xmlns:stm="http://1060.org/stm">
+							<stm:set xpath="/idoc/seq/instr/uri">
+								ffcpl:/user/<stm:param xpath="/user/id/text()"/>
+							</stm:set>
+						</stm:group>			
+					</operator>
+					<param>var:maintainer</param>
+					<target>var:query</target>
+				</instr>
+				<instr>
+					<type>dpml</type>
+					<operand>var:query</operand>
+					<target>var:maintainer</target>
+				</instr>
       	<instr>
       		<type>stm</type>
       		<operand><entry><maintainer/></entry></operand>
@@ -331,11 +356,12 @@
         </instr>
       </seq>
     </while>
-    <instr>
-    	<type>purl-storage-query-purl</type>
-    	<param>this:param</param>
-    	<target>var:purl</target>
-   	</instr>
+ 		<instr>
+			<type>dpml</type>
+			<operand>ffcpl:/sql/db/queryPURL.idoc</operand>
+			<param>this:param</param>
+			<target>var:purl</target>
+		</instr>
 		<instr>
 			<type>copy</type>
 			<operand>var:purl</operand>
@@ -344,6 +370,6 @@
 		<instr>
 			<type>expire</type>
 			<operand>this:response</operand>
-		</instr>	
+		</instr>
 	</seq>
 </idoc>

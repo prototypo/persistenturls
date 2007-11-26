@@ -5,33 +5,36 @@ main() {
 	ruri = context.getThisRequest().getArgument("uri");
 	parts = ruri.split("/");
 	type = parts[1];
-	
 	value = null;
 	uri = null;
+	param = null;
 	
 	switch(type) {
 		case "purl":
-		uri = "ffcpl:/sql/db/purlExists.idoc";
+		uri = "ffcpl:/sql/db/queryPURL.idoc";
 		value = ruri.substring(11);
+		param = new StringAspect("<purl><id>" + value + "</id></purl>");
 		break;
 		case "domain":
-		uri = "ffcpl:/sql/db/domainExists.idoc";
+		uri = "ffcpl:/sql/db/queryDomain.idoc";
 		value = ruri.substring(14);
+		param = new StringAspect("<domain><id>" + value + "</id></domain>");
 		break;
 		case "group":
-		uri = "ffcpl:/sql/db/groupExists.idoc";
-		value = ruri.substring(13);		
+		uri = "ffcpl:/sql/db/queryGroup.idoc";
+		value = ruri.substring(13);
+		param = new StringAspect("<group><id>" + value + "</id></group>");		
 		break;
 		case "user":
-		uri = "ffcpl:/sql/db/userExists.idoc";
-		value = ruri.substring(12);		
+		uri = "ffcpl:/sql/db/queryUser.idoc";
+		value = ruri.substring(12);
+		param = new StringAspect("<user><id>" + value + "</id></user>");						
 		break;
 	}
-	query = new StringAspect("<query><id>" + value + "</id></query>");
-	
+
 	req = context.createSubRequest("active:dpml");
 	req.addArgument("operand", uri);
-	req.addArgument("param", query);
+	req.addArgument("param", param);
 	res = context.issueSubRequest(req);
 	resp = context.createResponseFrom(res);
 	resp.setExpired();

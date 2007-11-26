@@ -48,8 +48,31 @@
 					<param>var:results</param>
 				</instr>
 				<instr>
-					<type>purl-storage-query-user</type>
+					<type>stm</type>
+					<operand>
+						<idoc>
+							<seq>
+								<instr>
+									<type>purl-storage-query-user</type>
+									<uri/>
+									<target>this:response</target>
+								</instr>
+							</seq>
+						</idoc>
+					</operand>
+					<operator>
+						<stm:group xmlns:stm="http://1060.org/stm">
+							<stm:set xpath="/idoc/seq/instr/uri">
+								ffcpl:/user/<stm:param xpath="/user/id/text()"/>
+							</stm:set>
+						</stm:group>			
+					</operator>
 					<param>var:user</param>
+					<target>var:query</target>
+				</instr>
+				<instr>
+					<type>dpml</type>
+					<operand>var:query</operand>
 					<target>var:user</target>
 				</instr>
 				<instr>

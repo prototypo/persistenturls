@@ -45,7 +45,6 @@
 			<target>var:purl</target>
 		</instr>		
 		<choose>
-			<!-- 301 PURLS -->
 			<cond>
 				<instr>
           			<type>xpatheval</type>
@@ -71,7 +70,6 @@
 					<target>var:purl</target>
 				</instr>
 			</then>		
-			<!-- 302 PURLS -->
 			<cond>
 				<instr>
           			<type>xpatheval</type>
@@ -97,8 +95,6 @@
 					<target>var:purl</target>
 				</instr>
 			</then>
-			
-			<!-- 303 PURLS -->
 			<cond>
 				<instr>
           			<type>xpatheval</type>
@@ -124,8 +120,6 @@
 					<target>var:purl</target>
 				</instr>
 			</then>	
-			
-			<!-- 307 PURLS -->
 			<cond>
 				<instr>
           			<type>xpatheval</type>
