@@ -42,4 +42,15 @@ public class GroupResourceStorage implements ResourceStorage {
         
         return retValue;
     }
+    
+    public boolean updateResource(INKFConvenienceHelper context, URIResolver resolver, IURAspect resource) throws NKFException {
+        boolean retValue = false;
+        
+        INKFRequest req = context.createSubRequest("active:purl-storage-update-group");
+        req.addArgument("param", resource);
+        context.issueSubRequest(req);
+        retValue = true;
+        
+        return retValue;
+    }    
 }

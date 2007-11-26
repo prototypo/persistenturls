@@ -15,6 +15,7 @@ public interface ResourceStorage {
     public boolean resourceExists(INKFConvenienceHelper context, String uri) throws NKFException;
     public boolean resourceExists(INKFConvenienceHelper context, URIResolver resolver) throws NKFException;
     public boolean storeResource(INKFConvenienceHelper context, URIResolver resolver, IURAspect resource) throws NKFException;
+    public boolean updateResource(INKFConvenienceHelper context, URIResolver resolver, IURAspect resource) throws NKFException;    
     public IURAspect getResource(INKFConvenienceHelper context, URIResolver resolver) throws NKFException;
     public IURAspect getResource(INKFConvenienceHelper context, String uri) throws NKFException;
 }

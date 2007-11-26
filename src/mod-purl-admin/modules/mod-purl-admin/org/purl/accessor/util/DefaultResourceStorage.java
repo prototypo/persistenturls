@@ -15,6 +15,10 @@ public class DefaultResourceStorage implements ResourceStorage {
         return retValue;
     }
 
+    public boolean updateResource(INKFConvenienceHelper context, URIResolver resolver, IURAspect resource) throws NKFException {
+        return storeResource(context, resolver, resource);
+    }
+    
     public IURAspect getResource(INKFConvenienceHelper context, URIResolver resolver) throws NKFException {
         IURAspect retValue = context.sourceAspect(resolver.getURI(context), IAspectString.class);
         return retValue;

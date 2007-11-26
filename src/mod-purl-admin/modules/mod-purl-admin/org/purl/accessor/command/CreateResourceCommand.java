@@ -85,7 +85,7 @@ public class CreateResourceCommand extends PURLCommand {
                         req.addArgument("operand", iur);
                         context.issueAsyncSubRequest(req); */
                         
-                        //NKHelper.indexResource(context, "ffcpl:/index/purls", uriResolver.getURI(context), iur);
+                        NKHelper.indexResource(context, "ffcpl:/index/purls", uriResolver.getURI(context), iur);
 
                         // Filter it if there is one
                         if(resFilter!=null) {

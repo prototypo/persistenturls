@@ -3,8 +3,10 @@ package org.purl.accessor.util;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFRequest;
 import org.ten60.netkernel.layer1.nkf.NKFException;
+import org.ten60.netkernel.xml.representation.IAspectXDA;
 
 import com.ten60.netkernel.urii.IURAspect;
+import com.ten60.netkernel.urii.IURRepresentation;
 import com.ten60.netkernel.urii.aspect.IAspectBoolean;
 
 public class UserResourceStorage implements ResourceStorage {
@@ -16,7 +18,8 @@ public class UserResourceStorage implements ResourceStorage {
     public IURAspect getResource(INKFConvenienceHelper context, String uri) throws NKFException {
         INKFRequest req = context.createSubRequest("active:purl-storage-query-user");
         req.addArgument("uri", uri);
-        return (IURAspect) context.issueSubRequest(req);
+        IURRepresentation res = context.issueSubRequest(req);
+        return context.transrept(res, IAspectXDA.class);
     }
 
     public boolean resourceExists(INKFConvenienceHelper context, String uri) throws NKFException {
@@ -42,4 +45,15 @@ public class UserResourceStorage implements ResourceStorage {
         
         return retValue;
     }
+    
+    public boolean updateResource(INKFConvenienceHelper context, URIResolver resolver, IURAspect resource) throws NKFException {
+        boolean retValue = false;
+        
+        INKFRequest req = context.createSubRequest("active:purl-storage-update-user");
+        req.addArgument("param", resource);
+        context.issueSubRequest(req);
+        retValue = true;
+        
+        return retValue;
+    }    
 }
