@@ -74,10 +74,10 @@ limitations under the License.
 			// TODO: DBG: Fake this for now until the URL is available on the server.  REMOVE ALL THIS WHEN URL WORKS.
 			if (count > 0) {
 				//message = "<results><user id=\"brian\" status=\"rejected\" /></results>";
-				message = "<results><user id=\"brian\" status=\"rejected\" /></results>";
+				message = "<results><user><id>brian</id><status>rejected</status></user></results>";
 			} else {
 				//message = "<results><user id=\"brian\" status=\"approved\" /></results>";
-				message = "<results><user><id>brian</id><status>approved</status></results>";
+				message = "<results><user><id>brian</id><status>approved</status></user></results>";
 			}
 			count++;
 			var headers = new Object();
