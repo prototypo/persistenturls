@@ -4,14 +4,23 @@ import com.ten60.netkernel.urii.aspect.*;
 import org.purl.accessor.util.*;
 
 main() {
+
+	sb = new StringBuffer("<purl-initialization>");
+	
+	req = context.createSubRequest("active:purl-storage-initialize");
+	context.issueSubRequest(req);
+	sb.append("<storage-layer>initialized</storage-layer>");	
+	
 	// Intialize the Lucene Index
 	if(!context.exists("ffcpl:/index/purls-initialized")) {
 		System.out.println("Reinitializing Lucene Index...");
 		NKHelper.initializeLuceneIndex(context, "ffcpl:/index/purls");
 		context.sinkAspect("ffcpl:/index/purls-initialized", new StringAspect("Initialized"));
+		sb.append("<lucene-index>initialized</lucene-index>");
 	}
 
-	resp=context.createResponseFrom(new StringAspect("<purl-accessor>initialized</purl-accessor>"));
+	sb.append("</purl-initialization>");
+	resp=context.createResponseFrom(new StringAspect(sb.toString()));
 	resp.setMimeType("text/xml");
 	context.setResponse(resp);
 }
