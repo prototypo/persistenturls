@@ -16,6 +16,6 @@ public class UserResolver extends URIResolver {
     }
 
     public String getURI(String id) {
-        return "ffcpl:/users/" + id;
+        return "ffcpl:/user/" + id;
     }
 }

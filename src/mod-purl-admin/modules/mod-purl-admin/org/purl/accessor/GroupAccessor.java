@@ -71,8 +71,8 @@ import org.purl.accessor.command.GetResourceCommand;
 import org.purl.accessor.command.PURLCommand;
 import org.purl.accessor.command.UpdateResourceCommand;
 import org.purl.accessor.util.DefaultResourceDeleter;
-import org.purl.accessor.util.DefaultResourceStorage;
 import org.purl.accessor.util.GroupResolver;
+import org.purl.accessor.util.GroupResourceStorage;
 import org.purl.accessor.util.GroupSearchHelper;
 import org.purl.accessor.util.NKHelper;
 import org.purl.accessor.util.PURLException;
@@ -80,6 +80,7 @@ import org.purl.accessor.util.ResourceCreator;
 import org.purl.accessor.util.ResourceStorage;
 import org.purl.accessor.util.URIResolver;
 import org.purl.accessor.util.UserResolver;
+import org.purl.accessor.util.UserResourceStorage;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.NKFException;
 import org.ten60.netkernel.layer1.representation.IAspectNVP;
@@ -99,8 +100,8 @@ public class GroupAccessor extends AbstractAccessor {
 
         URIResolver groupResolver = new GroupResolver();
 
-        ResourceStorage groupStorage = new DefaultResourceStorage();
-        ResourceCreator groupCreator = new GroupCreator(new UserResolver(), new DefaultResourceStorage());
+        ResourceStorage groupStorage = new GroupResourceStorage();
+        ResourceCreator groupCreator = new GroupCreator(new UserResolver(), new UserResourceStorage());
 
         commandMap.put("GET", new GetResourceCommand(TYPE, groupResolver, groupStorage, new GroupSearchHelper()));
         commandMap.put("POST", new CreateResourceCommand(TYPE, groupResolver, groupCreator, null, groupStorage));

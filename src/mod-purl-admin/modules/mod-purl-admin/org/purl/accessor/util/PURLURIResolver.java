@@ -17,9 +17,13 @@ public class PURLURIResolver extends URIResolver {
         try {
             String path = NKHelper.getArgument(context, "path");
             if(path.startsWith("ffcpl:")) {
-                path=path.substring(6);
+                path = path.substring(6);
             }
-            retValue =  getURI((!path.startsWith("/") ? ("/"+path) : path));
+            
+            path="ffcpl:/purl" + (!path.startsWith("/") ? ("/"+path) : path);
+
+            retValue = path;
+            
         } catch(NKFException nfe) {
             nfe.printStackTrace();
         }
@@ -28,22 +32,13 @@ public class PURLURIResolver extends URIResolver {
     }
 
     @Override
-    public String getURI(String id) {
+    public String getURI(String path) {
         String retValue = null;
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA");
-            byte [] idBytes = id.getBytes("UTF-8");
-            md.update(idBytes);
-            String s = new sun.misc.BASE64Encoder().encode(md.digest());
-            s = URLEncoder.encode(s, "8859_1");
-            retValue = "ffcpl:/storedpurls/" + s;
-        } catch (NoSuchAlgorithmException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        
+        if(!path.startsWith("ffcpl:")) {
+            path="ffcpl:/purl" + (!path.startsWith("/") ? ("/"+path) : path);
         }
+        retValue = path;
 
         return retValue;
     }

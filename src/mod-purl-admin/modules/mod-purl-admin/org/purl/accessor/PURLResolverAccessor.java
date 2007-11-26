@@ -10,7 +10,9 @@ import org.purl.accessor.command.PURLResolveCommand;
 import org.purl.accessor.command.PURLSeeAlsoResolveCommand;
 import org.purl.accessor.command.PURLValidatorCommand;
 import org.purl.accessor.util.NKHelper;
+import org.purl.accessor.util.PURLResourceStorage;
 import org.purl.accessor.util.PURLURIResolver;
+import org.purl.accessor.util.ResourceStorage;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFRequestReadOnly;
 import org.ten60.netkernel.layer1.nkf.INKFResponse;
@@ -19,12 +21,14 @@ import org.ten60.netkernel.xml.representation.IAspectXDA;
 import org.ten60.netkernel.xml.xda.IXDAReadOnly;
 import org.ten60.netkernel.xml.xda.IXDAReadOnlyIterator;
 
+import com.ten60.netkernel.urii.IURAspect;
 import com.ten60.netkernel.urii.IURRepresentation;
 import com.ten60.netkernel.urii.aspect.StringAspect;
 
 public class PURLResolverAccessor extends NKFAccessorImpl {
 
     static private PURLURIResolver purlResolver = new PURLURIResolver();
+    static private ResourceStorage purlStorageResolver = new PURLResourceStorage();
 
     private static Map<String,PURLResolveCommand> commandMap = new HashMap<String,PURLResolveCommand>();
 
@@ -70,7 +74,7 @@ public class PURLResolverAccessor extends NKFAccessorImpl {
         // Partial redirects require some special handling
 
         while(!found && !done) {
-            found = context.exists(purlResolver.getURI(purlloc));
+            found = purlStorageResolver.resourceExists(context, purlResolver.getURI(purlloc));
 
             if(!found) {
                 purlloc = extractNextPurlLevel(purlloc);
@@ -80,7 +84,8 @@ public class PURLResolverAccessor extends NKFAccessorImpl {
 
         if(found) {
             try {
-                purlXDA = (IAspectXDA) context.sourceAspect(purlResolver.getURI(purlloc), IAspectXDA.class);
+                IURAspect purl = purlStorageResolver.getResource(context, purlResolver.getURI(purlloc));
+                purlXDA = (IAspectXDA) context.transrept(purl, IAspectXDA.class);
                 IXDAReadOnly purlXDARO = purlXDA.getXDA();
                 String type = mode.equals("mode:validate") ? "validate" : purlXDARO.getText("/purl/type", true);
                 cmd = commandMap.get(type);

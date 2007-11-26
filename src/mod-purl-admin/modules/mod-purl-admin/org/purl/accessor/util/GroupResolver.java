@@ -20,7 +20,7 @@ public class GroupResolver extends URIResolver {
 
     @Override
     public String getURI(String id) {
-        return "ffcpl:/groups/" + id;
+        return "ffcpl:/group/" + id;
     }
 
 }

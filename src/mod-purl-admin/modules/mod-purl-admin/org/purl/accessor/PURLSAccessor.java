@@ -28,7 +28,6 @@ public class PURLSAccessor extends NKFAccessorImpl {
 	public void processRequest(INKFConvenienceHelper context) throws Exception {
 //		String path=context.getThisRequest().getArgument("path");
         IAspectXDA xdaParam = (IAspectXDA) context.sourceAspect("this:param:param", IAspectXDA.class);
-        System.out.println("**URI: " + context.getThisRequest().getURI());
 
         // Validate the input document against the batch schema
         INKFRequest req = context.createSubRequest("active:validateRNG");
@@ -53,7 +52,6 @@ public class PURLSAccessor extends NKFAccessorImpl {
 
                 String pid = xdaROItor.getText("@id", true);
                 String type = xdaROItor.getText("@type", true);
-                System.out.println(xdaROItor.getCurrentXPath());
                 IXDAReadOnlyIterator maintainerXdaROItor = xdaParam.getXDA().readOnlyIterator( xdaROItor.getCurrentXPath() + "/maintainers/maintainer");
                 StringBuffer sb = new StringBuffer();
                 while(maintainerXdaROItor.hasNext()) {
@@ -75,7 +73,6 @@ public class PURLSAccessor extends NKFAccessorImpl {
                     nvp.addNVP("basepurl", basepurl);
                 } else if(!type.equals("404") && !type.equals("410")) {
                     String target = xdaROItor.getText("target/@url", true);
-                    System.out.println("target: " + target);
                     nvp.addNVP("target", target);
                 }
 
@@ -85,8 +82,8 @@ public class PURLSAccessor extends NKFAccessorImpl {
                 req.addArgument("params", new NVPAspect(nvp));
                 req.addArgument("requestURL", context.getThisRequest().getArgument("requestURL"));
                 IURRepresentation iur=context.issueSubRequest(req);
-                IAspectString sa = (IAspectString) context.transrept(iur,IAspectString.class);
-                System.out.println(sa.getString());
+                //IAspectString sa = (IAspectString) context.transrept(iur,IAspectString.class);
+                //System.out.println(sa.getString());
                 createdPurlList.add(pid);
             }
 
@@ -107,7 +104,7 @@ public class PURLSAccessor extends NKFAccessorImpl {
                 sb.append(xdaROItor.getText(".", true));
                 sb.append("</error>");
             }
-            System.out.println(result.getString());
+
             sb.append("</purl-batch-error>");
             StringAspect sa = new StringAspect(sb.toString());
             resp = context.createResponseFrom(sa);

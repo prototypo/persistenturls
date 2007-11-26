@@ -79,11 +79,11 @@ public class CreateResourceCommand extends PURLCommand {
                         recordCommandState(context, "CREATE", path);
 
                         // TODO: Should we block on this?
-                        INKFRequest req = context.createSubRequest("active:purl-index");
+/*                        INKFRequest req = context.createSubRequest("active:purl-index");
                         req.addArgument("path", uriResolver.getURI(context));
                         req.addArgument("index", "ffcpl:/index/" + type);
                         req.addArgument("operand", iur);
-                        context.issueAsyncSubRequest(req);
+                        context.issueAsyncSubRequest(req); */
                         
                         //NKHelper.indexResource(context, "ffcpl:/index/purls", uriResolver.getURI(context), iur);
 

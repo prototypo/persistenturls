@@ -71,7 +71,7 @@ import org.purl.accessor.command.GetResourceCommand;
 import org.purl.accessor.command.PURLCommand;
 import org.purl.accessor.command.UpdateResourceCommand;
 import org.purl.accessor.util.DefaultResourceDeleter;
-import org.purl.accessor.util.DefaultResourceStorage;
+import org.purl.accessor.util.DomainResourceStorage;
 import org.purl.accessor.util.DomainSearchHelper;
 import org.purl.accessor.util.NKHelper;
 import org.purl.accessor.util.PURLException;
@@ -79,6 +79,7 @@ import org.purl.accessor.util.ResourceCreator;
 import org.purl.accessor.util.ResourceStorage;
 import org.purl.accessor.util.URIResolver;
 import org.purl.accessor.util.UserResolver;
+import org.purl.accessor.util.UserResourceStorage;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.NKFException;
 import org.ten60.netkernel.layer1.representation.IAspectNVP;
@@ -112,13 +113,13 @@ public class DomainAccessor extends AbstractAccessor {
 
             @Override
             public String getURI(String id) {
-                return "ffcpl:/domains/" + id;
+                return "ffcpl:/domain/" + id;
             }
 
         };
 
-        ResourceCreator domainCreator = new DomainCreator(new UserResolver(), new DefaultResourceStorage());
-        ResourceStorage domainStorage = new DefaultResourceStorage();
+        ResourceCreator domainCreator = new DomainCreator(new UserResolver(), new UserResourceStorage());
+        ResourceStorage domainStorage = new DomainResourceStorage();
 
         commandMap.put("GET", new GetResourceCommand(TYPE, domainResolver, domainStorage, new DomainSearchHelper()));
         commandMap.put("POST", new CreateResourceCommand(TYPE, domainResolver, domainCreator, null, domainStorage));

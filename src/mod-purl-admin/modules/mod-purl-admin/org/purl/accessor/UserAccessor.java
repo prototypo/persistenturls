@@ -70,7 +70,6 @@ import org.purl.accessor.command.GetResourceCommand;
 import org.purl.accessor.command.PURLCommand;
 import org.purl.accessor.command.UpdateResourceCommand;
 import org.purl.accessor.util.DefaultResourceDeleter;
-import org.purl.accessor.util.DefaultResourceStorage;
 import org.purl.accessor.util.NKHelper;
 import org.purl.accessor.util.PURLException;
 import org.purl.accessor.util.ResourceCreator;
@@ -79,6 +78,7 @@ import org.purl.accessor.util.SearchHelper;
 import org.purl.accessor.util.URIResolver;
 import org.purl.accessor.util.UserRequestResolver;
 import org.purl.accessor.util.UserResolver;
+import org.purl.accessor.util.UserResourceStorage;
 import org.purl.accessor.util.UserSearchHelper;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFRequest;
@@ -109,7 +109,7 @@ public class UserAccessor extends AbstractAccessor {
         userRequestResolver = new UserRequestResolver();
         ResourceCreator userCreator = new UserCreator();
         ResourceFilter userFilter = new UserPrivateDataFilter();
-        ResourceStorage userStorage = new DefaultResourceStorage();
+        ResourceStorage userStorage = new UserResourceStorage(); //new DefaultResourceStorage();
         SearchHelper userSearchHelper = new UserSearchHelper();
 
 		commandMap.put("GET", new GetResourceCommand(TYPE, userResolver, userStorage, userSearchHelper, userFilter));
@@ -201,7 +201,7 @@ public class UserAccessor extends AbstractAccessor {
         }
     }
 
-    class UserResourceStorage extends DefaultResourceStorage {
+ /*   class UserResourceStorage extends DefaultResourceStorage {
         public boolean resourceExists(INKFConvenienceHelper context, URIResolver resolver) throws NKFException {
             boolean retValue = super.resourceExists(context, resolver);
             // First check to see if the is an existing user-request
@@ -212,7 +212,7 @@ public class UserAccessor extends AbstractAccessor {
 
             return retValue;
         }
-    }
+    } */
 
     /**
      * An implementation of the ResourceFilter to prevent sensitive
