@@ -189,7 +189,13 @@
     		<xpath>count(/domain/maintainers/uid) = 2</xpath>
     		<xpath>count(/domain/writers/uid) = 1</xpath>    		
     	</assert>
-    </test>    
+    </test>
+    <test>
+   	<uri>active:purl-storage-query-domain+uri@ffcpl:/domain/zoo</uri>
+    	<assert>
+    		<xpath>count(/domain) = 1</xpath>
+    	</assert>    
+    </test>   
     <test>
     	<uri>active:beanshell+operator@ffcpl:/test/accessor/queryDomainMaintainers.bsh+domain@data:text/plain,boo</uri>
     	<assert>
@@ -217,6 +223,12 @@
     		<xpath>/domain/writers/uid[2] = 'david-test'</xpath>    		
     	</assert>
     </test>
+    <test>
+ 		<uri>active:purl-storage-pending-domains+testrun@data:test/plain,2</uri>
+		<assert name="Pending Domains">
+			<xpath>count(/pending/domain) = 2</xpath>
+		</assert>       	
+    </test>     
     <test>
     	<uri>active:purl-storage-purl-exists+uri@ffcpl:/purl/net/purl/301+testrun@data:text/plain,prerun</uri>
     	<assert name="PURL Doesn't Pre-Exist">

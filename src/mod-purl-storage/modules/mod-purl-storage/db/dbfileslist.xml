@@ -18,7 +18,8 @@
     <file>queryGroup.idoc</file>    
     <file>queryGroupMaintainers.idoc</file>
     <file>queryGroupMembers.idoc</file>    
-    <file>queryAll.xml</file>   
+    <file>queryAll.xml</file>
+    <file>queryResource.bsh</file>    
     <file>domainExists.idoc</file>            
     <file>createDomain.idoc</file>
     <file>updateDomain.idoc</file>
@@ -26,6 +27,9 @@
     <file>queryDomain.idoc</file>    
     <file>queryDomainMaintainers.idoc</file>
     <file>queryDomainWriters.idoc</file>
+    <file>pendingDomains.idoc</file>
+    <file>approveDomain.idoc</file>
+    <file>rejectDomain.idoc</file>      
     <file>purlExists.idoc</file>                    
     <file>createPURL.idoc</file>
     <file>deletePURL.idoc</file>

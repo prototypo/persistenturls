@@ -37,7 +37,8 @@
 								'<stm:param xpath="/purl/target/url/text()"/>',
 								NOW,
 								NOW,
-								1
+								1,
+								'false'
 								);																				
 						</stm:set>
 						</stm:group>
@@ -69,7 +70,8 @@
 								'<stm:param xpath="/purl/target/url/text()"/>',
 								NOW,
 								NOW,
-								1
+								1,
+								'false'
 								);																				
 						</stm:set>
 						</stm:group>
@@ -101,7 +103,8 @@
 								'<stm:param xpath="/purl/seealso/url/text()"/>',
 								NOW,
 								NOW,
-								1
+								1,
+								'false'
 								);																				
 						</stm:set>
 						</stm:group>
@@ -133,7 +136,8 @@
 								'<stm:param xpath="/purl/target/url/text()"/>',
 								NOW,
 								NOW,
-								1
+								1,
+								'false'
 								);																				
 						</stm:set>
 						</stm:group>
@@ -165,7 +169,8 @@
 								'',								
 								NOW,
 								NOW,
-								1
+								1,
+								'false'
 								);																				
 						</stm:set>
 						</stm:group>
@@ -197,7 +202,8 @@
 								'',								
 								NOW,
 								NOW,
-								1
+								1,
+								'false'
 								);																				
 						</stm:set>
 						</stm:group>

@@ -28,7 +28,8 @@
 							'<stm:param xpath="/domain/public/text()"/>',
 							NOW,
 							NOW,
-							1
+							0,
+							'false'
 							);																				
 					</stm:set>
 				</stm:group>
@@ -41,11 +42,34 @@
 			<operand>var:sql</operand>
 			<target>var:response</target>
 		</instr>
-		<instr>
-			<type>purl-storage-query-domain</type>
-			<param>this:param</param>
-			<target>var:domain</target>
-		</instr>			
+	<instr>
+					<type>stm</type>
+					<operand>
+						<idoc>
+							<seq>
+								<instr>
+									<type>purl-storage-query-domain</type>
+									<uri/>
+									<target>this:response</target>
+								</instr>
+							</seq>
+						</idoc>
+					</operand>
+					<operator>
+						<stm:group xmlns:stm="http://1060.org/stm">
+							<stm:set xpath="/idoc/seq/instr/uri">
+								ffcpl:/domain/<stm:param xpath="/domain/id/text()"/>
+							</stm:set>
+						</stm:group>			
+					</operator>
+					<param>this:param</param>
+					<target>var:query</target>
+				</instr>
+				<instr>
+					<type>dpml</type>
+					<operand>var:query</operand>
+					<target>var:domain</target>
+				</instr>			
 		<instr>
 			<type>stm</type>
 			<operand>var:todo</operand>
@@ -294,11 +318,34 @@
         </instr>
       </seq>
     </while>
-    <instr>
-    	<type>purl-storage-query-domain</type>
-    	<param>this:param</param>
-    	<target>var:domain</target>
-   	</instr>
+	<instr>
+					<type>stm</type>
+					<operand>
+						<idoc>
+							<seq>
+								<instr>
+									<type>purl-storage-query-domain</type>
+									<uri/>
+									<target>this:response</target>
+								</instr>
+							</seq>
+						</idoc>
+					</operand>
+					<operator>
+						<stm:group xmlns:stm="http://1060.org/stm">
+							<stm:set xpath="/idoc/seq/instr/uri">
+								ffcpl:/domain/<stm:param xpath="/domain/id/text()"/>
+							</stm:set>
+						</stm:group>			
+					</operator>
+					<param>this:param</param>
+					<target>var:query</target>
+				</instr>
+				<instr>
+					<type>dpml</type>
+					<operand>var:query</operand>
+					<target>var:domain</target>
+				</instr>
 		<instr>
 			<type>copy</type>
 			<operand>var:domain</operand>

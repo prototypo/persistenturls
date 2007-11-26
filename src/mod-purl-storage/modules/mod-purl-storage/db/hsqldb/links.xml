@@ -133,12 +133,6 @@
 		<args>all</args>
 	</link>	
 	<link>
-		<name>Query Domain</name>
-		<ext>/query-domain</ext>
-		<int>active:dpml+operand@ffcpl:/sql/db/queryDomain.idoc</int>
-		<args>all</args>
-	</link>
-	<link>
 		<name>Query Domain Maintainers</name>
 		<ext>/query-domainmaintainers</ext>
 		<int>active:dpml+operand@ffcpl:/sql/db/queryDomainMaintainers.idoc</int>
@@ -150,6 +144,32 @@
 		<int>active:dpml+operand@ffcpl:/sql/db/queryDomainWriters.idoc</int>
 		<args>all</args>		
 	</link>
+	
+	<link>
+		<name>Query Domain</name>
+		<ext>/query-domain</ext>
+		<int>active:beanshell+operator@ffcpl:/sql/db/queryResource.bsh</int>		
+		<!--<int>active:dpml+operand@ffcpl:/sql/db/queryDomain.idoc</int>-->
+		<args>all</args>
+	</link>
+	<link>
+		<name>Pending Domains</name>
+		<ext>/pending-domains</ext>
+		<int>active:dpml+operand@ffcpl:/sql/db/pendingDomains.idoc</int>
+		<args>all</args>
+	</link>	
+	<link>
+		<name>Approve Domain</name>
+		<ext>/approve-domain</ext>
+		<int>active:dpml+operand@ffcpl:/sql/db/approveDomain.idoc</int>
+		<args>all</args>
+	</link>
+	<link>
+		<name>Reject Domain</name>
+		<ext>/reject-domain</ext>
+		<int>active:dpml+operand@ffcpl:/sql/db/rejectDomain.idoc</int>
+		<args>all</args>
+	</link>	
 	<link>
 		<name>PURL Exists</name>
 		<ext>/purl-exists</ext>

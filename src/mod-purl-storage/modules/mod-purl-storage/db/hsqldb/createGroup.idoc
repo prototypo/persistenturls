@@ -28,7 +28,8 @@
 							'<stm:param xpath="/group/comments/text()"/>',
 							NOW,
 							NOW,
-							1
+							1,
+							'false'
 							);																				
 					</stm:set>
 				</stm:group>

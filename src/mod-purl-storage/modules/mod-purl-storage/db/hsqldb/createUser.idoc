@@ -16,7 +16,8 @@
 					'<stm:param xpath="/user/justification/text()"/>',
 					NOW,
 					NOW,
-					0
+					0,
+					'false'
 					);
 				</stm:set>
 			</stm:group>
