@@ -39,18 +39,10 @@
 			<target>var:results</target>
 		</instr> 
 		<instr>
-			<type>stm</type>
+			<type>copy</type>
 			<operand>
 				<writers/>
 			</operand>
-			<operator>
-				<stm:group xmlns:stm="http://1060.org/stm">
-					<stm:create-path newpath="@domain" select="." xpath="/writers">
-						<stm:param xpath="/domain/id/text()"/>
-					</stm:create-path>
-				</stm:group>
-			</operator>
-			<param>this:param</param>
 			<target>var:writers</target>
 		</instr>
 	<while>

@@ -34,8 +34,8 @@
     <file>createPURL.idoc</file>
     <file>deletePURL.idoc</file>
     <file>queryPURL.idoc</file>
-    <file>queryPURLMaintainers.idoc</file>        
-    <!--<file>updatePURL.idoc</file>
-    <file>updateGroup.idoc</file>-->
-    
+    <file>queryPURLMaintainers.idoc</file>
+    <file>validUser.idoc</file>
+    <file>validateResource.bsh</file>            
+    <file>updatePURL.idoc</file>
 </dbfiles>

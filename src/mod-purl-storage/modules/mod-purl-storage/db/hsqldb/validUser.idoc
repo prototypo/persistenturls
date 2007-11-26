@@ -1,0 +1,64 @@
+<idoc>
+	<seq>
+		<if>
+			<cond>
+				<instr>
+					<type>dpml</type>
+					<operand>ffcpl:/sql/db/userExists.idoc</operand>
+					<param>this:param</param>
+					<target>this:cond</target>
+				</instr>
+			</cond>
+			<then>
+				<instr>
+					<type>copy</type>
+					<operand><hello/></operand>
+					<target>this:response</target>
+				</instr>
+<!--				<instr>
+					<type>stm</type>
+					<operand>
+						<idoc>
+							<seq>
+								<instr>
+									<type>purl-storage-query-user</type>
+									<uri/>
+									<target>this:response</target>
+								</instr>
+							</seq>
+						</idoc>
+					</operand>
+					<operator>
+						<stm:group xmlns:stm="http://1060.org/stm">
+							<stm:set xpath="/idoc/seq/instr/uri">
+								ffcpl:/user/<stm:param xpath="/user/id/text()"/>
+							</stm:set>
+						</stm:group>			
+					</operator>
+					<param>this:param</param>
+					<target>var:query</target>
+				</instr>		
+				<instr>
+					<type>dpml</type>
+					<operand>var:query</operand>
+					<target>var:user</target>
+				</instr>
+				<instr>
+  					<type>xpatheval</type>
+  					<operand>var:user</operand>
+  					<operator>
+  						<xpath>/user[@status='1']</xpath>
+  					</operator>
+  					<target>this:response</target>
+				</instr>-->	
+			</then>
+			<else>
+				<instr>
+					<type>copy</type>
+					<operand><goodbye/></operand>
+					<target>this:response</target>
+				</instr>
+			</else>
+		</if>
+	</seq>
+</idoc>

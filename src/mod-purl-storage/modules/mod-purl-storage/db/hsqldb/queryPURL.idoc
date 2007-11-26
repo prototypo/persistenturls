@@ -27,12 +27,7 @@
 		<instr>
 			<type>stm</type>
 			<operand>
-				<purl>
-					<z_id/>
-					<id/>
-					<type/>
-					<maintainers/>
-				</purl>
+				<purl><z_id/><id/><type/></purl>
 			</operand>
 			<operator>
 				<stm:group xmlns:stm="http://1060.org/stm">
@@ -155,6 +150,11 @@
 				</stm:group>				
 			</operator>
 			<param>var:maintainers</param>
+			<target>this:response</target>
+		</instr>
+		<instr>
+			<type>expire</type>
+			<operand>this:response</operand>
 			<target>this:response</target>
 		</instr>
 	</seq>

@@ -67,6 +67,12 @@
 		<args>all</args>
 	</link>
 	<link>
+		<name>Valid User</name>
+		<ext>/valid-user</ext>
+		<int>active:beanshell+operator@ffcpl:/sql/db/validateResource.bsh</int>		
+		<args>all</args>	
+	</link>
+	<link>
 		<name>Group Exists</name>
 		<ext>/group-exists</ext>
 		<int>active:beanshell+operator@ffcpl:/sql/db/resourceExists.bsh</int>
@@ -182,6 +188,12 @@
 		<int>active:dpml+operand@ffcpl:/sql/db/createPURL.idoc</int>
 		<args>all</args>
 	</link>
+	<link>
+		<name>Update PURL</name>
+		<ext>/update-purl</ext>
+		<int>active:dpml+operand@ffcpl:/sql/db/updatePURL.idoc</int>
+		<args>all</args>
+	</link>	
 	<link>
 		<name>Delete PURL</name>
 		<ext>/delete-purl</ext>
