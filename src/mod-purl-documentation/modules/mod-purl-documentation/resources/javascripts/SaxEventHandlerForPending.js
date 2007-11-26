@@ -243,9 +243,9 @@ SAXEventHandlerForPending.prototype.startElement = function(name, atts) {
 		// Clear the working array.
 		elementMap = new Array();
 		elementMapIndex = 0;
-		// Extract the 'id' attribute.
-		elementMap[elementMapIndex] = ["id", atts.getValueByName(["id"])];
-		elementMapIndex++;
+		// Extract the 'id' attribute. - NO.  The 'id' attribute moved to a tag.
+		//elementMap[elementMapIndex] = ["id", atts.getValueByName(["id"])];
+		//elementMapIndex++;
 	}
 
 }  // end function startElement
