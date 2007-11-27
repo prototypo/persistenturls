@@ -51,10 +51,6 @@ public class PendingAccessor extends NKFAccessorImpl {
             }
         } else if(method.equals("POST")) {
             IAspectXDA param = (IAspectXDA) context.sourceAspect("this:param:param", IAspectXDA.class);
-            IXDAReadOnly paramRO = param.getXDA();
-            IAspectString paramSA = (IAspectString) context.transrept(param, IAspectString.class);
-            System.out.println(paramSA.getString());
-            
             resp = context.createResponseFrom(param);
         }
 

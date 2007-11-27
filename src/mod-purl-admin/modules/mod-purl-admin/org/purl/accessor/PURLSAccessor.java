@@ -1,6 +1,5 @@
 package org.purl.accessor;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,7 +56,7 @@ public class PURLSAccessor extends NKFAccessorImpl {
                 while(maintainerXdaROItor.hasNext()) {
                     maintainerXdaROItor.next();
                     if(sb.length()>0) {
-                        sb.append("\n");
+                        sb.append(",");
                     }
                     sb.append(maintainerXdaROItor.getText("@id", true));
                 }

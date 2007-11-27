@@ -82,10 +82,12 @@ import org.purl.accessor.util.URIResolver;
 import org.purl.accessor.util.UserResolver;
 import org.purl.accessor.util.UserResourceStorage;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
+import org.ten60.netkernel.layer1.nkf.INKFRequest;
 import org.ten60.netkernel.layer1.nkf.NKFException;
 import org.ten60.netkernel.layer1.representation.IAspectNVP;
 
 import com.ten60.netkernel.urii.IURAspect;
+import com.ten60.netkernel.urii.aspect.IAspectString;
 import com.ten60.netkernel.urii.aspect.StringAspect;
 
 public class GroupAccessor extends AbstractAccessor {
@@ -100,12 +102,13 @@ public class GroupAccessor extends AbstractAccessor {
 
         URIResolver groupResolver = new GroupResolver();
 
+        ResourceFilter groupFilter = new GroupPrivateDataFilter();
         ResourceStorage groupStorage = new GroupResourceStorage();
         ResourceCreator groupCreator = new GroupCreator(new UserResolver(), new UserResourceStorage());
 
-        commandMap.put("GET", new GetResourceCommand(TYPE, groupResolver, groupStorage, new GroupSearchHelper()));
-        commandMap.put("POST", new CreateResourceCommand(TYPE, groupResolver, groupCreator, null, groupStorage));
-        commandMap.put("DELETE", new DeleteResourceCommand(TYPE, groupResolver, new DefaultResourceDeleter(groupResolver), groupStorage));
+        commandMap.put("GET", new GetResourceCommand(TYPE, groupResolver, groupStorage, new GroupSearchHelper(), groupFilter));
+        commandMap.put("POST", new CreateResourceCommand(TYPE, groupResolver, groupCreator, groupFilter, groupStorage));
+        commandMap.put("DELETE", new DeleteResourceCommand(TYPE, groupResolver, groupStorage));
         commandMap.put("PUT", new UpdateResourceCommand(TYPE, groupResolver, groupCreator, groupStorage));
     }
 
@@ -183,5 +186,27 @@ public class GroupAccessor extends AbstractAccessor {
     
     private static void addGroupForUser(INKFConvenienceHelper context, String group, String user) throws NKFException {
         context.sinkAspect("active:purl-groups-for-user+user@user:" + user, new StringAspect("<groups><group id=\"" + group + "\"/></groups>"));
+    }
+    
+    static public class GroupPrivateDataFilter implements ResourceFilter {
+
+        public IURAspect filter(INKFConvenienceHelper context, IURAspect iur) {
+            IURAspect retValue = null;
+
+            try {
+                INKFRequest req = context.createSubRequest();
+                req.setURI("active:xslt");
+                req.addArgument("operand", iur);
+                req.addArgument("operator", "ffcpl:/filters/group.xsl");
+                req.setAspectClass(IAspectString.class);
+                retValue = context.issueSubRequestForAspect(req);
+            } catch(NKFException nfe) {
+                // TODO: return something other than the raw user
+                nfe.printStackTrace();
+            }
+
+            return retValue;
+        }
+
     }
 }

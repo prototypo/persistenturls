@@ -65,6 +65,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import org.purl.accessor.GroupAccessor.GroupPrivateDataFilter;
 import org.purl.accessor.command.CreateResourceCommand;
 import org.purl.accessor.command.DeleteResourceCommand;
 import org.purl.accessor.command.GetResourceCommand;
@@ -81,10 +82,12 @@ import org.purl.accessor.util.URIResolver;
 import org.purl.accessor.util.UserResolver;
 import org.purl.accessor.util.UserResourceStorage;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
+import org.ten60.netkernel.layer1.nkf.INKFRequest;
 import org.ten60.netkernel.layer1.nkf.NKFException;
 import org.ten60.netkernel.layer1.representation.IAspectNVP;
 
 import com.ten60.netkernel.urii.IURAspect;
+import com.ten60.netkernel.urii.aspect.IAspectString;
 import com.ten60.netkernel.urii.aspect.StringAspect;
 
 public class DomainAccessor extends AbstractAccessor {
@@ -118,12 +121,13 @@ public class DomainAccessor extends AbstractAccessor {
 
         };
 
+        ResourceFilter domainFilter = new DomainPrivateDataFilter();
         ResourceCreator domainCreator = new DomainCreator(new UserResolver(), new UserResourceStorage());
         ResourceStorage domainStorage = new DomainResourceStorage();
 
-        commandMap.put("GET", new GetResourceCommand(TYPE, domainResolver, domainStorage, new DomainSearchHelper()));
-        commandMap.put("POST", new CreateResourceCommand(TYPE, domainResolver, domainCreator, null, domainStorage));
-        commandMap.put("DELETE", new DeleteResourceCommand(TYPE, domainResolver, new DefaultResourceDeleter(domainResolver), domainStorage));
+        commandMap.put("GET", new GetResourceCommand(TYPE, domainResolver, domainStorage, new DomainSearchHelper(), domainFilter));
+        commandMap.put("POST", new CreateResourceCommand(TYPE, domainResolver, domainCreator, domainFilter, domainStorage));
+        commandMap.put("DELETE", new DeleteResourceCommand(TYPE, domainResolver, domainStorage));
         commandMap.put("PUT", new UpdateResourceCommand(TYPE, domainResolver, domainCreator, domainStorage));
     }
 
@@ -157,7 +161,6 @@ public class DomainAccessor extends AbstractAccessor {
             st = new StringTokenizer(writers, ",");
             while(st.hasMoreTokens()) {
                 String next = st.nextToken();
-                System.out.println("Checking: " + next);
                 if(!userStorage.resourceExists(context, userResolver.getURI(next))) {
                     throw new PURLException("User " + next + " does not exist", 400);
                 }
@@ -194,5 +197,27 @@ public class DomainAccessor extends AbstractAccessor {
             sb.append("</domain>");
             return new StringAspect(sb.toString());
         }
+    }
+    
+    static public class DomainPrivateDataFilter implements ResourceFilter {
+
+        public IURAspect filter(INKFConvenienceHelper context, IURAspect iur) {
+            IURAspect retValue = null;
+
+            try {
+                INKFRequest req = context.createSubRequest();
+                req.setURI("active:xslt");
+                req.addArgument("operand", iur);
+                req.addArgument("operator", "ffcpl:/filters/domain.xsl");
+                req.setAspectClass(IAspectString.class);
+                retValue = context.issueSubRequestForAspect(req);
+            } catch(NKFException nfe) {
+                // TODO: return something other than the raw user
+                nfe.printStackTrace();
+            }
+
+            return retValue;
+        }
+
     }
 }
