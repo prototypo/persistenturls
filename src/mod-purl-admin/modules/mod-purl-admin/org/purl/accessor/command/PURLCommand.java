@@ -13,8 +13,6 @@ import org.ten60.netkernel.layer1.nkf.INKFResponse;
 import org.ten60.netkernel.layer1.nkf.NKFException;
 import org.ten60.netkernel.layer1.representation.IAspectNVP;
 
-import com.ten60.netkernel.urii.aspect.IAspectString;
-
 /**
  * @version 1.0, 16 August 2007
  * @author Brian Sletten (brian at http://zepheira.com/)
@@ -64,7 +62,6 @@ abstract public class PURLCommand {
         sb.append(command);
         sb.append(" ");
         sb.append(resource);
-        System.out.println(sb.toString());
     }
 
 	protected IAspectNVP getParams(INKFConvenienceHelper context) throws NKFException {
@@ -72,8 +69,6 @@ abstract public class PURLCommand {
 
 		if(context.exists("this:param:param")) {
 			retValue = (IAspectNVP) context.sourceAspect("this:param:param", IAspectNVP.class);
-			IAspectString param = (IAspectString) context.sourceAspect("this:param:param", IAspectString.class);
-			System.out.println(param.getString());
 		}
 
 		if(retValue == null) {

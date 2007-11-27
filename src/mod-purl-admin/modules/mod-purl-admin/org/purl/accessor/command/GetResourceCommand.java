@@ -34,10 +34,6 @@ import org.ten60.netkernel.layer1.nkf.INKFRequest;
 import org.ten60.netkernel.layer1.nkf.INKFResponse;
 import org.ten60.netkernel.layer1.nkf.NKFException;
 import org.ten60.netkernel.layer1.representation.IAspectNVP;
-import org.ten60.netkernel.xml.representation.IAspectXDA;
-import org.ten60.netkernel.xml.xda.IXDAReadOnly;
-import org.ten60.netkernel.xml.xda.IXDAReadOnlyIterator;
-import org.ten60.netkernel.xml.xda.XPathLocationException;
 
 import com.ten60.netkernel.urii.IURAspect;
 import com.ten60.netkernel.urii.IURRepresentation;
@@ -65,11 +61,6 @@ public class GetResourceCommand extends PURLCommand {
 
         try {
             String path = context.getThisRequest().getArgument("path");
-            Iterator itor = context.getThisRequest().getArguments();
-
-            while(itor.hasNext()) {
-                System.out.println(itor.next());
-            }
 
             if(!path.endsWith("/")) {
                 String id = NKHelper.getLastSegment(context);
@@ -111,14 +102,10 @@ public class GetResourceCommand extends PURLCommand {
                     
                     String value = params.getValue(key);
                     
-                    System.out.println("key: " + key);
-                    
                     if(value.length() == 0) {
                         continue;
                     }
 
-                    System.out.println("value: " + value);
-                    
                     INKFRequest req = context.createSubRequest("active:purl-search");
                     req.addArgument("index", "ffcpl:/index/" + type);
 

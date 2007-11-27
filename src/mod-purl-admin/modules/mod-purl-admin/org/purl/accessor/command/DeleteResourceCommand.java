@@ -32,11 +32,8 @@ import com.ten60.netkernel.urii.aspect.StringAspect;
 
 public class DeleteResourceCommand extends PURLCommand {
 
-    ResourceDeleter resDeleter;
-
-    public DeleteResourceCommand(String type, URIResolver uriResolver, ResourceDeleter resDeleter, ResourceStorage resStorage) {
+    public DeleteResourceCommand(String type, URIResolver uriResolver, ResourceStorage resStorage) {
         super(type, uriResolver, resStorage);
-        this.resDeleter = resDeleter;
     }
 
     @Override
@@ -56,7 +53,7 @@ public class DeleteResourceCommand extends PURLCommand {
                 // Default response code of 200 is fine
                 // TODO: Cut golden thread for the resource
 
-                if(resDeleter.deleteResource(context)) {
+                if(resStorage.deleteResource(context, uriResolver.getURI(context))) {
                     recordCommandState(context, "DELETE", path);
 
                     String message = "Deleted resource: " + id;
