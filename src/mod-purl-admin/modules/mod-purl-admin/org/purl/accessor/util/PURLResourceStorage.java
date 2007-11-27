@@ -6,6 +6,7 @@ import org.ten60.netkernel.layer1.nkf.NKFException;
 import org.ten60.netkernel.xml.representation.IAspectXDA;
 
 import com.ten60.netkernel.urii.IURAspect;
+import com.ten60.netkernel.urii.IURRepresentation;
 import com.ten60.netkernel.urii.aspect.IAspectBoolean;
 
 public class PURLResourceStorage implements ResourceStorage {
@@ -17,8 +18,8 @@ public class PURLResourceStorage implements ResourceStorage {
     public IURAspect getResource(INKFConvenienceHelper context, String uri) throws NKFException {
         INKFRequest req = context.createSubRequest("active:purl-storage-query-purl");
         req.addArgument("uri", uri);
-        req.setAspectClass(IAspectXDA.class);
-        return (IAspectXDA) context.issueSubRequestForAspect(req);
+        IURRepresentation res = context.issueSubRequest(req);
+        return context.transrept(res, IAspectXDA.class);
     }
 
     public boolean resourceExists(INKFConvenienceHelper context, String uri) throws NKFException {
@@ -54,5 +55,18 @@ public class PURLResourceStorage implements ResourceStorage {
         retValue = true;
         
         return retValue;
+    }
+
+    public boolean deleteResource(INKFConvenienceHelper context, String uri) throws NKFException {
+        boolean retValue = false;
+        INKFRequest req = context.createSubRequest("active:purl-storage-delete-purl");
+        req.addArgument("uri", uri);
+        retValue = true;
+        
+        return retValue;
+    }
+
+    public boolean deleteResource(INKFConvenienceHelper context, URIResolver resolver) throws NKFException {
+        return deleteResource(context, resolver.getURI(context));
     }   
 }

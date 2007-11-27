@@ -55,5 +55,18 @@ public class UserResourceStorage implements ResourceStorage {
         retValue = true;
         
         return retValue;
-    }    
+    }  
+    
+    public boolean deleteResource(INKFConvenienceHelper context, String uri) throws NKFException {
+        boolean retValue = false;
+        INKFRequest req = context.createSubRequest("active:purl-storage-delete-user");
+        req.addArgument("uri", uri);
+        retValue = true;
+        
+        return retValue;
+    }
+
+    public boolean deleteResource(INKFConvenienceHelper context, URIResolver resolver) throws NKFException {
+        return deleteResource(context, resolver.getURI(context));
+    }   
 }

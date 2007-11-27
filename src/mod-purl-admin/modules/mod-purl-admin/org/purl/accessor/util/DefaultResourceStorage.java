@@ -1,6 +1,7 @@
 package org.purl.accessor.util;
 
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
+import org.ten60.netkernel.layer1.nkf.INKFRequest;
 import org.ten60.netkernel.layer1.nkf.NKFException;
 
 import com.ten60.netkernel.urii.IURAspect;
@@ -36,4 +37,12 @@ public class DefaultResourceStorage implements ResourceStorage {
     public boolean resourceExists(INKFConvenienceHelper context, String uri) throws NKFException {
         return context.exists(uri);
     }
+    
+    public boolean deleteResource(INKFConvenienceHelper context, String uri) throws NKFException {
+        return context.delete(uri);
+    }
+
+    public boolean deleteResource(INKFConvenienceHelper context, URIResolver resolver) throws NKFException {
+        return deleteResource(context, resolver.getURI(context));
+    }   
 }
