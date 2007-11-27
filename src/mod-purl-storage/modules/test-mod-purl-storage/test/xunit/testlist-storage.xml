@@ -19,10 +19,11 @@
     </test>
     <test>
     	<uri>active:purl-storage-user-exists+uri@ffcpl:/user/david-test+testrun@data:text/plain,prerun</uri>
-    	<assert name="User 1 Doesn't Pre-Exist">
+    	<assert name="User 1 Doesn't PreExist">
     		<uri>active:javascript+operator@ffcpl:/test/accessor/isFalse.js</uri>
     	</assert>
     </test>      
+     
     <test>
     	<uri>active:beanshell+operator@ffcpl:/test/accessor/createUser.bsh+user@ffcpl:/testdata/testuser1.xml</uri>
 		<assert name="User 1 Created">
@@ -78,6 +79,12 @@
 			<xpath>count(/user) = 1</xpath>
 		</assert>    
     </test>
+    <test>
+    	<uri>active:purl-storage-user-valid+uri@ffcpl:/user/brian-test</uri>
+    	<assert name="User 2 IsValid">
+    		<uri>active:javascript+operator@ffcpl:/test/accessor/isTrue.js</uri>
+    	</assert>
+    </test>     
     <test>
  		<uri>active:beanshell+operator@ffcpl:/test/accessor/pendingUsers.bsh+testrun@data:test/plain,2</uri>
 		<assert name="Pending Users 2">
@@ -281,6 +288,17 @@
     	</assert>
     </test>
     <test>
+    	<uri>active:beanshell+operator@ffcpl:/test/accessor/updatePURL.bsh+purl@ffcpl:/testdata/testpurl303-mod.xml</uri>
+    	<assert>
+    		<xpath>count(/purl) = 1</xpath>
+    		<xpath>/purl/id = '/net/purl/303'</xpath>
+    		<xpath>/purl/type = '303'</xpath>
+    		<xpath>/purl/seealso/url = 'http://somewhereelse.com/foaf/brian.rdf'</xpath>
+    		<xpath>count(/purl/maintainers/uid) = 1</xpath>
+    		<xpath>/purl/maintainers/uid = 'brian-test'</xpath>    		
+    	</assert>
+    </test>    
+    <test>
     	<uri>active:beanshell+operator@ffcpl:/test/accessor/createPURL.bsh+purl@ffcpl:/testdata/testpurl307.xml</uri>
     	<assert>
     		<xpath>count(/purl) = 1</xpath>
@@ -319,7 +337,83 @@
     		<xpath>count(/maintainers) = 1</xpath>
     		<xpath>/maintainers/uid[1] = 'brian-test'</xpath>
     	</assert>
+    </test>
+    <test>
+    	<uri>active:purl-storage-delete-group+uri@ffcpl:/group/purlworkers</uri>
+    	<assert>
+    		<xpath>count(/deleted) = 1</xpath>
+    		<xpath>/deleted/group/id = 'purlworkers'</xpath>
+    	</assert>    
+    </test>
+    <test>
+    	<uri>active:purl-storage-group-exists+uri@ffcpl:/group/purlworkers+testrun@data:text/plain,postdelete</uri>
+    	<assert name="Group 'purlworkers' Still Exists">
+    		<uri>active:javascript+operator@ffcpl:/test/accessor/isTrue.js</uri>
+    	</assert>
+    </test> 
+    <test>
+    	<uri>active:purl-storage-group-tombstoned+uri@ffcpl:/group/purlworkers+testrun@data:text/plain,postdelete</uri>
+    	<assert name="Group 'purlworkers' Tombstoned">
+    		<uri>active:javascript+operator@ffcpl:/test/accessor/isTrue.js</uri>
+    	</assert>
+    </test>         
+    <test>
+    	<uri>active:purl-storage-delete-user+uri@ffcpl:/user/brian-test</uri>
+    	<assert>
+    		<xpath>count(/deleted) = 1</xpath>
+    		<xpath>/deleted/user/id = 'brian-test'</xpath>    		
+    	</assert>    
+    </test>
+    <test>
+    	<uri>active:purl-storage-user-exists+uri@ffcpl:/user/brian-test+testrun@data:text/plain,postdelete</uri>
+    	<assert name="User 1 Still Exists">
+    		<uri>active:javascript+operator@ffcpl:/test/accessor/isTrue.js</uri>
+    	</assert>
+    </test> 
+    <test>
+    	<uri>active:purl-storage-user-tombstoned+uri@ffcpl:/user/brian-test+testrun@data:text/plain,postdelete</uri>
+    	<assert name="User 1 Tombstoned">
+    		<uri>active:javascript+operator@ffcpl:/test/accessor/isTrue.js</uri>
+    	</assert>
     </test>            
+    <test>
+    	<uri>active:purl-storage-delete-domain+uri@ffcpl:/domain/boo</uri>
+    	<assert>
+    		<xpath>count(/deleted) = 1</xpath>
+    		<xpath>/deleted/domain/id = 'boo'</xpath>
+    	</assert>    
+    </test>
+    <test>
+    	<uri>active:purl-storage-domain-exists+uri@ffcpl:/domain/boo+testrun@data:text/plain,postdelete</uri>
+    	<assert name="Domain 1 Still Exists">
+    		<uri>active:javascript+operator@ffcpl:/test/accessor/isTrue.js</uri>
+    	</assert>
+    </test> 
+    <test>
+    	<uri>active:purl-storage-domain-tombstoned+uri@ffcpl:/domain/boo+testrun@data:text/plain,postdelete</uri>
+    	<assert name="Domain 1 Tombstoned">
+    		<uri>active:javascript+operator@ffcpl:/test/accessor/isTrue.js</uri>
+    	</assert>
+    </test>     
+    <test>
+    	<uri>active:purl-storage-delete-purl+uri@ffcpl:/purl/net/purl/301</uri>
+    	<assert>
+    		<xpath>count(/deleted) = 1</xpath>
+    		<xpath>/deleted/purl/id = '/net/purl/301'</xpath>    		
+    	</assert>    
+    </test> 
+    <test>
+    	<uri>active:purl-storage-purl-exists+uri@ffcpl:/purl/net/purl/301+testrun@data:text/plain,postdelete</uri>
+    	<assert name="PURL /net/purl/301 Still Exists">
+    		<uri>active:javascript+operator@ffcpl:/test/accessor/isTrue.js</uri>
+    	</assert>
+    </test> 
+    <test>
+    	<uri>active:purl-storage-purl-tombstoned+uri@ffcpl:/purl/net/purl/301+testrun@data:text/plain,postdelete</uri>
+    	<assert name="PURL /net/purl/301 Tombstoned">
+    		<uri>active:javascript+operator@ffcpl:/test/accessor/isTrue.js</uri>
+    	</assert>
+    </test>  
  	<test>
       	<uri>active:purl-storage-destroy-db</uri>
 		<assert name="Test DB Deleted">
