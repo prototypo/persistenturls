@@ -56,7 +56,6 @@ public class purlClientTestRunner {
         suite.addTest(new simplePurlClientTest("testValidatePurl"));
         suite.addTest(new simplePurlClientTest("testResolvePurl"));
         suite.addTest(new simplePurlClientTest("testDeletePurl"));
-        suite.addTest(new simplePurlClientTest("testRedeletePurl"));
 
 		/*
 			Advanced PURL actions. Add, resolve and delete PURLs of each type.

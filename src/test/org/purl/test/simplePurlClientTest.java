@@ -118,12 +118,6 @@ public class simplePurlClientTest extends TestCase {
 		deletePurl("/testdomain/testPURL");
 	}
 	
-	// Test re-deleting an existing PURL via an HTTP DELETE (should fail).
-	public void testRedeletePurl() {
-		deletePurl("/testdomain/testPURL", false);
-	}
-
-
 	/****************** Test Batch PURLs **************************/
 		
 	// Test creating a batch of 301 PURLs via an HTTP POST.
@@ -446,7 +440,7 @@ public class simplePurlClientTest extends TestCase {
 			String url = "http://" + host + ":" + port + "/admin/user/testuser";
 
 			String errMsg = "Cannot search user.";
-			String control = "<user><id>testuser</id><name>Test User Modified</name><affiliation>Zepheira, LLC</affiliation><email>tuser@example.com</email></user>";
+			String control = "<user status=\"0\"><id>testuser</id><name>Test User Modified</name><affiliation>Zepheira, LLC</affiliation><email>tuser@example.com</email></user>";
 			String test = client.searchUser(url);
 
 			// XML response, so use assertXMLEqual.
