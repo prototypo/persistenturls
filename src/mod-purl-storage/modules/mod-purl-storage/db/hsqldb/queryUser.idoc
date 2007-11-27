@@ -21,18 +21,7 @@
 		</instr>
 		<instr>
 			<type>stm</type>
-			<operand>
-				<user>
-					<z_id/>
-					<id/>
-					<name/>
-					<affiliation/>
-					<email/>
-					<password/>
-					<hint/>
-					<justification/>
-				</user>
-			</operand>
+			<operand><user><z_id/><id/><name/><affiliation/><email/><password/><hint/><justification/></user></operand>
 			<operator>
 				<stm:group xmlns:stm="http://1060.org/stm">
 					<stm:create-path newpath="@status" select="." xpath="/user">

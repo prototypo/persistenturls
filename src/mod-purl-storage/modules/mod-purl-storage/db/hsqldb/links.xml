@@ -38,7 +38,7 @@
 	<link>
 		<name>Delete User</name>
 		<ext>/delete-user</ext>
-		<int>active:dpml+operand@ffcpl:/sql/db/deleteUser.idoc</int>
+		<int>active:beanshell+operator@ffcpl:/sql/db/deleteResource.bsh</int>
 		<args>all</args>
 	</link>
 	<link>
@@ -67,11 +67,17 @@
 		<args>all</args>
 	</link>
 	<link>
-		<name>Valid User</name>
-		<ext>/valid-user</ext>
-		<int>active:beanshell+operator@ffcpl:/sql/db/validateResource.bsh</int>		
+		<name>User Valid</name>
+		<ext>/user-valid</ext>
+		<int>active:beanshell+operator@ffcpl:/sql/db/resourceValid.bsh</int>		
 		<args>all</args>	
 	</link>
+	<link>
+		<name>User Tombstoned</name>
+		<ext>/user-tombstoned</ext>
+		<int>active:beanshell+operator@ffcpl:/sql/db/resourceTombstoned.bsh</int>		
+		<args>all</args>	
+	</link>	
 	<link>
 		<name>Group Exists</name>
 		<ext>/group-exists</ext>
@@ -87,7 +93,7 @@
 	<link>
 		<name>Delete Group</name>
 		<ext>/delete-group</ext>
-		<int>active:dpml+operand@ffcpl:/sql/db/deleteGroup.idoc</int>
+		<int>active:beanshell+operator@ffcpl:/sql/db/deleteResource.bsh</int>
 		<args>all</args>
 	</link>
 	<link>
@@ -99,7 +105,8 @@
 	<link>
 		<name>Query Group</name>
 		<ext>/query-group</ext>
-		<int>active:dpml+operand@ffcpl:/sql/db/queryGroup.idoc</int>
+		<int>active:beanshell+operator@ffcpl:/sql/db/queryResource.bsh</int>		
+		<!--<int>active:dpml+operand@ffcpl:/sql/db/queryGroup.idoc</int>-->
 		<args>all</args>
 	</link>
 	<link>
@@ -114,6 +121,12 @@
 		<int>active:dpml+operand@ffcpl:/sql/db/queryGroupMembers.idoc</int>
 		<args>all</args>		
 	</link>
+	<link>
+		<name>Group Tombstoned</name>
+		<ext>/group-tombstoned</ext>
+		<int>active:beanshell+operator@ffcpl:/sql/db/resourceTombstoned.bsh</int>		
+		<args>all</args>	
+	</link>		
 	<link>
 		<name>Domain Exists</name>
 		<ext>/domain-exists</ext>
@@ -135,7 +148,7 @@
 	<link>
 		<name>Delete Domain</name>
 		<ext>/delete-domain</ext>
-		<int>active:dpml+operand@ffcpl:/sql/db/deleteDomain.idoc</int>
+		<int>active:beanshell+operator@ffcpl:/sql/db/deleteResource.bsh</int>
 		<args>all</args>
 	</link>	
 	<link>
@@ -175,7 +188,13 @@
 		<ext>/reject-domain</ext>
 		<int>active:dpml+operand@ffcpl:/sql/db/rejectDomain.idoc</int>
 		<args>all</args>
-	</link>	
+	</link>
+	<link>
+		<name>Domain Tombstoned</name>
+		<ext>/domain-tombstoned</ext>
+		<int>active:beanshell+operator@ffcpl:/sql/db/resourceTombstoned.bsh</int>		
+		<args>all</args>	
+	</link>			
 	<link>
 		<name>PURL Exists</name>
 		<ext>/purl-exists</ext>
@@ -197,7 +216,7 @@
 	<link>
 		<name>Delete PURL</name>
 		<ext>/delete-purl</ext>
-		<int>active:dpml+operand@ffcpl:/sql/db/deletePURL.idoc</int>
+		<int>active:beanshell+operator@ffcpl:/sql/db/deleteResource.bsh</int>		
 		<args>all</args>
 	</link>	
 	<link>
@@ -213,4 +232,10 @@
 		<int>active:dpml+operand@ffcpl:/sql/db/queryPURLMaintainers.idoc</int>
 		<args>all</args>		
 	</link>
+	<link>
+		<name>PURL Tombstoned</name>
+		<ext>/purl-tombstoned</ext>
+		<int>active:beanshell+operator@ffcpl:/sql/db/resourceTombstoned.bsh</int>		
+		<args>all</args>	
+	</link>		
 </links>

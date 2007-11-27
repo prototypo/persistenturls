@@ -3,7 +3,11 @@
     <file>createDB.idoc</file>
     <file>destroyDB.idoc</file>
     <file>resourceExists.bsh</file>
-    <file>userExists.idoc</file>  
+    <file>resourceTombstoned.bsh</file>
+    <file>resourceValid.bsh</file>    
+    <file>userExists.idoc</file>
+    <file>userTombstoned.idoc</file>
+    <file>userValid.idoc</file>
     <file>createUser.idoc</file>
     <file>updateUser.idoc</file>
     <file>deleteUser.idoc</file>
@@ -11,7 +15,8 @@
     <file>pendingUsers.idoc</file>    
     <file>approveUser.idoc</file>
     <file>rejectUser.idoc</file>  
-    <file>groupExists.idoc</file>        
+    <file>groupExists.idoc</file>
+	<file>groupTombstoned.idoc</file>            
     <file>createGroup.idoc</file>
     <file>updateGroup.idoc</file>
     <file>deleteGroup.idoc</file>    
@@ -19,8 +24,10 @@
     <file>queryGroupMaintainers.idoc</file>
     <file>queryGroupMembers.idoc</file>    
     <file>queryAll.xml</file>
-    <file>queryResource.bsh</file>    
-    <file>domainExists.idoc</file>            
+    <file>queryResource.bsh</file>
+    <file>deleteResource.bsh</file>        
+    <file>domainExists.idoc</file>
+    <file>domainTombstoned.idoc</file>          
     <file>createDomain.idoc</file>
     <file>updateDomain.idoc</file>
     <file>deleteDomain.idoc</file>
@@ -30,12 +37,11 @@
     <file>pendingDomains.idoc</file>
     <file>approveDomain.idoc</file>
     <file>rejectDomain.idoc</file>      
-    <file>purlExists.idoc</file>                    
+    <file>purlExists.idoc</file>
+    <file>purlTombstoned.idoc</file>              
     <file>createPURL.idoc</file>
     <file>deletePURL.idoc</file>
     <file>queryPURL.idoc</file>
     <file>queryPURLMaintainers.idoc</file>
-    <file>validUser.idoc</file>
-    <file>validateResource.bsh</file>            
     <file>updatePURL.idoc</file>
 </dbfiles>

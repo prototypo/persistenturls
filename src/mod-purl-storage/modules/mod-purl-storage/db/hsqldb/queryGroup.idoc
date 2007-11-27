@@ -32,12 +32,7 @@
 		<instr>
 			<type>stm</type>
 			<operand>
-				<group>
-					<z_id/>
-					<id/>
-					<name/>
-					<comments/>
-				</group>
+				<group><z_id/><id/><name/><comments/></group>
 			</operand>
 			<operator>
 				<stm:group xmlns:stm="http://1060.org/stm">

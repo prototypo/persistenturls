@@ -139,7 +139,32 @@
 					<param>var:results</param>
 					<target>var:purl</target>
 				</instr>
-			</then>					
+			</then>
+<cond>
+				<instr>
+          			<type>xpatheval</type>
+          			<operand>var:purl</operand>
+          			<operator>
+            			<xpath>/purl/type='partial'</xpath>
+          			</operator>
+          			<target>this:cond</target>
+        		</instr>				
+			</cond>
+			<then>
+				<instr>
+					<type>stm</type>
+					<operand>var:purl</operand>
+					<operator>
+						<stm:group xmlns:stm="http://1060.org/stm">
+							<stm:create-path newpath="/target/url" select="." xpath="/purl">
+								<stm:param xpath="/results/row/target/text()"/>
+							</stm:create-path>
+						</stm:group>
+					</operator>
+					<param>var:results</param>
+					<target>var:purl</target>
+				</instr>
+			</then>													
 		</choose>
 		<instr>
 			<type>stm</type>

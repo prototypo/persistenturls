@@ -31,14 +31,7 @@
 		</instr>
 		<instr>
 			<type>stm</type>
-			<operand>
-				<domain>
-					<z_id/>
-					<id/>
-					<name/>
-					<public/>
-				</domain>
-			</operand>
+			<operand><domain><z_id/><id/><name/><public/></domain></operand>
 			<operator>
 				<stm:group xmlns:stm="http://1060.org/stm">
 					<stm:set xpath="/domain/z_id"><stm:param xpath="/results/row/z_id/text()"/></stm:set>				

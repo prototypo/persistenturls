@@ -43,10 +43,33 @@
 			<target>var:response</target>
 		</instr>
 		<instr>
-			<type>purl-storage-query-group</type>
+			<type>stm</type>
+			<operand>
+				<idoc>
+					<seq>
+						<instr>
+							<type>purl-storage-query-group</type>
+							<uri/>
+							<target>this:response</target>
+						</instr>
+					</seq>
+				</idoc>
+			</operand>
+			<operator>
+				<stm:group xmlns:stm="http://1060.org/stm">
+					<stm:set xpath="/idoc/seq/instr/uri">
+						ffcpl:/group/<stm:param xpath="/group/id/text()"/>
+					</stm:set>
+				</stm:group>			
+			</operator>
 			<param>this:param</param>
+			<target>var:query</target>
+		</instr>
+		<instr>
+			<type>dpml</type>
+			<operand>var:query</operand>
 			<target>var:group</target>
-		</instr>			
+		</instr>					
 		<instr>
 			<type>stm</type>
 			<operand>var:todo</operand>
@@ -297,11 +320,34 @@
         </instr>
       </seq>
     </while>
-    <instr>
-    	<type>purl-storage-query-group</type>
-    	<param>this:param</param>
-    	<target>var:group</target>
-   	</instr>
+	<instr>
+			<type>stm</type>
+			<operand>
+				<idoc>
+					<seq>
+						<instr>
+							<type>purl-storage-query-group</type>
+							<uri/>
+							<target>this:response</target>
+						</instr>
+					</seq>
+				</idoc>
+			</operand>
+			<operator>
+				<stm:group xmlns:stm="http://1060.org/stm">
+					<stm:set xpath="/idoc/seq/instr/uri">
+						ffcpl:/group/<stm:param xpath="/group/id/text()"/>
+					</stm:set>
+				</stm:group>			
+			</operator>
+			<param>this:param</param>
+			<target>var:query</target>
+		</instr>
+		<instr>
+			<type>dpml</type>
+			<operand>var:query</operand>
+			<target>var:group</target>
+		</instr>			
 		<instr>
 			<type>copy</type>
 			<operand>var:group</operand>

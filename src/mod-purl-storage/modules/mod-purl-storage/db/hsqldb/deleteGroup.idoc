@@ -21,5 +21,18 @@
 			<operand>var:sql</operand>
 			<target>this:response</target>
 		</instr>
+		<instr>
+			<type>stm</type>
+			<operand><deleted><group><id/></group></deleted></operand>
+			<operator>
+			<stm:group xmlns:stm="http://1060.org/stm">
+				<stm:set xpath="/deleted/group/id">
+					<stm:param xpath="/group/id/text()"/>						
+				</stm:set>
+			</stm:group>
+			</operator>
+			<param>this:param</param>
+			<target>this:response</target>
+		</instr>		
 	</seq>
 </idoc>

@@ -208,7 +208,36 @@
 					<param>this:param</param>
 					<target>var:sql</target>
 				</instr>
-			</then>										
+			</then>
+<cond>
+				<instr>
+          			<type>xpatheval</type>
+          			<operand>this:param</operand>
+          			<operator>
+            			<xpath>/purl/type='partial'</xpath>
+          			</operator>
+          			<target>this:cond</target>
+        		</instr>				
+			</cond>
+			<then>
+				<instr>
+					<type>stm</type>
+					<operand><sql/></operand>
+					<operator>
+						<stm:group xmlns:stm="http://1060.org/stm">
+						<stm:set xpath="/sql">
+							update purls set 
+								"type" = '<stm:param xpath="/purl/type/text()"/>',
+								"target" = '<stm:param xpath="/purl/target/url/text()"/>',   
+								"lastmodified" = NOW  
+							where "p_id" = '<stm:param xpath="/purl/id/text()"/>';							
+						</stm:set>
+						</stm:group>
+					</operator>
+					<param>this:param</param>
+					<target>var:sql</target>
+				</instr>
+			</then>												
 		</choose>
 		<instr>
 			<type>sqlUpdate</type>
