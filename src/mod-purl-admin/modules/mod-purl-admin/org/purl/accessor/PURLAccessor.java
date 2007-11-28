@@ -9,9 +9,9 @@ import org.purl.accessor.command.GetResourceCommand;
 import org.purl.accessor.command.PURLCommand;
 import org.purl.accessor.command.UpdateResourceCommand;
 import org.purl.accessor.util.AllowableResource;
-import org.purl.accessor.util.DefaultAllowableResource;
 import org.purl.accessor.util.GroupResolver;
 import org.purl.accessor.util.GroupResourceStorage;
+import org.purl.accessor.util.PURLAllowableResource;
 import org.purl.accessor.util.PURLCreator;
 import org.purl.accessor.util.PURLResourceStorage;
 import org.purl.accessor.util.PURLURIResolver;
@@ -50,7 +50,7 @@ public class PURLAccessor extends AbstractAccessor {
         ResourceStorage purlStorage = new PURLResourceStorage();
         ResourceStorage groupStorage = new GroupResourceStorage();
         
-        AllowableResource purlAllowableResource = new DefaultAllowableResource(purlStorage, purlResolver);
+        AllowableResource purlAllowableResource = new PURLAllowableResource(purlStorage, purlResolver);
 
         commandMap.put("POST", new CreateResourceCommand(TYPE, purlAllowableResource, purlResolver, purlCreator, purlFilter, purlStorage));
         commandMap.put("PUT", new UpdateResourceCommand(TYPE, purlResolver, purlCreator, purlStorage));

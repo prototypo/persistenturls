@@ -24,7 +24,7 @@ public class DefaultAllowableResource implements AllowableResource {
     }
     
     public String getDenyMessage(INKFConvenienceHelper context, String resourceName) {
-        return "Resource: " + resResolver.getURI(resourceName) + " already exists.";
+        return "Resource: " + /*resResolver.getURI(resourceName)*/ resourceName + " already exists.";
     }
 
 }

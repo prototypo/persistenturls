@@ -157,7 +157,6 @@ public class NKHelper {
     public static void indexResource(INKFConvenienceHelper context, String indexName, String id, IURAspect res) {
         try {
             StringAspect sa = (StringAspect) context.transrept(res, IAspectString.class);
-            System.out.println("INDEXING... " + sa.getString());
             StringBuffer sb = new StringBuffer("<luceneIndex><index>");
             sb.append(indexName);
             sb.append("</index><id>");
