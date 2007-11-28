@@ -54,11 +54,20 @@
     	<assert name="User 2 Exists">
     		<uri>active:javascript+operator@ffcpl:/test/accessor/isTrue.js</uri>
     	</assert>
-    </test>    
+    </test> 
+    <test>
+        <uri>active:beanshell+operator@ffcpl:/test/accessor/createUser.bsh+user@ffcpl:/testdata/testuser3.xml</uri>
+		<assert name="User 3 Created">
+			<xpath>count(/user) = 1</xpath>
+			<xpath>/user/id = 'eric-test'</xpath>
+			<xpath>/user/affiliation = 'Zepheira'</xpath>
+			<xpath>/user/email = 'eric@zepheira.com'</xpath>			
+		</assert>    
+    </test>       
     <test>
  		<uri>active:beanshell+operator@ffcpl:/test/accessor/pendingUsers.bsh+testrun@data:text/plain,1</uri>
-		<assert name="Pending Users 1">
-			<xpath>count(/pending/user) = 2</xpath>
+		<assert name="Pending Users">
+			<xpath>count(/pending/user) = 3</xpath>
 		</assert>       	
     </test>
     <test>
@@ -75,8 +84,10 @@
     </test>    --> 
     <test>
         <uri>active:beanshell+operator@ffcpl:/test/accessor/approveUser.bsh+user@data:text/plain,brian-test</uri>
-		<assert name="Approve User 1">
-			<xpath>count(/user) = 1</xpath>
+		<assert name="Approve User 2">
+			<xpath>count(/results) = 1</xpath>
+			<xpath>/results/user/id = 'brian-test'</xpath>
+			<xpath>/results/user/status = 'approved'</xpath>			
 		</assert>    
     </test>
     <test>
@@ -88,7 +99,7 @@
     <test>
  		<uri>active:beanshell+operator@ffcpl:/test/accessor/pendingUsers.bsh+testrun@data:test/plain,2</uri>
 		<assert name="Pending Users 2">
-			<xpath>count(/pending/user) = 1</xpath>
+			<xpath>count(/pending/user) = 2</xpath>
 		</assert>       	
     </test>        
     <test>
@@ -115,6 +126,20 @@
 			<xpath>/user/email = 'brian@someother.org'</xpath>
 		</assert>    
     </test>
+    <test>
+        <uri>active:beanshell+operator@ffcpl:/test/accessor/rejectUser.bsh+user@data:text/plain,eric-test</uri>
+		<assert name="Reject User 3">
+			<xpath>count(/results) = 1</xpath>
+			<xpath>/results/user/id = 'eric-test'</xpath>
+			<xpath>/results/user/status = 'rejected'</xpath>			
+		</assert>    
+    </test>
+    <test>
+    	<uri>active:purl-storage-user-exists+uri@ffcpl:/user/eric-test+testrun@data:test/plain,postreject</uri>
+    	<assert name="User 3 No Longer Exists">
+    		<uri>active:javascript+operator@ffcpl:/test/accessor/isFalse.js</uri>
+    	</assert>
+    </test>         
     <test>
     	<uri>active:purl-storage-group-exists+uri@ffcpl:/group/purlworkers+testrun@data:text/plain,prerun</uri>
     	<assert name="Group Doesn't Pre-Exist">
