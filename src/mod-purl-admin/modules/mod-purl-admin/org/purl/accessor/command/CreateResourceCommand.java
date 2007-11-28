@@ -25,7 +25,6 @@ import org.purl.accessor.util.ResourceCreator;
 import org.purl.accessor.util.ResourceStorage;
 import org.purl.accessor.util.URIResolver;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
-import org.ten60.netkernel.layer1.nkf.INKFRequest;
 import org.ten60.netkernel.layer1.nkf.INKFResponse;
 import org.ten60.netkernel.layer1.nkf.NKFException;
 import org.ten60.netkernel.layer1.representation.IAspectNVP;
@@ -76,15 +75,10 @@ public class CreateResourceCommand extends PURLCommand {
 
                     // Store the full resource
                     if(resStorage.storeResource(context, uriResolver, iur)) {
+                        iur = resStorage.getResource(context, uriResolver);
                         recordCommandState(context, "CREATE", path);
 
-                        // TODO: Should we block on this?
-/*                        INKFRequest req = context.createSubRequest("active:purl-index");
-                        req.addArgument("path", uriResolver.getURI(context));
-                        req.addArgument("index", "ffcpl:/index/" + type);
-                        req.addArgument("operand", iur);
-                        context.issueAsyncSubRequest(req); */
-                        
+                        // TODO: Move this to an offline process
                         NKHelper.indexResource(context, "ffcpl:/index/purls", uriResolver.getURI(context), iur);
 
                         // Filter it if there is one

@@ -70,7 +70,6 @@ import org.purl.accessor.command.DeleteResourceCommand;
 import org.purl.accessor.command.GetResourceCommand;
 import org.purl.accessor.command.PURLCommand;
 import org.purl.accessor.command.UpdateResourceCommand;
-import org.purl.accessor.util.DefaultResourceDeleter;
 import org.purl.accessor.util.GroupResolver;
 import org.purl.accessor.util.GroupResourceStorage;
 import org.purl.accessor.util.GroupSearchHelper;
@@ -79,6 +78,7 @@ import org.purl.accessor.util.PURLException;
 import org.purl.accessor.util.ResourceCreator;
 import org.purl.accessor.util.ResourceStorage;
 import org.purl.accessor.util.URIResolver;
+import org.purl.accessor.util.UserHelper;
 import org.purl.accessor.util.UserResolver;
 import org.purl.accessor.util.UserResourceStorage;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
@@ -134,16 +134,16 @@ public class GroupAccessor extends AbstractAccessor {
             StringTokenizer st = new StringTokenizer(maintainers, "\n,");
             while(st.hasMoreTokens()) {
                 String next = st.nextToken();
-                if(!userStorage.resourceExists(context, userResolver.getURI(next))) {
-                    throw new PURLException("User " + next + " does not exist", 400);
+                if(!UserHelper.isValidUser(context, userResolver.getURI(next))) {
+                    throw new PURLException("User " + next + " does not exist or is not approved.", 400);
                 }
             }
 
             st = new StringTokenizer(members, "\n,");
             while(st.hasMoreTokens()) {
                 String next = st.nextToken();
-                if(!userStorage.resourceExists(context, userResolver.getURI(next))) {
-                    throw new PURLException("User " + next + " does not exist", 400);
+                if(!UserHelper.isValidUser(context, userResolver.getURI(next))) {                
+                    throw new PURLException("User " + next + " does not exist or is not approved.", 400);
                 }
             }
 
@@ -171,7 +171,7 @@ public class GroupAccessor extends AbstractAccessor {
                 sb.append("<uid>");
                 String userId = st.nextToken().trim(); 
                 sb.append(userId);
-                addGroupForUser(context, groupId, userId);
+//                addGroupForUser(context, groupId, userId);
                 sb.append("</uid>");
             }
             sb.append("</members>");

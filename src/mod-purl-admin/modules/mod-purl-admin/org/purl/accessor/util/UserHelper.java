@@ -11,7 +11,7 @@ public class UserHelper {
         boolean retValue = false;
         
         try {
-            INKFRequest req = context.createSubRequest("purl-storage-user-valid");
+            INKFRequest req = context.createSubRequest("active:purl-storage-user-valid");
             req.setAspectClass(IAspectBoolean.class);
             req.addArgument("uri", userURI);
             retValue = ((IAspectBoolean) context.issueSubRequestForAspect(req)).isTrue();
