@@ -69,7 +69,6 @@ import org.purl.accessor.command.DeleteResourceCommand;
 import org.purl.accessor.command.GetResourceCommand;
 import org.purl.accessor.command.PURLCommand;
 import org.purl.accessor.command.UpdateResourceCommand;
-import org.purl.accessor.util.DefaultResourceDeleter;
 import org.purl.accessor.util.NKHelper;
 import org.purl.accessor.util.PURLException;
 import org.purl.accessor.util.ResourceCreator;
@@ -82,6 +81,7 @@ import org.purl.accessor.util.UserResourceStorage;
 import org.purl.accessor.util.UserSearchHelper;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFRequest;
+import org.ten60.netkernel.layer1.nkf.INKFResponse;
 import org.ten60.netkernel.layer1.nkf.NKFException;
 import org.ten60.netkernel.layer1.representation.IAspectNVP;
 import org.ten60.netkernel.xml.representation.IAspectXDA;
@@ -89,6 +89,7 @@ import org.ten60.netkernel.xml.xda.IXDAReadOnly;
 import org.ten60.netkernel.xml.xda.XPathLocationException;
 
 import com.ten60.netkernel.urii.IURAspect;
+import com.ten60.netkernel.urii.IURRepresentation;
 import com.ten60.netkernel.urii.aspect.IAspectString;
 import com.ten60.netkernel.urii.aspect.StringAspect;
 
@@ -115,7 +116,7 @@ public class UserAccessor extends AbstractAccessor {
 		commandMap.put("GET", new GetResourceCommand(TYPE, userResolver, userStorage, userSearchHelper, userFilter));
         // TODO: Wrap the POST requests to put the results into a request queue
         commandMap.put("POST", new CreateResourceCommand(TYPE, userResolver, userCreator, userFilter, userStorage));
-        commandMap.put("REQUEST", new CreateResourceCommand(TYPE, userRequestResolver, userCreator, userFilter, new UserResourceStorage()));
+        commandMap.put("REQUEST", new CreateResourceCommand(TYPE, userRequestResolver, userCreator, userFilter, userStorage));
 		commandMap.put("DELETE", new DeleteResourceCommand(TYPE, userResolver, userStorage));
 		commandMap.put("PUT", new UpdateResourceCommand(TYPE, userResolver, userCreator, userStorage));
 	}
@@ -127,11 +128,11 @@ public class UserAccessor extends AbstractAccessor {
             IAspectXDA config = (IAspectXDA) context.sourceAspect("ffcpl:/etc/PURLConfig.xml", IAspectXDA.class);
 
             if(method.equals("POST")) {
+                retValue = commandMap.get("POST");
+                
                 IXDAReadOnly configXDA = config.getXDA();
                 if(configXDA.isTrue("/purl-config/allowUserAutoCreation")) {
-                    retValue = commandMap.get(method);
-                } else {
-                    retValue = commandMap.get("REQUEST");
+                    retValue = new UserAutoCreateCommand(retValue);
                 }
             } else {
                 retValue = commandMap.get(method);
@@ -241,5 +242,43 @@ public class UserAccessor extends AbstractAccessor {
             return retValue;
         }
 
+    }
+    
+    static private class UserAutoCreateCommand extends PURLCommand {
+        
+        private PURLCommand createCmd;
+        
+        private UserAutoCreateCommand() {
+            super(null, null, null);
+        }
+        
+        public UserAutoCreateCommand(PURLCommand createCmd) {
+            super(createCmd.getType(), createCmd.getURIResolver(), createCmd.getResourceStorage());            
+            this.createCmd = createCmd;
+        }
+
+        @Override
+        public INKFResponse execute(INKFConvenienceHelper context) {
+            INKFResponse resp = null;
+            
+            try {
+                resp = createCmd.execute(context);
+                
+                INKFRequest req = context.createSubRequest("active:purl-storage-approve-user");
+                URIResolver uriResolver = getURIResolver();
+                String uri = uriResolver.getURI(context);
+                String[] parts = uri.split("/");
+                int length = parts.length;
+                req.addArgument("param", new StringAspect("<user><id>" + parts[length-1] + "</id></user>")); 
+                IURRepresentation iur = context.issueSubRequest(req);
+                IAspectString sa = (IAspectString) context.transrept(iur, IAspectString.class);
+                System.out.println(sa.getString());
+            } catch(Throwable t) {
+                t.printStackTrace();
+            }
+            
+            return resp;
+        }
+        
     }
 }

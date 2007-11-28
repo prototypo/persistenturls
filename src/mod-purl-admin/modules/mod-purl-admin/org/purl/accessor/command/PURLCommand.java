@@ -55,6 +55,18 @@ abstract public class PURLCommand {
     }
 
 	abstract public INKFResponse execute(INKFConvenienceHelper context);
+	
+	public String getType() {
+	    return type;
+	}
+	
+	public URIResolver getURIResolver() {
+	    return uriResolver;
+	}
+	
+	public ResourceStorage getResourceStorage() {
+	    return resStorage;
+	}
 
     protected void recordCommandState(INKFConvenienceHelper context, String command, String resource ) {
         StringBuffer sb = new StringBuffer(sdf.format(new Date()));
