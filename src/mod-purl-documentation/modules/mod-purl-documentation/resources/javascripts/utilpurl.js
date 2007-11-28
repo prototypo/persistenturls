@@ -496,6 +496,7 @@ function onResponse(message, headers, callingContext) {
 }
 
 // Get the selected value of a radio button group with a given *name*.
+// Some browsers cannot get the length of a radio button group when accessed by id :P
 function getSelectedRadio(name) {
 	
 	radio = document.getElementsByName(name);

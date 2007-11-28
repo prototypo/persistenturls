@@ -239,12 +239,31 @@ SAXEventHandler.prototype.startElement = function(name, atts) {
 	}
 	currentElement = name;
 	
-	if ( name == 'user' || name == 'group' || name == 'domain' || name == 'purl' ) {
+	if ( name == 'user' ) {
+		// Clear the working array.
+		elementMap = new Array();
+		elementMapIndex = 0;
+		// Extract the 'status' attribute, if present.
+		// TODO DBG
+		//alert("In element user.  atts has length " + atts.getLength() );
+		for ( i=0; i<atts.getLength() ; i++ ) {
+			// TODO DBG
+			//alert("Operating on attribute " + atts.getName([i]) + " = " + atts.getValue([i]));
+			if ( "status" == atts.getName([i]) ) {
+				value = "Pending approval";
+				if ( "1" == atts.getValue([i]) ) {
+					value = "Approved";
+				}
+				elementMap[elementMapIndex] = ["status", value];
+				elementMapIndex++;
+			}
+		}
+	} else if ( name == 'group' || name == 'domain' || name == 'purl' ) {
 		// Clear the working array.
 		elementMap = new Array();
 		elementMapIndex = 0;
 	}
-
+	
 }  // end function startElement
 
 
