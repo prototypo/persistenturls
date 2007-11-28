@@ -50,9 +50,6 @@ limitations under the License.
 //<![CDATA[
 
 	var debugThisPage = false;
-	
-	// TODO DBG
-	var count = 0;
 
 	// POST function, to be called by multiple forms (one per user to approve/deny).
 	// Take a user id, get the decision associated with the id and POST them to the server.
@@ -70,23 +67,7 @@ limitations under the License.
 				decision: decision
 			}
 			
-			/*
-			// TODO: DBG: Fake this for now until the URL is available on the server.  REMOVE ALL THIS WHEN URL WORKS.
-			if (count > 0) {
-				//message = "<results><user id=\"brian\" status=\"rejected\" /></results>";
-				message = "<results><user><id>brian</id><status>rejected</status></user></results>";
-			} else {
-				//message = "<results><user id=\"brian\" status=\"approved\" /></results>";
-				message = "<results><user><id>brian</id><status>approved</status></user></results>";
-			}
-			count++;
-			var headers = new Object();
-			headers["Content-Type"] = "text/xml";
-			onPendingResultsResponse(message, headers, id);
-			*/
-			
 			// Use the id as the calling context to allow for addressing of the right elements.
-			// USE THIS:
 			ajaxCaller.postVars("/admin/pending/user/" + id, bodyVars, urlVars, onPendingResultsResponse, false, id);
 		}
 		return false;
@@ -99,16 +80,6 @@ limitations under the License.
 		signalLoadingPendingList();
 		bodyVars = {}
 		// GET the list of pending user requests.
-		
-		/*
-		// TODO: DBG: Fake this for now until this URL is available on the server.  REMOVE ALL THIS WHEN URL WORKS.
-		var message = "<pending><user><id>brian</id><name>Brian Sletten</name><affiliation>Zepheira</affiliation><email>brian@example.com</email><justification>User-provided justification goes here.</justification></user><user><id>david</id><name>David Wood</name><affiliation>Zepheira</affiliation><email>david@example.com</email><justification>Ain't none.</justification></user><user><id>ralph</id><name>Ralph Swick</name><affiliation>W3C</affiliation><email>ralph@example.com</email><justification>Because we like Ralph.</justification></user></pending>";
-		var headers = new Object();
-		headers["Content-Type"] = "text/xml";
-		onPendingResponse(message, headers, "Pending users");
-		*/
-		
-		// USE THIS:
 		ajaxCaller.get("/admin/pending/user/", bodyVars, onPendingResponse, false, "Pending users");
 
 		return false;
