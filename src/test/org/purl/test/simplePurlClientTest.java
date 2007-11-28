@@ -9,6 +9,7 @@ import org.custommonkey.xmlunit.XMLAssert;
 import java.net.*;
 import java.io.*;
 import java.util.*;
+import java.util.regex.*;
 
 /**
  * JUnit tests for simplePurlClient.java
@@ -25,6 +26,11 @@ public class simplePurlClientTest extends TestCase {
 	// Set the host and port for all subsequent URLs.
 	private String host = "localhost";
 	private String port = "8080";
+	
+	// Track whether <allowUserAutoCreation/> is set or not.  The state of
+	// this variable determines the expected result codes for user registration
+	// and searching.
+	boolean userAutoCreationOn;
 	
 	// Constructor
 	public simplePurlClientTest (String name) {
@@ -349,6 +355,7 @@ public class simplePurlClientTest extends TestCase {
 	}
 	
 	// Test creating a new Clone PURL via an HTTP POST.
+	// TODO: Refactor this mess.
 	public void testCreateClonePurl() {
 		createPurl("/testdomain/testClonePURL", "clone", null, null, null, true);
 	}
@@ -440,7 +447,7 @@ public class simplePurlClientTest extends TestCase {
 			String url = "http://" + host + ":" + port + "/admin/user/testuser";
 
 			String errMsg = "Cannot search user.";
-			String control = "<user status=\"0\"><id>testuser</id><name>Test User Modified</name><affiliation>Zepheira, LLC</affiliation><email>tuser@example.com</email></user>";
+			String control = "<user status=\"1\"><id>testuser</id><name>Test User Modified</name><affiliation>Zepheira, LLC</affiliation><email>tuser@example.com</email></user>";
 			String test = client.searchUser(url);
 
 			// XML response, so use assertXMLEqual.
@@ -839,7 +846,8 @@ public class simplePurlClientTest extends TestCase {
 	  * @param justification A justification as to why the account should be created (some PURL servers require this).
 	*/
 	public void registerUser(String uid, String name, String affiliation, String email, String passwd, String hint, String justification) {
-
+		
+		int userAutoCreationInt = 0;
 		try {
 			String url = "http://" + host + ":" + port + "/admin/user/" + uid;
 
@@ -852,9 +860,28 @@ public class simplePurlClientTest extends TestCase {
 			formParameters.put("justification", justification);
 
 			String errMsg = "Cannot register a new user.";
-			String control = "<user><id>" + uid + "</id><name>" + name + "</name><affiliation>" + affiliation + "</affiliation><email>" + email + "</email></user>";
 			String test = client.registerUser(url, formParameters);
 
+			// Determine whether users may be automatically registered
+			// or whether they require approval.
+			if ( userAutoCreationOn != true && userAutoCreationOn != false ) {
+				// Set userAutoCreationOn the first time it can be determined.
+				if ( Pattern.matches("status=\"0\"", test) ) {
+					userAutoCreationOn = false;
+				} else if ( Pattern.matches("status=\"1\"", test) ) {
+						userAutoCreationOn = true;
+				} else {
+					// The status attribute was not found in the server's response.
+					// This is an error condition;
+					fail("Test registerUser() failed to understand the message from the server.");
+				}
+			}
+			
+			if ( userAutoCreationOn ) {
+				userAutoCreationInt = 1;
+			}
+			String control = "<user status=\"" + userAutoCreationInt + "\"><id>" + uid + "</id><name>" + name + "</name><affiliation>" + affiliation + "</affiliation><email>" + email + "</email></user>";
+			
 			// XML response, so use assertXMLEqual.
 			XMLAssert.assertXMLEqual(errMsg, control, test);
 

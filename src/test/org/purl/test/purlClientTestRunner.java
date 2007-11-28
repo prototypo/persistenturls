@@ -31,6 +31,9 @@ public class purlClientTestRunner {
         suite.addTest(new simplePurlClientTest("testRegisterUser2"));
         suite.addTest(new simplePurlClientTest("testCreateGroup"));
         suite.addTest(new simplePurlClientTest("testCreateDomain"));
+
+// TODO: Add tests to determine whether <allowUserAutoCreation/> has been set
+//       and approve/deny users as necessary.  Do the same with domains.
 		
 		/*
 			Modify the user, group and domain
