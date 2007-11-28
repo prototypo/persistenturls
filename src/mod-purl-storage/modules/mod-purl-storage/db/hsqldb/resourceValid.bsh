@@ -15,6 +15,11 @@ main() {
 		value = ruri.substring(12);
 		param = new StringAspect("<user><id>" + value + "</id></user>");						
 		break;
+		case "group":
+		uri = "ffcpl:/sql/db/groupExists.idoc";
+		value = ruri.substring(13);
+		param = new StringAspect("<group><id>" + value + "</id></group>");		
+		break;
 	}
 
 	req = context.createSubRequest("active:dpml");
