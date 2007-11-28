@@ -252,7 +252,7 @@ public class PURLCreator implements ResourceCreator {
             }
         }
 
-        boolean permitted = notFoundList.size() == 0;
+        boolean permitted = notFoundList == null;
         if(!permitted) {
             String errorMessage = null;
 
