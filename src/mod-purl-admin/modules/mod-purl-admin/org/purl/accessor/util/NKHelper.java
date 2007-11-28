@@ -25,7 +25,10 @@ public class NKHelper {
      * @throws NKFException
      */
     public static String getLastSegment(INKFConvenienceHelper context) throws NKFException {
-        String path=getArgument(context, "path");
+        return getLastSegment(getArgument(context, "path"));
+    }
+    
+    public static String getLastSegment(String path) {
         String[] parts=path.split("/");
         return parts[parts.length-1];
     }

@@ -70,6 +70,8 @@ import org.purl.accessor.command.DeleteResourceCommand;
 import org.purl.accessor.command.GetResourceCommand;
 import org.purl.accessor.command.PURLCommand;
 import org.purl.accessor.command.UpdateResourceCommand;
+import org.purl.accessor.util.AllowableResource;
+import org.purl.accessor.util.DefaultAllowableResource;
 import org.purl.accessor.util.DomainResolver;
 import org.purl.accessor.util.DomainResourceStorage;
 import org.purl.accessor.util.DomainSearchHelper;
@@ -105,9 +107,10 @@ public class DomainAccessor extends AbstractAccessor {
         ResourceFilter domainFilter = new DomainPrivateDataFilter();
         ResourceCreator domainCreator = new DomainCreator(new UserResolver(), new UserResourceStorage());
         ResourceStorage domainStorage = new DomainResourceStorage();
+        AllowableResource domainAllowableResource = new DefaultAllowableResource(domainStorage, domainResolver);
 
         commandMap.put("GET", new GetResourceCommand(TYPE, domainResolver, domainStorage, new DomainSearchHelper(), domainFilter));
-        commandMap.put("POST", new CreateResourceCommand(TYPE, domainResolver, domainCreator, domainFilter, domainStorage));
+        commandMap.put("POST", new CreateResourceCommand(TYPE, domainAllowableResource, domainResolver, domainCreator, domainFilter, domainStorage));
         commandMap.put("DELETE", new DeleteResourceCommand(TYPE, domainResolver, domainStorage));
         commandMap.put("PUT", new UpdateResourceCommand(TYPE, domainResolver, domainCreator, domainStorage));
     }

@@ -19,6 +19,7 @@ package org.purl.accessor.command;
  */
 
 import org.purl.accessor.ResourceFilter;
+import org.purl.accessor.util.AllowableResource;
 import org.purl.accessor.util.NKHelper;
 import org.purl.accessor.util.PURLException;
 import org.purl.accessor.util.ResourceCreator;
@@ -37,13 +38,15 @@ public class CreateResourceCommand extends PURLCommand {
 
     private ResourceCreator resCreator;
     private ResourceFilter resFilter;
+    private AllowableResource allowableResource;
 
-    public CreateResourceCommand(String type, URIResolver uriResolver, ResourceCreator resCreator) {
-        this(type, uriResolver, resCreator, null, null);
+    public CreateResourceCommand(String type, AllowableResource allowableRes, URIResolver uriResolver, ResourceCreator resCreator) {
+        this(type, allowableRes, uriResolver, resCreator, null, null);
     }
 
-    public CreateResourceCommand(String type, URIResolver uriResolver, ResourceCreator resCreator, ResourceFilter resFilter, ResourceStorage resStorage) {
+    public CreateResourceCommand(String type, AllowableResource allowableResource, URIResolver uriResolver, ResourceCreator resCreator, ResourceFilter resFilter, ResourceStorage resStorage) {
         super(type, uriResolver, resStorage);
+        this.allowableResource = allowableResource;
         this.resCreator = resCreator;
         this.resFilter = resFilter;
     }
@@ -54,17 +57,11 @@ public class CreateResourceCommand extends PURLCommand {
 
         try {
             IAspectNVP params = getParams(context);
+            String resource = uriResolver.getURI(context);
 
-            String id = NKHelper.getLastSegment(context);
-            String path = context.getThisRequest().getArgument("path");
-
-            if(path.startsWith("ffcpl:")) {
-                path = path.substring(6);
-            }
-
-            if(resStorage.resourceExists(context, uriResolver)) {
+            if( !allowableResource.allow(context, resource) ) {//resStorage.resourceExists(context, uriResolver)) {
                 // Cannot create the same name
-                String message = "Resource: " + path + " already exists.";
+                String message = allowableResource.getDenyMessage(context, resource);
                 IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect(message), 409);
                 retValue = context.createResponseFrom(rep);
                 retValue.setMimeType(NKHelper.MIME_TEXT);
@@ -76,7 +73,7 @@ public class CreateResourceCommand extends PURLCommand {
                     // Store the full resource
                     if(resStorage.storeResource(context, uriResolver, iur)) {
                         iur = resStorage.getResource(context, uriResolver);
-                        recordCommandState(context, "CREATE", path);
+                        recordCommandState(context, "CREATE", resource);
 
                         // TODO: Move this to an offline process
                         NKHelper.indexResource(context, "ffcpl:/index/purls", uriResolver.getURI(context), iur);
@@ -89,7 +86,7 @@ public class CreateResourceCommand extends PURLCommand {
                         IURRepresentation rep = NKHelper.setResponseCode(context, iur, 201);
                         retValue = context.createResponseFrom(rep);
                         retValue.setMimeType(NKHelper.MIME_XML);
-                        NKHelper.log(context, "Created new resource: " + id);
+                        NKHelper.log(context, "Created new resource: " + resource);
                     } else {
                         System.out.println("ERROR CREATING NEW RESOURCE");
                     }

@@ -70,6 +70,7 @@ import org.purl.accessor.command.DeleteResourceCommand;
 import org.purl.accessor.command.GetResourceCommand;
 import org.purl.accessor.command.PURLCommand;
 import org.purl.accessor.command.UpdateResourceCommand;
+import org.purl.accessor.util.AllowableResource;
 import org.purl.accessor.util.GroupResolver;
 import org.purl.accessor.util.GroupResourceStorage;
 import org.purl.accessor.util.GroupSearchHelper;
@@ -78,6 +79,7 @@ import org.purl.accessor.util.PURLException;
 import org.purl.accessor.util.ResourceCreator;
 import org.purl.accessor.util.ResourceStorage;
 import org.purl.accessor.util.URIResolver;
+import org.purl.accessor.util.UserGroupAllowableResource;
 import org.purl.accessor.util.UserHelper;
 import org.purl.accessor.util.UserResolver;
 import org.purl.accessor.util.UserResourceStorage;
@@ -100,14 +102,18 @@ public class GroupAccessor extends AbstractAccessor {
         // We use stateless command instances that are triggered
         // based on the method of the HTTP request
 
+        URIResolver userResolver = new UserResolver();
         URIResolver groupResolver = new GroupResolver();
 
         ResourceFilter groupFilter = new GroupPrivateDataFilter();
         ResourceStorage groupStorage = new GroupResourceStorage();
-        ResourceCreator groupCreator = new GroupCreator(new UserResolver(), new UserResourceStorage());
+        ResourceStorage userStorage = new UserResourceStorage();
+        
+        AllowableResource userGroupAllowableResource = new UserGroupAllowableResource(userStorage, userResolver, groupStorage, groupResolver);        
+        ResourceCreator groupCreator = new GroupCreator(new UserResolver());
 
         commandMap.put("GET", new GetResourceCommand(TYPE, groupResolver, groupStorage, new GroupSearchHelper(), groupFilter));
-        commandMap.put("POST", new CreateResourceCommand(TYPE, groupResolver, groupCreator, groupFilter, groupStorage));
+        commandMap.put("POST", new CreateResourceCommand(TYPE, userGroupAllowableResource, groupResolver, groupCreator, groupFilter, groupStorage));
         commandMap.put("DELETE", new DeleteResourceCommand(TYPE, groupResolver, groupStorage));
         commandMap.put("PUT", new UpdateResourceCommand(TYPE, groupResolver, groupCreator, groupStorage));
     }
@@ -118,12 +124,10 @@ public class GroupAccessor extends AbstractAccessor {
 
     static public class GroupCreator implements ResourceCreator {
 
-        private ResourceStorage userStorage;
         private URIResolver userResolver;
 
-        public GroupCreator(URIResolver userResolver, ResourceStorage userStorage) {
+        public GroupCreator(URIResolver userResolver) {
             this.userResolver = userResolver;
-            this.userStorage = userStorage;
         }
 
         public IURAspect createResource(INKFConvenienceHelper context, IAspectNVP params) throws NKFException {
@@ -182,10 +186,6 @@ public class GroupAccessor extends AbstractAccessor {
             
             return new StringAspect(sb.toString());
         }
-    }
-    
-    private static void addGroupForUser(INKFConvenienceHelper context, String group, String user) throws NKFException {
-        context.sinkAspect("active:purl-groups-for-user+user@user:" + user, new StringAspect("<groups><group id=\"" + group + "\"/></groups>"));
     }
     
     static public class GroupPrivateDataFilter implements ResourceFilter {

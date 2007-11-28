@@ -8,6 +8,8 @@ import org.purl.accessor.command.DeleteResourceCommand;
 import org.purl.accessor.command.GetResourceCommand;
 import org.purl.accessor.command.PURLCommand;
 import org.purl.accessor.command.UpdateResourceCommand;
+import org.purl.accessor.util.AllowableResource;
+import org.purl.accessor.util.DefaultAllowableResource;
 import org.purl.accessor.util.GroupResolver;
 import org.purl.accessor.util.GroupResourceStorage;
 import org.purl.accessor.util.PURLCreator;
@@ -47,8 +49,10 @@ public class PURLAccessor extends AbstractAccessor {
         ResourceCreator purlCreator = new PURLCreator(new URIResolver[] { userResolver, groupResolver }, purlResolver, new PURLResourceStorage(), new UserResourceStorage());
         ResourceStorage purlStorage = new PURLResourceStorage();
         ResourceStorage groupStorage = new GroupResourceStorage();
+        
+        AllowableResource purlAllowableResource = new DefaultAllowableResource(purlStorage, purlResolver);
 
-        commandMap.put("POST", new CreateResourceCommand(TYPE, purlResolver, purlCreator, purlFilter, purlStorage));
+        commandMap.put("POST", new CreateResourceCommand(TYPE, purlAllowableResource, purlResolver, purlCreator, purlFilter, purlStorage));
         commandMap.put("PUT", new UpdateResourceCommand(TYPE, purlResolver, purlCreator, purlStorage));
         commandMap.put("DELETE", new DeleteResourceCommand(TYPE, purlResolver, purlStorage));
         commandMap.put("GET", new GetResourceCommand(TYPE, purlResolver, purlStorage, new PurlSearchHelper(groupResolver, groupStorage), purlFilter));
