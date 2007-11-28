@@ -757,7 +757,7 @@ public class simplePurlClientTest extends TestCase {
 			} else {
 				// This test expects to fail.
 				// Override the control text:
-				control = "Resource: " + path + " already exists.";
+				control = "PURL: " + path + " already exists.";
 				controlLC = control.toLowerCase();
 				// Textual response, so use assertEquals().
 				assertEquals(errMsg, controlLC, testLC);
