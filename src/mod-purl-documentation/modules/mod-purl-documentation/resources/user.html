@@ -66,6 +66,24 @@ handles results from the server in response to form submissions.
 	// NB: This array contains the names of each element that represents a label for an HTML form item.  If you add a new form item and want it highlighted upon a "bad parameter" error, you MUST add it's id to this array.
 	var labelElements = ["c_name_label", "c_affiliation_label", "c_email_label", "c_id_label", "c_passwd_label", "c_hint_label", "c_justification_label", "m_name_label", "m_affiliation_label", "m_email_label", "m_id_label", "m_passwd_label", "m_hint_label", "m_justification_label", "s_name_label", "s_affiliation_label", "s_email_label", "s_id_label", "s_tombstone_label", "d_id_label"];
 
+	// Check to ensure that the user typed their password the same way each time.
+	function checkPassword(nextAction) {
+		// The prefix is either 'c_' for Create or 'm_' for Modify.
+		var prefix = contextMap[nextAction][1];
+		var passwd1 = $(prefix + 'passwd').value;
+		var passwd2 = $(prefix + 'passwd2').value;
+		if ( passwd1 != passwd2 ) {
+			alert("The passwords do not match.  Please re-enter your password.");
+		} else {
+			if ( nextAction == "Create" ) {
+				createSubmit();
+			} else if ( nextAction == "Modify" ) {
+				modifySubmit();
+			}
+		}
+		return false;
+	}
+
 	// Send a Create command via HTTP POST.
 	function createSubmit() {
 		var my_id = $('c_id').value;
@@ -205,7 +223,7 @@ handles results from the server in response to form submissions.
 
 				<td class="navtable_form">
 					<div id="create" style="display: none;">
-						<form action="#" name="createForm" onsubmit="return createSubmit()" id="createForm">
+						<form action="#" name="createForm" onsubmit="return checkPassword('Create')" id="createForm">
 							<fieldset>
 								<legend>2) Register a new user</legend>
 
@@ -246,6 +264,12 @@ handles results from the server in response to form submissions.
 										</tr>
 
 										<tr>
+											<td class="property" id="c_passwd2_label">Re-enter password:</td>
+
+											<td class="value"><input id="c_passwd2" name="c_passwd2" type="text" /></td>
+										</tr>
+
+										<tr>
 											<td class="property" id="c_hint_label">Password hint:</td>
 
 											<td class="value"><input id="c_hint" name="c_hint" type="text" /></td>
@@ -273,7 +297,7 @@ handles results from the server in response to form submissions.
 					</div>
 
 					<div id="modify" style="display: none;">
-						<form action="#" name="modifyForm" onsubmit="return modifySubmit()" id="modifyForm">
+						<form action="#" name="modifyForm" onsubmit="return checkPassword('Modify')" id="modifyForm">
 							<fieldset>
 								<legend>2) Modify a user</legend>
 
@@ -311,6 +335,12 @@ handles results from the server in response to form submissions.
 											<td class="property" id="m_passwd_label">Password:</td>
 
 											<td class="value"><input id="m_passwd" name="m_passwd" type="text" /></td>
+										</tr>
+
+										<tr>
+											<td class="property" id="m_passwd2_label">Re-enter password:</td>
+
+											<td class="value"><input id="m_passwd2" name="m_passwd2" type="text" /></td>
 										</tr>
 
 										<tr>
