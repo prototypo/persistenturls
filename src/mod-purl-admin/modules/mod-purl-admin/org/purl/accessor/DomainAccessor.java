@@ -65,13 +65,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import org.purl.accessor.GroupAccessor.GroupPrivateDataFilter;
 import org.purl.accessor.command.CreateResourceCommand;
 import org.purl.accessor.command.DeleteResourceCommand;
 import org.purl.accessor.command.GetResourceCommand;
 import org.purl.accessor.command.PURLCommand;
 import org.purl.accessor.command.UpdateResourceCommand;
-import org.purl.accessor.util.DefaultResourceDeleter;
+import org.purl.accessor.util.DomainResolver;
 import org.purl.accessor.util.DomainResourceStorage;
 import org.purl.accessor.util.DomainSearchHelper;
 import org.purl.accessor.util.NKHelper;
@@ -100,26 +99,7 @@ public class DomainAccessor extends AbstractAccessor {
         // We use stateless command instances that are triggered
         // based on the method of the HTTP request
 
-        URIResolver domainResolver = new URIResolver() {
-            @Override
-            public String getURI(INKFConvenienceHelper context) {
-                String retValue = null;
-
-                try {
-                    retValue = getURI(NKHelper.getLastSegment(context)).toLowerCase();
-                } catch(NKFException nfe) {
-                    nfe.printStackTrace();
-                }
-
-                return retValue;
-            }
-
-            @Override
-            public String getURI(String id) {
-                return "ffcpl:/domain/" + id;
-            }
-
-        };
+        URIResolver domainResolver = new DomainResolver();
 
         ResourceFilter domainFilter = new DomainPrivateDataFilter();
         ResourceCreator domainCreator = new DomainCreator(new UserResolver(), new UserResourceStorage());
