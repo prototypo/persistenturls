@@ -6,7 +6,7 @@
 	-->
     <identity>
 		<uri>urn:org:purl:admin</uri>
-		<version>0.0.1277</version>
+		<version>0.0.1339</version>
     </identity>
 	<info>
 		<name>PURL Admin Module</name>
@@ -159,11 +159,11 @@
       		<class>org.purl.accessor.PURLResolverAccessor</class>
     	</ura>
     	<ura>
-    		<match>active:purl-pending-user\+.*</match>
+    		<match>active:purl-storage-pending-users\+.*</match>
     		<class>org.purl.accessor.PendingAccessor</class>
     	</ura>
     	<ura>
-    		<match>active:purl-pending-user\+.*</match>
+    		<match>active:purl-storage-pending-domains\+.*</match>
     		<class>org.purl.accessor.PendingAccessor</class>
     	</ura>    	
 		<ura>
