@@ -78,6 +78,7 @@ import org.purl.accessor.util.PURLException;
 import org.purl.accessor.util.ResourceCreator;
 import org.purl.accessor.util.ResourceStorage;
 import org.purl.accessor.util.URIResolver;
+import org.purl.accessor.util.UserHelper;
 import org.purl.accessor.util.UserResolver;
 import org.purl.accessor.util.UserResourceStorage;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
@@ -133,7 +134,7 @@ public class DomainAccessor extends AbstractAccessor {
             StringTokenizer st = new StringTokenizer(maintainers, ",");
             while(st.hasMoreTokens()) {
                 String next = st.nextToken();
-                if(!userStorage.resourceExists(context, userResolver.getURI(next))) {
+                if(!UserHelper.isValidUser(context, userResolver.getURI(next))) {                
                     throw new PURLException("User " + next + " does not exist", 400);
                 }
             }
@@ -141,7 +142,7 @@ public class DomainAccessor extends AbstractAccessor {
             st = new StringTokenizer(writers, ",");
             while(st.hasMoreTokens()) {
                 String next = st.nextToken();
-                if(!userStorage.resourceExists(context, userResolver.getURI(next))) {
+                if(!UserHelper.isValidUser(context, userResolver.getURI(next))) {                                
                     throw new PURLException("User " + next + " does not exist", 400);
                 }
             }

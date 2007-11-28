@@ -219,27 +219,31 @@ public class PURLCreator implements ResourceCreator {
     }
 
     public boolean checkMaintainersList(INKFConvenienceHelper context, IAspectNVP params) throws NKFException {
-        boolean permitted = false;
         String maintainers = params.getValue("maintainers");
 
         StringTokenizer st = new StringTokenizer(maintainers, ",\n");
 
         List<String> notFoundList = null;
 
-        while(!permitted && st.hasMoreTokens()) {
+        while(st.hasMoreTokens()) {
             String next = st.nextToken();
-            String uri = null;
+            boolean individualPermitted = false;
 
             for(URIResolver ur : maintainerResolvers) {
-                uri = ur.getURI(next);
-                permitted = maintainerStorage.resourceExists(context, uri);
-
-                if(permitted) {
+                String uri = ur.getURI(next);
+                
+                if(uri.startsWith("ffcpl:/user")) {
+                    individualPermitted = UserHelper.isValidUser(context, ur.getURI(next));                    
+                } else if(uri.startsWith("ffcpl:/group")) {
+                    individualPermitted = GroupHelper.isValidGroup(context, ur.getURI(next));                    
+                }
+                
+                if(individualPermitted) {
                     break;
                 }
             }
 
-            if(!permitted) {
+            if(!individualPermitted) {
                 if(notFoundList == null) {
                     notFoundList = new ArrayList<String>();
                 }
@@ -248,6 +252,7 @@ public class PURLCreator implements ResourceCreator {
             }
         }
 
+        boolean permitted = notFoundList.size() == 0;
         if(!permitted) {
             String errorMessage = null;
 
