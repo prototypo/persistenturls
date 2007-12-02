@@ -1,118 +1,100 @@
-Installing and Running a PURL Server
-------------------------------------
-
-Welcome.  This document explains how to install and run a Persistent URL (PURL) server.  See http://purlz.org for community information.
-
-0) Install NetKernel 3.3 somewhere.  We will refer to the NetKernel installation directory as $NETKERNEL_INSTALLATION_DIRECTORY.  At the time of this writing, we are using http://www.1060.org/upload/beta/1060-NetKernel-SE-DK3.3-Beta-1.jar
+PURL Server Installation Instructions
+December 9 2007
 
 
-1) Next do an svn checkout if you haven't done one already:
+-----------------------------------------
+| Installing from a Subversion Checkout |
+-----------------------------------------
 
-	svn co http://purlz.zepheira.com/svn/purlz
+To install a PURL server from a Subversion checkout, do the following:
 
+1) Install NetKernel 3.2.0 (from http://1060.org/)
 
-2) You will need to customize one property in the top level build.xml file. In the "init" target, please point netkernel.home.dir to wherever you have NetKernel installed.
+2) Checkout the PURL source code:
 
+ svn checkout http://purlz.zepheira.com/svn/purlz <local_repository_name>
 
-3) Issue the following commands:
+3) Edit the file <NK_Install_dir>/etc/deployedModules.xml and add lines like the following (editing the path as necessary):
 
-  $ ant test
-  $ ant deploy
+ <module>file:/<path_to_repository>/src/mod-purl-storage/modules/mod-purl-storage</module>
+ <module>file:/<path_to_repository>/src/mod-purl-storage/modules/test-mod-purl-storage</module>
+ <module>file:/<path_to_repository>/src/mod-purl-admin/modules/mod-purl-admin</module>
+ <module>file:/<path_to_repository>/src/mod-purl-admin/modules/test-mod-purl-admin</module>	
+ <module>file:/<path_to_repository>/src/mod-purl-search/modules/mod-purl-search</module>
+ <module>file:/<path_to_repository>/src/mod-purl-virtualhost/modules/mod-purl-virtualhost</module>
+ <module>file:/<path_to_repository>/src/mod-session/modules/mod-session</module>
+ <module>file:/<path_to_repository>/src/mod-template/modules/mod-template</module>
+ <module>file:/<path_to_repository>/src/mod-template/modules/test-mod-template</module>
+ <module>file:/<path_to_repository>/src/mod-purl-documentation/modules/mod-purl-documentation</module>  
 
+While you are in that file, comment out the NetKernel demo applications:
 
-4) We need to install the PURL NetKernel modules into NetKernel.  Please edit the file $NETKERNEL_INSTALLATION_DIRECTORY/etc/deployedModules.xml to comment out the NetKernel demonstration applications and include the following lines (replacing $SVN_CO_DIRECTORY with wherever you checked it the PURL code):
+  	<!--Demonstration Apps - remove these for production systems-->
+	<!--
+	<module>modules/app-address-book-1.1.4.jar</module>
+	<module>modules/pingpong-1.2.0.jar</module>
+	<module>modules/forum-web-1.1.6.jar</module>
+	<module>modules/forum-services-lite-1.0.0.jar</module>
+	<module>modules/forum-style-2.0.1.jar</module>
+	-->
 
-------------------------------%<-------------------------------------
-  <!--Demonstration Apps - remove these for production systems-->
-  <!--
-  <module>modules/app-address-book-1.1.4.jar</module>
-  <module>modules/pingpong-1.2.0.jar</module>
-  <module>modules/forum-web-1.1.6.jar</module>
-  <module>modules/forum-services-lite-1.0.0.jar</module>
-  <module>modules/forum-style-2.0.1.jar</module>
-  -->
+4) Edit the file <NK_Install_dir>/modules/mod-fulcrum-frontend/module.xml and do the following:
 
-  <!-- PURL modules -->
-  <module>file:$SVN_CO_DIRECTORY/src/mod-purl-admin/modules/mod-purl-admin</module>
-  <module>file:$SVN_CO_DIRECTORY/src/mod-purl-admin/modules/test-mod-purl-admin</module>	
-  <module>file:$SVN_CO_DIRECTORY/src/mod-purl-search/modules/mod-purl-search</module>
-  <module>file:$SVN_CO_DIRECTORY/src/mod-purl-virtualhost/modules/mod-purl-virtualhost</module>
-  <module>file:$SVN_CO_DIRECTORY/src/mod-session/modules/mod-session</module>
-  <module>file:$SVN_CO_DIRECTORY/src/mod-template/modules/mod-template</module>
-  <module>file:$SVN_CO_DIRECTORY/src/mod-template/modules/test-mod-template</module>
-  <module>file:$SVN_CO_DIRECTORY/src/mod-purl-documentation/modules/mod-purl-documentation</module>
-------------------------------%<-------------------------------------
+(a) Add these lines toward the bottom (where the comment directing you to add your modules is):
 
-
-5) Edit $NETKERNEL_INSTALLATION_DIRECTORY/modules/mod-fulcrum-frontend/module.xml as follows:
-
-(a) Add the following lines (look for the section that says "Add your modules below here..."):
-
-<import>
-    <uri>urn:org:purl:virtual:host</uri>
-</import>
+       <import>
+           <uri>urn:org:purl:virtual:host</uri>
+       </import>
 
 (b) Comment out the following lines:
 
-------------------------------%<-------------------------------------
-<!--Put every request into the FFCPL domain-->
-<!--
-<rewrite>
-	<match>jetty://.*?/(.*)</match>
-	<to>ffcpl:/$1</to>
-</rewrite>
--->
-------------------------------%<-------------------------------------
+		<!--Put every request into the FFCPL domain-->
+		<!--
+		<rewrite>
+			<match>jetty://.*?/(.*)</match>
+			<to>ffcpl:/$1</to>
+		</rewrite>
+	        -->
 
 (c) Search for "Demo and Test modules" and comment them out.
 
-6) You should be able to start up NetKernel by running the following:
+5) Edit the file /<path_to_repository>/src/mod-purl-admin/modules/mod-purl-admin/etc/PURLConfig.xml and comment out the following line (IFF you want to review and approve new user registrations:
 
-  $ $NETKERNEL_INSTALLATION_DIRECTORY/bin/start.sh
+     <!--
+     <allowUserAutoCreation/>
+     -->
 
-NetKernel should start without error.
+6) Edit the file /<path_to_repository>/src/mod-purl-admin/modules/mod-purl-admin/module.xml and comment out the following lines:
 
+		<!--
+		<import>
+			<uri>urn:org:purl:static</uri>
+		</import>
+		-->
 
-7) Run the server-side XUnit tests. Hit the following URL:
+7) Build the source code:
 
-http://localhost:1060/ep+name@app_xunit
+ $ cd <repository>/src
+ (edit the file build.xml and change the value of the property "netkernel.home.dir" to the path to the NetKernel installation directory.)
+ $ ant all
+ $ ant deploy
 
-You should see "PURLs Template Library Tests". Select the Run button and make sure that you only see green test results. There should be three PURLs tests run.
+8) Start NetKernel by:
 
+ $ cd <NK_Install_dir>/bin
+ $ ./start.sh
 
-8)  Run the client-side JUnit tests:
+9) Hit the following URL to update NetKernel's entrypoints so it can find the cron job on purl-storage module: http://localhost:1060/ep+name@app_ext_introspect_reindex
 
-  $ cd $SVN_CO_DIRECTORY
-  $ ant test
+10) Try the tests:
 
-You should see an output that looks similar to this:
+(a) For the server-side tests, hit http://localhost:1060/ep+name@app_xunit
 
-------------------------------%<-------------------------------------
-Buildfile: build.xml
+(b) For the client-side tests, run:
 
-init:
+ $ cd <repository>/src
+ $ ant test
 
-build-test:
+11) Hit http://localhost:8080/docs/index.html with a Web browser. Help is available at http://localhost:8080/docs/help.html
 
-test:
-    [junit] Testsuite: org.purl.test.purlClientTestRunner
-    [junit] Tests run: 61, Failures: 0, Errors: 0, Time elapsed: 5.082 sec
-    [junit] 
-
-BUILD SUCCESSFUL
-Total time: 5 seconds
-------------------------------%<-------------------------------------
-
-Note that the client-side tests presume a clean (empty) database on the PURL server.  If you run the tests on a PURL server containing existing data, errors may result due to conflicts (e.g. a user/domain/group/PURL of a given name already exists).
-
-9) You should now be able to hit the Front End Fulcrum to interact with the PURL server:
-
-http://localhost:8080/docs/index.html
-
-
-10)  Help on using the server is available from:
-
-http://localhost:8080/docs/help.html
-
-
-11)  We are working to make this process easier.  In the meantime, have fun!
+12) Have fun!
