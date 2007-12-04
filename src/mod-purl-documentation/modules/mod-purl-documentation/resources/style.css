@@ -1,5 +1,5 @@
 body {
-	background: #FFF url(images/purl-128.jpg) fixed top right no-repeat;
+	background: #FFF url("./images/purl-128.jpg") fixed top right no-repeat;
 	padding: 15px 0px 0px 0px;
 	margin: 23px 28px;
 	min-width: 800px;
@@ -242,7 +242,7 @@ table.display {
 }
 
 table.display th {
-	background: #CAE8EA url(http://purlz.org/images/bg_header.jpg) no-repeat;
+	background: #CAE8EA url(./images/bg_header.jpg) no-repeat;
 	border: 1px solid #5F9EA0;
 	padding: 2px 6px;
 	font-size: 1.1em;
@@ -283,7 +283,7 @@ th.row {
 th.rowalt {
 	border-left: 1px solid #C1DAD7;
 	border-top: 0;
-	background: #f5fafa url(http://purlz.org/images/bullet2.gif) no-repeat;
+	background: #f5fafa url(./images/bullet2.gif) no-repeat;
 	font: bold 10px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
 	color: #797268;
 }
