@@ -1,3 +1,4 @@
 <config>
-	<type>hsqldb</type>
+    <!-- <type>hsqldb</type> -->
+    <type>mysql</type>
 </config>

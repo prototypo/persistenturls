@@ -1,0 +1,71 @@
+<idoc>
+	<seq>
+		<instr>
+			<type>stm</type>
+			<operand><sql/></operand>
+			<operator>
+			<stm:group xmlns:stm="http://1060.org/stm">
+				<stm:set xpath="/sql">
+					SELECT * from groups
+						where g_id = '<stm:param xpath="/group/id/text()"/>'
+				</stm:set>
+			</stm:group>
+		</operator>
+		<param>this:param</param>
+      	<target>var:sql</target>
+		</instr>
+		<instr>
+			<type>sqlQuery</type>
+			<operand>var:sql</operand>
+			<target>var:results</target>
+		</instr>
+		<instr>
+			<type>purl-storage-query-groupmaintainers</type>
+			<param>this:param</param>
+			<target>var:maintainers</target>
+		</instr>
+		<instr>
+			<type>purl-storage-query-groupmembers</type>
+			<param>this:param</param>
+			<target>var:members</target>
+		</instr>
+		<instr>
+			<type>stm</type>
+			<operand>
+				<group><z_id/><id/><name/><comments/></group>
+			</operand>
+			<operator>
+				<stm:group xmlns:stm="http://1060.org/stm">
+					<stm:set xpath="/group/z_id"><stm:param xpath="/results/row/z_id/text()"/></stm:set>				
+					<stm:set xpath="/group/id"><stm:param xpath="/results/row/g_id/text()"/></stm:set>
+					<stm:set xpath="/group/name"><stm:param xpath="/results/row/name/text()"/></stm:set>
+					<stm:set xpath="/group/comments"><stm:param xpath="/results/row/comments/text()"/></stm:set>
+				</stm:group>
+			</operator>
+			<param>var:results</param>
+			<target>var:results</target>
+		</instr>
+		<instr>
+			<type>stm</type>
+			<operand>var:results</operand>
+			<operator>
+				<stm:group xmlns:stm="http://1060.org/stm">
+					<stm:append xpath="/group"><stm:param xpath="/maintainers"/></stm:append>				
+				</stm:group>				
+			</operator>
+			<param>var:maintainers</param>
+			<target>var:results</target>
+		</instr>
+		<instr>
+			<type>stm</type>
+			<operand>var:results</operand>
+			<operator>
+				<stm:group xmlns:stm="http://1060.org/stm">
+					<stm:append xpath="/group"><stm:param xpath="/members"/></stm:append>				
+				</stm:group>				
+			</operator>
+			<param>var:members</param>
+			<target>this:response</target>
+		</instr>		
+	</seq>
+</idoc>

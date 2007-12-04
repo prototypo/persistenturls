@@ -1,0 +1,32 @@
+import org.ten60.netkernel.xml.representation.*;
+import com.ten60.netkernel.urii.aspect.*;
+
+main() {
+	ruri = context.getThisRequest().getArgument("uri");
+	parts = ruri.split("/");
+	type = parts[1];
+	value = null;
+	uri = null;
+	param = null;
+	
+	switch(type) {
+		case "user":
+		uri = "ffcpl:/sql/db/userValid.idoc";
+		value = ruri.substring(12);
+		param = new StringAspect("<user><id>" + value + "</id></user>");						
+		break;
+		case "group":
+		uri = "ffcpl:/sql/db/groupExists.idoc";
+		value = ruri.substring(13);
+		param = new StringAspect("<group><id>" + value + "</id></group>");		
+		break;
+	}
+
+	req = context.createSubRequest("active:dpml");
+	req.addArgument("operand", uri);
+	req.addArgument("param", param);
+	res = context.issueSubRequest(req);
+	resp = context.createResponseFrom(res);
+	resp.setExpired();
+	context.setResponse(resp);
+}
