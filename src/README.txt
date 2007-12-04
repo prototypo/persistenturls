@@ -1,14 +1,61 @@
 PURL Server Installation Instructions
 December 9 2007
 
+-----------------------------------------------
+| Installing using a NetKernel Module Package |
+-----------------------------------------------
+
+NB: This option is recommended for most users.
+
+1)  Install NetKernel 3.3.0, available from:
+
+  http://www.1060.org/download/
+
+You will want to choose the top option ("Executable JAR Graphical Installer").
+
+2)  Run NetKernel
+
+3)  Access NetKernel's Module Management Wizard by going to:
+
+  http://localhost:1060/ep+name@app_install_installer
+
+4)  Choose "Deploy a packaged set of modules" and select the button labeled "next".
+
+5)  Enter the URL to the PURL server:
+
+  http://purlz.org/project/purl/downloads/purlz-1.0b1.zip
+
+6)  Errors may occur on the server because the PURL server requires a reindexing of NetKernel's entrypoints.  Do that by going to:
+
+  http://localhost:1060/ep+name@app_ext_introspect_reindex
+
+7) Try the tests:
+
+(a) For the server-side tests, hit http://localhost:1060/ep+name@app_xunit
+
+(b) For the client-side tests, run:
+
+ $ cd <repository>/src
+ $ ant test
+
+8) Hit http://localhost:8080/docs/index.html with a Web browser. Help is available at http://localhost:8080/docs/help.html
+
+9) Have fun!
+
 
 -----------------------------------------
 | Installing from a Subversion Checkout |
 -----------------------------------------
 
+NB: This option is useful for developers and those wishing to customize their installation.
+
 To install a PURL server from a Subversion checkout, do the following:
 
-1) Install NetKernel 3.2.0 (from http://1060.org/)
+1) Install NetKernel 3.3.0, available from:
+
+  http://www.1060.org/download/
+
+You will probably want to choose the top option ("Executable JAR Graphical Installer").
 
 2) Checkout the PURL source code:
 
