@@ -25,7 +25,7 @@ You will want to choose the top option ("Executable JAR Graphical Installer").
 
   http://purlz.org/project/purl/downloads/purlz-1.0b1.zip
 
-6)  Errors may occur on the server because the PURL server requires a reindexing of NetKernel's entrypoints.  Do that by going to:
+6)  Errors may occur on server restart because the PURL server requires a reindexing of NetKernel's entrypoints.  Do not worry.  Reindex by going to:
 
   http://localhost:1060/ep+name@app_ext_introspect_reindex
 
