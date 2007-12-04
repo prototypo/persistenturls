@@ -161,7 +161,7 @@ public class GroupAccessor extends AbstractAccessor {
             sb.append("</name>");
             sb.append("<maintainers>");
             
-            st = new StringTokenizer(maintainers, ",");
+            st = new StringTokenizer(maintainers, "\n,");
             while(st.hasMoreElements()) {
                 sb.append("<uid>");
                 sb.append(st.nextToken().trim());
@@ -170,7 +170,7 @@ public class GroupAccessor extends AbstractAccessor {
             
             sb.append("</maintainers>");
             sb.append("<members>");
-            st = new StringTokenizer(members, ",");
+            st = new StringTokenizer(members, "\n,");
             while(st.hasMoreElements()) {
                 sb.append("<uid>");
                 String userId = st.nextToken().trim(); 
