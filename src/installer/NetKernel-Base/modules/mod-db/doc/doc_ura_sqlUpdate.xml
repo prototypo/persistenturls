@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<document>
+<title>sqlUpdate Accessor</title>
+<!--***************Cascading Style Sheets***************-->
+<csslist>
+	<css>/xlib/styles/css_ten60_lnf.css</css>
+	<css>/xlib/styles/xmlverbatim.css</css>
+</csslist>
+<!--***************Links***************-->
+<links>
+</links>
+<!--***************Table of Contents***************-->
+<toc>
+	<section name="title"/>
+	<section name="definition"/>
+	<section name="purpose"/>
+	<section name="copyright"/>
+</toc>
+
+<section name="title" styleuri="/xusr/share/doc/styles_1060/style_title.xsl">
+	<content>
+		<name>sqlUpdate</name>
+		<text>Accessor to perform SQL Updates on RDBMS</text>
+	</content>
+</section>
+
+<section name="definition" styleuri="/xusr/share/doc/styles_1060/style_definition.xsl">
+	<content>
+		<module>urn:org:ten60:netkernel:mod:db</module>
+		<format>
+		<sub name="format"/>
+		</format>
+		<returns>
+<b>t</b>
+		</returns>
+		<syntax>
+			<type><b>sqlUpdate</b></type>
+			<operand req="true">the &lt;sql&gt; query document</operand>
+			<configuration>optional configuration document</configuration>
+			<target req="true" frag="true">a result document</target>
+		</syntax>
+		</content>
+	<includes>
+
+<include name="format" type="xml">
+<instr>
+	<type>sqlUpdate</type>
+	<operand><sql>INSERT INTO table VALUES (1,'Hetty');</sql></operand>
+	<configuration>/myconfiguration/configRDBMS.xml</configuration>
+	<target>var:result</target>
+</instr>
+</include>
+</includes>
+</section>
+
+<section name="purpose" styleuri="/xusr/share/doc/styles_1060/style_basic.xsl">
+	<content>
+        <p>The <code>sqlUpdate</code> accessor performs an SQL update on an RDBMS using a JDBC connection. The query is provided in the operand
+		as a canonical <code>&lt;sql&gt;</code> document (see example above). The result is a document providing the number of rows updated by
+		the update.</p>
+		<p>
+		sqlUpdate is used for INSERT and UPDATE  SQL operations.
+		</p>
+		<h3>Configuration</h3>
+		<p>
+		By default the configuration will be read from <code>ffcpl:/etc/ConfigRDBMS.xml</code>. The document provides a driver and
+		connection URI (see example below).  Alternatively,the configuration can be provided in an optional &lt;configuration&gt; argument - this
+		may be either a URI to a config document or a literal configuration document.
+		</p>
+		<sub name="config"/>
+		For more details on the configuration see the <link name="doc_books_cst_rdbms_introduction">Mod DB Guide</link>.
+		
+	</content>
+	<includes>
+<include name="config" type="xml">
+<config>
+  <rdbms>
+    <jdbcDriver>com.mysql.jdbc.Driver</jdbcDriver>
+    <jdbcConnection>
+      jdbc:mysql://localhost/mydatabase?user=myusername&amp;password=mypassword
+    </jdbcConnection>
+  </rdbms>
+</config>
+</include>
+</includes>
+</section>
+
+<section name="copyright" styleuri="/xusr/share/doc/styles_1060/style_footer.xsl"/>	
+
+</document>

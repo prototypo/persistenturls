@@ -38,7 +38,7 @@ I.  Open Source Components
     LICENSE:  1060 Public License
               http://www.1060research.com/license/1060_public_license.html
     NB: 1060 Research Limited has committed to the release of 1060 NetKernel version 3.2 under a license approved by the Open Source Initiative (OSI) within 24 months of 2 August 2007.
-    NB: 1060 NetKernel bundled many Open Source Software projects.  The PURL Project uses several of them, including the Lucene search engine and the HSQLDB database.
+    NB: 1060 NetKernel bundles many Open Source Software projects.  The PURL Project uses several of them, including the Lucene search engine and the HSQLDB database.  Their licenses are provided in the folder $INSTALL_PATH/licenses/
 
 
 Please note:

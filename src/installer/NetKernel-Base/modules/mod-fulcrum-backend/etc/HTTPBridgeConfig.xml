@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<HTTPBridgeConfig>
+
+	<defaultExceptionURI>jetty://localhost/introspect/external-error</defaultExceptionURI>
+
+	<!--Allow cookies for install and new module wizards -->
+	<zone>
+		<match>.*/(install/|developerTools/wizard).*</match>
+		<processQueries />
+		<passCookies/>
+	</zone>
+	
+	<!--Default - Strip Cookies-->
+	<zone>
+		<match>.*</match>
+		<processQueries />
+	</zone>
+	
+</HTTPBridgeConfig>

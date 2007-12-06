@@ -1,11 +1,45 @@
 PURL Server Installation Instructions
 December 9 2007
 
------------------------------------------------
-| Installing using a NetKernel Module Package |
------------------------------------------------
+----------------
+| Introduction |
+----------------
 
-NB: This option is recommended for most users.
+Thank you for your interest in the Persistent Uniform Resource Locator (PURL) server.  More information about PURLs and the PURL server software may be found at http://purlz./org.  Please consider joining the mailing lists and participating in the online community so we can serve you better.
+
+This software is licensed as defined in the accompanying files LICENSE.txt and LEGAL.txt.  These files may be found in the installation directory.
+
+
+----------------
+| Installation |
+----------------
+
+There are three ways to install a PURL server, each of which are described below.  Please choose the option which matches your needs.
+
+  ----------------------------------------------
+  | Option A.  Installing from a JAR Installer |
+  ----------------------------------------------
+NB: This option is recommended for end users and those wishing to run a PURL server on non-default ports.  It will install a fully functional instance of 1060 NetKernel as well as the PURL service.
+
+1)  Download the JAR installer:
+
+  http://purlz.org/project/purl/downloads/purlz-installer-1.0b1.jar
+
+2)  Run the installer and follow its directions.  If you operating system does not allow JAR files to be executed directly, run the installer using this command:
+
+  java -jar purlz-installer-1.0b1.jar
+
+3) NetKernel's entrypoints must be updated upon installation so it can initialize several cron jobs. Do that by hitting this URL: http://localhost:1060/ep+name@app_ext_introspect_reindex
+
+4) Hit http://localhost:8080/docs/index.html with a Web browser. Help is available at http://localhost:8080/docs/help.html
+
+5) Have fun!
+
+
+  ----------------------------------------------------------
+  | Option B.  Installing using a NetKernel Module Package |
+  ----------------------------------------------------------
+NB: This option is recommended for users with existing NetKernel services installed.  Please be careful to ensure that you install the PURL module into your existing NetKernel or, if you want to install another NetKernel instance, that you use different ports for the NetKernel fulcrums (default ports are 8080 for the Front End Fulcrum and 1060 for the Back End Fulcrum).  Note that Option A (Installing from a JAR Installer) allows you to install a new NetKernel and manually set the port numbers.
 
 1)  Install NetKernel 3.3.0, available from:
 
@@ -43,10 +77,9 @@ You will want to choose the top option ("Executable JAR Graphical Installer").
 9) Have fun!
 
 
------------------------------------------
-| Installing from a Subversion Checkout |
------------------------------------------
-
+  ----------------------------------------------------
+  | Option C.  Installing from a Subversion Checkout |
+  ----------------------------------------------------
 NB: This option is useful for developers and those wishing to customize their installation.
 
 To install a PURL server from a Subversion checkout, do the following:
