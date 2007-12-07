@@ -5,7 +5,7 @@
 		<field type="radio" variable="DBSELECTION">
 			<description align="left" txt="Please select from the following options." id="description.radio"/>
 			<spec>
-				<choice txt="Use HSQLDB" id="radio.label.2" value="hsqldb" set="true"/>
+				<choice txt="Use HSQLDB (default)" id="radio.label.2" value="hsqldb" set="true"/>
 				<choice txt="Use MySQL" id="radio.label.1" value="mysql"/>
 			</spec>
 		</field>
@@ -27,6 +27,16 @@
 		</field>
 		<field type="text" variable="MYSQLPASSWORD">
 			<spec txt="MySQL Password:" id="text.label.5" size="25" set=""/>
+		</field>
+	</panel>
+	<panel order="2">
+		<field type="staticText" align="left" txt="Users of a PURL server may be allowed to register automatically or account activation may be restricted by an administrator.  If you would like to manually review and approve new user accounts, select 'approve all user registrations' below:"/>
+		<field type="radio" variable="USERAUTOCREATION">
+			<description align="left" txt="Please select from the following options." id="description.radio"/>
+			<spec>
+				<choice txt="Allow automatic user registrations (default)" id="radio.label.3" value="<allowUserAutoCreation/>" set="true"/>
+				<choice txt="Approve all user registrations" id="radio.label.4" value="<!-- <allowUserAutoCreation/> -->"/>
+			</spec>
 		</field>
 	</panel>
 </userInput>

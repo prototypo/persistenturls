@@ -23,12 +23,11 @@
  <res id="installer.langsel.img" src="images/installer_splash.jpg" />
  <res id="userInputSpec.xml" src="userInputSpec.xml" />
  <res id="conditions.xml" src="conditions.xml" />
- <res id="packsinfo.xml" src="packsinfo.xml" />
 </resources>
 
 <variables>
   <variable name="JARVERSION" value="0.0.1"/>
-  <variable name="USERAUTOCREATION" value="<allowUserAutoCreation/>"/>
+	<!-- Most variables moved to userInputSpec.xml -->
 </variables>
 
 <panels>
@@ -37,6 +36,7 @@
  <panel classname="TargetPanel"/>
  <panel order="0" classname="UserInputPanel"/>
  <panel order="1" classname="UserInputPanel" id="mysqlauth"/>
+ <panel order="2" classname="UserInputPanel"/>
  <panel classname="PacksPanel"/>
  <panel classname="InstallPanel"/>
  <panel classname="FinishPanel"/>
@@ -73,6 +73,9 @@
 		<file targetdir="$INSTALL_PATH/modules" src="../mod-purl-storage/modules/test-mod-purl-storage"/>
 		<file targetdir="$INSTALL_PATH/modules" src="../mod-purl-admin/modules/mod-purl-admin"/>
 		<file targetdir="$INSTALL_PATH/modules" src="../mod-purl-admin/modules/test-mod-purl-admin"/>
+		<!-- Overwrite the file that defines the <allowUserAutoCreation> option,
+		     so we can set it later by parsing. -->
+		<singlefile src="options/PURLConfig.xml" target="$INSTALL_PATH/modules/mod-purl-admin/etc/PURLConfig.xml" override="true"/>
 		<!-- PURL files with variable substitution upon installation. -->
 		<parsable targetfile="$INSTALL_PATH/etc/deployedModules.xml"/>
 		<parsable targetfile="$INSTALL_PATH/modules/mod-purl-admin/etc/PURLConfig.xml"/>
