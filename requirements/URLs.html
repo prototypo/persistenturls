@@ -35,6 +35,7 @@
 		<th>Public URL</th>
 		<th>HTTP Verb</th>
 		<th>Parameters</th>
+		<th>Auth required</th>
 	</tr>
 	<tr>
 		<td><a href="TLregisterUser.html">Register a new user</a></td>
@@ -47,6 +48,7 @@
 				Password (passwd)<br>
 				Hint (hint)<br>
 				Justification (justification)</td>
+		<td>no</td>
 	</tr>
 	<tr>
 		<td><a href="TLmodifyUser.html">Modify user information</a></td>
@@ -59,6 +61,7 @@
 				Password (passwd)<br>
 				Hint (hint)<br>
 				Justification (justification)</td>
+		<td>yes</td>
 	</tr>
 	<tr>
 		<td><a href="TLsearchUser.html">Search user information</a></td>
@@ -69,12 +72,14 @@
 				E-mail address (email)<br>
 				User ID (id)<br>
 				Search tombstoned (tombstone)</td>
+		<td>yes</td>
 	</tr>
 	<tr>
 		<td><a href="TLdeleteUser.html">Delete a user</a></td>
 		<td>$PURL_SERVER$/admin/user</td>
 		<td>DELETE</td>
 		<td>User ID (id) <b>and no others</b></td>
+		<td>yes</td>
 	</tr>
 	</table>
 
@@ -85,6 +90,7 @@
 		<th>Public URL</th>
 		<th>HTTP Verb</th>
 		<th>Parameters</th>
+		<th>Auth required</th>
 	</tr>
 	<tr>
 		<td><a href="TLcreatePURL.html">Create a PURL</a><br>
@@ -98,6 +104,7 @@
 				User/Group IDs (maintainers)<br>
 				Type (type)<br>
 				See Also URLs (seealso)</td>
+		<td>yes</td>
 	</tr>
 	<tr>
 		<td><a href="TLmodifyPURL.html">Modify a PURL</a></td>
@@ -108,6 +115,7 @@
 				User/Group IDs (maintainers)<br>
 				Type (type)<br>
 				See Also URLs (seealso)</td>
+		<td>yes</td>
 	</tr>
 	<tr><td><a href="TLsearchPURLMetadata.html">Search PURL metadata</a></td>
 		<td>$PURL_SERVER$/purl</td>
@@ -118,35 +126,41 @@
 				User/Group IDs (maintainers) or<br>
 				Explicit User/Group ID (explicitmaintainers)<br>
 				Search tombstoned (tombstone)</td>
+		<td>no</td>
 	</tr>
 	<tr><td><a href="TLdeletePURLs.html">Delete PURLs</a></td>
 		<td>$PURL_SERVER$/admin/purl</td>
 		<td>DELETE</td>
 		<td>PURL path (id) <b>and no others</b></td>
+		<td>yes</td>
 	</tr>
 	<tr>
 		<td><a href="TLbatchAddPURLs.html">Batch add PURLs</a></td>
 		<td>$PURL_SERVER$/admin/purls</td>
 		<td>POST</td>
 		<td>XML (see <a href="http://purlz.org/project/purl/documentation/batchPurlsExample.xml">example</a>) using a <a href="http://purlz.org/project/purl/documentation/batchPurls.rng">RELAX NG Schema</a></td>
+		<td>yes</td>
 	</tr>
 	<tr>
 		<td><a href="TLbatchModifyPURLs.html">Batch modify PURLs</a></td>
 		<td>$PURL_SERVER$/admin/purls</td>
 		<td>PUT</td>
 		<td>XML (see <a href="http://purlz.org/project/purl/documentation/batchPurlsExample.xml">example</a>) using a <a href="http://purlz.org/project/purl/documentation/batchPurls.rng">RELAX NG Schema</a></td>
+		<td>yes</td>
 	</tr>
 	<tr>
 		<td><a href="TLvalidatePURL.html">PURL Validation</a></td>
 		<td>$PURL_SERVER$/admin/targeturl</td>
 		<td>GET</td>
 		<td>PURL Path (id)</td>
+		<td>no</td>
 	</tr>
 	<tr>
 		<td><a href="TLvalidatePURLs.html">Batch PURL Validation</a></td>
 		<td>$PURL_SERVER$/admin/targeturls</td>
 		<td>GET</td>
 		<td>XML (see <a href="http://purlz.org/project/purl/documentation/batchPurlsExample.xml">example</a>) using a <a href="http://purlz.org/project/purl/documentation/batchPurls.rng">RELAX NG Schema</a></td>
+		<td>no</td>
 	</tr>
 	</table>
 
@@ -157,6 +171,7 @@
 		<th>Public URL</th>
 		<th>HTTP Verb</th>
 		<th>Parameters</th>
+		<th>Auth required</th>
 	</tr>
 	<tr>
 		<td><a href="TLcreateGroup.html">Create a new group</a></td>
@@ -167,6 +182,7 @@
 				Group maintainers (maintainers)<br>
 				Group members (members)<br>
 				Public comments (comments)</td>
+		<td>yes</td>
 	</tr>
 	<tr>
 		<td><a href="TLmodifyGroup.html">Modify group information</a></td>
@@ -177,6 +193,7 @@
 				Group maintainers (maintainers)<br>
 				Group members (members)<br>
 				Public comments (comments)</td>
+		<td>yes</td>
 	</tr>
 	<tr>
 		<td><a href="TLsearchGroup.html">Search group information</a></td>
@@ -187,12 +204,14 @@
 				Group maintainers (maintainers) or<br>
 				Group members (members)<br>
 				Search tombstoned (tombstone)</td>
+		<td>no</td>
 	</tr>
 	<tr>
 		<td><a href="TLdeleteGroup.html">Delete a group</a></td>
 		<td>$PURL_SERVER$/admin/group</td>
 		<td>DELETE</td>
 		<td>Group ID (id) <b>and no others</b></td>
+		<td>yes</td>
 	</tr>
 	</table>
 
@@ -203,6 +222,7 @@
 		<th>Public URL</th>
 		<th>HTTP Verb</th>
 		<th>Parameters</th>
+		<th>Auth required</th>
 	</tr>
 	<tr>
 		<td><a href="TLrequestDomain.html">Request a top-level domain</a><br>
@@ -214,6 +234,7 @@
 				Domain maintainers (maintainers)<br>
 				Domain writers (writers)<br>
 				Public (public)</td>
+		<td>yes</td>
 	</tr>
 	<tr>
 		<td><a href="TLmodifyDomain.html">Modify existing domain information</a></td>
@@ -224,6 +245,7 @@
 				Domain maintainers (maintainers)<br>
 				Domain writers (writers)<br>
 				Public (public)</td>
+		<td>yes</td>
 	</tr>
 	<tr>
 		<td><a href="TLsearchDomain.html">Search domain information</a></td>
@@ -234,12 +256,14 @@
 				Domain maintainer (maintainers) or<br>
 				Domain writer (writers)<br>
 				Search tombstoned (tombstone)</td>
+		<td>no</td>
 	</tr>
 	<tr>
 		<td><a href="TLdeleteDomain.html">Delete a domain</a></td>
 		<td>$PURL_SERVER$/admin/domain</td>
 		<td>DELETE</td>
 		<td>Domain ID (id) <b>and no others</b></td>
+		<td>yes</td>
 	</tr>
 	</table>
 
