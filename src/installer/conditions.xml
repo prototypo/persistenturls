@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<conditions>
+	<condition type="variable" id="use.hsqldb">
+		<name>DBSELECTION</name>
+		<value>hsqldb</value>
+	</condition>
+	<condition type="variable" id="use.mysql">
+		<name>DBSELECTION</name>
+		<value>mysql</value>
+	</condition>
+	<panelcondition panelid="mysqlauth" conditionid="use.mysql"/>
+	<packcondition packid="HSQLDB" conditionid="use.hsqldb"/>
+	<packcondition packid="MySQL" conditionid="use.mysql"/>
+	
+</conditions>

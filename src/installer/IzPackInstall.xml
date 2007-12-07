@@ -6,7 +6,8 @@
 	<url>http://purlz.org/</url>
 	<authors>
 		<author name="Zepheira, LLC" email="contact@zepheira.com"/>
-	</authors>
+	</authors>	
+	<javaversion>1.4.2</javaversion>
 </info>
 
 <guiprefs resizable="no" width="800" height="500"/>
@@ -20,6 +21,9 @@
  <res id="Installer.image" src="images/installer_image.jpg" />
  <res id="HTMLInfoPanel.info" src="README.html"/>
  <res id="installer.langsel.img" src="images/installer_splash.jpg" />
+ <res id="userInputSpec.xml" src="userInputSpec.xml" />
+ <res id="conditions.xml" src="conditions.xml" />
+ <res id="packsinfo.xml" src="packsinfo.xml" />
 </resources>
 
 <variables>
@@ -31,6 +35,8 @@
  <panel classname="HTMLInfoPanel"/>
  <panel classname="HTMLLicencePanel"/>
  <panel classname="TargetPanel"/>
+ <panel order="0" classname="UserInputPanel"/>
+ <panel order="1" classname="UserInputPanel" id="mysqlauth"/>
  <panel classname="PacksPanel"/>
  <panel classname="InstallPanel"/>
  <panel classname="FinishPanel"/>
@@ -38,8 +44,8 @@
 
 <packs>
    <!-- The core files -->
-   <pack name="Core" required="yes">
-       <description>Main distribution.  1060 NetKernel with PURL server modules and documentation.</description>	
+   <pack name="Core" id="Core" required="yes">
+       <description>Main distribution.  Contains 1060 NetKernel with PURL server modules and documentation.</description>	
 		<!-- NetKernel installation. -->
        <file targetdir="$INSTALL_PATH" src="NetKernel-Base/bin"/>
        <file targetdir="$INSTALL_PATH" src="NetKernel-Base/etc"/>
@@ -62,7 +68,7 @@
 		<file targetdir="$INSTALL_PATH/modules" src="../deploy/mod-template-0.0.1.jar"/>
 		<file targetdir="$INSTALL_PATH/modules" src="../deploy/test-mod-purl-search-0.0.1.jar"/>
 		<file targetdir="$INSTALL_PATH/modules" src="../deploy/test-mod-template-0.0.1.jar"/>
-		<!-- TODO: Change the next two to use JAR files GA. -->
+		<!-- NB: Cannot use JAR files for these because we need to parse files within them. -->
 		<file targetdir="$INSTALL_PATH/modules" src="../mod-purl-storage/modules/mod-purl-storage"/>
 		<file targetdir="$INSTALL_PATH/modules" src="../mod-purl-storage/modules/test-mod-purl-storage"/>
 		<file targetdir="$INSTALL_PATH/modules" src="../mod-purl-admin/modules/mod-purl-admin"/>
@@ -70,6 +76,7 @@
 		<!-- PURL files with variable substitution upon installation. -->
 		<parsable targetfile="$INSTALL_PATH/etc/deployedModules.xml"/>
 		<parsable targetfile="$INSTALL_PATH/modules/mod-purl-admin/etc/PURLConfig.xml"/>
+		<parsable targetfile="$INSTALL_PATH/README.txt"/>
 		<!-- NetKernel files with variable substitution upon installation. -->
 		<parsable targetfile="$INSTALL_PATH/etc/bootloader.cfg"/>
 		<parsable targetfile="$INSTALL_PATH/bin/start.sh"/>
@@ -81,18 +88,34 @@
 		<parsable targetfile="$INSTALL_PATH/bin/startup.bat"/>
 		<parsable targetfile="$INSTALL_PATH/bin/dexter.bat"/>
 		<parsable targetfile="$INSTALL_PATH/bin/win32-service/wrapper.conf"/>
-   </pack>
-	<pack name="Javadoc" required="yes">
-       <description>Javadoc.</description>
-       <file targetdir="$INSTALL_PATH" src="NetKernel-Base/javadoc"/>
-       <!--file targetdir="$INSTALL_PATH" src="TODO -- PURL modules javadoc"/-->
-   </pack>
-   <pack name="Source Code" required="no">
-       <description>Kernel sources.</description>
-       <file targetdir="$INSTALL_PATH" src="NetKernel-Base/build"/>
-       <file targetdir="$INSTALL_PATH" src="NetKernel-Base/src"/>
-       <!--file targetdir="$INSTALL_PATH" src="TODO -- PURL modules source"/-->
-   </pack>
+	</pack>
+	<!-- TODO: Overwrite the config files for the persistence layer -->
+	<!-- TODO: Parse the files that need passwords -->
+	<pack name="HSQLDB" id="HSQLDB" required="yes" conditionid="use.hsqldb">
+        <description>Contains configuration files for the HSQLDB database.</description>
+        <singlefile src="options/hsqldb/ConfigPURLSDB.xml" target="$INSTALL_PATH/modules/mod-purl-storage/etc/ConfigPURLSDB.xml" override="true"/>
+        <singlefile src="options/hsqldb/ConfigRDBMS.xml" target="$INSTALL_PATH/modules/test-mod-purl-storage/etc/ConfigRDBMS.xml" override="true"/>
+        <singlefile src="options/hsqldb/ConfigRDBMS.xml" target="$INSTALL_PATH/modules/mod-purl-admin/etc/ConfigRDBMS.xml" override="true"/>
+    </pack>
+    <pack name="MySQL" id="MySQL" required="yes" conditionid="use.mysql">
+        <description> Contains configuration files the MySQL database.</description>
+        <singlefile src="options/mysql/ConfigPURLSDB.xml" target="$INSTALL_PATH/modules/mod-purl-storage/etc/ConfigPURLSDB.xml" override="true"/>
+        <singlefile src="options/mysql/ConfigRDBMS.xml" target="$INSTALL_PATH/modules/test-mod-purl-storage/etc/ConfigRDBMS.xml" override="true"/>
+        <singlefile src="options/mysql/ConfigRDBMS.xml" target="$INSTALL_PATH/modules/mod-purl-admin/etc/ConfigRDBMS.xml" override="true"/>
+		<parsable targetfile="$INSTALL_PATH/modules/test-mod-purl-storage/etc/ConfigRDBMS.xml"/>
+		<parsable targetfile="$INSTALL_PATH/modules/mod-purl-admin/etc/ConfigRDBMS.xml"/>
+    </pack>
+	<pack name="Javadoc" id="Javadoc" required="no" preselected="no">
+	    <description>Javadoc documentation for developers.</description>
+	    <file targetdir="$INSTALL_PATH" src="NetKernel-Base/javadoc"/>
+	    <!--file targetdir="$INSTALL_PATH" src="TODO -- PURL modules javadoc"/-->
+	</pack>
+	<pack name="Source Code" id="Source Code" required="no" preselected="no">
+	    <description>Source code for the PURL server.</description>
+	    <file targetdir="$INSTALL_PATH" src="NetKernel-Base/build"/>
+	    <file targetdir="$INSTALL_PATH" src="NetKernel-Base/src"/>
+	    <!--file targetdir="$INSTALL_PATH" src="TODO -- PURL modules source"/-->
+	</pack>
 
 </packs>
 
