@@ -23,7 +23,7 @@ NB: This option is recommended for end users and those wishing to run a PURL ser
 
 1)  Download the JAR installer:
 
-  http://purlz.org/project/purl/downloads/purlz-installer-1.0b1.jar
+  http://purlz.org/project/purl/downloads/purlz-installer-1.0b2.jar
 
 2)  Run the installer and follow its directions.  If you operating system does not allow JAR files to be executed directly, run the installer using this command:
 
