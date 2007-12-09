@@ -80,8 +80,7 @@ handles results from the server in response to form submissions.
 				name: $('c_name').value,
 				maintainers: maintainers,
 				writers: writers,
-				public: $('c_public').checked,
-				referrer: "/docs/domain.html#create"
+				public: $('c_public').checked
 			}
 			ajaxCaller.postVars("/admin/domain/" + my_id, bodyVars, urlVars, onResponse, false, "Create");
 		}
@@ -109,8 +108,7 @@ handles results from the server in response to form submissions.
 			parameters = {
 				urlVars: urlVars,
 				bodyType: bodyType,
-				body: body,
-				referrer: "/docs/domain.html#modify"
+				body: body
 			};
 			ajaxCaller.putBody("/admin/domain/" + my_id, parameters.urlVars, onResponse, false, "Modify", parameters.bodyType, parameters.body);
 		}
@@ -126,8 +124,7 @@ handles results from the server in response to form submissions.
 				name: $('s_name').value,
 				maintainers: $('s_maintainers').value,
 				writers: $('s_writers').value,
-				tombstone: $('s_tombstone').checked,
-				referrer: "/docs/domain.html#search"
+				tombstone: $('s_tombstone').checked
 		}
 		if ( my_id == "" | my_id == null ) {
 			// No domain id is given, so we call the parent resource.

@@ -98,8 +98,7 @@ handles results from the server in response to form submissions.
 				email: $('c_email').value,
 				passwd: $('c_passwd').value,
 				hint: $('c_hint').value,
-				justification: $('c_justification').value,
-				referrer: "/docs/group.html#create"
+				justification: $('c_justification').value
 			}
 			ajaxCaller.postVars("/admin/user/" + my_id, bodyVars, urlVars, onResponse, false, "Create");
 		}
@@ -127,8 +126,7 @@ handles results from the server in response to form submissions.
 			parameters = {
 				urlVars: urlVars,
 				bodyType: bodyType,
-				body: body,
-				referrer: "/docs/group.html#modify"
+				body: body
 			};
 			ajaxCaller.putBody("/admin/user/" + my_id, parameters.urlVars, onResponse, false, "Modify", parameters.bodyType, parameters.body);
 		}
@@ -145,8 +143,7 @@ handles results from the server in response to form submissions.
 				affiliation: $('s_affiliation').value,
 				email: $('s_email').value,
 				id: $('s_id').value,
-				tombstone: $('s_tombstone').checked,
-				referrer: "/docs/group.html#search"
+				tombstone: $('s_tombstone').checked
 		}
 
 		// Perform the search against parent node

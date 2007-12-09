@@ -67,8 +67,7 @@ limitations under the License.
 			decision = getSelectedRadio(id + "_decision");			
 			urlVars = {}
 			bodyVars = {
-				decision: decision,
-				referrer: "/docs/admin/domain.html"
+				decision: decision
 			}
 			
 			// Use the id as the calling context to allow for addressing of the right elements.
@@ -87,7 +86,7 @@ limitations under the License.
 		ajaxCaller.get("/admin/pending/domain/", bodyVars, onPendingResponse, false, "Pending domains");
 
 		// Show the login status in a div on the page.
-		showLoginStatus();
+		showLoginStatus('/docs/admin/domain.html');
 		
 		return false;
 	}

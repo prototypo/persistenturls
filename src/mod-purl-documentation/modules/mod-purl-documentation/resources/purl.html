@@ -80,8 +80,7 @@ handles results from the server in response to form submissions.
 			bodyVars = {
 				type: "302",
 				target: $('c_target').value,
-				maintainers: maintainers,
-				referrer: "/docs/purl.html#create"
+				maintainers: maintainers
 			}
 			// TODO: What is the URL to admin a PURL?  /admin/purl/<path>/<name>?  /<path>/<name>?
 			ajaxCaller.postVars("/admin/purl" + my_id, bodyVars, urlVars, onResponse, false, "Create");
@@ -104,8 +103,7 @@ handles results from the server in response to form submissions.
 				target: $('a_target').value,
 				seealso: $('a_seealso').value,
 				maintainers: maintainers,
-				basepurl: $('a_basepurl').value,
-				referrer: "/docs/purl.html#advancedcreate"
+				basepurl: $('a_basepurl').value
 			}
 			// TODO: What is the URL to admin a PURL?  /admin/purl/<path>/<name>?  /<path>/<name>?
 			ajaxCaller.postVars("/admin/purl" + my_id, bodyVars, urlVars, onResponse, false, "Create");
@@ -133,8 +131,7 @@ handles results from the server in response to form submissions.
 			parameters = {
 				urlVars: urlVars,
 				bodyType: bodyType,
-				body: body,
-				referrer: "/docs/purl.html#modify"
+				body: body
 			};
 				// TODO: What is the URL to admin a PURL?  /admin/purl/<path>/<name>?  /<path>/<name>?
 			ajaxCaller.putBody("/admin/purl" + my_id, parameters.urlVars, onResponse, false, "Modify", parameters.bodyType, parameters.body);
@@ -152,8 +149,7 @@ handles results from the server in response to form submissions.
 			seealso: $('s_seealso').value,
 			maintainers: $('s_maintainers').value,
 			explicitmaintainers: $('s_explicitmaintainers').value,
-			tombstone: $('s_tombstone').checked,
-			referrer: "/docs/purl.html#search"
+			tombstone: $('s_tombstone').checked
 		}
 		if ( my_id == "" | my_id == null ) {
 			// No PURL name is given, so we call the parent resource.
@@ -175,9 +171,7 @@ handles results from the server in response to form submissions.
 			alert("You must provide a path to identify the PURL you wish to validate.  Please enter a path.");
 		} else {
 			signalLoadingResults();
-			bodyVars =  {
-				referrer: "/docs/purl.html#validate"
-			}
+			bodyVars =  {}
 			ajaxCaller.deleteIt("/admin/targeturl" + my_id, bodyVars, onResponse, false, "Validate");
 		}
 		clearErrorIndications();

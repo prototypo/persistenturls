@@ -79,8 +79,7 @@ handles results from the server in response to form submissions.
 				name: $('c_name').value,
 				maintainers: maintainers,
 				members: $('c_members').value,
-				comments: $('c_comments').value,
-				referrer: "/docs/group.html#create"
+				comments: $('c_comments').value
 			};
 			ajaxCaller.postVars("/admin/group/" + my_id, bodyVars, urlVars, onResponse, false, "Create");
 		}
@@ -108,8 +107,7 @@ handles results from the server in response to form submissions.
 			parameters = {
 				urlVars: urlVars,
 				bodyType: bodyType,
-				body: body,
-				referrer: "/docs/group.html#modify"
+				body: body
 			};
 			ajaxCaller.putBody("/admin/group/" + my_id, parameters.urlVars, onResponse, false, "Modify", parameters.bodyType, parameters.body);
 		}
@@ -125,8 +123,7 @@ handles results from the server in response to form submissions.
 				name: $('s_name').value,
 				maintainers: $('s_maintainers').value,
 				members: $('s_members').value,
-				tombstone: $('s_tombstone').checked,
-				referrer: "/docs/group.html#search"
+				tombstone: $('s_tombstone').checked
 		};
 		if ( my_id == "" | my_id == null ) {
 			// No group id is given, so we call the parent resource.

@@ -103,7 +103,7 @@ function onLoginStatusResponse (message, headers, callingContext) {
 		// "Parse" the XML
 		if ( message.indexOf("logged out") > -1 ) {
 			// The user is logged out or does not have an account.
-			resultBlock.innerHTML = "<p>Anonymous (<a href=\"/docs/login.bsh?referrer=" + callingContext + "\">log in</a>)</p>";
+			resultBlock.innerHTML = "<p>Anonymous (<a href=\"/admin/login/login.bsh?referrer=" + callingContext + "\">log in</a>)</p>";
 		} else if ( message.indexOf("logged in") > -1 ) {
 			// The user is logged in.
 			var uid = message.replace(/<uid>(.*)<\/uid>/, "$1");
