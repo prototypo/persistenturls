@@ -6,7 +6,7 @@
 	-->
     <identity>
 		<uri>urn:org:purl:virtual:host</uri>
-		<version>1.0.53</version>
+		<version>1.0.56</version>
     </identity>
 	<info>
 		<name>PURLS Virtual Host Module</name>
@@ -31,8 +31,6 @@
 			<match>ffcpl:/etc/HTTPBridgeConfig.xml</match>
 		</uri>
 	</export>
-	<rewrite>
-	</rewrite>
 	<mapping>
 		<!--
 		**************
@@ -40,7 +38,7 @@
 		*************
 		-->
 		<this>
-			<match>ffcpl:/etc/HTTPBridgeConfig.xml</match>
+			<match>ffcpl:/etc/HTTPBridgeConfig.xml</match>		
 		</this>
 
 <!-- 	If you want to have any static rewrites based on the virtualhost
@@ -59,10 +57,16 @@
     		<to>ffcpl:/$1</to>
 		</rewrite>
 		<import>
-		    <uri>urn:org:purl:documentation</uri>
+			<uri>urn:org:purl:gatekeeper</uri>
 		</import>
 		<import>
-			<uri>urn:org:purl:gatekeeper</uri>
+		    <uri>urn:org:purl:documentation</uri>
+		</import>						
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:xsecurity</uri>
+		</import>
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:session</uri>
 		</import>
 		<import>
 			<uri>urn:org:ten60:netkernel:ext:script</uri>
