@@ -129,6 +129,7 @@ Graphical Installer").
 3) Edit the file <NK_Install_dir>/etc/deployedModules.xml and add
 lines like the following (editing the path as necessary):
 
+ <module>file:/<path_to_repository>/src/mod-purl-gatekeeper/modules/mod-purl-gatekeeper</module>
  <module>file:/<path_to_repository>/src/mod-purl-storage/modules/mod-purl-storage</module>
  <module>file:/<path_to_repository>/src/mod-purl-storage/modules/test-mod-purl-storage</module>
  <module>file:/<path_to_repository>/src/mod-purl-admin/modules/mod-purl-admin</module>
