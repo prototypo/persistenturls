@@ -37,11 +37,12 @@
  <panel classname="HTMLLicencePanel"/>
  <panel classname="TargetPanel"/>
  <panel order="0" classname="UserInputPanel"/>
- <panel order="1" classname="UserInputPanel" id="mysqlauth"/>
- <panel order="2" classname="UserInputPanel"/>
+ <panel order="1" classname="UserInputPanel"/>
+ <panel order="2" classname="UserInputPanel" id="mysqlauth"/>
+ <panel order="3" classname="UserInputPanel"/>
  <panel classname="PacksPanel"/>
  <panel classname="InstallPanel"/>
- <panel order="3" classname="UserInputPanel"/>
+ <panel order="4" classname="UserInputPanel"/>
  <panel classname="ProcessPanel" id="serverstart"/>
  <panel classname="InfoPanel"/>
  <panel classname="FinishPanel"/>
@@ -78,13 +79,15 @@
 		<file targetdir="$INSTALL_PATH/modules" src="../mod-purl-storage/modules/test-mod-purl-storage"/>
 		<file targetdir="$INSTALL_PATH/modules" src="../mod-purl-admin/modules/mod-purl-admin"/>
 		<file targetdir="$INSTALL_PATH/modules" src="../mod-purl-admin/modules/test-mod-purl-admin"/>
-		<!-- Overwrite the file that defines the <allowUserAutoCreation> option,
-		     so we can set it later by parsing. -->
+		<!-- Overwrite the file that define installer options,
+		     so we can set them later by parsing. -->
 		<singlefile src="options/PURLConfig.xml" target="$INSTALL_PATH/modules/mod-purl-admin/etc/PURLConfig.xml" override="true"/>
+		<singlefile src="options/mod-purl-virtualhost/module.xml" target="$INSTALL_PATH/modules/mod-purl-virtualhost/module.xml" override="true"/>
 		<!-- PURL files with variable substitution upon installation. -->
 		<parsable targetfile="$INSTALL_PATH/etc/deployedModules.xml"/>
 		<parsable targetfile="$INSTALL_PATH/modules/mod-purl-admin/etc/PURLConfig.xml"/>
 		<parsable targetfile="$INSTALL_PATH/README.txt"/>
+		<parsable targetfile="$INSTALL_PATH/modules/mod-purl-virtualhost/module.xml"/>
 		<!-- NetKernel files with variable substitution upon installation. -->
 		<parsable targetfile="$INSTALL_PATH/etc/bootloader.cfg"/>
 		<parsable targetfile="$INSTALL_PATH/bin/start.sh"/>
@@ -97,14 +100,14 @@
 		<parsable targetfile="$INSTALL_PATH/bin/dexter.bat"/>
 		<parsable targetfile="$INSTALL_PATH/bin/win32-service/wrapper.conf"/>
 	</pack>
-	<!-- TODO: Overwrite the config files for the persistence layer -->
-	<!-- TODO: Parse the files that need passwords -->
+	
 	<pack name="HSQLDB" id="HSQLDB" required="yes" conditionid="use.hsqldb">
         <description>Contains configuration files for the HSQLDB database.</description>
         <singlefile src="options/hsqldb/ConfigPURLSDB.xml" target="$INSTALL_PATH/modules/mod-purl-storage/etc/ConfigPURLSDB.xml" override="true"/>
         <singlefile src="options/hsqldb/ConfigRDBMS.xml" target="$INSTALL_PATH/modules/test-mod-purl-storage/etc/ConfigRDBMS.xml" override="true"/>
         <singlefile src="options/hsqldb/ConfigRDBMS.xml" target="$INSTALL_PATH/modules/mod-purl-admin/etc/ConfigRDBMS.xml" override="true"/>
     </pack>
+
     <pack name="MySQL" id="MySQL" required="yes" conditionid="use.mysql">
         <description> Contains configuration files the MySQL database.</description>
         <singlefile src="options/mysql/ConfigPURLSDB.xml" target="$INSTALL_PATH/modules/mod-purl-storage/etc/ConfigPURLSDB.xml" override="true"/>
@@ -113,10 +116,12 @@
 		<parsable targetfile="$INSTALL_PATH/modules/test-mod-purl-storage/etc/ConfigRDBMS.xml"/>
 		<parsable targetfile="$INSTALL_PATH/modules/mod-purl-admin/etc/ConfigRDBMS.xml"/>
     </pack>
+
 	<pack name="Javadoc" id="Javadoc" required="no" preselected="no">
 	    <description>Javadoc documentation for developers.</description>
 	    <file targetdir="$INSTALL_PATH/" src="../javadoc"/>
 	</pack>
+	
 	<pack name="Source Code" id="Source Code" required="no" preselected="no">
 	    <description>Source code for the PURL server.</description>
 	    <file targetdir="$INSTALL_PATH" src="NetKernel-Base/build"/>
