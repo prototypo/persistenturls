@@ -21,7 +21,7 @@ public class SessionHelper {
         // TODO: Read this in from a configuration file
         Set<String> uriSet = new HashSet<String>();
         uriSet.add("ffcpl:/user"); 
-        uriSet.add("ffcpl:/admin/user");         
+        uriSet.add("ffcpl:/admin/pending");
         methodURIRequiresSessionMap.put("GET", uriSet);
         uriSet = new HashSet<String>();
         uriSet.add("ffcpl:/admin/purl");
@@ -45,6 +45,7 @@ public class SessionHelper {
         // GETs that don't require Sessions
         uriSet = new HashSet<String>();
         uriSet.add("ffcpl:/purl");
+        uriSet.add("ffcpl:/admin/user");        
         uriSet.add("ffcpl:/admin/targetpurl");
         uriSet.add("ffcpl:/admin/targetpurls");
         uriSet.add("ffcpl:/admin/group");
