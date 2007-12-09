@@ -1,5 +1,6 @@
 PURL Server Installation Instructions
-December 20, 2007
+Version 1.0b4
+December 21, 2007
 purlz@zepheira.com
 
 ----------------
@@ -34,13 +35,13 @@ functional instance of 1060 NetKernel as well as the PURL service.
 
 1)  Download the JAR installer:
 
-  http://purlz.org/project/purl/downloads/purlz-installer-1.0b3.jar
+  http://purlz.org/project/purl/downloads/PURLZ-Server-1.0b4.jar
 
 2) Run the installer and follow its directions.  If you operating
 system does not allow JAR files to be executed directly, run the
 installer using this command:
 
-  java -jar purlz-installer-1.0b1.jar
+  java -jar PURLZ-Server-1.0b4.jar
 
 
 3) Hit http://localhost:8080/docs/index.html with a Web browser. Help
@@ -83,7 +84,7 @@ labeled "next".
 
 5) Enter the URL to the PURL server:
 
-  http://purlz.org/project/purl/downloads/purlz-1.0b1.zip
+  http://purlz.org/project/purl/downloads/purlz-1.0b4.zip
 
 6) Try the tests:
 
