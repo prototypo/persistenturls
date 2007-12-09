@@ -103,7 +103,7 @@ function onLoginStatusResponse (message, headers, callingContext) {
 		// "Parse" the XML
 		if ( message.indexOf("logged out") > -1 ) {
 			// The user is logged out or does not have an account.
-			resultBlock.innerHTML = "<p>Anonymous (<a href=\"/admin/login/login.bsh?referrer=" + callingContext + "\">log in</a>)</p>";
+			resultBlock.innerHTML = "<form action=\"/admin/login/login.bsh?referrer=" + callingContext + "\" method=\"POST\" name=\"loginForm\" id=\"loginForm\">Anonymous (<a href=\"#\" onClick=\"login()\">log in</a>)</form>";
 		} else if ( message.indexOf("logged in") > -1 ) {
 			// The user is logged in.
 			var uid = message.replace(/<uid>(.*)<\/uid>/, "$1");
@@ -115,6 +115,11 @@ function onLoginStatusResponse (message, headers, callingContext) {
 	} else {
 		resultBlock.innerHTML += "<p class='error'>ERROR: Content-Type of results not supported.  Expected an XML message from the PURL server.<\/p>";
 	}
+}
+
+
+function login() {
+	document.loginForm.submit();
 }
 
 
