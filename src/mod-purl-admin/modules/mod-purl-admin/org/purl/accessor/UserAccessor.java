@@ -257,6 +257,7 @@ public class UserAccessor extends AbstractAccessor {
     static private class UserAutoCreateCommand extends PURLCommand {
         
         private PURLCommand createCmd;
+        private ResourceFilter userFilter = new UserPrivateDataFilter();
         
         private UserAutoCreateCommand() {
             super(null, null, null, null);
@@ -280,9 +281,15 @@ public class UserAccessor extends AbstractAccessor {
                 String[] parts = uri.split("/");
                 int length = parts.length;
                 req.addArgument("param", new StringAspect("<user><id>" + parts[length-1] + "</id></user>")); 
-                IURRepresentation iur = context.issueSubRequest(req);
-                IAspectString sa = (IAspectString) context.transrept(iur, IAspectString.class);
-                System.out.println(sa.getString());
+                context.issueSubRequest(req);
+                
+                req=context.createSubRequest("active:purl-storage-query-user");
+                req.addArgument("uri", "ffcpl:/user/" + parts[length-1]);
+                req.setAspectClass(IAspectXDA.class);
+                IAspectXDA result = (IAspectXDA) context.issueSubRequestForAspect(req);
+                resp = context.createResponseFrom(userFilter.filter(context, result));
+                resp.setMimeType("text/xml");                
+                
             } catch(Throwable t) {
                 t.printStackTrace();
             }
