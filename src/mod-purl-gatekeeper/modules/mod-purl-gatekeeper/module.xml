@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><module>
     <identity>
 		<uri>urn:org:purl:gatekeeper</uri>
-		<version>0.0.32</version>
+		<version>0.0.33</version>
     </identity>
 	<info>
 		<name>PURLS Gatekeeper Module</name>
@@ -52,6 +52,10 @@
 			<match>ffcpl:/resources/.*</match>
 			<match>ffcpl:/etc/(SessionPolicy|GateKeeperPolicy|HTTPBridgeConfig)\.xml</match>
 		</this>
+		<rewrite>
+			<match>(ffcpl:/.*.html).*</match>
+			<to>$1</to>
+		</rewrite>
 		<rewrite>
 			<match>ffcpl:/(admin/login/)(.*.bsh.*)</match>
 			<to>active:beanshell+operator@ffcpl:/resources/$2</to>
