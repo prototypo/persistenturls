@@ -55,7 +55,7 @@ contextMap["Delete"] = ["delete", "d_", 6, 4];
 var resultBlock = $("results");
 var htmlResults = "";
 
-function load() {
+function load(referrer) {
 	// Get the current URL and look for fragments.
 	// If found, attempt to show desired form.
 	var location = document.URL;
@@ -64,7 +64,7 @@ function load() {
 	var queryStringIndex = location.indexOf("?");
 	
 	// Show the login status in a div on the page.
-	showLoginStatus();
+	showLoginStatus(referrer);
 	
 	if ( urlFragmentIndex > -1 && queryStringIndex == -1 ) {
 		// Our URL has a fragment identifier, but no query string.
@@ -84,10 +84,11 @@ function load() {
 }
 
 
-function showLoginStatus() {
+function showLoginStatus(referrer) {
 	resultBlock = $("loginstatus");
 	resultBlock.innerHTML = "<p>Getting login status...<\/p>";
-	ajaxCaller.get("/admin/loginstatus", null, onLoginStatusResponse, false, "loginstatus");
+	// The referrer (the page we are on when we submit) is the callingContext
+	ajaxCaller.get("/admin/loginstatus", null, onLoginStatusResponse, false, referrer);
 }
 
 
@@ -102,7 +103,7 @@ function onLoginStatusResponse (message, headers, callingContext) {
 		// "Parse" the XML
 		if ( message.indexOf("logged out") > -1 ) {
 			// The user is logged out or does not have an account.
-			resultBlock.innerHTML = "<p>Anonymous (<a href=\"/docs/login.html\">log in</a>)</p>";
+			resultBlock.innerHTML = "<p>Anonymous (<a href=\"/docs/login.bsh?referrer=" + callingContext + "\">log in</a>)</p>";
 		} else if ( message.indexOf("logged in") > -1 ) {
 			// The user is logged in.
 			var uid = message.replace(/<uid>(.*)<\/uid>/, "$1");
