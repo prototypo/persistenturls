@@ -44,13 +44,13 @@
     <file>queryPURL.idoc</file>
     <file>queryPURLMaintainers.idoc</file>
     <file>updatePURL.idoc</file>
-    <file>usersIndexed.idoc</file>
-    <file>unindexedUsers.idoc</file>
-    <file>purlsIndexed.idoc</file>
-    <file>unindexedPURLs.idoc</file>
-    <file>groupsIndexed.idoc</file>
-    <file>unindexedGroups.idoc</file>
-    <file>domainsIndexed.idoc</file>
     <file>unindexedDomains.idoc</file>
-    
+    <file>unindexedGroups.idoc</file>
+    <file>unindexedPURLs.idoc</file>
+    <file>unindexedUsers.idoc</file>
+    <file>domainsIndexed.idoc</file>
+    <file>groupsIndexed.idoc</file>
+    <file>purlsIndexed.idoc</file>
+    <file>usersIndexed.idoc</file>  
+    <file>batchLoad.idoc</file>          
 </dbfiles>
