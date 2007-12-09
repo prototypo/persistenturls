@@ -67,24 +67,11 @@ limitations under the License.
 			decision = getSelectedRadio(id + "_decision");			
 			urlVars = {}
 			bodyVars = {
-				decision: decision
+				decision: decision,
+				referrer: "/docs/admin/domain.html"
 			}
-			
-			/*
-			// TODO: DBG: Fake this for now until the URL is available on the server.  REMOVE ALL THIS WHEN URL WORKS.
-			if (count > 0) {
-				message = "<results><domain id=\"brian\" status=\"rejected\" /></results>";
-			} else {
-				message = "<results><domain id=\"brian\" status=\"approved\" /></results>";
-			}
-			count++;
-			var headers = new Object();
-			headers["Content-Type"] = "text/xml";
-			onPendingResultsResponse(message, headers, id);
-			*/
 			
 			// Use the id as the calling context to allow for addressing of the right elements.
-			// USE THIS:
 			ajaxCaller.postVars("/admin/pending/domain/" + id, bodyVars, urlVars, onPendingResultsResponse, false, id);
 		}
 		return false;
@@ -97,18 +84,11 @@ limitations under the License.
 		signalLoadingPendingList();
 		bodyVars = {}
 		// GET the list of pending domain requests.
-		
-		/*
-		// TODO: DBG: Fake this for now until this URL is available on the server.  REMOVE ALL THIS WHEN URL WORKS.
-		var message = "<pending><domain id=\"brian\"><name>Brian Sletten</name><affiliation>Zepheira</affiliation><email>brian@example.com</email><justification>User-provided justification goes here.</justification></domain><domain id=\"david\"><name>David Wood</name><affiliation>Zepheira</affiliation><email>david@example.com</email><justification>Ain't none.</justification></domain><domain id=\"ralph\"><name>Ralph Swick</name><affiliation>W3C</affiliation><email>ralph@example.com</email><justification>Because we like Ralph.</justification></domain></pending>";
-		var headers = new Object();
-		headers["Content-Type"] = "text/xml";
-		onPendingResponse(message, headers, "Pending domains");
-		*/
-		
-		// USE THIS:
 		ajaxCaller.get("/admin/pending/domain/", bodyVars, onPendingResponse, false, "Pending domains");
 
+		// Show the login status in a div on the page.
+		showLoginStatus();
+		
 		return false;
 	}
 
@@ -117,6 +97,11 @@ limitations under the License.
 </head>
 
 <body onload="loadPendingDomains()">
+
+	<div id="loginstatus">
+		<p>Login status not determined.  Do you have Javascript and cookies enabled?</p>
+	</div>
+
 	<div id="header">
 		<h1>PURL Domain Approval</h1>
 

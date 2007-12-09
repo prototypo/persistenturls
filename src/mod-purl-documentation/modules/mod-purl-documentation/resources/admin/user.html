@@ -64,7 +64,8 @@ limitations under the License.
 			decision = getSelectedRadio(id + "_decision");			
 			urlVars = {}
 			bodyVars = {
-				decision: decision
+				decision: decision,
+				referrer: "/docs/admin/user.html"
 			}
 			
 			// Use the id as the calling context to allow for addressing of the right elements.
@@ -82,6 +83,9 @@ limitations under the License.
 		// GET the list of pending user requests.
 		ajaxCaller.get("/admin/pending/user/", bodyVars, onPendingResponse, false, "Pending users");
 
+		// Show the login status in a div on the page.
+		showLoginStatus();
+		
 		return false;
 	}
 
@@ -90,6 +94,11 @@ limitations under the License.
 </head>
 
 <body onload="loadPendingUsers()">
+
+	<div id="loginstatus">
+		<p>Login status not determined.  Do you have Javascript and cookies enabled?</p>
+	</div>
+
 	<div id="header">
 		<h1>PURL User Approval</h1>
 

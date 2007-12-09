@@ -146,9 +146,7 @@ handles results from the server in response to form submissions.
 			alert("You must provide a group id to identify the group you wish to delete.  Please enter a group id.");
 		} else {
 			signalLoadingResults();
-			bodyVars =  {
-				referrer: "/docs/group.html#delete"
-			};
+			bodyVars =  {};
 			ajaxCaller.deleteIt("/admin/group/" + my_id, bodyVars, onResponse, false, "Delete");
 		}
 		clearErrorIndications();
