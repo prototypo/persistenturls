@@ -42,12 +42,12 @@ installer using this command:
 
   java -jar purlz-installer-1.0b1.jar
 
-3) NetKernel's entrypoints must be updated upon installation so it can
-initialize several cron jobs. Do that by hitting this URL:
-http://localhost:1060/ep+name@app_ext_introspect_reindex
 
-4) Hit http://localhost:8080/docs/index.html with a Web browser. Help
+3) Hit http://localhost:8080/docs/index.html with a Web browser. Help
 is available at http://localhost:8080/docs/help.html
+
+4) Log in as user 'admin' with password 'password'.  You may change the
+password by modifying the user record after you have logged in.
 
 5) Have fun!
 
@@ -85,13 +85,7 @@ labeled "next".
 
   http://purlz.org/project/purl/downloads/purlz-1.0b1.zip
 
-6) Errors may occur on server restart because the PURL server requires
-a reindexing of NetKernel's entrypoints.  Do not worry.  Reindex by
-going to:
-
-  http://localhost:1060/ep+name@app_ext_introspect_reindex
-
-7) Try the tests:
+6) Try the tests:
 
 (a) For the server-side tests, hit http://localhost:1060/ep+name@app_xunit
 
@@ -100,8 +94,11 @@ going to:
  $ cd <repository>/src
  $ ant test
 
-8) Hit http://localhost:8080/docs/index.html with a Web browser. Help
+7) Hit http://localhost:8080/docs/index.html with a Web browser. Help
 is available at http://localhost:8080/docs/help.html
+
+8) Log in as user 'admin' with password 'password'.  You may change the
+password by modifying the user record after you have logged in.
 
 9) Have fun!
 
@@ -209,11 +206,7 @@ and comment out the following lines:
  $ cd <NK_Install_dir>/bin
  $ ./start.sh
 
-9) Hit the following URL to update NetKernel's entrypoints so it can
-find the cron job on purl-storage module:
-http://localhost:1060/ep+name@app_ext_introspect_reindex
-
-10) Try the tests:
+9) Try the tests:
 
 (a) For the server-side tests, hit http://localhost:1060/ep+name@app_xunit
 
@@ -222,7 +215,10 @@ http://localhost:1060/ep+name@app_ext_introspect_reindex
  $ cd <repository>/src
  $ ant test
 
-11) Hit http://localhost:8080/docs/index.html with a Web browser. Help
+10) Hit http://localhost:8080/docs/index.html with a Web browser. Help
 is available at http://localhost:8080/docs/help.html
+
+11) Log in as user 'admin' with password 'password'.  You may change the
+password by modifying the user record after you have logged in.
 
 12) Have fun!

@@ -58,8 +58,7 @@
 		</field>
 		<field type="staticText" align="left" txt=" "/>
 		<field type="staticText" align="left" txt="PLEASE NOTE:"/>
-		<field type="staticText" align="left" txt="1)  The server will show an error the first time it is started.  This is expected.  Please got to this URL immediately after the server starts to complete installation:"/>
-		<field type="staticText" align="left" txt="  http://localhost:1060/ep+name@app_ext_introspect_reindex"/>
+		<field type="staticText" align="left" txt="1)  Hit http://localhost:8080/docs/index.html once the server is running.  You may log into the server as 'admin' with the password 'password' and change the password after you have logged in by modifying the user record."/>
 		<field type="staticText" align="left" txt="2)  The PURL server will not be stopped when you quit the installer."/>
 	</panel>
 </userInput>
