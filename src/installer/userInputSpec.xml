@@ -1,10 +1,12 @@
 <?xml version="1.0"?>
 <userInput>
 	<panel order="0" layout="right" id="choosehost">
-		<field type="staticText" align="left" txt="Please provide the name of the host on which the PURL server will run.  If this machine has more than one name, you may change it here." id="staticText.text"/>
+		<field type="staticText" align="left" txt="Please provide the name of the host on which the PURL server will run.  If this machine has more than one name, you may change it here.  Please provide a fully qualified host name (e.g. myhost.example.com)" id="staticText.text"/>
 		<field type="text" variable="PURLHOST">
 			<spec txt="PURL server host name:" id="text.label.0" size="25" set="${HOST_NAME}"/>
 		</field>
+		<field type="staticText" align="left" txt=" "/>
+		<field type="staticText" align="left" txt="NB: You may change or add to the list of host names later by editing the configuration file $INSTALL_PATH/modules/mod-purl-virtualhost/module.xml"/>
 	</panel>
 	<panel order="1">
 		<field type="staticText" align="left" txt="The PURL server is architected to use alternative persistent storage systems." id="staticText.text"/>

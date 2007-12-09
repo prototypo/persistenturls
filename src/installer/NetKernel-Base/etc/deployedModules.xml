@@ -63,6 +63,7 @@
 	-->
 	
 	<!-- PURL Server modules -->
+	<module>modules/mod-purl-gatekeeper/</module>
 	<module>modules/mod-purl-storage/</module>
 	<module>modules/test-mod-purl-storage/</module>
 	<module>modules/mod-purl-admin/</module>

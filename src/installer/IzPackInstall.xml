@@ -79,6 +79,7 @@
 		<file targetdir="$INSTALL_PATH/modules" src="../mod-purl-storage/modules/test-mod-purl-storage"/>
 		<file targetdir="$INSTALL_PATH/modules" src="../mod-purl-admin/modules/mod-purl-admin"/>
 		<file targetdir="$INSTALL_PATH/modules" src="../mod-purl-admin/modules/test-mod-purl-admin"/>
+		<file targetdir="$INSTALL_PATH/modules" src="../mod-purl-gatekeeper/modules/mod-purl-gatekeeper"/>
 		<!-- Overwrite the file that define installer options,
 		     so we can set them later by parsing. -->
 		<singlefile src="options/PURLConfig.xml" target="$INSTALL_PATH/modules/mod-purl-admin/etc/PURLConfig.xml" override="true"/>

@@ -26,9 +26,8 @@
 		-->
 		<uri>
 			<match>jetty://localhost.*</match>
-			<match>jetty://127.0.0.1.*</match>
+			<match>jetty://127\.0\.0\.1.*</match>
 			<match>jetty://$PURLHOST.*</match>
-			<match>jetty://$IP_ADDRESS.*</match>
 			<!-- Add any other jetty://<servername> matches that you want
 				 to match.  -->
 			<match>ffcpl:/etc/HTTPBridgeConfig.xml</match>
