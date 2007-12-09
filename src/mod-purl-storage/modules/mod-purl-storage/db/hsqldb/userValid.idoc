@@ -20,10 +20,10 @@
 			<operand>var:sql</operand>
 			<target>this:response</target>
 		</instr>
-		<instr>
+<!--		<instr>
 			<type>expire</type>
 			<operand>this:response</operand>
 			<target>this:response</target>
-		</instr>
+		</instr>-->
 	</seq>
 </idoc>

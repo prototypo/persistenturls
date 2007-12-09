@@ -1,0 +1,20 @@
+<idoc>
+	<seq>
+		<instr>
+			<type>sqlQuery</type>
+			<operand>
+				<sql>
+					select "p_id" from purls
+						where "indexed" = false
+							limit 500;
+				</sql>
+			</operand>
+			<target>this:response</target>
+		</instr>
+		<instr>
+			<type>expire</type>
+			<operand>this:response</operand>
+			<target>this:response</target>
+		</instr>
+	</seq>
+</idoc>
