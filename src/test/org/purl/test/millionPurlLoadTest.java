@@ -60,8 +60,8 @@ public final class millionPurlLoadTest {
 			try {
 				//int delay = delayBase + (i * 10000);
 				Thread.sleep(delay);
-			} catch (Exception e) {
-				// An InterruptedException may be thrown, but we don't care.
+			} catch (Exception e2) {
+				System.err.println("Error: " + e2.getMessage() );
 			}
 			
 		}
