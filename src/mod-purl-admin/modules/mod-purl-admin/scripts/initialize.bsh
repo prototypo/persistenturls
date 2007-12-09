@@ -14,11 +14,14 @@ main() {
 	// Intialize the Lucene Index
 	if(!context.exists("ffcpl:/index/purls-initialized")) {
 		System.out.println("Reinitializing Lucene Index...");
-		NKHelper.initializeLuceneIndex(context, "ffcpl:/index/purls");
+		NKHelper.initializeLuceneIndex(context, "ffcpl:/index/purl");
+		NKHelper.initializeLuceneIndex(context, "ffcpl:/index/user");
+		NKHelper.initializeLuceneIndex(context, "ffcpl:/index/domain");
+		NKHelper.initializeLuceneIndex(context, "ffcpl:/index/group");		
 		context.sinkAspect("ffcpl:/index/purls-initialized", new StringAspect("Initialized"));
 		sb.append("<lucene-index>initialized</lucene-index>");
 	}
-
+	
 	sb.append("</purl-initialization>");
 	resp=context.createResponseFrom(new StringAspect(sb.toString()));
 	resp.setMimeType("text/xml");

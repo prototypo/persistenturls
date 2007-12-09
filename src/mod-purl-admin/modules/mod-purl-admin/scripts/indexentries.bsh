@@ -1,0 +1,225 @@
+import org.ten60.netkernel.xml.representation.*;
+import com.ten60.netkernel.urii.aspect.*;
+import org.purl.accessor.util.*;
+
+main() {
+
+	//acquireLock("active:purl-reindex");
+	
+	resp = null;
+	
+	if(!Indexer.alreadyIndexing() && Indexer.acquireIndexingLock()) {
+		try {
+			indexUsers();
+			indexDomains();
+			indexGroups();
+			indexPURLs();	
+	
+			resp=context.createResponseFrom(new StringAspect("<indexed-entries/>"));	
+
+		} finally {
+			//releaseLock("active:purl-reindex");
+			Indexer.doneIndexing();
+		}
+	} else {
+		resp=context.createResponseFrom(new StringAspect("<already-indexing/>"));	
+	}
+	
+	resp.setMimeType("text/xml");
+	context.setResponse(resp);
+}
+
+indexUsers() {
+
+	uriResolver = new UserResolver();
+	req=context.createSubRequest("active:purl-storage-unindexed-users");
+	req.setAspectClass(IAspectXDA.class);
+	res=context.issueSubRequestForAspect(req);
+	xdaRO = res.getXDA().readOnlyIterator("/results/row");
+	sb = null;
+	count = 0;
+	
+	try {
+		sb = new StringBuffer("<users>");
+		while(xdaRO.hasNext()) {
+			xdaRO.next();
+			userID = xdaRO.getText("userid", true);
+			req = context.createSubRequest("active:purl-storage-query-user");
+        	req.addArgument("uri", "ffcpl:/user/" + userID);
+			req.setAspectClass(IAspectString.class);
+			sa = context.issueSubRequestForAspect(req);
+		
+			NKHelper.indexResource(context, "ffcpl:/index/user", uriResolver.getURI(userID), sa);
+			
+			sb.append("<user><id>" + userID + "</id></user>");
+			
+			count++;
+		
+			System.out.println(sa.getString());
+		}
+	} finally {
+		NKHelper.closeIndex(context, "ffcpl:/index/user");
+		
+		if(count>0) {
+			sb.append("</users>");
+			
+			System.out.println(sb.toString());
+		
+			req = context.createSubRequest("active:purl-storage-users-indexed");
+			req.addArgument("param", new StringAspect(sb.toString()));
+			req.setAspectClass(IAspectString.class);
+			sa = context.issueSubRequestForAspect(req);
+		
+			System.out.println(sa.getString());
+		}
+	}
+}
+
+indexDomains() {
+	System.out.println("****Checking Domains...");
+
+	uriResolver = new DomainResolver();
+	req=context.createSubRequest("active:purl-storage-unindexed-domains");
+	req.setAspectClass(IAspectXDA.class);
+	res=context.issueSubRequestForAspect(req);
+	xdaRO = res.getXDA().readOnlyIterator("/results/row");
+	sb = null;
+	count = 0;
+	
+	try {
+		sb = new StringBuffer("<domains>");
+		while(xdaRO.hasNext()) {
+			xdaRO.next();
+			dID = xdaRO.getText("d_id", true);
+			req = context.createSubRequest("active:purl-storage-query-domain");
+        	req.addArgument("uri", "ffcpl:/domain/" + dID);
+			req.setAspectClass(IAspectString.class);
+			sa = context.issueSubRequestForAspect(req);
+		
+			NKHelper.indexResource(context, "ffcpl:/index/domain", uriResolver.getURI(dID), sa);
+			
+			sb.append("<domain><id>" + dID + "</id></domain>");
+			
+			count++;
+		
+			System.out.println(sa.getString());
+		}
+	} finally {
+		NKHelper.closeIndex(context, "ffcpl:/index/domain");
+		
+		if(count>0) {
+			sb.append("</domains>");
+			
+			System.out.println(sb.toString());
+		
+			req = context.createSubRequest("active:purl-storage-domains-indexed");
+			req.addArgument("param", new StringAspect(sb.toString()));
+			req.setAspectClass(IAspectString.class);
+			sa = context.issueSubRequestForAspect(req);
+		
+			System.out.println(sa.getString());
+		}
+	}
+}
+
+indexGroups() {
+	System.out.println("****Checking Groups...");
+
+	uriResolver = new GroupResolver();
+	req=context.createSubRequest("active:purl-storage-unindexed-groups");
+	req.setAspectClass(IAspectXDA.class);
+	res=context.issueSubRequestForAspect(req);
+	xdaRO = res.getXDA().readOnlyIterator("/results/row");
+	sb = null;
+	count = 0;
+	
+	try {
+		sb = new StringBuffer("<groups>");
+		while(xdaRO.hasNext()) {
+			xdaRO.next();
+			gID = xdaRO.getText("g_id", true);
+			req = context.createSubRequest("active:purl-storage-query-group");
+        	req.addArgument("uri", "ffcpl:/group/" + gID);
+			req.setAspectClass(IAspectString.class);
+			sa = context.issueSubRequestForAspect(req);
+		
+			NKHelper.indexResource(context, "ffcpl:/index/group", uriResolver.getURI(gID), sa);
+			
+			sb.append("<group><id>" + gID + "</id></group>");
+			
+			count++;
+		
+			System.out.println(sa.getString());
+		}
+	} finally {
+		NKHelper.closeIndex(context, "ffcpl:/index/group");
+		
+		if(count>0) {
+			sb.append("</groups>");
+			
+			System.out.println(sb.toString());
+		
+			req = context.createSubRequest("active:purl-storage-groups-indexed");
+			req.addArgument("param", new StringAspect(sb.toString()));
+			req.setAspectClass(IAspectString.class);
+			sa = context.issueSubRequestForAspect(req);
+		
+			System.out.println(sa.getString());
+		}
+	}
+}
+
+indexPURLs() {
+	System.out.println("****Checking PURLS...");
+
+	uriResolver = new PURLURIResolver();
+	req=context.createSubRequest("active:purl-storage-unindexed-purls");
+	req.setAspectClass(IAspectXDA.class);
+	res=context.issueSubRequestForAspect(req);
+	xdaRO = res.getXDA().readOnlyIterator("/results/row");
+	sb = null;
+	count = 0;
+	
+	try {
+		sb = new StringBuffer("<purls>");
+		while(xdaRO.hasNext()) {
+			xdaRO.next();
+			pID = xdaRO.getText("p_id", true);
+			req = context.createSubRequest("active:purl-storage-query-purl");
+        	req.addArgument("uri", "ffcpl:/purl" + pID);
+			req.setAspectClass(IAspectString.class);
+			sa = context.issueSubRequestForAspect(req);
+		
+			NKHelper.indexResource(context, "ffcpl:/index/purl", uriResolver.getURI(pID), sa);
+			
+			sb.append("<purl><id>" + pID + "</id></purl>");
+			
+			count++;
+		}
+		
+		System.out.println("=======================Indexed: " + count + " purls.");
+	} finally {
+		NKHelper.closeIndex(context, "ffcpl:/index/purl");
+		
+		if(count>0) {
+			sb.append("</purls>");
+		
+			req = context.createSubRequest("active:purl-storage-purls-indexed");
+			req.addArgument("param", new StringAspect(sb.toString()));
+			req.setAspectClass(IAspectString.class);
+			sa = context.issueSubRequestForAspect(req);
+		}
+	}
+}
+
+acquireLock(file) {
+	req=context.createSubRequest("active:lock");
+    req.addArgument("operand", file);
+    context.issueSubRequest(req);
+}
+
+releaseLock(file) {
+	req=context.createSubRequest("active:unlock");
+    req.addArgument("operand", file);
+    context.issueSubRequest(req);
+}
