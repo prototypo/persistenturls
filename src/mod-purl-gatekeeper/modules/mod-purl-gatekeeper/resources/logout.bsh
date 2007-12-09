@@ -15,12 +15,14 @@ void main()
 	if(context.exists("this:param:param")) {
 		nvp=context.sourceAspect("this:param:param", IAspectNVP.class);
 		referrer = nvp.getValue("referrer");
-		if(referrer == null) {
-			referrer = "/docs/index.html";
-		}		
 	}
 
+	if(referrer == null) {
+		referrer = "/docs/index.html";
+	}		
+
 	req=context.createSubRequest("active:HTTPRedirect");
+	System.out.println("referrer: " + referrer);
 	req.addArgument("operator", new StringAspect("<url>"+referrer+"</url>"));
 	result=context.issueSubRequest(req);
 	resp=context.createResponseFrom(result);
