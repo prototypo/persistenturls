@@ -106,7 +106,7 @@ function onLoginStatusResponse (message, headers, callingContext) {
 		} else if ( message.indexOf("logged in") > -1 ) {
 			// The user is logged in.
 			var uid = message.replace(/<uid>(.*)<\/uid>/, "$1");
-			resultBlock.innerHTML = "<p>Logged in as " + uid + " (<form action=\"/admin/logout\" method=\"POST\" name=\"logoutForm\" id=\"logoutForm\"><a href=\"/docs/logout.html\" onClick=\"logout()\">log out</a></form>)</p>";
+			resultBlock.innerHTML = "<form action=\"/admin/logout\" method=\"POST\" name=\"logoutForm\" id=\"logoutForm\">Logged in as " + uid + " (<a href=\"#\" onClick=\"logout()\">log out</a>)</form>";
 		} else {
 			// Something is strange about the message.
 			resultBlock.innerHTML = "<p class=\"error\">Error: Server response unreadable.</p>";
