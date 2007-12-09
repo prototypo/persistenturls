@@ -470,12 +470,12 @@ function onPendingResponse(message, headers, callingContext) {
 		// Write the results to the results area.
 		pendingBlock.innerHTML = htmlResults;
 	
-	} else if ( headers["Content-Type"] == "text/html" ) {
+	} else if ( headers["Content-Type"].indexOf("text/html") != -1 ) {
 		// Write the results to the results area.
 		pendingBlock.innerHTML = message;
 		
 	} else {
-		pendingBlock.innerHTML += "<p class='error'>ERROR: Content-Type of results not supported.  Expected an XML message from the PURL server.<\/p>";
+		pendingBlock.innerHTML = "<p class='error'>ERROR: Content-Type of results not supported.  Expected an XML or HTML message from the PURL server.  Received: " + message + "<\/p>";
 	}
 	
 }
