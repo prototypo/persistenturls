@@ -76,7 +76,7 @@ handles results from the server in response to form submissions.
 		var prefix = contextMap[nextAction][1];
 		var passwd1 = $(prefix + 'passwd').value;
 		var passwd2 = $(prefix + 'passwd2').value;
-		if ( passwd1 != passwd2 ) {
+		if ( passwd1 !+ null || passwd1 != "" || passwd1 != passwd2 ) {
 			alert("The passwords do not match.  Please re-enter your password.");
 		} else {
 			if ( nextAction == "Create" ) {
@@ -269,13 +269,13 @@ handles results from the server in response to form submissions.
 										<tr>
 											<td class="property" id="c_passwd_label">Password:</td>
 
-											<td class="value"><input id="c_passwd" name="c_passwd" type="text" /></td>
+											<td class="value"><input id="c_passwd" name="c_passwd" type="password" /></td>
 										</tr>
 
 										<tr>
 											<td class="property" id="c_passwd2_label">Re-enter password:</td>
 
-											<td class="value"><input id="c_passwd2" name="c_passwd2" type="text" /></td>
+											<td class="value"><input id="c_passwd2" name="c_passwd2" type="password" /></td>
 										</tr>
 
 										<tr>
