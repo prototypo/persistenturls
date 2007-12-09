@@ -6,7 +6,8 @@
 			<operator>
 			<stm:group xmlns:stm="http://1060.org/stm">
 				<stm:set xpath="/sql">
-					INSERT INTO users VALUES ( null, 
+					INSERT INTO users VALUES ( null,
+					'<stm:param xpath="/user/@admin"/>',
 					'<stm:param xpath="/user/name/text()"/>',
 					'<stm:param xpath="/user/affiliation/text()"/>',
 					'<stm:param xpath="/user/email/text()"/>',

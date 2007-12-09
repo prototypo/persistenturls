@@ -8,6 +8,7 @@
 				<stm:set xpath="/sql">
 	CREATE CACHED TABLE users (
 		"z_id"        	INTEGER IDENTITY,
+		"admin"			BOOLEAN,
 		"fullname"		VARCHAR(100),
 		"affiliation"	VARCHAR(100),
 		"email"			VARCHAR(100),

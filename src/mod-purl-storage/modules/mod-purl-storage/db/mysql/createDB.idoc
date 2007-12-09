@@ -9,6 +9,7 @@
                     <sql>
                         CREATE TABLE IF NOT EXISTS users (
                     		z_id        	INTEGER UNSIGNED NOT NULL AUTO_INCREMENT, PRIMARY KEY (z_id),
+                    		admin			BOOLEAN,
                     		fullname		VARCHAR(100),
                     		affiliation	VARCHAR(100),
                     		email			VARCHAR(100),
