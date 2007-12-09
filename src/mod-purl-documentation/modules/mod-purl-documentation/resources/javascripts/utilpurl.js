@@ -373,7 +373,7 @@ function formatPendingResults(xmlArray) {
 		}
 		html += "<\/dl></td>";
 	
-		html += "</tr></table></form><hr>"
+		html += "</tr></table></form><hr>";
 	}
 	
 	return html;
@@ -479,7 +479,7 @@ function onLoginResponse(message, headers, callingContext) {
 						htmlResults += "<dd>" + "Logged in as: " + fieldValue + "<\/dd>";
 					}
 					if ( fieldName == "referrer" ) {
-						htmlResults += "<dd>" + "Return to the <a href=\"" + fieldValue + "\">" + referring page + "</a>" + "<\/dd>";
+						htmlResults += "<dd>Return to the <a href=\"" + fieldValue + "\">referring page</a><\/dd>";
 					}
 				}
 
