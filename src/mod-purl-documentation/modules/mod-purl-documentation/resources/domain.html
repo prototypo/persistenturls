@@ -80,7 +80,8 @@ handles results from the server in response to form submissions.
 				name: $('c_name').value,
 				maintainers: maintainers,
 				writers: writers,
-				public: $('c_public').checked
+				public: $('c_public').checked,
+				referrer: "/docs/domain.html#create"
 			}
 			ajaxCaller.postVars("/admin/domain/" + my_id, bodyVars, urlVars, onResponse, false, "Create");
 		}
@@ -108,7 +109,8 @@ handles results from the server in response to form submissions.
 			parameters = {
 				urlVars: urlVars,
 				bodyType: bodyType,
-				body: body
+				body: body,
+				referrer: "/docs/domain.html#modify"
 			};
 			ajaxCaller.putBody("/admin/domain/" + my_id, parameters.urlVars, onResponse, false, "Modify", parameters.bodyType, parameters.body);
 		}
@@ -124,7 +126,8 @@ handles results from the server in response to form submissions.
 				name: $('s_name').value,
 				maintainers: $('s_maintainers').value,
 				writers: $('s_writers').value,
-				tombstone: $('s_tombstone').checked
+				tombstone: $('s_tombstone').checked,
+				referrer: "/docs/domain.html#search"
 		}
 		if ( my_id == "" | my_id == null ) {
 			// No domain id is given, so we call the parent resource.
@@ -144,7 +147,9 @@ handles results from the server in response to form submissions.
 			alert("You must provide a domain id to identify the domain you wish to delete.  Please enter a domain id.");
 		} else {
 			signalLoadingResults();
-			bodyVars =  {};
+			bodyVars =  {
+				referrer: "/docs/domain.html#delete"
+			};
 			ajaxCaller.deleteIt("/admin/domain/" + my_id, bodyVars, onResponse, false, "Delete");
 		}
 		clearErrorIndications();

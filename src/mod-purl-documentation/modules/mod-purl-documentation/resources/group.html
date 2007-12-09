@@ -79,7 +79,8 @@ handles results from the server in response to form submissions.
 				name: $('c_name').value,
 				maintainers: maintainers,
 				members: $('c_members').value,
-				comments: $('c_comments').value
+				comments: $('c_comments').value,
+				referrer: "/docs/group.html#create"
 			};
 			ajaxCaller.postVars("/admin/group/" + my_id, bodyVars, urlVars, onResponse, false, "Create");
 		}
@@ -107,7 +108,8 @@ handles results from the server in response to form submissions.
 			parameters = {
 				urlVars: urlVars,
 				bodyType: bodyType,
-				body: body
+				body: body,
+				referrer: "/docs/group.html#modify"
 			};
 			ajaxCaller.putBody("/admin/group/" + my_id, parameters.urlVars, onResponse, false, "Modify", parameters.bodyType, parameters.body);
 		}
@@ -123,7 +125,8 @@ handles results from the server in response to form submissions.
 				name: $('s_name').value,
 				maintainers: $('s_maintainers').value,
 				members: $('s_members').value,
-				tombstone: $('s_tombstone').checked
+				tombstone: $('s_tombstone').checked,
+				referrer: "/docs/group.html#search"
 		};
 		if ( my_id == "" | my_id == null ) {
 			// No group id is given, so we call the parent resource.
@@ -143,7 +146,9 @@ handles results from the server in response to form submissions.
 			alert("You must provide a group id to identify the group you wish to delete.  Please enter a group id.");
 		} else {
 			signalLoadingResults();
-			bodyVars =  {};
+			bodyVars =  {
+				referrer: "/docs/group.html#delete"
+			};
 			ajaxCaller.deleteIt("/admin/group/" + my_id, bodyVars, onResponse, false, "Delete");
 		}
 		clearErrorIndications();
