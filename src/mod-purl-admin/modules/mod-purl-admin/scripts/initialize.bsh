@@ -22,8 +22,47 @@ main() {
 		sb.append("<lucene-index>initialized</lucene-index>");
 	}
 	
+	if(installAdminUsers()) {
+		sb.append("<admin-users>created</admin-users>");
+	}
+	
 	sb.append("</purl-initialization>");
 	resp=context.createResponseFrom(new StringAspect(sb.toString()));
 	resp.setMimeType("text/xml");
 	context.setResponse(resp);
+}
+
+installAdminUsers() {
+	config = context.sourceAspect("ffcpl:/etc/PURLConfig.xml", IAspectXDA.class);
+	xdaItor = config.getXDA().readOnlyIterator("/purl-config/adminUsers/user");
+	while(xdaItor.hasNext()) {
+		xdaItor.next();
+		name = xdaItor.getText(xdaItor.getCurrentXPath(), true);
+		
+		sb = new StringBuffer("<user admin=\"true\">");
+		sb.append("<id>");
+		sb.append(name);
+		sb.append("</id>");
+		sb.append("<name>User of Steel</name>");
+		sb.append("<affiliation>PURL Server</affiliation>");
+        sb.append("<email/>");
+        sb.append("<password>");
+        sb.append(NKHelper.getMD5Value(context, "password"));
+        sb.append("</password>");
+        sb.append("<hint>It is a bad security practice.</hint>");
+        sb.append("<justification/>");
+        sb.append("</user>");
+        
+        sa = new StringAspect(sb.toString());
+        
+        req = context.createSubRequest("active:purl-storage-create-user");
+        req.addArgument("param", sa);
+        res = context.issueSubRequest(req);
+        
+        req=context.createSubRequest("active:purl-storage-approve-user");
+		req.addArgument("param", sa);
+		res = context.issueSubRequest(req);
+	}
+	
+	return true;
 }

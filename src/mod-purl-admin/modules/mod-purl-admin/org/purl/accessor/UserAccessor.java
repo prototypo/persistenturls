@@ -179,7 +179,7 @@ public class UserAccessor extends AbstractAccessor {
                     createUser = true;
                 }
 
-                StringBuffer sb = new StringBuffer( "<user>" );
+                StringBuffer sb = new StringBuffer( "<user admin=\"false\">" );
                 sb.append("<id>");
                 sb.append(NKHelper.getLastSegment(context));
                 sb.append("</id>");
