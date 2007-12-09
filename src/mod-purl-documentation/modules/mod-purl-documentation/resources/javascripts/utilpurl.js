@@ -106,7 +106,7 @@ function onLoginStatusResponse (message, headers, callingContext) {
 			resultBlock.innerHTML = "<form action=\"/admin/login/login.bsh?referrer=" + callingContext + "\" method=\"POST\" name=\"loginForm\" id=\"loginForm\">Anonymous (<a href=\"#\" onClick=\"login()\">log in</a>)</form>";
 		} else if ( message.indexOf("logged in") > -1 ) {
 			// The user is logged in.
-			var uid = message.replace(/<uid>(.*)<\/uid>/, "$1");
+			var uid = message.replace(/.*<uid>(.*)<\/uid>.*/, "$1");
 			resultBlock.innerHTML = "<form action=\"/admin/logout\" method=\"POST\" name=\"logoutForm\" id=\"logoutForm\">Logged in as " + uid + " (<a href=\"#\" onClick=\"logout()\">log out</a>)</form>";
 		} else {
 			// Something is strange about the message.
