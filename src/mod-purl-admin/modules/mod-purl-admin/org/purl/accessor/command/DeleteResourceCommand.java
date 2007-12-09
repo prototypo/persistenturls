@@ -18,8 +18,8 @@ package org.purl.accessor.command;
  *
  */
 
+import org.purl.accessor.util.AccessController;
 import org.purl.accessor.util.NKHelper;
-import org.purl.accessor.util.ResourceDeleter;
 import org.purl.accessor.util.ResourceStorage;
 import org.purl.accessor.util.URIResolver;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
@@ -32,8 +32,8 @@ import com.ten60.netkernel.urii.aspect.StringAspect;
 
 public class DeleteResourceCommand extends PURLCommand {
 
-    public DeleteResourceCommand(String type, URIResolver uriResolver, ResourceStorage resStorage) {
-        super(type, uriResolver, resStorage);
+    public DeleteResourceCommand(String type, URIResolver uriResolver, AccessController accessController, ResourceStorage resStorage) {
+        super(type, uriResolver, accessController, resStorage);
     }
 
     @Override
@@ -52,20 +52,28 @@ public class DeleteResourceCommand extends PURLCommand {
             if(resStorage.resourceExists(context,uriResolver)) {
                 // Default response code of 200 is fine
                 // TODO: Cut golden thread for the resource
+                String user = NKHelper.getUser(context);
+                
+                if(accessController.userHasAccess(context, user, uriResolver.getURI(context))) {
 
-                if(resStorage.deleteResource(context, uriResolver.getURI(context))) {
-                    recordCommandState(context, "DELETE", path);
+                    if(resStorage.deleteResource(context, uriResolver.getURI(context))) {
+                        recordCommandState(context, "DELETE", path);
 
-                    String message = "Deleted resource: " + id;
-                    IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect(message), 200);
+                        String message = "Deleted resource: " + id;
+                        IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect(message), 200);
+                        retValue = context.createResponseFrom(rep);
+                        retValue.setMimeType(NKHelper.MIME_TEXT);
+                        NKHelper.log(context,message);
+
+                        // Cut golden thread for the resource
+                        INKFRequest req = context.createSubRequest("active:cutGoldenThread");
+                        req.addArgument("param", "gt:" + path);
+                        context.issueSubRequest(req);
+                    }
+                } else {
+                    IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect("Not allowed to delete: " + id), 403);
                     retValue = context.createResponseFrom(rep);
                     retValue.setMimeType(NKHelper.MIME_TEXT);
-                    NKHelper.log(context,message);
-
-                    // Cut golden thread for the resource
-                    INKFRequest req = context.createSubRequest("active:cutGoldenThread");
-                    req.addArgument("param", "gt:" + path);
-                    context.issueSubRequest(req);
                 }
 
             } else {

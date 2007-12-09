@@ -18,6 +18,7 @@ package org.purl.accessor.command;
  *
  */
 
+import org.purl.accessor.util.AccessController;
 import org.purl.accessor.util.NKHelper;
 import org.purl.accessor.util.PURLException;
 import org.purl.accessor.util.ResourceCreator;
@@ -36,8 +37,8 @@ import com.ten60.netkernel.urii.aspect.StringAspect;
 public class UpdateResourceCommand extends PURLCommand {
     private ResourceCreator resCreator;
 
-    public UpdateResourceCommand(String type, URIResolver uriResolver, ResourceCreator resCreator, ResourceStorage resStorage) {
-        super(type, uriResolver, resStorage);
+    public UpdateResourceCommand(String type, URIResolver uriResolver, AccessController accessController, ResourceCreator resCreator, ResourceStorage resStorage) {
+        super(type, uriResolver, accessController, resStorage);
         this.resCreator = resCreator;
     }
 
@@ -57,46 +58,54 @@ public class UpdateResourceCommand extends PURLCommand {
             }
 
             if(resStorage.resourceExists(context,uriResolver)) {
-                try {
-                    // Update the user
+                String user = NKHelper.getUser(context);
+                
+                if(accessController.userHasAccess(context, user, uriResolver.getURI(context))) {
+                    try {
+                        // Update the user
 
-                    //PUT should come across on the param2 param
+                        //PUT should come across on the param2 param
 
-                    IAspectNVP params = getParams(context);
-                    IURAspect iur = resCreator.createResource(context, params);
-                    if(resStorage.updateResource(context, uriResolver, iur)) {
-                        recordCommandState(context, "UPDATE", path);
-                        
-                        // TODO: Should we block on this?
-                        //INKFRequest req = context.createSubRequest("active:purl-index");
-                        //req.addArgument("path", uriResolver.getURI(context));
-                        //req.addArgument("index", "ffcpl:/index/" + type);
-                        //req.addArgument("operand", iur);
-                        //context.issueAsyncSubRequest(req);
-                        
-                        //NKHelper.indexResource(context, "ffcpl:/index/" + type, id, res);
-                        NKHelper.indexResource(context, "ffcpl:/index/purls", uriResolver.getURI(context), iur);
+                        IAspectNVP params = getParams(context);
+                        IURAspect iur = resCreator.createResource(context, params);
+                        if(resStorage.updateResource(context, uriResolver, iur)) {
+                            recordCommandState(context, "UPDATE", path);
 
-                        String message = "Updated resource: " + id;
-                        IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect(message), 200);
+                            // TODO: Should we block on this?
+                            //INKFRequest req = context.createSubRequest("active:purl-index");
+                            //req.addArgument("path", uriResolver.getURI(context));
+                            //req.addArgument("index", "ffcpl:/index/" + type);
+                            //req.addArgument("operand", iur);
+                            //context.issueAsyncSubRequest(req);
+
+                            //NKHelper.indexResource(context, "ffcpl:/index/" + type, id, res);
+                            //NKHelper.indexResource(context, "ffcpl:/index/purls", uriResolver.getURI(context), iur);
+
+                            String message = "Updated resource: " + id;
+                            IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect(message), 200);
+                            retValue = context.createResponseFrom(rep);
+                            retValue.setMimeType(NKHelper.MIME_TEXT);
+                            NKHelper.log(context,message);
+
+                            // Cut golden thread for the resource
+                            INKFRequest req = context.createSubRequest("active:cutGoldenThread");
+                            req.addArgument("param", "gt:" + path);
+                            context.issueSubRequest(req);
+                        } else {
+                            // TODO: Handle failed update
+                            NKHelper.log(context, "ERROR UPDATING RESOURCE");
+                        }
+
+                    } catch(PURLException p) {
+                        IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect(p.getMessage()), p.getResponseCode());
                         retValue = context.createResponseFrom(rep);
                         retValue.setMimeType(NKHelper.MIME_TEXT);
-                        NKHelper.log(context,message);
-
-                        // Cut golden thread for the resource
-                        INKFRequest req = context.createSubRequest("active:cutGoldenThread");
-                        req.addArgument("param", "gt:" + path);
-                        context.issueSubRequest(req);
-                    } else {
-                        // TODO: Handle failed update
-                        NKHelper.log(context, "ERROR UPDATING RESOURCE");
+                        NKHelper.log(context, p.getMessage());
                     }
-
-                } catch(PURLException p) {
-                    IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect(p.getMessage()), p.getResponseCode());
+                } else {
+                    IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect("Not allowed to update: " + id), 403);
                     retValue = context.createResponseFrom(rep);
                     retValue.setMimeType(NKHelper.MIME_TEXT);
-                    NKHelper.log(context, p.getMessage());
                 }
             } else {
                 String message = "Cannot update. No such resource: " + id;

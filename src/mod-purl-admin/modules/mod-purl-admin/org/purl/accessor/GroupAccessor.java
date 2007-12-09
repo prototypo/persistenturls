@@ -70,7 +70,9 @@ import org.purl.accessor.command.DeleteResourceCommand;
 import org.purl.accessor.command.GetResourceCommand;
 import org.purl.accessor.command.PURLCommand;
 import org.purl.accessor.command.UpdateResourceCommand;
+import org.purl.accessor.util.AccessController;
 import org.purl.accessor.util.AllowableResource;
+import org.purl.accessor.util.GroupAccessController;
 import org.purl.accessor.util.GroupResolver;
 import org.purl.accessor.util.GroupResourceStorage;
 import org.purl.accessor.util.GroupSearchHelper;
@@ -79,6 +81,7 @@ import org.purl.accessor.util.PURLException;
 import org.purl.accessor.util.ResourceCreator;
 import org.purl.accessor.util.ResourceStorage;
 import org.purl.accessor.util.URIResolver;
+import org.purl.accessor.util.UnconstrainedGETAccessController;
 import org.purl.accessor.util.UserGroupAllowableResource;
 import org.purl.accessor.util.UserHelper;
 import org.purl.accessor.util.UserResolver;
@@ -111,11 +114,13 @@ public class GroupAccessor extends AbstractAccessor {
         
         AllowableResource userGroupAllowableResource = new UserGroupAllowableResource(userStorage, userResolver, groupStorage, groupResolver);        
         ResourceCreator groupCreator = new GroupCreator(new UserResolver());
+        
+        AccessController groupAccessController = new GroupAccessController();
 
-        commandMap.put("GET", new GetResourceCommand(TYPE, groupResolver, groupStorage, new GroupSearchHelper(), groupFilter));
-        commandMap.put("POST", new CreateResourceCommand(TYPE, userGroupAllowableResource, groupResolver, groupCreator, groupFilter, groupStorage));
-        commandMap.put("DELETE", new DeleteResourceCommand(TYPE, groupResolver, groupStorage));
-        commandMap.put("PUT", new UpdateResourceCommand(TYPE, groupResolver, groupCreator, groupStorage));
+        commandMap.put("GET", new GetResourceCommand(TYPE, groupResolver, new UnconstrainedGETAccessController(), groupStorage, new GroupSearchHelper(), groupFilter));
+        commandMap.put("POST", new CreateResourceCommand(TYPE, userGroupAllowableResource, groupResolver, groupAccessController, groupCreator, groupFilter, groupStorage));
+        commandMap.put("DELETE", new DeleteResourceCommand(TYPE, groupResolver, groupAccessController, groupStorage));
+        commandMap.put("PUT", new UpdateResourceCommand(TYPE, groupResolver, groupAccessController, groupCreator, groupStorage));
     }
 
     protected PURLCommand getCommand(INKFConvenienceHelper context, String method) {

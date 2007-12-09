@@ -5,9 +5,11 @@ import org.ten60.netkernel.layer1.nkf.INKFRequest;
 import org.ten60.netkernel.layer1.nkf.INKFRequestReadOnly;
 import org.ten60.netkernel.layer1.nkf.NKFException;
 import org.ten60.netkernel.xml.representation.IAspectXDA;
+import org.ten60.netkernel.xml.xda.IXDAReadOnlyIterator;
 
 import com.ten60.netkernel.urii.IURAspect;
 import com.ten60.netkernel.urii.IURRepresentation;
+import com.ten60.netkernel.urii.aspect.IAspectBoolean;
 import com.ten60.netkernel.urii.aspect.IAspectString;
 import com.ten60.netkernel.urii.aspect.StringAspect;
 
@@ -156,26 +158,32 @@ public class NKHelper {
 
     public static void indexResource(INKFConvenienceHelper context, String indexName, String id, IURAspect res) {
         try {
-            StringAspect sa = (StringAspect) context.transrept(res, IAspectString.class);
-            StringBuffer sb = new StringBuffer("<luceneIndex><index>");
-            sb.append(indexName);
-            sb.append("</index><id>");
-            sb.append(id);
-            sb.append("</id></luceneIndex>");
-            INKFRequest req = context.createSubRequest("active:luceneIndex");
-            req.addArgument("operand", res);
-            req.addArgument("operator", new StringAspect(sb.toString()));
-            context.issueSubRequest(req);
-
-            sb = new StringBuffer("<luceneIndex><index>");
-            sb.append(indexName);
-            sb.append("</index><close/></luceneIndex>");
-            req=context.createSubRequest("active:luceneIndex");
-            req.addArgument("operator", new StringAspect(sb.toString()));
-            context.issueSubRequest(req);
+            indexResourceNoClose(context, indexName, id, res);
+            closeIndex(context, indexName);
         } catch(NKFException e) {
             e.printStackTrace();
         }
+    }
+    
+    public static void indexResourceNoClose(INKFConvenienceHelper context, String indexName, String id, IURAspect res) throws NKFException {
+        StringBuffer sb = new StringBuffer("<luceneIndex><index>");
+        sb.append(indexName);
+        sb.append("</index><id>");
+        sb.append(id);
+        sb.append("</id></luceneIndex>");
+        INKFRequest req = context.createSubRequest("active:luceneIndex");
+        req.addArgument("operand", res);
+        req.addArgument("operator", new StringAspect(sb.toString()));
+        context.issueSubRequest(req);            
+    }
+
+    public static void closeIndex(INKFConvenienceHelper context, String indexName) throws NKFException {
+        StringBuffer sb = new StringBuffer("<luceneIndex><index>");
+        sb.append(indexName);
+        sb.append("</index><close/></luceneIndex>");
+        INKFRequest req=context.createSubRequest("active:luceneIndex");
+        req.addArgument("operator", new StringAspect(sb.toString()));
+        context.issueSubRequest(req);
     }
 
     public static IURRepresentation search(INKFConvenienceHelper context, String indexName, String query) {
@@ -210,6 +218,91 @@ public class NKHelper {
             retValue = result.getXDA().getText("/md5", true);
         } catch(Exception e) {
             e.printStackTrace();
+        }
+        
+        return retValue;
+    }
+    
+    public static String getUser(INKFConvenienceHelper context) {
+        String retValue = null;
+
+        try {
+            String sessionURI=context.getThisRequest().getArgument("session");
+            String tokenURI=sessionURI+"+key@ffcpl:/credentials";
+            IAspectString credentials = (IAspectString)context.sourceAspect(tokenURI,IAspectString.class);
+            retValue = credentials.getString();
+        } catch(NKFException nfe) {
+            nfe.printStackTrace();
+        }
+
+        return retValue;
+    }
+    
+    public static boolean validUser(INKFConvenienceHelper context, String user) {
+        boolean retValue = false;
+        
+        try {
+            INKFRequest req = context.createSubRequest("active:purl-storage-user-valid");
+            req.addArgument("uri", "ffcpl:/user/" + user); 
+            req.setAspectClass(IAspectBoolean.class);
+            IAspectBoolean result = (IAspectBoolean) context.issueSubRequestForAspect(req);
+            retValue = result.isTrue();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        
+        return retValue;
+    }
+    
+    public static boolean userIsGroupMaintainer(INKFConvenienceHelper context, String user, String group) {
+        boolean retValue = false;
+        
+        try {
+            INKFRequest req=context.createSubRequest("active:purl-storage-query-groupmaintainers");
+            req.addArgument("param", new StringAspect("<group><id>" + group + "</id></group>"));
+            req.setAspectClass(IAspectXDA.class);
+            IAspectXDA res = (IAspectXDA) context.issueSubRequestForAspect(req);
+            IAspectString sa = (IAspectString) context.transrept(res, IAspectString.class);
+            System.out.println(sa.getString());
+            retValue = res.getXDA().isTrue("/maintainers/uid = '" + user + "'");
+        } catch(Exception e) {
+         e.printStackTrace();   
+        }
+        
+        return retValue;
+    }
+    
+    public static boolean userIsDomainMaintainer(INKFConvenienceHelper context, String user, String domain) {
+        boolean retValue = false;
+        
+        try {
+            INKFRequest req=context.createSubRequest("active:purl-storage-query-domainmaintainers");
+            req.addArgument("param", new StringAspect("<domain><id>" + domain.substring(13) + "</id></domain>"));
+            req.setAspectClass(IAspectXDA.class);
+            IAspectXDA res = (IAspectXDA) context.issueSubRequestForAspect(req);
+            IAspectString sa = (IAspectString) context.transrept(res, IAspectString.class);
+            System.out.println(sa.getString());
+            retValue = res.getXDA().isTrue("/maintainers/uid = '" + user + "'");
+        } catch(Exception e) {
+         e.printStackTrace();   
+        }
+        
+        return retValue;
+    }
+    
+    public static boolean userIsPURLMaintainer(INKFConvenienceHelper context, String user, String purl) {
+        boolean retValue = false;
+
+        try {
+            INKFRequest req=context.createSubRequest("active:purl-storage-query-purlmaintainers");
+            req.addArgument("param", new StringAspect("<purl><id>" + purl.substring(11) + "</id></purl>"));
+            req.setAspectClass(IAspectXDA.class);
+            IAspectXDA res = (IAspectXDA) context.issueSubRequestForAspect(req);
+            IAspectString sa = (IAspectString) context.transrept(res, IAspectString.class);
+            System.out.println(sa.getString());
+            retValue = res.getXDA().isTrue("/maintainers/uid = '" + user + "'");
+        } catch(Exception e) {
+         e.printStackTrace();   
         }
         
         return retValue;

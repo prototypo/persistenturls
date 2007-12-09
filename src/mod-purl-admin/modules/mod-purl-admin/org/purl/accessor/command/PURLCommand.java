@@ -6,6 +6,7 @@ package org.purl.accessor.command;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.purl.accessor.util.AccessController;
 import org.purl.accessor.util.ResourceStorage;
 import org.purl.accessor.util.URIResolver;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
@@ -38,6 +39,7 @@ abstract public class PURLCommand {
     protected String type;
     protected URIResolver uriResolver;
     protected ResourceStorage resStorage;
+    protected AccessController accessController;
     protected static SimpleDateFormat sdf;
 
     static {
@@ -48,9 +50,10 @@ abstract public class PURLCommand {
      *
      * @param uriResolver
      */
-    protected PURLCommand(String type, URIResolver uriResolver, ResourceStorage resStorage) {
+    protected PURLCommand(String type, URIResolver uriResolver, AccessController accessController, ResourceStorage resStorage) {
         this.type = type;
         this.uriResolver = uriResolver;
+        this.accessController = accessController;
         this.resStorage = resStorage;
     }
 
@@ -64,10 +67,14 @@ abstract public class PURLCommand {
 	    return uriResolver;
 	}
 	
+	public AccessController getAccessController() {
+	    return accessController;
+	}
+	
 	public ResourceStorage getResourceStorage() {
 	    return resStorage;
 	}
-
+	
     protected void recordCommandState(INKFConvenienceHelper context, String command, String resource ) {
         StringBuffer sb = new StringBuffer(sdf.format(new Date()));
         sb.append(" ");
@@ -97,4 +104,6 @@ abstract public class PURLCommand {
 
 		return retValue;
 	}
+	
+
 }

@@ -70,12 +70,13 @@ import org.purl.accessor.command.DeleteResourceCommand;
 import org.purl.accessor.command.GetResourceCommand;
 import org.purl.accessor.command.PURLCommand;
 import org.purl.accessor.command.UpdateResourceCommand;
+import org.purl.accessor.util.AccessController;
 import org.purl.accessor.util.AllowableResource;
-import org.purl.accessor.util.DefaultAllowableResource;
+import org.purl.accessor.util.DomainAccessController;
+import org.purl.accessor.util.DomainAllowableResource;
 import org.purl.accessor.util.DomainResolver;
 import org.purl.accessor.util.DomainResourceStorage;
 import org.purl.accessor.util.DomainSearchHelper;
-import org.purl.accessor.util.NKHelper;
 import org.purl.accessor.util.PURLException;
 import org.purl.accessor.util.ResourceCreator;
 import org.purl.accessor.util.ResourceStorage;
@@ -105,14 +106,16 @@ public class DomainAccessor extends AbstractAccessor {
         URIResolver domainResolver = new DomainResolver();
 
         ResourceFilter domainFilter = new DomainPrivateDataFilter();
-        ResourceCreator domainCreator = new DomainCreator(new UserResolver(), new UserResourceStorage());
+        ResourceCreator domainCreator = new DomainCreator(domainResolver, new UserResolver(), new UserResourceStorage());
         ResourceStorage domainStorage = new DomainResourceStorage();
-        AllowableResource domainAllowableResource = new DefaultAllowableResource(domainStorage, domainResolver);
+        AllowableResource domainAllowableResource = new DomainAllowableResource(domainResolver, domainStorage); //new DefaultAllowableResource(domainStorage, domainResolver);
+        
+        AccessController domainAccessController = new DomainAccessController();
 
-        commandMap.put("GET", new GetResourceCommand(TYPE, domainResolver, domainStorage, new DomainSearchHelper(), domainFilter));
-        commandMap.put("POST", new CreateResourceCommand(TYPE, domainAllowableResource, domainResolver, domainCreator, domainFilter, domainStorage));
-        commandMap.put("DELETE", new DeleteResourceCommand(TYPE, domainResolver, domainStorage));
-        commandMap.put("PUT", new UpdateResourceCommand(TYPE, domainResolver, domainCreator, domainStorage));
+        commandMap.put("GET", new GetResourceCommand(TYPE, domainResolver, domainAccessController, domainStorage, new DomainSearchHelper(), domainFilter));
+        commandMap.put("POST", new CreateResourceCommand(TYPE, domainAllowableResource, domainResolver, domainAccessController, domainCreator, domainFilter, domainStorage));
+        commandMap.put("DELETE", new DeleteResourceCommand(TYPE, domainResolver, domainAccessController, domainStorage));
+        commandMap.put("PUT", new UpdateResourceCommand(TYPE, domainResolver, domainAccessController, domainCreator, domainStorage));
     }
 
     protected PURLCommand getCommand(INKFConvenienceHelper context, String method) {
@@ -122,9 +125,11 @@ public class DomainAccessor extends AbstractAccessor {
     static public class DomainCreator implements ResourceCreator {
 
         private ResourceStorage userStorage;
+        private URIResolver domainResolver;
         private URIResolver userResolver;
 
-        public DomainCreator(URIResolver userResolver, ResourceStorage userStorage) {
+        public DomainCreator(URIResolver domainResolver, URIResolver userResolver, ResourceStorage userStorage) {
+            this.domainResolver = domainResolver;
             this.userResolver = userResolver;
             this.userStorage = userStorage;
         }
@@ -155,7 +160,8 @@ public class DomainAccessor extends AbstractAccessor {
             sb.append(params.getValue("public"));
             sb.append("</public>");
             sb.append("<id>");
-            sb.append(NKHelper.getLastSegment(context));
+            //sb.append(NKHelper.getLastSegment(context));
+            sb.append(domainResolver.getURI(context).substring(13)); // Skip over ffcpl:/domain
             sb.append("</id>");
             sb.append("<name>");
             sb.append(params.getValue("name"));

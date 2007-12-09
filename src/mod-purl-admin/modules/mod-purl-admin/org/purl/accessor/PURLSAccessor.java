@@ -3,6 +3,7 @@ package org.purl.accessor;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.ten60.netkernel.layer1.nkf.INKFAsyncRequestHandle;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFRequest;
 import org.ten60.netkernel.layer1.nkf.INKFRequestReadOnly;
@@ -36,6 +37,8 @@ public class PURLSAccessor extends NKFAccessorImpl {
         IAspectXDA xda = (IAspectXDA)context.issueSubRequestForAspect(req);
         IXDAReadOnly xdaRO = xda.getXDA();
         INKFResponse resp = null;
+        
+        IURRepresentation method = context.source(context.getThisRequest().getArgument("method"));
 
         // TODO: Make this more declarative
         // TODO: What's the best way to do this?
@@ -77,10 +80,13 @@ public class PURLSAccessor extends NKFAccessorImpl {
 
                 req=context.createSubRequest("active:purl");
                 req.addArgument("path", "ffcpl:" + pid );
-                req.addArgument("method", context.source(context.getThisRequest().getArgument("method")));
+                req.addArgument("method", method);
                 req.addArgument("params", new NVPAspect(nvp));
                 req.addArgument("requestURL", context.getThisRequest().getArgument("requestURL"));
-                IURRepresentation iur=context.issueSubRequest(req);
+                context.issueSubRequest(req);
+                //INKFAsyncRequestHandle handle = context.issueAsyncSubRequest(req);
+                //handle.join();
+                //IURRepresentation iur=context.issueSubRequest(req);
                 //IAspectString sa = (IAspectString) context.transrept(iur,IAspectString.class);
                 //System.out.println(sa.getString());
                 createdPurlList.add(pid);
@@ -112,5 +118,4 @@ public class PURLSAccessor extends NKFAccessorImpl {
 		resp.setMimeType("text/xml");
 		context.setResponse(resp);
 	}
-
 }

@@ -19,6 +19,7 @@ package org.purl.accessor.command;
  */
 
 import org.purl.accessor.ResourceFilter;
+import org.purl.accessor.util.AccessController;
 import org.purl.accessor.util.AllowableResource;
 import org.purl.accessor.util.NKHelper;
 import org.purl.accessor.util.PURLException;
@@ -40,12 +41,12 @@ public class CreateResourceCommand extends PURLCommand {
     private ResourceFilter resFilter;
     private AllowableResource allowableResource;
 
-    public CreateResourceCommand(String type, AllowableResource allowableRes, URIResolver uriResolver, ResourceCreator resCreator) {
-        this(type, allowableRes, uriResolver, resCreator, null, null);
+    public CreateResourceCommand(String type, AllowableResource allowableRes, URIResolver uriResolver, AccessController accessController, ResourceCreator resCreator) {
+        this(type, allowableRes, uriResolver, accessController, resCreator, null, null);
     }
 
-    public CreateResourceCommand(String type, AllowableResource allowableResource, URIResolver uriResolver, ResourceCreator resCreator, ResourceFilter resFilter, ResourceStorage resStorage) {
-        super(type, uriResolver, resStorage);
+    public CreateResourceCommand(String type, AllowableResource allowableResource, URIResolver uriResolver, AccessController accessController, ResourceCreator resCreator, ResourceFilter resFilter, ResourceStorage resStorage) {
+        super(type, uriResolver, accessController, resStorage);
         this.allowableResource = allowableResource;
         this.resCreator = resCreator;
         this.resFilter = resFilter;
@@ -71,12 +72,13 @@ public class CreateResourceCommand extends PURLCommand {
                     IURAspect iur = resCreator.createResource(context, params);
 
                     // Store the full resource
-                    if(resStorage.storeResource(context, uriResolver, iur)) {
-                        iur = resStorage.getResource(context, uriResolver);
+                    iur = resStorage.storeResource(context, uriResolver, iur);
+                    
+                    if(iur != null ) {
                         recordCommandState(context, "CREATE", resource);
 
                         // TODO: Move this to an offline process
-                        NKHelper.indexResource(context, "ffcpl:/index/purls", uriResolver.getURI(context), iur);
+                        //NKHelper.indexResource(context, "ffcpl:/index/purls", uriResolver.getURI(context), iur);
 
                         // Filter it if there is one
                         if(resFilter!=null) {

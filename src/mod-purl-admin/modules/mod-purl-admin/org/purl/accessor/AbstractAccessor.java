@@ -52,6 +52,9 @@ abstract public class AbstractAccessor extends NKFAccessorImpl {
             }
 
         } catch(Throwable t) {
+            // TODO: Come up with some good standards for error
+            resp = context.createResponseFrom(new StringAspect("Error performing request"));
+            resp.setMimeType("text/plain");
             t.printStackTrace();
         }
 

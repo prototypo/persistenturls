@@ -24,6 +24,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.purl.accessor.ResourceFilter;
+import org.purl.accessor.util.AccessController;
 import org.purl.accessor.util.NKHelper;
 import org.purl.accessor.util.ResourceStorage;
 import org.purl.accessor.util.SearchHelper;
@@ -45,12 +46,12 @@ public class GetResourceCommand extends PURLCommand {
     private SearchHelper search;
     private ResourceFilter filter;
 
-    public GetResourceCommand(String type, URIResolver uriResolver, ResourceStorage resStorage, SearchHelper search) {
-        this(type, uriResolver, resStorage, search, null);
+    public GetResourceCommand(String type, URIResolver uriResolver, AccessController accessController, ResourceStorage resStorage, SearchHelper search) {
+        this(type, uriResolver, accessController, resStorage, search, null);
     }
 
-    public GetResourceCommand(String type, URIResolver uriResolver, ResourceStorage resStorage, SearchHelper search, ResourceFilter filter) {
-        super(type, uriResolver, resStorage);
+    public GetResourceCommand(String type, URIResolver uriResolver, AccessController accessController, ResourceStorage resStorage, SearchHelper search, ResourceFilter filter) {
+        super(type, uriResolver, accessController, resStorage);
         this.search = search;
         this.filter = filter;
     }
@@ -60,24 +61,32 @@ public class GetResourceCommand extends PURLCommand {
         INKFResponse retValue = null;
 
         try {
+            String user = NKHelper.getUser(context);
             String path = context.getThisRequest().getArgument("path");
 
             if(!path.endsWith("/")) {
                 String id = NKHelper.getLastSegment(context);
+                
                 if(resStorage.resourceExists(context, uriResolver)) {
-                    IURAspect asp = resStorage.getResource(context, uriResolver);
+                    if(accessController.userHasAccess(context, user, uriResolver.getURI(context))) {
+                        IURAspect asp = resStorage.getResource(context, uriResolver);
 
-                    // Filter the response if we have a filter
-                    if(filter!=null) {
-                        asp = filter.filter(context, asp);
+                        // Filter the response if we have a filter
+                        if(filter!=null) {
+                           asp = filter.filter(context, asp);
+                        }
+
+                        // Default response code of 200 is fine
+                        IURRepresentation rep = NKHelper.setResponseCode(context, asp, 200);
+                        rep = NKHelper.attachGoldenThread(context, "gt:" + path , rep);
+                        retValue = context.createResponseFrom(rep);
+                        retValue.setCacheable();
+                        retValue.setMimeType(NKHelper.MIME_XML);
+                    } else {
+                        IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect("Not allowed to view: " + uriResolver.getURI(context).substring(6)), 403);
+                        retValue = context.createResponseFrom(rep);
+                        retValue.setMimeType(NKHelper.MIME_TEXT);
                     }
-
-                    // Default response code of 200 is fine
-                    IURRepresentation rep = NKHelper.setResponseCode(context, asp, 200);
-                    rep = NKHelper.attachGoldenThread(context, "gt:" + path , rep);
-                    retValue = context.createResponseFrom(rep);
-                    retValue.setCacheable();
-                    retValue.setMimeType(NKHelper.MIME_XML);
                 } else {
                     IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect("No such resource: " + id), 404);
                     retValue = context.createResponseFrom(rep);

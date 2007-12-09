@@ -1,23 +1,22 @@
 package org.purl.accessor.util;
 
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
-import org.ten60.netkernel.layer1.nkf.INKFRequest;
 import org.ten60.netkernel.layer1.nkf.NKFException;
+import org.ten60.netkernel.xml.representation.IAspectXDA;
 
 import com.ten60.netkernel.urii.IURAspect;
 import com.ten60.netkernel.urii.aspect.IAspectString;
 
 public class DefaultResourceStorage implements ResourceStorage {
 
-    public boolean storeResource(INKFConvenienceHelper context, URIResolver resolver, IURAspect resource) throws NKFException {
-        boolean retValue = false;
+    public IURAspect storeResource(INKFConvenienceHelper context, URIResolver resolver, IURAspect resource) throws NKFException {
         context.sinkAspect(resolver.getURI(context), resource);
-        retValue = true;
-        return retValue;
+        return context.sourceAspect(resolver.getURI(context), IAspectXDA.class);
     }
 
     public boolean updateResource(INKFConvenienceHelper context, URIResolver resolver, IURAspect resource) throws NKFException {
-        return storeResource(context, resolver, resource);
+        storeResource(context, resolver, resource);
+        return true;
     }
     
     public IURAspect getResource(INKFConvenienceHelper context, URIResolver resolver) throws NKFException {

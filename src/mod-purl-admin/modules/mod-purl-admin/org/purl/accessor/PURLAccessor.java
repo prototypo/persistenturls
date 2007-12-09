@@ -8,9 +8,11 @@ import org.purl.accessor.command.DeleteResourceCommand;
 import org.purl.accessor.command.GetResourceCommand;
 import org.purl.accessor.command.PURLCommand;
 import org.purl.accessor.command.UpdateResourceCommand;
+import org.purl.accessor.util.AccessController;
 import org.purl.accessor.util.AllowableResource;
 import org.purl.accessor.util.GroupResolver;
 import org.purl.accessor.util.GroupResourceStorage;
+import org.purl.accessor.util.PURLAccessController;
 import org.purl.accessor.util.PURLAllowableResource;
 import org.purl.accessor.util.PURLCreator;
 import org.purl.accessor.util.PURLResourceStorage;
@@ -19,6 +21,7 @@ import org.purl.accessor.util.PurlSearchHelper;
 import org.purl.accessor.util.ResourceCreator;
 import org.purl.accessor.util.ResourceStorage;
 import org.purl.accessor.util.URIResolver;
+import org.purl.accessor.util.UnconstrainedGETAccessController;
 import org.purl.accessor.util.UserResolver;
 import org.purl.accessor.util.UserResourceStorage;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
@@ -51,11 +54,12 @@ public class PURLAccessor extends AbstractAccessor {
         ResourceStorage groupStorage = new GroupResourceStorage();
         
         AllowableResource purlAllowableResource = new PURLAllowableResource(purlStorage, purlResolver);
+        AccessController purlAccessController = new PURLAccessController();
 
-        commandMap.put("POST", new CreateResourceCommand(TYPE, purlAllowableResource, purlResolver, purlCreator, purlFilter, purlStorage));
-        commandMap.put("PUT", new UpdateResourceCommand(TYPE, purlResolver, purlCreator, purlStorage));
-        commandMap.put("DELETE", new DeleteResourceCommand(TYPE, purlResolver, purlStorage));
-        commandMap.put("GET", new GetResourceCommand(TYPE, purlResolver, purlStorage, new PurlSearchHelper(groupResolver, groupStorage), purlFilter));
+        commandMap.put("POST", new CreateResourceCommand(TYPE, purlAllowableResource, purlResolver, purlAccessController, purlCreator, purlFilter, purlStorage));
+        commandMap.put("PUT", new UpdateResourceCommand(TYPE, purlResolver, purlAccessController, purlCreator, purlStorage));
+        commandMap.put("DELETE", new DeleteResourceCommand(TYPE, purlResolver, purlAccessController, purlStorage));
+        commandMap.put("GET", new GetResourceCommand(TYPE, purlResolver, new UnconstrainedGETAccessController(), purlStorage, new PurlSearchHelper(groupResolver, groupStorage), purlFilter));
     }
 
     protected PURLCommand getCommand(INKFConvenienceHelper context, String method) {

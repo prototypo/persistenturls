@@ -69,6 +69,7 @@ import org.purl.accessor.command.DeleteResourceCommand;
 import org.purl.accessor.command.GetResourceCommand;
 import org.purl.accessor.command.PURLCommand;
 import org.purl.accessor.command.UpdateResourceCommand;
+import org.purl.accessor.util.AccessController;
 import org.purl.accessor.util.AllowableResource;
 import org.purl.accessor.util.GroupResolver;
 import org.purl.accessor.util.GroupResourceStorage;
@@ -78,6 +79,7 @@ import org.purl.accessor.util.ResourceCreator;
 import org.purl.accessor.util.ResourceStorage;
 import org.purl.accessor.util.SearchHelper;
 import org.purl.accessor.util.URIResolver;
+import org.purl.accessor.util.UserAccessController;
 import org.purl.accessor.util.UserGroupAllowableResource;
 import org.purl.accessor.util.UserRequestResolver;
 import org.purl.accessor.util.UserResolver;
@@ -120,11 +122,13 @@ public class UserAccessor extends AbstractAccessor {
         AllowableResource userGroupAllowableResource = new UserGroupAllowableResource(userStorage, userResolver, groupStorage, groupResolver);
         
         SearchHelper userSearchHelper = new UserSearchHelper();
+        
+        AccessController userAccessController = new UserAccessController();
 
-		commandMap.put("GET", new GetResourceCommand(TYPE, userResolver, userStorage, userSearchHelper, userFilter));
-        commandMap.put("POST", new CreateResourceCommand(TYPE, userGroupAllowableResource, userResolver, userCreator, userFilter, userStorage));
-		commandMap.put("DELETE", new DeleteResourceCommand(TYPE, userResolver, userStorage));
-		commandMap.put("PUT", new UpdateResourceCommand(TYPE, userResolver, userCreator, userStorage));
+		commandMap.put("GET", new GetResourceCommand(TYPE, userResolver, userAccessController, userStorage, userSearchHelper, userFilter));
+        commandMap.put("POST", new CreateResourceCommand(TYPE, userGroupAllowableResource, userResolver, userAccessController, userCreator, userFilter, userStorage));
+		commandMap.put("DELETE", new DeleteResourceCommand(TYPE, userResolver, userAccessController, userStorage));
+		commandMap.put("PUT", new UpdateResourceCommand(TYPE, userResolver, userAccessController, userCreator, userStorage));
 	}
 
     protected PURLCommand getCommand(INKFConvenienceHelper context, String method) {
@@ -255,11 +259,11 @@ public class UserAccessor extends AbstractAccessor {
         private PURLCommand createCmd;
         
         private UserAutoCreateCommand() {
-            super(null, null, null);
+            super(null, null, null, null);
         }
         
         public UserAutoCreateCommand(PURLCommand createCmd) {
-            super(createCmd.getType(), createCmd.getURIResolver(), createCmd.getResourceStorage());            
+            super(createCmd.getType(), createCmd.getURIResolver(), createCmd.getAccessController(), createCmd.getResourceStorage());            
             this.createCmd = createCmd;
         }
 

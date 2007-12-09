@@ -9,7 +9,12 @@ public class DomainResolver extends URIResolver {
         String retValue = null;
 
         try {
-            retValue = getURI(NKHelper.getLastSegment(context)).toLowerCase();
+            String path = NKHelper.getArgument(context, "path");
+            if(path.startsWith("ffcpl:/")) {
+                path = path.substring(19); // Skip over ffcpl:/admin/domain
+            }
+            
+            retValue = getURI(path).toLowerCase();
         } catch(NKFException nfe) {
             nfe.printStackTrace();
         }
@@ -19,7 +24,13 @@ public class DomainResolver extends URIResolver {
 
     @Override
     public String getURI(String id) {
-        return "ffcpl:/domain/" + id;
+        StringBuffer sb = new StringBuffer("ffcpl:/domain");
+        if(!id.startsWith("/")) {
+            sb.append("/");
+        }
+        
+        sb.append(id);
+        return sb.toString();
     }
 
 }

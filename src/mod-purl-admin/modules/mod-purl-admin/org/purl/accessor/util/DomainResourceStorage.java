@@ -25,7 +25,7 @@ public class DomainResourceStorage implements ResourceStorage {
     public boolean resourceExists(INKFConvenienceHelper context, String uri) throws NKFException {
         boolean retValue = false;
         INKFRequest req = context.createSubRequest("active:purl-storage-domain-exists");
-        req.addArgument("uri", uri);
+        req.addArgument("uri", uri.substring(13));
         req.setAspectClass(IAspectBoolean.class);
         retValue = ((IAspectBoolean) context.issueSubRequestForAspect(req)).isTrue();
         return retValue;
@@ -35,14 +35,12 @@ public class DomainResourceStorage implements ResourceStorage {
         return resourceExists(context, resolver.getURI(context));
     }
 
-    public boolean storeResource(INKFConvenienceHelper context, URIResolver resolver, IURAspect resource) throws NKFException {
-        boolean retValue = false;
-        
+    public IURAspect storeResource(INKFConvenienceHelper context, URIResolver resolver, IURAspect resource) throws NKFException {
+        IURAspect retValue = null;
         INKFRequest req = context.createSubRequest("active:purl-storage-create-domain");
         req.addArgument("param", resource);
-        context.issueSubRequest(req);
-        retValue = true;
-        
+        req.setAspectClass(IAspectXDA.class);
+        retValue = context.issueSubRequestForAspect(req);
         return retValue;
     }
     
