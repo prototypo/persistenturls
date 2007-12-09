@@ -62,7 +62,7 @@
 		    <uri>urn:org:purl:documentation</uri>
 		</import>
 		<import>
-			<uri>urn:org:purl:admin</uri>
+			<uri>urn:org:purl:gatekeeper</uri>
 		</import>
 		<import>
 			<uri>urn:org:ten60:netkernel:ext:script</uri>
