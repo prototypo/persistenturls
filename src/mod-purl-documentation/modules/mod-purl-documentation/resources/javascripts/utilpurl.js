@@ -486,6 +486,11 @@ function onResponse(message, headers, callingContext) {
 		// Write the results to the results area.
 		resultBlock.innerHTML += htmlResults;
 		
+	} else if ( headers["Content-Type"] == "text/html" ) {
+		
+		// Display the HTML directly.
+		resultBlock.innerHTML = message;
+		
 	} else {
 		resultBlock.innerHTML += "<p class='error'>Warning: Content-Type of results not supported.  Trying anyway:<\/p>";
 		resultBlock.innerHTML += "<p class='" + resultClass + "'>" + message + "<\/p>";
