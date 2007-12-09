@@ -1,0 +1,37 @@
+import org.ten60.netkernel.layer1.representation.*;
+import org.ten60.netkernel.layer1.nkf.*;
+import com.ten60.netkernel.urii.aspect.*;
+
+void main()
+{	
+	System.out.println("VALIDATING THE NEW SESSION");
+	sessionURI=context.getThisRequest().getArgument("session");
+	URI=context.getThisRequest().getArgument("uri");
+	System.out.println("URI: " + URI);
+	System.out.println("SESSION: " + sessionURI);		
+	tokenURI=sessionURI+"+key@ffcpl:/credentials";
+	
+	b = false;
+	
+	//See if credentials exist...
+	req=context.createSubRequest(tokenURI);
+	req.setRequestType(INKFRequestReadOnly.RQT_EXISTS);
+	req.setAspectClass(IAspectBoolean.class);
+	b=context.issueSubRequestForAspect(req).isTrue();
+	if(b)
+	{	//Validate Credentials
+
+		//Source the credentials from the session.
+		credentials=context.source(tokenURI);
+
+		//Do whatever you need to do to revalidate them.
+		//TBD
+
+		//If they're valid return true.
+		b=true;
+	}
+	
+	System.out.println("b: " + b);
+	resp=context.createResponseFrom(new BooleanAspect(b));
+	resp.setMimeType("text/plain");
+}
