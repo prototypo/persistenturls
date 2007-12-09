@@ -6,7 +6,7 @@
 	-->
     <identity>
 		<uri>urn:org:purl:admin</uri>
-		<version>0.0.1339</version>
+		<version>0.0.1457</version>
     </identity>
 	<info>
 		<name>PURL Admin Module</name>
@@ -32,7 +32,9 @@
 			<match>active:purl-group\+.*</match>
 			<match>active:purl-groups-for-user\+.*</match>
 			<match>active:purl-user\+.*</match>
+			<match>active:purl-user-authenticate\+.*</match>			
 			<match>active:purl-initialize</match>
+			<match>active:purl-entries-reindex</match>
 			<match>ffcpl:/etc/HTTPBridgeConfig.xml</match>
 			<match>ffcpl:/etc/LogConfig.xml</match>
 			<match>ffcpl:/entrypoints.xml</match>
@@ -75,6 +77,10 @@
 		<rewrite>
 			<match>active:purl-initialize</match>
 			<to>active:beanshell+operator@ffcpl:/scripts/initialize.bsh</to>
+		</rewrite>
+		<rewrite>
+			<match>active:purl-entries-reindex</match>
+			<to>active:beanshell+operator@ffcpl:/scripts/indexentries.bsh</to>
 		</rewrite>
 
  		<rewrite>
@@ -124,6 +130,11 @@
 		<rewrite>
 			<match>(ffcpl:/admin/pending/domain.*)</match>
 			<to>active:purl-storage-pending-domains+type@data:text/plain,domain+path@$1</to>
+		</rewrite>
+		
+		<rewrite>
+			<match>active:purl-user-authenticate(\+.*)</match>
+			<to>active:beanshell+operator@ffcpl:/scripts/userauthenticate.bsh$1</to>
 		</rewrite>		
 
 		<ura>
@@ -186,9 +197,9 @@
 		<import>
 			<uri>urn:org:ten60:netkernel:ext:http:client</uri>
 		</import>
-		<import>
+	<!--	<import>
 			<uri>urn:org:ten60:netkernel:ext:session</uri>
-		</import>
+		</import>-->
 		<import>
 			<uri>urn:org:ten60:netkernel:ext:script</uri>
 		</import>
@@ -204,6 +215,9 @@
 		<import>
 			<uri>urn:org:ten60:netkernel:ext:xml:core</uri>
 		</import>
+    	<import>
+    		<uri>urn:org:ten60:netkernel:util:cron</uri>
+    	</import> 		
 		<import>
 			<uri>urn:org:ten60:netkernel:ext:xml:ura</uri>
 		</import>
