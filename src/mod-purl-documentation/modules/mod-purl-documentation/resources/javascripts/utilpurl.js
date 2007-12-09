@@ -443,6 +443,69 @@ function onPendingResultsResponse(message, headers, callingContext) {
 
 
 // Callback for Create/Modify/Search/Delete (POST/PUT/GET/DELETE) actions.
+function onLoginResponse(message, headers, callingContext) {
+
+	// Highlight the results if an error occurs.
+	setClass("results", "withresults");
+	resultHeader = callingContext + " Successful";
+	resultClass = "response";
+	explanation = "";
+	if ( headers["Status"] != "200" && headers["Status"] != "201" ) {
+		if ( headers["Status"] ) {
+			explanation = HttpResponseCodes[headers["Status"]];
+		}
+		resultHeader = callingContext + " Failed: " + explanation + " (" + headers["Status"] + ")";
+		resultClass = "error";
+	}
+
+	// Style the results based on their Content-Type.
+	if ( headers["Content-Type"] == "text/plain" || headers["Content-Type"] == "text/html") {
+		resultBlock.innerHTML = "<p class='" + resultClass + "'>" + message + "<\/p>";
+
+	} else if ( headers["Content-Type"] == "text/xml" ||
+				headers["Content-Type"] == "application/xml" ) {
+
+		
+		if ( message.indexOf("success") > -1 ) {
+			// Login has been successful.
+			// Parse the XML
+			startParser(message); // sets array 'resultsMap' is in SaxEventHandler.js.
+		
+			for ( outerKey in resultsMap ) {
+				for ( innerKey in resultsMap[outerKey] ) {
+					fieldName = resultsMap[outerKey][innerKey][0];
+					fieldValue = resultsMap[outerKey][innerKey][1];
+					if ( fieldName == "uid" ) {
+						htmlResults += "<dd>" + "Logged in as: " + fieldValue + "<\/dd>";
+					}
+					if ( fieldName == "referrer" ) {
+						htmlResults += "<dd>" + "Return to the <a href=\"" + fieldValue + "\">" + referring page + "</a>" + "<\/dd>";
+					}
+				}
+
+				// Write the results to the results area.
+				resultBlock.innerHTML += htmlResults;
+			}
+		} else {
+			resultBlock.innerHTML += "Login attempt failed.";
+		}
+
+	} else if ( headers["Content-Type"] == "text/html" ) {
+
+		// Display the HTML directly.
+		resultBlock.innerHTML = message;
+
+	} else {
+		resultBlock.innerHTML += "<p class='error'>Warning: Content-Type of results not supported.  Trying anyway:<\/p>";
+		resultBlock.innerHTML += "<p class='" + resultClass + "'>" + message + "<\/p>";
+	}
+
+	// Provide debugging information, if requested.
+	printHTTPDetails(message, headers, callingContext);
+}
+
+
+// Callback for Create/Modify/Search/Delete (POST/PUT/GET/DELETE) actions.
 function onResponse(message, headers, callingContext) {
 	// If bad parameters were passed, highlight them via CSS.
 	if ( headers["Status"] == "400" && headers["X-bad-params"] ) {

@@ -64,7 +64,7 @@ limitations under the License.
 			bodyVars = {
 				passwd: $('l_passwd').value
 			}
-			ajaxCaller.postVars("/admin/login/" + my_id, bodyVars, urlVars, onResponse, false, "Login");
+			ajaxCaller.postVars("/admin/login/" + my_id, bodyVars, urlVars, onloginResponse, false, "Login");
 		}
 		clearErrorIndications();
 		return false;
