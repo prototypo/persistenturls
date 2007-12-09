@@ -113,7 +113,8 @@ function onLoginStatusResponse (message, headers, referrer) {
 		} else if ( message.indexOf("logged in") > -1 ) {
 			// The user is logged in.
 			var uid = message.replace(/.*<uid>(.*)<\/uid>.*/, "$1");
-			resultBlock.innerHTML = "<form action=\"/admin/logout?referrer=" + referrer + "\" method=\"POST\" name=\"logoutForm\" id=\"logoutForm\">Logged in as <b>" + uid + "</b> (<a href=\"#\" onClick=\"logout()\">log out</a>)</form>";
+			output = "<form action=\"/admin/logout?referrer=" + referrer + "\" method=\"POST\" name=\"logoutForm\" id=\"logoutForm\">Logged in as <b>" + uid + "</b> (<a href=\"#\" onClick=\"logout()\">log out</a>)</form>";
+			resultBlock.innerHTML = output;
 			// The user is logged in.  Enable all Submit buttons.
 			for ( var i=0 ; i<numNeedsAuth ; i++ ) {
 				document.getElementById("needAuth_" + i).disabled = false;
