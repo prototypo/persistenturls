@@ -62,6 +62,10 @@ handles results from the server in response to form submissions.
 	var debugThisPage = false;
 	
 	var context = "domain";
+	
+	// Number of Submit buttons on this page that need to be locked out
+	// when the user is not logged in.
+	var numNeedsAuth = 3;
 
 	// NB: This array contains the names of each element that represents a label for an HTML form item.  If you add a new form item and want it highlighted upon a "bad parameter" error, you MUST add it's id to this array.
 	var labelElements = ["c_name_label", "c_id_label", "c_maintainers_label", "c_writers_label", "c_public_label", "m_name_label", "m_id_label", "m_maintainers_label", "m_writers_label", "m_public_label", "s_name_label", "s_id_label", "s_maintainers_label", "s_writers_label", "s_tombstone_label", "d_id_label"];
@@ -258,7 +262,8 @@ handles results from the server in response to form submissions.
 										</tr>
 										
 									</tbody>
-								</table><input value="Submit" type="submit" />
+								</table><input value="Submit" id="needAuth_0" type="submit" /><br />
+								<div id="needAuthDiv_0"></div>
 
 								<table class="docstable" summary="documentation table">
 									<tbody>
@@ -316,7 +321,8 @@ handles results from the server in response to form submissions.
 											<td class="value"><input id="m_public" name="m_public" type="checkbox" value="true" /></td>
 										</tr>
 									</tbody>
-								</table><input value="Submit" type="submit" />
+								</table><input value="Submit" id="needAuth_1" type="submit" /><br />
+								<div id="needAuthDiv_1"></div>
 
 								<table class="docstable" summary="documentation table">
 									<tbody>
@@ -412,7 +418,8 @@ handles results from the server in response to form submissions.
 											<td class="value"><input id="d_id" name="d_id" type="text" /></td>
 										</tr>
 									</tbody>
-								</table><input value="Submit" type="submit" />
+								</table><input value="Submit" id="needAuth_2" type="submit" /><br />
+								<div id="needAuthDiv_2"></div>
 
 								<table class="docstable" summary="documentation table">
 									<tbody>

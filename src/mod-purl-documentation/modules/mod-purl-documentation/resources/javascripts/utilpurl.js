@@ -61,11 +61,7 @@ function load(referrer) {
 	var location = document.URL;
 	var urlFragment = "";
 	var urlFragmentIndex = location.indexOf("#");
-	var queryStringIndex = location.indexOf("?");
-	
-	// Show the login status in a div on the page.
-	showLoginStatus(referrer);
-	
+	var queryStringIndex = location.indexOf("?");	
 	if ( urlFragmentIndex > -1 && queryStringIndex == -1 ) {
 		// Our URL has a fragment identifier, but no query string.
 		urlFragment = location.substring(urlFragmentIndex + 1, location.length);
@@ -81,6 +77,10 @@ function load(referrer) {
 			}
 		}
 	}
+	
+	// Show the login status in a div on the page.
+	showLoginStatus(referrer);
+	
 }
 
 
@@ -104,10 +104,22 @@ function onLoginStatusResponse (message, headers, callingContext) {
 		if ( message.indexOf("logged out") > -1 ) {
 			// The user is logged out or does not have an account.
 			resultBlock.innerHTML = "<form action=\"/admin/login/login.bsh?referrer=" + callingContext + "\" method=\"POST\" name=\"loginForm\" id=\"loginForm\">Anonymous (<a href=\"#\" onClick=\"login()\">log in</a>)</form>";
+			// The use is logged out.  Disable Submit buttons requiring authentication.
+			for ( var i=0 ; i<numNeedsAuth ; i++ ) {
+				document.getElementById("needAuth_" + i).disabled = true;
+				// Add warning messages about not being logged in.
+				document.getElementById("needAuthDiv_" + i).innerHTML = "(You must be logged in to perform this action)";
+			}
 		} else if ( message.indexOf("logged in") > -1 ) {
 			// The user is logged in.
 			var uid = message.replace(/.*<uid>(.*)<\/uid>.*/, "$1");
-			resultBlock.innerHTML = "<form action=\"/admin/logout\" method=\"POST\" name=\"logoutForm\" id=\"logoutForm\">Logged in as " + uid + " (<a href=\"#\" onClick=\"logout()\">log out</a>)</form>";
+			resultBlock.innerHTML = "<form action=\"/admin/logout\" method=\"POST\" name=\"logoutForm\" id=\"logoutForm\">Logged in as <b>" + uid + "</b> (<a href=\"#\" onClick=\"logout()\">log out</a>)</form>";
+			// The user is logged in.  Enable all Submit buttons.
+			for ( var i=0 ; i<numNeedsAuth ; i++ ) {
+				document.getElementById("needAuth_" + i).disabled = false;
+				// Remove all warning messages about not being logged in.
+				document.getElementById("needAuthDiv_" + i).innerHTML = "";
+			}
 		} else {
 			// Something is strange about the message.
 			resultBlock.innerHTML = "<p class=\"error\">Error: Server response unreadable.</p>";

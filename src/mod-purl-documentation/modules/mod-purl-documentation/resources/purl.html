@@ -64,6 +64,10 @@ handles results from the server in response to form submissions.
 	var debugThisPage = false;
 	
 	var context = "purl";
+	
+	// Number of Submit buttons on this page that need to be locked out
+	// when the user is not logged in.
+	var numNeedsAuth = 4;
 
 	// NB: This array contains the names of each element that represents a label for an HTML form item.  If you add a new form item and want it highlighted upon a "bad parameter" error, you MUST add it's id to this array.
 	var labelElements = ["c_id_label", "c_target_label", "c_maintainers_label", "a_id_label", "a_maintainers_label", "a_type_label", "a_target_label", "a_seealso_label", "a_basepurl_label", "m_id_label", "m_type_label", "m_target_label", "m_seealso_label", "m_maintainers_label", "s_id_label", "s_target_label", "s_seealso_label", "s_maintainers_label", "s_explicitmaintainers_label", "s_tombstone_label", "v_id_label", "d_id_label"];
@@ -325,7 +329,8 @@ handles results from the server in response to form submissions.
 </textarea></td>
 										</tr>
 									</tbody>
-								</table><input value="Submit" type="submit" />
+								</table><input value="Submit" id="needAuth_0" type="submit" /><br />
+								<div id="needAuthDiv_0"></div>
 
 								<table class="docstable" summary="documentation table">
 									<tbody>
@@ -340,7 +345,6 @@ handles results from the server in response to form submissions.
 					</div><!-- create -->
 
 					<div id="advancedcreate" style="display: none;">
-						<!-- TODO: Submit to a different function! -->
 
 						<form action="#" name="advancedCreateForm" onsubmit="return createAdvSubmit()" id="advCreateForm">
 							<fieldset>
@@ -448,7 +452,8 @@ handles results from the server in response to form submissions.
 											<td class="value"><input id="a_basepurl" name="a_basepurl" type="text" size="40" /></td>
 										</tr>
 									</tbody>
-								</table><br><input value="Submit" type="submit" />
+								</table><br><input value="Submit" id="needAuth_1" type="submit" /><br />
+								<div id="needAuthDiv_1"></div>
 
 								<table class="docstable" summary="documentation table">
 									<tbody>
@@ -542,7 +547,8 @@ handles results from the server in response to form submissions.
 											<td class="value"><input id="m_seealso" name="m_seealso" type="text" size="40" /></td>
 										</tr>
 									</tbody>
-								</table><input value="Submit" type="submit" />
+								</table><input value="Submit" id="needAuth_2" type="submit" /><br />
+								<div id="needAuthDiv_2"></div>
 
 								<table class="docstable" summary="documentation table">
 									<tbody>
@@ -678,7 +684,8 @@ handles results from the server in response to form submissions.
 											<td class="value"><input id="d_id" name="d_id" type="text" size="40" /></td>
 										</tr>
 									</tbody>
-								</table><input value="Submit" type="submit" />
+								</table><input value="Submit" id="needAuth_3" type="submit" /><br />
+								<div id="needAuthDiv_3"></div>
 
 								<table class="docstable" summary="documentation table">
 									<tbody>

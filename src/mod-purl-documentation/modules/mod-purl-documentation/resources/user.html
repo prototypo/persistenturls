@@ -62,6 +62,10 @@ handles results from the server in response to form submissions.
 	var debugThisPage = false;
 	
 	var context = "user";
+	
+	// Number of Submit buttons on this page that need to be locked out
+	// when the user is not logged in.
+	var numNeedsAuth = 2;
 
 	// NB: This array contains the names of each element that represents a label for an HTML form item.  If you add a new form item and want it highlighted upon a "bad parameter" error, you MUST add it's id to this array.
 	var labelElements = ["c_name_label", "c_affiliation_label", "c_email_label", "c_id_label", "c_passwd_label", "c_hint_label", "c_justification_label", "m_name_label", "m_affiliation_label", "m_email_label", "m_id_label", "m_passwd_label", "m_hint_label", "m_justification_label", "s_name_label", "s_affiliation_label", "s_email_label", "s_id_label", "s_tombstone_label", "d_id_label"];
@@ -362,7 +366,8 @@ handles results from the server in response to form submissions.
 </textarea></td>
 										</tr>
 									</tbody>
-								</table><input value="Submit" type="submit" />
+								</table><input value="Submit" id="needAuth_0" type="submit" /><br />
+								<div id="needAuthDiv_0"></div>
 
 								<table class="docstable" summary="documentation table">
 									<tbody>
@@ -458,7 +463,8 @@ handles results from the server in response to form submissions.
 											<td class="value"><input id="d_id" name="d_id" type="text" /></td>
 										</tr>
 									</tbody>
-								</table><input value="Submit" type="submit" />
+								</table><input value="Submit" id="needAuth_1" type="submit" />	<br />
+								<div id="needAuthDiv_1"></div>
 
 								<table class="docstable" summary="documentation table">
 									<tbody>
