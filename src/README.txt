@@ -1,37 +1,53 @@
 PURL Server Installation Instructions
-December 9 2007
+December 20, 2007
+purlz@zepheira.com
 
 ----------------
 | Introduction |
 ----------------
 
-Thank you for your interest in the Persistent Uniform Resource Locator (PURL) server.  More information about PURLs and the PURL server software may be found at http://purlz./org.  Please consider joining the mailing lists and participating in the online community so we can serve you better.
+Thank you for your interest in the Persistent Uniform Resource Locator
+(PURL) server.  More information about PURLs and the PURL server
+software may be found at http://purlz.org.  Please consider joining
+the mailing lists and participating in the online community so we can
+serve you better.
 
-This software is licensed as defined in the accompanying files LICENSE.txt and LEGAL.txt.  These files may be found in the installation directory.
+This software is licensed as defined in the accompanying files
+LICENSE.txt and LEGAL.txt.  These files may be found in the
+installation directory.
 
 
 ----------------
 | Installation |
 ----------------
 
-There are three ways to install a PURL server, each of which are described below.  Please choose the option which matches your needs.
+There are three ways to install a PURL server, each of which are
+described below.  Please choose the option which matches your needs.
 
   ----------------------------------------------
   | Option A.  Installing from a JAR Installer |
   ----------------------------------------------
-NB: This option is recommended for end users and those wishing to run a PURL server on non-default ports.  It will install a fully functional instance of 1060 NetKernel as well as the PURL service.
+
+NOTE: This option is recommended for end users and those wishing to
+run a PURL server on non-default ports.  It will install a fully
+functional instance of 1060 NetKernel as well as the PURL service.
 
 1)  Download the JAR installer:
 
-  http://purlz.org/project/purl/downloads/purlz-installer-1.0b2.jar
+  http://purlz.org/project/purl/downloads/purlz-installer-1.0b3.jar
 
-2)  Run the installer and follow its directions.  If you operating system does not allow JAR files to be executed directly, run the installer using this command:
+2) Run the installer and follow its directions.  If you operating
+system does not allow JAR files to be executed directly, run the
+installer using this command:
 
   java -jar purlz-installer-1.0b1.jar
 
-3) NetKernel's entrypoints must be updated upon installation so it can initialize several cron jobs. Do that by hitting this URL: http://localhost:1060/ep+name@app_ext_introspect_reindex
+3) NetKernel's entrypoints must be updated upon installation so it can
+initialize several cron jobs. Do that by hitting this URL:
+http://localhost:1060/ep+name@app_ext_introspect_reindex
 
-4) Hit http://localhost:8080/docs/index.html with a Web browser. Help is available at http://localhost:8080/docs/help.html
+4) Hit http://localhost:8080/docs/index.html with a Web browser. Help
+is available at http://localhost:8080/docs/help.html
 
 5) Have fun!
 
@@ -39,27 +55,39 @@ NB: This option is recommended for end users and those wishing to run a PURL ser
   ----------------------------------------------------------
   | Option B.  Installing using a NetKernel Module Package |
   ----------------------------------------------------------
-NB: This option is recommended for users with existing NetKernel services installed.  Please be careful to ensure that you install the PURL module into your existing NetKernel or, if you want to install another NetKernel instance, that you use different ports for the NetKernel fulcrums (default ports are 8080 for the Front End Fulcrum and 1060 for the Back End Fulcrum).  Note that Option A (Installing from a JAR Installer) allows you to install a new NetKernel and manually set the port numbers.
 
-1)  Install NetKernel 3.3.0, available from:
+NOTE: This option is recommended for users with existing NetKernel
+services installed.  Please be careful to ensure that you install the
+PURL module into your existing NetKernel or, if you want to install
+another NetKernel instance, that you use different ports for the
+NetKernel fulcrums (default ports are 8080 for the Front End Fulcrum
+and 1060 for the Back End Fulcrum).  Note that Option A (Installing
+from a JAR Installer) allows you to install a new NetKernel and
+manually set the port numbers.
+
+1) Install NetKernel 3.3.0, available from:
 
   http://www.1060.org/download/
 
-You will want to choose the top option ("Executable JAR Graphical Installer").
+You will want to choose the top option ("Executable JAR Graphical
+Installer").
 
-2)  Run NetKernel
+2) Run NetKernel
 
-3)  Access NetKernel's Module Management Wizard by going to:
+3) Access NetKernel's Module Management Wizard by going to:
 
   http://localhost:1060/ep+name@app_install_installer
 
-4)  Choose "Deploy a packaged set of modules" and select the button labeled "next".
+4) Choose "Deploy a packaged set of modules" and select the button
+labeled "next".
 
-5)  Enter the URL to the PURL server:
+5) Enter the URL to the PURL server:
 
   http://purlz.org/project/purl/downloads/purlz-1.0b1.zip
 
-6)  Errors may occur on server restart because the PURL server requires a reindexing of NetKernel's entrypoints.  Do not worry.  Reindex by going to:
+6) Errors may occur on server restart because the PURL server requires
+a reindexing of NetKernel's entrypoints.  Do not worry.  Reindex by
+going to:
 
   http://localhost:1060/ep+name@app_ext_introspect_reindex
 
@@ -72,7 +100,8 @@ You will want to choose the top option ("Executable JAR Graphical Installer").
  $ cd <repository>/src
  $ ant test
 
-8) Hit http://localhost:8080/docs/index.html with a Web browser. Help is available at http://localhost:8080/docs/help.html
+8) Hit http://localhost:8080/docs/index.html with a Web browser. Help
+is available at http://localhost:8080/docs/help.html
 
 9) Have fun!
 
@@ -80,7 +109,9 @@ You will want to choose the top option ("Executable JAR Graphical Installer").
   ----------------------------------------------------
   | Option C.  Installing from a Subversion Checkout |
   ----------------------------------------------------
-NB: This option is useful for developers and those wishing to customize their installation.
+
+NOTE: This option is useful for developers and those wishing to
+customize their installation.
 
 To install a PURL server from a Subversion checkout, do the following:
 
@@ -88,13 +119,15 @@ To install a PURL server from a Subversion checkout, do the following:
 
   http://www.1060.org/download/
 
-You will probably want to choose the top option ("Executable JAR Graphical Installer").
+You will probably want to choose the top option ("Executable JAR
+Graphical Installer").
 
 2) Checkout the PURL source code:
 
  svn checkout http://purlz.zepheira.com/svn/purlz <local_repository_name>
 
-3) Edit the file <NK_Install_dir>/etc/deployedModules.xml and add lines like the following (editing the path as necessary):
+3) Edit the file <NK_Install_dir>/etc/deployedModules.xml and add
+lines like the following (editing the path as necessary):
 
  <module>file:/<path_to_repository>/src/mod-purl-storage/modules/mod-purl-storage</module>
  <module>file:/<path_to_repository>/src/mod-purl-storage/modules/test-mod-purl-storage</module>
@@ -118,9 +151,11 @@ While you are in that file, comment out the NetKernel demo applications:
 	<module>modules/forum-style-2.0.1.jar</module>
 	-->
 
-4) Edit the file <NK_Install_dir>/modules/mod-fulcrum-frontend/module.xml and do the following:
+4) Edit the file <NK_Install_dir>/modules/mod-fulcrum-frontend/module.xml 
+and do the following:
 
-(a) Add these lines toward the bottom (where the comment directing you to add your modules is):
+(a) Add these lines toward the bottom (where the comment directing you
+to add your modules is):
 
        <import>
            <uri>urn:org:purl:virtual:host</uri>
@@ -128,34 +163,43 @@ While you are in that file, comment out the NetKernel demo applications:
 
 (b) Comment out the following lines:
 
-		<!--Put every request into the FFCPL domain-->
-		<!--
-		<rewrite>
-			<match>jetty://.*?/(.*)</match>
-			<to>ffcpl:/$1</to>
-		</rewrite>
-	        -->
+       <!--Put every request into the FFCPL domain-->
+       <!--
+       <rewrite>
+	<match>jetty://.*?/(.*)</match>
+	<to>ffcpl:/$1</to>
+       </rewrite>
+       -->
 
 (c) Search for "Demo and Test modules" and comment them out.
 
-5) Edit the file /<path_to_repository>/src/mod-purl-admin/modules/mod-purl-admin/etc/PURLConfig.xml and comment out the following line (IFF you want to review and approve new user registrations:
+5) Edit the file
+/<path_to_repository>/src/mod-purl-admin/modules/mod-purl-admin/etc/PURLConfig.xml
+and comment out the following line (IFF you want to review and approve
+new user registrations:
 
      <!--
      <allowUserAutoCreation/>
      -->
 
-6) Edit the file /<path_to_repository>/src/mod-purl-admin/modules/mod-purl-admin/module.xml and comment out the following lines:
+6) Edit the file
+/<path_to_repository>/src/mod-purl-admin/modules/mod-purl-admin/module.xml
+and comment out the following lines:
 
-		<!--
-		<import>
-			<uri>urn:org:purl:static</uri>
-		</import>
-		-->
+	<!--
+	<import>
+		<uri>urn:org:purl:static</uri>
+	</import>
+	-->
 
 7) Build the source code:
 
  $ cd <repository>/src
- (edit the file build.xml and change the value of the property "netkernel.home.dir" to the path to the NetKernel installation directory.)
+
+ (edit the file build.xml and change the value of the property
+ "netkernel.home.dir" to the path to the NetKernel installation
+ directory.)
+
  $ ant all
  $ ant deploy
 
@@ -164,7 +208,9 @@ While you are in that file, comment out the NetKernel demo applications:
  $ cd <NK_Install_dir>/bin
  $ ./start.sh
 
-9) Hit the following URL to update NetKernel's entrypoints so it can find the cron job on purl-storage module: http://localhost:1060/ep+name@app_ext_introspect_reindex
+9) Hit the following URL to update NetKernel's entrypoints so it can
+find the cron job on purl-storage module:
+http://localhost:1060/ep+name@app_ext_introspect_reindex
 
 10) Try the tests:
 
@@ -175,6 +221,7 @@ While you are in that file, comment out the NetKernel demo applications:
  $ cd <repository>/src
  $ ant test
 
-11) Hit http://localhost:8080/docs/index.html with a Web browser. Help is available at http://localhost:8080/docs/help.html
+11) Hit http://localhost:8080/docs/index.html with a Web browser. Help
+is available at http://localhost:8080/docs/help.html
 
 12) Have fun!
