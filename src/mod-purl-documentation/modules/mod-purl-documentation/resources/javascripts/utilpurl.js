@@ -92,7 +92,7 @@ function showLoginStatus(referrer) {
 }
 
 
-function onLoginStatusResponse (message, headers, callingContext) {
+function onLoginStatusResponse (message, headers, referrer) {
 	// Fill the appropriate 'loginstatus' div with a login status indication.
 	resultBlock = $("loginstatus");
 	resultBlock.innerHTML = "<p>Getting login status...<\/p>";
@@ -103,7 +103,7 @@ function onLoginStatusResponse (message, headers, callingContext) {
 		// "Parse" the XML
 		if ( message.indexOf("logged out") > -1 ) {
 			// The user is logged out or does not have an account.
-			resultBlock.innerHTML = "<form action=\"/admin/login/login.bsh?referrer=" + callingContext + "\" method=\"POST\" name=\"loginForm\" id=\"loginForm\">Anonymous (<a href=\"#\" onClick=\"login()\">log in</a>)</form>";
+			resultBlock.innerHTML = "<form action=\"/admin/login/login.bsh?referrer=" + referrer + "\" method=\"POST\" name=\"loginForm\" id=\"loginForm\">Anonymous (<a href=\"#\" onClick=\"login()\">log in</a>)</form>";
 			// The use is logged out.  Disable Submit buttons requiring authentication.
 			for ( var i=0 ; i<numNeedsAuth ; i++ ) {
 				document.getElementById("needAuth_" + i).disabled = true;
