@@ -64,9 +64,9 @@ needSessionCheck() {
     		uri = "ffcpl:/admin/targetpurl";    	    	
     	} else if(uri.startsWith("ffcpl:/purl")) {
     		uri = "ffcpl:/purl";    	
-    	} else if(uri.startsWith("ffcpl:/admin/pending")) {
+    	}/*else if(uri.startsWith("ffcpl:/admin/pending")) {
     		uri = "ffcpl:/admin/pending";
-    	}
+    	}*/
     	
     	retValue = SessionHelper.requiresSession(context, method, uri);
     
