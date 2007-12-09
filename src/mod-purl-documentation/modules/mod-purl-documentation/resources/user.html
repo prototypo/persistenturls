@@ -76,7 +76,9 @@ handles results from the server in response to form submissions.
 		var prefix = contextMap[nextAction][1];
 		var passwd1 = $(prefix + 'passwd').value;
 		var passwd2 = $(prefix + 'passwd2').value;
-		if ( passwd1 != null || passwd1 != "" || passwd1 != passwd2 ) {
+		if ( passwd1 == null || passwd1 == "" ) {
+			alert("Passwords may not be empty.  Please re-enter your password.");
+		} else if ( passwd1 != passwd2 ) {
 			alert("The passwords do not match.  Please re-enter your password.");
 		} else {
 			if ( nextAction == "Create" ) {
