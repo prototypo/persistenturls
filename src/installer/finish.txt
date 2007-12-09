@@ -1,0 +1,9 @@
+Thank you for installing the PURL server!
+
+1) Don't forget to index the server's files by going to:
+
+  http://localhost:1060/ep+name@app_ext_introspect_reindex
+
+2) Get started with the server by going to:
+
+  http://localhost:8080/docs/index.html

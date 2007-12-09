@@ -1,8 +1,8 @@
 <installation version="1.0">
 
 <info>
-	<appname>PURLZ-Server-1.0b2</appname>
-	<appversion>1.0b2</appversion>
+	<appname>PURLZ-Server-1.0b3</appname>
+	<appversion>1.0b3</appversion>
 	<url>http://purlz.org/</url>
 	<authors>
 		<author name="Zepheira, LLC" email="contact@zepheira.com"/>
@@ -19,7 +19,7 @@
 <resources>
  <res id="HTMLLicencePanel.licence" src="Apache2.0License.html"/>
  <res id="Installer.image" src="images/installer_image.jpg" />
- <res id="InfoPanel.info" src="../README.txt"/>
+ <res id="InfoPanel.info" src="finish.txt"/>
  <res id="HTMLInfoPanel.info" src="README.html"/>
  <res id="installer.langsel.img" src="images/installer_splash.jpg" />
  <res id="userInputSpec.xml" src="userInputSpec.xml" />
@@ -43,6 +43,7 @@
  <panel classname="InstallPanel"/>
  <panel order="3" classname="UserInputPanel"/>
  <panel classname="ProcessPanel" id="serverstart"/>
+ <panel classname="InfoPanel"/>
  <panel classname="FinishPanel"/>
 </panels>
 
@@ -114,14 +115,19 @@
     </pack>
 	<pack name="Javadoc" id="Javadoc" required="no" preselected="no">
 	    <description>Javadoc documentation for developers.</description>
-	    <file targetdir="$INSTALL_PATH" src="NetKernel-Base/javadoc"/>
-	    <!--file targetdir="$INSTALL_PATH" src="TODO -- PURL modules javadoc"/-->
+	    <file targetdir="$INSTALL_PATH/" src="../javadoc"/>
 	</pack>
 	<pack name="Source Code" id="Source Code" required="no" preselected="no">
 	    <description>Source code for the PURL server.</description>
 	    <file targetdir="$INSTALL_PATH" src="NetKernel-Base/build"/>
-	    <file targetdir="$INSTALL_PATH" src="NetKernel-Base/src"/>
-	    <!--file targetdir="$INSTALL_PATH" src="TODO -- PURL modules source"/-->
+	    <file targetdir="$INSTALL_PATH/src/1060-NetKernel/" src="NetKernel-Base/src"/>
+	    <file targetdir="$INSTALL_PATH/src/purl" src="../mod-purl-admin"/>
+	    <file targetdir="$INSTALL_PATH/src/purl" src="../mod-purl-documentation"/>
+	    <file targetdir="$INSTALL_PATH/src/purl" src="../mod-purl-search"/>
+	    <file targetdir="$INSTALL_PATH/src/purl" src="../mod-purl-storage"/>
+	    <file targetdir="$INSTALL_PATH/src/purl" src="../mod-purl-virtualhost"/>
+	    <file targetdir="$INSTALL_PATH/src/purl" src="../mod-session"/>
+	    <file targetdir="$INSTALL_PATH/src/purl" src="../mod-template"/>
 	</pack>
 
 </packs>
