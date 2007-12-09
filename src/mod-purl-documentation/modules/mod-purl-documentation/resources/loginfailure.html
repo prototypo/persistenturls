@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <!--
 
-login.html - Provides a Web UI to log into a PURL server.
+login.html - Provides a page to redirect to upon failure to log into a PURL server.
 
 version 1.0, 20 December 2007
 David Wood (david at http://zepheira.com/)
@@ -30,53 +30,15 @@ limitations under the License.
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link type="text/css" rel="stylesheet" href="style.css" />
 
-	<title>PURL Login</title>
+	<title>PURL Login Failure</title>
 	<!--[if lt IE 7]>
     <script defer type="text/javascript" src="javascripts/pngfix.js"></script>
     <![endif]-->
-<script type="text/javascript" src="javascripts/utilajax.js">
-</script>
-<script type="text/javascript" src="javascripts/ajaxCaller.js">
-</script><!-- http://ajaxify.com/run/Lib/js/ -->
-
-<script type="text/javascript" src="javascripts/xmlsax.js">
-</script>
-<script type="text/javascript" src="javascripts/SaxEventHandler.js">
-</script><!-- http://xmljs.sourceforge.net -->
-
-<script type="text/javascript" src="javascripts/utilpurl.js">
-</script>
-<script type="text/javascript">
-//<![CDATA[
-
-	var debugThisPage = false;
-	
-	var context = "login";
-
-	// Send a Create command via HTTP POST.
-	function loginSubmit() {
-		var my_id = $('l_id').value;
-		if ( my_id == "" | my_id == null ) {
-			alert("Please enter a user id.");
-		} else {
-			signalLoadingResults();
-			urlVars = {}
-			bodyVars = {
-				passwd: $('l_passwd').value
-			}
-			ajaxCaller.postVars("/admin/login/" + my_id, bodyVars, urlVars, onResponse, false, "Login");
-		}
-		clearErrorIndications();
-		return false;
-	}
-
-//]]>
-</script>
 </head>
 
 <body>
 	<div id="header">
-		<h1>PURL User Login</h1>
+		<h1>PURL User Login Failure</h1>
 
 		<ul id="tabmenu">
 		<li><a class="inactive" href="index.html">Home</a></li>
@@ -97,36 +59,13 @@ limitations under the License.
 					<div id="login" style="display: inline;">
 						<form action="#" name="loginForm" onsubmit="return loginSubmit()" id="loginForm">
 							<fieldset>
-								<legend>Log in</legend>
+								<legend>Log in failed</legend>
 
 								<div class="instructions">
-									Fill in the following information to log in.
+									That account is not valid.  Either the user id or password were incorrect.
 								</div>
 
-								<table class="actiontable" summary="action table">
-									<tbody>
-										<tr>
-											<td class="property" id="l_id_label">User ID:</td>
-
-											<td class="value"><input id="l_id" name="l_id" type="text" /></td>
-										</tr>
-
-										<tr>
-											<td class="property" id="l_passwd_label">Password:</td>
-
-											<td class="value"><input id="l_passwd" name="l_passwd" type="text" /></td>
-										</tr>
-
-									</tbody>
-								</table><input value="Submit" type="submit" />
-
-								<table class="docstable" summary="documentation table">
-									<tbody>
-										<tr>
-											<td align="right"><a href="help.html#login">Help</a></td>
-										</tr>
-									</tbody>
-								</table>
+								<a href="login.html">try again</a>
 							</fieldset>
 						</form>
 					</div>
