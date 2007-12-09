@@ -1,6 +1,7 @@
 import org.ten60.netkernel.layer1.representation.*;
 import org.ten60.netkernel.layer1.nkf.*;
 import com.ten60.netkernel.urii.aspect.*;
+import org.purl.session.SessionHelper;
 
 void main()
 {	
@@ -18,7 +19,16 @@ void main()
 		referrer = "/docs/index.html";
 	}
 	System.out.println("referrer: " + nvp.getValue("referrer"));
-	if(id.equals("test") && passwd.equals("test"))
+	
+	req=context.createSubRequest("active:purl-user-authenticate");
+	req.addArgument("user", "data:text/plain," + id);
+	req.addArgument("password", "data:text/plain," + passwd);
+	req.setAspectClass(BooleanAspect.class);
+	resp = context.issueSubRequestForAspect(req);
+	
+	System.out.println("AUTHENTICATED: " + resp.isTrue());
+	//if(id.equals("test") && passwd.equals("test"))
+	if(resp.isTrue())
 	{	
 		System.out.println("YES!");
 		//Sink credentials to session...
@@ -51,7 +61,7 @@ void main()
 	}
 	else
 	{	
-		sb = new StringBuffer("<login>");
+/*		sb = new StringBuffer("<login>");
 		sb.append("<status results=\"failure\">Failure</status>");
 		sb.append("<referrer>/docs/user.html</referrer>");
 		sb.append("<uid>" + id + "</uid>");
@@ -61,7 +71,14 @@ void main()
 		resp.setMimeType("text/xml");
 		context.setResponse(resp);
 		System.out.println("3");
-		System.out.println(sb.toString());		
+		System.out.println(sb.toString()); */
+		
+		//Issue HTTP Redirect
+		req=context.createSubRequest("active:HTTPRedirect");
+		req.addArgument("operator", new StringAspect("<url>/docs/login.html</url>"));
+		result=context.issueSubRequest(req);
+		resp=context.createResponseFrom(result);
+		resp.setMimeType("text/xml");		
 	}
 	
 }

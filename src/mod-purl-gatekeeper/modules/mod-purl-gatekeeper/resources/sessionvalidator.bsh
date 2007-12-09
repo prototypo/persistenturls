@@ -1,6 +1,7 @@
 import org.ten60.netkernel.layer1.representation.*;
 import org.ten60.netkernel.layer1.nkf.*;
 import com.ten60.netkernel.urii.aspect.*;
+import org.purl.session.SessionHelper;
 
 void main()
 {	
@@ -29,9 +30,49 @@ void main()
 
 		//If they're valid return true.
 		b=true;
+	} else {
+		// If we don't already have a session, determine if we need one
+		b = !needSessionCheck();
 	}
 	
 	System.out.println("b: " + b);
 	resp=context.createResponseFrom(new BooleanAspect(b));
 	resp.setMimeType("text/plain");
+}
+
+needSessionCheck() {
+	methodArg = context.getThisRequest().getArgument("method");
+    method = ((StringAspect)context.sourceAspect(methodArg, IAspectString.class)).getString();
+    retValue = false;
+    
+    uri = context.getThisRequest().getArgument("uri");
+    
+    if(uri != null) {
+    	if(uri.startsWith("ffcpl:/admin/purls")) {
+    		uri = "ffcpl:/admin/purls";
+    	} else if(uri.startsWith("ffcpl:/admin/purl")) {
+    		uri = "ffcpl:/admin/purl";
+    	} else if(uri.startsWith("ffcpl:/admin/group")) {
+    		uri = "ffcpl:/admin/group";    	
+    	} else if(uri.startsWith("ffcpl:/admin/domain")) {
+    		uri = "ffcpl:/admin/domain";    	
+    	} else if(uri.startsWith("ffcpl:/admin/user")) {
+    		uri = "ffcpl:/admin/user";    	
+    	} else if(uri.startsWith("ffcpl:/admin/targetpurls")) {
+    		uri = "ffcpl:/admin/targetpurls"; 
+    	} else if(uri.startsWith("ffcpl:/admin/targetpurl")) {
+    		uri = "ffcpl:/admin/targetpurl";    	    	
+    	} else if(uri.startsWith("ffcpl:/purl")) {
+    		uri = "ffcpl:/purl";    	
+    	}
+    	
+    	retValue = SessionHelper.requiresSession(context, method, uri);
+    
+    	System.out.println("method: " + method);
+    	System.out.println("request: " + context.getThisRequest().getURI());
+	    System.out.println("uri: " + uri);
+	    System.out.println("retValue: " + retValue);
+	}
+    
+    return retValue;
 }

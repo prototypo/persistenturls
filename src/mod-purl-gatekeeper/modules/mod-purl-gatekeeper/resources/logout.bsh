@@ -10,8 +10,24 @@ void main()
 	req.setRequestType(INKFRequestReadOnly.RQT_DELETE);
 	context.issueSubRequest(req);
 	
-	result=new StringAspect("<login><status>logged out</status></login>");
+	referrer = null;
+	
+	if(context.exists("this:param:param")) {
+		nvp=context.sourceAspect("this:param:param", IAspectNVP.class);
+		referrer = nvp.getValue("referrer");
+		if(referrer == null) {
+			referrer = "/docs/login.html";
+		}		
+	}
+	System.out.println("referrer: " + referrer);
+	req=context.createSubRequest("active:HTTPRedirect");
+	req.addArgument("operator", new StringAspect("<url>"+referrer+"</url>"));
+	result=context.issueSubRequest(req);
 	resp=context.createResponseFrom(result);
 	resp.setMimeType("text/xml");
+	
+	//result=new StringAspect("<login><status>logged out</status></login>");
+	//resp=context.createResponseFrom(result);
+	//resp.setMimeType("text/xml");
 	
 }

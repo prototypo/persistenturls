@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><module>
     <identity>
 		<uri>urn:org:purl:gatekeeper</uri>
-		<version>0.0.23</version>
+		<version>0.0.31</version>
     </identity>
 	<info>
 		<name>PURLS Gatekeeper Module</name>
@@ -69,6 +69,9 @@
 		<import>
 			<uri>urn:org:purl:admin</uri>
 		</import>
+		<import>
+			<uri>urn:org:purl:storage</uri>
+		</import>		
 		<import>
 			<uri>urn:org:ten60:netkernel:ext:xsecurity</uri>
 		</import>
