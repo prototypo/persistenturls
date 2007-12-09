@@ -34,44 +34,6 @@ limitations under the License.
 	<!--[if lt IE 7]>
     <script defer type="text/javascript" src="javascripts/pngfix.js"></script>
     <![endif]-->
-<script type="text/javascript" src="javascripts/utilajax.js">
-</script>
-<script type="text/javascript" src="javascripts/ajaxCaller.js">
-</script><!-- http://ajaxify.com/run/Lib/js/ -->
-
-<script type="text/javascript" src="javascripts/xmlsax.js">
-</script>
-<script type="text/javascript" src="javascripts/SaxEventHandler.js">
-</script><!-- http://xmljs.sourceforge.net -->
-
-<script type="text/javascript" src="javascripts/utilpurl.js">
-</script>
-<script type="text/javascript">
-//<![CDATA[
-
-	var debugThisPage = false;
-	
-	var context = "login";
-
-	// Send a Create command via HTTP POST.
-	function loginSubmit() {
-		var my_id = $('l_id').value;
-		if ( my_id == "" | my_id == null ) {
-			alert("Please enter a user id.");
-		} else {
-			signalLoadingResults();
-			urlVars = {}
-			bodyVars = {
-				passwd: $('l_passwd').value
-			}
-			ajaxCaller.postVars("/admin/login/" + my_id, bodyVars, urlVars, onloginResponse, false, "Login");
-		}
-		clearErrorIndications();
-		return false;
-	}
-
-//]]>
-</script>
 </head>
 
 <body>
@@ -95,7 +57,7 @@ limitations under the License.
 
 				<td class="navtable_action">
 					<div id="login" style="display: inline;">
-						<form action="#" name="loginForm" onsubmit="return loginSubmit()" id="loginForm">
+						<form action="/admin/login/login-submit.bsh" name="loginForm" id="loginForm">
 							<fieldset>
 								<legend>Log in</legend>
 
@@ -108,13 +70,13 @@ limitations under the License.
 										<tr>
 											<td class="property" id="l_id_label">User ID:</td>
 
-											<td class="value"><input id="l_id" name="l_id" type="text" /></td>
+											<td class="value"><input id="id" name="id" type="text" /></td>
 										</tr>
 
 										<tr>
 											<td class="property" id="l_passwd_label">Password:</td>
 
-											<td class="value"><input id="l_passwd" name="l_passwd" type="text" /></td>
+											<td class="value"><input id="passwd" name="passwd" type="text" /></td>
 										</tr>
 
 									</tbody>
