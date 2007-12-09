@@ -86,7 +86,6 @@ handles results from the server in response to form submissions.
 				target: $('c_target').value,
 				maintainers: maintainers
 			}
-			// TODO: What is the URL to admin a PURL?  /admin/purl/<path>/<name>?  /<path>/<name>?
 			ajaxCaller.postVars("/admin/purl" + my_id, bodyVars, urlVars, onResponse, false, "Create");
 		}
 		clearErrorIndications();
@@ -109,7 +108,6 @@ handles results from the server in response to form submissions.
 				maintainers: maintainers,
 				basepurl: $('a_basepurl').value
 			}
-			// TODO: What is the URL to admin a PURL?  /admin/purl/<path>/<name>?  /<path>/<name>?
 			ajaxCaller.postVars("/admin/purl" + my_id, bodyVars, urlVars, onResponse, false, "Create");
 		}
 		clearErrorIndications();
@@ -137,7 +135,6 @@ handles results from the server in response to form submissions.
 				bodyType: bodyType,
 				body: body
 			};
-				// TODO: What is the URL to admin a PURL?  /admin/purl/<path>/<name>?  /<path>/<name>?
 			ajaxCaller.putBody("/admin/purl" + my_id, parameters.urlVars, onResponse, false, "Modify", parameters.bodyType, parameters.body);
 		}
 		clearErrorIndications();
@@ -157,11 +154,9 @@ handles results from the server in response to form submissions.
 		}
 		if ( my_id == "" | my_id == null ) {
 			// No PURL name is given, so we call the parent resource.
-			// TODO: What is the URL to admin a PURL?  /admin/purl/<path>/<name>?  /<path>/<name>?
 			ajaxCaller.get("/admin/purl/", bodyVars, onResponse, false, "Search");
 		} else {
 			// We have a PURL name, so we call that resource directly.
-			// TODO: What is the URL to admin a PURL?  /admin/purl/<path>/<name>?  /<path>/<name>?
 			ajaxCaller.get("/admin/purl" + my_id, bodyVars, onResponse, false, "Search");
 		}
 		clearErrorIndications();
@@ -190,7 +185,6 @@ handles results from the server in response to form submissions.
 		} else {
 			signalLoadingResults();
 			bodyVars =  {}
-			// TODO: What is the URL to admin a PURL?  /admin/purl/<path>/<name>?  /<path>/<name>?
 			ajaxCaller.deleteIt("/admin/purl" + my_id, bodyVars, onResponse, false, "Delete");
 		}
 		clearErrorIndications();

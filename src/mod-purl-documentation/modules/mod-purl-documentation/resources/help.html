@@ -76,6 +76,7 @@
 					<dt>4.2 <a href="#usermodify">Modify an Existing User</a></dt>
 					<dt>4.3 <a href="#usersearch">Search for User Information</a></dt>
 					<dt>4.4 <a href="#userdelete">Delete a User</a></dt>
+					<dt>4.5 <a href="#login">Logging into a PURL Server</a></dt>
 				</dl>
 				<li><a href="#group">Administering Groups of Users</a></li>
 				<dl>
@@ -335,6 +336,19 @@
 			
 			<p align="center"><img src="images/userdelete.png">&nbsp;<img src="images/userdeleteresults.png"><br><b>Figures 15(a) and 15(b). Deleting a User</b></p>
 		
+		
+			<a name="login">
+			<h3>4.5 Logging into a PURL Server</h3>
+
+				<h4>Web User Interface</h4>
+
+			<p>Users may perform some public actions (such as searching, validating and resolving) without being authenticated to the server.  Administrative actions (such as creating or deleting PURLs, groups and domains) require a user to log into an previously created account.</p>
+			
+			<p>A new PURL server is installed with a default user account called 'admin' with a password of 'password'.  Administrators are naturally encouraged to change the default password immediately after installation.</p>
+			
+			<p>New users may be registered by the public, but may have to be approved by an administrator prior to being used (if the server was so configured).  Auto user registration (that is, without approval) can be turned on or off by commenting or uncommenting the term &lt;allowUserAutoCreation&gt; in the configuration file INSTALL_DIR/modules/mod-purl-admin/etc/PURLConfig.xml.</p>
+			
+			
 		<a name="group">
 		<h2>5. Administering Groups of Users</h2>	
 
