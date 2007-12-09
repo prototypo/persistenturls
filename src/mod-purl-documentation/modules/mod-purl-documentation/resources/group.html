@@ -80,7 +80,7 @@ handles results from the server in response to form submissions.
 				maintainers: maintainers,
 				members: $('c_members').value,
 				comments: $('c_comments').value
-			}
+			};
 			ajaxCaller.postVars("/admin/group/" + my_id, bodyVars, urlVars, onResponse, false, "Create");
 		}
 		clearErrorIndications();
@@ -101,7 +101,7 @@ handles results from the server in response to form submissions.
 				maintainers: maintainers,
 				members: members,
 				comments: $('m_comments').value
-			}
+			};
 			bodyType = "text/html";
 			body = "";
 			parameters = {
@@ -124,7 +124,7 @@ handles results from the server in response to form submissions.
 				maintainers: $('s_maintainers').value,
 				members: $('s_members').value,
 				tombstone: $('s_tombstone').checked
-		}
+		};
 		if ( my_id == "" | my_id == null ) {
 			// No group id is given, so we call the parent resource.
 			ajaxCaller.get("/admin/group/", bodyVars, onResponse, false, "Search");
@@ -143,7 +143,7 @@ handles results from the server in response to form submissions.
 			alert("You must provide a group id to identify the group you wish to delete.  Please enter a group id.");
 		} else {
 			signalLoadingResults();
-			bodyVars =  {}
+			bodyVars =  {};
 			ajaxCaller.deleteIt("/admin/group/" + my_id, bodyVars, onResponse, false, "Delete");
 		}
 		clearErrorIndications();
@@ -155,6 +155,11 @@ handles results from the server in response to form submissions.
 </head>
 
 <body onload="load()">
+
+	<div id="loginstatus">
+		<p>Login status not determined.  Do you have Javascript and cookies enabled?</p>
+	</div>
+
 	<div id="header">
 		<h1>PURL Group Administration</h1>
 

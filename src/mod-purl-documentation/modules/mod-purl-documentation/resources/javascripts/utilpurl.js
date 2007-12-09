@@ -62,6 +62,10 @@ function load() {
 	var urlFragment = "";
 	var urlFragmentIndex = location.indexOf("#");
 	var queryStringIndex = location.indexOf("?");
+	
+	// Show the login status in a div on the page.
+	showLoginStatus();
+	
 	if ( urlFragmentIndex > -1 && queryStringIndex == -1 ) {
 		// Our URL has a fragment identifier, but no query string.
 		urlFragment = location.substring(urlFragmentIndex + 1, location.length);
@@ -69,12 +73,49 @@ function load() {
 		// Our URL has a fragment identifier and a query string.
 		urlFragment = location.substring(urlFragmentIndex + 1, queryStringIndex);
 	}
-	for ( key in contextMap ) {
-		if (contextMap[key][0] == urlFragment) {
-			showAction(key);
+	// Show the appropriate action, if we are on a page that has one.
+	if ( typeof(contextMap) != "undefined") {
+		for ( key in contextMap ) {
+			if (contextMap[key][0] == urlFragment) {
+				showAction(key);
+			}
 		}
 	}
 }
+
+
+function showLoginStatus() {
+	resultBlock = $("loginstatus");
+	resultBlock.innerHTML = "<p>Getting login status...<\/p>";
+	ajaxCaller.get("/admin/loginstatus", bodyVars, onLoginStatusResponse, false, "loginstatus");
+}
+
+
+function onLoginStatusResponse (message, headers, callingContext) {
+	// Fill the appropriate 'loginstatus' div with a login status indication.
+	resultBlock = $("loginstatus");
+	resultBlock.innerHTML = "<p>Getting login status...<\/p>";
+	
+	if ( headers["Content-Type"] == "text/xml" ||
+				headers["Content-Type"] == "application/xml" ) {
+
+		// "Parse" the XML
+		if ( message.indexOf("logged out") > -1 ) {
+			// The user is logged out or does not have an account.
+			resultBlock.innerHTML = "<p>Anonymous (<a href=\"/docs/login.html\">log in</a>)</p>";
+		} else if ( message.indexOf("logged in") > -1 ) {
+			// The user is logged in.
+			var uid = message.replace(/<uid>(.*)<\/uid>/, "$1");
+			resultBlock.innerHTML = "<p>Logged in as " + uid + " (<a href=\"/docs/logout.html\">log in</a>)</p>";
+		} else {
+			// Something is strange about the message.
+			resultBlock.innerHTML = "<p class=\"error\">Error: Server response unreadable.</p>";
+		}
+	} else {
+		resultBlock.innerHTML += "<p class='error'>ERROR: Content-Type of results not supported.  Expected an XML message from the PURL server.<\/p>";
+	}
+}
+
 
 function showAction(directive)
 {

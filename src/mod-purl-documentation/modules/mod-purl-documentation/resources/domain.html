@@ -144,7 +144,7 @@ handles results from the server in response to form submissions.
 			alert("You must provide a domain id to identify the domain you wish to delete.  Please enter a domain id.");
 		} else {
 			signalLoadingResults();
-			bodyVars =  {}
+			bodyVars =  {};
 			ajaxCaller.deleteIt("/admin/domain/" + my_id, bodyVars, onResponse, false, "Delete");
 		}
 		clearErrorIndications();
@@ -156,6 +156,11 @@ handles results from the server in response to form submissions.
 </head>
 
 <body onload="load()">
+
+	<div id="loginstatus">
+		<p>Login status not determined.  Do you have Javascript and cookies enabled?</p>
+	</div>
+
 	<div id="header">
 		<h1>PURL Domain Administration</h1>
 

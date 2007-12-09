@@ -34,9 +34,26 @@ limitations under the License.
 	<!--[if lt IE 7]>
     <script defer type="text/javascript" src="javascripts/pngfix.js"></script>
     <![endif]-->
+<script type="text/javascript" src="javascripts/utilajax.js">
+</script>
+<script type="text/javascript" src="javascripts/ajaxCaller.js">
+</script><!-- http://ajaxify.com/run/Lib/js/ -->
+
+<script type="text/javascript" src="javascripts/xmlsax.js">
+</script>
+<script type="text/javascript" src="javascripts/SaxEventHandler.js">
+</script><!-- http://xmljs.sourceforge.net -->
+
+<script type="text/javascript" src="javascripts/utilpurl.js">
+</script>
 </head>
 
-<body>
+<body onload="load()">
+
+	<div id="loginstatus">
+		<p>Login status not determined.  Do you have Javascript and cookies enabled?</p>
+	</div>
+
 	<div id="header">
 		<h1>PURL User Login</h1>
 
