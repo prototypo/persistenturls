@@ -34,6 +34,7 @@
 		<build-subdir dir="mod-purl-search"/>
 		<build-subdir dir="mod-purl-documentation"/>
 		<build-subdir dir="mod-purl-virtualhost"/>
+		<build-subdir dir="mod-purl-gatekeeper"/>		
 		<build-subdir dir="mod-session"/>
 		<build-subdir dir="mod-template"/>
 	</target>
@@ -53,6 +54,7 @@
 		<build-subdir dir="mod-purl-search" target="clean"/>
 		<build-subdir dir="mod-purl-documentation" target="clean"/>
 		<build-subdir dir="mod-purl-virtualhost" target="clean"/>
+		<build-subdir dir="mod-purl-gatekeeper" target="clean"/>		
 		<build-subdir dir="mod-control" target="clean"/>
 		<build-subdir dir="mod-session" target="clean"/>
 		<build-subdir dir="mod-template" target="clean"/>
@@ -62,6 +64,7 @@
 		<filter filtersFile="mod-purl-search/build/version.properties"/>
 		<filter filtersFile="mod-purl-documentation/build/version.properties"/>
 		<filter filtersFile="mod-purl-virtualhost/build/version.properties"/>
+		<filter filtersFile="mod-purl-gatekeeper/build/version.properties"/>		
 		<filter filtersFile="mod-control/build/version.properties"/>
 		<filter filtersFile="mod-session/build/version.properties"/>
 		<filter filtersFile="mod-template/build/version.properties"/>
