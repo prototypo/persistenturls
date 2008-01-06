@@ -69,7 +69,6 @@
 		<!-- PURL JARs. -->
 		<file targetdir="$INSTALL_PATH/modules" src="../deploy/mod-purl-documentation-0.0.1.jar"/>
 		<file targetdir="$INSTALL_PATH/modules" src="../deploy/mod-purl-search-0.0.1.jar"/>
-		<file targetdir="$INSTALL_PATH/modules" src="../deploy/mod-purl-virtualhost-0.0.1.jar"/>
 		<file targetdir="$INSTALL_PATH/modules" src="../deploy/mod-session-0.0.1.jar"/>
 		<file targetdir="$INSTALL_PATH/modules" src="../deploy/mod-template-0.0.1.jar"/>
 		<file targetdir="$INSTALL_PATH/modules" src="../deploy/test-mod-purl-search-0.0.1.jar"/>
@@ -77,6 +76,7 @@
 		<!-- NB: Cannot use JAR files for these because we need to parse files within them. -->
 		<file targetdir="$INSTALL_PATH/modules" src="../mod-purl-storage/modules/mod-purl-storage"/>
 		<file targetdir="$INSTALL_PATH/modules" src="../mod-purl-storage/modules/test-mod-purl-storage"/>
+		<file targetdir="$INSTALL_PATH/modules" src="../mod-purl-virtualhost/modules/mod-purl-virtualhost"/>
 		<file targetdir="$INSTALL_PATH/modules" src="../mod-purl-admin/modules/mod-purl-admin"/>
 		<file targetdir="$INSTALL_PATH/modules" src="../mod-purl-admin/modules/test-mod-purl-admin"/>
 		<file targetdir="$INSTALL_PATH/modules" src="../mod-purl-gatekeeper/modules/mod-purl-gatekeeper"/>
