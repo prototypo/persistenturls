@@ -53,7 +53,7 @@
 			<description align="left" txt="Would you like to start the PURL server now?" id="description3.radio"/>
 			<spec>
 				<choice txt="Start the server now" id="radio.label.5" value="true"/>
-				<choice txt="Do not start the server (default)" id="radio.label.6" value="false" set="false"/>
+				<choice txt="Do not start the server (default)" id="radio.label.6" value="false" set="true"/>
 			</spec>
 		</field>
 		<field type="staticText" align="left" txt=" "/>
