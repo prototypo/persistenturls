@@ -100,7 +100,7 @@
 		<a name="overview">
 		<h2>1. Overview of PURLs</h2>
 
-			<p>PURLs are Persistent Uniform Resource Locators (URLs).  A URL is simply an address on the World Wide Web.  A <i>Persistent</i> URL is an address on the World Wide Web that points to other Web resources.  If a Web resource changes location (and hence URL), a PURL pointing to it can be updated.  A user of a PURL always uses the same Web address, even though the resource in question may have moved.
+			<p>PURLs are Persistent Uniform Resource Locators (URLs).  A URL is simply an address on the World Wide Web.  A <i>Persistent</i> URL is an address on the World Wide Web that points to other Web resources.  If a Web resource changes location (and hence URL), a PURL pointing to it can be updated.  A user of a PURL always uses the same Web address, even though the resource in question may have moved.</p>
 				
 			<p>More information about PURLs may be found in a <a href="brief_intro.html">Brief Introduction</a> to PURLs, a <a href="long_intro.html">Long Introduction</a> to PURLs, the PURL <a href="faq.html">FAQ</a> or <a href="http://en.wikipedia.org/wiki/PURL">Wikipedia</a>.  More information about URLs may be found at <a href="http://en.wikipedia.org/wiki/URL">Wikipedia</a> and in <a href="http://www.ietf.org/rfc/rfc3986.txt">RFC 3986</a> from the Internet Engineering Task Force (IETF).</p>
 			
@@ -347,6 +347,8 @@
 			<p>A new PURL server is installed with a default user account called 'admin' with a password of 'password'.  Administrators are naturally encouraged to change the default password immediately after installation.</p>
 			
 			<p>New users may be registered by the public, but may have to be approved by an administrator prior to being used (if the server was so configured).  Auto user registration (that is, without approval) can be turned on or off by commenting or uncommenting the term &lt;allowUserAutoCreation&gt; in the configuration file INSTALL_DIR/modules/mod-purl-admin/etc/PURLConfig.xml.</p>
+			
+			<p>New users and top-level domains must be approved by an administrator if the &lt;allowUserAutoCreation&gt; option is not set.  New users may be approved by logging in as an administrator and accessing the <a href="admin/user.html">User Approval</a> and <a href="admin/domain.html">Domain Approval</a> pages.</p>
 			
 			
 		<a name="group">
