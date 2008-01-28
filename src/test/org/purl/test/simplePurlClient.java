@@ -18,7 +18,49 @@ import org.restlet.data.Form;
  * @version $Rev$
  */
 public final class simplePurlClient {
-    	
+    
+	// Instance vars:
+	// A single RESTlet client for all HTTP transactions.
+	Client client;
+	
+	// The session cookie to be set by the server in login().
+	String cookie;
+	
+	// Constructor
+	public simplePurlClient() {
+		client = new Client(Protocol.HTTP);
+	}
+	
+	
+	/****************** Log in **************************/
+	
+	/**
+	 * Log in a registered user via an HTTP POST.
+	 *
+	 * @param  url A URL addressing a login service for PURLs.
+	 * @return The response from the server.
+	 */
+	public String login (String url, Map<String, String> formParameters) throws IOException {
+		
+		// Convert the form data to a RESTlet Representation.
+		String form = urlEncode(formParameters);
+		
+		Representation rep = new StringRepresentation( form, MediaType.APPLICATION_WWW_FORM );
+		
+		// Request the resource and return its textual content.
+		Response response = client.post(url, rep);
+		
+		// Retain the session cookie set by the server.
+		cookie = response.getCookieSettings().getValues("NETKERNELSESSION");
+		
+		String output = response.getEntity().getText();
+		if ( output == null | output == "" ) {
+			output = "Cookie returned from server: " + cookie;
+		}		
+		return output;
+	}
+	
+	
 	/****************** Single PURLs **************************/
 	
 	/**
@@ -29,15 +71,11 @@ public final class simplePurlClient {
 	 */
 	public String createPurl (String url, Map<String, String> formParameters) throws IOException {
 		
-		Client client = new Client(Protocol.HTTP);
-		
 		// Convert the form data to a RESTlet Representation.
 		String form = urlEncode(formParameters);
 		
 		Representation rep = new StringRepresentation( form, MediaType.APPLICATION_WWW_FORM );
-		
-		// Request the resource and return its textual content.		
-		return client.post(url, rep).getEntity().getText();
+		return handleRequest(url, Method.POST, rep);
 	}
 	
 	/**
@@ -49,13 +87,9 @@ public final class simplePurlClient {
 	 */
 	public String modifyPurl (String url, Map<String, String> formParameters) throws IOException {
 		
-		Client client = new Client(Protocol.HTTP);
-		
 		// Convert the form data to a RESTlet Representation.
 		String form = urlEncode(formParameters);
-		
-		// Request the resource and return its textual content.		
-		return client.put(url + "?" + form, null).getEntity().getText();
+		return handleRequest(url + "?" + form, Method.PUT, null);
 		
 	}
 
@@ -67,7 +101,6 @@ public final class simplePurlClient {
 	 */
 	public String searchPurl(String url) throws IOException {
 	
-		Client client = new Client(Protocol.HTTP);
 		return client.get(url).getEntity().getText();
 	}
 
@@ -79,7 +112,6 @@ public final class simplePurlClient {
 	 */
 	public String validatePurl(String url) throws IOException {
 
-		Client client = new Client(Protocol.HTTP);
 		return client.get(url).getEntity().getText();
 	}
 
@@ -91,7 +123,6 @@ public final class simplePurlClient {
 	 */
 	public String resolvePurl(String url) throws IOException {
 		
-		Client client = new Client(Protocol.HTTP);
 		Response response = client.get(url);
 		Map<String,Object> responseAttrs = response.getAttributes();
 		String result = null;
@@ -114,11 +145,8 @@ public final class simplePurlClient {
 	 * @return The response from the server.
 	 */
 	public String deletePurl (String url) throws IOException {
-
-		Client client = new Client(Protocol.HTTP);
-
-		// Request the resource and return its textual content.		
-		return client.delete(url).getEntity().getText();
+		
+		return handleRequest(url, Method.DELETE, null);
 	}
 	
 	
@@ -132,13 +160,9 @@ public final class simplePurlClient {
 	 */
 	public String createPurls (String url, File file) throws IOException {
 		
-		Client client = new Client(Protocol.HTTP);
-		
 		// Convert the form data to a RESTlet Representation.
 		Representation rep = new FileRepresentation( file, MediaType.TEXT_XML, 3600 );
-		
-		// Request the resource and return its textual content.		
-		return client.post(url, rep).getEntity().getText();
+		return handleRequest(url, Method.POST, rep);
 	}
 	
 	/**
@@ -149,13 +173,9 @@ public final class simplePurlClient {
 	 */
 	public String modifyPurls (String url, File file) throws IOException {
 		
-		Client client = new Client(Protocol.HTTP);
-		
 		// Convert the form data to a RESTlet Representation.
 		Representation rep = new FileRepresentation( file, MediaType.APPLICATION_XML, 3600 );
-		
-		// Request the resource and return its textual content.		
-		return client.put(url, rep).getEntity().getText();
+		return handleRequest(url, Method.PUT, rep);
 	}
 
 	/**
@@ -166,13 +186,9 @@ public final class simplePurlClient {
 	 */
 	public String validatePurls (String url, File file) throws IOException {
 
-		Client client = new Client(Protocol.HTTP);
-
 		// Convert the form data to a RESTlet Representation.
 		Representation rep = new FileRepresentation( file, MediaType.APPLICATION_XML, 3600 );
-
-		// Request the resource and return its textual content.		
-		return client.put(url, rep).getEntity().getText();
+		return handleRequest(url, Method.PUT, rep);
 	}
 	
 	/****************** Users **************************/
@@ -184,8 +200,6 @@ public final class simplePurlClient {
 	 * @return The response from the server.
 	 */
 	public String registerUser (String url, Map<String, String> formParameters) throws IOException {
-		
-		Client client = new Client(Protocol.HTTP);
 		
 		// Convert the form data to a RESTlet Representation.
 		String form = urlEncode(formParameters);
@@ -203,14 +217,10 @@ public final class simplePurlClient {
 	 * @return The response from the server.
 	 */
 	public String modifyUser (String url, Map<String, String> formParameters) throws IOException {
-		
-		Client client = new Client(Protocol.HTTP);
 				
 		// Encode the form so it will pass on a URL.
 		String form = urlEncode(formParameters);
-		
-		// Request the resource and return its textual content.	
-		return client.put(url + "?" + form, null).getEntity().getText();
+		return handleRequest(url + "?" + form, Method.PUT, null);
 		
 	}
 
@@ -222,7 +232,6 @@ public final class simplePurlClient {
 	 */
 	public String searchUser(String url) throws IOException {
 	
-		Client client = new Client(Protocol.HTTP);
 		return client.get(url).getEntity().getText();
 	}
 
@@ -234,10 +243,7 @@ public final class simplePurlClient {
 	 */
 	public String deleteUser (String url) throws IOException {
 		
-		Client client = new Client(Protocol.HTTP);
-		
-		// Request the resource and return its textual content.		
-		return client.delete(url).getEntity().getText();
+		return handleRequest(url, Method.DELETE, null);
 	}
 
 	
@@ -252,14 +258,11 @@ public final class simplePurlClient {
 	 */
 	public String createGroup (String url, Map<String, String> formParameters) throws IOException {
 		
-		Client client = new Client(Protocol.HTTP);
-		
 		// Convert the form data to a RESTlet Representation.
 		String form = urlEncode(formParameters);
 		Representation rep = new StringRepresentation( form, MediaType.APPLICATION_WWW_FORM );
 		
-		// Request the resource and return its textual content.		
-		return client.post(url, rep).getEntity().getText();
+		return handleRequest(url, Method.POST, rep);
 	}
 	
 	/**
@@ -270,14 +273,10 @@ public final class simplePurlClient {
 	 * @return the result from either the server or an error message.
 	 */
 	public String modifyGroup (String url, Map<String, String> formParameters) throws IOException {
-		
-		Client client = new Client(Protocol.HTTP);
 				
 		// Encode the form so it will pass on a URL.
 		String form = urlEncode(formParameters);
-		
-		// Request the resource and return its textual content.	
-		return client.put(url + "?" + form, null).getEntity().getText();
+		return handleRequest(url + "?" + form, Method.PUT, null);
 	}
 	
 	/**
@@ -291,13 +290,9 @@ public final class simplePurlClient {
 	//       PUT bodies with this type of content type.
 	public String modifyGroup (String url, File file) throws IOException {
 		
-		Client client = new Client(Protocol.HTTP);
-		
 		// Turn the file into a Representation.
 		Representation rep = new FileRepresentation( file, MediaType.TEXT_XML, 3600 );
-			
-		// Request the resource and return its textual content.
-		return client.put(url, rep).getEntity().getText();
+		return handleRequest(url, Method.PUT, rep);
 
 	}
 
@@ -309,7 +304,6 @@ public final class simplePurlClient {
 	 */
 	public String searchGroup(String url) throws IOException {
 	
-		Client client = new Client(Protocol.HTTP);
 		return client.get(url).getEntity().getText();
 	}
 
@@ -321,10 +315,7 @@ public final class simplePurlClient {
 	 */
 	public String deleteGroup (String url) throws IOException {
 		
-		Client client = new Client(Protocol.HTTP);
-		
-		// Request the resource and return its textual content.		
-		return client.delete(url).getEntity().getText();
+		return handleRequest(url, Method.DELETE, null);
 	}
 	
 	
@@ -339,14 +330,10 @@ public final class simplePurlClient {
 	 */
 	public String createDomain (String url, Map<String, String> formParameters) throws IOException {
 		
-		Client client = new Client(Protocol.HTTP);
-		
 		// Convert the form data to a RESTlet Representation.
 		String form = urlEncode(formParameters);
 		Representation rep = new StringRepresentation( form, MediaType.APPLICATION_WWW_FORM );
-		
-		// Request the resource and return its textual content.		
-		return client.post(url, rep).getEntity().getText();
+		return handleRequest(url, Method.POST, rep);
 	}
 	
 	/**
@@ -357,14 +344,10 @@ public final class simplePurlClient {
 	 * @return The response from the server.
 	 */
 	public String modifyDomain (String url, Map<String, String> formParameters) throws IOException {
-		
-		Client client = new Client(Protocol.HTTP);
 				
 		// Encode the form so it will pass on a URL.
 		String form = urlEncode(formParameters);
-		
-		// Request the resource and return its textual content.	
-		return client.put(url + "?" + form, null).getEntity().getText();
+		return handleRequest(url + "?" + form, Method.PUT, null);
 	}
 
 	/**
@@ -374,8 +357,6 @@ public final class simplePurlClient {
 	 * @return The response from the server (a String of XML or text).
 	 */
 	public String searchDomain(String url) throws IOException {
-	
-		Client client = new Client(Protocol.HTTP);
 		return client.get(url).getEntity().getText();
 	}
 
@@ -387,13 +368,41 @@ public final class simplePurlClient {
 	 */
 	public String deleteDomain (String url) throws IOException {
 		
-		Client client = new Client(Protocol.HTTP);
-		
-		// Request the resource and return its textual content.		
-		return client.delete(url).getEntity().getText();
+		return handleRequest(url, Method.DELETE, null);
 	}
 	
 	/****************** Utility Methods **************************/
+	
+	/**
+	  * Create a RESTful request including a session cookie and send.
+	  * This is a utility method to ease the creation of requests with
+	  * a common cookie.
+	  *
+	  * @param url a String representation of a URL to request.
+	  * @param method a Restlet Method (Method.GET, Method.POST, Method.PUT or Method.DELETE).
+	  * @param rep a Representation to pass to the request.
+	  */
+	// TODO: Migrate all methods to use this.
+	public String handleRequest (String url, Method method, Representation rep) {
+
+		// Create a new request
+		Request request = new Request(method, url);
+
+		// Add the session cookie and the representation.
+		request.getCookies().add(new Cookie("NETKERNELSESSION", cookie));
+		request.setEntity(rep);
+
+		try {
+			// Send the request.
+			Response response = client.handle(request);
+
+			// Return the contents of the response.
+			return response.getEntity().getText();
+		} catch (IOException e) {
+			return e.toString();
+		}
+	}
+	
 	
 	/**
 	 * URL encode a series of name-value pairs so they may be used in HTTP requests.

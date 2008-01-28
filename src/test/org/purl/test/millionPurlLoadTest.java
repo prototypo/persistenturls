@@ -48,6 +48,10 @@ public final class millionPurlLoadTest {
 		String userResult = harness.registerUser("testuser", "Test User", "Zepheira", "test.user@example.com", "Testing!", "testing", "Testing.");
 		System.out.println("Result of user registration: " + userResult);
 		
+		// Log in as user.
+		String loginResult = harness.login("testuser", "Testing!");
+		System.out.println("User login result: " + loginResult);
+		
 		// Write test files to the filesystem, if needed.
 		if ( ! harness.checkFiles() ) {
 			harness.writeFiles();
@@ -130,7 +134,32 @@ public final class millionPurlLoadTest {
 			reportException("Failed to resolve URL: ", e);
 		}
 
-		return "ERROR: Test not completed.";
+		return "ERROR: User registration not completed.";
+	}
+	
+	
+	/** Log in as a registered user via an HTTP POST.
+	  *
+	  * @param user A user id (e.g. "dwood").
+	  * @param passwd The password associated with the user id.
+	  *
+	  * NB: Implicitly sets a cookie in the RESTlet client.
+	*/
+	public String login(String user, String passwd) {
+		
+		try {
+			String url = "http://" + host + ":" + port + "/admin/login/login-submit.bsh";			
+			Map<String, String> formParameters = new HashMap<String,String> ();
+			formParameters.put("id", "testuser");
+			formParameters.put("passwd", "Testing!");
+			formParameters.put("referrer", "/docs/index.html");
+			String test = client.login(url, formParameters);
+			return test;
+		} catch (Exception e) {
+			reportException("Failed to login user: ", e);
+		}
+
+		return "ERROR: User login not completed.";
 	}
 	
 
