@@ -39,7 +39,7 @@ public class simplePurlClientTest extends TestCase {
 
 	// Create an instance of the PURL test client for all methods to use.
 	protected void setUp() {
-		client = new simplePurlClient();
+		client = SimplePurlClientFactory.getInstance();
 	}
 		
 
@@ -414,6 +414,28 @@ public class simplePurlClientTest extends TestCase {
 		registerUser("testuser2", "Another Test User", "Zepheira", "another.test.user@example.com", "passWord!", "", "");
 	}
 
+	// Test logging in as testuser.
+	public void testLoginUser() {
+		try {
+			String url = "http://" + host + ":" + port + "/admin/login/login-submit.bsh";
+						
+			Map<String, String> formParameters = new HashMap<String,String> ();
+			formParameters.put("id", "testuser");
+			formParameters.put("passwd", "Testing!");
+			formParameters.put("referrer", "/docs/index.html");
+			
+			String errMsg = "Cannot login testuser: ";
+			String control = "";
+			String test = client.login(url, formParameters);
+			
+			// Textual response, so use assertEquals.
+			assertEquals(errMsg + test, control, test);
+			
+		} catch (Exception e) {
+			reportException("Failed to login user: ", e);
+		}
+	}
+
 	// Test modifying an existing user via an HTTP PUT.
 	public void testModifyUser() {
 
@@ -488,7 +510,7 @@ public class simplePurlClientTest extends TestCase {
 			String test = client.createGroup(url, formParameters);
 			
 			// XML response, so use assertXMLEqual.
-			XMLAssert.assertXMLEqual(errMsg, control, test);
+			XMLAssert.assertXMLEqual(errMsg + ".  Response from server: " + test, control, test);
 						
 		} catch (Exception e) {
 			reportException("Failed to resolve URL: ", e);
@@ -603,7 +625,9 @@ public class simplePurlClientTest extends TestCase {
 			String test = client.createDomain(url, formParameters);
 			
 			// XML response, so use assertXMLEqual.
-			XMLAssert.assertXMLEqual(errMsg, control, test);
+			XMLAssert.assertXMLEqual(errMsg + " : " + test, control, test);
+			// TODO: DBG
+			//assertEquals(errMsg + test, control, test);
 			
 		} catch (Exception e) {
 			reportException("Failed to resolve URL: ", e);
@@ -847,7 +871,7 @@ public class simplePurlClientTest extends TestCase {
 	*/
 	public void registerUser(String uid, String name, String affiliation, String email, String passwd, String hint, String justification) {
 		
-		int userAutoCreationInt = 0;
+		int userAutoCreationFlag = 1;
 		try {
 			String url = "http://" + host + ":" + port + "/admin/user/" + uid;
 
@@ -878,9 +902,9 @@ public class simplePurlClientTest extends TestCase {
 			}
 			
 			if ( userAutoCreationOn ) {
-				userAutoCreationInt = 1;
+				userAutoCreationFlag = 0;
 			}
-			String control = "<user status=\"" + userAutoCreationInt + "\"><id>" + uid + "</id><name>" + name + "</name><affiliation>" + affiliation + "</affiliation><email>" + email + "</email></user>";
+			String control = "<user status=\"" + userAutoCreationFlag + "\"><id>" + uid + "</id><name>" + name + "</name><affiliation>" + affiliation + "</affiliation><email>" + email + "</email></user>";
 			
 			// XML response, so use assertXMLEqual.
 			XMLAssert.assertXMLEqual(errMsg, control, test);

@@ -21,7 +21,7 @@ public final class simplePurlClient {
     
 	// Instance vars:
 	// A single RESTlet client for all HTTP transactions.
-	Client client;
+	public Client client;
 	
 	// The session cookie to be set by the server in login().
 	String cookie;
@@ -53,10 +53,11 @@ public final class simplePurlClient {
 		// Retain the session cookie set by the server.
 		cookie = response.getCookieSettings().getValues("NETKERNELSESSION");
 		
+		// DBG
+		System.out.println("Cookie returned from server: " + cookie);
+		
 		String output = response.getEntity().getText();
-		if ( output == null | output == "" ) {
-			output = "Cookie returned from server: " + cookie;
-		}		
+		
 		return output;
 	}
 	
@@ -382,7 +383,6 @@ public final class simplePurlClient {
 	  * @param method a Restlet Method (Method.GET, Method.POST, Method.PUT or Method.DELETE).
 	  * @param rep a Representation to pass to the request.
 	  */
-	// TODO: Migrate all methods to use this.
 	public String handleRequest (String url, Method method, Representation rep) {
 
 		// Create a new request
@@ -399,7 +399,7 @@ public final class simplePurlClient {
 			// Return the contents of the response.
 			return response.getEntity().getText();
 		} catch (IOException e) {
-			return e.toString();
+			return e.toString() + ":" + e.getCause();
 		}
 	}
 	
@@ -443,6 +443,5 @@ public final class simplePurlClient {
 		
 		return encodedValue;
 	}
-	
 
 } // class
