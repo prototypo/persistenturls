@@ -17,7 +17,6 @@ main() {
 		req.setAspectClass(IAspectXDA.class);
 		userXDA = context.issueSubRequestForAspect(req);
 		existingHashedPassword = userXDA.getXDA().getText("/user/password", true);
-		userSA = context.transrept(userXDA, IAspectString.class);
 		b = existingHashedPassword.equals(hashedPassword);
 	} else {
 		// TODO: Send back a message?
