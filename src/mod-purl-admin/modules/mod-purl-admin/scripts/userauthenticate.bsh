@@ -12,19 +12,12 @@ main() {
 	b = false;
 	
 	if(NKHelper.validUser(context, user.getString())) {
-		System.out.println("user: " + user.getString());
-		System.out.println("password: " + password.getString());
-		System.out.println("hashed password: " + hashedPassword);
-	
 		req = context.createSubRequest("active:purl-storage-query-user");
 		req.addArgument("uri", "ffcpl:/user/" + user.getString());
 		req.setAspectClass(IAspectXDA.class);
 		userXDA = context.issueSubRequestForAspect(req);
 		existingHashedPassword = userXDA.getXDA().getText("/user/password", true);
-	
 		userSA = context.transrept(userXDA, IAspectString.class);
-		System.out.println("USER: " + userSA.getString());
-	
 		b = existingHashedPassword.equals(hashedPassword);
 	} else {
 		// TODO: Send back a message?
