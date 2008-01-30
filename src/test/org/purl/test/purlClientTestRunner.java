@@ -8,8 +8,8 @@ import junit.framework.TestSuite;
  *
  * NB: These tests assume a clean PURL server with no data persisted.  Clean
  *     your server first to prevent possible conflicts.
- * NB: These tests asssume that immediate user registration is available in the
- *     PURL server. To turn on immediate user registration, uncomment
+ * NB: These tests asssume that automatic user registration is available in the
+ *     PURL server. To turn on automatic user registration, uncomment
  *     <allowUserAutoCreation/> in src/mod-purl-admin/modules/mod-purl-admin/etc/PURLConfig.xml
  * NB: Because PURL servers don't really delete resources, but merely
  *     'tombstone' them, running these tests will leave created resources
@@ -29,10 +29,11 @@ public class purlClientTestRunner {
 		*/
         suite.addTest(new simplePurlClientTest("testRegisterUser"));
         suite.addTest(new simplePurlClientTest("testRegisterUser2"));
+		suite.addTest(new simplePurlClientTest("testLoginUser"));
         suite.addTest(new simplePurlClientTest("testCreateGroup"));
         suite.addTest(new simplePurlClientTest("testCreateDomain"));
 
-// TODO: Add tests to determine whether <allowUserAutoCreation/> has been set
+// TODO?: Add tests to determine whether <allowUserAutoCreation/> has been set
 //       and approve/deny users as necessary.  Do the same with domains.
 		
 		/*
