@@ -22,4 +22,17 @@ public class UserRequestResolver extends URIResolver {
         return "ffcpl:/user-requests/" + id;
     }
 
+    @Override
+    public String getDisplayName(String id) {
+        String retValue = null;
+        
+        if(!id.startsWith("ffcpl:/user-requests/")) {
+            retValue = id;
+        } else {
+            retValue = id.substring(21);
+        }
+        
+        return retValue;
+    }
+
 }

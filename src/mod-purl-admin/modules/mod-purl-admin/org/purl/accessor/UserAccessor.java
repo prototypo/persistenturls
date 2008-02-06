@@ -95,7 +95,6 @@ import org.ten60.netkernel.xml.xda.IXDAReadOnly;
 import org.ten60.netkernel.xml.xda.XPathLocationException;
 
 import com.ten60.netkernel.urii.IURAspect;
-import com.ten60.netkernel.urii.IURRepresentation;
 import com.ten60.netkernel.urii.aspect.IAspectString;
 import com.ten60.netkernel.urii.aspect.StringAspect;
 
@@ -212,19 +211,6 @@ public class UserAccessor extends AbstractAccessor {
         }
     }
 
- /*   class UserResourceStorage extends DefaultResourceStorage {
-        public boolean resourceExists(INKFConvenienceHelper context, URIResolver resolver) throws NKFException {
-            boolean retValue = super.resourceExists(context, resolver);
-            // First check to see if the is an existing user-request
-            if(!retValue) {
-                // If not, check to see if there is a user
-                retValue = super.resourceExists(context, userResolver);
-            }
-
-            return retValue;
-        }
-    } */
-
     /**
      * An implementation of the ResourceFilter to prevent sensitive
      * user information from being returned.
@@ -296,6 +282,5 @@ public class UserAccessor extends AbstractAccessor {
             
             return resp;
         }
-        
     }
 }

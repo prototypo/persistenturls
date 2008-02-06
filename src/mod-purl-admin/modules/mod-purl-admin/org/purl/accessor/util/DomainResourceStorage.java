@@ -25,7 +25,7 @@ public class DomainResourceStorage implements ResourceStorage {
     public boolean resourceExists(INKFConvenienceHelper context, String uri) throws NKFException {
         boolean retValue = false;
         INKFRequest req = context.createSubRequest("active:purl-storage-domain-exists");
-        req.addArgument("uri", uri.substring(13));
+        req.addArgument("uri", uri);
         req.setAspectClass(IAspectBoolean.class);
         retValue = ((IAspectBoolean) context.issueSubRequestForAspect(req)).isTrue();
         return retValue;

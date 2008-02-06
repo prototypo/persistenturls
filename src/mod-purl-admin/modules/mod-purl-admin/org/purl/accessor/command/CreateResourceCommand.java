@@ -55,10 +55,10 @@ public class CreateResourceCommand extends PURLCommand {
     @Override
     public INKFResponse execute(INKFConvenienceHelper context) {
         INKFResponse retValue = null;
-
+        String resource = uriResolver.getURI(context);
+        
         try {
             IAspectNVP params = getParams(context);
-            String resource = uriResolver.getURI(context);
 
             if( !allowableResource.allow(context, resource) ) {//resStorage.resourceExists(context, uriResolver)) {
                 // Cannot create the same name
@@ -77,9 +77,6 @@ public class CreateResourceCommand extends PURLCommand {
                     if(iur != null ) {
                         recordCommandState(context, "CREATE", resource);
 
-                        // TODO: Move this to an offline process
-                        //NKHelper.indexResource(context, "ffcpl:/index/purls", uriResolver.getURI(context), iur);
-
                         // Filter it if there is one
                         if(resFilter!=null) {
                             iur = resFilter.filter(context, iur);
@@ -88,9 +85,13 @@ public class CreateResourceCommand extends PURLCommand {
                         IURRepresentation rep = NKHelper.setResponseCode(context, iur, 201);
                         retValue = context.createResponseFrom(rep);
                         retValue.setMimeType(NKHelper.MIME_XML);
-                        NKHelper.log(context, "Created new resource: " + resource);
+                        NKHelper.log(context, "Created new resource: " + uriResolver.getDisplayName(resource));
                     } else {
-                        System.out.println("ERROR CREATING NEW RESOURCE");
+                        String message = "Error creating new resource: " + uriResolver.getDisplayName(resource);
+                        IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect(message), 500);
+                        retValue = context.createResponseFrom(rep);
+                        retValue.setMimeType(NKHelper.MIME_TEXT);
+                        NKHelper.log(context, message);
                     }
                 } catch(PURLException p) {
                     IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect(p.getMessage()), p.getResponseCode());
@@ -100,9 +101,16 @@ public class CreateResourceCommand extends PURLCommand {
                 }
             }
 
-        } catch (NKFException e) {
-            // TODO Handle
-            e.printStackTrace();
+        } catch (NKFException nfe) {
+            try {
+                String message = "Error creating new resource: " + uriResolver.getDisplayName(resource);
+                IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect(message), 500);
+                retValue = context.createResponseFrom(rep);
+                retValue.setMimeType(NKHelper.MIME_TEXT);
+                NKHelper.log(context, message);
+            } catch(Exception e) {
+                NKHelper.log(context, e.getMessage());
+            }
         }
 
         return retValue;

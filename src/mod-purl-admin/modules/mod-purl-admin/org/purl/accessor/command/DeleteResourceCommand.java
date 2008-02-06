@@ -42,10 +42,9 @@ public class DeleteResourceCommand extends PURLCommand {
         String id = null;
 
         try {
-            String path = context.getThisRequest().getArgument("path").toLowerCase();
-
-            if(path.startsWith("ffcpl:")) {
-                path = path.substring(6);
+            String path = context.getThisRequest().getArgument("path");
+            if(path.startsWith("ffcpl:/path")) {
+                path = path.substring(11);
             }
 
             id = NKHelper.getLastSegment(context);
@@ -59,7 +58,7 @@ public class DeleteResourceCommand extends PURLCommand {
                     if(resStorage.deleteResource(context, uriResolver.getURI(context))) {
                         recordCommandState(context, "DELETE", path);
 
-                        String message = "Deleted resource: " + id;
+                        String message = "Deleted resource: " + uriResolver.getDisplayName(path);
                         IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect(message), 200);
                         retValue = context.createResponseFrom(rep);
                         retValue.setMimeType(NKHelper.MIME_TEXT);
@@ -77,16 +76,23 @@ public class DeleteResourceCommand extends PURLCommand {
                 }
 
             } else {
-                String message = "No such resource: " + id;
+                String message = "No such resource: " + uriResolver.getDisplayName(id);
                 IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect(message), 404);
                 retValue = context.createResponseFrom(rep);
                 retValue.setMimeType(NKHelper.MIME_TEXT);
                 NKHelper.log(context,message);
             }
 
-        } catch (NKFException e) {
-            // TODO Handle
-            e.printStackTrace();
+        } catch (NKFException nfe) {
+            try {
+                String message = "Error deleting resource: " + uriResolver.getDisplayName(id);
+                IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect(message), 500);
+                retValue = context.createResponseFrom(rep);
+                retValue.setMimeType(NKHelper.MIME_TEXT);
+                NKHelper.log(context, message);
+            } catch(Exception e) {
+                NKHelper.log(context, e.getMessage());
+            }
         }
 
         if(id != null) {

@@ -61,14 +61,14 @@ public class GetResourceCommand extends PURLCommand {
         INKFResponse retValue = null;
 
         try {
-            String user = NKHelper.getUser(context);
+           // String user = NKHelper.getUser(context);
             String path = context.getThisRequest().getArgument("path");
 
             if(!path.endsWith("/")) {
-                String id = NKHelper.getLastSegment(context);
+             //   String id = NKHelper.getLastSegment(context);
                 
                 if(resStorage.resourceExists(context, uriResolver)) {
-                    if(accessController.userHasAccess(context, user, uriResolver.getURI(context))) {
+                    //if(accessController.userHasAccess(context, user, uriResolver.getURI(context))) {
                         IURAspect asp = resStorage.getResource(context, uriResolver);
 
                         // Filter the response if we have a filter
@@ -82,13 +82,13 @@ public class GetResourceCommand extends PURLCommand {
                         retValue = context.createResponseFrom(rep);
                         retValue.setCacheable();
                         retValue.setMimeType(NKHelper.MIME_XML);
-                    } else {
-                        IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect("Not allowed to view: " + uriResolver.getURI(context).substring(6)), 403);
+                    /*} else {
+                        IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect("Not allowed to view: " + uriResolver.getDisplayName(path)), 403);
                         retValue = context.createResponseFrom(rep);
                         retValue.setMimeType(NKHelper.MIME_TEXT);
-                    }
+                    }*/
                 } else {
-                    IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect("No such resource: " + id), 404);
+                    IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect("No such resource: " + uriResolver.getDisplayName(path)), 404);
                     retValue = context.createResponseFrom(rep);
                     retValue.setMimeType(NKHelper.MIME_TEXT);
                 }
@@ -187,8 +187,6 @@ public class GetResourceCommand extends PURLCommand {
                 }
                 
                 sb.append("</results>");
-
-                System.out.println(sb.toString());
 
                 retValue = context.createResponseFrom(new StringAspect(sb.toString()));
                 retValue.setMimeType(NKHelper.MIME_XML);

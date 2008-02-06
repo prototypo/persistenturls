@@ -46,7 +46,8 @@ public class UpdateResourceCommand extends PURLCommand {
     public INKFResponse execute(INKFConvenienceHelper context) {
         INKFResponse retValue = null;
         String id = null;
-
+        String resource = uriResolver.getURI(context);
+        
         try {
             //IAspectNVP params = getParams(context);
             id = NKHelper.getLastSegment(context);
@@ -63,7 +64,7 @@ public class UpdateResourceCommand extends PURLCommand {
                 if(accessController.userHasAccess(context, user, uriResolver.getURI(context))) {
                     try {
                         // Update the user
-
+                        
                         //PUT should come across on the param2 param
 
                         IAspectNVP params = getParams(context);
@@ -71,17 +72,7 @@ public class UpdateResourceCommand extends PURLCommand {
                         if(resStorage.updateResource(context, uriResolver, iur)) {
                             recordCommandState(context, "UPDATE", path);
 
-                            // TODO: Should we block on this?
-                            //INKFRequest req = context.createSubRequest("active:purl-index");
-                            //req.addArgument("path", uriResolver.getURI(context));
-                            //req.addArgument("index", "ffcpl:/index/" + type);
-                            //req.addArgument("operand", iur);
-                            //context.issueAsyncSubRequest(req);
-
-                            //NKHelper.indexResource(context, "ffcpl:/index/" + type, id, res);
-                            //NKHelper.indexResource(context, "ffcpl:/index/purls", uriResolver.getURI(context), iur);
-
-                            String message = "Updated resource: " + id;
+                            String message = "Updated resource: " + uriResolver.getDisplayName(resource);
                             IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect(message), 200);
                             retValue = context.createResponseFrom(rep);
                             retValue.setMimeType(NKHelper.MIME_TEXT);
@@ -103,21 +94,28 @@ public class UpdateResourceCommand extends PURLCommand {
                         NKHelper.log(context, p.getMessage());
                     }
                 } else {
-                    IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect("Not allowed to update: " + id), 403);
+                    IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect("Not allowed to update: " + uriResolver.getDisplayName(id)), 403);
                     retValue = context.createResponseFrom(rep);
                     retValue.setMimeType(NKHelper.MIME_TEXT);
                 }
             } else {
-                String message = "Cannot update. No such resource: " + id;
+                String message = "Cannot update. No such resource: " + uriResolver.getDisplayName(id);
                 IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect(message), 404);
                 retValue = context.createResponseFrom(rep);
                 retValue.setMimeType(NKHelper.MIME_TEXT);
                 NKHelper.log(context,message);
             }
 
-        } catch (NKFException e) {
-            // TODO Handle
-            e.printStackTrace();
+        } catch (NKFException nfe) {
+            try {
+                String message = "Error updating resource: " + uriResolver.getDisplayName(id);
+                IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect(message), 500);
+                retValue = context.createResponseFrom(rep);
+                retValue.setMimeType(NKHelper.MIME_TEXT);
+                NKHelper.log(context, message);
+            } catch(Exception e) {
+                NKHelper.log(context, e.getMessage());
+            }
         }
 
         if(id != null) {
@@ -126,5 +124,4 @@ public class UpdateResourceCommand extends PURLCommand {
 
         return retValue;
     }
-
 }

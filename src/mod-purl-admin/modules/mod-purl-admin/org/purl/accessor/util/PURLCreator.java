@@ -36,8 +36,8 @@ public class PURLCreator implements ResourceCreator {
         IURAspect retValue = null;
 
         String purl = NKHelper.getArgument(context, "path");
-        if(purl.startsWith("ffcpl:")) {
-            purl = purl.substring(6);
+        if(purl.startsWith("ffcpl:/purl")) {
+            purl = purl.substring(11);
         }
 
         String existingPurl = params.getValue("basepurl");
@@ -86,8 +86,8 @@ public class PURLCreator implements ResourceCreator {
     private IURAspect createClonedPURL(INKFConvenienceHelper context, IAspectNVP params) throws NKFException {
         IURAspect retValue = null;
         String purl = NKHelper.getArgument(context, "path");
-        if(purl.startsWith("ffcpl:")) {
-            purl = purl.substring(6);
+        if(purl.startsWith("ffcpl:/purl")) {
+            purl = purl.substring(11);
         }
         String existingPurl = params.getValue("basepurl");
         String oldURI = purlResolver.getURI(existingPurl);
@@ -121,8 +121,8 @@ public class PURLCreator implements ResourceCreator {
         StringBuffer sb = new StringBuffer("<purl>");
         String target = params.getValue("target");
         String purl = NKHelper.getArgument(context, "path");
-        if(purl.startsWith("ffcpl:")) {
-            purl = purl.substring(6);
+        if(purl.startsWith("ffcpl:/purl")) {
+            purl = purl.substring(11);
         }
 
         sb.append("<id>");
@@ -160,8 +160,8 @@ public class PURLCreator implements ResourceCreator {
         StringBuffer sb = new StringBuffer("<purl>");
         String target = params.getValue("target");
         String purl = NKHelper.getArgument(context, "path");
-        if(purl.startsWith("ffcpl:")) {
-            purl = purl.substring(6);
+        if(purl.startsWith("ffcpl:/purl")) {
+            purl = purl.substring(11);
         }
 
         sb.append("<id>");

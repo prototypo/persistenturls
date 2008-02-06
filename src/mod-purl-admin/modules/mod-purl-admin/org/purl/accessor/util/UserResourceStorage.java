@@ -59,6 +59,7 @@ public class UserResourceStorage implements ResourceStorage {
         boolean retValue = false;
         INKFRequest req = context.createSubRequest("active:purl-storage-delete-user");
         req.addArgument("uri", uri);
+        context.issueSubRequest(req);
         retValue = true;
         
         return retValue;

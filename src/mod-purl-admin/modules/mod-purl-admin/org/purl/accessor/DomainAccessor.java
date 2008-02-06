@@ -124,14 +124,12 @@ public class DomainAccessor extends AbstractAccessor {
 
     static public class DomainCreator implements ResourceCreator {
 
-        private ResourceStorage userStorage;
         private URIResolver domainResolver;
         private URIResolver userResolver;
 
         public DomainCreator(URIResolver domainResolver, URIResolver userResolver, ResourceStorage userStorage) {
             this.domainResolver = domainResolver;
             this.userResolver = userResolver;
-            this.userStorage = userStorage;
         }
 
         public IURAspect createResource(INKFConvenienceHelper context, IAspectNVP params) throws NKFException {

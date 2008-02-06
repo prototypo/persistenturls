@@ -61,7 +61,6 @@ public class PURLResolverAccessor extends NKFAccessorImpl {
         String mode = NKHelper.getArgument(context, "mode");
 
         String purlloc = path.substring(6);
-        String origPurlLoc = purlloc;
         String errMsg = null;
 
         INKFResponse resp = null;

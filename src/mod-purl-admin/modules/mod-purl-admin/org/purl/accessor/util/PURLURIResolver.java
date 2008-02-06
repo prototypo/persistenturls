@@ -1,10 +1,5 @@
 package org.purl.accessor.util;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.NKFException;
 
@@ -16,13 +11,11 @@ public class PURLURIResolver extends URIResolver {
 
         try {
             String path = NKHelper.getArgument(context, "path");
-            if(path.startsWith("ffcpl:")) {
-                path = path.substring(6);
+            if(!path.startsWith("ffcpl:/purl/")) {
+                retValue = getURI(path);
+            } else {
+                retValue = path;
             }
-            
-            path="ffcpl:/purl" + (!path.startsWith("/") ? ("/"+path) : path);
-
-            retValue = path;
             
         } catch(NKFException nfe) {
             nfe.printStackTrace();
@@ -35,13 +28,25 @@ public class PURLURIResolver extends URIResolver {
     public String getURI(String path) {
         String retValue = null;
         
-        if(!path.startsWith("ffcpl:")) {
-            path="ffcpl:/purl" + (!path.startsWith("/") ? ("/"+path) : path);
+        if(!path.startsWith("ffcpl:/purl")) {
+            path="ffcpl:/purl" + getDisplayName(path);
         }
+        
         retValue = path;
 
         return retValue;
     }
 
-
+    @Override
+    public String getDisplayName(String path) {
+        String retValue = null;
+        
+        if(!path.startsWith("ffcpl:/purl")) {
+            retValue = (!path.startsWith("/") ? ("/"+path) : path);
+        } else {
+            retValue = path.substring(11);
+        }
+        
+        return retValue;
+    }
 }

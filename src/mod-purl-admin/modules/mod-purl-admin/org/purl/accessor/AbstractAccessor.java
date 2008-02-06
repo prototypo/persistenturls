@@ -32,7 +32,6 @@ abstract public class AbstractAccessor extends NKFAccessorImpl {
         INKFResponse resp = null;
 
         // TODO: Can this fail?
-        String path = context.getThisRequest().getArgument("path");
         String methodArg = context.getThisRequest().getArgument("method");
         String method = ((StringAspect)context.sourceAspect(methodArg, IAspectString.class)).getString();
 
