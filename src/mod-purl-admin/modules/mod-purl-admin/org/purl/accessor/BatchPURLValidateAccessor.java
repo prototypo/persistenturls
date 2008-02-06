@@ -60,7 +60,6 @@ public class BatchPURLValidateAccessor extends NKFAccessorImpl {
             sb.append("</purl-batch-validate>");
             resp = context.createResponseFrom(new StringAspect(sb.toString()));
         } else {
-            StringAspect result = (StringAspect) context.transrept(xda, IAspectString.class);
             StringBuffer sb = new StringBuffer("<purl-batch-validate-error>");
             IXDAReadOnlyIterator xdaROItor = xdaRO.readOnlyIterator("/b/errors/error");
             while(xdaROItor.hasNext()) {

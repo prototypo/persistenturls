@@ -65,13 +65,6 @@ public class PURLAccessor extends AbstractAccessor {
     protected PURLCommand getCommand(INKFConvenienceHelper context, String method) {
         return commandMap.get(method);
     }
-
-
-    
-
-
-
-
     
     static public class PURLPrivateDataFilter implements ResourceFilter {
 
