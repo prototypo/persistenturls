@@ -53,6 +53,8 @@ public final class simplePurlClient {
 		// Retain the session cookie set by the server.
 		cookie = response.getCookieSettings().getValues("NETKERNELSESSION");
 		
+		CookieFactory.setCookie(cookie);
+		
 		// DBG
 		System.out.println("Cookie returned from server: " + cookie);
 		
@@ -388,10 +390,11 @@ public final class simplePurlClient {
 		// Create a new request
 		Request request = new Request(method, url);
 
+		String cookie = CookieFactory.getCookie();
 		// Add the session cookie and the representation.
 		request.getCookies().add(new Cookie("NETKERNELSESSION", cookie));
 		request.setEntity(rep);
-
+		
 		try {
 			// Send the request.
 			Response response = client.handle(request);
@@ -399,6 +402,7 @@ public final class simplePurlClient {
 			// Return the contents of the response.
 			return response.getEntity().getText();
 		} catch (IOException e) {
+		    e.printStackTrace();
 			return e.toString() + ":" + e.getCause();
 		}
 	}

@@ -123,7 +123,8 @@ public class purlClientTestRunner {
         suite.addTest(new simplePurlClientTest("testDeleteDomain"));
         suite.addTest(new simplePurlClientTest("testDeleteGroup"));
         suite.addTest(new simplePurlClientTest("testDeleteUser"));
-        suite.addTest(new simplePurlClientTest("testDeleteUser2"));
+        suite.addTest(new simplePurlClientTest("testDeleteUser2NoLogin"));
+        suite.addTest(new simplePurlClientTest("testDeleteUser2"));        
 
         return suite;
   }

@@ -1,15 +1,20 @@
 package org.purl.test;
 
 // JUnit
+import java.io.BufferedInputStream;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Pattern;
+
 import junit.framework.TestCase;
 
-// XMLUnit
 import org.custommonkey.xmlunit.XMLAssert;
-
-import java.net.*;
-import java.io.*;
-import java.util.*;
-import java.util.regex.*;
+import org.custommonkey.xmlunit.XMLUnit;
 
 /**
  * JUnit tests for simplePurlClient.java
@@ -39,10 +44,8 @@ public class simplePurlClientTest extends TestCase {
 
 	// Create an instance of the PURL test client for all methods to use.
 	protected void setUp() {
-		client = SimplePurlClientFactory.getInstance();
+	    client = new simplePurlClient();
 	}
-		
-
 
 	/****************** Test Single PURLs **************************/
 	
@@ -68,7 +71,7 @@ public class simplePurlClientTest extends TestCase {
 			formParameters.put("maintainers", "testuser");
 
 			String errMsg = "Cannot modify a PURL: ";
-			String control = "Updated resource: testPURL";
+			String control = "Updated resource: /testdomain/testPURL";
 			String test = client.modifyPurl(url, formParameters);
 
 			// Textual response, so use assertEquals.
@@ -182,13 +185,7 @@ public class simplePurlClientTest extends TestCase {
 		try {
 			String url = "http://" + host + ":" + port + "/admin/purls/";
 
-			File file = new File(System.getProperty("user.dir") + 
-								System.getProperty("file.separator") +
-								"test" + 
-								System.getProperty("file.separator") + 
-								"testdata" + 
-								System.getProperty("file.separator"), 
-								"purlsmodify.xml");
+			File file = new File(getTestDataFile("purlsmodify.xml"));
 
 			String errMsg = "Cannot modify a batch of PURLs: ";
 			// NB: Change the number below (6) if the number of PURLs defined in the input file changes.
@@ -208,51 +205,14 @@ public class simplePurlClientTest extends TestCase {
 
 		try {
 			String url = "http://" + host + ":" + port + "/admin/targeturls/";
-
-			File file = new File(System.getProperty("user.dir") + 
-								System.getProperty("file.separator") +
-								"test" + 
-								System.getProperty("file.separator") + 
-								"testdata" + 
-								System.getProperty("file.separator") +
-								"purlsvalidate.xml");
-
+			
+			File file = new File(getTestDataFile("purlsvalidate.xml"));
 			String errMsg = "Cannot validate a batch of PURLs: ";
-			String control;
-			// TODO: Reading from a file seems to generate an XMLUnit comparison error...
-			/*
-			String controlFileName = System.getProperty("user.dir") + 
-								System.getProperty("file.separator") +
-								"test" + 
-								System.getProperty("file.separator") + 
-								"testdata" + 
-								System.getProperty("file.separator") +
-								"purlsvalidatecontrol.xml";
-			control = readFile(controlFileName);
-			*/
-			
-			// TODO: Remove this once file comparison works.
-			control = "<purl-batch-validate>" +
-					"<purl><id>/testdomain/test301</id>" +
-					"<status results=\"success\">Success</status></purl>" +
-					"<purl><id>/testdomain/test302</id>" +
-					"<status result=\"failure\">" +
-					"ERROR: Error resolving PURL target: http://example.com/test302target/</status></purl>" +
-					"<purl><id>/testdomain/test303/</id>" +
-					"<status result=\"failure\">" +
-					"ERROR: Error resolving PURL target: http://example.com/see/also/some/more.xml</status></purl>" +
-					"<purl><id>/testdomain/test307</id>" +
-					"<status result=\"failure\">" +
-					"ERROR: Error resolving PURL target: http://example.com/test307target/</status></purl>" +
-					"<purl><id>/testdomain/test404</id>" +
-					"<status result=\"validated\">Validated</status></purl>" +
-					"<purl><id>/testdomain/test410</id>" +
-					"<status result=\"validated\">Validated</status></purl>" +
-					"</purl-batch-validate>";
-			
+			String control = readFile(getTestDataFile("purlsvalidatecontrol.xml"));
 			String test = client.validatePurls(url, file);
-
+            
 			// XML response, so use assertXMLEqual.
+            XMLUnit.setIgnoreWhitespace(true);
 			XMLAssert.assertXMLEqual(errMsg + test, control, test);
 
 		} catch (Exception e) {
@@ -485,9 +445,15 @@ public class simplePurlClientTest extends TestCase {
 		deleteUser("testuser");
 	}
 	
+	public void testDeleteUser2NoLogin() {
+	    // Delete user without logging in, expect failure
+        deleteUser("testuser2", false, false);	    
+	}
+	
 	// Test deleting the other user via an HTTP DELETE.
 	public void testDeleteUser2() {
-		deleteUser("testuser2");
+	    // Delete user with logging in, expect success
+        deleteUser("testuser2", true, true);
 	}
 	
 	
@@ -549,13 +515,7 @@ public class simplePurlClientTest extends TestCase {
 			try {
 				String url = "http://" + host + ":" + port + "/admin/group/testgroup";
 
-				File file = new File(System.getProperty("user.dir") + 
-									System.getProperty("file.separator") +
-									"test" + 
-									System.getProperty("file.separator") + 
-									"testdata" + 
-									System.getProperty("file.separator"), 
-									"groupmodify.xml");
+				File file = new File(getTestDataFile("groupmodify.xml"));
 
 				String errMsg = "Cannot modify a group: ";
 				String control = "Updated resource: testgroup";
@@ -621,7 +581,7 @@ public class simplePurlClientTest extends TestCase {
 			formParameters.put("public", "false");
 			
 			String errMsg = "Cannot create a new domain.";
-			String control = "<domain><id>testdomain</id><name>Test Domain</name><maintainers><uid>testuser</uid></maintainers><writers><uid>testuser</uid></writers><public>false</public></domain>";
+			String control = "<domain><id>/testdomain</id><name>Test Domain</name><maintainers><uid>testuser</uid></maintainers><writers><uid>testuser</uid></writers><public>false</public></domain>";
 			String test = client.createDomain(url, formParameters);
 			
 			// XML response, so use assertXMLEqual.
@@ -647,7 +607,7 @@ public class simplePurlClientTest extends TestCase {
 				formParameters.put("public", "false");
 
 				String errMsg = "Cannot modify a Domain: ";
-				String control = "Updated resource: testdomain";
+				String control = "Updated resource: /testdomain";
 				String test = client.modifyDomain(url, formParameters);
 
 				// Textual response, so use assertEquals.
@@ -665,7 +625,7 @@ public class simplePurlClientTest extends TestCase {
 			String url = "http://" + host + ":" + port + "/admin/domain/testdomain";
 
 			String errMsg = "Cannot search domain.";
-			String control = "<domain><id>testdomain</id><name>Test Domain Modified</name><maintainers><uid>testuser</uid><uid>testuser2</uid></maintainers><writers><uid>testuser</uid></writers><public>false</public></domain>";
+			String control = "<domain><id>/testdomain</id><name>Test Domain Modified</name><maintainers><uid>testuser</uid><uid>testuser2</uid></maintainers><writers><uid>testuser</uid></writers><public>false</public></domain>";
 			String test = client.searchDomain(url);
 			
 			// XML response, so use assertXMLEqual.
@@ -683,7 +643,7 @@ public class simplePurlClientTest extends TestCase {
 			String url = "http://" + host + ":" + port + "/admin/domain/testdomain";
 		
 			String errMsg = "Cannot delete domain.";
-			String control = "Deleted resource: testdomain";
+			String control = "Deleted resource: /testdomain";
 			String test = client.deleteDomain(url);
 			
 			// Textual response, so use assertEquals().
@@ -833,7 +793,7 @@ public class simplePurlClientTest extends TestCase {
 
 		try {
 			String url = "http://" + host + ":" + port + "/admin/purl" + path;
-			String purlName = path.substring(path.lastIndexOf('/') + 1, path.length() );
+			String purlName = path;//.substring(path.lastIndexOf('/') + 1, path.length() );
 
 			String errMsg = "Cannot delete PURL.";
 			String control = "Deleted resource: " + purlName;
@@ -919,20 +879,49 @@ public class simplePurlClientTest extends TestCase {
 	  * @param uid A user id (e.g. "dwood").
 	*/
 	public void deleteUser(String uid) {
+	    deleteUser(uid, false, true);
+	}
+	
+	public void deleteUser(String uid, boolean loginFirst, boolean expectSuccess) {
 
-		try {
-			String url = "http://" + host + ":" + port + "/admin/user/" + uid;
+	    if(loginFirst) {
+	        // For now we assume we want to login as testuser2
 
-			String errMsg = "Cannot delete User.";
-			String control = "Deleted resource: " + uid;
-			String test = client.deleteUser(url);
+	        String url = "http://" + host + ":" + port + "/admin/login/login-submit.bsh";
 
-			// Textual response, so use assertEquals().
-			assertEquals(errMsg, control, test);
+	        Map<String, String> formParameters = new HashMap<String,String> ();
+	        formParameters.put("id", "testuser2");
+	        formParameters.put("passwd", "passWord!");
+	        formParameters.put("referrer", "/docs/index.html");
 
-		} catch (Exception e) {
-			reportException("Failed to resolve URL: ", e);
-		}
+	        try {
+	            client.login(url, formParameters);
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+	    }
+
+	    String test = null;
+	    try {
+	        String url = "http://" + host + ":" + port + "/admin/user/" + uid;
+	        test = client.deleteUser(url);
+	    } catch (Exception e) {
+	        reportException("Failed to resolve URL: ", e);
+	    }
+
+	    String control = null;
+	    String errMsg = null;
+
+	    if(expectSuccess) {
+	        errMsg = "Cannot delete User.";         
+	        control = "Deleted resource: " + uid;           
+	    } else {
+	        errMsg = "Could (but shouldn't) delete User.";         
+	        control = "Not allowed to delete: " + uid;	        
+	    }
+
+	    // Textual response, so use assertEquals().
+	    assertEquals(errMsg, control, test);
 	}
 	
 	/** Create a batch of PURLs via an HTTP POST.
@@ -944,14 +933,7 @@ public class simplePurlClientTest extends TestCase {
 
 		try {
 			String url = "http://" + host + ":" + port + "/admin/purls/";
-
-			File file = new File(System.getProperty("user.dir") + 
-								System.getProperty("file.separator") +
-								"test" + 
-								System.getProperty("file.separator") + 
-								"testdata" + 
-								System.getProperty("file.separator"), 
-								filename);
+			File file = new File(getTestDataFile(filename));
 
 			String errMsg = "Cannot create a batch of PURLs.";
 			String control = "<purl-batch-success numCreated=\"" + numCreated + "\"/>";
@@ -963,7 +945,25 @@ public class simplePurlClientTest extends TestCase {
 		} catch (Exception e) {
 			reportException("Failed to resolve URL: ", e);
 		}
-	}		
+	}
+	
+	private String getTestDataFile(String filename) {
+        String separator = System.getProperty("file.separator");
+        String userDir = System.getProperty("user.dir");
+        
+        StringBuffer sb = new StringBuffer(System.getProperty("user.dir"));
+        sb.append(separator);
+        
+        if(!userDir.endsWith("test")) {
+            sb.append("test");
+            sb.append(separator);               
+        }
+        
+        sb.append("testdata");
+        sb.append(separator);
+        sb.append(filename);
+        return sb.toString();
+	}
 
 	/** Read in the contents of a file and return them.
 	  *

@@ -1,14 +1,11 @@
 package org.purl.test;
 
-import java.net.*;
-import java.io.*;
-import java.util.*;
-
-import org.restlet.*;
-import org.restlet.data.*;
-import org.restlet.util.*;
-import org.restlet.resource.*;
-import org.restlet.data.Form;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Attempts to load 1 million PURLs into a PURL server.
@@ -34,7 +31,7 @@ public final class millionPurlLoadTest {
 	public static void main(String args[]) {
 		
 		millionPurlLoadTest harness = new millionPurlLoadTest();
-		int delay = 900000;  // Default delay 15 minutes between loads.
+		int delay = 100;  // Default delay 15 minutes between loads.
 		
 		if ( null != args && args.length == 2 ) {
 			if ( args[0].equals("-d") ) {
@@ -81,7 +78,7 @@ public final class millionPurlLoadTest {
 		try {
 			String url = "http://" + host + ":" + port + "/admin/purls/";
 
-			File file = new File("testdata" + 
+			File file = new File(System.getProperty("user.home") + 
 								System.getProperty("file.separator") +
 								"large" +
 								System.getProperty("file.separator") +
@@ -172,7 +169,7 @@ public final class millionPurlLoadTest {
 	// Check to see if the last test file exists.
 	private boolean checkFiles() {
 		
-		File file = new File("testdata" + 
+		File file = new File(System.getProperty("user.home") + 
 							System.getProperty("file.separator") +
 							"large" +
 							System.getProperty("file.separator") +
@@ -191,7 +188,7 @@ public final class millionPurlLoadTest {
 			
 			try	{
 			    // Open an output stream
-			    FileOutputStream fileout = new FileOutputStream ("testdata" + 
+			    FileOutputStream fileout = new FileOutputStream (System.getProperty("user.home") + 
 									System.getProperty("file.separator") +
 									"large" +
 									System.getProperty("file.separator") +
