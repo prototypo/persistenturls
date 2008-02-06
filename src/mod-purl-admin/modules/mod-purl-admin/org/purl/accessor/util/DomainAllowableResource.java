@@ -5,11 +5,9 @@ import org.ten60.netkernel.layer1.nkf.NKFException;
 
 public class DomainAllowableResource implements AllowableResource {
     
-    private URIResolver uriResolver;
     private ResourceStorage domainStorage;
     
     public DomainAllowableResource(URIResolver uriResolver, ResourceStorage domainStorage) {
-        this.uriResolver = uriResolver;
         this.domainStorage = domainStorage;
     }
 
@@ -21,7 +19,6 @@ public class DomainAllowableResource implements AllowableResource {
             String domain = resourceName;
 
             while(!done) {
-                System.out.println("Checking: " + domain);
                 done = domainStorage.resourceExists(context, domain);
                 if(!done) {
                     int lastSlash = domain.lastIndexOf("/");
@@ -44,5 +41,4 @@ public class DomainAllowableResource implements AllowableResource {
     public String getDenyMessage(INKFConvenienceHelper context, String resourceName) {
         return "Domain: " + resourceName + " cannot be created because it or a parent domain already exist.";
     }
-
 }

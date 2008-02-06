@@ -3,8 +3,6 @@ package org.purl.accessor.util;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.NKFException;
 
-import com.ten60.netkernel.urii.IURAspect;
-
 public class DefaultResourceDeleter implements ResourceDeleter {
 
     URIResolver uriResolver;

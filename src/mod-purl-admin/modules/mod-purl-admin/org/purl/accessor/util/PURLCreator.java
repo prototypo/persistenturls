@@ -22,12 +22,10 @@ import com.ten60.netkernel.urii.aspect.StringAspect;
 public class PURLCreator implements ResourceCreator {
     private URIResolver[] maintainerResolvers;
     private URIResolver purlResolver;
-    private ResourceStorage maintainerStorage;
     private ResourceStorage purlStorage;
 
     public PURLCreator( URIResolver[] maintainerResolvers, URIResolver purlResolver, ResourceStorage purlStorage, ResourceStorage maintainerStorage) {
         this.maintainerResolvers = maintainerResolvers;
-        this.maintainerStorage = maintainerStorage;
         this.purlResolver = purlResolver;
         this.purlStorage = purlStorage;
     }
