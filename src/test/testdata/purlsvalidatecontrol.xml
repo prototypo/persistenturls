@@ -1,8 +1,7 @@
-<?xml version="1.0"?>
 <purl-batch-validate>
 	<purl>
 		<id>/testdomain/test301</id>
-		<status results="success">Success</status>
+		<status result="failure">ERROR: Error resolving PURL target: http://example.com/test301target/</status>
 	</purl>
 	<purl>
 		<id>/testdomain/test302</id>
