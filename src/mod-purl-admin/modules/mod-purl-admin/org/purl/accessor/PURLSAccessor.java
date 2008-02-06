@@ -24,7 +24,7 @@ public class PURLSAccessor extends NKFAccessorImpl {
         String methodArg = context.getThisRequest().getArgument("method");
         String method = ((StringAspect)context.sourceAspect(methodArg, IAspectString.class)).getString();
         
-        if(method.equals("POST")) {
+        if(method.equals("POST") || method.equals("PUT")) {
             IAspectXDA xdaParam = (IAspectXDA) context.sourceAspect("this:param:param", IAspectXDA.class);
 
             // Validate the input document against the batch schema
