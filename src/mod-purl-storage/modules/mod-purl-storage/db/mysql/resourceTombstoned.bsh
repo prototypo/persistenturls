@@ -16,7 +16,7 @@ main() {
 		break;
 		case "domain":
 		uri = "ffcpl:/sql/db/domainTombstoned.idoc";
-		value = ruri.substring(14);
+		value = ruri.substring(13);
 		break;
 		case "group":
 		uri = "ffcpl:/sql/db/groupTombstoned.idoc";
