@@ -108,7 +108,7 @@ public class simplePurlClientTest extends TestCase {
 
 			String result = client.validatePurl(url);
 						
-			String control = "<purl><id>/testdomain/testPURL</id><status results=\"success\">Success</status></purl>";
+			String control = "<purl><id>/testdomain/testPURL</id><status result=\"success\">Success</status></purl>";
 			assertEquals("Cannot validate PURL.",
 						control,
 						result);
@@ -210,7 +210,7 @@ public class simplePurlClientTest extends TestCase {
 			String errMsg = "Cannot validate a batch of PURLs: ";
 			String control = readFile(getTestDataFile("purlsvalidatecontrol.xml"));
 			String test = client.validatePurls(url, file);
-            
+
 			// XML response, so use assertXMLEqual.
             XMLUnit.setIgnoreWhitespace(true);
 			XMLAssert.assertXMLEqual(errMsg + test, control, test);
