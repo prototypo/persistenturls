@@ -7,6 +7,8 @@ main() {
 	dbconfig = context.sourceAspect("ffcpl:/etc/ConfigPURLSDB.xml", IAspectXDA.class);
 	dbtype = dbconfig.getXDA().getText("/config/type", true);
 	
+	System.out.println("Initializing Database: " + dbtype);
+	
 	resp = null;
 	dbInitFile = "ffcpl:/sql/" + dbtype + "-initialized";
 	
@@ -27,7 +29,6 @@ main() {
 			res = context.issueSubRequest(req);
 			req = context.createSubRequest("active:purl-storage-create-db");
 			res = context.issueSubRequest(req);
-			
 			context.sinkAspect(dbInitFile, new StringAspect("<db type=\"" + dbtype + "\" initialized=\"" + new Date() + "\"/>"));
 		}
 		
