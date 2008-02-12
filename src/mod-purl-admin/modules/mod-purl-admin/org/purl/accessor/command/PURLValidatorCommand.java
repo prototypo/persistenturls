@@ -1,5 +1,6 @@
 package org.purl.accessor.command;
 
+import java.io.IOException;
 import java.net.UnknownHostException;
 
 import org.purl.accessor.util.NKHelper;
@@ -51,7 +52,7 @@ public class PURLValidatorCommand extends PURLResolveCommand {
                             req.addArgument("operand", iur);
                             context.issueSubRequest(req);
 
-                            sb.append("<status results=\"success\">Success</status>");
+                            sb.append("<status result=\"success\">Success</status>");
 
                         } catch(NKFException e) {
                             String error = null;
@@ -60,7 +61,7 @@ public class PURLValidatorCommand extends PURLResolveCommand {
                                 t=t.getCause();
                                 if(t instanceof UnknownHostException) {
                                     error = "Cannot find host: " + url;
-                                } else if(t instanceof NetKernelException) {
+                                } else if((t instanceof NetKernelException) || (t instanceof IOException)) {
                                     error = "Error resolving PURL target: " + url;
                                 }
                             }
