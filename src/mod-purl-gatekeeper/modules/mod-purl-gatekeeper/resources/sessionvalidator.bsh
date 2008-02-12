@@ -5,11 +5,8 @@ import org.purl.session.SessionHelper;
 
 void main()
 {	
-	System.out.println("VALIDATING THE NEW SESSION");
 	sessionURI=context.getThisRequest().getArgument("session");
 	URI=context.getThisRequest().getArgument("uri");
-	System.out.println("URI: " + URI);
-	System.out.println("SESSION: " + sessionURI);		
 	tokenURI=sessionURI+"+key@ffcpl:/credentials";
 	
 	b = false;
@@ -35,7 +32,6 @@ void main()
 		b = !needSessionCheck();
 	}
 	
-	System.out.println("b: " + b);
 	resp=context.createResponseFrom(new BooleanAspect(b));
 	resp.setMimeType("text/plain");
 }
