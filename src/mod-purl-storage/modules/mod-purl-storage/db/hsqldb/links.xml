@@ -295,7 +295,7 @@
 	<link>
 		<name>Batch Load</name>
 		<ext>/batch-load</ext>
-		<int>active:dpml+operand@ffcpl:/sql/db/batchLoad.idoc</int>
+		<int>active:purl-storage-fast-batch-load</int>
 		<args>all</args>
 	</link>					
 </links>
