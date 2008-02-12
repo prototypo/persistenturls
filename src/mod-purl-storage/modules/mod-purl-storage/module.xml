@@ -32,8 +32,7 @@
 			<match>ffcpl:/etc/ConfigPURLSDB.xml</match>
 			<match>ffcpl:/filters/.*</match>			
 			<match>ffcpl:/tables/.*</match>
-		</this>
-		<this>
+			<match>ffcpl:/org/.*</match>
 			<match>ffcpl:/resources/.*</match>
 			<match>ffcpl:/sql/.*</match>
 			<match>ffcpl:/db/.*</match>
@@ -45,6 +44,11 @@
 			<to>active:beanshell+operator@ffcpl:/resources/initdb.bsh</to>
 		</rewrite>
 		
+		<ura>
+      		<match>active:purl-storage-fast-batch-load\+.*</match>
+      		<class>org.purl.accessor.BatchLoadAccessor</class>
+    	</ura>
+
 		<rewrite>
 			<match>active:purl-storage-(.*)</match>
 			<to>active:mapper+operator@ffcpl:/sql/db/links.xml+operand@ffcpl:/xrl/$1</to>
