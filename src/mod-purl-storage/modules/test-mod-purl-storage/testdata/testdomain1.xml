@@ -1,6 +1,6 @@
 <domain>
 	<public>true</public>
-	<id>boo</id>
+	<id>/boo</id>
 	<name>My Public Domain</name>
 	<maintainers>
 		<uid>brian-test</uid>

@@ -1,6 +1,6 @@
 <domain>
 	<public>false</public>
-	<id>zoo</id>
+	<id>/zoo</id>
 	<name>My Other Private Domain</name>
 	<maintainers>
 		<uid>brian-test</uid>
