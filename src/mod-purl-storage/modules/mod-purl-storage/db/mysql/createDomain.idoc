@@ -58,7 +58,7 @@
 					<operator>
 						<stm:group xmlns:stm="http://1060.org/stm">
 							<stm:set xpath="/idoc/seq/instr/uri">
-								ffcpl:/domain/<stm:param xpath="/domain/id/text()"/>
+								ffcpl:/domain<stm:param xpath="/domain/id/text()"/>
 							</stm:set>
 						</stm:group>			
 					</operator>
@@ -334,7 +334,7 @@
 					<operator>
 						<stm:group xmlns:stm="http://1060.org/stm">
 							<stm:set xpath="/idoc/seq/instr/uri">
-								ffcpl:/domain/<stm:param xpath="/domain/id/text()"/>
+								ffcpl:/domain<stm:param xpath="/domain/id/text()"/>
 							</stm:set>
 						</stm:group>			
 					</operator>
