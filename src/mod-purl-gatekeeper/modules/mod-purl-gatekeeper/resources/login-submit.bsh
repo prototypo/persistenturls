@@ -34,7 +34,6 @@ void main()
 		//Sink credentials to session...
 		sessionURI=context.getThisRequest().getArgument("session");
 		tokenURI=sessionURI+"+key@ffcpl:/credentials";
-		System.out.println("TokenURI: " + tokenURI);
 		req=context.createSubRequest(tokenURI);
 		req.setRequestType(INKFRequestReadOnly.RQT_SINK);
 		req.addSystemArgument(new StringAspect(id));

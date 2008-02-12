@@ -7,8 +7,6 @@ void main()
 	System.out.println("VALIDATING THE NEW SESSION");
 	sessionURI=context.getThisRequest().getArgument("session");
 	URI=context.getThisRequest().getArgument("uri");
-	System.out.println("URI: " + URI);
-	System.out.println("SESSION: " + sessionURI);		
 	tokenURI=sessionURI+"+key@ffcpl:/credentials";
 	
 	b = false;
@@ -35,7 +33,6 @@ void main()
 	
 	sb.append("</login>");
 	
-	System.out.println("b: " + b);
 	resp=context.createResponseFrom(new StringAspect(sb.toString()));
 	resp.setMimeType("text/xml");
 }
