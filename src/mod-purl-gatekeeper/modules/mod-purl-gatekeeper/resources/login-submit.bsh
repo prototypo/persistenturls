@@ -5,20 +5,15 @@ import org.purl.session.SessionHelper;
 
 void main()
 {	
-	System.out.println("CHECKING THE LOGIN CREDENTIALS");
 	nvp=context.sourceAspect("this:param:param", IAspectNVP.class);
-	System.out.println("GOT A PARAM");
 	result=null;
-	System.out.println("id: " + nvp.getValue("id"));
-	System.out.println("passwd: " + nvp.getValue("passwd"));
 	id=nvp.getValue("id");
 	passwd = nvp.getValue("passwd");
-	System.out.println("passwd: " + passwd);
+
 	referrer = nvp.getValue("referrer");
 	if(referrer == null) {
 		referrer = "/docs/index.html";
 	}
-	System.out.println("referrer: " + nvp.getValue("referrer"));
 	
 	req=context.createSubRequest("active:purl-user-authenticate");
 	req.addArgument("user", "data:text/plain," + id);
@@ -26,11 +21,9 @@ void main()
 	req.setAspectClass(BooleanAspect.class);
 	resp = context.issueSubRequestForAspect(req);
 	
-	System.out.println("AUTHENTICATED: " + resp.isTrue());
 	//if(id.equals("test") && passwd.equals("test"))
 	if(resp.isTrue())
 	{	
-		System.out.println("YES!");
 		//Sink credentials to session...
 		sessionURI=context.getThisRequest().getArgument("session");
 		tokenURI=sessionURI+"+key@ffcpl:/credentials";
@@ -39,7 +32,6 @@ void main()
 		req.addSystemArgument(new StringAspect(id));
 		context.issueSubRequest(req);
 		
-		System.out.println("1");
 		//Issue HTTP Redirect
 		req=context.createSubRequest("active:HTTPRedirect");
 		req.addArgument("operator", new StringAspect("<url>"+referrer+"</url>"));
