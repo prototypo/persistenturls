@@ -51,5 +51,6 @@
     <file>domainsIndexed.idoc</file>
     <file>groupsIndexed.idoc</file>
     <file>purlsIndexed.idoc</file>
-    <file>usersIndexed.idoc</file>        
+    <file>usersIndexed.idoc</file>
+    <file>batchLoad.xsl</file>
 </dbfiles>
