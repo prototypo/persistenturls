@@ -185,6 +185,7 @@ indexPURLs() {
 		while(xdaRO.hasNext()) {
 			xdaRO.next();
 			pID = xdaRO.getText("p_id", true);
+			zID = xdaRO.getText("z_id", true);			
 			req = context.createSubRequest("active:purl-storage-query-purl");
         	req.addArgument("uri", "ffcpl:/purl" + pID);
 			req.setAspectClass(IAspectString.class);
@@ -192,7 +193,7 @@ indexPURLs() {
 		
 			NKHelper.indexResource(context, "ffcpl:/index/purl", uriResolver.getURI(pID), sa);
 			
-			sb.append("<purl><id>" + pID + "</id></purl>");
+			sb.append("<purl><id>" + pID + "</id><z_id>" + zID + "</z_id></purl>");
 			
 			count++;
 		}
@@ -203,11 +204,12 @@ indexPURLs() {
 		
 		if(count>0) {
 			sb.append("</purls>");
-		
+			System.out.println("****STARTING INDEX");
 			req = context.createSubRequest("active:purl-storage-purls-indexed");
 			req.addArgument("param", new StringAspect(sb.toString()));
 			req.setAspectClass(IAspectString.class);
 			sa = context.issueSubRequestForAspect(req);
+			System.out.println("****ENDING INDEX");			
 		}
 	}
 }
