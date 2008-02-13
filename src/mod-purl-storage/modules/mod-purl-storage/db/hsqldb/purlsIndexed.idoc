@@ -29,7 +29,7 @@
       					<stm:group xmlns:stm="http://1060.org/stm">
 							<stm:append xpath="/batch">
 								<sql>update purls set "indexed" = true
-									where "p_id" = '<stm:param xpath="/purls/purl[1]/id/text()"/>';</sql>
+									where "z_id" = <stm:param xpath="/purls/purl[1]/z_id/text()"/>;</sql>
       						</stm:append>
       					</stm:group>
       				</operator>
