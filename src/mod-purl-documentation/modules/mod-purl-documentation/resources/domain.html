@@ -1,8 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<!-- 
+	<!-- 
 
 domain.html - Provides a Web UI for the administration of PURL domains.
 
@@ -35,15 +34,15 @@ Importantly, look for the callback function onResponse() in utilpurl.js, which
 handles results from the server in response to form submissions.
 
 -->
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link type="text/css" rel="stylesheet" href="style.css" />
+		<title>
+			PURL Domain Administration
+		</title><!--[if lt IE 7]>
+	<script defer type="text/javascript" src="javascripts/pngfix.js"></script>
+	<![endif]-->
 
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<link type="text/css" rel="stylesheet" href="style.css" />
-
-	<title>PURL Domain Administration</title>
-	<!--[if lt IE 7]>
-    <script defer type="text/javascript" src="javascripts/pngfix.js"></script>
-    <![endif]-->
 <script type="text/javascript" src="javascripts/utilajax.js">
 </script>
 <script type="text/javascript" src="javascripts/ajaxCaller.js">
@@ -101,7 +100,7 @@ handles results from the server in response to form submissions.
 				public: $('c_public').checked
 			}
 			//ajaxCaller.postVars("/admin/domain/" + my_id, bodyVars, urlVars, onResponse, false, "Create");
-			ajaxCaller.postVars(normalizeDomainName("/admin/domain/", my_id), bodyVars, urlVars, onResponse, false, "Create");			
+			ajaxCaller.postVars(normalizeDomainName("/admin/domain/", my_id), bodyVars, urlVars, onResponse, false, "Create");          
 		}
 		clearErrorIndications();
 		return false;
@@ -152,7 +151,7 @@ handles results from the server in response to form submissions.
 		} else {
 			// We have a domain id, so we call that resource directly.
 			//ajaxCaller.get("/admin/domain/" + my_id, bodyVars, onResponse, false, "Search");
-			ajaxCaller.get(normalizeDomainName("/admin/domain/",my_id), bodyVars, onResponse, false, "Search");			
+			ajaxCaller.get(normalizeDomainName("/admin/domain/",my_id), bodyVars, onResponse, false, "Search");         
 		}
 		clearErrorIndications();
 		return false;
@@ -167,7 +166,7 @@ handles results from the server in response to form submissions.
 			signalLoadingResults();
 			bodyVars =  {};
 			//ajaxCaller.deleteIt("/admin/domain/" + my_id, bodyVars, onResponse, false, "Delete");
-			ajaxCaller.deleteIt(normalizeDomainName("/admin/domain/", my_id), bodyVars, onResponse, false, "Delete");			
+			ajaxCaller.deleteIt(normalizeDomainName("/admin/domain/", my_id), bodyVars, onResponse, false, "Delete");           
 		}
 		clearErrorIndications();
 		return false;
@@ -175,299 +174,334 @@ handles results from the server in response to form submissions.
 
 //]]>
 </script>
-</head>
-
-<body onload="load('/docs/domain.html')">
-
-	<div id="loginstatus">
-		<p>Login status not determined.  Do you have Javascript and cookies enabled?</p>
-	</div>
-
-	<div id="header">
-		<h1>PURL Domain Administration</h1>
-
-		<ul id="tabmenu">
-		<li><a class="inactive" href="index.html">Home</a></li>
-		<li><a class="inactive" href="purl.html">PURLs</a></li>
-		<li><a class="inactive" href="user.html">Users</a></li>
-		<li><a class="inactive" href="group.html">Groups</a></li>
-		<li><a class="active" href="domain.html">Domains</a></li>
-		<li><a class="inactive" href="help.html#domain">Help</a></li>
-		</ul>
-	</div>
-
-	<div id="content">
-		<table class="navtable" summary="purl interface" width="100%">
-			<tr valign="top">
-				<td class="navtable_action" width="35%">
-					<div id="navigation">
-						<form name="naviform" id="naviform">
-							<fieldset>
-								<legend>1) Choose an action to take on domains</legend>
-
-								<div class="instructions">
-									Domain administration options.
-								</div><select name="naviselect" onchange="showAction()">
-									<option value="">
-										--- Select your action ---
-									</option>
-
-									<option value="create">
-										Create a new domain
-									</option>
-
-									<option value="modify">
-										Modify an existing domain
-									</option>
-
-									<option value="search">
-										Search for a domain
-									</option>
-
-									<option value="delete">
-										Delete a domain
-									</option>
-								</select>
-							</fieldset>
-						</form><img src="./images/domains.png" alt="domains" />
-					</div>
-				</td>
-
-				<td class="navtable_form">
-					<div id="create" style="display: none;">
-						<form action="#" name="createForm" onsubmit="return createSubmit()" id="createForm">
-							<fieldset>
-								<legend>2) Create a new domain</legend>
-
-								<div class="instructions">
-									Fill in the following information to create a new domain.
-								</div>
-
-								<table class="actiontable" summary="action table">
-									<tbody>
-										<tr>
-											<td class="property" id="c_name_label">Name:</td>
-
-											<td class="value"><input id="c_name" name="c_name" type="text" /></td>
-										</tr>
-
-										<tr>
-											<td class="property" id="c_id_label">Domain ID:</td>
-
-											<td class="value"><input id="c_id" name="c_id" type="text" /></td>
-										</tr>
-										
-										<tr>
-											<td class="property" id="c_maintainers_label">Maintainer IDs (one per line):</td>
-
-											<td class="value">
-												<textarea rows="5" cols="40" id="c_maintainers" name="c_maintainers"></textarea>
-											</td>
-										</tr>
-										
-										<tr>
-											<td class="property" id="c_writers_label">Writer IDs (one per line):</td>
-
-											<td class="value">
-												<textarea rows="5" cols="40" id="c_writers" name="c_writers"></textarea>
-											</td>
-										</tr>
-
-										<tr>
-											<td class="property" id="c_public_label">Public?  (Applies solely to top-level domains):</td>
-
-											<td class="value"><input id="c_public" name="c_public" type="checkbox" value="true" /></td>
-										</tr>
-										
-									</tbody>
-								</table><input value="Submit" id="needAuth_0" type="submit" /><br />
-								<div id="needAuthDiv_0"></div>
-
-								<table class="docstable" summary="documentation table">
-									<tbody>
-										<tr>
-											<td align="right"><a href="help.html#domaincreate">Help</a></td>
-										</tr>
-									</tbody>
-								</table>
-							</fieldset>
-						</form>
-					</div>
-
-					<div id="modify" style="display: none;">
-						<form action="#" name="modifyForm" onsubmit="return modifySubmit()" id="modifyForm">
-							<fieldset>
-								<legend>2) Modify a domain</legend>
-
-								<div class="instructions">
-									Modify any of the following domain information.
-								</div>
-
-								<table class="actiontable" summary="action table">
-									<tbody>
-										<tr>
-											<td class="property" id="m_name_label">Name:</td>
-
-											<td class="value"><input id="m_name" name="m_name" type="text" /></td>
-										</tr>
-
-										<tr>
-											<td class="property" id="m_id_label">Domain ID:</td>
-
-											<td class="value"><input id="m_id" name="m_id" type="text" /></td>
-										</tr>
-										
-										<tr>
-											<td class="property" id="m_maintainers_label">Maintainer IDs (one per line):</td>
-
-											<td class="value">
-												<textarea rows="5" cols="40" id="m_maintainers" name="m_maintainers"></textarea>
-											</td>
-										</tr>
-										
-										<tr>
-											<td class="property" id="m_writers_label">Writer IDs (one per line):</td>
-
-											<td class="value">
-												<textarea rows="5" cols="40" id="m_writers" name="m_writers"></textarea>
-											</td>
-										</tr>
-
-										<tr>
-											<td class="property" id="m_public_label">Public?  (Applies solely to top-level domains):</td>
-
-											<td class="value"><input id="m_public" name="m_public" type="checkbox" value="true" /></td>
-										</tr>
-									</tbody>
-								</table><input value="Submit" id="needAuth_1" type="submit" /><br />
-								<div id="needAuthDiv_1"></div>
-
-								<table class="docstable" summary="documentation table">
-									<tbody>
-										<tr>
-											<td align="right"><a href="help.html#domainmodify">Help</a></td>
-										</tr>
-									</tbody>
-								</table>
-							</fieldset>
-						</form>
-					</div>
-
-					<div id="search" style="display: none;">
-						<form action="#" name="searchForm" onsubmit="return searchSubmit()" id="searchForm">
-							<fieldset>
-								<legend>2) Search for a domain</legend>
-
-								<div class="instructions">
-									Search domains based on any of the following characteristics.
-								</div>
-
-								<table class="actiontable" summary="action table">
-									<tbody>
-										<tr>
-											<td class="property" id="s_name_label">Name:</td>
-
-											<td class="value"><input id="s_name" name="s_name" type="text" /></td>
-										</tr>
-
-										<tr>
-											<td align="center"><b>or</b></td>
-										</tr>
-										
-										<tr>
-											<td class="property" id="s_id_label">Domain ID:</td>
-
-											<td class="value"><input id="s_id" name="s_id" type="text" /></td>
-										</tr>
-
-										<tr>
-											<td align="center"><b>or</b></td>
-										</tr>
-
-										<tr>
-											<td class="property" id="s_maintainers_label">Maintainer ID:</td>
-
-											<td class="value"><input id="s_maintainers" name="s_maintainers" type="text" /></td>
-										</tr>
-
-										<tr>
-											<td align="center"><b>or</b></td>
-										</tr>
-
-										<tr>
-											<td class="property" id="s_writers_label">Writer ID:</td>
-
-											<td class="value"><input id="s_writers" name="s_writers" type="text" /></td>
-										</tr>
-
-										<tr>
-											<td class="property" id="s_tombstone_label">Search tombstoned domains:</td>
-
-											<td class="value"><input id="s_tombstone" name="s_tombstone" type="checkbox" value="true" /></td>
-										</tr>
-									</tbody>
-								</table><input value="Submit" type="submit" />
-
-								<table class="docstable" summary="documentation table">
-									<tbody>
-										<tr>
-											<td align="right"><a href="help.html#domainsearch">Help</a></td>
-										</tr>
-									</tbody>
-								</table>
-							</fieldset>
-						</form>
-					</div>
-
-					<div id="delete" style="display: none;">
-						<form action="#" name="deleteForm" onsubmit="return checkDeleteSubmit('domain', 'd_id')" id="deleteForm">
-							<fieldset>
-								<legend>2) Delete a domain</legend>
-
-								<div class="instructions">
-									Delete a domain based on its Domain ID. You will be prompted for confirmation to complete this action.
-								</div>
-
-								<table class="actiontable" summary="action table">
-									<tbody>
-										<tr>
-											<td class="property" id="d_id_label">Domain ID:</td>
-
-											<td class="value"><input id="d_id" name="d_id" type="text" /></td>
-										</tr>
-									</tbody>
-								</table><input value="Submit" id="needAuth_2" type="submit" /><br />
-								<div id="needAuthDiv_2"></div>
-
-								<table class="docstable" summary="documentation table">
-									<tbody>
-										<tr>
-											<td align="right"><a href="help.html#domaindelete">Help</a></td>
-										</tr>
-									</tbody>
-								</table>
-							</fieldset>
-						</form>
-					</div><!-- navigation -->
-				</td>
-			</tr>
-		</table>
-	</div><!-- content -->
-
-	<div id="results" class="noresults"></div>
-
-	<div id="footer">
-	<table width="100%" summary="supporters">
-	<tr>
-	<td>
-	<a href = "http://www.oclc.org/"><img align="left" src = "images/oclclogo.png" alt="oclc"/></a> 
-	</td>
-	<td>
-	<a href = "http://zepheira.com/"><img align="right" src = "images/zepheiralogo.png" alt="zepheira" /></a>
-	</td>
-	</tr>
-	</table>
-	</div>
-
-</body>
+	</head>
+	<body onload="load('/docs/domain.html')">
+		<div id="loginstatus">
+			<p>
+				Login status not determined. Do you have Javascript and cookies enabled?
+			</p>
+		</div>
+		<div id="header">
+			<h1>
+				PURL Domain Administration
+			</h1>
+			<ul id="tabmenu">
+				<li>
+					<a class="inactive" href="index.html">Home</a>
+				</li>
+				<li>
+					<a class="inactive" href="purl.html">PURLs</a>
+				</li>
+				<li>
+					<a class="inactive" href="user.html">Users</a>
+				</li>
+				<li>
+					<a class="inactive" href="group.html">Groups</a>
+				</li>
+				<li>
+					<a class="active" href="domain.html">Domains</a>
+				</li>
+				<li>
+					<a class="inactive" href="help.html#domain">Help</a>
+				</li>
+			</ul>
+		</div>
+		<div id="content">
+			<table class="navtable" summary="purl interface" width="100%">
+				<tr valign="top">
+					<td class="navtable_action" width="35%">
+						<div id="navigation">
+							<form name="naviform" id="naviform">
+								<fieldset>
+									<legend>1) Choose an action to take on domains</legend>
+									<div class="instructions">
+										Domain administration options.
+									</div><select name="naviselect" onchange="showAction()">
+										<option value="">
+											--- Select your action ---
+										</option>
+										<option value="create">
+											Create a new domain
+										</option>
+										<option value="modify">
+											Modify an existing domain
+										</option>
+										<option value="search">
+											Search for a domain
+										</option>
+										<option value="delete">
+											Delete a domain
+										</option>
+									</select>
+								</fieldset>
+							</form><img src="./images/domains.png" alt="domains" />
+						</div>
+					</td>
+					<td class="navtable_form">
+						<div id="create" style="display: none;">
+							<form action="#" name="createForm" onsubmit="return createSubmit()" id="createForm">
+								<fieldset>
+									<legend>2) Create a new domain</legend>
+									<div class="instructions">
+										Fill in the following information to create a new domain.
+									</div>
+									<div id="needAuth_0">
+										<table class="actiontable" summary="action table">
+											<tbody>
+												<tr>
+													<td class="property" id="c_name_label">
+														Name:
+													</td>
+													<td class="value">
+														<input id="c_name" name="c_name" type="text" />
+													</td>
+												</tr>
+												<tr>
+													<td class="property" id="c_id_label">
+														Domain ID:
+													</td>
+													<td class="value">
+														<input id="c_id" name="c_id" type="text" />
+													</td>
+												</tr>
+												<tr>
+													<td class="property" id="c_maintainers_label">
+														Maintainer IDs (one per line):
+													</td>
+													<td class="value">
+														<textarea rows="5" cols="40" id="c_maintainers" name="c_maintainers">
+</textarea>
+													</td>
+												</tr>
+												<tr>
+													<td class="property" id="c_writers_label">
+														Writer IDs (one per line):
+													</td>
+													<td class="value">
+														<textarea rows="5" cols="40" id="c_writers" name="c_writers">
+</textarea>
+													</td>
+												</tr>
+												<tr>
+													<td class="property" id="c_public_label">
+														Public? (Applies solely to top-level domains):
+													</td>
+													<td class="value">
+														<input id="c_public" name="c_public" type="checkbox" value="true" />
+													</td>
+												</tr>
+											</tbody>
+										</table><input value="Submit" type="submit" /><br />
+									</div>
+									<div id="needAuthDiv_0"></div>
+									<table class="docstable" summary="documentation table">
+										<tbody>
+											<tr>
+												<td align="right">
+													<a href="help.html#domaincreate">Help</a>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</fieldset>
+							</form>
+						</div>
+						<div id="modify" style="display: none;">
+							<form action="#" name="modifyForm" onsubmit="return modifySubmit()" id="modifyForm">
+								<fieldset>
+									<legend>2) Modify a domain</legend>
+									<div class="instructions">
+										Modify any of the following domain information.
+									</div>
+									<div id="needAuth_1">
+										<table class="actiontable" summary="action table">
+											<tbody>
+												<tr>
+													<td class="property" id="m_name_label">
+														Name:
+													</td>
+													<td class="value">
+														<input id="m_name" name="m_name" type="text" />
+													</td>
+												</tr>
+												<tr>
+													<td class="property" id="m_id_label">
+														Domain ID:
+													</td>
+													<td class="value">
+														<input id="m_id" name="m_id" type="text" />
+													</td>
+												</tr>
+												<tr>
+													<td class="property" id="m_maintainers_label">
+														Maintainer IDs (one per line):
+													</td>
+													<td class="value">
+														<textarea rows="5" cols="40" id="m_maintainers" name="m_maintainers">
+</textarea>
+													</td>
+												</tr>
+												<tr>
+													<td class="property" id="m_writers_label">
+														Writer IDs (one per line):
+													</td>
+													<td class="value">
+														<textarea rows="5" cols="40" id="m_writers" name="m_writers">
+</textarea>
+													</td>
+												</tr>
+												<tr>
+													<td class="property" id="m_public_label">
+														Public? (Applies solely to top-level domains):
+													</td>
+													<td class="value">
+														<input id="m_public" name="m_public" type="checkbox" value="true" />
+													</td>
+												</tr>
+											</tbody>
+										</table><input value="Submit" type="submit" /><br />
+									</div>
+									<div id="needAuthDiv_1"></div>
+									<table class="docstable" summary="documentation table">
+										<tbody>
+											<tr>
+												<td align="right">
+													<a href="help.html#domainmodify">Help</a>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</fieldset>
+							</form>
+						</div>
+						<div id="search" style="display: none;">
+							<form action="#" name="searchForm" onsubmit="return searchSubmit()" id="searchForm">
+								<fieldset>
+									<legend>2) Search for a domain</legend>
+									<div class="instructions">
+										Search domains based on any of the following characteristics.
+									</div>
+									<table class="actiontable" summary="action table">
+										<tbody>
+											<tr>
+												<td class="property" id="s_name_label">
+													Name:
+												</td>
+												<td class="value">
+													<input id="s_name" name="s_name" type="text" />
+												</td>
+											</tr>
+											<tr>
+												<td align="center">
+													<b>or</b>
+												</td>
+											</tr>
+											<tr>
+												<td class="property" id="s_id_label">
+													Domain ID:
+												</td>
+												<td class="value">
+													<input id="s_id" name="s_id" type="text" />
+												</td>
+											</tr>
+											<tr>
+												<td align="center">
+													<b>or</b>
+												</td>
+											</tr>
+											<tr>
+												<td class="property" id="s_maintainers_label">
+													Maintainer ID:
+												</td>
+												<td class="value">
+													<input id="s_maintainers" name="s_maintainers" type="text" />
+												</td>
+											</tr>
+											<tr>
+												<td align="center">
+													<b>or</b>
+												</td>
+											</tr>
+											<tr>
+												<td class="property" id="s_writers_label">
+													Writer ID:
+												</td>
+												<td class="value">
+													<input id="s_writers" name="s_writers" type="text" />
+												</td>
+											</tr>
+											<tr>
+												<td class="property" id="s_tombstone_label">
+													Search tombstoned domains:
+												</td>
+												<td class="value">
+													<input id="s_tombstone" name="s_tombstone" type="checkbox" value="true" />
+												</td>
+											</tr>
+										</tbody>
+									</table><input value="Submit" type="submit" />
+									<table class="docstable" summary="documentation table">
+										<tbody>
+											<tr>
+												<td align="right">
+													<a href="help.html#domainsearch">Help</a>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</fieldset>
+							</form>
+						</div>
+						<div id="delete" style="display: none;">
+							<form action="#" name="deleteForm" onsubmit="return checkDeleteSubmit('domain', 'd_id')" id="deleteForm">
+								<fieldset>
+									<legend>2) Delete a domain</legend>
+									<div class="instructions">
+										Delete a domain based on its Domain ID. You will be prompted for confirmation to complete this action.
+									</div>
+									<div id="needAuth_2">
+										<table class="actiontable" summary="action table">
+											<tbody>
+												<tr>
+													<td class="property" id="d_id_label">
+														Domain ID:
+													</td>
+													<td class="value">
+														<input id="d_id" name="d_id" type="text" />
+													</td>
+												</tr>
+											</tbody>
+										</table><input value="Submit" type="submit" /><br />
+									</div>
+									<div id="needAuthDiv_2"></div>
+									<table class="docstable" summary="documentation table">
+										<tbody>
+											<tr>
+												<td align="right">
+													<a href="help.html#domaindelete">Help</a>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</fieldset>
+							</form>
+						</div><!-- navigation -->
+					</td>
+				</tr>
+			</table>
+		</div><!-- content -->
+		<div id="results" class="noresults"></div>
+		<div id="footer">
+			<table width="100%" summary="supporters">
+				<tr>
+					<td>
+						<a href="http://www.oclc.org/"><img align="left" src="images/oclclogo.png" alt="oclc" /></a>
+					</td>
+					<td>
+						<a href="http://zepheira.com/"><img align="right" src="images/zepheiralogo.png" alt="zepheira" /></a>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</body>
 </html>

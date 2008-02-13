@@ -100,24 +100,32 @@ function onLoginStatusResponse (message, headers, referrer) {
 	if ( headers["Content-Type"] == "text/xml" ||
 				headers["Content-Type"] == "application/xml" ) {
 
-		// "Parse" the XML
+		// Parse the XML
 		if ( message.indexOf("logged out") > -1 ) {
 			// The user is logged out or does not have an account.
 			resultBlock.innerHTML = "<form action=\"/admin/login/login.bsh?referrer=" + referrer + "\" method=\"POST\" name=\"loginForm\" id=\"loginForm\">Anonymous (<a href=\"#\" onClick=\"login()\">log in</a>)</form>";
-			// The use is logged out.  Disable Submit buttons requiring authentication.
+			/*
+			 THE USER IS LOGGED OUT.
+			 */
 			for ( var i=0 ; i<numNeedsAuth ; i++ ) {
-				document.getElementById("needAuth_" + i).disabled = true;
+				// Hide forms that are restricted to authenticated users.
+				// This is a convenience, NOT a security mechanism (authorization happens on the server).
+				setVisibility("needAuth_" + i, 'none');
+				
 				// Add warning messages about not being logged in.
 				document.getElementById("needAuthDiv_" + i).innerHTML = "(You must be logged in to perform this action)";
 			}
 		} else if ( message.indexOf("logged in") > -1 ) {
-			// The user is logged in.
+			/*
+			  THE USER IS LOGGED IN.
+			 */
 			var uid = message.replace(/.*<uid>(.*)<\/uid>.*/, "$1");
 			output = "<form action=\"/admin/logout?referrer=" + referrer + "\" method=\"POST\" name=\"logoutForm\" id=\"logoutForm\">Logged in as <b>" + uid + "</b> (<a href=\"#\" onClick=\"logout()\">log out</a>)</form>";
 			resultBlock.innerHTML = output;
-			// The user is logged in.  Enable all Submit buttons.
 			for ( var i=0 ; i<numNeedsAuth ; i++ ) {
-				document.getElementById("needAuth_" + i).disabled = false;
+				// Show forms that are restricted to authenticated users.
+				// This is a convenience, NOT a security mechanism (authorization happens on the server).
+				setVisibility("needAuth_" + i, 'inline');
 				// Remove all warning messages about not being logged in.
 				document.getElementById("needAuthDiv_" + i).innerHTML = "";
 			}
@@ -171,7 +179,7 @@ function showAction(directive)
 	}
 }
 
-function setVisibility(id, visibility) {
+function setVisibility(id, visibility) {	
 	document.getElementById(id).style.display = visibility;
 }
 

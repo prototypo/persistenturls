@@ -1,8 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<!--
+	<!--
 
 user.html - Provides a Web UI for the administration of PURL users.
 
@@ -35,15 +34,15 @@ Importantly, look for the callback function onResponse() in utilpurl.js, which
 handles results from the server in response to form submissions.
 
 -->
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link type="text/css" rel="stylesheet" href="style.css" />
+		<title>
+			PURL User Administration
+		</title><!--[if lt IE 7]>
+	<script defer type="text/javascript" src="javascripts/pngfix.js"></script>
+	<![endif]-->
 
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<link type="text/css" rel="stylesheet" href="style.css" />
-
-	<title>PURL User Administration</title>
-	<!--[if lt IE 7]>
-    <script defer type="text/javascript" src="javascripts/pngfix.js"></script>
-    <![endif]-->
 <script type="text/javascript" src="javascripts/utilajax.js">
 </script>
 <script type="text/javascript" src="javascripts/ajaxCaller.js">
@@ -174,329 +173,377 @@ handles results from the server in response to form submissions.
 	}
 //]]>
 </script>
-</head>
-
-<body onload="load('/docs/user.html')">
-
-	<div id="loginstatus">
-		<p>Login status not determined.  Do you have Javascript and cookies enabled?</p>
-	</div>
-
-	<div id="header">
-		<h1>PURL User Administration</h1>
-
-		<ul id="tabmenu">
-		<li><a class="inactive" href="index.html">Home</a></li>
-		<li><a class="inactive" href="purl.html">PURLs</a></li>
-		<li><a class="active" href="user.html">Users</a></li>
-		<li><a class="inactive" href="group.html">Groups</a></li>
-		<li><a class="inactive" href="domain.html">Domains</a></li>
-		<li><a class="inactive" href="help.html#user">Help</a></li>
-		</ul>
-	</div>
-
-	<div id="content">
-		<table class="navtable" summary="purl interface" width="100%">
-			<tr valign="top">
-				<td class="navtable_action" width="35%">
-					<div id="navigation">
-						<form name="naviform" id="naviform">
-							<fieldset>
-								<legend>1) Choose an action to take on users</legend>
-
-								<div class="instructions">
-									User administration options.
-								</div><select name="naviselect" onchange="showAction()">
-									<option value="">
-										--- Select your action ---
-									</option>
-
-									<option value="create">
-										Register a new user
-									</option>
-
-									<option value="modify">
-										Modify an existing user
-									</option>
-
-									<option value="search">
-										Search for a user
-									</option>
-
-									<option value="delete">
-										Delete a user
-									</option>
-								</select>
-							</fieldset>
-						</form><img src="./images/users.png" alt="users" />
-					</div>
-				</td>
-
-				<td class="navtable_form">
-					<div id="create" style="display: none;">
-						<form action="#" name="createForm" onsubmit="return checkPassword('Create')" id="createForm">
-							<fieldset>
-								<legend>2) Register a new user</legend>
-
-								<div class="instructions">
-									Fill in the following information to create a new user.
-								</div>
-
-								<table class="actiontable" summary="action table">
-									<tbody>
-										<tr>
-											<td class="property" id="c_name_label">Full name:</td>
-
-											<td class="value"><input id="c_name" name="c_name" type="text" /></td>
-										</tr>
-
-										<tr>
-											<td class="property" id="c_affiliation_label">Affiliation:</td>
-
-											<td class="value"><input id="c_affiliation" name="c_affiliation" type="text" /></td>
-										</tr>
-
-										<tr>
-											<td class="property" id="c_email_label">E-mail address:</td>
-
-											<td class="value"><input id="c_email" name="c_email" type="text" /></td>
-										</tr>
-
-										<tr>
-											<td class="property" id="c_id_label">User ID:</td>
-
-											<td class="value"><input id="c_id" name="c_id" type="text" /></td>
-										</tr>
-
-										<tr>
-											<td class="property" id="c_passwd_label">Password:</td>
-
-											<td class="value"><input id="c_passwd" name="c_passwd" type="password" /></td>
-										</tr>
-
-										<tr>
-											<td class="property" id="c_passwd2_label">Re-enter password:</td>
-
-											<td class="value"><input id="c_passwd2" name="c_passwd2" type="password" /></td>
-										</tr>
-
-										<tr>
-											<td class="property" id="c_hint_label">Password hint:</td>
-
-											<td class="value"><input id="c_hint" name="c_hint" type="text" /></td>
-										</tr>
-
-										<tr>
-											<td class="property" id="c_justification_label">Justification:</td>
-
-											<td class="value">
-											<textarea rows="5" cols="40" id="c_justification" name="c_justification">
-</textarea></td>
-										</tr>
-									</tbody>
-								</table><input value="Submit" type="submit" />
-
-								<table class="docstable" summary="documentation table">
-									<tbody>
-										<tr>
-											<td align="right"><a href="help.html#usercreate">Help</a></td>
-										</tr>
-									</tbody>
-								</table>
-							</fieldset>
-						</form>
-					</div>
-
-					<div id="modify" style="display: none;">
-						<form action="#" name="modifyForm" onsubmit="return checkPassword('Modify')" id="modifyForm">
-							<fieldset>
-								<legend>2) Modify a user</legend>
-
-								<div class="instructions">
-									Modify any of the following user information.
-								</div>
-
-								<table class="actiontable" summary="action table">
-									<tbody>
-										<tr>
-											<td class="property" id="m_name_label">Full name:</td>
-
-											<td class="value"><input id="m_name" name="m_name" type="text" /></td>
-										</tr>
-
-										<tr>
-											<td class="property" id="m_affiliation_label">Affiliation:</td>
-
-											<td class="value"><input id="m_affiliation" name="m_affiliation" type="text" /></td>
-										</tr>
-
-										<tr>
-											<td class="property" id="m_email_label">E-mail address:</td>
-
-											<td class="value"><input id="m_email" name="m_email" type="text" /></td>
-										</tr>
-
-										<tr>
-											<td class="property" id="m_id_label">User ID:</td>
-
-											<td class="value"><input id="m_id" name="m_id" type="text" /></td>
-										</tr>
-
-										<tr>
-											<td class="property" id="m_passwd_label">Password:</td>
-
-											<td class="value"><input id="m_passwd" name="m_passwd" type="text" /></td>
-										</tr>
-
-										<tr>
-											<td class="property" id="m_passwd2_label">Re-enter password:</td>
-
-											<td class="value"><input id="m_passwd2" name="m_passwd2" type="text" /></td>
-										</tr>
-
-										<tr>
-											<td class="property" id="m_hint_label">Password hint:</td>
-
-											<td class="value"><input id="m_hint" name="m_hint" type="text" /></td>
-										</tr>
-
-										<tr>
-											<td class="property" id="m_justification_label">Justification:</td>
-
-											<td class="value">
-											<textarea rows="5" cols="40" id="m_justification" name="m_justification">
-</textarea></td>
-										</tr>
-									</tbody>
-								</table><input value="Submit" id="needAuth_0" type="submit" /><br />
-								<div id="needAuthDiv_0"></div>
-
-								<table class="docstable" summary="documentation table">
-									<tbody>
-										<tr>
-											<td align="right"><a href="help.html#usermodify">Help</a></td>
-										</tr>
-									</tbody>
-								</table>
-							</fieldset>
-						</form>
-					</div>
-
-					<div id="search" style="display: none;">
-						<form action="#" name="searchForm" onsubmit="return searchSubmit()" id="searchForm">
-							<fieldset>
-								<legend>2) Search for a user</legend>
-
-								<div class="instructions">
-									Search users based on any of the following characteristics.
-								</div>
-
-								<table class="actiontable" summary="action table">
-									<tbody>
-										<tr>
-											<td class="property" id="s_name_label">Full name:</td>
-
-											<td class="value"><input id="s_name" name="s_name" type="text" /></td>
-										</tr>
-
-										<tr>
-											<td align="center"><b>or</b></td>
-										</tr>
-
-										<tr>
-											<td class="property" id="s_affiliation_label">Affiliation:</td>
-
-											<td class="value"><input id="s_affiliation" name="s_affiliation" type="text" /></td>
-										</tr>
-
-										<tr>
-											<td align="center"><b>or</b></td>
-										</tr>
-
-										<tr>
-											<td class="property" id="s_email_label">E-mail address:</td>
-
-											<td class="value"><input id="s_email" name="s_email" type="text" /></td>
-										</tr>
-
-										<tr>
-											<td align="center"><b>or</b></td>
-										</tr>
-
-										<tr>
-											<td class="property" id="s_id_label">User ID:</td>
-
-											<td class="value"><input id="s_id" name="s_id" type="text" /></td>
-										</tr>
-
-										<tr>
-											<td class="property" id="s_tombstone_label">Search tombstoned users:</td>
-
-											<td class="value"><input id="s_tombstone" name="s_tombstone" type="checkbox" value="true" /></td>
-										</tr>
-									</tbody>
-								</table><input value="Submit" type="submit" />
-
-								<table class="docstable" summary="documentation table">
-									<tbody>
-										<tr>
-											<td align="right"><a href="help.html#usersearch">Help</a></td>
-										</tr>
-									</tbody>
-								</table>
-							</fieldset>
-						</form>
-					</div>
-
-					<div id="delete" style="display: none;">
-						<form action="#" name="deleteForm" onsubmit="return checkDeleteSubmit('user', 'd_id')" id="deleteForm">
-							<fieldset>
-								<legend>2) Delete a user</legend>
-
-								<div class="instructions">
-									Delete a user based on its User ID. You will be prompted for confirmation to complete this action.
-								</div>
-
-								<table class="actiontable" summary="action table">
-									<tbody>
-										<tr>
-											<td class="property" id="d_id_label">User ID:</td>
-
-											<td class="value"><input id="d_id" name="d_id" type="text" /></td>
-										</tr>
-									</tbody>
-								</table><input value="Submit" id="needAuth_1" type="submit" />	<br />
-								<div id="needAuthDiv_1"></div>
-
-								<table class="docstable" summary="documentation table">
-									<tbody>
-										<tr>
-											<td align="right"><a href="help.html#userdelete">Help</a></td>
-										</tr>
-									</tbody>
-								</table>
-							</fieldset>
-						</form>
-					</div><!-- navigation -->
-				</td>
-			</tr>
-		</table>
-	</div><!-- content -->
-
-	<div id="results" class="noresults"></div>
-	
-	<div id="footer">
-	<table width="100%" summary="supporters">
-	<tr>
-	<td>
-	<a href = "http://www.oclc.org/"><img align="left" src = "images/oclclogo.png" alt="oclc"/></a> 
-	</td>
-	<td>
-	<a href = "http://zepheira.com/"><img align="right" src = "images/zepheiralogo.png" alt="zepheira" /></a>
-	</td>
-	</tr>
-	</table>
-	</div>
-		
-</body>
+	</head>
+	<body onload="load('/docs/user.html')">
+		<div id="loginstatus">
+			<p>
+				Login status not determined. Do you have Javascript and cookies enabled?
+			</p>
+		</div>
+		<div id="header">
+			<h1>
+				PURL User Administration
+			</h1>
+			<ul id="tabmenu">
+				<li>
+					<a class="inactive" href="index.html">Home</a>
+				</li>
+				<li>
+					<a class="inactive" href="purl.html">PURLs</a>
+				</li>
+				<li>
+					<a class="active" href="user.html">Users</a>
+				</li>
+				<li>
+					<a class="inactive" href="group.html">Groups</a>
+				</li>
+				<li>
+					<a class="inactive" href="domain.html">Domains</a>
+				</li>
+				<li>
+					<a class="inactive" href="help.html#user">Help</a>
+				</li>
+			</ul>
+		</div>
+		<div id="content">
+			<table class="navtable" summary="purl interface" width="100%">
+				<tr valign="top">
+					<td class="navtable_action" width="35%">
+						<div id="navigation">
+							<form name="naviform" id="naviform">
+								<fieldset>
+									<legend>1) Choose an action to take on users</legend>
+									<div class="instructions">
+										User administration options.
+									</div><select name="naviselect" onchange="showAction()">
+										<option value="">
+											--- Select your action ---
+										</option>
+										<option value="create">
+											Register a new user
+										</option>
+										<option value="modify">
+											Modify an existing user
+										</option>
+										<option value="search">
+											Search for a user
+										</option>
+										<option value="delete">
+											Delete a user
+										</option>
+									</select>
+								</fieldset>
+							</form><img src="./images/users.png" alt="users" />
+						</div>
+					</td>
+					<td class="navtable_form">
+						<div id="create" style="display: none;">
+							<form action="#" name="createForm" onsubmit="return checkPassword('Create')" id="createForm">
+								<fieldset>
+									<legend>2) Register a new user</legend>
+									<div class="instructions">
+										Fill in the following information to create a new user.
+									</div>
+									<table class="actiontable" summary="action table">
+										<tbody>
+											<tr>
+												<td class="property" id="c_name_label">
+													Full name:
+												</td>
+												<td class="value">
+													<input id="c_name" name="c_name" type="text" />
+												</td>
+											</tr>
+											<tr>
+												<td class="property" id="c_affiliation_label">
+													Affiliation:
+												</td>
+												<td class="value">
+													<input id="c_affiliation" name="c_affiliation" type="text" />
+												</td>
+											</tr>
+											<tr>
+												<td class="property" id="c_email_label">
+													E-mail address:
+												</td>
+												<td class="value">
+													<input id="c_email" name="c_email" type="text" />
+												</td>
+											</tr>
+											<tr>
+												<td class="property" id="c_id_label">
+													User ID:
+												</td>
+												<td class="value">
+													<input id="c_id" name="c_id" type="text" />
+												</td>
+											</tr>
+											<tr>
+												<td class="property" id="c_passwd_label">
+													Password:
+												</td>
+												<td class="value">
+													<input id="c_passwd" name="c_passwd" type="password" />
+												</td>
+											</tr>
+											<tr>
+												<td class="property" id="c_passwd2_label">
+													Re-enter password:
+												</td>
+												<td class="value">
+													<input id="c_passwd2" name="c_passwd2" type="password" />
+												</td>
+											</tr>
+											<tr>
+												<td class="property" id="c_hint_label">
+													Password hint:
+												</td>
+												<td class="value">
+													<input id="c_hint" name="c_hint" type="text" />
+												</td>
+											</tr>
+											<tr>
+												<td class="property" id="c_justification_label">
+													Justification:
+												</td>
+												<td class="value">
+													<textarea rows="5" cols="40" id="c_justification" name="c_justification">
+</textarea>
+												</td>
+											</tr>
+										</tbody>
+									</table><input value="Submit" type="submit" />
+									<table class="docstable" summary="documentation table">
+										<tbody>
+											<tr>
+												<td align="right">
+													<a href="help.html#usercreate">Help</a>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</fieldset>
+							</form>
+						</div>
+						<div id="modify" style="display: none;">
+							<form action="#" name="modifyForm" onsubmit="return checkPassword('Modify')" id="modifyForm">
+								<fieldset>
+									<legend>2) Modify a user</legend>
+									<div class="instructions">
+										Modify any of the following user information.
+									</div>
+									<div id="needAuth_0">
+										<table class="actiontable" summary="action table">
+											<tbody>
+												<tr>
+													<td class="property" id="m_name_label">
+														Full name:
+													</td>
+													<td class="value">
+														<input id="m_name" name="m_name" type="text" />
+													</td>
+												</tr>
+												<tr>
+													<td class="property" id="m_affiliation_label">
+														Affiliation:
+													</td>
+													<td class="value">
+														<input id="m_affiliation" name="m_affiliation" type="text" />
+													</td>
+												</tr>
+												<tr>
+													<td class="property" id="m_email_label">
+														E-mail address:
+													</td>
+													<td class="value">
+														<input id="m_email" name="m_email" type="text" />
+													</td>
+												</tr>
+												<tr>
+													<td class="property" id="m_id_label">
+														User ID:
+													</td>
+													<td class="value">
+														<input id="m_id" name="m_id" type="text" />
+													</td>
+												</tr>
+												<tr>
+													<td class="property" id="m_passwd_label">
+														Password:
+													</td>
+													<td class="value">
+														<input id="m_passwd" name="m_passwd" type="text" />
+													</td>
+												</tr>
+												<tr>
+													<td class="property" id="m_passwd2_label">
+														Re-enter password:
+													</td>
+													<td class="value">
+														<input id="m_passwd2" name="m_passwd2" type="text" />
+													</td>
+												</tr>
+												<tr>
+													<td class="property" id="m_hint_label">
+														Password hint:
+													</td>
+													<td class="value">
+														<input id="m_hint" name="m_hint" type="text" />
+													</td>
+												</tr>
+												<tr>
+													<td class="property" id="m_justification_label">
+														Justification:
+													</td>
+													<td class="value">
+														<textarea rows="5" cols="40" id="m_justification" name="m_justification">
+</textarea>
+													</td>
+												</tr>
+											</tbody>
+										</table><input value="Submit" type="submit" /><br />
+									</div>
+									<div id="needAuthDiv_0"></div>
+									<table class="docstable" summary="documentation table">
+										<tbody>
+											<tr>
+												<td align="right">
+													<a href="help.html#usermodify">Help</a>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</fieldset>
+							</form>
+						</div>
+						<div id="search" style="display: none;">
+							<form action="#" name="searchForm" onsubmit="return searchSubmit()" id="searchForm">
+								<fieldset>
+									<legend>2) Search for a user</legend>
+									<div class="instructions">
+										Search users based on any of the following characteristics.
+									</div>
+									<table class="actiontable" summary="action table">
+										<tbody>
+											<tr>
+												<td class="property" id="s_name_label">
+													Full name:
+												</td>
+												<td class="value">
+													<input id="s_name" name="s_name" type="text" />
+												</td>
+											</tr>
+											<tr>
+												<td align="center">
+													<b>or</b>
+												</td>
+											</tr>
+											<tr>
+												<td class="property" id="s_affiliation_label">
+													Affiliation:
+												</td>
+												<td class="value">
+													<input id="s_affiliation" name="s_affiliation" type="text" />
+												</td>
+											</tr>
+											<tr>
+												<td align="center">
+													<b>or</b>
+												</td>
+											</tr>
+											<tr>
+												<td class="property" id="s_email_label">
+													E-mail address:
+												</td>
+												<td class="value">
+													<input id="s_email" name="s_email" type="text" />
+												</td>
+											</tr>
+											<tr>
+												<td align="center">
+													<b>or</b>
+												</td>
+											</tr>
+											<tr>
+												<td class="property" id="s_id_label">
+													User ID:
+												</td>
+												<td class="value">
+													<input id="s_id" name="s_id" type="text" />
+												</td>
+											</tr>
+											<tr>
+												<td class="property" id="s_tombstone_label">
+													Search tombstoned users:
+												</td>
+												<td class="value">
+													<input id="s_tombstone" name="s_tombstone" type="checkbox" value="true" />
+												</td>
+											</tr>
+										</tbody>
+									</table><input value="Submit" type="submit" />
+									<table class="docstable" summary="documentation table">
+										<tbody>
+											<tr>
+												<td align="right">
+													<a href="help.html#usersearch">Help</a>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</fieldset>
+							</form>
+						</div>
+						<div id="delete" style="display: none;">
+							<form action="#" name="deleteForm" onsubmit="return checkDeleteSubmit('user', 'd_id')" id="deleteForm">
+								<fieldset>
+									<legend>2) Delete a user</legend>
+									<div class="instructions">
+										Delete a user based on its User ID. You will be prompted for confirmation to complete this action.
+									</div>
+									<div id="needAuth_1">
+										<table class="actiontable" summary="action table">
+											<tbody>
+												<tr>
+													<td class="property" id="d_id_label">
+														User ID:
+													</td>
+													<td class="value">
+														<input id="d_id" name="d_id" type="text" />
+													</td>
+												</tr>
+											</tbody>
+										</table><input value="Submit" type="submit" /><br />
+									</div>
+									<div id="needAuthDiv_1"></div>
+									<table class="docstable" summary="documentation table">
+										<tbody>
+											<tr>
+												<td align="right">
+													<a href="help.html#userdelete">Help</a>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</fieldset>
+							</form>
+						</div><!-- navigation -->
+					</td>
+				</tr>
+			</table>
+		</div><!-- content -->
+		<div id="results" class="noresults"></div>
+		<div id="footer">
+			<table width="100%" summary="supporters">
+				<tr>
+					<td>
+						<a href="http://www.oclc.org/"><img align="left" src="images/oclclogo.png" alt="oclc" /></a>
+					</td>
+					<td>
+						<a href="http://zepheira.com/"><img align="right" src="images/zepheiralogo.png" alt="zepheira" /></a>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</body>
 </html>
