@@ -27,6 +27,9 @@
 					<stm:create-path newpath="@status" select="." xpath="/user">
 						<stm:param xpath="/results/row/status/text()"/>
 					</stm:create-path>
+					<stm:create-path newpath="@admin" select="." xpath="/user">
+						<stm:param xpath="/results/row/admin/text()"/>
+					</stm:create-path>
 					<stm:set xpath="/user/z_id"><stm:param xpath="/results/row/z_id/text()"/></stm:set>					
 					<stm:set xpath="/user/id"><stm:param xpath="/results/row/userid/text()"/></stm:set>
 					<stm:set xpath="/user/name"><stm:param xpath="/results/row/fullname/text()"/></stm:set>
