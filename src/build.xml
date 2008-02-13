@@ -30,6 +30,7 @@
 	<target description="Build everything." name="all" depends="init,prepare-app-deployment">
 		<mkdir dir="${dist.dir}"/>
 		<build-subdir dir="mod-control"/>
+		<build-subdir dir="mod-purl-storage"/>		
 		<build-subdir dir="mod-purl-admin"/>
 		<build-subdir dir="mod-purl-search"/>
 		<build-subdir dir="mod-purl-documentation"/>
@@ -50,6 +51,7 @@
 		<delete dir="${dist.dir}"/>
 		<delete dir="${deploy.dir}"/>
 		<delete file="mod-control/modules/mod-control/etc/appDeployment.xml"/>
+		<build-subdir dir="mod-purl-storage" target="clean"/>				
 		<build-subdir dir="mod-purl-admin" target="clean"/>
 		<build-subdir dir="mod-purl-search" target="clean"/>
 		<build-subdir dir="mod-purl-documentation" target="clean"/>
@@ -60,6 +62,7 @@
 		<build-subdir dir="mod-template" target="clean"/>
 	</target>
 	<target name="prepare-app-deployment">
+		<filter filtersFile="mod-purl-storage/build/version.properties"/>	    
 		<filter filtersFile="mod-purl-admin/build/version.properties"/>
 		<filter filtersFile="mod-purl-search/build/version.properties"/>
 		<filter filtersFile="mod-purl-documentation/build/version.properties"/>
