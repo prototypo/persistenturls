@@ -70,6 +70,20 @@ handles results from the server in response to form submissions.
 	// NB: This array contains the names of each element that represents a label for an HTML form item.  If you add a new form item and want it highlighted upon a "bad parameter" error, you MUST add it's id to this array.
 	var labelElements = ["c_name_label", "c_id_label", "c_maintainers_label", "c_writers_label", "c_public_label", "m_name_label", "m_id_label", "m_maintainers_label", "m_writers_label", "m_public_label", "s_name_label", "s_id_label", "s_maintainers_label", "s_writers_label", "s_tombstone_label", "d_id_label"];
 
+	function normalizeDomainName(base, domain) {
+		if(base.charAt(base.length - 1) != '/') {
+			if(domain.charAt(0) != '/') {
+				domain = '/' + domain;
+			}
+		} else {
+			if(domain.charAt(0) == '/') {
+				domain = domain.slice(1);
+			}
+		}
+		
+		return base + domain;
+	}
+	
 	// Send a Create command via HTTP POST.
 	function createSubmit() {
 		var my_id = $('c_id').value;
@@ -86,7 +100,8 @@ handles results from the server in response to form submissions.
 				writers: writers,
 				public: $('c_public').checked
 			}
-			ajaxCaller.postVars("/admin/domain/" + my_id, bodyVars, urlVars, onResponse, false, "Create");
+			//ajaxCaller.postVars("/admin/domain/" + my_id, bodyVars, urlVars, onResponse, false, "Create");
+			ajaxCaller.postVars(normalizeDomainName("/admin/domain/", my_id), bodyVars, urlVars, onResponse, false, "Create");			
 		}
 		clearErrorIndications();
 		return false;
@@ -114,7 +129,8 @@ handles results from the server in response to form submissions.
 				bodyType: bodyType,
 				body: body
 			};
-			ajaxCaller.putBody("/admin/domain/" + my_id, parameters.urlVars, onResponse, false, "Modify", parameters.bodyType, parameters.body);
+			//ajaxCaller.putBody("/admin/domain/" + my_id, parameters.urlVars, onResponse, false, "Modify", parameters.bodyType, parameters.body);
+			ajaxCaller.putBody(normalizeDomainName("/admin/domain/",my_id), parameters.urlVars, onResponse, false, "Modify", parameters.bodyType, parameters.body);
 		}
 		clearErrorIndications();
 		return false;
@@ -135,7 +151,8 @@ handles results from the server in response to form submissions.
 			ajaxCaller.get("/admin/domain/", bodyVars, onResponse, false, "Search");
 		} else {
 			// We have a domain id, so we call that resource directly.
-			ajaxCaller.get("/admin/domain/" + my_id, bodyVars, onResponse, false, "Search");
+			//ajaxCaller.get("/admin/domain/" + my_id, bodyVars, onResponse, false, "Search");
+			ajaxCaller.get(normalizeDomainName("/admin/domain/",my_id), bodyVars, onResponse, false, "Search");			
 		}
 		clearErrorIndications();
 		return false;
@@ -149,7 +166,8 @@ handles results from the server in response to form submissions.
 		} else {
 			signalLoadingResults();
 			bodyVars =  {};
-			ajaxCaller.deleteIt("/admin/domain/" + my_id, bodyVars, onResponse, false, "Delete");
+			//ajaxCaller.deleteIt("/admin/domain/" + my_id, bodyVars, onResponse, false, "Delete");
+			ajaxCaller.deleteIt(normalizeDomainName("/admin/domain/", my_id), bodyVars, onResponse, false, "Delete");			
 		}
 		clearErrorIndications();
 		return false;
