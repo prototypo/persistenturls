@@ -185,9 +185,12 @@
 			<match>(ffcpl:/(?!static|pub|xlib).*)</match>
 			<to>active:beanshell+operator@ffcpl:/scripts/main.bsh+base@$1</to>
 		</rewrite>
+		<!-- The mod-purl-static module is needed for SR (for now) but should eventually be removed. -->
+		<!--
 		<import>
 			<uri>urn:org:purl:static</uri>
 		</import>
+		-->
 		<import>
 			<uri>urn:org:purl:storage</uri>
 		</import>
