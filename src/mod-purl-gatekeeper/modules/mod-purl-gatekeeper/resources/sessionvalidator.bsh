@@ -60,17 +60,39 @@ needSessionCheck() {
     		uri = "ffcpl:/admin/targetpurl";    	    	
     	} else if(uri.startsWith("ffcpl:/purl")) {
     		uri = "ffcpl:/purl";    	
-    	}/*else if(uri.startsWith("ffcpl:/admin/pending")) {
+    	} else if(uri.startsWith("ffcpl:/admin/pending")) {
     		uri = "ffcpl:/admin/pending";
-    	}*/
+    	}
     	
     	retValue = SessionHelper.requiresSession(context, method, uri);
+    	
+    	/*user = getUser();
+    	
+    	System.out.println("user: " + user );
     
     	System.out.println("method: " + method);
     	System.out.println("request: " + context.getThisRequest().getURI());
 	    System.out.println("uri: " + uri);
-	    System.out.println("retValue: " + retValue);
+	    System.out.println("retValue: " + retValue); */
 	}
     
     return retValue;
 }
+
+getUser() {
+        retValue = null;
+
+        try {
+            sessionURI=context.getThisRequest().getArgument("session");
+            tokenURI=sessionURI+"+key@ffcpl:/credentials";
+            if(context.exists(tokenURI)) {
+            	credentials = (IAspectString)context.sourceAspect(tokenURI,IAspectString.class);
+            	retValue = credentials.getString();
+            } else {
+            }
+        } catch(NKFException nfe) {
+            nfe.printStackTrace();
+        }
+
+        return retValue;
+    }

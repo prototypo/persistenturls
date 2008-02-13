@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFRequest;
+import org.ten60.netkernel.xml.representation.IAspectXDA;
 
 import com.ten60.netkernel.urii.aspect.IAspectBoolean;
 
@@ -86,6 +87,22 @@ public class SessionHelper {
             req.setAspectClass(IAspectBoolean.class);
             IAspectBoolean result = (IAspectBoolean) context.issueSubRequestForAspect(req);
             retValue = result.isTrue();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        
+        return retValue;
+    }
+    
+    public static boolean isUserAdmin(INKFConvenienceHelper context, String user) {
+        boolean retValue = false;
+        
+        try {
+            INKFRequest req = context.createSubRequest("active:purl-storage-query-user");
+            req.addArgument("uri", "ffcpl:/user/" + user); 
+            req.setAspectClass(IAspectXDA.class);
+            IAspectXDA result = (IAspectXDA) context.issueSubRequestForAspect(req);
+            retValue = result.getXDA().isTrue("/user/@admin='true'");
         } catch(Exception e) {
             e.printStackTrace();
         }

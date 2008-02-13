@@ -4,7 +4,6 @@ import com.ten60.netkernel.urii.aspect.*;
 
 void main()
 {	
-	System.out.println("VALIDATING THE NEW SESSION");
 	sessionURI=context.getThisRequest().getArgument("session");
 	URI=context.getThisRequest().getArgument("uri");
 	tokenURI=sessionURI+"+key@ffcpl:/credentials";
