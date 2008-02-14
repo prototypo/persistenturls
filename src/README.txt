@@ -35,13 +35,13 @@ functional instance of 1060 NetKernel as well as the PURL service.
 
 1)  Download the JAR installer:
 
-  http://purlz.org/project/purl/downloads/PURLZ-Server-1.0b4.jar
+  http://purlz.org/project/purl/downloads/PURLZ-Server-<version>.jar
 
 2) Run the installer and follow its directions.  If you operating
 system does not allow JAR files to be executed directly, run the
 installer using this command:
 
-  java -jar PURLZ-Server-1.0b4.jar
+  java -jar PURLZ-Server-<version>.jar
 
 
 3) Hit http://localhost:8080/docs/index.html with a Web browser. Help
@@ -84,13 +84,14 @@ labeled "next".
 
 5) Enter the URL to the PURL server:
 
-  http://purlz.org/project/purl/downloads/purlz-1.0b4.zip
+  http://purlz.org/project/purl/downloads/purlz-<version>.zip
 
 6) Try the tests:
 
 (a) For the server-side tests, hit http://localhost:1060/ep+name@app_xunit
 
-(b) For the client-side tests, run:
+(b) For the client-side tests, MAKE SURE that your PURL server is using
+automatic user creation.  Then run:
 
  $ cd <repository>/src
  $ ant test
@@ -117,8 +118,9 @@ To install a PURL server from a Subversion checkout, do the following:
 
   http://www.1060.org/download/
 
-You will probably want to choose the top option ("Executable JAR
-Graphical Installer").
+NB: You will probably want to choose the top option ("Executable JAR
+Graphical Installer").  But proceed this way if you want to cause
+yourself headaches.
 
 2) Checkout the PURL source code:
 
@@ -211,7 +213,8 @@ and comment out the following lines:
 
 (a) For the server-side tests, hit http://localhost:1060/ep+name@app_xunit
 
-(b) For the client-side tests, run:
+(b) For the client-side tests, MAKE SURE that your PURL server is using
+automatic user creation.  Then run:
 
  $ cd <repository>/src
  $ ant test
