@@ -38,10 +38,13 @@ public class DomainResolver extends URIResolver {
     public String getDisplayName(String id) {
         String retValue = null;
         
-        if(!id.startsWith("ffcpl:/domain/") && !id.startsWith("ffcpl:/admin/domain/")) {
+        if(!id.startsWith("ffcpl:/domain/") && 
+           !id.startsWith("ffcpl:/admin/")) {
             retValue = (!id.startsWith("/") ? ("/"+id) : id);
         } else {
-            if(id.startsWith("ffcpl:/admin")) {
+            if(id.startsWith("ffcpl:/admin/pending/domain")) {
+                retValue = id.substring(27);                
+            } else if (id.startsWith("ffcpl:/admin")) {
                 retValue = id.substring(19);                
             } else {
                 retValue = id.substring(13);
