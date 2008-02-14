@@ -429,7 +429,7 @@ public class simplePurlClientTest extends TestCase {
 			String url = "http://" + host + ":" + port + "/admin/user/testuser";
 
 			String errMsg = "Cannot search user.";
-			String control = "<user status=\"1\"><id>testuser</id><name>Test User Modified</name><affiliation>Zepheira, LLC</affiliation><email>tuser@example.com</email></user>";
+			String control = "<user admin=\"false\" status=\"1\"><id>testuser</id><name>Test User Modified</name><affiliation>Zepheira, LLC</affiliation><email>tuser@example.com</email></user>";
 			String test = client.searchUser(url);
 
 			// XML response, so use assertXMLEqual.
@@ -864,7 +864,7 @@ public class simplePurlClientTest extends TestCase {
 			if ( userAutoCreationOn ) {
 				userAutoCreationFlag = 0;
 			}
-			String control = "<user status=\"" + userAutoCreationFlag + "\"><id>" + uid + "</id><name>" + name + "</name><affiliation>" + affiliation + "</affiliation><email>" + email + "</email></user>";
+			String control = "<user admin=\"false\" status=\"" + userAutoCreationFlag + "\"><id>" + uid + "</id><name>" + name + "</name><affiliation>" + affiliation + "</affiliation><email>" + email + "</email></user>";
 			
 			// XML response, so use assertXMLEqual.
 			XMLAssert.assertXMLEqual(errMsg, control, test);
