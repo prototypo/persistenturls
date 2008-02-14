@@ -1,8 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<!--
+	<!--
 
 user.html - Provides a Web UI for the approval/denial of PURL users.
 
@@ -25,15 +24,15 @@ limitations under the License.
 =========================================================================
 
 -->
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link type="text/css" rel="stylesheet" href="../style.css" />
+		<title>
+			PURL User Approval
+		</title><!--[if lt IE 7]>
+	<script defer type="text/javascript" src="../javascripts/pngfix.js"></script>
+	<![endif]-->
 
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<link type="text/css" rel="stylesheet" href="../style.css" />
-
-	<title>PURL User Approval</title>
-	<!--[if lt IE 7]>
-    <script defer type="text/javascript" src="../javascripts/pngfix.js"></script>
-    <![endif]-->
 <script type="text/javascript" src="../javascripts/utilajax.js">
 </script>
 <script type="text/javascript" src="../javascripts/ajaxCaller.js">
@@ -51,7 +50,7 @@ limitations under the License.
 
 	var debugThisPage = false;
 	
-	// Number of Submit buttons on this page that need to be locked out
+	// Number of forms on this page that need to be locked out
 	// when the user is not logged in.
 	var numNeedsAuth = 0;
 
@@ -65,7 +64,7 @@ limitations under the License.
 			// Add a loading message to the transient div.
 			signalLoadingPendingResults(id);
 			
-			decision = getSelectedRadio(id + "_decision");			
+			decision = getSelectedRadio(id + "_decision");          
 			urlVars = {}
 			bodyVars = {
 				decision: decision
@@ -94,54 +93,66 @@ limitations under the License.
 
 //]]>
 </script>
-</head>
-
-<body onload="loadPendingUsers()">
-
-	<div id="loginstatus">
-		<p>Login status not determined.  Do you have Javascript and cookies enabled?</p>
-	</div>
-
-	<div id="header">
-		<h1>PURL User Approval</h1>
-
-		<ul id="tabmenu">
-		<li><a class="active" href="user.html">User Approval</a></li>
-		<li><a class="inactive" href="domain.html">Domain Approval</a></li>
-		<!-- TODO: Make this help section! -->
-		<li><a class="inactive" href="../help.html#approval">Help</a></li>
-		</ul>
-	</div>
-
-	<div id="content">
-		<table class="navtable" summary="purl interface" width="100%">
-			<tr valign="top">
-				<td class="navtable_form">
-					<div id="review">
-						<fieldset>
-							<legend>Choose to approve or deny each request.</legend>
-							
-							<div id="pending">
-							</div>
-						</fieldset>
-					</div>
-				</td>
-			</tr>
-		</table>
-	</div><!-- content -->
-	
-	<div id="footer">
-	<table width="100%" summary="supporters">
-	<tr>
-	<td>
-	<a href = "http://www.oclc.org/"><img align="left" src = "../images/oclclogo.png" alt="oclc"/></a> 
-	</td>
-	<td>
-	<a href = "http://zepheira.com/"><img align="right" src = "../images/zepheiralogo.png" alt="zepheira" /></a>
-	</td>
-	</tr>
-	</table>
-	</div>
-		
-</body>
+	</head>
+	<body onload="loadPendingUsers()">
+		<div id="loginstatus">
+			<p>
+				Login status not determined. Do you have Javascript and cookies enabled?
+			</p>
+		</div>
+		<div id="header">
+			<h1>
+				PURL User Approval
+			</h1>
+			<ul id="tabmenu">
+				<li>
+					<a class="inactive" href="../index.html">Home</a>
+				</li>
+				<li>
+					<a class="inactive" href="../purl.html">PURLs</a>
+				</li>
+				<li>
+					<a class="inactive" href="../user.html">Users</a>
+				</li>
+				<li>
+					<a class="inactive" href="../group.html">Groups</a>
+				</li>
+				<li>
+					<a class="inactive" href="../domain.html">Domains</a>
+				</li>
+				<li>
+					<a class="inactive" href="index.html">Admin</a>
+				</li>
+				<li>
+					<a class="inactive" href="../help.html">Help</a>
+				</li>
+			</ul>
+		</div>
+		<div id="content">
+			<table class="navtable" summary="purl interface" width="100%">
+				<tr valign="top">
+					<td class="navtable_form">
+						<div id="review">
+							<fieldset>
+								<legend>Choose to approve or deny each request.</legend>
+								<div id="pending"></div>
+							</fieldset>
+						</div>
+					</td>
+				</tr>
+			</table>
+		</div><!-- content -->
+		<div id="footer">
+			<table width="100%" summary="supporters">
+				<tr>
+					<td>
+						<a href="http://www.oclc.org/"><img align="left" src="../images/oclclogo.png" alt="oclc" /></a>
+					</td>
+					<td>
+						<a href="http://zepheira.com/"><img align="right" src="../images/zepheiralogo.png" alt="zepheira" /></a>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</body>
 </html>
