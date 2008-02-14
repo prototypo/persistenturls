@@ -54,8 +54,6 @@ indexUsers() {
 			sb.append("<user><id>" + userID + "</id></user>");
 			
 			count++;
-		
-			System.out.println(sa.getString());
 		}
 	} finally {
 		NKHelper.closeIndex(context, "ffcpl:/index/user");
@@ -63,14 +61,11 @@ indexUsers() {
 		if(count>0) {
 			sb.append("</users>");
 			
-			System.out.println(sb.toString());
-		
 			req = context.createSubRequest("active:purl-storage-users-indexed");
 			req.addArgument("param", new StringAspect(sb.toString()));
 			req.setAspectClass(IAspectString.class);
 			sa = context.issueSubRequestForAspect(req);
 		
-			System.out.println(sa.getString());
 		}
 	}
 }
@@ -101,8 +96,6 @@ indexDomains() {
 			sb.append("<domain><id>" + dID + "</id></domain>");
 			
 			count++;
-		
-			System.out.println(sa.getString());
 		}
 	} finally {
 		NKHelper.closeIndex(context, "ffcpl:/index/domain");
@@ -110,14 +103,10 @@ indexDomains() {
 		if(count>0) {
 			sb.append("</domains>");
 			
-			System.out.println(sb.toString());
-		
 			req = context.createSubRequest("active:purl-storage-domains-indexed");
 			req.addArgument("param", new StringAspect(sb.toString()));
 			req.setAspectClass(IAspectString.class);
 			sa = context.issueSubRequestForAspect(req);
-		
-			System.out.println(sa.getString());
 		}
 	}
 }
@@ -148,8 +137,6 @@ indexGroups() {
 			sb.append("<group><id>" + gID + "</id></group>");
 			
 			count++;
-		
-			System.out.println(sa.getString());
 		}
 	} finally {
 		NKHelper.closeIndex(context, "ffcpl:/index/group");
@@ -157,14 +144,10 @@ indexGroups() {
 		if(count>0) {
 			sb.append("</groups>");
 			
-			System.out.println(sb.toString());
-		
 			req = context.createSubRequest("active:purl-storage-groups-indexed");
 			req.addArgument("param", new StringAspect(sb.toString()));
 			req.setAspectClass(IAspectString.class);
 			sa = context.issueSubRequestForAspect(req);
-		
-			System.out.println(sa.getString());
 		}
 	}
 }
@@ -204,12 +187,10 @@ indexPURLs() {
 		
 		if(count>0) {
 			sb.append("</purls>");
-			System.out.println("****STARTING INDEX");
 			req = context.createSubRequest("active:purl-storage-purls-indexed");
 			req.addArgument("param", new StringAspect(sb.toString()));
 			req.setAspectClass(IAspectString.class);
 			sa = context.issueSubRequestForAspect(req);
-			System.out.println("****ENDING INDEX");			
 		}
 	}
 }
