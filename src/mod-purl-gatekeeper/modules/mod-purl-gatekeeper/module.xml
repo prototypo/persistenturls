@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><module>
     <identity>
 		<uri>urn:org:purl:gatekeeper</uri>
-		<version>0.0.33</version>
+		<version>0.0.44</version>
     </identity>
 	<info>
 		<name>PURLS Gatekeeper Module</name>
@@ -18,7 +18,8 @@
 			<match>ffcpl:/(admin)/.*</match>
 			<!--Export http configuration-->
 			<match>ffcpl:/etc/HTTPBridgeConfig.xml</match>
-			<match>ffcpl:/.*</match>
+			<match>ffcpl:/(?!entrypoints).*</match>
+			<!--<match>ffcpl:/.*</match>-->			
 		</uri>
 	</export>
 	<rewrite>
@@ -41,7 +42,7 @@
 		
 		<!--*** Route gatekeeper requests to session mapper ***-->
 		<rule>
-			<match>(.*(admin).*)</match>
+			<match>(.*admin.*)</match>
 			<to>active:sessionmapper+uri@$e1</to>
 		</rule>
 			
@@ -76,7 +77,10 @@
 		</import>
 		<import>
 			<uri>urn:org:purl:storage</uri>
-		</import>		
+		</import>
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:xml:core</uri>
+		</import>				
 		<import>
 			<uri>urn:org:ten60:netkernel:ext:xsecurity</uri>
 		</import>

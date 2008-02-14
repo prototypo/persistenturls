@@ -2,7 +2,7 @@
 <GateKeeperPolicy>
 	<zone>
 		<match>.*/admin/pending/(user|domain).*</match>
-		<isValidURI>active:beanshell+operator@ffcpl:/resources/sessionvalidator.bsh</isValidURI>
+		<isValidURI>active:beanshell+operator@ffcpl:/resources/adminsessionvalidator.bsh</isValidURI>
 		<loginURI>ffcpl:/docs/needadmin.html</loginURI>
 	</zone>
 	<zone>
