@@ -54,6 +54,20 @@ limitations under the License.
 	// Number of Submit buttons on this page that need to be locked out
 	// when the user is not logged in.
 	var numNeedsAuth = 0;
+	
+	function normalizeDomainName(base, domain) {
+		if(base.charAt(base.length - 1) != '/') {
+			if(domain.charAt(0) != '/') {
+				domain = '/' + domain;
+			}
+		} else {
+			if(domain.charAt(0) == '/') {
+				domain = domain.slice(1);
+			}
+		}
+		
+		return base + domain;
+	}
 
 	// POST function, to be called by multiple forms (one per domain to approve/deny).
 	// Take a domain id, get the decision associated with the id and POST them to the server.
@@ -72,7 +86,7 @@ limitations under the License.
 			}
 			
 			// Use the id as the calling context to allow for addressing of the right elements.
-			ajaxCaller.postVars("/admin/pending/domain/" + id, bodyVars, urlVars, onPendingResultsResponse, false, id);
+			ajaxCaller.postVars(normalizeDomainName("/admin/pending/domain/",id), bodyVars, urlVars, onPendingResultsResponse, false, id);
 		}
 		return false;
 	}
