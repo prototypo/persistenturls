@@ -6,7 +6,7 @@
 	-->
     <identity>
 		<uri>urn:org:purl:admin</uri>
-		<version>0.0.1457</version>
+		<version>0.0.1509</version>
     </identity>
 	<info>
 		<name>PURL Admin Module</name>
@@ -89,7 +89,7 @@
 		</rewrite>
 		<rewrite>
 			<match>(ffcpl:/admin/purl)(.*)</match>
-			<to>active:purl+path@$2</to>
+			<to>active:purl+path@ffcpl:/purl$2</to>
 		</rewrite>
 		<rewrite>
 			<match>(ffcpl:/admin/targeturls)(.*)</match>
@@ -125,11 +125,11 @@
 		</rewrite>
 		<rewrite>
 			<match>(ffcpl:/admin/pending/user.*)</match>
-			<to>active:purl-storage-pending-users+type@data:text/plain,user+path@$1</to>
+			<to>active:purl-admin-pending-users+type@data:text/plain,user+path@$1</to>
 		</rewrite>
 		<rewrite>
 			<match>(ffcpl:/admin/pending/domain.*)</match>
-			<to>active:purl-storage-pending-domains+type@data:text/plain,domain+path@$1</to>
+			<to>active:purl-admin-pending-domains+type@data:text/plain,domain+path@$1</to>
 		</rewrite>
 		
 		<rewrite>
@@ -170,11 +170,11 @@
       		<class>org.purl.accessor.PURLResolverAccessor</class>
     	</ura>
     	<ura>
-    		<match>active:purl-storage-pending-users\+.*</match>
+    		<match>active:purl-admin-pending-users\+.*</match>
     		<class>org.purl.accessor.PendingAccessor</class>
     	</ura>
     	<ura>
-    		<match>active:purl-storage-pending-domains\+.*</match>
+    		<match>active:purl-admin-pending-domains\+.*</match>
     		<class>org.purl.accessor.PendingAccessor</class>
     	</ura>    	
 		<ura>
@@ -185,12 +185,10 @@
 			<match>(ffcpl:/(?!static|pub|xlib).*)</match>
 			<to>active:beanshell+operator@ffcpl:/scripts/main.bsh+base@$1</to>
 		</rewrite>
-		<!-- The mod-purl-static module is needed for SR (for now) but should eventually be removed. -->
 		<!--
 		<import>
 			<uri>urn:org:purl:static</uri>
-		</import>
-		-->
+		</import>-->
 		<import>
 			<uri>urn:org:purl:storage</uri>
 		</import>
