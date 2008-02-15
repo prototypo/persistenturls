@@ -47,13 +47,21 @@
 				<choice txt="Approve all user registrations" id="radio.label.4" value="<!-- <allowUserAutoCreation/> -->"/>
 			</spec>
 		</field>
+		<field type="staticText" align="left" txt="Users may be allowed to create Top Level Domains (e.g. /NET) for PURLs automatically or Top Level Domain registration may be restricted by an administrator.  If you would like to manually review and approve new Top Level Domains, select 'approve all Top Level Domains' below:"/>
+		<field type="radio" variable="TOPLEVELDOMAINAUTOCREATION">
+			<description align="left" txt="Please select from the following options." id="description3.radio"/>
+			<spec>
+				<choice txt="Allow automatic Top Level Domain registrations (default)" id="radio.label.4" value="<allowTopLevelDomainAutoCreation/>" set="true"/>
+				<choice txt="Approve all Top Level Domain registrations" id="radio.label.4" value="<!-- <allowTopLevelDomainAutoCreation/> -->"/>
+			</spec>
+		</field>
 	</panel>
 	<panel order="4">
 		<field type="radio" variable="STARTSERVER">
-			<description align="left" txt="Would you like to start the PURL server now?" id="description3.radio"/>
+			<description align="left" txt="Would you like to start the PURL server now?" id="description5.radio"/>
 			<spec>
-				<choice txt="Start the server now" id="radio.label.5" value="true"/>
-				<choice txt="Do not start the server (default)" id="radio.label.6" value="false" set="true"/>
+				<choice txt="Start the server now" id="radio.label.6" value="true"/>
+				<choice txt="Do not start the server (default)" id="radio.label.7" value="false" set="true"/>
 			</spec>
 		</field>
 		<field type="staticText" align="left" txt=" "/>

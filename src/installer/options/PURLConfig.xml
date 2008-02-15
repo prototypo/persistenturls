@@ -2,6 +2,7 @@
 	<!--  TODO: Parameterize all server references -->
 	<serverInfo>2.0; http://localhost:8080</serverInfo>
 	$USERAUTOCREATION
+	$TOPLEVELDOMAINAUTOCREATION
 	<allowPublicDomains/>
 	<publicDomains>
 		<domain>/net</domain>
