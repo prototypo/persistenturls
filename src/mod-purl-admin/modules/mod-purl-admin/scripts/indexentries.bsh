@@ -5,24 +5,27 @@ import org.purl.accessor.util.*;
 main() {
 
 	//acquireLock("active:purl-reindex");
-	
 	resp = null;
 	
-	if(!Indexer.alreadyIndexing() && Indexer.acquireIndexingLock()) {
-		try {
-			indexUsers();
-			indexDomains();
-			indexGroups();
-			indexPURLs();	
+	if(context.exists("ffcpl:/index/purls-initialized")) {
+		if(!Indexer.alreadyIndexing() && Indexer.acquireIndexingLock()) {
+			try {
+				indexUsers();
+				indexDomains();
+				indexGroups();
+				indexPURLs();	
+		
+				resp=context.createResponseFrom(new StringAspect("<indexed-entries/>"));	
 	
-			resp=context.createResponseFrom(new StringAspect("<indexed-entries/>"));	
-
-		} finally {
-			//releaseLock("active:purl-reindex");
-			Indexer.doneIndexing();
-		}
+			} finally {
+				//releaseLock("active:purl-reindex");
+				Indexer.doneIndexing();
+			}
+		} else {
+			resp=context.createResponseFrom(new StringAspect("<already-indexing/>"));	
+		}			
 	} else {
-		resp=context.createResponseFrom(new StringAspect("<already-indexing/>"));	
+		resp=context.createResponseFrom(new StringAspect("<database-uninitialized/>"));		
 	}
 	
 	resp.setMimeType("text/xml");
@@ -87,7 +90,7 @@ indexDomains() {
 			xdaRO.next();
 			dID = xdaRO.getText("d_id", true);
 			req = context.createSubRequest("active:purl-storage-query-domain");
-        	req.addArgument("uri", "ffcpl:/domain/" + dID);
+        	req.addArgument("uri", "ffcpl:/domain" + dID);
 			req.setAspectClass(IAspectString.class);
 			sa = context.issueSubRequestForAspect(req);
 		
