@@ -86,8 +86,12 @@ import org.purl.accessor.util.UserResolver;
 import org.purl.accessor.util.UserResourceStorage;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFRequest;
+import org.ten60.netkernel.layer1.nkf.INKFResponse;
 import org.ten60.netkernel.layer1.nkf.NKFException;
 import org.ten60.netkernel.layer1.representation.IAspectNVP;
+import org.ten60.netkernel.xml.representation.IAspectXDA;
+import org.ten60.netkernel.xml.xda.IXDAReadOnly;
+import org.ten60.netkernel.xml.xda.XPathLocationException;
 
 import com.ten60.netkernel.urii.IURAspect;
 import com.ten60.netkernel.urii.aspect.IAspectString;
@@ -119,7 +123,30 @@ public class DomainAccessor extends AbstractAccessor {
     }
 
     protected PURLCommand getCommand(INKFConvenienceHelper context, String method) {
-        return commandMap.get(method);
+        PURLCommand retValue = null;
+
+        try {
+            IAspectXDA config = (IAspectXDA) context.sourceAspect("ffcpl:/etc/PURLConfig.xml", IAspectXDA.class);
+
+            if(method.equals("POST")) {
+                retValue = commandMap.get("POST");
+                
+                IXDAReadOnly configXDA = config.getXDA();
+                if(configXDA.isTrue("/purl-config/allowTopLevelDomainAutoCreation")) {
+                    retValue = new DomainAutoCreateCommand(retValue);
+                }
+            } else {
+                retValue = commandMap.get(method);
+            }
+        } catch (NKFException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (XPathLocationException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return retValue;
     }
 
     static public class DomainCreator implements ResourceCreator {
@@ -152,6 +179,8 @@ public class DomainAccessor extends AbstractAccessor {
                     throw new PURLException("User " + next + " does not exist", 400);
                 }
             }
+            
+            //TODO: Migrate to use Domain Aspect
 
             StringBuffer sb = new StringBuffer("<domain>");
             sb.append("<public>");
@@ -167,6 +196,7 @@ public class DomainAccessor extends AbstractAccessor {
             sb.append("<maintainers>");
             
             st = new StringTokenizer(maintainers, ",");
+
             while(st.hasMoreElements()) {
                 sb.append("<uid>");
                 sb.append(st.nextToken().trim());
@@ -207,5 +237,49 @@ public class DomainAccessor extends AbstractAccessor {
             return retValue;
         }
 
+    }
+    
+    static private class DomainAutoCreateCommand extends PURLCommand {
+        
+        private PURLCommand createCmd;
+        private ResourceFilter domainFilter = new DomainPrivateDataFilter();
+        
+        private DomainAutoCreateCommand() {
+            super(null, null, null, null);
+        }
+        
+        public DomainAutoCreateCommand(PURLCommand createCmd) {
+            super(createCmd.getType(), createCmd.getURIResolver(), createCmd.getAccessController(), createCmd.getResourceStorage());            
+            this.createCmd = createCmd;
+        }
+
+        @Override
+        public INKFResponse execute(INKFConvenienceHelper context) {
+            INKFResponse resp = null;
+            
+            try {
+                resp = createCmd.execute(context);
+                
+                INKFRequest req = context.createSubRequest("active:purl-storage-approve-domain");
+                URIResolver uriResolver = getURIResolver();
+                String domainURI = uriResolver.getURI(context);
+                String domain = uriResolver.getDisplayName(domainURI);
+
+                req.addArgument("param", new StringAspect("<domain><id>" + domain + "</id></domain>")); 
+                context.issueSubRequest(req);
+                
+                req=context.createSubRequest("active:purl-storage-query-domain");
+                req.addArgument("uri", domainURI);
+                req.setAspectClass(IAspectXDA.class);
+                IAspectXDA result = (IAspectXDA) context.issueSubRequestForAspect(req);
+                resp = context.createResponseFrom(domainFilter.filter(context, result));
+                resp.setMimeType("text/xml");                
+                 
+            } catch(Throwable t) {
+                t.printStackTrace();
+            }
+            
+            return resp;
+        }
     }
 }

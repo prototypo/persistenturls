@@ -3,17 +3,44 @@ package org.purl.accessor.util;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 
 public class PURLAllowableResource extends DefaultAllowableResource {
+    
+    private URIResolver domainResolver;
 
-    public PURLAllowableResource(ResourceStorage resStorage, URIResolver resResolver) {
+    public PURLAllowableResource(ResourceStorage resStorage, URIResolver resResolver, URIResolver domainResolver) {
         super(resStorage, resResolver);
+        
+        this.domainResolver = domainResolver;
+    }
+    
+    public boolean allow(INKFConvenienceHelper context, String resourceName) {
+        // If the PURL does not already exist and the user has permission
+        // to create a PURL for this domain, we allow the resource
+        
+        return super.allow(context, resourceName)
+               && NKHelper.userCanCreatePURL(context, resourceName);
     }
     
     public String getDenyMessage(INKFConvenienceHelper context, String resourceName) {
-        if(resourceName.startsWith("ffcpl:/purl")) {
-            resourceName = resourceName.substring(11);
+        String retValue = null;
+        String displayName = getResourceResolver().getDisplayName(resourceName);
+        
+        if(!super.allow(context, resourceName)) {
+            retValue = "PURL: " + displayName + " already exists.";
+        } else {
+            String domain = NKHelper.getDomainForPURL(context, resourceName);
+            if(domain != null) {
+                if(!NKHelper.validDomain(context, domain)) {
+                    retValue = "Top Level Domain: " + domainResolver.getDisplayName(domain) + " has not been approved.";
+                } else {
+                    retValue = "User: " + NKHelper.getUser(context) 
+                        + " is not authorized to create: " + displayName;
+                }
+            } else {
+                retValue = "Top Level Domain does not exist for PURL: " + getResourceResolver().getDisplayName(resourceName);
+            }
         }
         
-        return "PURL: " + resourceName + " already exists.";
+        return retValue;
     }
 
 }

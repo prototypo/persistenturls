@@ -157,11 +157,8 @@ public class PURLCreator implements ResourceCreator {
 
         StringBuffer sb = new StringBuffer("<purl>");
         String target = params.getValue("target");
-        String purl = NKHelper.getArgument(context, "path");
-        if(purl.startsWith("ffcpl:/purl")) {
-            purl = purl.substring(11);
-        }
-
+        String purl = purlResolver.getDisplayName(NKHelper.getArgument(context, "path"));
+        
         sb.append("<id>");
         sb.append(purl);
         sb.append("</id>");
@@ -271,7 +268,7 @@ public class PURLCreator implements ResourceCreator {
 
         return permitted;
     }
-
+    
     public IURAspect createResource(INKFConvenienceHelper context, IAspectNVP params) throws NKFException {
         IURAspect retValue = null;
 
@@ -289,6 +286,9 @@ public class PURLCreator implements ResourceCreator {
         if(!type.equals("clone")) {
             checkMaintainersList(context, params);
         }
+        
+        String purl = purlResolver.getDisplayName(NKHelper.getArgument(context, "path"));
+        NKHelper.createNecessarySubdomains(context, purl);
 
         if(type != null) {
             if(!isNumber(type)) {

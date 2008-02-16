@@ -10,6 +10,7 @@ import org.purl.accessor.command.PURLCommand;
 import org.purl.accessor.command.UpdateResourceCommand;
 import org.purl.accessor.util.AccessController;
 import org.purl.accessor.util.AllowableResource;
+import org.purl.accessor.util.DomainResolver;
 import org.purl.accessor.util.GroupResolver;
 import org.purl.accessor.util.GroupResourceStorage;
 import org.purl.accessor.util.PURLAccessController;
@@ -47,13 +48,15 @@ public class PURLAccessor extends AbstractAccessor {
 
         URIResolver userResolver = new UserResolver();
         URIResolver groupResolver = new GroupResolver();
+        URIResolver domainResolver = new DomainResolver();
+        
         ResourceFilter purlFilter = new PURLPrivateDataFilter();
 
         ResourceCreator purlCreator = new PURLCreator(new URIResolver[] { userResolver, groupResolver }, purlResolver, new PURLResourceStorage(), new UserResourceStorage());
         ResourceStorage purlStorage = new PURLResourceStorage();
         ResourceStorage groupStorage = new GroupResourceStorage();
         
-        AllowableResource purlAllowableResource = new PURLAllowableResource(purlStorage, purlResolver);
+        AllowableResource purlAllowableResource = new PURLAllowableResource(purlStorage, purlResolver, domainResolver);
         AccessController purlAccessController = new PURLAccessController();
 
         commandMap.put("POST", new CreateResourceCommand(TYPE, purlAllowableResource, purlResolver, purlAccessController, purlCreator, purlFilter, purlStorage));
