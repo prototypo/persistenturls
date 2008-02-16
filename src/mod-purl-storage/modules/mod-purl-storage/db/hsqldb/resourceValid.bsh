@@ -20,6 +20,11 @@ main() {
 		value = ruri.substring(13);
 		param = new StringAspect("<group><id>" + value + "</id></group>");		
 		break;
+		case "domain":
+		uri = "ffcpl:/sql/db/domainValid.idoc";
+		value = ruri.substring(13);
+		param = new StringAspect("<domain><id>" + value + "</id></domain>");								
+		break;		
 	}
 
 	req = context.createSubRequest("active:dpml");
