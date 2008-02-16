@@ -4,7 +4,6 @@ import com.ten60.netkernel.urii.aspect.*;
 import org.purl.accessor.*;
 
 main() {
-	System.out.println(context.getThisRequest().getURI());
 	base=context.getThisRequest().getArgument("base");
     String method = context.getThisRequest().getArgument("method");
 	req=context.createSubRequest("active:purl-resolver");
