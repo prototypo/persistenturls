@@ -138,7 +138,13 @@
 		<ext>/domain-exists</ext>
 		<int>active:beanshell+operator@ffcpl:/sql/db/resourceExists.bsh</int>
 		<args>all</args>
-	</link>		
+	</link>
+	<link>
+		<name>Domain Valid</name>
+		<ext>/domain-valid</ext>
+		<int>active:beanshell+operator@ffcpl:/sql/db/resourceValid.bsh</int>		
+		<args>all</args>	
+	</link>			
 	<link>
 		<name>Create Domain</name>
 		<ext>/create-domain</ext>
