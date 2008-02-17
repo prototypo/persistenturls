@@ -90,10 +90,13 @@
 							2.4 <a href="#purlsearch">Search for PURL Information</a>
 						</dt>
 						<dt>
-							2.5 <a href="#purlvalidate">Validate a PURL</a>
+							2.5 <a href="#purlhistory">Search for a PURL's History</a>
 						</dt>
 						<dt>
-							2.6 <a href="#purldelete">Delete a PURL</a>
+							2.6 <a href="#purlvalidate">Validate a PURL</a>
+						</dt>
+						<dt>
+							2.7 <a href="#purldelete">Delete a PURL</a>
 						</dt>
 					</dl>
 				</li>
@@ -180,7 +183,7 @@
 			<hr>
 			<a name="overview" id="overview"></a>
 			<h2>
-				<a name="overview" id="overview">1. Overview of PURLs</a>
+				1. Overview of PURLs
 			</h2>
 			<p>
 				PURLs are Persistent Uniform Resource Locators (URLs). A URL is simply an address on the World Wide Web. A <i>Persistent</i> URL is an address on the World Wide Web that points to other Web resources. If a Web resource changes location (and hence URL), a PURL pointing to it can be updated. A user of a PURL always uses the same Web address, even though the resource in question may have moved.
@@ -293,7 +296,7 @@
 				<b>Figure 2. Tabbed Navigation in the Web User Interface</b>
 			</p><a name="purl" id="purl"></a>
 			<h2>
-				<a name="purl" id="purl">2. Administering PURLs</a>
+				2. Administering PURLs
 			</h2>
 			<p>
 				The single most important task that one can accomplish on a PURL server is the creation of a new PURL. Other administrative actions, from user, group or domain maintenance to the other operations on the PURLs themselves are secondary to that main task. This section addresses the creation of simple (HTTP redirection) PURLs and advanced PURLs, along with the other things that may be done to a PURL.
@@ -309,7 +312,7 @@
 				<b>Figure 3. Actions on PURLs</b>
 			</p><a name="purlcreate" id="purlcreate"></a>
 			<h3>
-				<a name="purlcreate" id="purlcreate">2.1 Create a New PURL</a>
+				2.1 Create a New PURL
 			</h3>
 			<h4>
 				Web User Interface
@@ -334,7 +337,7 @@
 				<b>Figures 4(a) and 4(b). Creating a PURL</b>
 			</p><a name="purladvcreate" id="purladvcreate"></a>
 			<h3>
-				<a name="purladvcreate" id="purladvcreate">2.2 Create an Advanced PURL</a>
+				2.2 Create an Advanced PURL
 			</h3>
 			<h4>
 				Web User Interface
@@ -367,7 +370,7 @@
 				<b>Figure 6(c). Directing a "See Also" (303) PURL to an RDF Document</b>
 			</p><a name="purlmodify" id="purlmodify"></a>
 			<h3>
-				<a name="purlmodify" id="purlmodify">2.3 Modify an Existing PURL</a>
+				2.3 Modify an Existing PURL
 			</h3>
 			<h4>
 				Web User Interface
@@ -383,7 +386,7 @@
 				<b>Figures 7(a) and 7(b). Modifying a PURL</b>
 			</p><a name="purlsearch" id="purlsearch"></a>
 			<h3>
-				<a name="purlsearch" id="purlsearch">2.4 Search for PURL Information</a>
+				2.4 Search for PURL Information
 			</h3>
 			<h4>
 				Web User Interface
@@ -400,9 +403,18 @@
 			<p align="center">
 				<img src="images/purlsearch.png">&nbsp;<img src="images/purlsearchresults.png"><br>
 				<b>Figures 8(a) and 8(b). Searching for PURLs</b>
+			</p><a name="purlhistory" id="purlhistory"></a>
+			<h3>
+				2.5 Search for PURL's History
+			</h3>
+			<h4>
+				Web User Interface
+			</h4>
+			<p>
+				Information regarding the changes to a PURL may be searched using the <a href="purl.html#history">PURL History Form</a>. Records may be searched by PURL path (see Figure 1 for the definition of a PURL path), target URL, See Also URL or maintainer IDs. A target URL is a URL that a PURL of type 301, 302 or 307 redirects to (see the list of PURL types in <a href="#overview">1. Overview of PURLs</a>). A See Also URL is a URL that a PURL of type 303 refers to. A maintainer is a user or group authorized to administer a PURL. Two types of maintainer fields are used: "Maintainer IDs" expands groups into lists of users and "Explicit Maintainers" does not.
 			</p><a name="purlvalidate" id="purlvalidate"></a>
 			<h3>
-				<a name="purlvalidate" id="purlvalidate">2.5 Validate a PURL</a>
+				2.6 Validate a PURL
 			</h3>
 			<h4>
 				Web User Interface
@@ -421,7 +433,7 @@
 				<b>Figures 9(a) and 9(b). Validating a PURL</b>
 			</p><a name="purldelete" id="purldelete"></a>
 			<h3>
-				<a name="purldelete" id="purldelete">2.6 Delete a PURL</a>
+				2.7 Delete a PURL
 			</h3>
 			<h4>
 				Web User Interface
@@ -437,7 +449,7 @@
 				<b>Figures 10(a) and 10(b). Deleting a PURL</b>
 			</p><a name="purls" id="purls"></a>
 			<h2>
-				<a name="purls" id="purls">3. Administering Batches of PURLs</a>
+				3. Administering Batches of PURLs
 			</h2>
 			<p>
 				It is sometimes convenient to administer many PURLs at one time, especially if one is doing that programmatically or has a large number of PURLs under management. Batches of PURLs may be created or modified by submitting an XML document to a PURL server. XML documents submitted must comply with a RELAX-NG schema available from <a href="http://purlz.org/project/purl/documentation/batchPurls.rng">http://purlz.org/project/purl/documentation/batchPurls.rng</a>. An example XML document is provided at <a href="http://purlz.org/project/purl/documentation/batchPurlsExample.xml">http://purlz.org/project/purl/documentation/batchPurlsExample.xml</a>.
@@ -449,13 +461,13 @@
 				Similarly, no Web user interface has been provided for batch operations since AJAX techniques are prohibited from reading local filesystems for security reasons. The use of Javascript would be necessary to support HTTP PUT (used for modifications) because most Web browsers do not natively support that method. Those requiring the bulk deletion of PURLs are therefore encouraged to do so programmatically within an HTTP 1.1 session to minimize network overhead.
 			</p><a name="purlscreate" id="purlscreate"></a>
 			<h3>
-				<a name="purlscreate" id="purlscreate">3.1 Create a Batch of PURLs</a>
+				3.1 Create a Batch of PURLs
 			</h3>
 			<p>
 				Batches of PURLs may be created by send an HTTP POST request to the RESTful API at http://$PURL_SERVER$/admin/purls. The input needs to be an XML document (see an <a href="http://purlz.org/project/purl/documentation/batchPurlsExample.xml">example</a>) using a <a href="http://purlz.org/project/purl/documentation/batchPurls.rng">RELAX NG Schema</a>. The input XML file will be validated against the schema before processing by the PURL server.
 			</p><a name="purlsmodify" id="purlsmodify"></a>
 			<h3>
-				<a name="purlsmodify" id="purlsmodify">3.2 Modify a Batch of PURLs</a>
+				3.2 Modify a Batch of PURLs
 			</h3>
 			<p>
 				Batches of PURLs may be modified by send an HTTP POST request to the RESTful API at http://$PURL_SERVER$/admin/purls. The input needs to be an XML document (see an <a href="http://purlz.org/project/purl/documentation/batchPurlsExample.xml">example</a>) using a <a href="http://purlz.org/project/purl/documentation/batchPurls.rng">RELAX NG Schema</a>. The input XML file will be validated against the schema before processing by the PURL server.
@@ -464,7 +476,7 @@
 				The input schema for batch modifications is the same as for batch creation, except that is not possible to modify a PURL of type "clone", "chain" or "partial" since they will be turned into type "302" upon creation. The created type "302" PURLs may naturally be modified.
 			</p><a name="user" id="user"></a>
 			<h2>
-				<a name="user" id="user">4. Administering Users</a>
+				4. Administering Users
 			</h2>
 			<p>
 				Four actions may be taken on a user: Registration, Modification, Searching or Deletion. These four actions may be accessed in the PURL Web user interface as shown in Figure 11. The same four actions may be taken by other PURL clients. See <a href="#rest">Creating RESTful PURL Clients</a> for details.
@@ -477,7 +489,7 @@
 				<b>Figure 11. Actions on Users</b>
 			</p><a name="usercreate" id="usercreate"></a>
 			<h3>
-				<a name="usercreate" id="usercreate">4.1 Register a New User</a>
+				4.1 Register a New User
 			</h3>
 			<h4>
 				Web User Interface
@@ -499,7 +511,7 @@
 				<b>Figures 12(a) and 12(b). Registering a User</b>
 			</p><a name="usermodify" id="usermodify"></a>
 			<h3>
-				<a name="usermodify" id="usermodify">4.2 Modify an Existing User</a>
+				4.2 Modify an Existing User
 			</h3>
 			<h4>
 				Web User Interface
@@ -515,7 +527,7 @@
 				<b>Figures 13(a) and 13(b). Modifying a User</b>
 			</p><a name="usersearch" id="usersearch"></a>
 			<h3>
-				<a name="usersearch" id="usersearch">4.3 Search for User Information</a>
+				4.3 Search for User Information
 			</h3>
 			<h4>
 				Web User Interface
@@ -534,7 +546,7 @@
 				<b>Figures 14(a) and 14(b). Searching User Records</b>
 			</p><a name="userdelete" id="userdelete"></a>
 			<h3>
-				<a name="userdelete" id="userdelete">4.4 Delete a User</a>
+				4.4 Delete a User
 			</h3>
 			<h4>
 				Web User Interface
@@ -550,7 +562,7 @@
 				<b>Figures 15(a) and 15(b). Deleting a User</b>
 			</p><a name="login" id="login"></a>
 			<h3>
-				<a name="login" id="login">4.5 Logging into a PURL Server</a>
+				4.5 Logging into a PURL Server
 			</h3>
 			<h4>
 				Web User Interface
@@ -568,7 +580,7 @@
 				New users and top-level domains must be approved by an administrator if the &lt;allowUserAutoCreation&gt; option is not set. New users and top-level domains may be approved by logging in as an administrator and accessing the <a href="admin/user.html">User Approval</a> and <a href="admin/domain.html">Domain Approval</a> pages.
 			</p><a name="group" id="group"></a>
 			<h2>
-				<a name="group" id="group">5. Administering Groups of Users</a>
+				5. Administering Groups of Users
 			</h2>
 			<p>
 				It can be convenient to create groups of users to facilitate administration. For example, if you create a large number of PURLs and each PURL may be changed by the same list of people, it will be easier to create a single group to represent those people than to individually list all people as maintainers.
@@ -584,7 +596,7 @@
 				<b>Figure 16. Actions on Groups</b>
 			</p><a name="groupcreate" id="groupcreate"></a>
 			<h3>
-				<a name="groupcreate" id="groupcreate">5.1 Create a New Group</a>
+				5.1 Create a New Group
 			</h3>
 			<h4>
 				Web User Interface
@@ -600,7 +612,7 @@
 				<b>Figures 17(a) and 17(b). Creating a Group</b>
 			</p><a name="groupmodify" id="groupmodify"></a>
 			<h3>
-				<a name="groupmodify" id="groupmodify">5.2 Modify an Existing Group</a>
+				5.2 Modify an Existing Group
 			</h3>
 			<h4>
 				Web User Interface
@@ -616,7 +628,7 @@
 				<b>Figures 18(a) and 18(b). Modifying a Group</b>
 			</p><a name="groupsearch" id="groupsearch"></a>
 			<h3>
-				<a name="groupsearch" id="groupsearch">5.3 Search for Group Information</a>
+				5.3 Search for Group Information
 			</h3>
 			<h4>
 				Web User Interface
@@ -635,7 +647,7 @@
 				<b>Figures 19(a) and 19(b). Searching for Group Information</b>
 			</p><a name="groupdelete" id="groupdelete"></a>
 			<h3>
-				<a name="groupdelete" id="groupdelete">5.4 Delete a Group</a>
+				5.4 Delete a Group
 			</h3>
 			<p>
 				Groups may be deleted by providing their group IDs to the <a href="group.html#delete">Group Deletion Form</a>. Groups may only be deleted if their group IDs are known. Please note that deleting group records actually results in them being "tombstoned" so that any PURLs they administer do not become inaccessible. Tombstoned group records may be searched by selecting the checkbox labeled "Search tombstoned groups" in the <a href="group.html#search">Group Search Form</a> as shown in Figure 19(a).
@@ -651,7 +663,7 @@
 				<b>Figures 20(a) and 20(b). Deleting a Group</b>
 			</p><a name="domain" id="domain"></a>
 			<h2>
-				<a name="domain" id="domain">6. Administering PURL Domains</a>
+				6. Administering PURL Domains
 			</h2>
 			<p>
 				PURLs are created within domains. A domain is the path portion of the PURL URL form, as shown in Figure 1. PURLs may not be created unless they are within a domain; that helps to ensure order and security on a PURL server.
@@ -670,7 +682,7 @@
 				<b>Figure 21. Actions on Domains</b>
 			</p><a name="domaincreate" id="domaincreate"></a>
 			<h3>
-				<a name="domaincreate" id="domaincreate">6.1 Create a New Domain</a>
+				6.1 Create a New Domain
 			</h3>
 			<h4>
 				Web User Interface
@@ -689,7 +701,7 @@
 				<b>Figures 22(a) and 22(b). Creating a Domain</b>
 			</p><a name="domainmodify" id="domainmodify"></a>
 			<h3>
-				<a name="domainmodify" id="domainmodify">6.2 Modify an Existing Domain</a>
+				6.2 Modify an Existing Domain
 			</h3>
 			<h4>
 				Web User Interface
@@ -705,7 +717,7 @@
 				<b>Figures 23(a) and 23(b). Modifying a Domain</b>
 			</p><a name="domainsearch" id="domainsearch"></a>
 			<h3>
-				<a name="domainsearch" id="domainsearch">6.3 Search for Domain Information</a>
+				6.3 Search for Domain Information
 			</h3>
 			<h4>
 				Web User Interface
@@ -724,7 +736,7 @@
 				<b>Figures 24(a) and 24(b). Searching for Domain Information</b>
 			</p><a name="domaindelete" id="domaindelete"></a>
 			<h3>
-				<a name="domaindelete" id="domaindelete">6.4 Delete a Domain</a>
+				6.4 Delete a Domain
 			</h3>
 			<h4>
 				Web User Interface
@@ -740,7 +752,7 @@
 				<b>Figures 25(a) and 25(b). Deleting a Domain</b>
 			</p><a name="rest" id="rest"></a>
 			<h2>
-				<a name="rest" id="rest">7. RESTful PURL Clients</a>
+				7. RESTful PURL Clients
 			</h2>
 			<p>
 				Clients for PURL servers may be easily created using the available API. PURL servers expose services with an interface based on Representational State Transfer (<a href="http://en.wikipedia.org/wiki/REST">REST</a>) architecture. Examples of code in the Java programming language are provided for all PURL actions in the unit tests of the source code distribution. See particularly the file <u>src/test/org/purl/test/simplePurlClient.java</u>. That file used the <a href="http://www.restlet.org/">RESTlet</a> API to make calls to PURL servers. Additional illustrative code may be found in the <a href="http://www.junit.org/">JUnit</a> tests located in <u>src/test/org/purl/test/simplePurlClientTest.java</u> and called from <u>src/test/org/purl/test/purlClientTestRunner.java</u>.
