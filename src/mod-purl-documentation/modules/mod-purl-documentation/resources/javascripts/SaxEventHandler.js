@@ -258,6 +258,22 @@ SAXEventHandler.prototype.startElement = function(name, atts) {
 				elementMapIndex++;
 			}
 		}
+	// For history entries.
+	} else if ( name == 'entry' ) {
+		// Clear the working array.
+		elementMap = new Array();
+		elementMapIndex = 0;
+		// Extract the 'type' attribute, if present.
+		// TODO DBG
+		//alert("In element user.  atts has length " + atts.getLength() );
+		for ( i=0; i<atts.getLength() ; i++ ) {
+			// TODO DBG
+			//alert("Operating on attribute " + atts.getName([i]) + " = " + atts.getValue([i]));
+			if ( "type" == atts.getName([i]) ) {
+				elementMap[elementMapIndex] = ["status", atts.getValue([i])];
+				elementMapIndex++;
+			}
+		}
 	} else if ( name == 'group' || name == 'domain' || name == 'purl' ) {
 		// Clear the working array.
 		elementMap = new Array();
