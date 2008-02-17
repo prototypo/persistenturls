@@ -270,7 +270,7 @@ SAXEventHandler.prototype.startElement = function(name, atts) {
 			// TODO DBG
 			//alert("Operating on attribute " + atts.getName([i]) + " = " + atts.getValue([i]));
 			if ( "type" == atts.getName([i]) ) {
-				elementMap[elementMapIndex] = ["status", atts.getValue([i])];
+				elementMap[elementMapIndex] = ["type", atts.getValue([i])];
 				elementMapIndex++;
 			}
 		}
