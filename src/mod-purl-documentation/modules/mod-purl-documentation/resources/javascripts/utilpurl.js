@@ -49,8 +49,9 @@ contextMap["Create"] = ["create", "c_", 1, 1];
 contextMap["AdvancedCreate"] = ["advancedcreate", "a_", 2, 0];
 contextMap["Modify"] = ["modify", "m_", 3, 2];
 contextMap["Search"] = ["search", "s_", 4, 3];
-contextMap["Validate"] = ["validate", "v_", 5, 0];
-contextMap["Delete"] = ["delete", "d_", 6, 4];
+contextMap["History"] = ["history", "s_", 5, 0];
+contextMap["Validate"] = ["validate", "v_", 6, 0];
+contextMap["Delete"] = ["delete", "d_", 7, 4];
 
 var resultBlock = $("results");
 var htmlResults = "";
