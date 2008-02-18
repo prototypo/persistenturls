@@ -14,7 +14,8 @@
 					DROP TABLE groupmaintainers IF EXISTS;
 					DROP TABLE groupmembers IF EXISTS;					
 					DROP TABLE purls IF EXISTS;
-					DROP TABLE purlmaintainers IF EXISTS;					
+					DROP TABLE purlmaintainers IF EXISTS;
+					DROP TABLE purlhistory IF EXISTS;				
 				</stm:set>
 			</stm:group>
 		</operator>

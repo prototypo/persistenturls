@@ -303,5 +303,16 @@
 		<ext>/batch-load</ext>
 		<int>active:purl-storage-fast-batch-load</int>
 		<args>all</args>
-	</link>					
+	</link>
+	<link>
+		<name>Update PURL History</name>
+		<ext>/update-purl-history</ext>
+		<int>active:beanshell+operator@ffcpl:/resources/updatePURLHistory.bsh</int>
+		<args>all</args>
+	</link>
+	<link>
+		<name>Query PURL History</name>
+		<ext>/query-purl-history</ext>
+		<int>active:beanshell+operator@ffcpl:/resources/queryPURLHistory.bsh</int>
+		<args>all</args>								
 </links>

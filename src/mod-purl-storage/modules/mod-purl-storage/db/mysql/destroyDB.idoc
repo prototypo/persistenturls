@@ -31,7 +31,10 @@
                 </stm:append>
 				<stm:append xpath="/batch">
                     <sql>DROP TABLE IF EXISTS purlmaintainers</sql>
-                </stm:append>					
+                </stm:append>
+				<stm:append xpath="/batch">
+                    <sql>DROP TABLE IF EXISTS purlhistory</sql>
+                </stm:append>                					
 			</stm:group>
 		</operator>
       	<target>var:sql</target>

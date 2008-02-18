@@ -119,6 +119,19 @@
                     	)
                  </sql> 	
                 </stm:append>
+                <stm:append xpath="/batch">
+                <sql>
+                		CREATE TABLE IF NOT EXISTS purlhistory (
+                			z_id			INTEGER UNSIGNED NOT NULL AUTO_INCREMENT, PRIMARY KEY (z_id),
+                			p_id			INTEGER,
+                			u_id			INTEGER,
+                			status			SMALLINT,
+                    		type			VARCHAR(100),
+                    		target			VARCHAR(4000),                			                			
+                			modtime			DATETIME
+                		)
+                </sql>
+                </stm:append>
                 </stm:group>
             </operator>
             <target>var:sql</target>
