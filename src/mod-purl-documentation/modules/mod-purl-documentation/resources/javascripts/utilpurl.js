@@ -49,9 +49,8 @@ contextMap["Create"] = ["create", "c_", 1, 1];
 contextMap["AdvancedCreate"] = ["advancedcreate", "a_", 2, 0];
 contextMap["Modify"] = ["modify", "m_", 3, 2];
 contextMap["Search"] = ["search", "s_", 4, 3];
-contextMap["History"] = ["history", "s_", 5, 0];
-contextMap["Validate"] = ["validate", "v_", 6, 0];
-contextMap["Delete"] = ["delete", "d_", 7, 4];
+contextMap["Validate"] = ["validate", "v_", 5, 0];
+contextMap["Delete"] = ["delete", "d_", 6, 4];
 
 var resultBlock = $("results");
 var htmlResults = "";
@@ -331,7 +330,27 @@ function loadModify(recordData) {
 	return false;
 }
 
-// Open results in a separate window.
+
+// Fetch PURL history results and show in a new window.
+function loadHistory(purlId) {
+	bodyVars =  {}
+	if ( purlId == "" | purlId == null ) {
+		// No PURL name is given.  This is an error condition.
+		alert("Cannot load history for PURL ID " + purlId + ".  This is a software error and should be"
+		+ "reported to the systems administrator of your PURL server.");
+	} else if ( purlId.indexOf("/") != 0 ) {
+		// This doesn't look like a PURL id.
+		alert("The PURL given (ID: " + purlId + ") is not valid.  Cannot show history for this PURL." );
+	} else {
+		// We have a PURL name, so we call that resource directly.
+		ajaxCaller.get("/admin/history/purl" + purlId, bodyVars, onResponse, false, "History");
+	}
+	clearErrorIndications();
+	return false;
+}
+
+
+// Open search results in a separate window.
 function showResultsWindow() {
 	
 	// This will open a "modify" form in the opening window, not the results window.
@@ -377,12 +396,23 @@ function getHTMLFromXMLArray(xmlArray) {
 			// Write an HTML list item for each element in a record.
 			for ( innerKey in xmlArray[outerKey] ) {
 				if ( xmlArray[outerKey][innerKey][0] == "id" ) {
-					htmlList += "<dd><br>" + xmlArray[outerKey][innerKey][0] + ": " + xmlArray[outerKey][innerKey][1] +
+					idValue = xmlArray[outerKey][innerKey][1];
+					htmlList += "<dd><br>" + xmlArray[outerKey][innerKey][0] + ": " + idValue +
 							 	" <a href='#modify' class='tooltip' onClick='return loadModify(\"" + 
 								dataString +
 								"\")'><img src='http://purlz.org/images/edit.png' alt='Modify record'>" +
-								"<span>Modify record</span></a>" + 
-								"<\/dd>";
+								"<span>Modify record</span></a>";
+					// Nasty hack to insert a clickable icon for *PURL* history.
+					// TODO: This should be refactored so the test for a PURL id is more robust.
+					// For now it presumes that a PURL id will start with a '/', and the data won't look
+					// like a domain by having 'public' and 'writers' in the data.
+					if ( idValue.indexOf("/") == 0 && dataString.indexOf("public") == -1  && dataString.indexOf("writers") == -1 ) {
+						htmlList += " <a href='#history' class='tooltip' onClick='return loadHistory(\"" + 
+						idValue +
+						"\")'><img src='http://purlz.org/images/history.png' alt='Show history'>" +
+						"<span>Show history</span></a>";
+					}
+					htmlList += "<\/dd>";
 				} else {
 					fieldValue = xmlArray[outerKey][innerKey][1].replace(/%LINEBREAK%/g, ", ");
 					htmlList += "<dd>" + xmlArray[outerKey][innerKey][0] + ": " + fieldValue + "<\/dd>";
@@ -561,9 +591,19 @@ function onResponse(message, headers, callingContext) {
 		startParser(message);		
 		htmlResults = getHTMLFromXMLArray(resultsMap);  // resultsMap is in SaxEventHandler.js.
 				
-		// Write the results to the results area.
-		resultBlock.innerHTML += htmlResults;
-		
+		if ( callingContext == "History" ) {
+			// Write history results to a new window.
+			content = "<html><head><title>PURL History Results</title></head><body>";
+			content += "<h2>PURL History Results</h2>";
+			content += htmlResults;
+			content += "</body></html>";
+			historyWindow = window.open('','historyWindow','width=800,height=600,status=yes,scrollbars=yes,resizable=yes');
+			historyWindow.document.write(content);
+		} else {
+			// Write the results to the results area on the current page.
+			resultBlock.innerHTML += htmlResults;
+		}
+
 	} else if ( headers["Content-Type"] == "text/html" ) {
 		
 		// Display the HTML directly.
