@@ -597,7 +597,7 @@ function onResponse(message, headers, callingContext) {
 			content += "<h2>PURL History Results</h2>";
 			content += htmlResults;
 			content += "</body></html>";
-			historyWindow = window.open('','historyWindow','width=800,height=600,status=yes,scrollbars=yes,resizable=yes');
+			var historyWindow = window.open('','historyWindow','width=800,height=600,status=yes,scrollbars=yes,resizable=yes');
 			historyWindow.document.write(content);
 		} else {
 			// Write the results to the results area on the current page.
