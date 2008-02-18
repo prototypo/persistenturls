@@ -314,5 +314,6 @@
 		<name>Query PURL History</name>
 		<ext>/query-purl-history</ext>
 		<int>active:beanshell+operator@ffcpl:/resources/queryPURLHistory.bsh</int>
-		<args>all</args>								
+		<args>all</args>
+	</link>								
 </links>
