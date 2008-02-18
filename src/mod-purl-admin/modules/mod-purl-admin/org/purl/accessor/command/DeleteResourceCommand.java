@@ -55,7 +55,7 @@ public class DeleteResourceCommand extends PURLCommand {
                 
                 if(accessController.userHasAccess(context, user, uriResolver.getURI(context))) {
 
-                    if(resStorage.deleteResource(context, uriResolver.getURI(context))) {
+                    if(resStorage.deleteResource(context, uriResolver)) {
                         recordCommandState(context, "DELETE", path);
 
                         String message = "Deleted resource: " + uriResolver.getDisplayName(path);

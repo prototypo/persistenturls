@@ -74,7 +74,7 @@ public class CreateResourceCommand extends PURLCommand {
                     // Store the full resource
                     iur = resStorage.storeResource(context, uriResolver, iur);
                     
-                    if(iur != null ) {
+                    if(iur != null) {
                         recordCommandState(context, "CREATE", resource);
 
                         // Filter it if there is one
