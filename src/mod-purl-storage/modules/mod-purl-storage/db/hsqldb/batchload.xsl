@@ -10,6 +10,10 @@
         <sql>
             INSERT INTO purls VALUES( null, '<xsl:value-of select="@id"/>', '<xsl:value-of select="@type"/>', '<xsl:value-of select="*/@url"/>', NOW, NOW, 1, 'false');
         </sql>
+        
+        <sql>
+        	INSERT INTO purlhistory VALUES(null, IDENTITY(), @@CURRENTUSER@@, 0, '<xsl:value-of select="@type"/>', '<xsl:value-of select="*/@url"/>', NOW);
+        </sql>        
         <xsl:for-each select="maintainers/maintainer">
             <sql>
                 INSERT INTO purlmaintainers VALUES(null, 0, @@MAINTAINER-<xsl:value-of select="@id"/>@@);

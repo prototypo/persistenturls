@@ -15,6 +15,10 @@
             set @pid = LAST_INSERT_ID();
         </sql>
         
+        <sql>
+        	INSERT INTO purlhistory VALUES(null, @pid, @@CURRENTUSER@@, 0, '<xsl:value-of select="@type"/>', '<xsl:value-of select="*/@url"/>', NOW());
+        </sql>
+        
         <xsl:for-each select="maintainers/maintainer">
             <sql>
                 INSERT INTO purlmaintainers VALUES(null, @pid, @@MAINTAINER-<xsl:value-of select="@id"/>@@);                

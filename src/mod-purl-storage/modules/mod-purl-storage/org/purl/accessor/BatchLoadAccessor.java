@@ -26,11 +26,13 @@ import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFRequest;
 import org.ten60.netkernel.layer1.nkf.INKFRequestReadOnly;
 import org.ten60.netkernel.layer1.nkf.INKFResponse;
+import org.ten60.netkernel.layer1.nkf.NKFException;
 import org.ten60.netkernel.layer1.nkf.impl.NKFAccessorImpl;
 import org.ten60.netkernel.xml.representation.IAspectXDA;
 import org.ten60.netkernel.xml.xda.IXDAReadOnlyIterator;
 
 import com.ten60.netkernel.urii.IURRepresentation;
+import com.ten60.netkernel.urii.aspect.IAspectString;
 import com.ten60.netkernel.urii.aspect.StringAspect;
 
 public class BatchLoadAccessor extends NKFAccessorImpl {
@@ -57,6 +59,7 @@ public class BatchLoadAccessor extends NKFAccessorImpl {
         }
         
         IAspectXDA xdaParam = (IAspectXDA) context.sourceAspect("this:param:param", IAspectXDA.class);
+        String currentUser = ((IAspectString) context.sourceAspect("this:param:currentuser", IAspectString.class)).getString();
         
         // TODO: Authenticate the batch format
 
@@ -97,6 +100,9 @@ public class BatchLoadAccessor extends NKFAccessorImpl {
             maintainerSB.append("</replace></pattern>");
         }
         
+        maintainerSB.append("<pattern><regex>@@CURRENTUSER@@</regex><replace>");
+        maintainerSB.append(maintainerMap.get(currentUser));
+        maintainerSB.append("</replace></pattern>");        
         maintainerSB.append("</sed>");
         
         req=context.createSubRequest();
@@ -104,12 +110,18 @@ public class BatchLoadAccessor extends NKFAccessorImpl {
         req.addArgument("operand", xdaParam);
         req.addArgument("operator", "ffcpl:/sql/db/batchload.xsl");
         IURRepresentation iur = context.issueSubRequest(req);
-       
+ 
+        IAspectString sa = (IAspectString) context.transrept(iur, IAspectString.class);
+        String sas = sa.getString();
+        
         req = context.createSubRequest();
         req.setURI("active:sed");
         req.addArgument("operator", new StringAspect(maintainerSB.toString()));
         req.addArgument("operand", iur);
         iur = context.issueSubRequest(req);
+        
+        sa = (IAspectString) context.transrept(iur, IAspectString.class);
+        sas = sa.getString();
         
         req = context.createSubRequest("active:sqlBatch");
         req.addArgument("operand", iur);
