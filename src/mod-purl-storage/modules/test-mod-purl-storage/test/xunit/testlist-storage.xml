@@ -371,6 +371,18 @@
     	</assert>
     </test>
     <test>
+    	<uri>active:purl-storage-update-purl-history+user@data:text/plain,brian-test+purl@ffcpl:/purl/net/purl/301+status@data:text/plain,0</uri>
+    	<assert>
+    		<xpath>count(/purl-history-updated) = 1</xpath>
+    	</assert>
+    </test>
+    <test>
+    	<uri>active:purl-storage-query-purl-history+purl@ffcpl:/purl/net/purl/301</uri>
+    	<assert>
+    		<xpath>count(/history) = 1</xpath>
+    	</assert>    
+    </test>
+    <test>
     	<uri>active:purl-storage-delete-group+uri@ffcpl:/group/purlworkers</uri>
     	<assert>
     		<xpath>count(/deleted) = 1</xpath>
