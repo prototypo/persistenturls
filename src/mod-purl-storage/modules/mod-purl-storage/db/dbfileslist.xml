@@ -55,6 +55,5 @@
     <file>usersIndexed.idoc</file>
     <file>batchload.xsl</file>
     <file>updatePURLHistory.idoc</file>
-    <file>updatePURLHistory.bsh</file>    
     <file>queryPURLHistory.idoc</file>
 </dbfiles>
