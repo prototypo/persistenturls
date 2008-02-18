@@ -593,10 +593,12 @@ function onResponse(message, headers, callingContext) {
 				
 		if ( callingContext == "History" ) {
 			// Write history results to a new window.
-			content = "<html><head><title>PURL History Results</title></head><body>";
+			content = "<html><head><title>PURL History Results</title>"
+			content += "<link type='text/css' rel='stylesheet' href='style.css' /></head><body>";
 			content += "<h2>PURL History Results</h2>";
+			content += "<div class='withresults'>";
 			content += htmlResults;
-			content += "</body></html>";
+			content += "</div></body></html>";
 			var historyWindow = window.open('','historyWindow','width=800,height=600,status=yes,scrollbars=yes,resizable=yes');
 			historyWindow.document.write(content);
 		} else {
