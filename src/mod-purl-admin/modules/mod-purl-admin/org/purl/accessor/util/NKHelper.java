@@ -282,8 +282,6 @@ public class NKHelper {
             req.addArgument("param", new StringAspect("<group><id>" + group + "</id></group>"));
             req.setAspectClass(IAspectXDA.class);
             IAspectXDA res = (IAspectXDA) context.issueSubRequestForAspect(req);
-            IAspectString sa = (IAspectString) context.transrept(res, IAspectString.class);
-            System.out.println(sa.getString());
             retValue = res.getXDA().isTrue("/maintainers/uid = '" + user + "'");
         } catch(Exception e) {
          e.printStackTrace();   
@@ -296,13 +294,10 @@ public class NKHelper {
         boolean retValue = false;
         
         try {
-            System.out.println(domain.substring(13));
             INKFRequest req=context.createSubRequest("active:purl-storage-query-domainmaintainers");
             req.addArgument("param", new StringAspect("<domain><id>" + domain.substring(13) + "</id></domain>"));
             req.setAspectClass(IAspectXDA.class);
             IAspectXDA res = (IAspectXDA) context.issueSubRequestForAspect(req);
-            IAspectString sa = (IAspectString) context.transrept(res, IAspectString.class);
-            System.out.println(sa.getString());
             retValue = res.getXDA().isTrue("/maintainers/uid = '" + user + "'");
         } catch(Exception e) {
          e.printStackTrace();   
@@ -319,7 +314,6 @@ public class NKHelper {
             req.addArgument("param", new StringAspect("<domain><id>" + domain.substring(13) + "</id></domain>"));
             req.setAspectClass(IAspectXDA.class);
             IAspectXDA res = (IAspectXDA) context.issueSubRequestForAspect(req);
-            IAspectString sa = (IAspectString) context.transrept(res, IAspectString.class);
             retValue = res.getXDA().isTrue("/writers/uid = '" + user + "'");
         } catch(Exception e) {
          e.printStackTrace();   
@@ -336,8 +330,6 @@ public class NKHelper {
             req.addArgument("param", new StringAspect("<purl><id>" + purl.substring(11) + "</id></purl>"));
             req.setAspectClass(IAspectXDA.class);
             IAspectXDA res = (IAspectXDA) context.issueSubRequestForAspect(req);
-            IAspectString sa = (IAspectString) context.transrept(res, IAspectString.class);
-            System.out.println(sa.getString());
             retValue = res.getXDA().isTrue("/maintainers/uid = '" + user + "'");
         } catch(Exception e) {
          e.printStackTrace();   
