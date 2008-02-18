@@ -21,9 +21,6 @@ main() {
 	req.setAspectClass(IAspectXDA.class);
 	res = context.issueSubRequestForAspect(req);
 	
-	sa = context.transrept(res, IAspectString.class);
-	System.out.println(sa.getString());
-	
 	maintainerMap = new HashMap();
     maintainerItor = res.getXDA().readOnlyIterator("/purl/maintainers/uid");
     while(maintainerItor.hasNext()) {
