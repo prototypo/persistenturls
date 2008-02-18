@@ -1,5 +1,6 @@
 package org.purl.accessor;
 
+import org.purl.accessor.util.NKHelper;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFRequest;
 import org.ten60.netkernel.layer1.nkf.INKFRequestReadOnly;
@@ -43,6 +44,7 @@ public class PURLSAccessor extends NKFAccessorImpl {
             if(xdaRO.isTrue("/b/text()='t'")) {
                 req = context.createSubRequest("active:purl-storage-batch-load");
                 req.addArgument("param", xdaParam);
+                req.addArgument("currentuser", "data:text/plain," + NKHelper.getUser(context));
                 IURRepresentation iur = context.issueSubRequest(req);
                 resp = context.createResponseFrom(iur);
             }
