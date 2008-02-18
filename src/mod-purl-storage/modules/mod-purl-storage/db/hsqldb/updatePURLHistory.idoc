@@ -7,7 +7,7 @@
 				<stm:group xmlns:stm="http://1060.org/stm">
 				<stm:set xpath="/sql">
 					INSERT INTO purlhistory VALUES ( null,
-						'<stm:param xpath="/history/pid/text()"/>',
+						'<stm:param xpath="/history/p_id/text()"/>',
 						'<stm:param xpath="/history/u_id/text()"/>',
 						'<stm:param xpath="/history/status/text()"/>',
 						'<stm:param xpath="/history/type/text()"/>',
