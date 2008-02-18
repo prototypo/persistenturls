@@ -41,6 +41,8 @@ public class PURLResourceStorage implements ResourceStorage {
         req.addArgument("param", resource);
         req.setAspectClass(IAspectXDA.class);
         retValue = context.issueSubRequestForAspect(req);
+        
+        updatePURLHistory(context, resolver, "data:text/plain,0");
         return retValue;
     }
     
@@ -50,21 +52,31 @@ public class PURLResourceStorage implements ResourceStorage {
         INKFRequest req = context.createSubRequest("active:purl-storage-update-purl");
         req.addArgument("param", resource);
         context.issueSubRequest(req);
+        updatePURLHistory(context, resolver, "data:text/plain,1");        
         retValue = true;
         
         return retValue;
     }
 
     public boolean deleteResource(INKFConvenienceHelper context, String uri) throws NKFException {
-        boolean retValue = false;
-        INKFRequest req = context.createSubRequest("active:purl-storage-delete-purl");
-        req.addArgument("uri", uri);
-        retValue = true;
-        
-        return retValue;
+        return false;
     }
 
     public boolean deleteResource(INKFConvenienceHelper context, URIResolver resolver) throws NKFException {
-        return deleteResource(context, resolver.getURI(context));
-    }   
+        boolean retValue = false;
+        INKFRequest req = context.createSubRequest("active:purl-storage-delete-purl");
+        req.addArgument("uri", resolver.getURI(context));
+        context.issueSubRequest(req);
+        updatePURLHistory(context, resolver, "data:text/plain,2");
+        retValue = true;
+        return retValue;
+    }
+    
+    protected void updatePURLHistory(INKFConvenienceHelper context, URIResolver resolver, String status) throws NKFException {
+        INKFRequest req = context.createSubRequest("active:purl-storage-update-purl-history");
+        req.addArgument("purl", resolver.getURI(context));
+        req.addArgument("user", "data:text/plain," + NKHelper.getUser(context));
+        req.addArgument("status", status);
+        context.issueSubRequest(req);
+    }
 }
