@@ -9,7 +9,7 @@
 
     <!-- Type clone.  Clone an existing PURL -->
 		<!-- PURL /testdomain/test301-2 must exist first! -->
-		<purl id="/testdomain/testClone-1" type="clone">
+		<purl id="/testdomain/testClone-2" type="clone">
 			<basepurl path="/testdomain/test301-2"/>
     </purl>
 
