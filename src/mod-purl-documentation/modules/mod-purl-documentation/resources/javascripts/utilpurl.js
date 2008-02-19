@@ -441,14 +441,8 @@ function getHistoryHTMLFromXMLArray(xmlArray) {
 						// Leave some visible white space between records.
 						htmlList += "<br>";
 					}
-					// TODO: A SAX bug is giving me an extra 'modifieddate' field, but
-					// I can't find it.  This hack should be fixed.
-					xmlArray[outerKey][innerKey][1] = xmlArray[outerKey][innerKey][1].replace(/\n/g, "");
-					if ( xmlArray[outerKey][innerKey][1] != null && xmlArray[outerKey][innerKey][1] != '' ) {
-						htmlList += xmlArray[outerKey][innerKey][0] + ": " + xmlArray[outerKey][innerKey][1] + "<\/dd>";
-					}
+					htmlList += xmlArray[outerKey][innerKey][0] + ": " + xmlArray[outerKey][innerKey][1] + "<\/dd>";
 				}
-				//alert(xmlArray[outerKey][innerKey][0] + ": **" + xmlArray[outerKey][innerKey][1] + "**");
 			}
 		}
 	}

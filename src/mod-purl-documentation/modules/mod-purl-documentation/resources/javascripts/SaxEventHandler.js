@@ -484,7 +484,8 @@ SAXEventHandler.prototype._fullCharacterDataReceived = function(fullCharacterDat
 			//alert("Added " + previousElement + " : " + fullCharacterData );
 		}
 	} else {
-		if ( fullCharacterData != null ) {
+		fullCharacterData = fullCharacterData.replace(/\n/g, "");
+		if ( fullCharacterData != null && fullCharacterData != "" ) {
 			elementMap[elementMapIndex] = [currentElement, fullCharacterData];
 		}
 	}
