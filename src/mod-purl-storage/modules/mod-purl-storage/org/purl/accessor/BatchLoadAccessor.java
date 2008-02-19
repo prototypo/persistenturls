@@ -26,9 +26,9 @@ import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFRequest;
 import org.ten60.netkernel.layer1.nkf.INKFRequestReadOnly;
 import org.ten60.netkernel.layer1.nkf.INKFResponse;
-import org.ten60.netkernel.layer1.nkf.NKFException;
 import org.ten60.netkernel.layer1.nkf.impl.NKFAccessorImpl;
 import org.ten60.netkernel.xml.representation.IAspectXDA;
+import org.ten60.netkernel.xml.xda.IXDAReadOnly;
 import org.ten60.netkernel.xml.xda.IXDAReadOnlyIterator;
 
 import com.ten60.netkernel.urii.IURRepresentation;
@@ -85,6 +85,15 @@ public class BatchLoadAccessor extends NKFAccessorImpl {
                 z_id = maintainerXDA.getXDA().getText("/user/z_id", true);
                 maintainerMap.put(maintainer, z_id);
             }
+        }
+        
+        if(!maintainerMap.containsKey(currentUser)) {
+            req = context.createSubRequest("active:purl-storage-query-user");
+            req.addArgument("uri", "ffcpl:/user/" + currentUser);
+            req.setAspectClass(IAspectXDA.class);
+            IAspectXDA maintainerXDA = (IAspectXDA)context.issueSubRequestForAspect(req);
+            String z_id = maintainerXDA.getXDA().getText("/user/z_id", true);
+            maintainerMap.put(currentUser, z_id);           
         }
         
         Iterator<String> itor = maintainerMap.keySet().iterator();
