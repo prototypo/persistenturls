@@ -42,7 +42,7 @@
 	</purl>
 <!-- Type clone.  Clone an existing PURL -->
 	<purl id="/testdomain/testClone" type="clone">
-		<basepurl path="/testdomain/test301"/>
+		<basepurl path="/testdomain/test301PURL"/>
 	</purl>
 <!-- Type chain.  Chain an existing PURL -->
 	<purl id="/testdomain/testChain" type="chain">
