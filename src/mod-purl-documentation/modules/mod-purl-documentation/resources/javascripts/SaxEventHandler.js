@@ -151,7 +151,7 @@ SAXEventHandler.prototype.endElement = function(name) {
     this._handleCharacterData();
 
     //place endElement event handling code below this line
-	if ( name == 'user' || name == 'group' || name == 'domain' || name == 'purl' ) {
+	if ( name == 'user' || name == 'group' || name == 'domain' || name == 'purl' || name == 'history' ) {
 		// Write the working array into the results.
 		resultsMap[resultsMapIndex] = elementMap;
 		resultsMapIndex++;
@@ -261,8 +261,8 @@ SAXEventHandler.prototype.startElement = function(name, atts) {
 	// For history entries.
 	} else if ( name == 'entry' ) {
 		// Clear the working array.
-		elementMap = new Array();
-		elementMapIndex = 0;
+		//elementMap = new Array();
+		//elementMapIndex = 0;
 		// Extract the 'type' attribute, if present.
 		// TODO DBG
 		//alert("In element user.  atts has length " + atts.getLength() );
@@ -270,11 +270,11 @@ SAXEventHandler.prototype.startElement = function(name, atts) {
 			// TODO DBG
 			//alert("Operating on attribute " + atts.getName([i]) + " = " + atts.getValue([i]));
 			if ( "type" == atts.getName([i]) ) {
-				elementMap[elementMapIndex] = ["type", atts.getValue([i])];
+				elementMap[elementMapIndex] = ["action", atts.getValue([i])];
 				elementMapIndex++;
 			}
 		}
-	} else if ( name == 'group' || name == 'domain' || name == 'purl' ) {
+	} else if ( name == 'group' || name == 'domain' || name == 'purl' || name == 'history') {
 		// Clear the working array.
 		elementMap = new Array();
 		elementMapIndex = 0;
@@ -484,7 +484,9 @@ SAXEventHandler.prototype._fullCharacterDataReceived = function(fullCharacterDat
 			//alert("Added " + previousElement + " : " + fullCharacterData );
 		}
 	} else {
-		elementMap[elementMapIndex] = [currentElement, fullCharacterData];
+		if ( fullCharacterData != null ) {
+			elementMap[elementMapIndex] = [currentElement, fullCharacterData];
+		}
 	}
 	elementMapIndex++;
 

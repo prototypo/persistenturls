@@ -377,11 +377,7 @@ function showResultsWindow() {
 function getHTMLFromXMLArray(xmlArray) {
 		
 	var htmlList = "<dl>";
-	keyCount = 0;
-	for ( outerKey in xmlArray ) {
-		keyCount++;
-	}
-	if ( keyCount == 0 ) {
+	if ( xmlArray.length == 0 ) {
 		htmlList += "<dd>No results found<\/dd>";
 	} else {
 		// Found results, so create HTML for each record.
@@ -417,6 +413,42 @@ function getHTMLFromXMLArray(xmlArray) {
 					fieldValue = xmlArray[outerKey][innerKey][1].replace(/%LINEBREAK%/g, ", ");
 					htmlList += "<dd>" + xmlArray[outerKey][innerKey][0] + ": " + fieldValue + "<\/dd>";
 				}
+			}
+		}
+	}
+	htmlList += "<\/dl></div>";
+	return htmlList;
+}
+
+
+// Create an HTML list from an array of XML elements and their values.
+// Used for PURL History actions.
+function getHistoryHTMLFromXMLArray(xmlArray) {
+		
+	var htmlList = "<dl>";
+	if ( xmlArray.length == 0 ) {
+		htmlList += "<dd>No results found<\/dd>";
+	} else {
+		// Found results, so create HTML for each record.
+		for ( outerKey in xmlArray ) {
+			// Write an HTML list item for each element in a record.
+			for ( innerKey in xmlArray[outerKey] ) {
+				htmlList += "<dd>";
+				if ( xmlArray[outerKey][innerKey][0] == "id" ) {
+					htmlList += "<b>" + xmlArray[outerKey][innerKey][0] + ": " + xmlArray[outerKey][innerKey][1] + "</b><\/dd>";
+				} else {
+					if ( xmlArray[outerKey][innerKey][0] == "action" ) {
+						// Leave some visible white space between records.
+						htmlList += "<br>";
+					}
+					// TODO: A SAX bug is giving me an extra 'modifieddate' field, but
+					// I can't find it.  This hack should be fixed.
+					xmlArray[outerKey][innerKey][1] = xmlArray[outerKey][innerKey][1].replace(/\n/g, "");
+					if ( xmlArray[outerKey][innerKey][1] != null && xmlArray[outerKey][innerKey][1] != '' ) {
+						htmlList += xmlArray[outerKey][innerKey][0] + ": " + xmlArray[outerKey][innerKey][1] + "<\/dd>";
+					}
+				}
+				//alert(xmlArray[outerKey][innerKey][0] + ": **" + xmlArray[outerKey][innerKey][1] + "**");
 			}
 		}
 	}
@@ -562,9 +594,9 @@ function onResponse(message, headers, callingContext) {
 	
 	// Highlight the results if an error occurs.
 	setClass("results", "withresults");
-	resultHeader = callingContext + " Successful";
-	resultClass = "response";
-	explanation = "";
+	var resultHeader = callingContext + " Successful";
+	var resultClass = "response";
+	var explanation = "";
 	if ( headers["Status"] != "200" && headers["Status"] != "201" ) {
 		if ( headers["Status"] ) {
 			explanation = HttpResponseCodes[headers["Status"]];
@@ -574,14 +606,15 @@ function onResponse(message, headers, callingContext) {
 	}
 	
 	// Show the result header and allow results to be duplicated in a new window.
-	resultBlock.innerHTML = "<h3 class='" + resultClass + "'>" +
-							"<a href='#' class='tooltip' onClick='return showResultsWindow()'>" +
-							"<img src='http://purlz.org/images/tearoff_icon.png' alt='Open results in a new window' />" +
-							"<span>Open results in a new window</span></a>" +
-							" " + resultHeader + "<\/h3>";
+	var resultsTop = "<h3 class='" + resultClass + "'>" +
+						"<a href='#' class='tooltip' onClick='return showResultsWindow()'>" +
+						"<img src='http://purlz.org/images/tearoff_icon.png' alt='Open results in a new window' />" +
+						"<span>Open results in a new window</span></a>" +
+						" " + resultHeader + "<\/h3>";
 
 	// Style the results based on their Content-Type.
 	if ( headers["Content-Type"] == "text/plain" || headers["Content-Type"] == "text/html") {
+		resultBlock.innerHTML = resultsTop;
 		resultBlock.innerHTML += "<p class='" + resultClass + "'>" + message + "<\/p>";
 		
 	} else if ( headers["Content-Type"] == "text/xml" ||
@@ -589,29 +622,36 @@ function onResponse(message, headers, callingContext) {
 		
 		// Parse the XML
 		startParser(message);		
-		htmlResults = getHTMLFromXMLArray(resultsMap);  // resultsMap is in SaxEventHandler.js.
+		var htmlResults = getHTMLFromXMLArray(resultsMap);  // resultsMap is in SaxEventHandler.js.
 				
 		if ( callingContext == "History" ) {
+				
 			// Write history results to a new window.
-			content = "<html><head><title>PURL History Results</title>"
+			var simpleHtmlResults = getHistoryHTMLFromXMLArray(resultsMap);  // resultsMap is in SaxEventHandler.js.	
+			
+			var content = "<html><head><title>PURL History Results</title>";
 			content += "<link type='text/css' rel='stylesheet' href='style.css' /></head><body>";
 			content += "<h2>PURL History Results</h2>";
 			content += "<div class='withresults'>";
-			content += htmlResults;
+			content += simpleHtmlResults;
 			content += "</div></body></html>";
-			var historyWindow = window.open('','historyWindow','width=800,height=600,status=yes,scrollbars=yes,resizable=yes');
+			var historyWindow = window.open('','historyWindow','width=1024,height=768,status=yes,resizable=yes');
 			historyWindow.document.write(content);
+			historyWindow.document.close();
 		} else {
 			// Write the results to the results area on the current page.
+			resultBlock.innerHTML = resultsTop;
 			resultBlock.innerHTML += htmlResults;
 		}
 
 	} else if ( headers["Content-Type"] == "text/html" ) {
 		
 		// Display the HTML directly.
-		resultBlock.innerHTML = message;
+		resultBlock.innerHTML = resultsTop;
+		resultBlock.innerHTML += message;
 		
 	} else {
+		resultBlock.innerHTML = resultsTop;
 		resultBlock.innerHTML += "<p class='error'>Warning: Content-Type of results not supported.  Trying anyway:<\/p>";
 		resultBlock.innerHTML += "<p class='" + resultClass + "'>" + message + "<\/p>";
 	}
