@@ -5,9 +5,11 @@ import org.ten60.netkernel.layer1.nkf.NKFException;
 
 public class DomainAllowableResource implements AllowableResource {
     
+    private URIResolver domainResolver;
     private ResourceStorage domainStorage;
     
-    public DomainAllowableResource(URIResolver uriResolver, ResourceStorage domainStorage) {
+    public DomainAllowableResource(URIResolver domainResolver, ResourceStorage domainStorage) {
+        this.domainResolver = domainResolver;
         this.domainStorage = domainStorage;
     }
 
@@ -39,6 +41,6 @@ public class DomainAllowableResource implements AllowableResource {
     }
 
     public String getDenyMessage(INKFConvenienceHelper context, String resourceName) {
-        return "Domain: " + resourceName + " cannot be created because it or a parent domain already exist.";
+        return "Domain: " + domainResolver.getDisplayName(resourceName) + " cannot be created because it or a parent domain already exist.";
     }
 }

@@ -102,6 +102,8 @@ public class DomainAccessor extends AbstractAccessor {
     public static final String TYPE = "domain";
 
     private Map<String, PURLCommand> commandMap = new HashMap<String,PURLCommand>();
+    
+    private ResourceStorage domainStorage;
 
     public DomainAccessor() {
         // We use stateless command instances that are triggered
@@ -111,7 +113,7 @@ public class DomainAccessor extends AbstractAccessor {
 
         ResourceFilter domainFilter = new DomainPrivateDataFilter();
         ResourceCreator domainCreator = new DomainCreator(domainResolver, new UserResolver(), new UserResourceStorage());
-        ResourceStorage domainStorage = new DomainResourceStorage();
+        domainStorage = new DomainResourceStorage();
         AllowableResource domainAllowableResource = new DomainAllowableResource(domainResolver, domainStorage); //new DefaultAllowableResource(domainStorage, domainResolver);
         
         AccessController domainAccessController = new DomainAccessController();
@@ -133,7 +135,7 @@ public class DomainAccessor extends AbstractAccessor {
                 
                 IXDAReadOnly configXDA = config.getXDA();
                 if(configXDA.isTrue("/purl-config/allowTopLevelDomainAutoCreation")) {
-                    retValue = new DomainAutoCreateCommand(retValue);
+                    retValue = new DomainAutoCreateCommand(retValue, domainStorage);
                 }
             } else {
                 retValue = commandMap.get(method);
@@ -164,7 +166,7 @@ public class DomainAccessor extends AbstractAccessor {
             String maintainers = params.getValue("maintainers");
             String writers = params.getValue("writers");
 
-            StringTokenizer st = new StringTokenizer(maintainers, ",");
+            StringTokenizer st = new StringTokenizer(maintainers, ", ");
             while(st.hasMoreTokens()) {
                 String next = st.nextToken();
                 if(!UserHelper.isValidUser(context, userResolver.getURI(next))) {                
@@ -172,7 +174,7 @@ public class DomainAccessor extends AbstractAccessor {
                 }
             }
 
-            st = new StringTokenizer(writers, ",");
+            st = new StringTokenizer(writers, ", ");
             while(st.hasMoreTokens()) {
                 String next = st.nextToken();
                 if(!UserHelper.isValidUser(context, userResolver.getURI(next))) {                                
@@ -243,14 +245,16 @@ public class DomainAccessor extends AbstractAccessor {
         
         private PURLCommand createCmd;
         private ResourceFilter domainFilter = new DomainPrivateDataFilter();
+        private ResourceStorage domainStorage;
         
         private DomainAutoCreateCommand() {
             super(null, null, null, null);
         }
         
-        public DomainAutoCreateCommand(PURLCommand createCmd) {
+        public DomainAutoCreateCommand(PURLCommand createCmd, ResourceStorage domainStorage) {
             super(createCmd.getType(), createCmd.getURIResolver(), createCmd.getAccessController(), createCmd.getResourceStorage());            
             this.createCmd = createCmd;
+            this.domainStorage = domainStorage;
         }
 
         @Override
@@ -259,21 +263,28 @@ public class DomainAccessor extends AbstractAccessor {
             
             try {
                 resp = createCmd.execute(context);
-                
-                INKFRequest req = context.createSubRequest("active:purl-storage-approve-domain");
                 URIResolver uriResolver = getURIResolver();
                 String domainURI = uriResolver.getURI(context);
-                String domain = uriResolver.getDisplayName(domainURI);
 
-                req.addArgument("param", new StringAspect("<domain><id>" + domain + "</id></domain>")); 
-                context.issueSubRequest(req);
-                
-                req=context.createSubRequest("active:purl-storage-query-domain");
+                INKFRequest req = context.createSubRequest("active:purl-storage-query-domain");
                 req.addArgument("uri", domainURI);
                 req.setAspectClass(IAspectXDA.class);
                 IAspectXDA result = (IAspectXDA) context.issueSubRequestForAspect(req);
-                resp = context.createResponseFrom(domainFilter.filter(context, result));
-                resp.setMimeType("text/xml");                
+                
+                if(result.getXDA().isTrue("/domain/@status='0'")) {
+                    String domain = uriResolver.getDisplayName(domainURI);
+                    req = context.createSubRequest("active:purl-storage-approve-domain");
+                    req.addArgument("param", new StringAspect("<domain><id>" + domain + "</id></domain>")); 
+                    context.issueSubRequest(req);
+
+                    req=context.createSubRequest("active:purl-storage-query-domain");
+                    req.addArgument("uri", domainURI);
+                    req.setAspectClass(IAspectXDA.class);
+                    
+                    result = (IAspectXDA) context.issueSubRequestForAspect(req);
+                    resp = context.createResponseFrom(domainFilter.filter(context, result));
+                    resp.setMimeType("text/xml");
+                }
                  
             } catch(Throwable t) {
                 t.printStackTrace();

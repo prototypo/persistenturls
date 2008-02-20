@@ -261,20 +261,28 @@ public class UserAccessor extends AbstractAccessor {
             try {
                 resp = createCmd.execute(context);
                 
-                INKFRequest req = context.createSubRequest("active:purl-storage-approve-user");
                 URIResolver uriResolver = getURIResolver();
                 String uri = uriResolver.getURI(context);
-                String[] parts = uri.split("/");
-                int length = parts.length;
-                req.addArgument("param", new StringAspect("<user><id>" + parts[length-1] + "</id></user>")); 
-                context.issueSubRequest(req);
                 
-                req=context.createSubRequest("active:purl-storage-query-user");
-                req.addArgument("uri", "ffcpl:/user/" + parts[length-1]);
+                INKFRequest req = context.createSubRequest("active:purl-storage-query-user");
+                req.addArgument("uri", uri);
                 req.setAspectClass(IAspectXDA.class);
                 IAspectXDA result = (IAspectXDA) context.issueSubRequestForAspect(req);
-                resp = context.createResponseFrom(userFilter.filter(context, result));
-                resp.setMimeType("text/xml");                
+
+                if(result.getXDA().isTrue("/user/@status='0'")) {
+                    String user = uriResolver.getDisplayName(uri);
+                
+                    req = context.createSubRequest("active:purl-storage-approve-user");                
+                    req.addArgument("param", new StringAspect("<user><id>" + user + "</id></user>")); 
+                    context.issueSubRequest(req);
+                
+                    req=context.createSubRequest("active:purl-storage-query-user");
+                    req.addArgument("uri", uri);
+                    req.setAspectClass(IAspectXDA.class);
+                    result = (IAspectXDA) context.issueSubRequestForAspect(req);
+                    resp = context.createResponseFrom(userFilter.filter(context, result));
+                    resp.setMimeType("text/xml");
+                }
                 
             } catch(Throwable t) {
                 t.printStackTrace();

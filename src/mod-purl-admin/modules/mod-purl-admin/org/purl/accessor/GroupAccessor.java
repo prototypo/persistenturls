@@ -140,7 +140,7 @@ public class GroupAccessor extends AbstractAccessor {
             String maintainers = params.getValue("maintainers");
             String members = params.getValue("members");
 
-            StringTokenizer st = new StringTokenizer(maintainers, "\n,");
+            StringTokenizer st = new StringTokenizer(maintainers, "\n, ");
             while(st.hasMoreTokens()) {
                 String next = st.nextToken();
                 if(!UserHelper.isValidUser(context, userResolver.getURI(next))) {
@@ -148,7 +148,7 @@ public class GroupAccessor extends AbstractAccessor {
                 }
             }
 
-            st = new StringTokenizer(members, "\n,");
+            st = new StringTokenizer(members, "\n, ");
             while(st.hasMoreTokens()) {
                 String next = st.nextToken();
                 if(!UserHelper.isValidUser(context, userResolver.getURI(next))) {                
@@ -166,7 +166,7 @@ public class GroupAccessor extends AbstractAccessor {
             sb.append("</name>");
             sb.append("<maintainers>");
             
-            st = new StringTokenizer(maintainers, "\n,");
+            st = new StringTokenizer(maintainers, "\n, ");
             while(st.hasMoreElements()) {
                 sb.append("<uid>");
                 sb.append(st.nextToken().trim());
@@ -175,7 +175,7 @@ public class GroupAccessor extends AbstractAccessor {
             
             sb.append("</maintainers>");
             sb.append("<members>");
-            st = new StringTokenizer(members, "\n,");
+            st = new StringTokenizer(members, "\n, ");
             while(st.hasMoreElements()) {
                 sb.append("<uid>");
                 String userId = st.nextToken().trim(); 
