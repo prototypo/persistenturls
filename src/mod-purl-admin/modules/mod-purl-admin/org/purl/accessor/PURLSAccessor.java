@@ -17,14 +17,20 @@ import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFRequest;
 import org.ten60.netkernel.layer1.nkf.INKFRequestReadOnly;
 import org.ten60.netkernel.layer1.nkf.INKFResponse;
+import org.ten60.netkernel.layer1.nkf.NKFException;
 import org.ten60.netkernel.layer1.nkf.impl.NKFAccessorImpl;
 import org.ten60.netkernel.layer1.representation.NVPAspect;
 import org.ten60.netkernel.layer1.representation.NVPImpl;
+import org.ten60.netkernel.xml.representation.DOMXDAAspect;
 import org.ten60.netkernel.xml.representation.IAspectXDA;
+import org.ten60.netkernel.xml.xda.DOMXDA;
+import org.ten60.netkernel.xml.xda.IXDA;
 import org.ten60.netkernel.xml.xda.IXDAReadOnly;
 import org.ten60.netkernel.xml.xda.IXDAReadOnlyIterator;
+import org.ten60.netkernel.xml.xda.XDOIncompatibilityException;
 import org.ten60.netkernel.xml.xda.XPathLocationException;
 
+import com.ten60.netkernel.urii.IURAspect;
 import com.ten60.netkernel.urii.IURRepresentation;
 import com.ten60.netkernel.urii.aspect.IAspectString;
 import com.ten60.netkernel.urii.aspect.StringAspect;
@@ -70,6 +76,8 @@ public class PURLSAccessor extends NKFAccessorImpl {
             if(xdaRO.isTrue("/b/text()='t'")) {
                 try {
                  if(checkPURLsAndUsers(context, xdaParam)) {
+                     xdaParam = checkForClones(context, xdaParam);
+                     xdaParam = checkForChains(context, xdaParam);
                      req = context.createSubRequest("active:purl-storage-batch-load");
                      req.addArgument("param", xdaParam);
                      req.addArgument("currentuser", "data:text/plain," + NKHelper.getUser(context));
@@ -201,4 +209,151 @@ public class PURLSAccessor extends NKFAccessorImpl {
 	    
 	    return retValue;
 	}
+	
+	private IAspectXDA checkForClones(INKFConvenienceHelper context, IAspectXDA batchXDA) throws PURLException
+	{
+	    IXDA retValue = null;
+	    boolean modified = false;
+
+	    try {
+	        IXDAReadOnlyIterator xdaROItor = batchXDA.getXDA().readOnlyIterator("/purls/purl[@type='clone']");
+	        
+	        if(xdaROItor.hasNext()) {
+	            retValue = batchXDA.getClonedXDA();
+	        }
+	        
+	        while(xdaROItor.hasNext()) {
+	            xdaROItor.next();
+	            
+	            try {
+	                String basepurl = xdaROItor.getText("basepurl/@path", true);
+	                String baseURI = purlResolver.getURI(basepurl);
+	                
+	                if(!purlStorage.resourceExists(context, baseURI)) {
+                        System.out.println("**********" + baseURI);
+	                    throw new PURLException("Invalid cloned PURL: " + basepurl + " for PURL:" 
+	                            + xdaROItor.getText("@id", true), 400);
+	                }
+	                
+                   IURAspect iur = purlStorage.getResource(context, baseURI);
+                   IAspectXDA oldPurlXDAOrig = (IAspectXDA) context.transrept(iur, IAspectXDA.class);
+                   IXDAReadOnly xdaRO = oldPurlXDAOrig.getXDA();
+                   String type = xdaRO.getText("/purl/type", true);
+
+	                
+	                StringBuffer sb = new StringBuffer("<purl id=\"");
+	                sb.append(xdaROItor.getText("@id", true));
+	                sb.append("\" type=\"");
+	                sb.append(type);
+	                sb.append("\">");
+                    sb.append("<maintainers>");
+                    IXDAReadOnlyIterator maintainersItor = xdaRO.readOnlyIterator("maintainers/uid");
+                    
+                    while(maintainersItor.hasNext()) {
+                        maintainersItor.next();
+                        sb.append("<maintainer id=\"");
+                        sb.append(maintainersItor.getText(".", true));
+                        sb.append("\"/>");
+                    }
+                    
+                    sb.append("</maintainers>");
+                    
+                    if(isNumber(type)) {
+                        int numType = Integer.valueOf(type).intValue();
+                        
+                        switch(numType) {
+                            case 301:
+                            case 302:
+                            case 307:
+                                sb.append("<target url=\"");
+                                sb.append(xdaRO.getText("/purl/target/url", true));
+                                sb.append("\"/>");
+                                break;
+                            case 303:
+                                sb.append("<seealso url=\"");
+                                sb.append(xdaRO.getText("/purl/target/url", true));
+                                sb.append("\"/>");                                
+                                break;
+                            case 404:
+                            case 410:
+                                break;
+                        }
+                    } else {
+                        System.out.println("************************THIS NEEDS DOING");
+                    }
+                    
+	                sb.append("</purl>");
+	                
+	                IAspectXDA newPURLXDA = (IAspectXDA) context.transrept(new StringAspect(sb.toString()), IAspectXDA.class);
+	                retValue.replace(newPURLXDA.getXDA(), "/purl", xdaROItor.getCurrentXPath());	                
+
+	                modified = true;
+	            } catch(NKFException nfe) {
+	                nfe.printStackTrace();
+	            } catch (XDOIncompatibilityException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+	        }
+	    } catch (XPathLocationException e) {
+            e.printStackTrace();
+        }
+	    
+        return modified ? new DOMXDAAspect((DOMXDA)retValue) : batchXDA;
+	}
+	
+   private IAspectXDA checkForChains(INKFConvenienceHelper context, IAspectXDA batchXDA) throws PURLException
+   {
+	   IXDA retValue = null;
+	   boolean modified = false;
+	   
+	   try {
+           IXDAReadOnlyIterator xdaROItor = batchXDA.getXDA().readOnlyIterator("/purls/purl[@type='chain']");
+           
+           if(xdaROItor.hasNext()) {
+               retValue = batchXDA.getClonedXDA();
+           }
+           
+           while(xdaROItor.hasNext()) {
+               xdaROItor.next();
+               String basepurl = xdaROItor.getText("basepurl/@path", true);
+               String baseURI = purlResolver.getURI(basepurl);
+               if(purlStorage.resourceExists(context, baseURI)) {
+                   StringAspect targetShim = new StringAspect("<target url=\"" + basepurl + "\"/>");
+                   DOMXDAAspect targetShimDOMXDA = (DOMXDAAspect) context.transrept(targetShim, DOMXDAAspect.class);
+                   retValue.append(targetShimDOMXDA.getXDA(), "/", xdaROItor.getCurrentXPath());
+                   modified = true;
+               } else {
+                   System.out.println("**********" + baseURI);                   
+                   throw new PURLException("Invalid chained PURL: " + basepurl + " for PURL:" 
+                           + xdaROItor.getText("@id", true), 400);
+               }
+           }
+	   } catch (XPathLocationException e) {
+	       e.printStackTrace();
+	   } catch (NKFException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+	   } catch (XDOIncompatibilityException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+	   } 
+	   
+       return modified ? new DOMXDAAspect((DOMXDA)retValue) : batchXDA;
+   }
+	
+    private boolean isNumber(String number) {
+        boolean retValue = true;
+        int idx = 0;
+
+        if(number != null) {
+            int len = number.length();
+
+            while(retValue && idx < len) {
+                retValue = Character.isDigit(number.charAt(idx++));
+            }
+        }
+
+        return retValue;
+    }
 }

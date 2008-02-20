@@ -3,6 +3,7 @@ package org.purl.accessor;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.purl.accessor.command.PURLChainCommand;
 import org.purl.accessor.command.PURLGoneResolveCommand;
 import org.purl.accessor.command.PURLPartialRedirectResolveCommand;
 import org.purl.accessor.command.PURLRedirectResolveCommand;
@@ -38,6 +39,7 @@ public class PURLResolverAccessor extends NKFAccessorImpl {
         PURLResolveCommand seeAlsoResolver = new PURLSeeAlsoResolveCommand();
         PURLResolveCommand partialRedirectResolver = new PURLPartialRedirectResolveCommand();
         PURLResolveCommand purlValidator = new PURLValidatorCommand();
+        PURLResolveCommand chainResolver = new PURLChainCommand();
 
         commandMap.put("301", redirectResolver);
         commandMap.put("302", redirectResolver);
@@ -47,6 +49,7 @@ public class PURLResolverAccessor extends NKFAccessorImpl {
         commandMap.put("410", goneResolver);
         commandMap.put("partial", partialRedirectResolver);
         commandMap.put("validate", purlValidator);
+        commandMap.put("chain", chainResolver);
     }
 
     public PURLResolverAccessor() {
@@ -55,7 +58,6 @@ public class PURLResolverAccessor extends NKFAccessorImpl {
 
     @Override
     public void processRequest(INKFConvenienceHelper context) throws Exception {
-
         IAspectXDA configXDA = (IAspectXDA) context.sourceAspect("ffcpl:/etc/PURLConfig.xml", IAspectXDA.class);
         String path = NKHelper.getArgument(context, "path");
         String mode = NKHelper.getArgument(context, "mode");
@@ -108,7 +110,7 @@ public class PURLResolverAccessor extends NKFAccessorImpl {
             }
 
         } else {
-            if(!mode.equals("mode:validate")) {
+            if(mode != null && !mode.equals("mode:validate")) {
                 // TODO: This may go away
                 IXDAReadOnly xdaRO = (IXDAReadOnly) configXDA.getClonedXDA();
                 IXDAReadOnlyIterator xdaItor = xdaRO.readOnlyIterator("/purl-config/topLevelRedirects/redirect");
