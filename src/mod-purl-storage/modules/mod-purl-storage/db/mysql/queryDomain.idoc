@@ -34,6 +34,9 @@
 			<operand><domain><z_id/><id/><name/><public/></domain></operand>
 			<operator>
 				<stm:group xmlns:stm="http://1060.org/stm">
+					<stm:create-path newpath="@status" select="." xpath="/domain">
+						<stm:param xpath="/results/row/status/text()"/>
+					</stm:create-path>
 					<stm:set xpath="/domain/z_id"><stm:param xpath="/results/row/z_id/text()"/></stm:set>				
 					<stm:set xpath="/domain/id"><stm:param xpath="/results/row/d_id/text()"/></stm:set>
 					<stm:set xpath="/domain/name"><stm:param xpath="/results/row/name/text()"/></stm:set>
