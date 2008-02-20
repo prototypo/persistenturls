@@ -49,7 +49,7 @@
 		<maintainers>
 			<maintainer id="testuser"/>
 		</maintainers>
-		<basepurl path="/testdomain/test301"/>
+		<basepurl path="/testdomain/test301-1"/>
 	</purl>
 <!-- Type partial.  Partial-redirect PURL -->
 	<purl id="/testdomain/testPartial" type="partial">
