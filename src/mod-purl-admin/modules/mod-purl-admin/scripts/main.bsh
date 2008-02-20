@@ -10,6 +10,7 @@ main() {
 	req.addArgument("mode", "mode:resolve");
 	req.addArgument("path", base);
 	req.addArgument("method", method);
+	req.addArgument("requestURL", context.getThisRequest().getArgument("requestURL"));
 	resp=context.issueSubRequest(req);
 	context.setResponse(resp);
 }
