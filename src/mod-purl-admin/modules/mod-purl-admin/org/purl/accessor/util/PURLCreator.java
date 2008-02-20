@@ -33,27 +33,18 @@ public class PURLCreator implements ResourceCreator {
     private IURAspect createChainedPURL(INKFConvenienceHelper context, IAspectNVP params) throws NKFException {
         IURAspect retValue = null;
 
-        String purl = NKHelper.getArgument(context, "path");
-        if(purl.startsWith("ffcpl:/purl")) {
-            purl = purl.substring(11);
-        }
-
+        String purl = purlResolver.getURI(context);
         String existingPurl = params.getValue("basepurl");
         String oldURI = purlResolver.getURI(existingPurl);
 
         if(purlStorage.resourceExists(context, oldURI)) {
             StringBuffer sb = new StringBuffer("<purl>");
             sb.append("<id>");
-            sb.append(purl);
+            sb.append(purlResolver.getDisplayName(purl));
             sb.append("</id>");
-            sb.append("<type>302</type>");
-
-            String requestURL = context.getThisRequest().getArgument("requestURL");
-            int slashIdx = requestURL.indexOf("/", 7);
-            String target = requestURL.substring(0, slashIdx) + existingPurl;
+            sb.append("<type>chain</type>");
             sb.append("<target><url>");
-            target = target.replaceAll("&", "&amp;");
-            sb.append(target);
+            sb.append(purlResolver.getDisplayName(oldURI));
             sb.append("</url></target>");
 
             String maintainers=params.getValue("maintainers");
