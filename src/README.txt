@@ -52,6 +52,33 @@ password by modifying the user record after you have logged in.
 
 5) Have fun!
 
+A few thoughts:
+
+1) If you just want to play around with the server, the HSQLDB
+installation should be fine and self-contained. If you want to install a
+more realistic server, please select the MySQL option and make sure it
+is installed and configured (it will ask for username/password/port info
+during installation).
+
+2) By default, users and top-level domains are "approved" automatically.
+This is important for unit testing purposes and will be fine for many
+installations. If you want to have a production environment where this
+is not the case, this is most easily specified during the installation
+process. If you run without the auto approval process selected, you will
+have to approve these through the admin interface which is now linked
+off of the main UI (you need admin privileges).
+
+3) By default an admin account is created with username/password of
+admin/password.
+
+4) To hit the main documentation page, go to
+http://localhost:8080/docs/index.html. We make a best guess as to the
+name of the machine during the installation process. If you want to
+override this behavior during the installation, you can. If you need to
+add other hostnames after the fact, please edit the
+$installation_dir/modules/mod-purl-virtualhost/module.xml and look for
+the section that discusses this.
+
 
   ----------------------------------------------------------
   | Option B.  Installing using a NetKernel Module Package |
