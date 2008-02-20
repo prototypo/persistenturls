@@ -681,7 +681,7 @@ public class simplePurlClientTest extends TestCase {
 		try {
 			String url = "http://" + host + ":" + port + "/admin/purl" + path;
 			String control = "<purl><id>" + path + "</id>";
-			if ( useBasepurl ) {
+			if ( type.equals("clone") ) {
 				// For chaining and cloning PURLs.
 				// NB: Presumes use of the hard-coded test data!
 				control += "<type>302</type>";                                                      
@@ -714,14 +714,15 @@ public class simplePurlClientTest extends TestCase {
 				// For chaining.
 				// Note use of hardcoded basePURL, which must be created first.
 				formParameters.put("basepurl", "/testdomain/test302PURL");
-				control += "<target><url>http://localhost:8080/testdomain/test302PURL</url></target>";
+				control += "<target><url>/testdomain/test302PURL</url></target>";
 			}
 			control += "</purl>";
 
 			String errMsg = "Cannot create a new " + type + " PURL: ";
 			
 			String test = client.createPurl(url, formParameters);
-						
+			
+
 			// Convert the test and control values to lower case for clean comparison.
 			String testLC = test.toLowerCase();
 			String controlLC = control.toLowerCase();
