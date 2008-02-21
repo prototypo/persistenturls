@@ -75,7 +75,7 @@ public class PURLSAccessor extends NKFAccessorImpl {
             // TODO: What's the best way to do this?
             if(xdaRO.isTrue("/b/text()='t'")) {
                 try {
-                 if(checkPURLsAndUsers(context, xdaParam)) {
+                     xdaParam = checkPURLsAndUsers(context, xdaParam);
                      xdaParam = checkForClones(context, xdaParam);
                      xdaParam = checkForChains(context, xdaParam);
                      req = context.createSubRequest("active:purl-storage-batch-load");
@@ -83,7 +83,6 @@ public class PURLSAccessor extends NKFAccessorImpl {
                      req.addArgument("currentuser", "data:text/plain," + NKHelper.getUser(context));
                      IURRepresentation iur = context.issueSubRequest(req);
                       resp = context.createResponseFrom(iur);
-                 }
                 }  catch(PURLException pe) {
                     errorMessage = pe.getMessage();
                     errorCode = pe.getResponseCode();
@@ -161,8 +160,9 @@ public class PURLSAccessor extends NKFAccessorImpl {
         context.setResponse(resp);
 	}
 	
-	private boolean checkPURLsAndUsers(INKFConvenienceHelper context, IAspectXDA batchXDA) throws PURLException {
-	    boolean retValue = false;
+	private IAspectXDA checkPURLsAndUsers(INKFConvenienceHelper context, IAspectXDA batchXDA) throws PURLException {
+        IXDA retValue = null;
+        boolean modified = false;
 
 	    Set<String> alreadySeen = new HashSet<String>();
 	    
@@ -179,6 +179,23 @@ public class PURLSAccessor extends NKFAccessorImpl {
 	                }
 	            } else {
 	                throw new PURLException("PURL " + purlResolver.getDisplayName(p_id) + " cannot be created.", 400);
+	            }
+	            
+	            // If we come across a PURL with a trailing '/', normalize it to our
+	            // displayName format.
+	            
+	            if(p_id.endsWith("/")) {
+	                if(!modified) {
+	                    retValue = batchXDA.getClonedXDA();
+	                    modified = true;
+	                }
+	                
+	                try {
+	                    retValue.setText(xdaROItor.getCurrentXPath() + "/@id", purlResolver.getDisplayName(p_id));
+	                } catch (XDOIncompatibilityException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    } 
 	            }
 	        }
 	        
@@ -201,13 +218,11 @@ public class PURLSAccessor extends NKFAccessorImpl {
 	                throw new PURLException("Invalid user: " + next + " in batch.", 400);
 	            }
 	        }
-	        
-	        retValue = true;
 	    } catch (XPathLocationException e) {
             e.printStackTrace();
         } 
 	    
-	    return retValue;
+        return modified ? new DOMXDAAspect((DOMXDA)retValue) : batchXDA;
 	}
 	
 	private IAspectXDA checkForClones(INKFConvenienceHelper context, IAspectXDA batchXDA) throws PURLException
@@ -230,7 +245,6 @@ public class PURLSAccessor extends NKFAccessorImpl {
 	                String baseURI = purlResolver.getURI(basepurl);
 	                
 	                if(!purlStorage.resourceExists(context, baseURI)) {
-                        System.out.println("**********" + baseURI);
 	                    throw new PURLException("Invalid cloned PURL: " + basepurl + " for PURL:" 
 	                            + xdaROItor.getText("@id", true), 400);
 	                }
