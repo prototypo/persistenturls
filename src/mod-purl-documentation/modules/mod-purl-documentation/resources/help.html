@@ -302,6 +302,9 @@
 				The single most important task that one can accomplish on a PURL server is the creation of a new PURL. Other administrative actions, from user, group or domain maintenance to the other operations on the PURLs themselves are secondary to that main task. This section addresses the creation of simple (HTTP redirection) PURLs and advanced PURLs, along with the other things that may be done to a PURL.
 			</p>
 			<p>
+				A &quot;maintainer&quot; is someone who can modify a PURL.  A maintainer of a PURL may modify the record for that PURL.
+			</p>
+			<p>
 				Six actions may be taken on a PURL: Creation, Advanced Creation, Modification, Searching, Validation or Deletion. These six actions may be accessed in the PURL Web user interface as shown in Figure 3. The same six actions may be taken by other PURL clients. See <a href="#rest">Creating RESTful PURL Clients</a> for details.
 			</p>
 			<p>
@@ -667,6 +670,9 @@
 			</h2>
 			<p>
 				PURLs are created within domains. A domain is the path portion of the PURL URL form, as shown in Figure 1. PURLs may not be created unless they are within a domain; that helps to ensure order and security on a PURL server.
+			</p>
+			<p>
+				A &quot;maintainer&quot; is someone who can modify a domain.  A maintainer of a domain may modify the record for that domain.  A &quot;writer&quot; is someone who may create a new PURL under a domain.
 			</p>
 			<p>
 				Some PURL servers allow one or more domains to act as public spaces. This is the case with the /NET domain on the oldest PURL server at <a href="http://purl.org/">http://purl.org/</a>. Public domains allow for subdomains and PURLs to be created within them by the general public. Most domains, however, will be private and writing to them requires that you are either a maintainer or a writer of those domains.
