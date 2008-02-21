@@ -47,6 +47,10 @@ public class PURLURIResolver extends URIResolver {
             retValue = path.substring(11);
         }
         
+        if(retValue.endsWith("/")) {
+            retValue = retValue.substring(0, retValue.length()-1);
+        }
+        
         return retValue;
     }
 }

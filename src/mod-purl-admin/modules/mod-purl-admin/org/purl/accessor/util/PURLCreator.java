@@ -109,11 +109,9 @@ public class PURLCreator implements ResourceCreator {
 
         StringBuffer sb = new StringBuffer("<purl>");
         String target = params.getValue("target");
-        String purl = NKHelper.getArgument(context, "path");
-        if(purl.startsWith("ffcpl:/purl")) {
-            purl = purl.substring(11);
-        }
-
+        String purlURI = purlResolver.getURI(context);
+        String purl = purlResolver.getDisplayName(purlURI);
+        
         sb.append("<id>");
         sb.append(purl);
         sb.append("</id>");
