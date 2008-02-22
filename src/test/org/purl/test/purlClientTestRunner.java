@@ -31,7 +31,11 @@ public class purlClientTestRunner {
         suite.addTest(new simplePurlClientTest("testRegisterUser2"));
 		suite.addTest(new simplePurlClientTest("testLoginUser"));
         suite.addTest(new simplePurlClientTest("testCreateGroup"));
+        suite.addTest(new simplePurlClientTest("testCreateGroupWithMultipleMaintainers"));
+        suite.addTest(new simplePurlClientTest("testCreateGroupWithMultipleMembers"));
         suite.addTest(new simplePurlClientTest("testCreateDomain"));
+        suite.addTest(new simplePurlClientTest("testCreateDomainWithMultipleMaintainers"));
+        suite.addTest(new simplePurlClientTest("testCreateDomainWithMultipleWriters"));
 
 // TODO?: Add tests to determine whether <allowUserAutoCreation/> has been set
 //       and approve/deny users as necessary.  Do the same with domains.
@@ -41,14 +45,34 @@ public class purlClientTestRunner {
 		*/
         suite.addTest(new simplePurlClientTest("testModifyUser"));
         suite.addTest(new simplePurlClientTest("testModifyGroup"));
+        suite.addTest(new simplePurlClientTest("testModifyGroupAddMaintainer"));
+        suite.addTest(new simplePurlClientTest("testModifyGroupRemoveMaintainer"));
+        suite.addTest(new simplePurlClientTest("testModifyGroupAddMember"));
+        suite.addTest(new simplePurlClientTest("testModifyGroupRemoveMember"));
         suite.addTest(new simplePurlClientTest("testModifyDomain"));
+        suite.addTest(new simplePurlClientTest("testModifyDomainAddMaintainer"));
+        suite.addTest(new simplePurlClientTest("testModifyDomainRemoveMaintainer"));
+        suite.addTest(new simplePurlClientTest("testModifyDomainAddWriter"));
+        suite.addTest(new simplePurlClientTest("testModifyDomainRemoveWriter"));
 
 		/*
 			Search the user, group and domain.
 		*/
         suite.addTest(new simplePurlClientTest("testSearchUser"));
+        suite.addTest(new simplePurlClientTest("testSearchUserByName"));
+        suite.addTest(new simplePurlClientTest("testSearchUserByAffiliation"));
+        suite.addTest(new simplePurlClientTest("testSearchUserByEmail"));
+        suite.addTest(new simplePurlClientTest("testSearchUserByIdAndName"));
         suite.addTest(new simplePurlClientTest("testSearchGroup"));
+        suite.addTest(new simplePurlClientTest("testSearchGroupByName"));
+        suite.addTest(new simplePurlClientTest("testSearchGroupByMaintainer"));
+        suite.addTest(new simplePurlClientTest("testSearchGroupByMember"));
+        suite.addTest(new simplePurlClientTest("testSearchGroupByIdAndName"));
         suite.addTest(new simplePurlClientTest("testSearchDomain"));
+        suite.addTest(new simplePurlClientTest("testSearchDomainByName"));
+        suite.addTest(new simplePurlClientTest("testSearchDomainByMaintainer"));
+        suite.addTest(new simplePurlClientTest("testSearchDomainByWriter"));
+        suite.addTest(new simplePurlClientTest("testSearchDomainByIdAndName"));
 
 		/*
 			Single PURL actions

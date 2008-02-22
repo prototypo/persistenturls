@@ -440,6 +440,78 @@ public class simplePurlClientTest extends TestCase {
 			}
 	}
 
+	// Test searching for users via an HTTP GET.
+	public void testSearchUserByName() {
+
+		try {
+			String url = "http://" + host + ":" + port + "/admin/user/?name=Test%20User%20Modified";
+
+			String errMsg = "Cannot search user.";
+			String control = "<user admin=\"false\" status=\"1\"><id>testuser</id><name>Test User Modified</name><affiliation>Zepheira, LLC</affiliation><email>tuser@example.com</email></user>";
+			String test = client.searchUser(url);
+
+			// XML response, so use assertXMLEqual.
+			XMLAssert.assertXMLEqual(errMsg, control, test);						
+			
+			} catch (Exception e) {
+				reportException("Failed to resolve URL: ", e);
+			}
+	}
+
+	// Test searching for users via an HTTP GET.
+	public void testSearchUserByAffiliation() {
+
+		try {
+			String url = "http://" + host + ":" + port + "/admin/user/?affiliation=Zepheira%2C%20LLC";
+
+			String errMsg = "Cannot search user.";
+			String control = "<user admin=\"false\" status=\"1\"><id>testuser</id><name>Test User Modified</name><affiliation>Zepheira, LLC</affiliation><email>tuser@example.com</email></user>";
+			String test = client.searchUser(url);
+
+			// XML response, so use assertXMLEqual.
+			XMLAssert.assertXMLEqual(errMsg, control, test);						
+			
+			} catch (Exception e) {
+				reportException("Failed to resolve URL: ", e);
+			}
+	}
+
+	// Test searching for users via an HTTP GET.
+	public void testSearchUserByEmail() {
+
+		try {
+			String url = "http://" + host + ":" + port + "/admin/user/?email=tuser%40example.com";
+
+			String errMsg = "Cannot search user.";
+			String control = "<user admin=\"false\" status=\"1\"><id>testuser</id><name>Test User Modified</name><affiliation>Zepheira, LLC</affiliation><email>tuser@example.com</email></user>";
+			String test = client.searchUser(url);
+
+			// XML response, so use assertXMLEqual.
+			XMLAssert.assertXMLEqual(errMsg, control, test);						
+			
+			} catch (Exception e) {
+				reportException("Failed to resolve URL: ", e);
+			}
+	}
+
+	// Test searching for users via an HTTP GET.
+	public void testSearchUserByIdAndName() {
+
+		try {
+			String url = "http://" + host + ":" + port + "/admin/user/testuser?name=Test%20User%20Modified";
+
+			String errMsg = "Cannot search user.";
+			String control = "<user admin=\"false\" status=\"1\"><id>testuser</id><name>Test User Modified</name><affiliation>Zepheira, LLC</affiliation><email>tuser@example.com</email></user>";
+			String test = client.searchUser(url);
+
+			// XML response, so use assertXMLEqual.
+			XMLAssert.assertXMLEqual(errMsg, control, test);						
+			
+			} catch (Exception e) {
+				reportException("Failed to resolve URL: ", e);
+			}
+	}
+
 	// Test deleting an existing user via an HTTP DELETE.
 	public void testDeleteUser() {
 		deleteUser("testuser");
@@ -483,6 +555,54 @@ public class simplePurlClientTest extends TestCase {
 		}
 	}
 	
+	// Test creating a new group with multiple members via an HTTP POST.
+	public void testCreateGroupWithMultipleMaintainers() {
+		
+		try {
+			String url = "http://" + host + ":" + port + "/admin/group/testgroup2";
+			
+			Map<String, String> formParameters = new HashMap<String, String>();
+			formParameters.put("name", "Test Group");
+			formParameters.put("maintainers", "testuser,testuser2");
+			formParameters.put("members", "testuser");
+			formParameters.put("comments", "A group used for unit tests.");
+							
+			String errMsg = "Cannot create a new group.";
+			String control = "<group><id>testgroup2</id><name>Test Group</name><maintainers><uid>testuser</uid><uid>testuser2</uid></maintainers><members><uid>testuser</uid></members><comments>A group used for unit tests.</comments></group>";
+			String test = client.createGroup(url, formParameters);
+			
+			// XML response, so use assertXMLEqual.
+			XMLAssert.assertXMLEqual(errMsg + ".  Response from server: " + test, control, test);
+						
+		} catch (Exception e) {
+			reportException("Failed to resolve URL: ", e);
+		}
+	}
+
+	// Test creating a new group with multiple members via an HTTP POST.
+	public void testCreateGroupWithMultipleMembers() {
+
+		try {
+			String url = "http://" + host + ":" + port + "/admin/group/testgroup3";
+
+			Map<String, String> formParameters = new HashMap<String, String>();
+			formParameters.put("name", "Test Group");
+			formParameters.put("maintainers", "testuser");
+			formParameters.put("members", "testuser,testuser2");
+			formParameters.put("comments", "A group used for unit tests.");
+
+			String errMsg = "Cannot create a new group.";
+			String control = "<group><id>testgroup3</id><name>Test Group</name><maintainers><uid>testuser</uid></maintainers><members><uid>testuser</uid><uid>testuser2</uid></members><comments>A group used for unit tests.</comments></group>";
+			String test = client.createGroup(url, formParameters);
+
+			// XML response, so use assertXMLEqual.
+			XMLAssert.assertXMLEqual(errMsg + ".  Response from server: " + test, control, test);
+
+		} catch (Exception e) {
+			reportException("Failed to resolve URL: ", e);
+		}
+	}
+	
 	// Test modifying an existing group via an HTTP PUT.
 	public void testModifyGroup() {
 		
@@ -507,6 +627,106 @@ public class simplePurlClientTest extends TestCase {
 			reportException("Failed to resolve URL: ", e);
 		}
 	}
+	
+	// Test modifying an existing group via an HTTP PUT.
+	public void testModifyGroupAddMaintainer() {
+		
+		try {
+			String url = "http://" + host + ":" + port + "/admin/group/testgroup";
+			
+			Map<String, String> formParameters = new HashMap<String, String>();
+			formParameters.put("name", "Test Group Modified");
+			formParameters.put("maintainers", "testuser,testuser2");
+			formParameters.put("members", "testuser");
+			formParameters.put("comments", "A modified group used for unit tests.");
+							
+			String errMsg = "Cannot modify a group.";
+			String control = "Updated resource: testgroup";
+			//String control = "<group><id>testgroup</id><name>Test Group Modified</name><maintainers>testuser</maintainers><members>testuser</members><comments>A modified group used for unit tests.</comments></group>";
+			String test = client.modifyGroup(url, formParameters);
+			
+			// Textual response, so use assertEquals.
+			assertEquals(errMsg + test, control, test);
+						
+		} catch (Exception e) {
+			reportException("Failed to resolve URL: ", e);
+		}
+	}
+	
+	// Test modifying an existing group via an HTTP PUT.
+	public void testModifyGroupRemoveMaintainer() {
+		
+		try {
+			String url = "http://" + host + ":" + port + "/admin/group/testgroup";
+			
+			Map<String, String> formParameters = new HashMap<String, String>();
+			formParameters.put("name", "Test Group Modified");
+			formParameters.put("maintainers", "testuser");
+			formParameters.put("members", "testuser");
+			formParameters.put("comments", "A modified group used for unit tests.");
+							
+			String errMsg = "Cannot modify a group.";
+			String control = "Updated resource: testgroup";
+			//String control = "<group><id>testgroup</id><name>Test Group Modified</name><maintainers>testuser</maintainers><members>testuser</members><comments>A modified group used for unit tests.</comments></group>";
+			String test = client.modifyGroup(url, formParameters);
+			
+			// Textual response, so use assertEquals.
+			assertEquals(errMsg + test, control, test);
+						
+		} catch (Exception e) {
+			reportException("Failed to resolve URL: ", e);
+		}
+	}
+	
+	// Test modifying an existing group via an HTTP PUT.
+	public void testModifyGroupAddMember() {
+		
+		try {
+			String url = "http://" + host + ":" + port + "/admin/group/testgroup";
+			
+			Map<String, String> formParameters = new HashMap<String, String>();
+			formParameters.put("name", "Test Group Modified");
+			formParameters.put("maintainers", "testuser");
+			formParameters.put("members", "testuser,testuser2");
+			formParameters.put("comments", "A modified group used for unit tests.");
+							
+			String errMsg = "Cannot modify a group.";
+			String control = "Updated resource: testgroup";
+			//String control = "<group><id>testgroup</id><name>Test Group Modified</name><maintainers>testuser</maintainers><members>testuser</members><comments>A modified group used for unit tests.</comments></group>";
+			String test = client.modifyGroup(url, formParameters);
+			
+			// Textual response, so use assertEquals.
+			assertEquals(errMsg + test, control, test);
+						
+		} catch (Exception e) {
+			reportException("Failed to resolve URL: ", e);
+		}
+	}
+	
+	// Test modifying an existing group via an HTTP PUT.
+	public void testModifyGroupRemoveMember() {
+		
+		try {
+			String url = "http://" + host + ":" + port + "/admin/group/testgroup";
+			
+			Map<String, String> formParameters = new HashMap<String, String>();
+			formParameters.put("name", "Test Group Modified");
+			formParameters.put("maintainers", "testuser");
+			formParameters.put("members", "testuser");
+			formParameters.put("comments", "A modified group used for unit tests.");
+							
+			String errMsg = "Cannot modify a group.";
+			String control = "Updated resource: testgroup";
+			//String control = "<group><id>testgroup</id><name>Test Group Modified</name><maintainers>testuser</maintainers><members>testuser</members><comments>A modified group used for unit tests.</comments></group>";
+			String test = client.modifyGroup(url, formParameters);
+			
+			// Textual response, so use assertEquals.
+			assertEquals(errMsg + test, control, test);
+						
+		} catch (Exception e) {
+			reportException("Failed to resolve URL: ", e);
+		}
+	}	
 	
 	// Test modifying an existing group via an HTTP PUT.
 	// TODO: Replace/remove?
@@ -547,6 +767,78 @@ public class simplePurlClientTest extends TestCase {
 			}
 	}
 
+	// Test searching for groups via an HTTP GET.
+	public void testSearchGroupByName() {
+		
+		try {
+			String url = "http://" + host + ":" + port + "/admin/group/?name=Test%20Group%20Modified";
+
+			String errMsg = "Cannot search group.";
+			String control = "<group><id>testgroup</id><name>Test Group Modified</name><maintainers><uid>testuser</uid></maintainers><members><uid>testuser</uid></members><comments>A modified group used for unit tests.</comments></group>";
+			String test = client.searchGroup(url);
+			
+			// XML response, so use assertXMLEqual.
+			XMLAssert.assertXMLEqual(errMsg, control, test);
+			
+			} catch (Exception e) {
+				reportException("Failed to resolve URL: ", e);
+			}
+	}
+
+	// Test searching for groups via an HTTP GET.
+	public void testSearchGroupByMaintainer() {
+		
+		try {
+			String url = "http://" + host + ":" + port + "/admin/group/?maintainers=testuser";
+
+			String errMsg = "Cannot search group.";
+			String control = "<group><id>testgroup</id><name>Test Group Modified</name><maintainers><uid>testuser</uid></maintainers><members><uid>testuser</uid></members><comments>A modified group used for unit tests.</comments></group>";
+			String test = client.searchGroup(url);
+			
+			// XML response, so use assertXMLEqual.
+			XMLAssert.assertXMLEqual(errMsg, control, test);
+			
+			} catch (Exception e) {
+				reportException("Failed to resolve URL: ", e);
+			}
+	}
+
+	// Test searching for groups via an HTTP GET.
+	public void testSearchGroupByMember() {
+		
+		try {
+			String url = "http://" + host + ":" + port + "/admin/group/?members=testuser";
+
+			String errMsg = "Cannot search group.";
+			String control = "<group><id>testgroup</id><name>Test Group Modified</name><maintainers><uid>testuser</uid></maintainers><members><uid>testuser</uid></members><comments>A modified group used for unit tests.</comments></group>";
+			String test = client.searchGroup(url);
+			
+			// XML response, so use assertXMLEqual.
+			XMLAssert.assertXMLEqual(errMsg, control, test);
+			
+			} catch (Exception e) {
+				reportException("Failed to resolve URL: ", e);
+			}
+	}
+
+	// Test searching for groups via an HTTP GET.
+	public void testSearchGroupByIdAndName() {
+		
+		try {
+			String url = "http://" + host + ":" + port + "/admin/group/testgroup?name=Test%20Group%20Modified";
+
+			String errMsg = "Cannot search group.";
+			String control = "<group><id>testgroup</id><name>Test Group Modified</name><maintainers><uid>testuser</uid></maintainers><members><uid>testuser</uid></members><comments>A modified group used for unit tests.</comments></group>";
+			String test = client.searchGroup(url);
+			
+			// XML response, so use assertXMLEqual.
+			XMLAssert.assertXMLEqual(errMsg, control, test);
+			
+			} catch (Exception e) {
+				reportException("Failed to resolve URL: ", e);
+			}
+	}
+	
 	// Test deleting an existing group via an HTTP DELETE.
 	public void testDeleteGroup() {
 		
@@ -593,7 +885,59 @@ public class simplePurlClientTest extends TestCase {
 			reportException("Failed to resolve URL: ", e);
 		}
 	}
-	
+
+	// Test creating a new domain via an HTTP POST.
+	public void testCreateDomainWithMultipleMaintainers() {
+		
+		try {
+			String url = "http://" + host + ":" + port + "/admin/domain/testdomain2";
+			
+			Map<String, String> formParameters = new HashMap<String, String>();
+			formParameters.put("name", "Test Domain");
+			formParameters.put("maintainers", "testuser,testuser2");
+			formParameters.put("writers", "testuser");
+			formParameters.put("public", "false");
+			
+			String errMsg = "Cannot create a new domain.";
+			String control = "<domain><id>/testdomain2</id><name>Test Domain</name><maintainers><uid>testuser</uid><uid>testuser2</uid></maintainers><writers><uid>testuser</uid></writers><public>false</public></domain>";
+			String test = client.createDomain(url, formParameters);
+			
+			// XML response, so use assertXMLEqual.
+			XMLAssert.assertXMLEqual(errMsg + " : " + test, control, test);
+			// TODO: DBG
+			//assertEquals(errMsg + test, control, test);
+			
+		} catch (Exception e) {
+			reportException("Failed to resolve URL: ", e);
+		}
+	}
+
+	// Test creating a new domain via an HTTP POST.
+	public void testCreateDomainWithMultipleWriters() {
+		
+		try {
+			String url = "http://" + host + ":" + port + "/admin/domain/testdomain3";
+			
+			Map<String, String> formParameters = new HashMap<String, String>();
+			formParameters.put("name", "Test Domain");
+			formParameters.put("maintainers", "testuser");
+			formParameters.put("writers", "testuser,testuser2");
+			formParameters.put("public", "false");
+			
+			String errMsg = "Cannot create a new domain.";
+			String control = "<domain><id>/testdomain3</id><name>Test Domain</name><maintainers><uid>testuser</uid></maintainers><writers><uid>testuser</uid><uid>testuser2</uid></writers><public>false</public></domain>";
+			String test = client.createDomain(url, formParameters);
+			
+			// XML response, so use assertXMLEqual.
+			XMLAssert.assertXMLEqual(errMsg + " : " + test, control, test);
+			// TODO: DBG
+			//assertEquals(errMsg + test, control, test);
+			
+		} catch (Exception e) {
+			reportException("Failed to resolve URL: ", e);
+		}
+	}
+			
 	// Test modifying an existing domain via an HTTP PUT.
 	public void testModifyDomain() {
 
@@ -602,9 +946,9 @@ public class simplePurlClientTest extends TestCase {
 
 				Map<String, String> formParameters = new HashMap<String, String>();
 				formParameters.put("name", "Test Domain Modified");
-				formParameters.put("maintainers", "testuser,testuser2");
+				formParameters.put("maintainers", "testuser");
 				formParameters.put("writers", "testuser");
-				formParameters.put("public", "false");
+				formParameters.put("public", "true");
 
 				String errMsg = "Cannot modify a Domain: ";
 				String control = "Updated resource: /testdomain";
@@ -618,6 +962,102 @@ public class simplePurlClientTest extends TestCase {
 			}
 	}
 
+	// Test modifying an existing domain via an HTTP PUT.
+	public void testModifyDomainAddMaintainer() {
+
+			try {
+				String url = "http://" + host + ":" + port + "/admin/domain/testdomain";
+
+				Map<String, String> formParameters = new HashMap<String, String>();
+				formParameters.put("name", "Test Domain Modified");
+				formParameters.put("maintainers", "testuser,testuser2");
+				formParameters.put("writers", "testuser");
+				formParameters.put("public", "true");
+
+				String errMsg = "Cannot modify a Domain: ";
+				String control = "Updated resource: /testdomain";
+				String test = client.modifyDomain(url, formParameters);
+
+				// Textual response, so use assertEquals.
+				assertEquals(errMsg + test, control, test);
+
+			} catch (Exception e) {
+				reportException("Failed to resolve URL: ", e);
+			}
+	}
+
+	// Test modifying an existing domain via an HTTP PUT.
+	public void testModifyDomainRemoveMaintainer() {
+
+			try {
+				String url = "http://" + host + ":" + port + "/admin/domain/testdomain";
+
+				Map<String, String> formParameters = new HashMap<String, String>();
+				formParameters.put("name", "Test Domain Modified");
+				formParameters.put("maintainers", "testuser");
+				formParameters.put("writers", "testuser");
+				formParameters.put("public", "true");
+
+				String errMsg = "Cannot modify a Domain: ";
+				String control = "Updated resource: /testdomain";
+				String test = client.modifyDomain(url, formParameters);
+
+				// Textual response, so use assertEquals.
+				assertEquals(errMsg + test, control, test);
+
+			} catch (Exception e) {
+				reportException("Failed to resolve URL: ", e);
+			}
+	}
+
+	// Test modifying an existing domain via an HTTP PUT.
+	public void testModifyDomainAddWriter() {
+
+			try {
+				String url = "http://" + host + ":" + port + "/admin/domain/testdomain";
+
+				Map<String, String> formParameters = new HashMap<String, String>();
+				formParameters.put("name", "Test Domain Modified");
+				formParameters.put("maintainers", "testuser");
+				formParameters.put("writers", "testuser,testuser2");
+				formParameters.put("public", "true");
+
+				String errMsg = "Cannot modify a Domain: ";
+				String control = "Updated resource: /testdomain";
+				String test = client.modifyDomain(url, formParameters);
+
+				// Textual response, so use assertEquals.
+				assertEquals(errMsg + test, control, test);
+
+			} catch (Exception e) {
+				reportException("Failed to resolve URL: ", e);
+			}
+	}
+
+	// Test modifying an existing domain via an HTTP PUT.
+	public void testModifyDomainRemoveWriter() {
+
+			try {
+				String url = "http://" + host + ":" + port + "/admin/domain/testdomain";
+
+				Map<String, String> formParameters = new HashMap<String, String>();
+				formParameters.put("name", "Test Domain Modified");
+				formParameters.put("maintainers", "testuser");
+				formParameters.put("writers", "testuser");
+				formParameters.put("public", "true");
+
+				String errMsg = "Cannot modify a Domain: ";
+				String control = "Updated resource: /testdomain";
+				String test = client.modifyDomain(url, formParameters);
+
+				// Textual response, so use assertEquals.
+				assertEquals(errMsg + test, control, test);
+
+			} catch (Exception e) {
+				reportException("Failed to resolve URL: ", e);
+			}
+	}
+		
 	// Test searching for domains via an HTTP GET.
 	public void testSearchDomain() {
 		
@@ -631,6 +1071,78 @@ public class simplePurlClientTest extends TestCase {
 			// XML response, so use assertXMLEqual.
 			XMLAssert.assertXMLEqual(errMsg, control, test);
 			
+		} catch (Exception e) {
+			reportException("Failed to resolve URL: ", e);
+		}
+	}
+
+	// Test searching for domains via an HTTP GET.
+	public void testSearchDomainByName() {
+
+		try {
+			String url = "http://" + host + ":" + port + "/admin/domain/?name=Test%20Domain%20Modified";
+
+			String errMsg = "Cannot search domain.";
+			String control = "<domain><id>/testdomain</id><name>Test Domain Modified</name><maintainers><uid>testuser</uid><uid>testuser2</uid></maintainers><writers><uid>testuser</uid></writers><public>false</public></domain>";
+			String test = client.searchDomain(url);
+
+			// XML response, so use assertXMLEqual.
+			XMLAssert.assertXMLEqual(errMsg, control, test);
+
+		} catch (Exception e) {
+			reportException("Failed to resolve URL: ", e);
+		}
+	}
+
+	// Test searching for domains via an HTTP GET.
+	public void testSearchDomainByMaintainer() {
+
+		try {
+			String url = "http://" + host + ":" + port + "/admin/domain/?maintainers=testuser";
+
+			String errMsg = "Cannot search domain.";
+			String control = "<domain><id>/testdomain</id><name>Test Domain Modified</name><maintainers><uid>testuser</uid><uid>testuser2</uid></maintainers><writers><uid>testuser</uid></writers><public>false</public></domain>";
+			String test = client.searchDomain(url);
+
+			// XML response, so use assertXMLEqual.
+			XMLAssert.assertXMLEqual(errMsg, control, test);
+
+		} catch (Exception e) {
+			reportException("Failed to resolve URL: ", e);
+		}
+	}
+
+	// Test searching for domains via an HTTP GET.
+	public void testSearchDomainByWriter() {
+
+		try {
+			String url = "http://" + host + ":" + port + "/admin/domain/?writers=testuser";
+
+			String errMsg = "Cannot search domain.";
+			String control = "<domain><id>/testdomain</id><name>Test Domain Modified</name><maintainers><uid>testuser</uid><uid>testuser2</uid></maintainers><writers><uid>testuser</uid></writers><public>false</public></domain>";
+			String test = client.searchDomain(url);
+
+			// XML response, so use assertXMLEqual.
+			XMLAssert.assertXMLEqual(errMsg, control, test);
+
+		} catch (Exception e) {
+			reportException("Failed to resolve URL: ", e);
+		}
+	}
+
+	// Test searching for domains via an HTTP GET.
+	public void testSearchDomainByIdAndName() {
+
+		try {
+			String url = "http://" + host + ":" + port + "/admin/domain/testdomain?name=Test%20Domain%20Modified";
+
+			String errMsg = "Cannot search domain.";
+			String control = "<domain><id>/testdomain</id><name>Test Domain Modified</name><maintainers><uid>testuser</uid><uid>testuser2</uid></maintainers><writers><uid>testuser</uid></writers><public>false</public></domain>";
+			String test = client.searchDomain(url);
+
+			// XML response, so use assertXMLEqual.
+			XMLAssert.assertXMLEqual(errMsg, control, test);
+
 		} catch (Exception e) {
 			reportException("Failed to resolve URL: ", e);
 		}
