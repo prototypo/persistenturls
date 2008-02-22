@@ -18,8 +18,10 @@ package org.purl.accessor.command;
  *
  */
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 
@@ -63,8 +65,19 @@ public class GetResourceCommand extends PURLCommand {
         try {
            // String user = NKHelper.getUser(context);
             String path = context.getThisRequest().getArgument("path");
+            IAspectNVP params = null;
+            boolean isSearch = false;
+            
+            if(context.exists("this:param:param")) {
+                params = (IAspectNVP) context.sourceAspect( "this:param:param", IAspectNVP.class);
+                Set<String> paramNames = params.getNames();
+                
+                if(paramNames.contains("seealso")) {
+                    isSearch = true;
+                }
+            }
 
-            if(!path.endsWith("/")) {
+            if(!isSearch) {
              //   String id = NKHelper.getLastSegment(context);
                 
                 if(resStorage.resourceExists(context, uriResolver)) {
@@ -93,17 +106,20 @@ public class GetResourceCommand extends PURLCommand {
                     retValue.setMimeType(NKHelper.MIME_TEXT);
                 }
             } else {
-                IAspectNVP params = (IAspectNVP) context.sourceAspect( "this:param:param", IAspectNVP.class);
+                //IAspectNVP params = (IAspectNVP) context.sourceAspect( "this:param:param", IAspectNVP.class);
+                
+                List<String> searchList = new ArrayList<String>();
                 Iterator namesItor = params.getNames().iterator();
-                INKFAsyncRequestHandle handles[] = new INKFAsyncRequestHandle[params.getNames().size()];
-                IURRepresentation results[] = new IURRepresentation[params.getNames().size()];
-                String keys[] = new String[params.getNames().size()];
+                INKFAsyncRequestHandle handles[] = null;//new INKFAsyncRequestHandle[params.getNames().size()];
+                IURRepresentation results[] = null;//new IURRepresentation[params.getNames().size()];
+                String keys[] = null;
 
                 int idx = 0;
 
                 while(namesItor.hasNext()) {
                     // TODO: Make this more efficient
                     String key = (String) namesItor.next();
+                    System.out.println("key: " + key);
 
                     if(key.equals("tombstone")) {
                         continue;
@@ -114,7 +130,19 @@ public class GetResourceCommand extends PURLCommand {
                     if(value.length() == 0) {
                         continue;
                     }
-
+                    
+                    searchList.add(key);
+                }
+                
+                handles = new INKFAsyncRequestHandle[searchList.size()];
+                results = new IURRepresentation[searchList.size()];
+                keys = new String[searchList.size()];
+                
+                Iterator<String> searchCriteriaItor = searchList.iterator();
+                
+                while(searchCriteriaItor.hasNext()) {
+                    String key = searchCriteriaItor.next();
+                    String value = params.getValue(key);
                     INKFRequest req = context.createSubRequest("active:purl-search");
                     req.addArgument("index", "ffcpl:/index/" + type);
 

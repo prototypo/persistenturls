@@ -294,11 +294,23 @@ public class NKHelper {
         boolean retValue = false;
         
         try {
-            INKFRequest req=context.createSubRequest("active:purl-storage-query-domainmaintainers");
-            req.addArgument("param", new StringAspect("<domain><id>" + domain.substring(13) + "</id></domain>"));
+            INKFRequest req=context.createSubRequest("active:purl-storage-query-domain");
+            req.addArgument("uri", domain);
             req.setAspectClass(IAspectXDA.class);
             IAspectXDA res = (IAspectXDA) context.issueSubRequestForAspect(req);
-            retValue = res.getXDA().isTrue("/maintainers/uid = '" + user + "'");
+            retValue = res.getXDA().isTrue("/domain/maintainers/uid = '" + user + "'");
+            
+            if(!retValue && res.getXDA().isTrue("/domain/maintainers/gid")) {
+                // If the user is not spelled out explicitly, see if he/she is a member of a 
+                // group that is a maintainer
+                
+                IAspectXDA groupListXDA = (IAspectXDA) context.transrept(UserHelper.getGroupsForUser(context, user), IAspectXDA.class);
+                IXDAReadOnlyIterator itor = groupListXDA.getXDA().readOnlyIterator("/groups/group");
+                
+                while(!retValue && itor.hasNext()) {
+                    retValue = res.getXDA().isTrue("/domain/maintainers/gid = '" + itor.getText(".", true) + "'");
+                }
+            }            
         } catch(Exception e) {
          e.printStackTrace();   
         }
@@ -315,8 +327,16 @@ public class NKHelper {
             req.setAspectClass(IAspectXDA.class);
             IAspectXDA res = (IAspectXDA) context.issueSubRequestForAspect(req);
             retValue = res.getXDA().isTrue("/writers/uid = '" + user + "'");
+            
+            if(!retValue && res.getXDA().isTrue("/writers/gid")) {
+                // If the user is not spelled out explicitly, see if he/she is a member of a 
+                // group that is a writer
+                
+                IAspectXDA groupListXDA = (IAspectXDA) context.transrept(UserHelper.getGroupsForUser(context, user), IAspectXDA.class);
+                retValue = groupListXDA.getXDA().isTrue("/groups/group = '" + user + "'");
+            }
         } catch(Exception e) {
-         e.printStackTrace();   
+            e.printStackTrace();   
         }
         
         return retValue;

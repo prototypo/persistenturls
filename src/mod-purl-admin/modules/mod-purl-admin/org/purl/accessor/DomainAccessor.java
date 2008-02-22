@@ -77,6 +77,7 @@ import org.purl.accessor.util.DomainAllowableResource;
 import org.purl.accessor.util.DomainResolver;
 import org.purl.accessor.util.DomainResourceStorage;
 import org.purl.accessor.util.DomainSearchHelper;
+import org.purl.accessor.util.GroupResolver;
 import org.purl.accessor.util.PURLException;
 import org.purl.accessor.util.ResourceCreator;
 import org.purl.accessor.util.ResourceStorage;
@@ -112,7 +113,7 @@ public class DomainAccessor extends AbstractAccessor {
         URIResolver domainResolver = new DomainResolver();
 
         ResourceFilter domainFilter = new DomainPrivateDataFilter();
-        ResourceCreator domainCreator = new DomainCreator(domainResolver, new UserResolver(), new UserResourceStorage());
+        ResourceCreator domainCreator = new DomainCreator(domainResolver, new UserResolver(), new GroupResolver(), new UserResourceStorage());
         domainStorage = new DomainResourceStorage();
         AllowableResource domainAllowableResource = new DomainAllowableResource(domainResolver, domainStorage); //new DefaultAllowableResource(domainStorage, domainResolver);
         
@@ -155,10 +156,12 @@ public class DomainAccessor extends AbstractAccessor {
 
         private URIResolver domainResolver;
         private URIResolver userResolver;
+        private URIResolver groupResolver;
 
-        public DomainCreator(URIResolver domainResolver, URIResolver userResolver, ResourceStorage userStorage) {
+        public DomainCreator(URIResolver domainResolver, URIResolver userResolver, URIResolver groupResolver, ResourceStorage userStorage) {
             this.domainResolver = domainResolver;
             this.userResolver = userResolver;
+            this.groupResolver = groupResolver;
         }
 
         public IURAspect createResource(INKFConvenienceHelper context, IAspectNVP params) throws NKFException {
@@ -169,28 +172,33 @@ public class DomainAccessor extends AbstractAccessor {
             StringTokenizer st = new StringTokenizer(maintainers, ", ");
             while(st.hasMoreTokens()) {
                 String next = st.nextToken();
-                if(!UserHelper.isValidUser(context, userResolver.getURI(next))) {                
-                    throw new PURLException("User " + next + " does not exist", 400);
+                if(!UserHelper.isValidUser(context, userResolver.getURI(next)) &&
+                   !UserHelper.isValidGroup(context, groupResolver.getURI(next))) 
+                {                
+                    throw new PURLException("User or group " + next + " does not exist", 400);
                 }
             }
 
             st = new StringTokenizer(writers, ", ");
             while(st.hasMoreTokens()) {
                 String next = st.nextToken();
-                if(!UserHelper.isValidUser(context, userResolver.getURI(next))) {                                
-                    throw new PURLException("User " + next + " does not exist", 400);
+                if(!UserHelper.isValidUser(context, userResolver.getURI(next))&&
+                   !UserHelper.isValidGroup(context, groupResolver.getURI(next))) 
+                {                                
+                    throw new PURLException("User or group " + next + " does not exist", 400);
                 }
             }
             
             //TODO: Migrate to use Domain Aspect
+            
+            String domain = domainResolver.getDisplayName(domainResolver.getURI(context));
 
             StringBuffer sb = new StringBuffer("<domain>");
             sb.append("<public>");
             sb.append(params.getValue("public"));
             sb.append("</public>");
             sb.append("<id>");
-            //sb.append(NKHelper.getLastSegment(context));
-            sb.append(domainResolver.getURI(context).substring(13)); // Skip over ffcpl:/domain
+            sb.append(domain);
             sb.append("</id>");
             sb.append("<name>");
             sb.append(params.getValue("name"));
@@ -200,19 +208,35 @@ public class DomainAccessor extends AbstractAccessor {
             st = new StringTokenizer(maintainers, ",");
 
             while(st.hasMoreElements()) {
-                sb.append("<uid>");
-                sb.append(st.nextToken().trim());
-                sb.append("</uid>");
+                String maintainer = st.nextToken();
+                if(UserHelper.isValidUser(context, userResolver.getURI(maintainer))) {
+                    sb.append("<uid>");
+                    sb.append(maintainer.trim());
+                    sb.append("</uid>");
+                } else {
+                    sb.append("<gid>");
+                    sb.append(maintainer.trim());
+                    sb.append("</gid>");                    
+                }
             }
             
             sb.append("</maintainers>");
             sb.append("<writers>");
             st = new StringTokenizer(writers, ",");
+            
             while(st.hasMoreElements()) {
-                sb.append("<uid>");
-                sb.append(st.nextToken().trim());
-                sb.append("</uid>");
+                String maintainer = st.nextToken();
+                if(UserHelper.isValidUser(context, userResolver.getURI(maintainer))) {
+                    sb.append("<uid>");
+                    sb.append(maintainer.trim());
+                    sb.append("</uid>");
+                } else {
+                    sb.append("<gid>");
+                    sb.append(maintainer.trim());
+                    sb.append("</gid>");                    
+                }
             }
+            
             sb.append("</writers>");
             sb.append("</domain>");
             return new StringAspect(sb.toString());
