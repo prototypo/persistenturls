@@ -18,7 +18,8 @@ main() {
 		case "group":
 		uri = "ffcpl:/sql/db/groupExists.idoc";
 		value = ruri.substring(13);
-		param = new StringAspect("<group><id>" + value + "</id></group>");		
+		// This stupid variance is because we are simply looking for group existence
+		param = new StringAspect("<query><id>" + value + "</id></query>");		
 		break;
 		case "domain":
 		uri = "ffcpl:/sql/db/domainValid.idoc";

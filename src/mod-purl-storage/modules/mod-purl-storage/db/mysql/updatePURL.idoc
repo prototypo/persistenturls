@@ -375,7 +375,8 @@
       				<stm:set xpath="/sql">
       				INSERT INTO purlmaintainers VALUES ( null,
 							'<stm:param xpath="/entry/pid/text()"/>',
-							'<stm:param xpath="/entry/maintainer/text()"/>'
+							'<stm:param xpath="/entry/maintainer/text()"/>',
+							0
 							);
 					</stm:set>		
       			</stm:group>

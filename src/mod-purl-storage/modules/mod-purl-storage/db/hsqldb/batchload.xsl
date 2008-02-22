@@ -16,7 +16,7 @@
         </sql>        
         <xsl:for-each select="maintainers/maintainer">
             <sql>
-                INSERT INTO purlmaintainers VALUES(null, 0, @@MAINTAINER-<xsl:value-of select="@id"/>@@);
+                INSERT INTO purlmaintainers VALUES(null, 0, @@MAINTAINER-<xsl:value-of select="@id"/>@@, 0);
             </sql>
             <sql>
             	UPDATE purlmaintainers set "p_id" = (select "z_id" from purls where "p_id" = '<xsl:value-of select="../../@id"/>') where "z_id" = IDENTITY();

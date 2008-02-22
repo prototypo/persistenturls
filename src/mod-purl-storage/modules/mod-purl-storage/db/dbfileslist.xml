@@ -56,4 +56,11 @@
     <file>batchload.xsl</file>
     <file>updatePURLHistory.idoc</file>
     <file>queryPURLHistory.idoc</file>
+    <file>createDomain.xsl</file>
+    <file>updateDomain.xsl</file>
+    <file>domainQuery.xml</file>
+    <file>domainMaintainersQuery.xml</file>
+    <file>queryMaintainerFromID.xml</file>
+    <file>queryGroupsForUser.xml</file>    
+    <file>queryGroupFromID.xml</file>    
 </dbfiles>

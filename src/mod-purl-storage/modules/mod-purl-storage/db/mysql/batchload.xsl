@@ -21,7 +21,7 @@
         
         <xsl:for-each select="maintainers/maintainer">
             <sql>
-                INSERT INTO purlmaintainers VALUES(null, @pid, @@MAINTAINER-<xsl:value-of select="@id"/>@@);                
+                INSERT INTO purlmaintainers VALUES(null, @pid, @@MAINTAINER-<xsl:value-of select="@id"/>@@, 0);                
             </sql>
         </xsl:for-each>
         <xsl:apply-templates/>
