@@ -24,13 +24,13 @@ main() {
 		req.setAspectClass(IAspectXDA.class);
 		oldDomainXDA = context.issueSubRequestForAspect(req);
 		
-		maintainerMap = new HashMap();
-        maintainerItor = paramXDA.readOnlyIterator("//maintainers/uid");
+		userMaintainerMap = new HashMap();
+        userMaintainerItor = paramXDA.readOnlyIterator("//maintainers/uid");
         
-        while(maintainerItor.hasNext()) {
-            maintainerItor.next();
-            maintainer = maintainerItor.getText(".", true);
-            z_id = maintainerMap.get(maintainer);
+        while(userMaintainerItor.hasNext()) {
+            userMaintainerItor.next();
+            maintainer = userMaintainerItor.getText(".", true);
+            z_id = userMaintainerMap.get(maintainer);
             
             if(z_id == null) {
                 req = context.createSubRequest("active:purl-storage-query-user");
@@ -38,22 +38,86 @@ main() {
                 req.setAspectClass(IAspectXDA.class);
                 maintainerXDA = (IAspectXDA)context.issueSubRequestForAspect(req);
                 z_id = maintainerXDA.getXDA().getText("/user/z_id", true);
-                maintainerMap.put(maintainer, z_id);
+                userMaintainerMap.put(maintainer, z_id);
             }
         }
         
-        itor = maintainerMap.keySet().iterator();
+        userItor = userMaintainerMap.keySet().iterator();
+        
+        groupMaintainerMap = new HashMap();
+        groupMaintainerItor = paramXDA.readOnlyIterator("//maintainers/gid");
+        
+        while(groupMaintainerItor.hasNext()) {
+            groupMaintainerItor.next();
+            maintainer = groupMaintainerItor.getText(".", true);
+            z_id = groupMaintainerMap.get(maintainer);
+            
+            if(z_id == null) {
+                req = context.createSubRequest("active:purl-storage-query-user");
+                req.addArgument("uri", "ffcpl:/user/" + maintainer);
+                req.setAspectClass(IAspectXDA.class);
+                maintainerXDA = (IAspectXDA)context.issueSubRequestForAspect(req);
+                z_id = maintainerXDA.getXDA().getText("/user/z_id", true);
+                groupMaintainerMap.put(maintainer, z_id);
+            }
+        }
+        
+        userMaintainerItor = paramXDA.readOnlyIterator("//writers/uid");
+        
+        while(userMaintainerItor.hasNext()) {
+            userMaintainerItor.next();
+            maintainer = userMaintainerItor.getText(".", true);
+            z_id = userMaintainerMap.get(maintainer);
+            
+            if(z_id == null) {
+                req = context.createSubRequest("active:purl-storage-query-user");
+                req.addArgument("uri", "ffcpl:/user/" + maintainer);
+                req.setAspectClass(IAspectXDA.class);
+                maintainerXDA = (IAspectXDA)context.issueSubRequestForAspect(req);
+                z_id = maintainerXDA.getXDA().getText("/user/z_id", true);
+                userMaintainerMap.put(maintainer, z_id);
+            }
+        } 
+        
+        groupMaintainerItor = paramXDA.readOnlyIterator("//writers/gid");
+        
+        while(groupMaintainerItor.hasNext()) {
+            groupMaintainerItor.next();
+            maintainer = groupMaintainerItor.getText(".", true);
+            z_id = groupMaintainerMap.get(maintainer);
+            
+            if(z_id == null) {
+                req = context.createSubRequest("active:purl-storage-query-user");
+                req.addArgument("uri", "ffcpl:/user/" + maintainer);
+                req.setAspectClass(IAspectXDA.class);
+                maintainerXDA = (IAspectXDA)context.issueSubRequestForAspect(req);
+                z_id = maintainerXDA.getXDA().getText("/user/z_id", true);
+                groupMaintainerMap.put(maintainer, z_id);
+            }
+        }               
+        
+        userItor = userMaintainerMap.keySet().iterator();
+        groupItor = groupMaintainerMap.keySet().iterator();        
         
         maintainerSB = new StringBuffer("<sed>");
         
-        while(itor.hasNext()) {
-            key = itor.next();
+        while(userItor.hasNext()) {
+            key = userItor.next();
             maintainerSB.append("<pattern><regex>@@USER-");
             maintainerSB.append(key);
             maintainerSB.append("@@</regex><replace>");
-            maintainerSB.append(maintainerMap.get(key));
+            maintainerSB.append(userMaintainerMap.get(key));
             maintainerSB.append("</replace></pattern>");
         }
+        
+        while(groupItor.hasNext()) {
+            key = groupItor.next();
+            maintainerSB.append("<pattern><regex>@@GROUP-");
+            maintainerSB.append(key);
+            maintainerSB.append("@@</regex><replace>");
+            maintainerSB.append(groupMaintainerMap.get(key));
+            maintainerSB.append("</replace></pattern>");
+        }        
         
         maintainerSB.append("<pattern><regex>@@DID@@</regex><replace>");
         maintainerSB.append(oldDomainXDA.getXDA().getText("/domain/z_id", true));
