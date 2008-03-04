@@ -548,6 +548,7 @@ public class simplePurlClientTest extends TestCase {
 			String test = client.createGroup(url, formParameters);
 			
 			// XML response, so use assertXMLEqual.
+            XMLUnit.setIgnoreWhitespace(true);
 			XMLAssert.assertXMLEqual(errMsg + ".  Response from server: " + test, control, test);
 						
 		} catch (Exception e) {
@@ -572,6 +573,7 @@ public class simplePurlClientTest extends TestCase {
 			String test = client.createGroup(url, formParameters);
 			
 			// XML response, so use assertXMLEqual.
+            XMLUnit.setIgnoreWhitespace(true);
 			XMLAssert.assertXMLEqual(errMsg + ".  Response from server: " + test, control, test);
 						
 		} catch (Exception e) {
@@ -587,15 +589,17 @@ public class simplePurlClientTest extends TestCase {
 			
 			Map<String, String> formParameters = new HashMap<String, String>();
 			formParameters.put("name", "Test Group 3");
-			formParameters.put("maintainers", "testgroup");
+			formParameters.put("maintainers", "testgroup,testuser");
 			formParameters.put("members", "testuser");
 			formParameters.put("comments", "A group used for unit tests.");
 							
 			String errMsg = "Cannot create a new group.";
-			String control = "<group><id>testgroup3</id><name>Test Group 3</name><maintainers><uid>testgroup</uid></maintainers><members><uid>testuser</uid></members><comments>A group used for unit tests.</comments></group>";
+			String control = "<group><id>testgroup3</id><name>Test Group 3</name><maintainers><uid>testuser</uid><gid>testgroup</gid></maintainers><members><uid>testuser</uid></members><comments>A group used for unit tests.</comments></group>";
+
 			String test = client.createGroup(url, formParameters);
 			
 			// XML response, so use assertXMLEqual.
+            XMLUnit.setIgnoreWhitespace(true);
 			XMLAssert.assertXMLEqual(errMsg + ".  Response from server: " + test, control, test);
 						
 		} catch (Exception e) {
@@ -620,6 +624,7 @@ public class simplePurlClientTest extends TestCase {
 			String test = client.createGroup(url, formParameters);
 
 			// XML response, so use assertXMLEqual.
+            XMLUnit.setIgnoreWhitespace(true);
 			XMLAssert.assertXMLEqual(errMsg + ".  Response from server: " + test, control, test);
 
 		} catch (Exception e) {
@@ -640,10 +645,12 @@ public class simplePurlClientTest extends TestCase {
 			formParameters.put("comments", "A group used for unit tests.");
 
 			String errMsg = "Cannot create a new group.";
-			String control = "<group><id>testgroup5</id><name>Test Group 5</name><maintainers><uid>testuser</uid></maintainers><members><uid>testgroup</uid></members><comments>A group used for unit tests.</comments></group>";
+
+			String control = "<group><id>testgroup5</id><name>Test Group 5</name><maintainers><uid>testuser</uid></maintainers><members><gid>testgroup</gid></members><comments>A group used for unit tests.</comments></group>";
 			String test = client.createGroup(url, formParameters);
 
 			// XML response, so use assertXMLEqual.
+            XMLUnit.setIgnoreWhitespace(true);
 			XMLAssert.assertXMLEqual(errMsg + ".  Response from server: " + test, control, test);
 
 		} catch (Exception e) {
@@ -975,6 +982,7 @@ public class simplePurlClientTest extends TestCase {
 			String test = client.createDomain(url, formParameters);
 			
 			// XML response, so use assertXMLEqual.
+            XMLUnit.setIgnoreWhitespace(true);
 			XMLAssert.assertXMLEqual(errMsg + " : " + test, control, test);
 			// TODO: DBG
 			//assertEquals(errMsg + test, control, test);
@@ -997,10 +1005,11 @@ public class simplePurlClientTest extends TestCase {
 			formParameters.put("public", "false");
 			
 			String errMsg = "Cannot create a new domain.";
-			String control = "<domain><id>/testdomain2</id><name>Test Domain</name><maintainers><uid>testuser</uid><uid>testuser2</uid></maintainers><writers><uid>testuser</uid></writers><public>false</public></domain>";
+			String control = "<domain><id>/testdomain2</id><name>Test Domain 2</name><maintainers><uid>testuser</uid><uid>testuser2</uid></maintainers><writers><uid>testuser</uid></writers><public>false</public></domain>";
 			String test = client.createDomain(url, formParameters);
 			
 			// XML response, so use assertXMLEqual.
+			XMLUnit.setIgnoreWhitespace(true);
 			XMLAssert.assertXMLEqual(errMsg + " : " + test, control, test);
 			// TODO: DBG
 			//assertEquals(errMsg + test, control, test);
@@ -1018,15 +1027,16 @@ public class simplePurlClientTest extends TestCase {
 			
 			Map<String, String> formParameters = new HashMap<String, String>();
 			formParameters.put("name", "Test Domain 3");
-			formParameters.put("maintainers", "testgroup");
+			formParameters.put("maintainers", "testgroup, testuser");
 			formParameters.put("writers", "testuser");
 			formParameters.put("public", "false");
 			
 			String errMsg = "Cannot create a new domain.";
-			String control = "<domain><id>/testdomain3</id><name>Test Domain</name><maintainers><uid>testgroup</uid></maintainers><writers><uid>testuser</uid></writers><public>false</public></domain>";
+			String control = "<domain><id>/testdomain3</id><name>Test Domain 3</name><maintainers><uid>testuser</uid><gid>testgroup</gid></maintainers><writers><uid>testuser</uid></writers><public>false</public></domain>";
 			String test = client.createDomain(url, formParameters);
 			
 			// XML response, so use assertXMLEqual.
+	        XMLUnit.setIgnoreWhitespace(true);
 			XMLAssert.assertXMLEqual(errMsg + " : " + test, control, test);
 			// TODO: DBG
 			//assertEquals(errMsg + test, control, test);
@@ -1049,10 +1059,11 @@ public class simplePurlClientTest extends TestCase {
 			formParameters.put("public", "false");
 			
 			String errMsg = "Cannot create a new domain.";
-			String control = "<domain><id>/testdomain4</id><name>Test Domain</name><maintainers><uid>testuser</uid></maintainers><writers><uid>testuser</uid><uid>testuser2</uid></writers><public>false</public></domain>";
+			String control = "<domain><id>/testdomain4</id><name>Test Domain 4</name><maintainers><uid>testuser</uid></maintainers><writers><uid>testuser</uid><uid>testuser2</uid></writers><public>false</public></domain>";
 			String test = client.createDomain(url, formParameters);
 			
 			// XML response, so use assertXMLEqual.
+	        XMLUnit.setIgnoreWhitespace(true);
 			XMLAssert.assertXMLEqual(errMsg + " : " + test, control, test);
 			// TODO: DBG
 			//assertEquals(errMsg + test, control, test);
@@ -1075,10 +1086,11 @@ public class simplePurlClientTest extends TestCase {
 			formParameters.put("public", "false");
 			
 			String errMsg = "Cannot create a new domain.";
-			String control = "<domain><id>/testdomain5</id><name>Test Domain</name><maintainers><uid>testuser</uid></maintainers><writers><uid>testgroup</uid></writers><public>false</public></domain>";
+			String control = "<domain><id>/testdomain5</id><name>Test Domain 5</name><maintainers><uid>testuser</uid></maintainers><writers><gid>testgroup</gid></writers><public>false</public></domain>";
 			String test = client.createDomain(url, formParameters);
 			
 			// XML response, so use assertXMLEqual.
+	        XMLUnit.setIgnoreWhitespace(true);
 			XMLAssert.assertXMLEqual(errMsg + " : " + test, control, test);
 			// TODO: DBG
 			//assertEquals(errMsg + test, control, test);
@@ -1266,6 +1278,7 @@ public class simplePurlClientTest extends TestCase {
 			String test = client.searchDomain(url);
 			
 			// XML response, so use assertXMLEqual.
+            XMLUnit.setIgnoreWhitespace(true);			
 			XMLAssert.assertXMLEqual(errMsg, control, test);
 			
 		} catch (Exception e) {
