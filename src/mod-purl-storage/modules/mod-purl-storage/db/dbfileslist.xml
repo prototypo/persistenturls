@@ -17,10 +17,7 @@
     <file>rejectUser.idoc</file>  
     <file>groupExists.idoc</file>
 	<file>groupTombstoned.idoc</file>            
-<!--    <file>createGroup.idoc</file>
-    <file>updateGroup.idoc</file>-->
     <file>deleteGroup.idoc</file>    
-<!--    <file>queryGroup.idoc</file>-->    
     <file>queryGroupMaintainers.idoc</file>
     <file>queryGroupMembers.idoc</file>    
     <file>queryAll.xml</file>
@@ -29,10 +26,7 @@
     <file>domainExists.idoc</file>
 	<file>domainValid.idoc</file>
     <file>domainTombstoned.idoc</file>          
-<!--    <file>createDomain.idoc</file>
-    <file>updateDomain.idoc</file> -->
     <file>deleteDomain.idoc</file>
-<!--    <file>queryDomain.idoc</file>-->    
     <file>queryDomainMaintainers.idoc</file>
     <file>queryDomainWriters.idoc</file>
     <file>pendingDomains.idoc</file>
@@ -40,11 +34,8 @@
     <file>rejectDomain.idoc</file>      
     <file>purlExists.idoc</file>
     <file>purlTombstoned.idoc</file>              
-<!--    <file>createPURL.idoc</file>-->
     <file>deletePURL.idoc</file>
-<!--    <file>queryPURL.idoc</file>-->
     <file>queryPURLMaintainers.idoc</file>
-<!--    <file>updatePURL.idoc</file>-->
     <file>unindexedDomains.idoc</file>
     <file>unindexedGroups.idoc</file>
     <file>unindexedPURLs.idoc</file>
