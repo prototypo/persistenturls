@@ -187,9 +187,16 @@ public class PURLCreator implements ResourceCreator {
             sb.append("<maintainers>");
             StringTokenizer st = new StringTokenizer(maintainers, ",");
             while(st.hasMoreElements()) {
-                sb.append("<uid>");
-                sb.append(st.nextToken().trim());
-                sb.append("</uid>");
+                String maintainer = st.nextToken();
+                if(UserHelper.isValidUser(context, maintainerResolvers[0].getURI(maintainer))) {
+                    sb.append("<uid>");
+                    sb.append(maintainer.trim());
+                    sb.append("</uid>");
+                } else {
+                    sb.append("<gid>");
+                    sb.append(maintainer.trim());
+                    sb.append("</gid>");                    
+                }
             }
             sb.append("</maintainers>");
         }

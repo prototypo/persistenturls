@@ -39,10 +39,11 @@ public class PURLResourceStorage implements ResourceStorage {
         IURAspect retValue = null;
         INKFRequest req = context.createSubRequest("active:purl-storage-create-purl");
         req.addArgument("param", resource);
+        req.addArgument("user", "data:text/plain," + NKHelper.getUser(context));        
         req.setAspectClass(IAspectXDA.class);
         retValue = context.issueSubRequestForAspect(req);
         
-        updatePURLHistory(context, resolver, "data:text/plain,0");
+//        updatePURLHistory(context, resolver, "data:text/plain,0");
         return retValue;
     }
     
@@ -51,8 +52,9 @@ public class PURLResourceStorage implements ResourceStorage {
         
         INKFRequest req = context.createSubRequest("active:purl-storage-update-purl");
         req.addArgument("param", resource);
+        req.addArgument("user", "data:text/plain," + NKHelper.getUser(context));        
         context.issueSubRequest(req);
-        updatePURLHistory(context, resolver, "data:text/plain,1");        
+        //updatePURLHistory(context, resolver, "data:text/plain,1");        
         retValue = true;
         
         return retValue;
@@ -66,8 +68,9 @@ public class PURLResourceStorage implements ResourceStorage {
         boolean retValue = false;
         INKFRequest req = context.createSubRequest("active:purl-storage-delete-purl");
         req.addArgument("uri", resolver.getURI(context));
+        req.addArgument("user", "data:text/plain," + NKHelper.getUser(context));        
         context.issueSubRequest(req);
-        updatePURLHistory(context, resolver, "data:text/plain,2");
+        //updatePURLHistory(context, resolver, "data:text/plain,2");
         retValue = true;
         return retValue;
     }
