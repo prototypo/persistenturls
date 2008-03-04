@@ -32,10 +32,14 @@ public class purlClientTestRunner {
 		suite.addTest(new simplePurlClientTest("testLoginUser"));
         suite.addTest(new simplePurlClientTest("testCreateGroup"));
         suite.addTest(new simplePurlClientTest("testCreateGroupWithMultipleMaintainers"));
+        suite.addTest(new simplePurlClientTest("testCreateGroupWithAGroupAsMaintainer"));
         suite.addTest(new simplePurlClientTest("testCreateGroupWithMultipleMembers"));
+        suite.addTest(new simplePurlClientTest("testCreateGroupWithAGroupAsMember"));
         suite.addTest(new simplePurlClientTest("testCreateDomain"));
         suite.addTest(new simplePurlClientTest("testCreateDomainWithMultipleMaintainers"));
+        suite.addTest(new simplePurlClientTest("testCreateDomainWithAGroupAsMaintainer"));
         suite.addTest(new simplePurlClientTest("testCreateDomainWithMultipleWriters"));
+        suite.addTest(new simplePurlClientTest("testCreateDomainWithAGroupAsWriter"));
 
 // TODO?: Add tests to determine whether <allowUserAutoCreation/> has been set
 //       and approve/deny users as necessary.  Do the same with domains.
@@ -47,13 +51,17 @@ public class purlClientTestRunner {
         suite.addTest(new simplePurlClientTest("testModifyGroup"));
         suite.addTest(new simplePurlClientTest("testModifyGroupAddMaintainer"));
         suite.addTest(new simplePurlClientTest("testModifyGroupRemoveMaintainer"));
+        suite.addTest(new simplePurlClientTest("testModifyGroupRemoveGroupAsMaintainer"));
         suite.addTest(new simplePurlClientTest("testModifyGroupAddMember"));
         suite.addTest(new simplePurlClientTest("testModifyGroupRemoveMember"));
+        suite.addTest(new simplePurlClientTest("testModifyGroupRemoveGroupAsMember"));
         suite.addTest(new simplePurlClientTest("testModifyDomain"));
         suite.addTest(new simplePurlClientTest("testModifyDomainAddMaintainer"));
         suite.addTest(new simplePurlClientTest("testModifyDomainRemoveMaintainer"));
+        suite.addTest(new simplePurlClientTest("testModifyDomainRemoveGroupAsMaintainer"));
         suite.addTest(new simplePurlClientTest("testModifyDomainAddWriter"));
         suite.addTest(new simplePurlClientTest("testModifyDomainRemoveWriter"));
+        suite.addTest(new simplePurlClientTest("testModifyDomainRemoveGroupAsWriter")); //new
 
 		/*
 			Search the user, group and domain.
