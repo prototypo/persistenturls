@@ -383,6 +383,22 @@ public class NKHelper {
         return retValue;
     }
     
+    public static boolean domainIsPublic(INKFConvenienceHelper context, String domain) {
+        boolean retValue = false;
+
+        try {
+            INKFRequest req = context.createSubRequest("active:purl-storage-query-domain");
+            req.addArgument("uri", domainResolver.getURI(domain));
+            req.setAspectClass(IAspectXDA.class);
+            IAspectXDA result = (IAspectXDA) context.issueSubRequestForAspect(req);
+            retValue = result.getXDA().isTrue("/domain/public = 'true'");
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        
+        return retValue;
+    }
+    
     public static boolean userCanCreatePURL(INKFConvenienceHelper context, String resource) {
         return userCanCreatePURL(context, NKHelper.getUser(context), resource);
     }
@@ -390,8 +406,10 @@ public class NKHelper {
     public static boolean userCanCreatePURL(INKFConvenienceHelper context, String user, String resource) {
         String domain = getDomainForPURL(context, resource);
         return domain != null && validDomain(context, domain) &&
+                ( domainIsPublic(context, domain) ||
                 (userIsDomainMaintainer(context, user, domain) || 
-                userIsDomainWriter(context, user, domain));
+                userIsDomainWriter(context, user, domain) )
+              );
     }
     
     public static void createNecessarySubdomains(INKFConvenienceHelper context, String purl) {
