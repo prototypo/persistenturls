@@ -568,7 +568,7 @@ public class simplePurlClientTest extends TestCase {
 			formParameters.put("comments", "A group used for unit tests.");
 							
 			String errMsg = "Cannot create a new group.";
-			String control = "<group><id>testgroup2</id><name>Test Group</name><maintainers><uid>testuser</uid><uid>testuser2</uid></maintainers><members><uid>testuser</uid></members><comments>A group used for unit tests.</comments></group>";
+			String control = "<group><id>testgroup2</id><name>Test Group 2</name><maintainers><uid>testuser</uid><uid>testuser2</uid></maintainers><members><uid>testuser</uid></members><comments>A group used for unit tests.</comments></group>";
 			String test = client.createGroup(url, formParameters);
 			
 			// XML response, so use assertXMLEqual.
@@ -592,7 +592,7 @@ public class simplePurlClientTest extends TestCase {
 			formParameters.put("comments", "A group used for unit tests.");
 							
 			String errMsg = "Cannot create a new group.";
-			String control = "<group><id>testgroup3</id><name>Test Group</name><maintainers><uid>testgroup</uid></maintainers><members><uid>testuser</uid></members><comments>A group used for unit tests.</comments></group>";
+			String control = "<group><id>testgroup3</id><name>Test Group 3</name><maintainers><uid>testgroup</uid></maintainers><members><uid>testuser</uid></members><comments>A group used for unit tests.</comments></group>";
 			String test = client.createGroup(url, formParameters);
 			
 			// XML response, so use assertXMLEqual.
@@ -616,7 +616,7 @@ public class simplePurlClientTest extends TestCase {
 			formParameters.put("comments", "A group used for unit tests.");
 
 			String errMsg = "Cannot create a new group.";
-			String control = "<group><id>testgroup4</id><name>Test Group</name><maintainers><uid>testuser</uid></maintainers><members><uid>testuser</uid><uid>testuser2</uid></members><comments>A group used for unit tests.</comments></group>";
+			String control = "<group><id>testgroup4</id><name>Test Group 4</name><maintainers><uid>testuser</uid></maintainers><members><uid>testuser</uid><uid>testuser2</uid></members><comments>A group used for unit tests.</comments></group>";
 			String test = client.createGroup(url, formParameters);
 
 			// XML response, so use assertXMLEqual.
@@ -640,7 +640,7 @@ public class simplePurlClientTest extends TestCase {
 			formParameters.put("comments", "A group used for unit tests.");
 
 			String errMsg = "Cannot create a new group.";
-			String control = "<group><id>testgroup5</id><name>Test Group</name><maintainers><uid>testuser</uid></maintainers><members><uid>testgroup</uid></members><comments>A group used for unit tests.</comments></group>";
+			String control = "<group><id>testgroup5</id><name>Test Group 5</name><maintainers><uid>testuser</uid></maintainers><members><uid>testgroup</uid></members><comments>A group used for unit tests.</comments></group>";
 			String test = client.createGroup(url, formParameters);
 
 			// XML response, so use assertXMLEqual.
