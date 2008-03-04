@@ -30,7 +30,7 @@
         
         <xsl:for-each select="writers/uid">
             <sql>
-                INSERT INTO domainwriters VALUES(null, @did, @@USER-<xsl:value-of select="."/>@@, 0);                
+                INSERT INTO domainwriters VALUES(null, 0, @@USER-<xsl:value-of select="."/>@@, 0);                
             </sql>
             <sql>
             	UPDATE domainwriters set "d_id" = (select "z_id" from domains where "d_id" = '<xsl:value-of select="../../id"/>') where "z_id" = IDENTITY();
