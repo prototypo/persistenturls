@@ -62,7 +62,9 @@ package org.purl.accessor;
 */
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.purl.accessor.command.CreateResourceCommand;
@@ -78,6 +80,7 @@ import org.purl.accessor.util.DomainResolver;
 import org.purl.accessor.util.DomainResourceStorage;
 import org.purl.accessor.util.DomainSearchHelper;
 import org.purl.accessor.util.GroupResolver;
+import org.purl.accessor.util.NKHelper;
 import org.purl.accessor.util.PURLException;
 import org.purl.accessor.util.ResourceCreator;
 import org.purl.accessor.util.ResourceStorage;
@@ -166,6 +169,7 @@ public class DomainAccessor extends AbstractAccessor {
 
         public IURAspect createResource(INKFConvenienceHelper context, IAspectNVP params) throws NKFException {
 
+            String currentUser = NKHelper.getUser(context);
             String maintainers = params.getValue("maintainers");
             String writers = params.getValue("writers");
 
@@ -207,8 +211,16 @@ public class DomainAccessor extends AbstractAccessor {
             
             st = new StringTokenizer(maintainers, ",");
 
+            Set<String> maintainerList = new HashSet<String>();
+            
             while(st.hasMoreElements()) {
                 String maintainer = st.nextToken().trim();
+                
+                // Avoid duplicates                
+                if(maintainerList.contains(maintainer)) {
+                    continue; 
+                }
+
                 if(UserHelper.isValidUser(context, userResolver.getURI(maintainer))) {
                     sb.append("<uid>");
                     sb.append(maintainer.trim());
@@ -218,14 +230,31 @@ public class DomainAccessor extends AbstractAccessor {
                     sb.append(maintainer.trim());
                     sb.append("</gid>");                    
                 }
+                
+                maintainerList.add(maintainer);
+            }
+            
+            if(!maintainerList.contains(currentUser)) {
+                sb.append("<uid>");
+                sb.append(currentUser);
+                sb.append("</uid>");
             }
             
             sb.append("</maintainers>");
+            
+            maintainerList.clear();
+            
             sb.append("<writers>");
             st = new StringTokenizer(writers, ",");
             
             while(st.hasMoreElements()) {
                 String maintainer = st.nextToken().trim();
+                
+                // Avoid duplicates                
+                if(maintainerList.contains(maintainer)) {
+                    continue; 
+                }
+                
                 if(UserHelper.isValidUser(context, userResolver.getURI(maintainer))) {
                     sb.append("<uid>");
                     sb.append(maintainer.trim());
@@ -235,6 +264,8 @@ public class DomainAccessor extends AbstractAccessor {
                     sb.append(maintainer.trim());
                     sb.append("</gid>");                    
                 }
+                
+                maintainerList.add(maintainer);
             }
             
             sb.append("</writers>");

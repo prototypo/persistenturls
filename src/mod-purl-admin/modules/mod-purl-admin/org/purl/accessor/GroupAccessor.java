@@ -62,7 +62,9 @@ package org.purl.accessor;
 */
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.purl.accessor.command.CreateResourceCommand;
@@ -77,6 +79,7 @@ import org.purl.accessor.util.GroupHelper;
 import org.purl.accessor.util.GroupResolver;
 import org.purl.accessor.util.GroupResourceStorage;
 import org.purl.accessor.util.GroupSearchHelper;
+import org.purl.accessor.util.NKHelper;
 import org.purl.accessor.util.PURLException;
 import org.purl.accessor.util.ResourceCreator;
 import org.purl.accessor.util.ResourceStorage;
@@ -139,6 +142,7 @@ public class GroupAccessor extends AbstractAccessor {
 
         public IURAspect createResource(INKFConvenienceHelper context, IAspectNVP params) throws NKFException {
 
+            String currentUser = NKHelper.getUser(context);
             String maintainers = params.getValue("maintainers");
             String members = params.getValue("members");
 
@@ -172,9 +176,17 @@ public class GroupAccessor extends AbstractAccessor {
             sb.append("</name>");
             sb.append("<maintainers>");
             
+            Set<String> maintainerList = new HashSet<String>();
+            
             st = new StringTokenizer(maintainers, ", ");
             while(st.hasMoreElements()) {
                 String maintainer = st.nextToken().trim();
+                
+                // Avoid duplicates                
+                if(maintainerList.contains(maintainer)) {
+                    continue; 
+                }
+                
                 if(UserHelper.isValidUser(context, userResolver.getURI(maintainer))) {
                     sb.append("<uid>");
                     sb.append(maintainer);
@@ -184,13 +196,30 @@ public class GroupAccessor extends AbstractAccessor {
                     sb.append(maintainer);
                     sb.append("</gid>");                    
                 }
+                
+                maintainerList.add(maintainer);
+            }
+            
+            if(!maintainerList.contains(currentUser)) {
+                sb.append("<uid>");
+                sb.append(currentUser);
+                sb.append("</uid>");
             }
             
             sb.append("</maintainers>");
+            
+            maintainerList.clear();
+            
             sb.append("<members>");
             st = new StringTokenizer(members, "\n, ");
             while(st.hasMoreElements()) {
                 String member = st.nextToken().trim();
+                
+                // Avoid duplicates                
+                if(maintainerList.contains(member)) {
+                    continue; 
+                }
+                
                 if(UserHelper.isValidUser(context, userResolver.getURI(member))) {
                     sb.append("<uid>");
                     sb.append(member);
@@ -200,6 +229,8 @@ public class GroupAccessor extends AbstractAccessor {
                     sb.append(member);
                     sb.append("</gid>");                    
                 }
+                
+                maintainerList.add(member);
             }
             
             sb.append("</members>");
