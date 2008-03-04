@@ -234,7 +234,7 @@ public class NKHelper {
             String sessionURI=context.getThisRequest().getArgument("session");
             String tokenURI=sessionURI+"+key@ffcpl:/credentials";
             IAspectString credentials = (IAspectString)context.sourceAspect(tokenURI,IAspectString.class);
-            retValue = credentials.getString();
+            retValue = credentials.getString().trim().toLowerCase();
         } catch(NKFException nfe) {
             nfe.printStackTrace();
         }
