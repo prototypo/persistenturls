@@ -210,7 +210,8 @@
       				<stm:set xpath="/sql">
       				INSERT INTO groupmaintainers VALUES ( null,
 							'<stm:param xpath="/entry/gid/text()"/>',
-							'<stm:param xpath="/entry/maintainer/text()"/>'
+							'<stm:param xpath="/entry/maintainer/text()"/>',
+							0
 							);
 					</stm:set>		
       			</stm:group>
@@ -329,7 +330,8 @@
       				<stm:set xpath="/sql">
       				INSERT INTO groupmembers VALUES ( null,
 							'<stm:param xpath="/entry/gid/text()"/>',
-							'<stm:param xpath="/entry/member/text()"/>'
+							'<stm:param xpath="/entry/member/text()"/>',
+							0
 							);
 					</stm:set>		
       			</stm:group>

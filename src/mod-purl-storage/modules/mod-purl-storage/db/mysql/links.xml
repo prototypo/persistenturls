@@ -87,7 +87,8 @@
 	<link>
 		<name>Create Group</name>
 		<ext>/create-group</ext>
-		<int>active:dpml+operand@ffcpl:/sql/db/createGroup.idoc</int>
+		<!--<int>active:dpml+operand@ffcpl:/sql/db/createGroup.idoc</int>-->
+		<int>active:beanshell+operator@ffcpl:/resources/createGroup.bsh</int>		
 		<args>all</args>
 	</link>
 	<link>
@@ -99,13 +100,13 @@
 	<link>
 		<name>Update Group</name>
 		<ext>/update-group</ext>
-		<int>active:dpml+operand@ffcpl:/sql/db/updateGroup.idoc</int>
+		<int>active:beanshell+operator@ffcpl:/resources/updateGroup.bsh</int>		
 		<args>all</args>
 	</link>		
 	<link>
 		<name>Query Group</name>
 		<ext>/query-group</ext>
-		<int>active:beanshell+operator@ffcpl:/sql/db/queryResource.bsh</int>		
+		<int>active:beanshell+operator@ffcpl:/resources/queryGroup.bsh</int>		
 		<!--<int>active:dpml+operand@ffcpl:/sql/db/queryGroup.idoc</int>-->
 		<args>all</args>
 	</link>
@@ -244,7 +245,7 @@
 	<link>
 		<name>Query PURL</name>
 		<ext>/query-purl</ext>
-		<int>active:beanshell+operator@ffcpl:/sql/db/queryResource.bsh</int>
+		<int>active:beanshell+operator@ffcpl:/resources/queryPURL.bsh</int>
 		<!--<int>active:dpml+operand@ffcpl:/sql/db/queryPURL.idoc</int>-->
 		<args>all</args>
 	</link>

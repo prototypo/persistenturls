@@ -67,6 +67,7 @@
 		"z_id"			INTEGER IDENTITY,
 		"g_id"			INTEGER,
 		"m_id"			INTEGER,
+		"type"			SMALLINT,
 		UNIQUE( "z_id" )
 	);
 	
@@ -74,6 +75,7 @@
 		"z_id"			INTEGER IDENTITY,
 		"g_id"			INTEGER,
 		"m_id"			INTEGER,
+		"type"			SMALLINT,		
 		UNIQUE( "z_id" )	
 	);
 	

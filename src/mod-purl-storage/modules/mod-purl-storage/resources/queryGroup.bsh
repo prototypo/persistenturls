@@ -10,62 +10,50 @@ import java.util.*;
 main() {
     resp = null;
     iur = null;
-    purl = null;
+    group = null;
     
     try {
         ruri = context.getThisRequest().getArgument("uri");
-        purl = ruri.substring(11);
+        group = ruri.substring(13);
         
-        purlSQL = context.sourceAspect("ffcpl:/sql/db/purlQuery.xml", IAspectXDA.class);
-        purlSQL = generatePURLQuerySQL(purlSQL, purl);
-        results = issueSQLQuery(purlSQL);
-        
+        groupSQL = context.sourceAspect("ffcpl:/sql/db/groupQuery.xml", IAspectXDA.class);
+        groupSQL = generateGroupQuerySQL(groupSQL, group);
+        results = issueSQLQuery(groupSQL);
+
         if(results.getXDA().isTrue("/results/row/z_id")) {
-        purlID = results.getXDA().getText("/results/row/z_id/text()", true);
+        groupID = results.getXDA().getText("/results/row/z_id/text()", true);
 
-        purlMaintainersSQL = context.sourceAspect("ffcpl:/sql/db/purlMaintainersQuery.xml", IAspectXDA.class);
-        purlMaintainersResults = issueSQLQuery(processSQL(purlMaintainersSQL, purlID));
+        groupMaintainersSQL = context.sourceAspect("ffcpl:/sql/db/groupMaintainersQuery.xml", IAspectXDA.class);
+        groupMaintainersResults = issueSQLQuery(processSQL(groupMaintainersSQL, groupID));
+        groupMembersSQL = context.sourceAspect("ffcpl:/sql/db/groupMembersQuery.xml", IAspectXDA.class);
+        groupMembersResults = issueSQLQuery(processSQL(groupMembersSQL, groupID));        
         
-        purlTemplate = context.sourceAspect("ffcpl:/resources/purlTemplate.xml", IAspectXDA.class);     
+        groupTemplate = context.sourceAspect("ffcpl:/resources/groupTemplate.xml", IAspectXDA.class);     
         resultsXDA = results.getXDA();
-        purlXDA = purlTemplate.getClonedXDA();
-        purlXDA.setText("/purl/z_id", resultsXDA.getText("/results/row/z_id/text()", true));                
-        purlXDA.setText("/purl/id", resultsXDA.getText("/results/row/p_id/text()", true));
+        groupXDA = groupTemplate.getClonedXDA();
+        groupXDA.setText("/group/z_id", resultsXDA.getText("/results/row/z_id/text()", true));                
+        groupXDA.setText("/group/id", resultsXDA.getText("/results/row/g_id/text()", true));
+        groupXDA.setText("/group/name", resultsXDA.getText("/results/row/name/text()", true));
+        groupXDA.setText("/group/comments", resultsXDA.getText("/results/row/comments/text()", true));                
         
-        type = resultsXDA.getText("/results/row/type/text()", true);
+        itor = groupMaintainersResults.getXDA().readOnlyIterator("/results/row");
+        addGroupMaintainersAndMembers(groupXDA, itor, "maintainers");
+        itor = groupMembersResults.getXDA().readOnlyIterator("/results/row");
+        addGroupMaintainersAndMembers(groupXDA, itor, "members");        
         
-        purlXDA.setText("/purl/type", type);
-        
-        switch(type) {
-        case "301":
-        case "302":
-        case "307":
-        case "partial":
-        case "chain":
-            purlXDA.appendPath("/purl", "target/url", resultsXDA.getText("/results/row/target/text()", true));
-            break;
-        case "303":
-            purlXDA.appendPath("/purl", "seealso/url", resultsXDA.getText("/results/row/target/text()", true));            
-            break;
-        }
-        
-        itor = purlMaintainersResults.getXDA().readOnlyIterator("/results/row");
-        addPURLMaintainers(purlXDA, itor);
-
-        iur = new DOMXDAAspect(purlXDA);
-        
+        iur = new DOMXDAAspect(groupXDA);
         } else {
-            iur = new StringAspect("<purl/>");
+            iur = new StringAspect("<group/>");
         }
 
     } catch(Throwable t) {
         t.printStackTrace();
-        iur = new StringAspect("<error message=\"Could not query purl:" + purl + "\"/>");
+        iur = new StringAspect("<error message=\"Could not query group:" + group + "\"/>");
     }
 
     req=context.createSubRequest("active:attachGoldenThread");
     req.addArgument("operand", iur);
-    req.addArgument("param", "gt:resource:" + purl);
+    req.addArgument("param", "gt:resource:" + group);
     res=context.issueSubRequest(req);
         
     resp = context.createResponseFrom(res);
@@ -74,18 +62,18 @@ main() {
     context.setResponse(resp);
 }
 
-generatePURLQuerySQL(purlSQL, purl) {
-    // Sed the PURL name
+generateGroupQuerySQL(groupSQL, group) {
+    // Sed the Group name
     // TODO: Turn this into a cacheable resource request
     
-    sedSB = new StringBuffer("<sed><pattern><regex>@@PID@@</regex><replace>");
-    sedSB.append(purl);
+    sedSB = new StringBuffer("<sed><pattern><regex>@@GID@@</regex><replace>");
+    sedSB.append(group);
     sedSB.append("</replace></pattern></sed>");
     sed = new StringAspect(sedSB.toString());
     
     req = context.createSubRequest("active:sed");
     req.addArgument("operator", sed);
-    req.addArgument("operand", purlSQL);
+    req.addArgument("operand", groupSQL);
     req.setAspectClass(IAspectXDA.class);
     context.issueSubRequestForAspect(req);
 }
@@ -98,23 +86,23 @@ issueSQLQuery(sql) {
     context.issueSubRequestForAspect(req);
 }
 
-processSQL(purlMaintainersSQL, purlID) {
+processSQL(groupMaintainersSQL, groupID) {
     // Sed the database and table names
     // TODO: Turn these into cacheable resource requests
     
-    sedSB = new StringBuffer("<sed><pattern><regex>@@PID@@</regex><replace>");
-    sedSB.append(purlID);
+    sedSB = new StringBuffer("<sed><pattern><regex>@@GID@@</regex><replace>");
+    sedSB.append(groupID);
     sedSB.append("</replace></pattern></sed>");
     sed = new StringAspect(sedSB.toString());
     
     req = context.createSubRequest("active:sed");
     req.addArgument("operator", sed);
-    req.addArgument("operand", purlMaintainersSQL);
+    req.addArgument("operand", groupMaintainersSQL);
     req.setAspectClass(IAspectXDA.class);
     context.issueSubRequestForAspect(req);      
 }
 
-addPURLMaintainers(xda, itor) {
+addGroupMaintainersAndMembers(xda, itor, element) {
     while(itor.hasNext()) {
         itor.next();
         sb = new StringBuffer();
@@ -128,11 +116,12 @@ addPURLMaintainers(xda, itor) {
             case "1":
                 sb.append("<gid>");
                 sb.append(getMaintainerFromID("g_id", "groups", itor.getText("m_id", true)));              
-                sb.append("</gid>"); 
+                sb.append("</gid>");                
             break;
         }
+        
         node = context.transrept(new StringAspect(sb.toString()), IAspectXDA.class);
-        xda.append(node.getXDA(), "/", "/purl/maintainers");
+        xda.append(node.getXDA(), "/", "/group/" + element);
     }
 }
 

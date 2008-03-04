@@ -82,7 +82,8 @@
                     	CREATE TABLE IF NOT EXISTS groupmaintainers (
                     		z_id			INTEGER UNSIGNED NOT NULL AUTO_INCREMENT, PRIMARY KEY (z_id),
                     		g_id			INTEGER,
-                    		m_id			INTEGER
+                    		m_id			INTEGER,
+                    		type			SMALLINT
                     	)
                   	</sql>
    	            </stm:append>
@@ -92,7 +93,8 @@
                     	CREATE TABLE IF NOT EXISTS groupmembers (
                     		z_id			INTEGER UNSIGNED NOT NULL AUTO_INCREMENT, PRIMARY KEY (z_id),
                     		g_id			INTEGER,
-                    		m_id			INTEGER
+                    		m_id			INTEGER,
+                    		type			SMALLINT
                     	)
                  	</sql>
                   </stm:append>
