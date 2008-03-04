@@ -51,6 +51,10 @@ public class DomainResolver extends URIResolver {
             }
         }
         
+        if(retValue.endsWith("/")) {
+            retValue = retValue.substring(0, retValue.length()-1);
+        }
+        
         return retValue;
     }
 
