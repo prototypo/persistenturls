@@ -32,7 +32,7 @@
         
         <xsl:for-each select="maintainers/gid">
             <sql>
-                INSERT INTO domainmaintainers VALUES(null, @@DID@@, @@GROUP-<xsl:value-of select="."/>@@, 0);                
+                INSERT INTO domainmaintainers VALUES(null, @@DID@@, @@GROUP-<xsl:value-of select="."/>@@, 1);                
             </sql>
         </xsl:for-each>
         
@@ -44,7 +44,7 @@
         
         <xsl:for-each select="writers/gid">
             <sql>
-                INSERT INTO domainwriters VALUES(null, @@DID@@, @@GROUP-<xsl:value-of select="."/>@@, 0);                
+                INSERT INTO domainwriters VALUES(null, @@DID@@, @@GROUP-<xsl:value-of select="."/>@@, 1);                
             </sql>
         </xsl:for-each>
     </xsl:template>  
