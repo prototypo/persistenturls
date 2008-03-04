@@ -208,7 +208,7 @@ public class DomainAccessor extends AbstractAccessor {
             st = new StringTokenizer(maintainers, ",");
 
             while(st.hasMoreElements()) {
-                String maintainer = st.nextToken();
+                String maintainer = st.nextToken().trim();
                 if(UserHelper.isValidUser(context, userResolver.getURI(maintainer))) {
                     sb.append("<uid>");
                     sb.append(maintainer.trim());
@@ -225,7 +225,7 @@ public class DomainAccessor extends AbstractAccessor {
             st = new StringTokenizer(writers, ",");
             
             while(st.hasMoreElements()) {
-                String maintainer = st.nextToken();
+                String maintainer = st.nextToken().trim();
                 if(UserHelper.isValidUser(context, userResolver.getURI(maintainer))) {
                     sb.append("<uid>");
                     sb.append(maintainer.trim());

@@ -73,10 +73,10 @@ import org.purl.accessor.command.UpdateResourceCommand;
 import org.purl.accessor.util.AccessController;
 import org.purl.accessor.util.AllowableResource;
 import org.purl.accessor.util.GroupAccessController;
+import org.purl.accessor.util.GroupHelper;
 import org.purl.accessor.util.GroupResolver;
 import org.purl.accessor.util.GroupResourceStorage;
 import org.purl.accessor.util.GroupSearchHelper;
-import org.purl.accessor.util.NKHelper;
 import org.purl.accessor.util.PURLException;
 import org.purl.accessor.util.ResourceCreator;
 import org.purl.accessor.util.ResourceStorage;
@@ -113,7 +113,7 @@ public class GroupAccessor extends AbstractAccessor {
         ResourceStorage userStorage = new UserResourceStorage();
         
         AllowableResource userGroupAllowableResource = new UserGroupAllowableResource(userStorage, userResolver, groupStorage, groupResolver);        
-        ResourceCreator groupCreator = new GroupCreator(new UserResolver());
+        ResourceCreator groupCreator = new GroupCreator(new UserResolver(), groupResolver);
         
         AccessController groupAccessController = new GroupAccessController();
 
@@ -130,9 +130,11 @@ public class GroupAccessor extends AbstractAccessor {
     static public class GroupCreator implements ResourceCreator {
 
         private URIResolver userResolver;
+        private URIResolver groupResolver;
 
-        public GroupCreator(URIResolver userResolver) {
+        public GroupCreator(URIResolver userResolver, URIResolver groupResolver) {
             this.userResolver = userResolver;
+            this.groupResolver = groupResolver;
         }
 
         public IURAspect createResource(INKFConvenienceHelper context, IAspectNVP params) throws NKFException {
@@ -143,46 +145,63 @@ public class GroupAccessor extends AbstractAccessor {
             StringTokenizer st = new StringTokenizer(maintainers, "\n, ");
             while(st.hasMoreTokens()) {
                 String next = st.nextToken();
-                if(!UserHelper.isValidUser(context, userResolver.getURI(next))) {
-                    throw new PURLException("User " + next + " does not exist or is not approved.", 400);
+                if(!UserHelper.isValidUser(context, userResolver.getURI(next)) &&
+                   !GroupHelper.isValidGroup(context, groupResolver.getURI(next))) 
+                {
+                    throw new PURLException(next + " does not exist or is not an approved user.", 400);
                 }
             }
 
             st = new StringTokenizer(members, "\n, ");
             while(st.hasMoreTokens()) {
                 String next = st.nextToken();
-                if(!UserHelper.isValidUser(context, userResolver.getURI(next))) {                
-                    throw new PURLException("User " + next + " does not exist or is not approved.", 400);
+                if(!UserHelper.isValidUser(context, userResolver.getURI(next)) &&
+                   !GroupHelper.isValidGroup(context, groupResolver.getURI(next))) 
+                {                
+                    throw new PURLException(next + " does not exist or is not an approved user.", 400);
                 }
             }
 
-            String groupId = NKHelper.getLastSegment(context); 
+            String groupId = groupResolver.getURI(context);
             StringBuffer sb = new StringBuffer("<group>");
             sb.append("<id>");
-            sb.append(groupId);
+            sb.append(groupResolver.getDisplayName(groupId));
             sb.append("</id>");
             sb.append("<name>");
             sb.append(params.getValue("name"));
             sb.append("</name>");
             sb.append("<maintainers>");
             
-            st = new StringTokenizer(maintainers, "\n, ");
+            st = new StringTokenizer(maintainers, ", ");
             while(st.hasMoreElements()) {
-                sb.append("<uid>");
-                sb.append(st.nextToken().trim());
-                sb.append("</uid>");
+                String maintainer = st.nextToken().trim();
+                if(UserHelper.isValidUser(context, userResolver.getURI(maintainer))) {
+                    sb.append("<uid>");
+                    sb.append(maintainer);
+                    sb.append("</uid>");
+                } else {
+                    sb.append("<gid>");
+                    sb.append(maintainer);
+                    sb.append("</gid>");                    
+                }
             }
             
             sb.append("</maintainers>");
             sb.append("<members>");
             st = new StringTokenizer(members, "\n, ");
             while(st.hasMoreElements()) {
-                sb.append("<uid>");
-                String userId = st.nextToken().trim(); 
-                sb.append(userId);
-//                addGroupForUser(context, groupId, userId);
-                sb.append("</uid>");
+                String member = st.nextToken().trim();
+                if(UserHelper.isValidUser(context, userResolver.getURI(member))) {
+                    sb.append("<uid>");
+                    sb.append(member);
+                    sb.append("</uid>");
+                } else {
+                    sb.append("<gid>");
+                    sb.append(member);
+                    sb.append("</gid>");                    
+                }
             }
+            
             sb.append("</members>");
             sb.append("<comments>");
             sb.append(params.getValue("comments"));

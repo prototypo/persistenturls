@@ -187,14 +187,14 @@ public class PURLCreator implements ResourceCreator {
             sb.append("<maintainers>");
             StringTokenizer st = new StringTokenizer(maintainers, ",");
             while(st.hasMoreElements()) {
-                String maintainer = st.nextToken();
+                String maintainer = st.nextToken().trim();
                 if(UserHelper.isValidUser(context, maintainerResolvers[0].getURI(maintainer))) {
                     sb.append("<uid>");
-                    sb.append(maintainer.trim());
+                    sb.append(maintainer);
                     sb.append("</uid>");
                 } else {
                     sb.append("<gid>");
-                    sb.append(maintainer.trim());
+                    sb.append(maintainer);
                     sb.append("</gid>");                    
                 }
             }
@@ -217,7 +217,7 @@ public class PURLCreator implements ResourceCreator {
         List<String> notFoundList = null;
 
         while(st.hasMoreTokens()) {
-            String next = st.nextToken();
+            String next = st.nextToken().trim();
             boolean individualPermitted = false;
 
             for(URIResolver ur : maintainerResolvers) {

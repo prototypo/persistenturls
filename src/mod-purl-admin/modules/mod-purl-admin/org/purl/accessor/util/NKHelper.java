@@ -282,7 +282,8 @@ public class NKHelper {
             req.addArgument("param", new StringAspect("<group><id>" + group + "</id></group>"));
             req.setAspectClass(IAspectXDA.class);
             IAspectXDA res = (IAspectXDA) context.issueSubRequestForAspect(req);
-            retValue = res.getXDA().isTrue("/maintainers/uid = '" + user + "'");
+            retValue = res.getXDA().isTrue("/maintainers/uid = '" + user + "'") ||
+                       res.getXDA().isTrue("/maintainers/gid = '" + user + "'");
         } catch(Exception e) {
          e.printStackTrace();   
         }
@@ -309,6 +310,7 @@ public class NKHelper {
                 
                 while(!retValue && itor.hasNext()) {
                     retValue = res.getXDA().isTrue("/domain/maintainers/gid = '" + itor.getText(".", true) + "'");
+                    itor.next();
                 }
             }            
         } catch(Exception e) {
