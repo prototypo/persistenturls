@@ -6,6 +6,7 @@
             <user>sa</user>
             <password/>
             <shutdown>true</shutdown>
+            <poolSize>50</poolSize>
 
             <!-- mysql -->
             <!--<jdbcDriver>com.mysql.jdbc.Driver</jdbcDriver>
