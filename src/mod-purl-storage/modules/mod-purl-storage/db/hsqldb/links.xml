@@ -148,13 +148,13 @@
 	<link>
 		<name>Create Domain</name>
 		<ext>/create-domain</ext>
-		<int>active:dpml+operand@ffcpl:/sql/db/createDomain.idoc</int>
+		<int>active:beanshell+operator@ffcpl:/resources/createDomain.bsh</int>
 		<args>all</args>
 	</link>
 	<link>
 		<name>Update Domain</name>
 		<ext>/update-domain</ext>
-		<int>active:dpml+operand@ffcpl:/sql/db/updateDomain.idoc</int>
+		<int>active:beanshell+operator@ffcpl:/resources/updateDomain.bsh</int>
 		<args>all</args>
 	</link>	
 	<link>
@@ -179,7 +179,7 @@
 	<link>
 		<name>Query Domain</name>
 		<ext>/query-domain</ext>
-		<int>active:beanshell+operator@ffcpl:/sql/db/queryResource.bsh</int>		
+		<int>active:beanshell+operator@ffcpl:/resources/queryDomain.bsh</int>		
 		<!--<int>active:dpml+operand@ffcpl:/sql/db/queryDomain.idoc</int>-->
 		<args>all</args>
 	</link>
