@@ -2,8 +2,10 @@ package org.purl.accessor.util;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
@@ -47,17 +49,7 @@ public class PURLCreator implements ResourceCreator {
             sb.append(purlResolver.getDisplayName(oldURI));
             sb.append("</url></target>");
 
-            String maintainers=params.getValue("maintainers");
-            if(maintainers!=null) {
-                sb.append("<maintainers>");
-                StringTokenizer st = new StringTokenizer(maintainers, ",");
-                while(st.hasMoreElements()) {
-                    sb.append("<uid>");
-                    sb.append(st.nextToken().trim());
-                    sb.append("</uid>");
-                }
-                sb.append("</maintainers>");
-            }
+            addMaintainerList(context, sb, params.getValue("maintainers"));
 
             sb.append("</purl>");
 
@@ -121,18 +113,8 @@ public class PURLCreator implements ResourceCreator {
         target = target.replaceAll("&", "&amp;");
         sb.append(target);
         sb.append("</url></target>");
-
-        String maintainers=params.getValue("maintainers");
-        if(maintainers!=null) {
-            sb.append("<maintainers>");
-            StringTokenizer st = new StringTokenizer(maintainers, ",");
-            while(st.hasMoreElements()) {
-                sb.append("<uid>");
-                sb.append(st.nextToken().trim());
-                sb.append("</uid>");
-            }
-            sb.append("</maintainers>");
-        }
+        
+        addMaintainerList(context, sb, params.getValue("maintainers"));
 
         sb.append("</purl>");
 
@@ -182,24 +164,7 @@ public class PURLCreator implements ResourceCreator {
             break;
         }
 
-        String maintainers=params.getValue("maintainers");
-        if(maintainers!=null) {
-            sb.append("<maintainers>");
-            StringTokenizer st = new StringTokenizer(maintainers, ",");
-            while(st.hasMoreElements()) {
-                String maintainer = st.nextToken().trim();
-                if(UserHelper.isValidUser(context, maintainerResolvers[0].getURI(maintainer))) {
-                    sb.append("<uid>");
-                    sb.append(maintainer);
-                    sb.append("</uid>");
-                } else {
-                    sb.append("<gid>");
-                    sb.append(maintainer);
-                    sb.append("</gid>");                    
-                }
-            }
-            sb.append("</maintainers>");
-        }
+        addMaintainerList(context, sb, params.getValue("maintainers"));
 
         sb.append("</purl>");
 
@@ -334,5 +299,55 @@ public class PURLCreator implements ResourceCreator {
         }
 
         return retValue;
+    }
+    
+    /**
+     * Build up the maintainer list in the StringBuffer adding the currentUser if they
+     * have not been explicitly stated as a maintainer.
+     * 
+     * @param sb
+     * @param maintainerList
+     * @param currentUser
+     */
+    private void addMaintainerList(INKFConvenienceHelper context, StringBuffer sb, String maintainersList) {
+        
+        if(maintainersList!=null) {
+            String currentUser = NKHelper.getUser(context);
+            Set<String> processedSet = new HashSet<String>();
+            
+            sb.append("<maintainers>");
+            StringTokenizer st = new StringTokenizer(maintainersList, ",\n");
+            while(st.hasMoreElements()) {
+                String maintainer = st.nextToken().trim().toLowerCase();
+                
+                // Avoid duplicates
+                if(processedSet.contains(maintainer)) {
+                    continue;
+                }
+                
+                if(UserHelper.isValidUser(context, maintainerResolvers[0].getURI(maintainer))) {
+                    sb.append("<uid>");
+                    sb.append(maintainer);
+                    sb.append("</uid>");
+                } else {
+                    sb.append("<gid>");
+                    sb.append(maintainer);
+                    sb.append("</gid>");                    
+                }
+                
+                processedSet.add(maintainer);
+            }
+            
+            // Add the currentUser if he/she has not yet been specified
+            // to avoid orphaned PURLs.
+            
+            if(!processedSet.contains(currentUser)) {
+                sb.append("<uid>");
+                sb.append(currentUser);
+                sb.append("</uid>");
+            }
+            
+            sb.append("</maintainers>");
+        }       
     }
 }
