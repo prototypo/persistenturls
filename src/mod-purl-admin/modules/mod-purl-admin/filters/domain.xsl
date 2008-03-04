@@ -9,8 +9,6 @@
         </xsl:copy>
     </xsl:template>
     
-    <xsl:template match="@status"/>
-    
     <xsl:template match="node()|@*">
         <xsl:copy>
             <xsl:apply-templates select="node()|@*" />
