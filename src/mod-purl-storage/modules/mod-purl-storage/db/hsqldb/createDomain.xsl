@@ -38,7 +38,7 @@
         </xsl:for-each>
         <xsl:for-each select="writers/gid">
             <sql>
-                INSERT INTO domainwriters VALUES(null, @did, @@GROUP-<xsl:value-of select="."/>@@, 1);                
+                INSERT INTO domainwriters VALUES(null, 0, @@GROUP-<xsl:value-of select="."/>@@, 1);                
             </sql>
             <sql>
             	UPDATE domainwriters set "d_id" = (select "z_id" from domains where "d_id" = '<xsl:value-of select="../../id"/>') where "z_id" = IDENTITY();
