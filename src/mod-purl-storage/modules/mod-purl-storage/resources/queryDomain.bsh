@@ -43,6 +43,7 @@ main() {
 		addDomainMaintainersAndWriters(domainXDA, "/domain/writers", "w_id", itor);
 
 		iur = new DOMXDAAspect(domainXDA);
+		
 		} else {
 			iur = new StringAspect("<domain/>");
 		}
@@ -59,6 +60,7 @@ main() {
 		
 	resp = context.createResponseFrom(res);
 	resp.setMimeType("text/xml");
+	resp.setCacheable();
 	//resp.setExpired();
 	context.setResponse(resp);
 }

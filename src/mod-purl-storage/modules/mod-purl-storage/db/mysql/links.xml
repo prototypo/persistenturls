@@ -224,13 +224,15 @@
 	<link>
 		<name>Create PURL</name>
 		<ext>/create-purl</ext>
-		<int>active:dpml+operand@ffcpl:/sql/db/createPURL.idoc</int>
+		<!--<int>active:dpml+operand@ffcpl:/sql/db/createPURL.idoc</int>-->
+		<int>active:beanshell+operator@ffcpl:/resources/createPURL.bsh</int>		
 		<args>all</args>
 	</link>
 	<link>
 		<name>Update PURL</name>
 		<ext>/update-purl</ext>
-		<int>active:dpml+operand@ffcpl:/sql/db/updatePURL.idoc</int>
+		<!--<int>active:dpml+operand@ffcpl:/sql/db/updatePURL.idoc</int>-->
+		<int>active:beanshell+operator@ffcpl:/resources/updatePURL.bsh</int>		
 		<args>all</args>
 	</link>	
 	<link>
