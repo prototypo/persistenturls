@@ -463,7 +463,12 @@ function formatPendingResults(xmlArray) {
 		recordCount++;
 		for ( innerKey in xmlArray[outerKey] ) {
 			if ( xmlArray[outerKey][innerKey][0] == "id" ) {
-				id[outerKey] = xmlArray[outerKey][innerKey][1];
+                           // TODONEXT: Avoid a failure to get an id
+                           // because of duplicates.
+                           var idvalue = xmlArray[outerKey][innerKey][1];
+                           if ( idvalue != "" && idvalue != null && idvalue != "\n" ) {
+                             id[outerKey] = idvalue;
+                           }
 			}
 		}
 	}

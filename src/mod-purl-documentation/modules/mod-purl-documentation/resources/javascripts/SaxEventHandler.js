@@ -466,30 +466,28 @@ SAXEventHandler.prototype._fullCharacterDataReceived = function(fullCharacterDat
 	// DHW: For those of you wondering: Yes, this method was the one that convinced
 	// me that I should have used a DOM parser instead of SAX.  It is on my list :)
 	
-	// Create entries in elementMap that relate to the names of the fields on
-	// the "modify" forms in the files purl|user|group|domain.html; this facilitates
-	// population of the modify forms with record data.	
-	if ( currentElement == "url" && ( previousElement == "target" || previousElement == "seealso" ) ) {
-		elementMap[elementMapIndex] = [previousElement, fullCharacterData];
-	} else if ( currentElement == "uid" && ( previousElement == "maintainers" || previousElement == "writers" || previousElement == "members" ) ) {
-		// Append as necessary to account for possible multiple maintainers, writers and members.
-		if ( elementMap[elementMapIndex-1][0] == previousElement ) {
-			// This is a follow-on uid field.  To prevent duplicate entries, we write backward.
-			elementMapIndex--;
-			elementMap[elementMapIndex] = [previousElement, elementMap[elementMapIndex][1] + "%LINEBREAK%" + fullCharacterData];
-			//alert("Appended " + previousElement + " : " + elementMap[elementMapIndex][1] );
-		} else {
-			// This is the first uid field.	
+	// Don't write element without data.
+	fullCharacterData = fullCharacterData.replace(/^\s*/g,'');
+	if ( fullCharacterData != "" && fullCharacterData != "\n" && fullCharacterData != null ) {
+		// Create entries in elementMap that relate to the names of the fields on
+		// the "modify" forms in the files purl|user|group|domain.html; this facilitates
+		// population of the modify forms with record data.
+		if ( currentElement == "url" && ( previousElement == "target" || previousElement == "seealso" ) ) {
 			elementMap[elementMapIndex] = [previousElement, fullCharacterData];
-			//alert("Added " + previousElement + " : " + fullCharacterData );
-		}
-	} else {
-		fullCharacterData = fullCharacterData.replace(/\n/g, "");
-		if ( fullCharacterData != null && fullCharacterData != "" ) {
+			elementMapIndex++;
+			
+		} else if ( currentElement == "uid" && ( previousElement == "maintainers" || previousElement == "writers" || previousElement == "members" ) ) {
+			// Append as necessary to account for possible multiple maintainers, writers and members.
+			var elementName = previousElement.substring(0, previousElement.length -1);
+			elementMap[elementMapIndex] = [elementName, fullCharacterData];
+			elementMapIndex++;
+		
+		// All other entries we want to retain go here.	
+		} else if ( currentElement == "id" || currentElement == "name" || currentElement == "public"  || currentElement == "affiliation" || currentElement == "email") {
 			elementMap[elementMapIndex] = [currentElement, fullCharacterData];
+			elementMapIndex++;
 		}
 	}
-	elementMapIndex++;
 
 }  // end function _fullCharacterDataReceived
 

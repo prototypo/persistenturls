@@ -436,9 +436,21 @@ SAXEventHandlerForPending.prototype._fullCharacterDataReceived = function(fullCh
 	
 	// Create entries in elementMap that relate to the names of the fields on
 	// the "modify" forms in the files purl|user|group|domain.html; this facilitates
-	// population of the modify forms with record data.	
-	elementMap[elementMapIndex] = [currentElement, fullCharacterData];
-	elementMapIndex++;
+	// population of the modify forms with record data.
+	if ( currentElement == 'id' || currentElement == 'name' || currentElement == 'affiliation' || currentElement == 'email'|| currentElement == 'public' || currentElement == 'uid' || currentElement == 'gid') {
+		fullCharacterData = fullCharacterData.replace(/^\s*/g,'');
+		if ( fullCharacterData != "" && fullCharacterData != "\n" && fullCharacterData != null ) {
+		
+			if ( ( currentElement == 'uid' || currentElement == 'gid' ) && (previousElement == 'maintainers' || previousElement == 'writers') ) {
+				var elementName = previousElement.substring(0, previousElement.length -1);
+			} else {
+				var elementName = currentElement;
+			}
+		
+			elementMap[elementMapIndex] = [elementName, fullCharacterData];
+			elementMapIndex++;
+		}
+	}
 
 }  // end function _fullCharacterDataReceived
 
