@@ -34,7 +34,10 @@ main() {
         groupXDA.setText("/group/z_id", resultsXDA.getText("/results/row/z_id/text()", true));                
         groupXDA.setText("/group/id", resultsXDA.getText("/results/row/g_id/text()", true));
         groupXDA.setText("/group/name", resultsXDA.getText("/results/row/name/text()", true));
-        groupXDA.setText("/group/comments", resultsXDA.getText("/results/row/comments/text()", true));                
+
+        if(resultsXDA.isTrue("/results/row/commments/text()")) {
+            groupXDA.setText("/group/comments", resultsXDA.getText("/results/row/comments/text()", true));
+        }
         
         itor = groupMaintainersResults.getXDA().readOnlyIterator("/results/row");
         addGroupMaintainersAndMembers(groupXDA, itor, "maintainers");
