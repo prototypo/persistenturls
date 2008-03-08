@@ -108,8 +108,6 @@ main() {
 
         maintainerSB.append("</sed>");
         
-        System.out.println(maintainerSB.toString());
-        
         req = context.createSubRequest("active:xslt");
         req.addArgument("operand", param);
         req.addArgument("operator", "ffcpl:/sql/db/updatePURL.xsl");
