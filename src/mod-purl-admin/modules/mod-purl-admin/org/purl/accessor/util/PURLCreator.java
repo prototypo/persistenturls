@@ -123,7 +123,7 @@ public class PURLCreator implements ResourceCreator {
         return retValue;
     }
 
-    private IURAspect createNumericPURL(INKFConvenienceHelper context, IAspectNVP params, int type) throws NKFException, UnsupportedEncodingException {
+    private IURAspect createNumericPURL(INKFConvenienceHelper context, IAspectNVP params, int type) throws PURLException, NKFException, UnsupportedEncodingException {
         IURAspect retValue = null;
 
         StringBuffer sb = new StringBuffer("<purl>");
@@ -141,6 +141,9 @@ public class PURLCreator implements ResourceCreator {
         case 301:
         case 302:
         case 307:
+            if((target == null) || target.length() == 0) {
+                throw new PURLException(type + " PURLs must have a target URL", 400);
+            }
             sb.append("<target><url>");
             target = target.replaceAll("&", "&amp;");
             sb.append(target);
@@ -148,6 +151,11 @@ public class PURLCreator implements ResourceCreator {
             break;
         case 303:
             String seealsos=params.getValue("seealso");
+            
+            if((seealsos == null) || seealsos.length() == 0) {
+                throw new PURLException(type + " PURLs must have a seealso URL", 400);
+            }            
+
             StringTokenizer st = new StringTokenizer(seealsos, " \n");
             while(st.hasMoreElements()) {
                 sb.append("<seealso><url>");
@@ -230,7 +238,7 @@ public class PURLCreator implements ResourceCreator {
         return permitted;
     }
     
-    public IURAspect createResource(INKFConvenienceHelper context, IAspectNVP params) throws NKFException {
+    public IURAspect createResource(INKFConvenienceHelper context, IAspectNVP params) throws PURLException, NKFException {
         IURAspect retValue = null;
 
         // TODO: Validate the PURLs against the existing character restrictions
@@ -271,6 +279,8 @@ public class PURLCreator implements ResourceCreator {
                 } catch (UnsupportedEncodingException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
+                } catch( PURLException pe ) {
+                    throw pe;
                 }
             }
 
