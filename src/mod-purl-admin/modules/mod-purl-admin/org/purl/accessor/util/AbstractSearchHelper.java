@@ -1,5 +1,6 @@
 package org.purl.accessor.util;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,6 @@ import org.ten60.netkernel.xml.xda.IXDAReadOnlyIterator;
 import org.ten60.netkernel.xml.xda.XPathLocationException;
 
 import com.ten60.netkernel.urii.IURRepresentation;
-import com.ten60.netkernel.urii.aspect.IAspectString;
 
 abstract public class AbstractSearchHelper implements SearchHelper {
     private Map<String,String> keywordBasisMap;
@@ -38,7 +38,6 @@ abstract public class AbstractSearchHelper implements SearchHelper {
         
         try {
             IAspectXDA searchXDA = (IAspectXDA) context.transrept(result, IAspectXDA.class);
-            IAspectString searchString = (IAspectString) context.transrept(result, IAspectString.class);
             IXDAReadOnly roSearchXDA = searchXDA.getXDA();
             
             IXDAReadOnlyIterator roXDAItor = roSearchXDA.readOnlyIterator("//match");
@@ -71,6 +70,8 @@ abstract public class AbstractSearchHelper implements SearchHelper {
     }
     
     public String processKeyword(INKFConvenienceHelper context, String key, String value) {
+        String retValue = null;
+        
         // By default, no special handling
         String parts[] = value.split(" ");
         StringBuffer sb = new StringBuffer();
@@ -101,6 +102,12 @@ abstract public class AbstractSearchHelper implements SearchHelper {
             sb.append(key);
         }
         
-        return URLEncoder.encode(sb.toString());
+        try {
+            retValue = URLEncoder.encode(sb.toString(), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        
+        return retValue;
     }
 }
