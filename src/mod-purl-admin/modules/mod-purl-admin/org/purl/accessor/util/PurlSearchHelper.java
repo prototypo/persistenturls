@@ -33,7 +33,9 @@ public class PurlSearchHelper extends AbstractSearchHelper {
     }
     
     public String processKeyword(INKFConvenienceHelper context, String key, String value) {
-        String retValue = value; 
+        String retValue = value;
+        boolean callSuper = true;
+        
         if(key.equals("maintainers")) {
             StringTokenizer st = new StringTokenizer(value, ", ");
             StringBuffer sb = new StringBuffer();
@@ -92,10 +94,16 @@ public class PurlSearchHelper extends AbstractSearchHelper {
             retValue = retValue.replaceAll("/", " ");
         } else if(key.equals("id")) {
             if(retValue.startsWith("/")) {
-                retValue = retValue.substring(1);
+                if(retValue.endsWith("*")) {
+                    retValue = retValue.substring(0, retValue.length() - 1) + " " + retValue.substring(1); 
+                } else {
+                    retValue = retValue.substring(1);
+                }
             }
+            
+            callSuper = false;
         }
         
-        return super.processKeyword(context, key, retValue);
+        return callSuper ? super.processKeyword(context, key, retValue) : retValue;
     }
 }
