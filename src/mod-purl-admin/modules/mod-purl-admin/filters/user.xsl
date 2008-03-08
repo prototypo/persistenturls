@@ -3,7 +3,8 @@
    <xsl:output method="xml" omit-xml-declaration="yes"/>
    <xsl:template match="password"/>
    <xsl:template match="hint"/>
-   <xsl:template match="z_id"/>   
+   <xsl:template match="z_id"/>
+   <xsl:template match="justification"/>  
 
     <xsl:template match="/">
         <xsl:copy>
