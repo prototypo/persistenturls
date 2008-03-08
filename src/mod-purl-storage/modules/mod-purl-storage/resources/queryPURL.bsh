@@ -31,6 +31,8 @@ main() {
         purlXDA = purlTemplate.getClonedXDA();
         purlXDA.setText("/purl/z_id", resultsXDA.getText("/results/row/z_id/text()", true));                
         purlXDA.setText("/purl/id", resultsXDA.getText("/results/row/p_id/text()", true));
+        purlXDA.setText("/purl/@status", resultsXDA.getText("/results/row/status/text()", true));
+
         
         type = resultsXDA.getText("/results/row/type/text()", true);
         
