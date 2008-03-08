@@ -448,7 +448,7 @@ SAXEventHandlerForPending.prototype._fullCharacterDataReceived = function(fullCh
 	// DHW
 	
 	// Create entries in elementMap for each field in a user or domain record.
-	if ( currentElement == 'id' || currentElement == 'name' || currentElement == 'affiliation' || currentElement == 'email'|| currentElement == 'public' || currentElement == 'uid' || currentElement == 'gid') {
+	if ( currentElement == 'id' || currentElement == 'name' || currentElement == 'affiliation' || currentElement == 'email'|| currentElement == 'public' || currentElement == 'uid' || currentElement == 'gid'  || currentElement == 'justification' ) {
 		fullCharacterData = fullCharacterData.replace(/^\s*|\s*$/g,'');
 		if ( fullCharacterData != "" && fullCharacterData != "\n" && fullCharacterData != null ) {
 		

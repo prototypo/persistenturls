@@ -517,9 +517,14 @@ SAXEventHandler.prototype._fullCharacterDataReceived = function(fullCharacterDat
 			// Store uids and gids to account for possible multiple members.
 			// We will write them into the array when the document is fully parsed.
 			members = members + "," + fullCharacterData;
+			
+		} else if ( currentElement == "uid" && previousElement == "modifiedby" ) {
+			// There should only be one uid that modified a resource in history.
+			elementMap[elementMapIndex] = [currentElement, fullCharacterData];
+			elementMapIndex++;
 		
 		// All other entries we want to retain go here.	
-		} else if ( currentElement == "id" || currentElement == "name" || currentElement == "type"  || currentElement == "comments"  || currentElement == "public"  || currentElement == "affiliation" || currentElement == "email") {
+		} else if ( currentElement == "id" || currentElement == "name" || currentElement == "type"  || currentElement == "comments"  || currentElement == "public"  || currentElement == "affiliation" || currentElement == "email" || currentElement == "modifieddate" ) {
 			elementMap[elementMapIndex] = [currentElement, fullCharacterData];
 			elementMapIndex++;
 		}
