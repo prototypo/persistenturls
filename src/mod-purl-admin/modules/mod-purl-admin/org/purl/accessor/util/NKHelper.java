@@ -436,11 +436,15 @@ public class NKHelper {
         boolean retValue = false;
 
         try {
-            INKFRequest req = context.createSubRequest("active:purl-storage-query-domain");
-            req.addArgument("uri", domainResolver.getURI(domain));
-            req.setAspectClass(IAspectXDA.class);
-            IAspectXDA result = (IAspectXDA) context.issueSubRequestForAspect(req);
-            retValue = result.getXDA().isTrue("/domain[@status='1']");
+            String uri = domainResolver.getURI(domain);
+            
+            if(uri != null) {
+                INKFRequest req = context.createSubRequest("active:purl-storage-query-domain");
+                req.addArgument("uri", uri);
+                req.setAspectClass(IAspectXDA.class);
+                IAspectXDA result = (IAspectXDA) context.issueSubRequestForAspect(req);
+                retValue = result.getXDA().isTrue("/domain[@status='1']");
+            }
         } catch(Exception e) {
             e.printStackTrace();
         }
