@@ -21,6 +21,7 @@ public class SearchAccessor extends NKFAccessorImpl {
     public void processRequest(INKFConvenienceHelper context) throws Exception {
         
         INKFRequest req = context.createSubRequest("active:luceneSearch");
+        INKFResponse resp = null;
         String index=context.getThisRequest().getArgument("index");
         IURRepresentation retValue = null;
         int kwidx = 0;
@@ -43,10 +44,15 @@ public class SearchAccessor extends NKFAccessorImpl {
         sb.append("</query>");
         sb.append("</luceneSearch>");
         
-        req.addArgument("operator", new StringAspect(sb.toString()));
-        retValue = context.issueSubRequest(req);
+        try {
+            req.addArgument("operator", new StringAspect(sb.toString()));
+            retValue = context.issueSubRequest(req);
+            resp = context.createResponseFrom(retValue);
+        } catch(Throwable t) {
+            t.printStackTrace();
+            resp = context.createResponseFrom(new StringAspect("<results/>"));
+        }
         
-        INKFResponse resp = context.createResponseFrom(retValue);
         resp.setMimeType("text/xml");
         context.setResponse(resp);
     }
