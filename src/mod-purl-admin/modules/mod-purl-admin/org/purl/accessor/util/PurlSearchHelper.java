@@ -19,7 +19,7 @@ public class PurlSearchHelper extends AbstractSearchHelper {
     
     static {
         // TODO: Turn this into a configuration file
-        keywordBasisMap.put("path", "/purl/id");
+        keywordBasisMap.put("id", "/purl/id");
         keywordBasisMap.put("maintainers", "/purl/maintainers/uid");
         keywordBasisMap.put("explicitmaintainers", "/purl/maintainers/uid");        
         keywordBasisMap.put("target", "/purl/target/url");
@@ -90,6 +90,10 @@ public class PurlSearchHelper extends AbstractSearchHelper {
                 retValue = retValue.substring(7);
             }
             retValue = retValue.replaceAll("/", " ");
+        } else if(key.equals("id")) {
+            if(retValue.startsWith("/")) {
+                retValue = retValue.substring(1);
+            }
         }
         
         return super.processKeyword(context, key, retValue);
