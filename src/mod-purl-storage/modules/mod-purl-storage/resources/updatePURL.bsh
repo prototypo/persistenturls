@@ -111,6 +111,7 @@ main() {
         req = context.createSubRequest("active:purl-storage-query-purl");
         req.addArgument("uri", "ffcpl:/purl" + purl);
         iur = context.issueSubRequest(req);
+        
     } catch(Throwable t) {
         t.printStackTrace();
         iur = new StringAspect("<error message=\"Could not update purl:" + purl + "\"/>");

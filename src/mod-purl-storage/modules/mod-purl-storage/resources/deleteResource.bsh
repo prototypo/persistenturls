@@ -1,0 +1,54 @@
+import org.ten60.netkernel.xml.representation.*;
+import com.ten60.netkernel.urii.aspect.*;
+
+main() {
+    System.out.println("****************************************DELETE***********************");
+    ruri = context.getThisRequest().getArgument("uri");
+    System.out.println("RURI: " + ruri);
+    parts = ruri.split("/");
+    type = parts[1];
+    value = null;
+    uri = null;
+    param = null;
+    goldenThread = null;
+    
+    System.out.println("1111111111");
+    
+    switch(type) {
+        case "purl":
+        uri = "ffcpl:/sql/db/deletePURL.idoc";
+        System.out.println("RURI: " + ruri);
+        value = ruri.substring(11);
+        param = new StringAspect("<purl><id>" + value + "</id></purl>");
+        System.out.println("*******PURL: " + value);
+        break;
+        case "domain":
+        uri = "ffcpl:/sql/db/deleteDomain.idoc";
+        value = ruri.substring(13);
+        param = new StringAspect("<domain><id>" + value + "</id></domain>");
+        break;
+        case "group":
+        uri = "ffcpl:/sql/db/deleteGroup.idoc";
+        value = ruri.substring(13);
+        param = new StringAspect("<group><id>" + value + "</id></group>");
+        break;
+        case "user":
+        uri = "ffcpl:/sql/db/deleteUser.idoc";
+        value = ruri.substring(12);
+        param = new StringAspect("<user><id>" + value + "</id></user>");
+        break;
+    }
+
+    req = context.createSubRequest("active:dpml");
+    req.addArgument("operand", uri);
+    req.addArgument("param", param);
+    res = context.issueSubRequest(req);
+    resp = context.createResponseFrom(res);
+    
+    req=context.createSubRequest("active:cutGoldenThread");
+    req.addArgument("param", "gt:resource:" + value);
+    context.issueSubRequest(req);
+
+    resp.setExpired();
+    context.setResponse(resp);
+}

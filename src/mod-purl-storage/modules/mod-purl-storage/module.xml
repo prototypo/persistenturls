@@ -43,6 +43,16 @@
 			<match>active:purl-storage-initialize</match>
 			<to>active:beanshell+operator@ffcpl:/resources/initdb.bsh</to>
 		</rewrite>
+
+		<rewrite>
+			<match>active:purl-storage-delete-purl(\+.*)</match>
+			<to>active:beanshell+operator@ffcpl:/resources/deleteResource.bsh$1</to>
+		</rewrite>		
+		
+		<rewrite>
+			<match>active:purl-storage-delete-(.*)(\+.*)</match>
+			<to>active:beanshell+operator@ffcpl:/resources/deleteResource.bsh$2</to>
+		</rewrite>
 		
 		<ura>
       		<match>active:purl-storage-fast-batch-load\+.*</match>

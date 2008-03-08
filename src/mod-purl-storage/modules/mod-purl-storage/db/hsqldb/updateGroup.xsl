@@ -6,7 +6,8 @@
                 UPDATE groups SET 
                 "name" = '<xsl:value-of select="name"/>',
                 "comments" = '<xsl:value-of select="comments"/>',
-                "lastmodified" = NOW
+                "lastmodified" = NOW,
+                "indexed" = 0
                 where "g_id" = '<xsl:value-of select="id"/>';
             </sql>
             <sql>

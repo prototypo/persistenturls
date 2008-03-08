@@ -13,7 +13,8 @@
 						"password" = '<stm:param xpath="/user/password/text()"/>', 
 						"password_hint" = '<stm:param xpath="/user/hint/text()"/>',
 						"justification" = '<stm:param xpath="/user/justification/text()"/>',
-						"lastmodified" = NOW
+						"lastmodified" = NOW,
+						"indexed" = 0
 					where "userid" = '<stm:param xpath="/user/id/text()"/>';						
 				</stm:set>
 			</stm:group>

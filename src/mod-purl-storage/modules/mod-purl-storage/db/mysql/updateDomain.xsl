@@ -12,7 +12,8 @@
 			UPDATE domains SET 
 				name = '<xsl:value-of select="name"/>',
 				public = <xsl:value-of select="public"/>,
-				lastmodified = NOW()  
+				lastmodified = NOW(),
+				indexed = 0  
 			WHERE d_id = '<xsl:value-of select="id"/>';        	
         </sql>
         

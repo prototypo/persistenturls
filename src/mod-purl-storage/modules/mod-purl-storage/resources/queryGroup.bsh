@@ -31,11 +31,13 @@ main() {
         groupTemplate = context.sourceAspect("ffcpl:/resources/groupTemplate.xml", IAspectXDA.class);     
         resultsXDA = results.getXDA();
         groupXDA = groupTemplate.getClonedXDA();
+        groupXDA.setText("/group/@status", resultsXDA.getText("/results/row/status/text()", true));
+
         groupXDA.setText("/group/z_id", resultsXDA.getText("/results/row/z_id/text()", true));                
         groupXDA.setText("/group/id", resultsXDA.getText("/results/row/g_id/text()", true));
         groupXDA.setText("/group/name", resultsXDA.getText("/results/row/name/text()", true));
 
-        if(resultsXDA.isTrue("/results/row/commments/text()")) {
+        if(resultsXDA.isTrue("/results/row/comments/text()")) {
             groupXDA.setText("/group/comments", resultsXDA.getText("/results/row/comments/text()", true));
         }
         

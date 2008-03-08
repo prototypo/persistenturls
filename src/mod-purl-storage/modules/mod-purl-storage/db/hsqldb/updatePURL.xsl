@@ -8,7 +8,8 @@
                 <xsl:if test="//url">
                     "target"='<xsl:value-of select="//url[1]"/>',
                 </xsl:if>
-                "lastmodified" = NOW()
+                "lastmodified" = NOW(),
+                "indexed" = 0
                 where "p_id" = '<xsl:value-of select="id"/>';
             </sql>
             <sql>

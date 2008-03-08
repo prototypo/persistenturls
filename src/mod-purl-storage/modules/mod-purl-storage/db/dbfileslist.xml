@@ -22,7 +22,6 @@
     <file>queryGroupMembers.idoc</file>    
     <file>queryAll.xml</file>
     <file>queryResource.bsh</file>
-    <file>deleteResource.bsh</file>        
     <file>domainExists.idoc</file>
 	<file>domainValid.idoc</file>
     <file>domainTombstoned.idoc</file>          
