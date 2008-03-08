@@ -630,8 +630,9 @@ function onResponse(message, headers, callingContext) {
 				headers["Content-Type"] == "application/xml" ) {
 		
 		// Parse the XML
-		startParser(message);		
-		var htmlResults = getHTMLFromXMLArray(resultsMap);  // resultsMap is in SaxEventHandler.js.
+		startParser(message);
+		// TODO: Check this.  The var htmlResults was out of scope and causing problems with the tear-off results page.		
+		htmlResults = getHTMLFromXMLArray(resultsMap);  // resultsMap is in SaxEventHandler.js.
 				
 		if ( callingContext == "History" ) {
 				
