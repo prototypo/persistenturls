@@ -78,20 +78,28 @@ abstract public class AbstractSearchHelper implements SearchHelper {
         if(parts.length > 1) {
             for(String s : parts) {
                 // Skip over blanks and ignore terms that start with a '*'
-                if(s.length() > 0 && !s.startsWith("*")) {
+
+                if(s.length() > 0) {
                     sb.append("+");
                     sb.append(s);
                     sb.append(" ");
                 }
             }
         } else {
-            sb.append("+");
-            sb.append(value);
-            sb.append(" ");            
+            
+            int starIdx = value.indexOf("*");
+
+            if(starIdx < 0 || starIdx == value.lastIndexOf("*")) {
+              sb.append("+");
+              sb.append(value);
+              sb.append(" ");
+            }
         }
-        
-        sb.append("and basis:");
-        sb.append(key);
+
+        if(sb.length() > 0) {
+            sb.append("and basis:");
+            sb.append(key);
+        }
         
         return URLEncoder.encode(sb.toString());
     }
