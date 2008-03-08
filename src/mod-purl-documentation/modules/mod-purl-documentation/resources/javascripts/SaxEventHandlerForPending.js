@@ -42,6 +42,9 @@ var resultsMap;
 var resultsMapIndex;
 var currentElement = '';
 var previousElement = '';
+var maintainers;
+var writers;
+var members;
 
 /*****************************************************************************
                     SAXEventHandlerForPending Object
@@ -132,6 +135,24 @@ SAXEventHandlerForPending.prototype.endDocument = function() {
 
 	// DHW: TODO: Keep more than one doc's worth of data until manually cleared?
 	// 		Add a new method to clear the array contents?
+	
+	// DHW:
+	// Add entries for maintainers, writers and members, if any were found.
+	if ( maintainers.length > 0 ) {
+		maintainers = maintainers.substring(1, maintainers.length); // remove leading comma
+		elementMap[elementMapIndex] = ["maintainers", maintainers];
+		elementMapIndex++;
+	}
+	if ( writers.length > 0 ) {
+		writers = writers.substring(1, writers.length); // remove leading comma
+		elementMap[elementMapIndex] = ["writers", writers];
+		elementMapIndex++;
+	}
+	if ( members.length > 0 ) {
+		members = members.substring(1, members.length); // remove leading comma
+		elementMap[elementMapIndex] = ["members", members];
+		elementMapIndex++;
+	}
 
 }  // end function endDocument
 
@@ -243,9 +264,9 @@ SAXEventHandlerForPending.prototype.startElement = function(name, atts) {
 		// Clear the working array.
 		elementMap = new Array();
 		elementMapIndex = 0;
-		// Extract the 'id' attribute. - NO.  The 'id' attribute moved to a tag.
-		//elementMap[elementMapIndex] = ["id", atts.getValueByName(["id"])];
-		//elementMapIndex++;
+		maintainers = "";
+		writers = "";
+		members = "";
 	}
 
 }  // end function startElement
@@ -438,11 +459,24 @@ SAXEventHandlerForPending.prototype._fullCharacterDataReceived = function(fullCh
 	// the "modify" forms in the files purl|user|group|domain.html; this facilitates
 	// population of the modify forms with record data.
 	if ( currentElement == 'id' || currentElement == 'name' || currentElement == 'affiliation' || currentElement == 'email'|| currentElement == 'public' || currentElement == 'uid' || currentElement == 'gid') {
-		fullCharacterData = fullCharacterData.replace(/^\s*/g,'');
+		fullCharacterData = fullCharacterData.replace(/^\s*|\s*$/g,'');
 		if ( fullCharacterData != "" && fullCharacterData != "\n" && fullCharacterData != null ) {
 		
-			if ( ( currentElement == 'uid' || currentElement == 'gid' ) && (previousElement == 'maintainers' || previousElement == 'writers') ) {
-				var elementName = previousElement.substring(0, previousElement.length -1);
+			if ( ( currentElement == "uid" || currentElement == "gid" ) && previousElement == "maintainers" ) {
+				// Store uids and gids to account for possible multiple maintainers.
+				// We will write them into the array when the document is fully parsed.
+				maintainers = maintainers + "," + fullCharacterData;
+			
+			} else if ( ( currentElement == "uid" || currentElement == "gid" )  && previousElement == "writers" ) {
+				// Store uids and gids to account for possible multiple writers.
+				// We will write them into the array when the document is fully parsed.
+				writers = writers + "," + fullCharacterData;
+			
+			} else if ( ( currentElement == "uid" || currentElement == "gid" )  && previousElement == "members" ) {
+				// Store uids and gids to account for possible multiple members.
+				// We will write them into the array when the document is fully parsed.
+				members = members + "," + fullCharacterData;
+			
 			} else {
 				var elementName = currentElement;
 			}

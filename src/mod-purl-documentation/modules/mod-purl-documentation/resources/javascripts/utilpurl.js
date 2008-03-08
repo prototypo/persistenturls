@@ -302,10 +302,10 @@ function loadModify(recordData) {
 			currentElement = document.getElementById(fieldName);
 			if ( currentElement != null ) {
 				if ( currentElement.type == "checkbox" ) {
-				// TODONEXT: Is this sufficient?  Check to ensure that this works.
-				currentElement.checked = false;
+					// TODO: Is this sufficient?  Check to ensure that this works.
+					currentElement.checked = false;
 				} else {
-				currentElement.value = null;
+					currentElement.value = null;
 				}
 			}
 		}
@@ -315,13 +315,19 @@ function loadModify(recordData) {
 	for ( key in records ) {
 		if (key.length > 0) {
 			records[key] = records[key].replace(/%LINEBREAK%/g, "\n");
+			if ( key == "maintainers" || key == "writers" || key == "members" ) {
+				records[key] = records[key].replace(/,/g, "\n");
+			}
 			currentElement = document.getElementById("m_" + key);
 			if ( currentElement != null ) {
 				if ( currentElement.type == "checkbox" ) {
-				// TODONEXT: Is this sufficient?  Check to ensure that this works.
-				currentElement.checked = records[key];
+					if ( records[key] == "false" ){
+						currentElement.checked = false;
+					} else {
+						currentElement.checked = true;
+					}
 				} else {
-				currentElement.value = records[key];
+					currentElement.value = records[key];
 				}
 			}
 		}

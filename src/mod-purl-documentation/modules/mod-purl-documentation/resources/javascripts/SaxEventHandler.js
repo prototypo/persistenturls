@@ -42,6 +42,9 @@ var resultsMap;
 var resultsMapIndex;
 var currentElement = '';
 var previousElement = '';
+var maintainers = "";
+var writers = "";
+var members = "";
 
 /*****************************************************************************
                     SAXEventHandler Object
@@ -132,6 +135,25 @@ SAXEventHandler.prototype.endDocument = function() {
 
 	// DHW: TODO: Keep more than one doc's worth of data until manually cleared?
 	// 		Add a new method to clear the array contents?
+	
+	// DHW:
+	// Add entries for maintainers, writers and members, if any were found.
+	if ( maintainers.length > 0 ) {
+		maintainers = maintainers.substring(1, maintainers.length); // remove leading comma
+		elementMap[elementMapIndex] = ["maintainers", maintainers];
+		elementMapIndex++;
+	}
+	if ( writers.length > 0 ) {
+		writers = writers.substring(1, writers.length); // remove leading comma
+		elementMap[elementMapIndex] = ["writers", writers];
+		elementMapIndex++;
+	}
+	if ( members.length > 0 ) {
+		members = members.substring(1, members.length); // remove leading comma
+		elementMap[elementMapIndex] = ["members", members];
+		elementMapIndex++;
+	}
+	
 
 }  // end function endDocument
 
@@ -278,6 +300,9 @@ SAXEventHandler.prototype.startElement = function(name, atts) {
 		// Clear the working array.
 		elementMap = new Array();
 		elementMapIndex = 0;
+		maintainers = "";
+		writers = "";
+		members = "";
 	}
 	
 }  // end function startElement
@@ -467,7 +492,7 @@ SAXEventHandler.prototype._fullCharacterDataReceived = function(fullCharacterDat
 	// me that I should have used a DOM parser instead of SAX.  It is on my list :)
 	
 	// Don't write element without data.
-	fullCharacterData = fullCharacterData.replace(/^\s*/g,'');
+	fullCharacterData = fullCharacterData.replace(/^\s*|\s*$/g,'');
 	if ( fullCharacterData != "" && fullCharacterData != "\n" && fullCharacterData != null ) {
 		// Create entries in elementMap that relate to the names of the fields on
 		// the "modify" forms in the files purl|user|group|domain.html; this facilitates
@@ -476,11 +501,20 @@ SAXEventHandler.prototype._fullCharacterDataReceived = function(fullCharacterDat
 			elementMap[elementMapIndex] = [previousElement, fullCharacterData];
 			elementMapIndex++;
 			
-		} else if ( currentElement == "uid" && ( previousElement == "maintainers" || previousElement == "writers" || previousElement == "members" ) ) {
-			// Append as necessary to account for possible multiple maintainers, writers and members.
-			var elementName = previousElement.substring(0, previousElement.length -1);
-			elementMap[elementMapIndex] = [elementName, fullCharacterData];
-			elementMapIndex++;
+		} else if ( ( currentElement == "uid" || currentElement == "gid" ) && previousElement == "maintainers" ) {
+			// Store uids and gids to account for possible multiple maintainers.
+			// We will write them into the array when the document is fully parsed.
+			maintainers = maintainers + "," + fullCharacterData;
+			
+		} else if ( ( currentElement == "uid" || currentElement == "gid" )  && previousElement == "writers" ) {
+			// Store uids and gids to account for possible multiple writers.
+			// We will write them into the array when the document is fully parsed.
+			writers = writers + "," + fullCharacterData;
+			
+		} else if ( ( currentElement == "uid" || currentElement == "gid" )  && previousElement == "members" ) {
+			// Store uids and gids to account for possible multiple members.
+			// We will write them into the array when the document is fully parsed.
+			members = members + "," + fullCharacterData;
 		
 		// All other entries we want to retain go here.	
 		} else if ( currentElement == "id" || currentElement == "name" || currentElement == "public"  || currentElement == "affiliation" || currentElement == "email") {
