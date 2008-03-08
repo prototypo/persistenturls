@@ -25,8 +25,11 @@ main() {
 				copyFiles(dbtype, file);
 			}
 
-			req = context.createSubRequest("active:purl-storage-destroy-db");
-			res = context.issueSubRequest(req);
+			if(dbtype.equals("hsqldb")) {
+				req = context.createSubRequest("active:purl-storage-destroy-db");
+				res = context.issueSubRequest(req);
+			}
+			
 			req = context.createSubRequest("active:purl-storage-create-db");
 			res = context.issueSubRequest(req);
 			context.sinkAspect(dbInitFile, new StringAspect("<db type=\"" + dbtype + "\" initialized=\"" + new Date() + "\"/>"));
