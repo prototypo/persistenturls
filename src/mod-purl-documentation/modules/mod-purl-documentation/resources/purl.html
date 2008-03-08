@@ -161,7 +161,7 @@ handles results from the server in response to form submissions.
 		if ( my_id.indexOf("/") != 0 && my_id.length > 0 ) {
 			alert("A PURL path always starts with a forward slash (/) character.  Please provide the full path.");
 		} else {
-			ajaxCaller.get("/admin/purl", bodyVars, onResponse, false, "Search");
+			ajaxCaller.get("/admin/purl/", bodyVars, onResponse, false, "Search");
 		}
 		clearErrorIndications();
 		return false;
