@@ -36,7 +36,7 @@ public class SearchAccessor extends NKFAccessorImpl {
             if(kwidx > 0) {
                 sb.append(" ");
             }
-            String terms = URLDecoder.decode(context.getThisRequest().getArgument(kwname).substring(8));
+            String terms = URLDecoder.decode(context.getThisRequest().getArgument(kwname).substring(8), "UTF-8");
             sb.append(terms);
             kwname=getKeywordName(++kwidx);
         }
