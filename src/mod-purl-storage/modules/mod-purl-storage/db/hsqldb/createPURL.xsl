@@ -3,11 +3,11 @@
     <xsl:template match="/purl">
         <batch>
             <sql>
-                INSERT INTO purls VALUES( null, '<xsl:value-of select="id"/>', '<xsl:value-of select="type"/>', '<xsl:value-of select="*/url"/>', NOW(), NOW(), 1, false);
+                INSERT INTO purls VALUES( null, '<xsl:value-of select="id"/>', '<xsl:value-of select="type"/>', '<xsl:value-of select="*/url"/>', NOW, NOW, 1, false);
             </sql>
             
             <sql>
-                INSERT INTO purlhistory VALUES(null, IDENTITY(), @@CURRENTUSER@@, 0, '<xsl:value-of select="type"/>', '<xsl:value-of select="*/url"/>', NOW());
+                INSERT INTO purlhistory VALUES(null, IDENTITY(), @@CURRENTUSER@@, 0, '<xsl:value-of select="type"/>', '<xsl:value-of select="*/url"/>', NOW);
             </sql>
             
             <xsl:for-each select="maintainers/uid">

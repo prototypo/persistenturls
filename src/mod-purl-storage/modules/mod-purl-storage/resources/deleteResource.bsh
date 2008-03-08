@@ -13,7 +13,6 @@ main() {
     switch(type) {
         case "purl":
         uri = "ffcpl:/sql/db/deletePURL.idoc";
-        System.out.println("RURI: " + ruri);
         value = ruri.substring(11);
         param = new StringAspect("<purl><id>" + value + "</id></purl>");
         break;
@@ -39,6 +38,14 @@ main() {
     req.addArgument("param", param);
     res = context.issueSubRequest(req);
     resp = context.createResponseFrom(res);
+    
+    if(type.equals("purl")) {
+        req = context.createSubRequest("active:purl-storage-update-purl-history");
+        req.addArgument("purl", ruri);
+        req.addArgument("user", context.getThisRequest().getArgument("user"));
+        req.addArgument("status", "data:text/plain,2");
+        context.issueSubRequest(req);
+    }
     
     req=context.createSubRequest("active:cutGoldenThread");
     req.addArgument("param", "gt:resource:" + value);

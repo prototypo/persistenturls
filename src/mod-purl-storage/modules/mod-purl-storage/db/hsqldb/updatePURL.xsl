@@ -27,6 +27,10 @@
                     INSERT INTO purlmaintainers VALUES(null, @@PID@@, @@GROUP-<xsl:value-of select="."/>@@, 1);                
                 </sql>
             </xsl:for-each>
+            
+            <sql>
+                INSERT INTO purlhistory VALUES(null, @@PID@@, @@CURRENTUSER@@, 1, '<xsl:value-of select="type"/>', '<xsl:value-of select="*/url"/>', NOW);
+            </sql>
         </batch>
     </xsl:template>
 </xsl:stylesheet>

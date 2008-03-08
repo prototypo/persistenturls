@@ -14,6 +14,9 @@ main() {
     
     try {
         param = context.sourceAspect("this:param:param", IAspectXDA.class);
+        
+        currentUser = context.sourceAspect("this:param:user", IAspectString.class).getString();
+
         paramXDA = param.getXDA();
         
         purl = paramXDA.getText("/purl/id", true);
@@ -39,6 +42,15 @@ main() {
                 z_id = maintainerXDA.getXDA().getText("/user/z_id", true);
                 userMaintainerMap.put(maintainer, z_id);
             }
+        }
+        
+        if(!userMaintainerMap.containsKey(currentUser)) {
+            req = context.createSubRequest("active:purl-storage-query-user");
+            req.addArgument("uri", "ffcpl:/user/" + currentUser);
+            req.setAspectClass(IAspectXDA.class);
+            maintainerXDA = (IAspectXDA)context.issueSubRequestForAspect(req);
+            z_id = maintainerXDA.getXDA().getText("/user/z_id", true);
+            userMaintainerMap.put(currentUser, z_id);            
         }
         
         userItor = userMaintainerMap.keySet().iterator();
@@ -87,7 +99,16 @@ main() {
         maintainerSB.append("<pattern><regex>@@PID@@</regex><replace>");
         maintainerSB.append(oldPURLXDA.getXDA().getText("/purl/z_id", true));
         maintainerSB.append("</replace></pattern>");
+        
+        if(currentUser!=null) {
+            maintainerSB.append("<pattern><regex>@@CURRENTUSER@@</regex><replace>");
+            maintainerSB.append(userMaintainerMap.get(currentUser));
+            maintainerSB.append("</replace></pattern>");
+        }
+
         maintainerSB.append("</sed>");
+        
+        System.out.println(maintainerSB.toString());
         
         req = context.createSubRequest("active:xslt");
         req.addArgument("operand", param);
@@ -99,6 +120,9 @@ main() {
         req.addArgument("operator", new StringAspect(maintainerSB.toString()));
         req.addArgument("operand", iur);
         iur = context.issueSubRequest(req);
+        
+        sa = context.transrept(iur, IAspectString.class);
+        System.out.println(sa.getString());
         
         req = context.createSubRequest("active:sqlBatch");
         req.addArgument("operand", iur);
