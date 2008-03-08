@@ -123,18 +123,14 @@ handles results from the server in response to form submissions.
 		var my_id = $('s_id').value;
 		signalLoadingResults();
 		bodyVars =  {
+				id: my_id,
 				name: $('s_name').value,
 				maintainers: $('s_maintainers').value,
 				members: $('s_members').value,
 				tombstone: $('s_tombstone').checked
 		};
-		if ( my_id == "" | my_id == null ) {
-			// No group id is given, so we call the parent resource.
-			ajaxCaller.get("/admin/group/", bodyVars, onResponse, false, "Search");
-		} else {
-			// We have a group id, so we call that resource directly.
-			ajaxCaller.get("/admin/group/" + my_id, bodyVars, onResponse, false, "Search");
-		}
+		ajaxCaller.get("/admin/group/", bodyVars, onResponse, false, "Search");
+			
 		clearErrorIndications();
 		return false;
 	}

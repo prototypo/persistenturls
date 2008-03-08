@@ -151,20 +151,16 @@ handles results from the server in response to form submissions.
 		var my_id = $('s_id').value;
 		signalLoadingResults();
 		bodyVars =  {
+			id: my_id,
 			target: $('s_target').value,
 			seealso: $('s_seealso').value,
 			maintainers: $('s_maintainers').value,
 			explicitmaintainers: $('s_explicitmaintainers').value,
 			tombstone: $('s_tombstone').checked
-		}
-		if ( my_id == "" | my_id == null ) {
-			// No PURL name is given, so we call the parent resource.
-			ajaxCaller.get("/admin/purl/", bodyVars, onResponse, false, "Search");
-		} else if ( my_id.indexOf("/") != 0 ) {
+		if ( my_id.indexOf("/") != 0 ) {
 			alert("A PURL path always starts with a forward slash (/) character.  Please provide the full path.");
 		} else {
-			// We have a PURL name, so we call that resource directly.
-			ajaxCaller.get("/admin/purl" + my_id, bodyVars, onResponse, false, "Search");
+			ajaxCaller.get("/admin/purl", bodyVars, onResponse, false, "Search");
 		}
 		clearErrorIndications();
 		return false;

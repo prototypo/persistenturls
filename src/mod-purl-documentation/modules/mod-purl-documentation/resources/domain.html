@@ -140,19 +140,14 @@ handles results from the server in response to form submissions.
 		var my_id = $('s_id').value;
 		signalLoadingResults();
 		bodyVars =  {
+				id: my_id,
 				name: $('s_name').value,
 				maintainers: $('s_maintainers').value,
 				writers: $('s_writers').value,
 				tombstone: $('s_tombstone').checked
 		}
-		if ( my_id == "" | my_id == null ) {
-			// No domain id is given, so we call the parent resource.
-			ajaxCaller.get("/admin/domain/", bodyVars, onResponse, false, "Search");
-		} else {
-			// We have a domain id, so we call that resource directly.
-			//ajaxCaller.get("/admin/domain/" + my_id, bodyVars, onResponse, false, "Search");
-			ajaxCaller.get(normalizeDomainName("/admin/domain/",my_id), bodyVars, onResponse, false, "Search");         
-		}
+		ajaxCaller.get(normalizeDomainName("/admin/domain/"), bodyVars, onResponse, false, "Search");
+			
 		clearErrorIndications();
 		return false;
 	}
