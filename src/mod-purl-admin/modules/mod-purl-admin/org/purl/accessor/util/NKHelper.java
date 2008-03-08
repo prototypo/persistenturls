@@ -432,6 +432,23 @@ public class NKHelper {
         return retValue;
     }
     
+    public static boolean domainIsValid(INKFConvenienceHelper context, String domain) {
+        boolean retValue = false;
+
+        try {
+            INKFRequest req = context.createSubRequest("active:purl-storage-query-domain");
+            req.addArgument("uri", domainResolver.getURI(domain));
+            req.setAspectClass(IAspectXDA.class);
+            IAspectXDA result = (IAspectXDA) context.issueSubRequestForAspect(req);
+            retValue = result.getXDA().isTrue("/domain[@status='1']");
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        
+        return retValue;
+    }    
+    
+    
     public static boolean userCanCreatePURL(INKFConvenienceHelper context, String resource) {
         return userCanCreatePURL(context, NKHelper.getUser(context), resource);
     }

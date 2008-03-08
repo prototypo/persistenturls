@@ -17,6 +17,7 @@ public class PURLAllowableResource extends DefaultAllowableResource {
         // to create a PURL for this domain, we allow the resource
         
         return super.allow(context, resourceName)
+               && NKHelper.domainIsValid(context, NKHelper.getDomainForPURL(context, resourceName))
                && (UserHelper.isAdminUser(context, NKHelper.getUser(context)) ||
                    NKHelper.userCanCreatePURL(context, resourceName));
     }
