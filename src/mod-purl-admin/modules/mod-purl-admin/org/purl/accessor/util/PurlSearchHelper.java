@@ -85,8 +85,13 @@ public class PurlSearchHelper extends AbstractSearchHelper {
                 
                 retValue = sb.toString();
             }
+        } else if(key.equals("target") || key.equals("seealso")) {
+            if(retValue.startsWith("http://")) {
+                retValue = retValue.substring(7);
+            }
+            retValue = retValue.replaceAll("/", " ");
         }
         
-        return retValue;
+        return super.processKeyword(context, key, retValue);
     }
 }
