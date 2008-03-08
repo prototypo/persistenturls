@@ -38,38 +38,13 @@ void main()
 		result=context.issueSubRequest(req);
 		resp=context.createResponseFrom(result);
 		resp.setMimeType("text/xml");
-		
-		//Return HTTP Redirect 
-/*		sb = new StringBuffer("<login>");
-		sb.append("<status results=\"success\">Success</status>");
-		sb.append("<referrer>/docs/user.html</referrer>");
-		sb.append("<uid>" + id + "</uid>");
-		sb.append("</login>");
-		result = new StringAspect(sb.toString());
-		context.setResponse(resp);
-		System.out.println("2");
-		System.out.println(sb.toString()); */		
 	}
 	else
 	{	
-/*		sb = new StringBuffer("<login>");
-		sb.append("<status results=\"failure\">Failure</status>");
-		sb.append("<referrer>/docs/user.html</referrer>");
-		sb.append("<uid>" + id + "</uid>");
-		sb.append("</login>");
-		result = new StringAspect(sb.toString());
-		resp=context.createResponseFrom(result);
-		resp.setMimeType("text/xml");
-		context.setResponse(resp);
-		System.out.println("3");
-		System.out.println(sb.toString()); */
-		
-		//Issue HTTP Redirect
-		req=context.createSubRequest("active:HTTPRedirect");
-		req.addArgument("operator", new StringAspect("<url>/docs/login.html</url>"));
+		req=context.createSubRequest("active:beanshell");
+		req.addArgument("operator", "ffcpl:/resources/login.bsh");
 		result=context.issueSubRequest(req);
 		resp=context.createResponseFrom(result);
-		resp.setMimeType("text/xml");		
 	}
 	
 }
