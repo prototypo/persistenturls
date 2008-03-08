@@ -448,26 +448,25 @@ SAXEventHandlerForPending.prototype._fullCharacterDataReceived = function(fullCh
 	// DHW
 	
 	// Create entries in elementMap for each field in a user or domain record.
-	if ( currentElement == 'id' || currentElement == 'name' || currentElement == 'affiliation' || currentElement == 'email'|| currentElement == 'public' || currentElement == 'uid' || currentElement == 'gid'  || currentElement == 'justification' ) {
-		fullCharacterData = fullCharacterData.replace(/^\s*|\s*$/g,'');
-		if ( fullCharacterData != "" && fullCharacterData != "\n" && fullCharacterData != null ) {
-		
-			if ( ( currentElement == "uid" || currentElement == "gid" ) && previousElement == "maintainers" ) {
-				// Store uids and gids to account for possible multiple maintainers.
-				// We will write them into the array when the document is fully parsed.
-				maintainers = maintainers + "," + fullCharacterData;
+	fullCharacterData = fullCharacterData.replace(/^\s*|\s*$/g,'');
+	if ( fullCharacterData != "" && fullCharacterData != "\n" && fullCharacterData != null ) {
+		if ( currentElement == 'id' || currentElement == 'name' || currentElement == 'affiliation' || currentElement == 'email'|| currentElement == 'public' || currentElement == 'uid' || currentElement == 'gid'  || currentElement == 'justification' ) {
+	
+				if ( ( currentElement == "uid" || currentElement == "gid" ) && previousElement == "maintainers" ) {
+					// Store uids and gids to account for possible multiple maintainers.
+					// We will write them into the array when the document is fully parsed.
+					maintainers = maintainers + "," + fullCharacterData;
 			
-			} else if ( ( currentElement == "uid" || currentElement == "gid" )  && previousElement == "writers" ) {
-				// Store uids and gids to account for possible multiple writers.
-				// We will write them into the array when the document is fully parsed.
-				writers = writers + "," + fullCharacterData;
+				} else if ( ( currentElement == "uid" || currentElement == "gid" )  && previousElement == "writers" ) {
+					// Store uids and gids to account for possible multiple writers.
+					// We will write them into the array when the document is fully parsed.
+					writers = writers + "," + fullCharacterData;
 			
-			} else {
-				var elementName = currentElement;
-			}
-		
-			elementMap[elementMapIndex] = [elementName, fullCharacterData];
-			elementMapIndex++;
+				} else {
+					var elementName = currentElement;
+					elementMap[elementMapIndex] = [elementName, fullCharacterData];
+					elementMapIndex++;
+				}
 		}
 	}
 
