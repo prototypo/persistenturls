@@ -89,6 +89,8 @@ public class purlClientTestRunner {
         suite.addTest(new simplePurlClientTest("testRecreatePurl"));
         suite.addTest(new simplePurlClientTest("testModifyPurl"));
         suite.addTest(new simplePurlClientTest("testSearchPurl"));
+        suite.addTest(new simplePurlClientTest("testSearchPurlByTarget"));
+        suite.addTest(new simplePurlClientTest("testSearchPurlByMaintainer"));
         suite.addTest(new simplePurlClientTest("testValidatePurl"));
         suite.addTest(new simplePurlClientTest("testResolvePurl"));
         suite.addTest(new simplePurlClientTest("testDeletePurl"));
