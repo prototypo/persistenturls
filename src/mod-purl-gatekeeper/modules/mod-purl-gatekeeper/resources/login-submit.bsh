@@ -41,10 +41,11 @@ void main()
 	}
 	else
 	{	
-		req=context.createSubRequest("active:beanshell");
-		req.addArgument("operator", "ffcpl:/resources/login.bsh");
+		//Issue HTTP Redirect
+		req=context.createSubRequest("active:HTTPRedirect");
+		req.addArgument("operator", new StringAspect("<url>/docs/loginfailure.html</url>"));
 		result=context.issueSubRequest(req);
 		resp=context.createResponseFrom(result);
+		resp.setMimeType("text/xml");
 	}
-	
 }
