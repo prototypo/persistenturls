@@ -45,34 +45,34 @@ handles results from the server in response to form submissions.
 	<script defer type="text/javascript" src="javascripts/pngfix.js"></script>
 	<![endif]-->
 
-<script type="text/javascript" src="javascripts/utilajax.js">
+		<script type="text/javascript" src="javascripts/utilajax.js">
 </script>
-<script type="text/javascript" src="javascripts/ajaxCaller.js">
+		<script type="text/javascript" src="javascripts/ajaxCaller.js">
 </script><!-- http://ajaxify.com/run/Lib/js/ -->
 
-<script type="text/javascript" src="javascripts/xmlsax.js">
+		<script type="text/javascript" src="javascripts/xmlsax.js">
 </script>
-<script type="text/javascript" src="javascripts/SaxEventHandler.js">
+		<script type="text/javascript" src="javascripts/SaxEventHandler.js">
 </script><!-- http://xmljs.sourceforge.net -->
 
-<script type="text/javascript" src="javascripts/utilpurl.js">
+		<script type="text/javascript" src="javascripts/utilpurl.js">
 </script>
-<script type="text/javascript">
+		<script type="text/javascript">
 //<![CDATA[
 
-	var debugThisPage = false;
-	
-	var context = "purl";
-	
-	// Number of forms on this page that need to be locked out
-	// when the user is not logged in.
-	var numNeedsAuth = 4;
+		var debugThisPage = false;
 
-	// NB: This array contains the names of each element that represents a label for an HTML form item.  If you add a new form item and want it highlighted upon a "bad parameter" error, you MUST add it's id to this array.
-	var labelElements = ["c_id_label", "c_target_label", "c_maintainers_label", "a_id_label", "a_maintainers_label", "a_type_label", "a_target_label", "a_seealso_label", "a_basepurl_label", "m_id_label", "m_type_label", "m_target_label", "m_seealso_label", "m_maintainers_label", "s_id_label", "s_target_label", "s_seealso_label", "s_maintainers_label", "s_explicitmaintainers_label", "s_tombstone_label", "v_id_label", "d_id_label"];
+		var context = "purl";
 
-	// Send a Create command via HTTP POST.
-	function createSubmit() {
+		// Number of forms on this page that need to be locked out
+		// when the user is not logged in.
+		var numNeedsAuth = 4;
+
+		// NB: This array contains the names of each element that represents a label for an HTML form item.  If you add a new form item and want it highlighted upon a "bad parameter" error, you MUST add it's id to this array.
+		var labelElements = ["c_id_label", "c_target_label", "c_maintainers_label", "a_id_label", "a_maintainers_label", "a_type_label", "a_target_label", "a_seealso_label", "a_basepurl_label", "m_id_label", "m_type_label", "m_target_label", "m_seealso_label", "m_maintainers_label", "s_id_label", "s_target_label", "s_seealso_label", "s_maintainers_label", "s_explicitmaintainers_label", "s_tombstone_label", "v_id_label", "d_id_label"];
+
+		// Send a Create command via HTTP POST.
+		function createSubmit() {
 		var my_id = $('c_id').value;
 		if ( my_id == "" | my_id == null ) {
 			alert("You must provide a path to identify the PURL you wish to create.  Please enter a path.");
@@ -91,10 +91,10 @@ handles results from the server in response to form submissions.
 		}
 		clearErrorIndications();
 		return false;
-	}
+		}
 
-	// Send a Create command via HTTP POST for "advanced" PURL features.
-	function createAdvSubmit() {
+		// Send a Create command via HTTP POST for "advanced" PURL features.
+		function createAdvSubmit() {
 		var my_id = $('a_id').value;
 		if ( my_id == "" | my_id == null ) {
 			alert("You must provide a path to identify the PURL you wish to create.  Please enter a path.");
@@ -115,10 +115,10 @@ handles results from the server in response to form submissions.
 		}
 		clearErrorIndications();
 		return false;
-	}
+		}
 
-	// Send a Modify command via HTTP PUT.
-	function modifySubmit() {       
+		// Send a Modify command via HTTP PUT.
+		function modifySubmit() {       
 		var my_id = $('m_id').value;
 		if ( my_id == "" | my_id == null ) {
 			alert("You must provide a path to identify the PURL you wish to modify.  Please enter a path.");
@@ -144,10 +144,10 @@ handles results from the server in response to form submissions.
 		}
 		clearErrorIndications();
 		return false;
-	}
+		}
 
-	// Send a Search command via HTTP GET.
-	function searchSubmit() {
+		// Send a Search command via HTTP GET.
+		function searchSubmit() {
 		var my_id = $('s_id').value;
 		signalLoadingResults();
 		bodyVars =  {
@@ -157,6 +157,7 @@ handles results from the server in response to form submissions.
 			maintainers: $('s_maintainers').value,
 			explicitmaintainers: $('s_explicitmaintainers').value,
 			tombstone: $('s_tombstone').checked
+		}
 		if ( my_id.indexOf("/") != 0 ) {
 			alert("A PURL path always starts with a forward slash (/) character.  Please provide the full path.");
 		} else {
@@ -164,10 +165,10 @@ handles results from the server in response to form submissions.
 		}
 		clearErrorIndications();
 		return false;
-	}
+		}
 
-	// Send a Validate command via HTTP GET.
-	function validateSubmit() {
+		// Send a Validate command via HTTP GET.
+		function validateSubmit() {
 		var my_id = $('v_id').value;
 		if ( my_id == "" | my_id == null ) {
 			alert("You must provide a path to identify the PURL you wish to validate.  Please enter a path.");
@@ -180,10 +181,10 @@ handles results from the server in response to form submissions.
 		}
 		clearErrorIndications();
 		return false;
-	}
+		}
 
-	// Send a Delete command via HTTP DELETE.
-	function deleteSubmit() {
+		// Send a Delete command via HTTP DELETE.
+		function deleteSubmit() {
 		var my_id = $('d_id').value;
 		if ( my_id == "" | my_id == null ) {
 			alert("You must provide a path to identify the PURL you wish to delete.  Please enter a path.");
@@ -196,9 +197,9 @@ handles results from the server in response to form submissions.
 		}
 		clearErrorIndications();
 		return false;
-	}
-	
-	function showAdvancedPURLFields() {
+		}
+
+		function showAdvancedPURLFields() {
 		var purlType = document.getElementById('a_type').value;
 		if ( purlType == "301" || purlType == "302" || purlType == "307" || purlType == "partial") {
 			setVisibility('maintainerstable', 'inline');
@@ -227,10 +228,10 @@ handles results from the server in response to form submissions.
 			setVisibility('targeturltable', 'none');
 			setVisibility('basepurltable', 'none');
 		}
-	}
+		}
 
-//]]>
-</script>
+		//]]>
+		</script>
 	</head>
 	<body onload="load('/docs/purl.html')">
 		<div id="loginstatus">
@@ -360,7 +361,7 @@ handles results from the server in response to form submissions.
 							</form>
 						</div><!-- create -->
 						<div id="advancedcreate" style="display: none;">
-							<form action="#" name="advancedCreateForm" onsubmit="return createAdvSubmit()" id="advCreateForm">
+							<form action="#" name="advancedCreateForm" onsubmit="return createAdvSubmit()" id="advancedCreateForm">
 								<fieldset>
 									<legend>2) Create an advanced PURL</legend>
 									<div class="instructions">
