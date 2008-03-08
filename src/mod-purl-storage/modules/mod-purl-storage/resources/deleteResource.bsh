@@ -2,9 +2,7 @@ import org.ten60.netkernel.xml.representation.*;
 import com.ten60.netkernel.urii.aspect.*;
 
 main() {
-    System.out.println("****************************************DELETE***********************");
     ruri = context.getThisRequest().getArgument("uri");
-    System.out.println("RURI: " + ruri);
     parts = ruri.split("/");
     type = parts[1];
     value = null;
@@ -12,15 +10,12 @@ main() {
     param = null;
     goldenThread = null;
     
-    System.out.println("1111111111");
-    
     switch(type) {
         case "purl":
         uri = "ffcpl:/sql/db/deletePURL.idoc";
         System.out.println("RURI: " + ruri);
         value = ruri.substring(11);
         param = new StringAspect("<purl><id>" + value + "</id></purl>");
-        System.out.println("*******PURL: " + value);
         break;
         case "domain":
         uri = "ffcpl:/sql/db/deleteDomain.idoc";
