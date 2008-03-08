@@ -120,7 +120,6 @@ handles results from the server in response to form submissions.
 
 	// Send a Search command via HTTP GET.
 	function searchSubmit() {
-		var my_id = $('s_id').value;
 		signalLoadingResults();
 		bodyVars =  {
 				id: $('s_id').value,

@@ -269,12 +269,13 @@ SAXEventHandler.prototype.startElement = function(name, atts) {
 		// TODO DBG
 		//alert("In element user.  atts has length " + atts.getLength() );
 		for ( i=0; i<atts.getLength() ; i++ ) {
-			// TODO DBG
 			//alert("Operating on attribute " + atts.getName([i]) + " = " + atts.getValue([i]));
 			if ( "status" == atts.getName([i]) ) {
 				value = "Pending approval";
 				if ( "1" == atts.getValue([i]) ) {
 					value = "Approved";
+				} else if ( "2" == atts.getValue([i]) ) {
+						value = "Tombstoned";
 				}
 				elementMap[elementMapIndex] = ["status", value];
 				elementMapIndex++;
