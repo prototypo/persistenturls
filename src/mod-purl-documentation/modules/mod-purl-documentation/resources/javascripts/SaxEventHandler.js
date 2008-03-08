@@ -132,29 +132,7 @@ SAXEventHandler.prototype.endDocument = function() {
     this._handleCharacterData();
 
     //place endDocument event handling code below this line
-
-	// DHW: TODO: Keep more than one doc's worth of data until manually cleared?
-	// 		Add a new method to clear the array contents?
 	
-	// DHW:
-	// Add entries for maintainers, writers and members, if any were found.
-	if ( maintainers.length > 0 ) {
-		maintainers = maintainers.substring(1, maintainers.length); // remove leading comma
-		elementMap[elementMapIndex] = ["maintainers", maintainers];
-		elementMapIndex++;
-	}
-	if ( writers.length > 0 ) {
-		writers = writers.substring(1, writers.length); // remove leading comma
-		elementMap[elementMapIndex] = ["writers", writers];
-		elementMapIndex++;
-	}
-	if ( members.length > 0 ) {
-		members = members.substring(1, members.length); // remove leading comma
-		elementMap[elementMapIndex] = ["members", members];
-		elementMapIndex++;
-	}
-	
-
 }  // end function endDocument
 
 
@@ -173,6 +151,29 @@ SAXEventHandler.prototype.endElement = function(name) {
     this._handleCharacterData();
 
     //place endElement event handling code below this line
+	// DHW
+	if ( name == 'group' || name == 'domain' || name == 'purl' || name == 'history') {
+		// Add entries for maintainers, writers and members, if any were found.
+		if ( maintainers.length > 0 ) {
+			maintainers = maintainers.substring(1, maintainers.length); // remove leading comma
+			elementMap[elementMapIndex] = ["maintainers", maintainers];
+			elementMapIndex++;
+			maintainers = "";
+		}
+		if ( writers.length > 0 ) {
+			writers = writers.substring(1, writers.length); // remove leading comma
+			elementMap[elementMapIndex] = ["writers", writers];
+			elementMapIndex++;
+			writers = "";
+		}
+		if ( members.length > 0 ) {
+			members = members.substring(1, members.length); // remove leading comma
+			elementMap[elementMapIndex] = ["members", members];
+			elementMapIndex++;
+			members = "";
+		}
+	}
+	
 	if ( name == 'user' || name == 'group' || name == 'domain' || name == 'purl' || name == 'history' ) {
 		// Write the working array into the results.
 		resultsMap[resultsMapIndex] = elementMap;

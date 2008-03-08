@@ -44,7 +44,6 @@ var currentElement = '';
 var previousElement = '';
 var maintainers;
 var writers;
-var members;
 
 /*****************************************************************************
                     SAXEventHandlerForPending Object
@@ -133,27 +132,6 @@ SAXEventHandlerForPending.prototype.endDocument = function() {
 
     //place endDocument event handling code below this line
 
-	// DHW: TODO: Keep more than one doc's worth of data until manually cleared?
-	// 		Add a new method to clear the array contents?
-	
-	// DHW:
-	// Add entries for maintainers, writers and members, if any were found.
-	if ( maintainers.length > 0 ) {
-		maintainers = maintainers.substring(1, maintainers.length); // remove leading comma
-		elementMap[elementMapIndex] = ["maintainers", maintainers];
-		elementMapIndex++;
-	}
-	if ( writers.length > 0 ) {
-		writers = writers.substring(1, writers.length); // remove leading comma
-		elementMap[elementMapIndex] = ["writers", writers];
-		elementMapIndex++;
-	}
-	if ( members.length > 0 ) {
-		members = members.substring(1, members.length); // remove leading comma
-		elementMap[elementMapIndex] = ["members", members];
-		elementMapIndex++;
-	}
-
 }  // end function endDocument
 
 
@@ -172,6 +150,24 @@ SAXEventHandlerForPending.prototype.endElement = function(name) {
     this._handleCharacterData();
 
     //place endElement event handling code below this line
+
+	// DHW
+	if ( name == 'domain' ) {
+		// Add entries for domain maintainers and writers if any were found.
+		if ( maintainers.length > 0 ) {
+			maintainers = maintainers.substring(1, maintainers.length); // remove leading comma
+			elementMap[elementMapIndex] = ["maintainers", maintainers];
+			elementMapIndex++;
+			maintainers = "";
+		}
+		if ( writers.length > 0 ) {
+			writers = writers.substring(1, writers.length); // remove leading comma
+			elementMap[elementMapIndex] = ["writers", writers];
+			elementMapIndex++;
+			writers = "";
+		}
+	}
+	
 	if ( name == 'user' || name == 'domain' ) {
 		// Write the working array into the results.
 		resultsMap[resultsMapIndex] = elementMap;
@@ -260,13 +256,12 @@ SAXEventHandlerForPending.prototype.startElement = function(name, atts) {
 	}
 	currentElement = name;
 	
-	if ( name == 'user' || name == 'group' || name == 'domain' || name == 'purl' ) {
+	if ( name == 'user' || name == 'domain' ) {
 		// Clear the working array.
 		elementMap = new Array();
 		elementMapIndex = 0;
 		maintainers = "";
 		writers = "";
-		members = "";
 	}
 
 }  // end function startElement
@@ -452,12 +447,7 @@ SAXEventHandlerForPending.prototype._fullCharacterDataReceived = function(fullCh
     //place character (text) event handling code below this line
 	// DHW
 	
-	// DHW: For those of you wondering: Yes, this method was the one that convinced
-	// me that I should have used a DOM parser instead of SAX.  It is on my list :)
-	
-	// Create entries in elementMap that relate to the names of the fields on
-	// the "modify" forms in the files purl|user|group|domain.html; this facilitates
-	// population of the modify forms with record data.
+	// Create entries in elementMap for each field in a user or domain record.
 	if ( currentElement == 'id' || currentElement == 'name' || currentElement == 'affiliation' || currentElement == 'email'|| currentElement == 'public' || currentElement == 'uid' || currentElement == 'gid') {
 		fullCharacterData = fullCharacterData.replace(/^\s*|\s*$/g,'');
 		if ( fullCharacterData != "" && fullCharacterData != "\n" && fullCharacterData != null ) {
@@ -471,11 +461,6 @@ SAXEventHandlerForPending.prototype._fullCharacterDataReceived = function(fullCh
 				// Store uids and gids to account for possible multiple writers.
 				// We will write them into the array when the document is fully parsed.
 				writers = writers + "," + fullCharacterData;
-			
-			} else if ( ( currentElement == "uid" || currentElement == "gid" )  && previousElement == "members" ) {
-				// Store uids and gids to account for possible multiple members.
-				// We will write them into the array when the document is fully parsed.
-				members = members + "," + fullCharacterData;
 			
 			} else {
 				var elementName = currentElement;
