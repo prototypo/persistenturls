@@ -138,6 +138,7 @@ handles results from the server in response to form submissions.
 	// Send a Search command via HTTP GET.
 	function searchSubmit() {
 		var my_id = $('s_id').value;
+
 		signalLoadingResults();
 		bodyVars =  {
 				id: $('s_id').value,
@@ -146,7 +147,7 @@ handles results from the server in response to form submissions.
 				writers: $('s_writers').value,
 				tombstone: $('s_tombstone').checked
 		}
-		ajaxCaller.get(normalizeDomainName("/admin/domain/"), bodyVars, onResponse, false, "Search");
+		ajaxCaller.get("/admin/domain/", bodyVars, onResponse, false, "Search");
 			
 		clearErrorIndications();
 		return false;
