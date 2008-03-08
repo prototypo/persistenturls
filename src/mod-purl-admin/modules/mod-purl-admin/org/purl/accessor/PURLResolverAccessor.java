@@ -15,8 +15,10 @@ import org.purl.accessor.util.PURLResourceStorage;
 import org.purl.accessor.util.PURLURIResolver;
 import org.purl.accessor.util.ResourceStorage;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
+import org.ten60.netkernel.layer1.nkf.INKFRequest;
 import org.ten60.netkernel.layer1.nkf.INKFRequestReadOnly;
 import org.ten60.netkernel.layer1.nkf.INKFResponse;
+import org.ten60.netkernel.layer1.nkf.NKFException;
 import org.ten60.netkernel.layer1.nkf.impl.NKFAccessorImpl;
 import org.ten60.netkernel.xml.representation.IAspectXDA;
 import org.ten60.netkernel.xml.xda.IXDAReadOnly;
@@ -63,6 +65,7 @@ public class PURLResolverAccessor extends NKFAccessorImpl {
         String mode = NKHelper.getArgument(context, "mode");
 
         String purlloc = path.substring(6);
+        String purllocOrig = purlloc;
         String errMsg = null;
 
         INKFResponse resp = null;
@@ -82,26 +85,38 @@ public class PURLResolverAccessor extends NKFAccessorImpl {
                 done = (purlloc == null) || (purlloc.equals("ffcpl:"));
             }
         }
-
+        
         if(found) {
-            try {
-                IURAspect purl = purlStorageResolver.getResource(context, purlResolver.getURI(purlloc));
-                purlXDA = (IAspectXDA) context.transrept(purl, IAspectXDA.class);
-                IXDAReadOnly purlXDARO = purlXDA.getXDA();
-                String type = mode.equals("mode:validate") ? "validate" : purlXDARO.getText("/purl/type", true);
-                cmd = commandMap.get(type);
+            String uri = purlResolver.getURI(purlloc);
+            
+            if(!purlStorageResolver.resourceIsTombstoned(context, uri)) {
+                try {
+                    IURAspect purl = purlStorageResolver.getResource(context, uri);
+                    purlXDA = (IAspectXDA) context.transrept(purl, IAspectXDA.class);
+                    IXDAReadOnly purlXDARO = purlXDA.getXDA();
+                    String type = mode.equals("mode:validate") ? "validate" : purlXDARO.getText("/purl/type", true);
+                    cmd = commandMap.get(type);
 
-                if(cmd != null) {
-                    try {
-                        resp = cmd.execute(context, purlXDA);
-                    } catch(Throwable t){
-                        errMsg = "<purl-error>Error Resolving PURL "+ path.substring(6) + ". Please try again later.</purl-error>";
+                    if(cmd != null) {
+                        try {
+                            resp = cmd.execute(context, purlXDA);
+                        } catch(Throwable t){
+                            // TODO: Add a default HTML Page
+                            errMsg = "<purl-error>Error Resolving PURL "+ path.substring(6) + ". Please try again later.</purl-error>";
+                        }
+                    } else {
+                        // TODO: Add a default HTML Page
+                        errMsg = "<purl-error>Invalid PURL "+ path.substring(6) +"</purl-error>";
                     }
-                } else {
+                } catch(Throwable t) {
                     errMsg = "<purl-error>Invalid PURL "+ path.substring(6) +"</purl-error>";
                 }
-            } catch(Throwable t) {
-                errMsg = "<purl-error>Invalid PURL "+ path.substring(6) +"</purl-error>";
+            } else {
+                    IURRepresentation iur = generatePURLResolveErrorResponse(context, 
+                        purlResolver.getDisplayName(uri),
+                        "ffcpl:/pub/purl-tombstoned.html");
+                    resp = context.createResponseFrom(iur);
+                    resp.setMimeType("text/html");
             }
 
             if(errMsg!=null) {
@@ -132,8 +147,11 @@ public class PURLResolverAccessor extends NKFAccessorImpl {
                     IURRepresentation iur = context.source(path);
                     resp = context.createResponseFrom(iur);
                 } else {
-                    resp = context.createResponseFrom(new StringAspect("<purl-error>Could not resolve PURL "+ path.substring(6) +"</purl-error>"));
-                    resp.setMimeType("text/xml");
+                    IURRepresentation iur = generatePURLResolveErrorResponse(context, 
+                            purllocOrig,
+                            "ffcpl:/pub/purl-notfound.html");
+                    resp = context.createResponseFrom(iur);
+                    resp.setMimeType("text/html");
                 }
             } else {
                 cmd = commandMap.get("validate");
@@ -159,6 +177,28 @@ public class PURLResolverAccessor extends NKFAccessorImpl {
                 retValue = purl.substring(0, slashIndex);
             }
         }
+        return retValue;
+    }
+    
+    private IURRepresentation generatePURLResolveErrorResponse(INKFConvenienceHelper context, String purl, String fileURI) throws NKFException {
+        IURRepresentation retValue = null;
+        
+        try {
+            IURRepresentation responseBody = context.source(fileURI);
+            // TODO: Turn this into a resource!
+            StringBuffer sed = new StringBuffer("<sed><pattern><regex>@@PURL@@</regex><replace>");
+            sed.append(purl);
+            sed.append("</replace></pattern></sed>");
+            
+            INKFRequest req = context.createSubRequest("active:sed");
+            req.addArgument("operand", responseBody);
+            req.addArgument("operator", new StringAspect(sed.toString()));
+            retValue = context.issueSubRequest(req);
+        } catch (NKFException e) {
+            e.printStackTrace();
+        }
+        
+        
         return retValue;
     }
 }
