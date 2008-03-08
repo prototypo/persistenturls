@@ -589,6 +589,10 @@ function onPendingResultsResponse(message, headers, callingContext) {
 
 // Callback for Create/Modify/Search/Delete (POST/PUT/GET/DELETE) actions.
 function onResponse(message, headers, callingContext) {
+	
+	// DBG
+	//alert("Received message from server:\n\nHeaders:\n" + headers + "\n\nBody:\n" + message);
+	
 	// If bad parameters were passed, highlight them via CSS.
 	if ( headers["Status"] == "400" && headers["X-bad-params"] ) {
 		var badParams = headers["X-bad-params"].split(",");

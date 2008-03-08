@@ -519,7 +519,7 @@ SAXEventHandler.prototype._fullCharacterDataReceived = function(fullCharacterDat
 			members = members + "," + fullCharacterData;
 		
 		// All other entries we want to retain go here.	
-		} else if ( currentElement == "id" || currentElement == "name" || currentElement == "public"  || currentElement == "affiliation" || currentElement == "email") {
+		} else if ( currentElement == "id" || currentElement == "name" || currentElement == "type"  || currentElement == "comments"  || currentElement == "public"  || currentElement == "affiliation" || currentElement == "email") {
 			elementMap[elementMapIndex] = [currentElement, fullCharacterData];
 			elementMapIndex++;
 		}
