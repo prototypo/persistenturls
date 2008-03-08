@@ -39,13 +39,11 @@ abstract public class AbstractSearchHelper implements SearchHelper {
         try {
             IAspectXDA searchXDA = (IAspectXDA) context.transrept(result, IAspectXDA.class);
             IAspectString searchString = (IAspectString) context.transrept(result, IAspectString.class);
-            System.out.println(searchString.getString());
             IXDAReadOnly roSearchXDA = searchXDA.getXDA();
             
             IXDAReadOnlyIterator roXDAItor = roSearchXDA.readOnlyIterator("//match");
 
             while(roXDAItor.hasNext()) {
-                System.out.println("CURRENT XPATH: " + roXDAItor.getCurrentXPath());
                 roXDAItor.next();
                 String uri = roXDAItor.getText("docid", true);
                 String basis = roXDAItor.getText("basis", true);

@@ -75,24 +75,14 @@ public class PURLSAccessor extends NKFAccessorImpl {
             // TODO: What's the best way to do this?
             if(xdaRO.isTrue("/b/text()='t'")) {
                 try {
-                    long start = System.currentTimeMillis();
                      xdaParam = checkPURLsAndUsers(context, xdaParam);
-                     long one = System.currentTimeMillis();                     
                      xdaParam = checkForClones(context, xdaParam);
-                     long two = System.currentTimeMillis();                     
                      xdaParam = checkForChains(context, xdaParam);
-                     long three = System.currentTimeMillis();                     
                      req = context.createSubRequest("active:purl-storage-batch-load");
                      req.addArgument("param", xdaParam);
                      req.addArgument("currentuser", "data:text/plain," + NKHelper.getUser(context));
                      IURRepresentation iur = context.issueSubRequest(req);
                       resp = context.createResponseFrom(iur);
-                      long four = System.currentTimeMillis();
-                      
-                      System.out.println("Step 1: " + (one - start)/1000.0);
-                      System.out.println("Step 2: " + (two - one)/1000.0);
-                      System.out.println("Step 3: " + (three - two)/1000.0);
-                      System.out.println("Step 4: " + (four - three)/1000.0);                      
                 }  catch(PURLException pe) {
                     errorMessage = pe.getMessage();
                     errorCode = pe.getResponseCode();
