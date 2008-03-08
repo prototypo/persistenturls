@@ -17,7 +17,8 @@ public class PURLAllowableResource extends DefaultAllowableResource {
         // to create a PURL for this domain, we allow the resource
         
         return super.allow(context, resourceName)
-               && NKHelper.userCanCreatePURL(context, resourceName);
+               && (UserHelper.isAdminUser(context, NKHelper.getUser(context)) ||
+                   NKHelper.userCanCreatePURL(context, resourceName));
     }
     
     public String getDenyMessage(INKFConvenienceHelper context, String resourceName) {
