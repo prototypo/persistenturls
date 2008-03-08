@@ -6,7 +6,8 @@ public class PURLAccessController implements AccessController {
 
     public boolean userHasAccess(INKFConvenienceHelper context, String user, String uri) {
         boolean retValue = false;
-        retValue = NKHelper.userIsPURLMaintainer(context, user, uri);
+        retValue = UserHelper.isAdminUser(context, user) || 
+            NKHelper.userIsPURLMaintainer(context, user, uri);
         return retValue;
     }
 

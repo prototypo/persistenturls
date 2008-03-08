@@ -7,9 +7,8 @@ public class UserAccessController implements AccessController {
     public boolean userHasAccess(INKFConvenienceHelper context, String user, String uri) {
         boolean retValue = false;
         
-        // TODO: Add Admin Support
         if(user != null) {
-            retValue = uri.endsWith(user);
+            retValue = UserHelper.isAdminUser(context, user) || uri.endsWith(user);
         }
         
         return retValue;

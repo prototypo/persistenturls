@@ -58,6 +58,10 @@ public class CreateResourceCommand extends PURLCommand {
         String resource = uriResolver.getURI(context);
         
         try {
+            if(!NKHelper.validURI(resource)) {
+                throw new PURLException("Invalid URI", 403);
+            }
+            
             IAspectNVP params = getParams(context);
 
             if( !allowableResource.allow(context, resource) ) {//resStorage.resourceExists(context, uriResolver)) {
@@ -111,6 +115,19 @@ public class CreateResourceCommand extends PURLCommand {
             } catch(Exception e) {
                 NKHelper.log(context, e.getMessage());
             }
+        } catch (PURLException pe) {
+            try {
+                String message = "Error creating new resource: " 
+                    + uriResolver.getDisplayName(resource)
+                    + ": " + pe.getMessage();
+                
+                IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect(message), pe.getResponseCode());
+                retValue = context.createResponseFrom(rep);
+                retValue.setMimeType(NKHelper.MIME_TEXT);
+                NKHelper.log(context, message);
+            } catch(Exception e) {
+                NKHelper.log(context, e.getMessage());
+            }            
         }
 
         return retValue;

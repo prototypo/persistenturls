@@ -205,7 +205,7 @@ public class DomainAccessor extends AbstractAccessor {
             sb.append(domain);
             sb.append("</id>");
             sb.append("<name>");
-            sb.append(params.getValue("name"));
+            sb.append(cleanseInput(params.getValue("name")));
             sb.append("</name>");
             sb.append("<maintainers>");
             

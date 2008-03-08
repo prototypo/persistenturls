@@ -3,6 +3,7 @@ package org.purl.accessor.util;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.NKFException;
 import org.ten60.netkernel.xml.representation.IAspectXDA;
+import org.ten60.netkernel.xml.xda.XPathLocationException;
 
 import com.ten60.netkernel.urii.IURAspect;
 import com.ten60.netkernel.urii.aspect.IAspectString;
@@ -35,6 +36,22 @@ public class DefaultResourceStorage implements ResourceStorage {
 
     public boolean resourceExists(INKFConvenienceHelper context, String uri) throws NKFException {
         return context.exists(uri);
+    }
+    
+    public boolean resourceIsTombstoned(INKFConvenienceHelper context, String uri) throws NKFException {
+        boolean retValue = false;
+        
+        System.out.println("****************TELL BRIAN THIS GOT CALLED");
+        
+        IURAspect resource = getResource(context, uri);
+        IAspectXDA resourceXDA = (IAspectXDA) context.transrept(resource, IAspectXDA.class);
+        try {
+            retValue = resourceXDA.getXDA().isTrue("/purl[@status='2']");
+        } catch (XPathLocationException e) {
+            e.printStackTrace();
+        }
+
+        return retValue;
     }
     
     public boolean deleteResource(INKFConvenienceHelper context, String uri) throws NKFException {

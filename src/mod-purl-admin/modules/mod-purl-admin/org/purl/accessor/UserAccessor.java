@@ -61,6 +61,7 @@ package org.purl.accessor;
  * Attempt to modify an uncreated resource: 412 (Precondition Failed)
 */
 
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -183,10 +184,11 @@ public class UserAccessor extends AbstractAccessor {
                 sb.append(NKHelper.getLastSegment(context));
                 sb.append("</id>");
                 sb.append("<name>");
-                sb.append(params.getValue("name"));
+                String name = cleanseInput(params.getValue("name"));
+                sb.append(name);
                 sb.append("</name>");
                 sb.append("<affiliation>");
-                sb.append(params.getValue("affiliation"));
+                sb.append(cleanseInput(params.getValue("affiliation")));
                 sb.append("</affiliation>");
                 sb.append("<email>");
                 sb.append(params.getValue("email"));
@@ -195,10 +197,10 @@ public class UserAccessor extends AbstractAccessor {
                 sb.append(NKHelper.getMD5Value(context, params.getValue("passwd")));
                 sb.append("</password>");
                 sb.append("<hint>");
-                sb.append(params.getValue("hint"));
+                sb.append(cleanseInput(params.getValue("hint")));
                 sb.append("</hint>");
                 sb.append("<justification>");
-                sb.append(params.getValue("justification"));
+                sb.append(cleanseInput(params.getValue("justification")));
                 sb.append("</justification>");
                 sb.append("</user>");
                 retValue = new StringAspect(sb.toString());

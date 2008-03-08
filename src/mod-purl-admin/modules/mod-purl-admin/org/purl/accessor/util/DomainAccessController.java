@@ -7,7 +7,8 @@ public class DomainAccessController implements AccessController {
     public boolean userHasAccess(INKFConvenienceHelper context, String user, String uri) {
         boolean retValue = false;
         
-        retValue = NKHelper.userIsDomainMaintainer(context, user, uri);
+        retValue = UserHelper.isAdminUser(context, user) || 
+            NKHelper.userIsDomainMaintainer(context, user, uri);
         
         return retValue;
     }

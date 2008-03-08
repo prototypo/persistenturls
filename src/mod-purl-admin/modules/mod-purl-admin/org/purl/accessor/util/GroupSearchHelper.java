@@ -11,7 +11,7 @@ public class GroupSearchHelper extends AbstractSearchHelper {
         // TODO: Turn this into a configuration file
         keywordBasisMap.put("name", "/group/name");
         keywordBasisMap.put("maintainers", "/group/maintainers/uid");
-        keywordBasisMap.put("writers", "/group/writers/uid");
+        keywordBasisMap.put("members", "/group/members/uid");
         keywordBasisMap.put("id", "/group/id");
     }
 

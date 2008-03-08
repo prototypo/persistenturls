@@ -63,65 +63,47 @@ public class GetResourceCommand extends PURLCommand {
         INKFResponse retValue = null;
 
         try {
-           // String user = NKHelper.getUser(context);
             String path = context.getThisRequest().getArgument("path");
             IAspectNVP params = null;
-            boolean isSearch = false;
-            
-            if(context.exists("this:param:param")) {
-                params = (IAspectNVP) context.sourceAspect( "this:param:param", IAspectNVP.class);
-                Set<String> paramNames = params.getNames();
-                
-                if(paramNames.contains("seealso")) {
-                    isSearch = true;
-                }
-            }
 
-            if(!isSearch) {
-             //   String id = NKHelper.getLastSegment(context);
-                
+            if(!isSearch(path)) {
                 if(resStorage.resourceExists(context, uriResolver)) {
-                    //if(accessController.userHasAccess(context, user, uriResolver.getURI(context))) {
-                        IURAspect asp = resStorage.getResource(context, uriResolver);
+                    IURAspect asp = resStorage.getResource(context, uriResolver);
 
-                        // Filter the response if we have a filter
-                        if(filter!=null) {
-                           asp = filter.filter(context, asp);
-                        }
+                    // Filter the response if we have a filter
+                    if(filter!=null) {
+                        asp = filter.filter(context, asp);
+                    }
 
-                        // Default response code of 200 is fine
-                        IURRepresentation rep = NKHelper.setResponseCode(context, asp, 200);
-                        rep = NKHelper.attachGoldenThread(context, "gt:" + path , rep);
-                        retValue = context.createResponseFrom(rep);
-                        retValue.setCacheable();
-                        retValue.setMimeType(NKHelper.MIME_XML);
-                    /*} else {
-                        IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect("Not allowed to view: " + uriResolver.getDisplayName(path)), 403);
-                        retValue = context.createResponseFrom(rep);
-                        retValue.setMimeType(NKHelper.MIME_TEXT);
-                    }*/
+                    // Default response code of 200 is fine
+                    IURRepresentation rep = NKHelper.setResponseCode(context, asp, 200);
+                    rep = NKHelper.attachGoldenThread(context, "gt:" + path , rep);
+                    retValue = context.createResponseFrom(rep);
+                    retValue.setCacheable();
+                    retValue.setMimeType(NKHelper.MIME_XML);
                 } else {
                     IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect("No such resource: " + uriResolver.getDisplayName(path)), 404);
                     retValue = context.createResponseFrom(rep);
                     retValue.setMimeType(NKHelper.MIME_TEXT);
                 }
             } else {
-                //IAspectNVP params = (IAspectNVP) context.sourceAspect( "this:param:param", IAspectNVP.class);
-                
+                params = (IAspectNVP) context.sourceAspect( "this:param:param", IAspectNVP.class);
                 List<String> searchList = new ArrayList<String>();
                 Iterator namesItor = params.getNames().iterator();
-                INKFAsyncRequestHandle handles[] = null;//new INKFAsyncRequestHandle[params.getNames().size()];
-                IURRepresentation results[] = null;//new IURRepresentation[params.getNames().size()];
+                INKFAsyncRequestHandle handles[] = null;
+                IURRepresentation results[] = null;
                 String keys[] = null;
+                
+                boolean includeTombstoned = false;
 
                 int idx = 0;
 
                 while(namesItor.hasNext()) {
                     // TODO: Make this more efficient
                     String key = (String) namesItor.next();
-                    System.out.println("key: " + key);
 
                     if(key.equals("tombstone")) {
+                        includeTombstoned = Boolean.valueOf(params.getValue(key));
                         continue;
                     }
                     
@@ -148,7 +130,7 @@ public class GetResourceCommand extends PURLCommand {
 
                     // See if the keyword values need any processing or filtering
                     
-                    StringTokenizer st = new StringTokenizer(value, " ,");
+                    StringTokenizer st = new StringTokenizer(value, ",");
                     int kwidx = 0;
                     
                     // We build up arguments this way to encourage caching of the search results
@@ -197,15 +179,17 @@ public class GetResourceCommand extends PURLCommand {
                         for(String uri: uris) {
                             if(!alreadyDoneSet.contains(uri)) {
                                 if(resStorage.resourceExists(context, uri)) {
-                                    IURAspect iur = resStorage.getResource(context, uri);
-                                    if(iur != null) {
-                                        // Filter the response if we have a filter
-                                        if(filter!=null) {
-                                            iur = filter.filter(context, iur);
-                                        }
+                                    if(!resStorage.resourceIsTombstoned(context, uri) || includeTombstoned) {
+                                        IURAspect iur = resStorage.getResource(context, uri);
+                                        if(iur != null) {
+                                            // Filter the response if we have a filter
+                                            if(filter!=null) {
+                                                iur = filter.filter(context, iur);
+                                            }
 
-                                        StringAspect sa = (StringAspect) context.transrept(iur, IAspectString.class);
-                                        sb.append(sa.getString());
+                                            StringAspect sa = (StringAspect) context.transrept(iur, IAspectString.class);
+                                            sb.append(sa.getString());
+                                        }
                                     }
                                 }
                                 alreadyDoneSet.add(uri);
@@ -226,6 +210,14 @@ public class GetResourceCommand extends PURLCommand {
         }
 
         return retValue;
+    }
+    
+    private boolean isSearch(String path) {
+        // TODO: Use regexs
+        return  path.endsWith("/user/") || 
+                path.endsWith("/domain/") ||
+                path.endsWith("/purl/") ||
+                path.endsWith("/group/");
     }
     
     private String getKeywordName(int kwidx) {

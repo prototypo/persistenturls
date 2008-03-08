@@ -12,7 +12,8 @@ public class GroupAccessController implements AccessController {
         // retValue = true;
         String parts[] = uri.split("/");
         String group = parts[parts.length - 1];
-        retValue = NKHelper.userIsGroupMaintainer(context, user, group);
+        retValue = UserHelper.isAdminUser(context, user) || 
+            NKHelper.userIsGroupMaintainer(context, user, group);
         
         return retValue;
     }

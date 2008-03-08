@@ -32,6 +32,7 @@ import org.ten60.netkernel.layer1.representation.IAspectNVP;
 
 import com.ten60.netkernel.urii.IURAspect;
 import com.ten60.netkernel.urii.IURRepresentation;
+import com.ten60.netkernel.urii.aspect.IAspectString;
 import com.ten60.netkernel.urii.aspect.StringAspect;
 
 public class UpdateResourceCommand extends PURLCommand {
@@ -49,6 +50,10 @@ public class UpdateResourceCommand extends PURLCommand {
         String resource = uriResolver.getURI(context);
         
         try {
+            
+            if(!NKHelper.validURI(resource)) {
+                throw new PURLException("Invalid URI", 403);
+            }
             //IAspectNVP params = getParams(context);
             id = NKHelper.getLastSegment(context);
 
@@ -70,6 +75,8 @@ public class UpdateResourceCommand extends PURLCommand {
                         IAspectNVP params = getParams(context);
                         IURAspect iur = resCreator.createResource(context, params);
                         if(resStorage.updateResource(context, uriResolver, iur)) {
+                            // Trigger a reindex of the updated resource
+                            NKHelper.updateIndices(context);
                             recordCommandState(context, "UPDATE", path);
 
                             String message = "Updated resource: " + uriResolver.getDisplayName(resource);
@@ -116,6 +123,19 @@ public class UpdateResourceCommand extends PURLCommand {
             } catch(Exception e) {
                 NKHelper.log(context, e.getMessage());
             }
+        } catch (PURLException pe) {
+            try {
+                String message = "Error updating resource: " 
+                    + uriResolver.getDisplayName(resource)
+                    + ": " + pe.getMessage();
+                
+                IURRepresentation rep = NKHelper.setResponseCode(context, new StringAspect(message), pe.getResponseCode());
+                retValue = context.createResponseFrom(rep);
+                retValue.setMimeType(NKHelper.MIME_TEXT);
+                NKHelper.log(context, message);
+            } catch(Exception e) {
+                NKHelper.log(context, e.getMessage());
+            }            
         }
 
         if(id != null) {

@@ -1,5 +1,6 @@
 package org.purl.accessor.util;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +45,7 @@ abstract public class AbstractSearchHelper implements SearchHelper {
             IXDAReadOnlyIterator roXDAItor = roSearchXDA.readOnlyIterator("//match");
 
             while(roXDAItor.hasNext()) {
+                System.out.println("CURRENT XPATH: " + roXDAItor.getCurrentXPath());
                 roXDAItor.next();
                 String uri = roXDAItor.getText("docid", true);
                 String basis = roXDAItor.getText("basis", true);
@@ -72,6 +74,27 @@ abstract public class AbstractSearchHelper implements SearchHelper {
     
     public String processKeyword(INKFConvenienceHelper context, String key, String value) {
         // By default, no special handling
-        return value + "~";
+        String parts[] = value.split(" ");
+        StringBuffer sb = new StringBuffer();
+        
+        if(parts.length > 1) {
+            for(String s : parts) {
+                // Skip over blanks and ignore terms that start with a '*'
+                if(s.length() > 0 && !s.startsWith("*")) {
+                    sb.append("+");
+                    sb.append(s);
+                    sb.append(" ");
+                }
+            }
+        } else {
+            sb.append("+");
+            sb.append(value);
+            sb.append(" ");            
+        }
+        
+        sb.append("and basis:");
+        sb.append(key);
+        
+        return URLEncoder.encode(sb.toString());
     }
 }

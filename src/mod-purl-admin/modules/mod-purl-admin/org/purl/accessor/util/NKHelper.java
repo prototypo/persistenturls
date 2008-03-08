@@ -15,6 +15,9 @@ import com.ten60.netkernel.urii.aspect.IAspectBoolean;
 import com.ten60.netkernel.urii.aspect.IAspectString;
 import com.ten60.netkernel.urii.aspect.StringAspect;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 public class NKHelper {
     public static final String
         MIME_TEXT = "text/plain",
@@ -160,12 +163,28 @@ public class NKHelper {
         }
     }
 
+    public static void updateIndices(INKFConvenienceHelper context) {
+        try {
+            INKFRequest req = context.createSubRequest("active:purl-entries-reindex");
+            context.issueAsyncSubRequest(req);
+        } catch(NKFException nfe) {
+            nfe.printStackTrace();
+        }
+    }
+    
     public static void indexResource(INKFConvenienceHelper context, String indexName, String id, IURAspect res) {
         try {
+            //acquireLock(context, "active:purl-reindex");
             indexResourceNoClose(context, indexName, id, res);
             closeIndex(context, indexName);
         } catch(NKFException e) {
             e.printStackTrace();
+        } finally {
+/*            try {
+                //releaseLock(context, "active:purl-reindex");
+            } catch(NKFException e) {
+                e.printStackTrace();
+            } */
         }
     }
     
@@ -270,6 +289,20 @@ public class NKHelper {
         } catch(Exception e) {
             e.printStackTrace();
         }
+        
+        return retValue;
+    }
+    
+    public static boolean validURI(String uri) {
+        boolean retValue = false;
+        
+        try {
+            URI u = new URI(uri);
+            retValue = true;
+        } catch (URISyntaxException e) {
+            // Swallow this silently, we'll report
+            // the failure elsewhere
+        } 
         
         return retValue;
     }
@@ -486,5 +519,17 @@ public class NKHelper {
                 nfe.printStackTrace();
             }
         }
+    }
+    
+    public static void acquireLock(INKFConvenienceHelper context, String uri) throws NKFException {
+        INKFRequest req=context.createSubRequest("active:lock");
+        req.addArgument("operand", uri);
+        context.issueSubRequest(req);
+    }
+    
+    public static void releaseLock(INKFConvenienceHelper context, String uri) throws NKFException {
+        INKFRequest req=context.createSubRequest("active:unlock");
+        req.addArgument("operand", uri);
+        context.issueSubRequest(req);
     }
 }

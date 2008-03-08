@@ -59,6 +59,11 @@ abstract public class AbstractAccessor extends NKFAccessorImpl {
 
         context.setResponse(resp);
     }
+    
+    static protected String cleanseInput(String input) {
+        // For now, fix the apostrophe problem
+        return input.replaceAll("'", "''");
+    }
 
     protected abstract PURLCommand getCommand(INKFConvenienceHelper ctx, String method);
 }

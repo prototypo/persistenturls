@@ -172,7 +172,7 @@ public class GroupAccessor extends AbstractAccessor {
             sb.append(groupResolver.getDisplayName(groupId));
             sb.append("</id>");
             sb.append("<name>");
-            sb.append(params.getValue("name"));
+            sb.append(cleanseInput(params.getValue("name")));
             sb.append("</name>");
             sb.append("<maintainers>");
             
@@ -235,7 +235,7 @@ public class GroupAccessor extends AbstractAccessor {
             
             sb.append("</members>");
             sb.append("<comments>");
-            sb.append(params.getValue("comments"));
+            sb.append(cleanseInput(params.getValue("comments")));
             sb.append("</comments>");
             sb.append("</group>");
             

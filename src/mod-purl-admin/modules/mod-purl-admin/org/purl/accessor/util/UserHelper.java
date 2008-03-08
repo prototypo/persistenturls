@@ -3,6 +3,8 @@ package org.purl.accessor.util;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFRequest;
 import org.ten60.netkernel.layer1.nkf.NKFException;
+import org.ten60.netkernel.xml.representation.IAspectXDA;
+import org.ten60.netkernel.xml.xda.XPathLocationException;
 
 import com.ten60.netkernel.urii.IURRepresentation;
 import com.ten60.netkernel.urii.aspect.IAspectBoolean;
@@ -37,6 +39,26 @@ public class UserHelper {
             nfe.printStackTrace();
         }
         
+        return retValue;
+    }
+    
+    public static boolean isAdminUser(INKFConvenienceHelper context, String user) {
+        boolean retValue = false;
+        
+        try {
+            INKFRequest req = context.createSubRequest("active:purl-storage-query-user");
+            req.addArgument("uri", userResolver.getURI(user));
+            req.setAspectClass(IAspectXDA.class);
+            IAspectXDA userXDA = (IAspectXDA) context.issueSubRequestForAspect(req);
+            retValue = userXDA.getXDA().isTrue("/user[@admin='true']");
+        } catch (NKFException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (XPathLocationException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } 
+
         return retValue;
     }
     
