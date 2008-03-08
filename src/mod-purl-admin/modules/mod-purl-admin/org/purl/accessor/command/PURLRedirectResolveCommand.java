@@ -23,6 +23,8 @@ import org.ten60.netkernel.layer1.nkf.INKFResponse;
 import org.ten60.netkernel.xml.representation.IAspectXDA;
 import org.ten60.netkernel.xml.xda.IXDAReadOnly;
 
+import com.ten60.netkernel.urii.IURRepresentation;
+
 public class PURLRedirectResolveCommand extends PURLResolveCommand {
 
     @Override
@@ -33,7 +35,12 @@ public class PURLRedirectResolveCommand extends PURLResolveCommand {
             String type = purlXDARO.getText("/purl/type", true);
             String url = purlXDARO.getText("/purl/target/url", true);
             url = url.replaceAll("&", "&amp;");
-            resp = generateResponseCode(context, type, url);
+            
+            IURRepresentation bodyDoc = context.source("ffcpl:/pub/redirect.html");
+            
+            resp = generateResponseCode(context, type, url, 
+                    parameterizeBodyDoc(context, bodyDoc, type, url), 
+                    "text/html; charset=iso-8859-1");
 
         } catch(Throwable t) {
             t.printStackTrace();

@@ -59,6 +59,10 @@ abstract public class PURLResolveCommand {
         respCode.append("<header><name>X-Purl</name><value>");
         respCode.append(serverInfo);
         respCode.append("</value></header>");
+        
+        respCode.append("<header><name>Content-Type</name><value>");
+        respCode.append(mimeType);
+        respCode.append("</value></header>");
 
         if(url!=null) {
             respCode.append("<header><name>Location</name><value>");
@@ -87,4 +91,28 @@ abstract public class PURLResolveCommand {
         resp.setMimeType(mimeType);
         return resp;
     }
+    
+    protected IURRepresentation parameterizeBodyDoc(INKFConvenienceHelper context, IURRepresentation bodyDoc, String type, String url) {
+        IURRepresentation retValue = null;
+
+        try {
+            // TODO: Turn this into a resource!
+            StringBuffer sed = new StringBuffer("<sed><pattern><regex>@@PURL_TYPE@@</regex><replace>");
+            sed.append(type);
+            sed.append("</replace></pattern><pattern><regex>@@PURL_TARGET@@</regex><replace>");
+            sed.append(url);
+            sed.append("</replace></pattern></sed>");
+            
+            INKFRequest req = context.createSubRequest("active:sed");
+            req.addArgument("operand", bodyDoc);
+            req.addArgument("operator", new StringAspect(sed.toString()));
+            retValue = context.issueSubRequest(req);
+        } catch (NKFException e) {
+            e.printStackTrace();
+        }
+        
+        return retValue;
+    }
 }
+
+
