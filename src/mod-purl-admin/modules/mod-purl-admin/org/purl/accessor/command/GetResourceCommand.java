@@ -147,7 +147,9 @@ public class GetResourceCommand extends PURLCommand {
                             }
                             
                         } else {
-                            req.addArgument(getKeywordName(kwidx++), "keyword:" + next); 
+                            if(next.length() > 0 ) {
+                                req.addArgument(getKeywordName(kwidx++), "keyword:" + next);
+                            }
                         }
                     }
                     
