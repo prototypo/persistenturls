@@ -27,7 +27,7 @@ public class DomainResolver extends URIResolver {
     public String getURI(String id) {
         String retValue = null;
         
-        if(!id.startsWith("ffcpl:/domain/")) {
+        if((id != null) && !id.startsWith("ffcpl:/domain/")) {
             id="ffcpl:/domain" + getDisplayName(id);
         }
         retValue = id;
