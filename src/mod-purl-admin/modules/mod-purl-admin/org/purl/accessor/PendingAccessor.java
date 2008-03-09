@@ -72,9 +72,11 @@ public class PendingAccessor extends NKFAccessorImpl {
                 String decisionResult = params.getValue("decision");
                 String uri = null;
                 String resource = null;
+                boolean approval = false;
                 
                 if(decisionResult.equals("approve")) {
                     uri = approveRequestMap.get(type);
+                    approval = true;
                 } else if(decisionResult.equals("deny")){
                     uri = denyRequestMap.get(type);                    
                 } else {
@@ -84,17 +86,25 @@ public class PendingAccessor extends NKFAccessorImpl {
                 if(type.equals("user")) {
                     resource = userResolver.getURI(context).substring(12);
                     param = new StringAspect("<user><id>" + resource + "</id></user>");
+
                 } else if(type.equals("domain")) {
                     resource = domainResolver.getURI(context).substring(13);
                     param = new StringAspect("<domain><id>" + resource + "</id></domain>");                    
                 } else {
                     // TODO: Handle Error
                 }
-                
+
                 INKFRequest req = context.createSubRequest(uri);
                 req.addArgument("param", param);
                 IURRepresentation res = context.issueSubRequest(req);
                 resp = context.createResponseFrom(res);
+                
+                if(approval) {
+                    req=context.createSubRequest("active:cutGoldenThread");
+                    req.addArgument("param", "gt:resource:" + resource);
+                    context.issueSubRequest(req);
+                }
+                
             } else {
                 // TODO: Handle Error
             }
