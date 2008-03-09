@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entrypoints>
+  <entrypoint>
+    <name>icon</name>
+    <uri>ffcpl:/pub/fulcrum.png</uri>
+    <indexable>
+      <title>Icon</title>
+      <desc></desc>
+      <keywords/>
+    </indexable>
+    <categories>img</categories>
+    <group>Entrypoints</group>
+    <icon/>
+  </entrypoint>  	
+</entrypoints>
+

@@ -1,0 +1,3 @@
+<sql>
+	SELECT * from purlmaintainers where p_id = @@PID@@;
+</sql>

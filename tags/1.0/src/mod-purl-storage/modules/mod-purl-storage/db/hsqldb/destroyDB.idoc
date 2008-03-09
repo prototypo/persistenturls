@@ -1,0 +1,40 @@
+<idoc>
+	<seq>
+		<instr>
+			<type>stm</type>
+			<operand><sql/></operand>
+			<operator>
+			<stm:group xmlns:stm="http://1060.org/stm">
+				<stm:set xpath="/sql">
+					DROP TABLE users IF EXISTS;
+					DROP TABLE domains IF EXISTS;
+					DROP TABLE domainmaintainers IF EXISTS;
+					DROP TABLE domainwriters IF EXISTS;										
+					DROP TABLE groups IF EXISTS;
+					DROP TABLE groupmaintainers IF EXISTS;
+					DROP TABLE groupmembers IF EXISTS;					
+					DROP TABLE purls IF EXISTS;
+					DROP TABLE purlmaintainers IF EXISTS;
+					DROP TABLE purlhistory IF EXISTS;				
+				</stm:set>
+			</stm:group>
+		</operator>
+      	<target>var:sql</target>
+		</instr>
+		<instr>
+			<type>sqlUpdate</type>
+			<operand>var:sql</operand>
+			<target>this:response</target>
+		</instr>
+		<instr>
+			<type>copy</type>
+			<operand><db/></operand>
+			<target>this:response</target>
+		</instr>
+		<instr>
+			<type>expire</type>
+			<operand>this:response</operand>
+			<target>this:response</target>			
+		</instr>
+	</seq>
+</idoc>
