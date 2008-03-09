@@ -93,13 +93,8 @@ public class PurlSearchHelper extends AbstractSearchHelper {
             }
             retValue = retValue.replaceAll("/", " ");
         } else if(key.equals("id")) {
-            if(retValue.startsWith("/")) {
-                if(retValue.endsWith("*")) {
-                    retValue = retValue.substring(0, retValue.length() - 1) + " " + retValue.substring(1); 
-                } else {
-                    retValue = retValue.substring(1);
-                }
-            }
+            
+            retValue = "docid:ffcpl*" + retValue;
             
             callSuper = false;
         }
