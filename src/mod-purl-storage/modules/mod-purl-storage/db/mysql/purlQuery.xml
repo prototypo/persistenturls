@@ -1,0 +1,3 @@
+<sql>
+	SELECT * from purls where p_id = '@@PID@@';
+</sql>

@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+************************************************************
+Main NetKernel Configuration Settings
+************************************************************
+-->
+<system>
+	<!--
+	************************************************************
+	Resource Locations
+	
+	NB All paths are resolved with respect
+	to the [install] basepath.
+	
+	eg /scratch uses [install]/scratch
+	
+	************************************************************
+	-->
+	<!--
+	**********
+	Relative URI Scratch - single location of the scratch override directory
+	**********
+	-->
+	<scratchDir>scratch/</scratchDir>
+	<!--
+	**********
+	Relative URI of document containing list of modules to deploy
+	**********
+	-->
+	<deployedModules>etc/deployedModules.xml</deployedModules>
+	<!--
+	**********
+	Relative URI Directory to expand Jar /lib directories of Modules to
+	**********
+	-->
+	<expandedJarPool>lib/expanded/</expandedJarPool>
+	<!--
+	**********
+	Relative URI Directory to store new or downloaded modules in
+	**********
+	-->
+	<modules>modules/</modules>
+	<!--
+	************************************************************
+	Kernel Settings
+	************************************************************
+	-->
+	<!--
+	**********
+	Maximum number of concurrent requests allowed to enter Kernel
+	from the Transports.
+	**********
+	-->
+	<throttle>5</throttle>
+	<!--
+	**********
+	Maximum number of requests queued before requests are rejected
+	by throttle.
+	**********
+	-->
+	<throttleQueue>100</throttleQueue>
+	<!--
+	**********
+	Number of Scheduler Threads to start with.  Number grows
+	if blocking requests are made. Kernel manages the number of
+	additional threads above this baseline on a demand basis.
+	**********
+	-->
+	<schedulerThreads>8</schedulerThreads>
+	<!--
+	**********
+	Number of lines of the exception stack to serialize to the
+	XML Exception document
+	**********
+	-->
+	<exceptionStackDepth>4</exceptionStackDepth>
+	<!--
+	**********
+	The URI of the module containing a cache to use as default
+	if none is specified in a specific module
+	**********
+	-->
+	<defaultCacheModule>urn:org:ten60:netkernel:cache:standard</defaultCacheModule>
+	<!--
+	**********
+	The size of the cache kept by the scheduler of requests resolved to accessors
+	**********
+	-->
+	<requestMappingCacheSize>512</requestMappingCacheSize>
+	<!--
+	**********
+	HouseKeeping Thread execution period in milliseconds
+	**********
+	-->
+	<houseKeepingPeriod>500</houseKeepingPeriod>
+	<!--
+	**********
+	Period of inactivity within a session after which deadlock is assumed.
+	Deadlock resolution process includes increasing available threads and
+	issuing an interrupted response.
+	**********
+	-->
+	<deadlockPeriod>90000</deadlockPeriod>
+	<!--
+	**********
+	Interval for which an ffcpl: resource is assumed to be valid and will not be rechecked for freshness.
+	Set low for easy development and high for maximum performance in deployment
+	**********
+	-->
+	<defaultResourceExpiry>3000</defaultResourceExpiry>
+	<!--
+	**********
+	enable extended resource metadata useful during development for trace tool and debugger
+	**********
+	-->
+	<debugMeta>false</debugMeta>
+	<!--
+	**********
+	This URI is requested by the kernel after successful startup
+	**********
+	-->
+	<initURI>active:init</initURI>
+	<initModule>urn:org:ten60:netkernel:ext:kernel</initModule>
+	
+	<!--
+	************************************************************
+	Dynamic Compiler Provider Settings
+	************************************************************
+	-->
+	<dynamicClassProvider>com.ten60.netkernel.dcp.JavacProvider</dynamicClassProvider>
+	
+	<!--
+	************************************************************
+	Kernel Statistics Settings
+	************************************************************
+	-->
+	<statistics>
+		<!--
+		**********
+		Number of times Housekeeper must run before a sample is taken
+		**********
+		-->
+		<frequencyDivisor>10</frequencyDivisor>
+		<!--
+		**********
+		Number of statistic samples to store
+		**********
+		-->
+		<historySize>60</historySize>
+		<!--
+		**********
+		Format for statistic time stamp
+		**********
+		-->
+		<timestampFormat>HH:mm:ss</timestampFormat>
+	</statistics>
+	<!--
+	************************************************************
+	Kernel Logger Settings
+	************************************************************
+	-->
+	<log>
+		<!--
+		**********
+		Logging Handler - as many as required
+		**********
+		-->
+		<!-- this entry is needed for the log viewer to work, limit and count may be changed -->
+		<handler>
+			<instance>
+				<class>com.ten60.netkernel.util.LogFileHandler</class>
+				<string>%blog/netkernel%g.log</string> <!-- don't change this as log console will not find files! -->
+				<int>262144</int> <!-- length limit -->
+				<int>2</int> <!-- file count -->
+			</instance>
+			<formatterClass>java.util.logging.XMLFormatter</formatterClass>
+		</handler>
+		<!-- this entry is needed for the messages to standard out -->
+		<handler>
+			<instance>
+				<class>java.util.logging.ConsoleHandler</class>
+			</instance>
+			<formatterClass>com.ten60.netkernel.util.ConsoleFormatter</formatterClass>
+		</handler>
+		<!--
+		**********
+		Log level settings - values can be:  debug, fine, info, warning, severe, application, container
+		**********
+		-->
+		<level>
+			<warning/>
+			<severe/>
+			<application/>
+			<container/>
+		</level>
+	</log>
+	
+	<!--
+	************************************************************
+	Proxy Settings
+	************************************************************
+	-->
+	<proxy>
+		<type>none</type>
+		<host/>
+		<port/>
+	</proxy>
+</system>

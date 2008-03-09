@@ -1,0 +1,9 @@
+import org.ten60.netkernel.layer1.representation.*;
+import org.ten60.netkernel.xml.representation.*;
+import com.ten60.netkernel.urii.aspect.*;
+
+main() {
+	b = context.exists("active:purl-groups-for-user+user@user:nosuchuser");
+	resp=context.createResponseFrom(new BooleanAspect(!b));
+	context.setResponse(resp);
+}

@@ -1,0 +1,6 @@
+<purl>
+	<id>/net/purl/303</id>
+	<type>303</type>
+	<seealso><url>http://somewhereelse.com/foaf/brian.rdf</url></seealso>
+	<maintainers><uid>brian-test</uid></maintainers>
+</purl>

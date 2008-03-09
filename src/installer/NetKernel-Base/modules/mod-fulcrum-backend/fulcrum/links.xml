@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<links basepath="/fulcrum/">
+	<link>
+		<ext>/index</ext>
+		<int>ffcpl:/introspect/entrypoint/icon-list-news+param@ffcpl:/fulcrum/index.xml</int>
+	</link>
+	<link>
+		<ext>/controlpanel</ext>
+		<int>ffcpl:/introspect/entrypoint/icon-list+param@ffcpl:/fulcrum/controlpanel.xml</int>
+	</link>
+	<link>
+		<ext>/devtools</ext>
+		<int>ffcpl:/introspect/entrypoint/icon-list+param@ffcpl:/fulcrum/devtools.xml</int>
+	</link>
+	<link>
+		<ext>/support</ext>
+		<int>ffcpl:/introspect/entrypoint/icon-list+param@ffcpl:/fulcrum/support.xml</int>
+	</link>
+	<link>
+		<ext>/documents</ext>
+		<int>ffcpl:/introspect/entrypoint/icon-list+param@ffcpl:/fulcrum/documentation.xml</int>
+	</link>
+	<link>
+		<ext>/1060-forum</ext>
+		<int>active:HTTPRedirect+operator@data:text/xml,%3Curi%3Ehttp://www.1060.org/forum/%3C/uri%3E</int>
+	</link>
+	<link>
+		<ext>/1060-support</ext>
+		<int>active:HTTPRedirect+operator@data:text/xml,%3Curi%3Ehttp://www.1060research.com/services/index.html%3C/uri%3E</int>
+	</link>
+	<link>
+		<ext>/javadoc</ext>
+		<int>active:HTTPRedirect+operator@data:text/xml,%3Curi%3Ehttp://localhost:1060/javadoc/netkernel/index.html%3C/uri%3E</int>
+	</link>
+	<link>
+		<ext>/1060-forum-icon</ext>
+		<int>ffcpl:/pub/forum.png</int>
+	</link>
+	<link>
+		<ext>/1060-bugxter</ext>
+		<int>active:HTTPRedirect+operator@data:text/xml,%3Curi%3Ehttp://www.1060.org/bugxter/%3C/uri%3E</int>
+	</link>
+</links>
+

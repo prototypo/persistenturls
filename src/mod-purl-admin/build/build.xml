@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="all" name="PURL Admin Module">
+	<target description="Build everything." name="all">
+		<ant antfile="build-mod-purl-admin.xml"/>
+		<ant antfile="build-test-mod-purl-admin.xml"/>
+        <echo message="PURL Admin Module build completed."/>
+    </target>
+    
+    <target description="Clean up the derived objects" name="clean">
+        <delete>
+            <fileset dir="." includes="**/*.jar"/>
+        </delete>
+        <delete>
+            <fileset dir="../modules/mod-purl-admin/" includes="**/*.class"/>
+        </delete>
+    </target>
+</project>

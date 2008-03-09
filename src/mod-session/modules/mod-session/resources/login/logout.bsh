@@ -1,0 +1,16 @@
+import org.ten60.netkernel.layer1.representation.*;
+import org.ten60.netkernel.layer1.nkf.*;
+import com.ten60.netkernel.urii.aspect.*;
+
+void main()
+{	sessionURI=context.getThisRequest().getArgument("session");
+	tokenURI=sessionURI+"+key@ffcpl:/credentials";
+	req=context.createSubRequest(tokenURI);
+	req.setRequestType(INKFRequestReadOnly.RQT_DELETE);
+	context.issueSubRequest(req);
+
+	result=context.source("../static/logged-out.html");
+	resp=context.createResponseFrom(result);
+	resp.setMimeType("text/html");
+
+}

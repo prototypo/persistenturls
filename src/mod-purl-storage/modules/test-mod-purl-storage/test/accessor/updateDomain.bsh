@@ -1,0 +1,14 @@
+import org.ten60.netkernel.layer1.representation.*;
+import org.ten60.netkernel.xml.representation.*;
+import com.ten60.netkernel.urii.aspect.*;
+
+main() {
+	domain=context.source("this:param:domain");
+	req=context.createSubRequest("active:purl-storage-update-domain");
+	req.addArgument("param", domain);
+	req.addArgument("nocache", new StringAspect("no-cache"));	
+	res = context.issueSubRequest(req);
+  	response = context.createResponseFrom(res);
+  	response.setMimeType("text/xml");
+  	context.setResponse(response);
+}

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list>
+	<this>app_fulcrum_backend_devtools</this>
+	<entrypoints>
+		<entrypoint>app_wizard_new_module</entrypoint>
+		<entrypoint>doc_user_workbench_redirect</entrypoint>
+		<entrypoint>app_ext_introspect_trace</entrypoint>
+		<entrypoint>app_ext_introspect_classtrace</entrypoint>
+		<entrypoint>app_debugger</entrypoint>
+		<entrypoint>app_visualizer</entrypoint>
+		
+		<entrypoint>app_dpml_playpen</entrypoint>
+		<entrypoint>app_script_playpen</entrypoint>
+		<entrypoint>app_regular_expression_cookbook</entrypoint>
+		<entrypoint>app_ext_introspect_modbrowser</entrypoint>
+		<entrypoint>app_xunit</entrypoint>
+		<entrypoint>app_mod_editor</entrypoint>
+	</entrypoints>
+</list>

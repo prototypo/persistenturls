@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?><module>
+	<!--
+	***********
+	PURLs Search Module
+	***********
+	-->
+    <identity>
+		<uri>urn:org:purl:search</uri>
+		<version>0.0.46</version>
+    </identity>
+	<info>
+		<name>PURL Search Module</name>
+        <description>A module containing the PURLS 2 search interface.</description>
+		<dynamic/>
+    </info>
+    <publisher>
+        <name>OCLC</name>
+		<uri>http://www.oclc.org</uri>
+    </publisher>
+	<export>
+		<uri>
+			<match>active:purl-search\+.*</match>
+			<match>active:purl-index\+.*</match>			
+			<match>ffcpl:/etc/LogConfig.xml</match>
+			<match>ffcpl:/entrypoints.xml</match>
+			<match>ffcpl:/etc/CRONConfig.xml</match>
+		</uri>
+	</export>
+	<mapping>
+		<this>
+			<match>ffcpl:/entrypoints.xml</match>
+			<match>ffcpl:/etc/.*</match>
+			<match>ffcpl:/index/.*</match>
+		</this>
+		<ura>
+      		<match>active:purl-search\+.*</match>
+      		<class>org.purl.accessor.SearchAccessor</class>
+    	</ura>
+		<ura>
+      		<match>active:purl-index\+.*</match>
+      		<class>org.purl.accessor.IndexAccessor</class>
+    	</ura>    	
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:session</uri>
+		</import>
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:script</uri>
+		</import>
+	    <import>
+	      <uri>urn:org:ten60:netkernel:mod:lucene</uri>
+	    </import>
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:sys</uri>
+		</import>
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:xml:core</uri>
+		</import>
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:xml:ura</uri>
+		</import>
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:layer1</uri>
+		</import>
+		<super/>
+    </mapping>
+</module>

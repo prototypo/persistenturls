@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="all" name="PURL Search Module">
+	<target description="Build everything." name="all">
+		<ant antfile="build-mod-purl-search.xml"/>
+		<ant antfile="build-test-mod-purl-search.xml"/>
+        <echo message="PURL Search Module build completed."/>
+    </target>
+
+    <target description="Clean up the derived objects" name="clean">
+        <delete>
+            <fileset dir="." includes="**/*.jar"/>
+        </delete>
+        <delete>
+            <fileset dir="../modules/mod-purl-search/" includes="**/*.class"/>
+        </delete>
+    </target>
+</project>

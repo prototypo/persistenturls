@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<document>
+<title>SQLEscapeXML Accessor</title>
+<!--***************Cascading Style Sheets***************-->
+<csslist>
+	<css>/xlib/styles/css_ten60_lnf.css</css>
+	<css>/xlib/styles/xmlverbatim.css</css>
+</csslist>
+<!--***************Links***************-->
+<links>
+</links>
+<!--***************Table of Contents***************-->
+<toc>
+	<section name="title"/>
+	<section name="definition"/>
+	<section name="purpose"/>
+	<section name="copyright"/>
+</toc>
+
+<section name="title" styleuri="/xusr/share/doc/styles_1060/style_title.xsl">
+	<content>
+		<name>SQLEscapeXML</name>
+		<text>An accessor to Escape XML to be suitable for SQL INSERT/UPDATE</text>
+	</content>
+</section>
+
+<section name="definition" styleuri="/xusr/share/doc/styles_1060/style_definition.xsl">
+	<content>
+		<module>urn:org:ten60:netkernel:mod:db</module>
+		<format>
+		<sub name="format"/>
+		</format>
+		<returns>
+<b>t</b>
+		</returns>
+		<syntax>
+			<type><b>SQLEscapeXML</b></type>
+			<operand req="true">the URI of the XML resources</operand>
+			<target req="true" frag="true">target resource</target>
+		</syntax>
+		</content>
+	<includes>
+
+<include name="format" type="xml">
+<instr>
+	<type>SQLEscapeXML</type>
+	<operand>var:myxml</operand>
+	<target>var:escaped</target>
+</instr>
+</include>
+</includes>
+</section>
+
+<section name="purpose" styleuri="/xusr/share/doc/styles_1060/style_basic.xsl">
+	<content>
+        <p>The <code>SQLEscapeXML</code> accessor is used to escape all text elements in the operand
+		XML document so that the text may be used in an SQL statement.
+		</p>
+		<p>
+		SQL parsers require apostrophe " ' " characters to be escaped to double apostrophes " '' ".  This 
+		accessor escapes all text nodes (attributes and elements) in an XML document so that the text values may be
+		used (substituted into) an SQL statement.
+		</p>
+	</content>
+</section>
+
+<section name="copyright" styleuri="/xusr/share/doc/styles_1060/style_footer.xsl"/>	
+
+</document>
