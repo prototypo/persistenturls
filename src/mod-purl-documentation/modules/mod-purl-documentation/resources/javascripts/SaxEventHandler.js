@@ -262,31 +262,33 @@ SAXEventHandler.prototype.startElement = function(name, atts) {
 	}
 	currentElement = name;
 	
-	if ( name == 'user' ) {
+	if ( name == 'group' || name == 'domain' || name == 'purl' || name == 'user' ) {
 		// Clear the working array.
 		elementMap = new Array();
 		elementMapIndex = 0;
+		maintainers = "";
+		writers = "";
+		members = "";
 		// Extract the 'status' attribute, if present.
 		// TODO DBG
 		//alert("In element user.  atts has length " + atts.getLength() );
-		for ( i=0; i<atts.getLength() ; i++ ) {
-			//alert("Operating on attribute " + atts.getName([i]) + " = " + atts.getValue([i]));
-			if ( "status" == atts.getName([i]) ) {
-				value = "Pending approval";
-				if ( "1" == atts.getValue([i]) ) {
-					value = "Approved";
-				} else if ( "2" == atts.getValue([i]) ) {
-						value = "Tombstoned";
+		if ( atts.getLength() > 0 ) {
+			for ( i=0; i<atts.getLength() ; i++ ) {
+				//alert("Operating on attribute " + atts.getName([i]) + " = " + atts.getValue([i]));
+				if ( "status" == atts.getName([i]) ) {
+					value = "Pending approval";
+					if ( "1" == atts.getValue([i]) ) {
+						value = "Approved";
+					} else if ( "2" == atts.getValue([i]) ) {
+							value = "Tombstoned";
+					}
+					elementMap[elementMapIndex] = ["status", value];
+					elementMapIndex++;
 				}
-				elementMap[elementMapIndex] = ["status", value];
-				elementMapIndex++;
 			}
 		}
 	// For history entries.
 	} else if ( name == 'entry' ) {
-		// Clear the working array.
-		//elementMap = new Array();
-		//elementMapIndex = 0;
 		// Extract the 'type' attribute, if present.
 		// TODO DBG
 		//alert("In element user.  atts has length " + atts.getLength() );
@@ -298,7 +300,7 @@ SAXEventHandler.prototype.startElement = function(name, atts) {
 				elementMapIndex++;
 			}
 		}
-	} else if ( name == 'group' || name == 'domain' || name == 'purl' || name == 'history') {
+	} else if ( name == 'history') {
 		// Clear the working array.
 		elementMap = new Array();
 		elementMapIndex = 0;
