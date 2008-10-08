@@ -61,7 +61,6 @@ package org.purl.accessor;
  * Attempt to modify an uncreated resource: 412 (Precondition Failed)
 */
 
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -74,13 +73,13 @@ import org.purl.accessor.util.AccessController;
 import org.purl.accessor.util.AllowableResource;
 import org.purl.accessor.util.GroupResolver;
 import org.purl.accessor.util.GroupResourceStorage;
-import org.purl.accessor.util.NKHelper;
-import org.purl.accessor.util.PURLException;
 import org.purl.accessor.util.ResourceCreator;
+import org.purl.accessor.util.ResourceFilter;
 import org.purl.accessor.util.ResourceStorage;
 import org.purl.accessor.util.SearchHelper;
 import org.purl.accessor.util.URIResolver;
 import org.purl.accessor.util.UserAccessController;
+import org.purl.accessor.util.UserCreator;
 import org.purl.accessor.util.UserGroupAllowableResource;
 import org.purl.accessor.util.UserRequestResolver;
 import org.purl.accessor.util.UserResolver;
@@ -90,7 +89,6 @@ import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFRequest;
 import org.ten60.netkernel.layer1.nkf.INKFResponse;
 import org.ten60.netkernel.layer1.nkf.NKFException;
-import org.ten60.netkernel.layer1.representation.IAspectNVP;
 import org.ten60.netkernel.xml.representation.IAspectXDA;
 import org.ten60.netkernel.xml.xda.IXDAReadOnly;
 import org.ten60.netkernel.xml.xda.XPathLocationException;
@@ -156,61 +154,6 @@ public class UserAccessor extends AbstractAccessor {
         }
 
         return retValue;
-    }
-
-    /**
-     * A ResourceCreator instance to fill out a user instance
-     * from parameters that were passed in.
-     *
-     * @author brian
-     *
-     */
-    static public class UserCreator implements ResourceCreator {
-
-        public IURAspect createResource(INKFConvenienceHelper context, IAspectNVP params) throws NKFException {
-            IAspectXDA config = (IAspectXDA)  context.sourceAspect("ffcpl:/etc/PURLConfig.xml", IAspectXDA.class);
-            IXDAReadOnly configXDA = config.getXDA();
-            StringAspect retValue = null;
-
-            try {
-                boolean createUser = false;
-
-                if(configXDA.isTrue("/purl-config/allowUserAutoCreation")) {
-                    createUser = true;
-                }
-
-                StringBuffer sb = new StringBuffer( "<user admin=\"false\">" );
-                sb.append("<id>");
-                sb.append(NKHelper.getLastSegment(context));
-                sb.append("</id>");
-                sb.append("<name>");
-                String name = cleanseInput(params.getValue("name"));
-                sb.append(name);
-                sb.append("</name>");
-                sb.append("<affiliation>");
-                sb.append(cleanseInput(params.getValue("affiliation")));
-                sb.append("</affiliation>");
-                sb.append("<email>");
-                sb.append(params.getValue("email"));
-                sb.append("</email>");
-                sb.append("<password>");
-                sb.append(NKHelper.getMD5Value(context, params.getValue("passwd")));
-                sb.append("</password>");
-                sb.append("<hint>");
-                sb.append(cleanseInput(params.getValue("hint")));
-                sb.append("</hint>");
-                sb.append("<justification>");
-                sb.append(cleanseInput(params.getValue("justification")));
-                sb.append("</justification>");
-                sb.append("</user>");
-                retValue = new StringAspect(sb.toString());
-            } catch (XPathLocationException e) {
-                // TODO What should the error code be?
-                throw new PURLException("Unable to create user: " + NKHelper.getLastSegment(context), 500);
-            }
-
-            return retValue;
-        }
     }
 
     /**

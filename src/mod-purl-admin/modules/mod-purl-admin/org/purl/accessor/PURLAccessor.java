@@ -20,6 +20,7 @@ import org.purl.accessor.util.PURLResourceStorage;
 import org.purl.accessor.util.PURLURIResolver;
 import org.purl.accessor.util.PurlSearchHelper;
 import org.purl.accessor.util.ResourceCreator;
+import org.purl.accessor.util.ResourceFilter;
 import org.purl.accessor.util.ResourceStorage;
 import org.purl.accessor.util.URIResolver;
 import org.purl.accessor.util.UnconstrainedGETAccessController;

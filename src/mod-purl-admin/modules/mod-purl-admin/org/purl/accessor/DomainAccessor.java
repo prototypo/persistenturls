@@ -62,10 +62,7 @@ package org.purl.accessor;
 */
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
-import java.util.StringTokenizer;
 
 import org.purl.accessor.command.CreateResourceCommand;
 import org.purl.accessor.command.DeleteResourceCommand;
@@ -76,29 +73,26 @@ import org.purl.accessor.util.AccessController;
 import org.purl.accessor.util.AllowableResource;
 import org.purl.accessor.util.DomainAccessController;
 import org.purl.accessor.util.DomainAllowableResource;
+import org.purl.accessor.util.DomainCreator;
 import org.purl.accessor.util.DomainResolver;
 import org.purl.accessor.util.DomainResourceStorage;
 import org.purl.accessor.util.DomainSearchHelper;
 import org.purl.accessor.util.GroupResolver;
-import org.purl.accessor.util.NKHelper;
-import org.purl.accessor.util.PURLException;
 import org.purl.accessor.util.ResourceCreator;
+import org.purl.accessor.util.ResourceFilter;
 import org.purl.accessor.util.ResourceStorage;
 import org.purl.accessor.util.URIResolver;
-import org.purl.accessor.util.UserHelper;
 import org.purl.accessor.util.UserResolver;
 import org.purl.accessor.util.UserResourceStorage;
+import org.purl.accessor.util.XSLTResourceFilter;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFRequest;
 import org.ten60.netkernel.layer1.nkf.INKFResponse;
 import org.ten60.netkernel.layer1.nkf.NKFException;
-import org.ten60.netkernel.layer1.representation.IAspectNVP;
 import org.ten60.netkernel.xml.representation.IAspectXDA;
 import org.ten60.netkernel.xml.xda.IXDAReadOnly;
 import org.ten60.netkernel.xml.xda.XPathLocationException;
 
-import com.ten60.netkernel.urii.IURAspect;
-import com.ten60.netkernel.urii.aspect.IAspectString;
 import com.ten60.netkernel.urii.aspect.StringAspect;
 
 public class DomainAccessor extends AbstractAccessor {
@@ -115,7 +109,7 @@ public class DomainAccessor extends AbstractAccessor {
 
         URIResolver domainResolver = new DomainResolver();
 
-        ResourceFilter domainFilter = new DomainPrivateDataFilter();
+        ResourceFilter domainFilter = new XSLTResourceFilter("ffcpl:/filters/domain.xsl");
         ResourceCreator domainCreator = new DomainCreator(domainResolver, new UserResolver(), new GroupResolver(), new UserResourceStorage());
         domainStorage = new DomainResourceStorage();
         AllowableResource domainAllowableResource = new DomainAllowableResource(domainResolver, domainStorage); //new DefaultAllowableResource(domainStorage, domainResolver);
@@ -133,16 +127,13 @@ public class DomainAccessor extends AbstractAccessor {
 
         try {
             IAspectXDA config = (IAspectXDA) context.sourceAspect("ffcpl:/etc/PURLConfig.xml", IAspectXDA.class);
-
+            retValue = commandMap.get(method);
+            
             if(method.equals("POST")) {
-                retValue = commandMap.get("POST");
-                
                 IXDAReadOnly configXDA = config.getXDA();
                 if(configXDA.isTrue("/purl-config/allowTopLevelDomainAutoCreation")) {
                     retValue = new DomainAutoCreateCommand(retValue, domainStorage);
                 }
-            } else {
-                retValue = commandMap.get(method);
             }
         } catch (NKFException e) {
             // TODO Auto-generated catch block
@@ -154,153 +145,11 @@ public class DomainAccessor extends AbstractAccessor {
 
         return retValue;
     }
-
-    static public class DomainCreator implements ResourceCreator {
-
-        private URIResolver domainResolver;
-        private URIResolver userResolver;
-        private URIResolver groupResolver;
-
-        public DomainCreator(URIResolver domainResolver, URIResolver userResolver, URIResolver groupResolver, ResourceStorage userStorage) {
-            this.domainResolver = domainResolver;
-            this.userResolver = userResolver;
-            this.groupResolver = groupResolver;
-        }
-
-        public IURAspect createResource(INKFConvenienceHelper context, IAspectNVP params) throws NKFException {
-
-            String currentUser = NKHelper.getUser(context);
-            String maintainers = params.getValue("maintainers");
-            String writers = params.getValue("writers");
-
-            StringTokenizer st = new StringTokenizer(maintainers, ", ");
-            while(st.hasMoreTokens()) {
-                String next = st.nextToken();
-                if(!UserHelper.isValidUser(context, userResolver.getURI(next)) &&
-                   !UserHelper.isValidGroup(context, groupResolver.getURI(next))) 
-                {                
-                    throw new PURLException("User or group " + next + " does not exist", 400);
-                }
-            }
-
-            st = new StringTokenizer(writers, ", ");
-            while(st.hasMoreTokens()) {
-                String next = st.nextToken();
-                if(!UserHelper.isValidUser(context, userResolver.getURI(next))&&
-                   !UserHelper.isValidGroup(context, groupResolver.getURI(next))) 
-                {                                
-                    throw new PURLException("User or group " + next + " does not exist", 400);
-                }
-            }
-            
-            //TODO: Migrate to use Domain Aspect
-            
-            String domain = domainResolver.getDisplayName(domainResolver.getURI(context));
-
-            StringBuffer sb = new StringBuffer("<domain>");
-            sb.append("<public>");
-            sb.append(params.getValue("public"));
-            sb.append("</public>");
-            sb.append("<id>");
-            sb.append(domain);
-            sb.append("</id>");
-            sb.append("<name>");
-            sb.append(cleanseInput(params.getValue("name")));
-            sb.append("</name>");
-            sb.append("<maintainers>");
-            
-            st = new StringTokenizer(maintainers, ",");
-
-            Set<String> maintainerList = new HashSet<String>();
-            
-            while(st.hasMoreElements()) {
-                String maintainer = st.nextToken().trim();
-                
-                // Avoid duplicates                
-                if(maintainerList.contains(maintainer)) {
-                    continue; 
-                }
-
-                if(UserHelper.isValidUser(context, userResolver.getURI(maintainer))) {
-                    sb.append("<uid>");
-                    sb.append(maintainer.trim());
-                    sb.append("</uid>");
-                } else {
-                    sb.append("<gid>");
-                    sb.append(maintainer.trim());
-                    sb.append("</gid>");                    
-                }
-                
-                maintainerList.add(maintainer);
-            }
-            
-            if(!maintainerList.contains(currentUser)) {
-                sb.append("<uid>");
-                sb.append(currentUser);
-                sb.append("</uid>");
-            }
-            
-            sb.append("</maintainers>");
-            
-            maintainerList.clear();
-            
-            sb.append("<writers>");
-            st = new StringTokenizer(writers, ",");
-            
-            while(st.hasMoreElements()) {
-                String maintainer = st.nextToken().trim();
-                
-                // Avoid duplicates                
-                if(maintainerList.contains(maintainer)) {
-                    continue; 
-                }
-                
-                if(UserHelper.isValidUser(context, userResolver.getURI(maintainer))) {
-                    sb.append("<uid>");
-                    sb.append(maintainer.trim());
-                    sb.append("</uid>");
-                } else {
-                    sb.append("<gid>");
-                    sb.append(maintainer.trim());
-                    sb.append("</gid>");                    
-                }
-                
-                maintainerList.add(maintainer);
-            }
-            
-            sb.append("</writers>");
-            sb.append("</domain>");
-            return new StringAspect(sb.toString());
-        }
-    }
-    
-    static public class DomainPrivateDataFilter implements ResourceFilter {
-
-        public IURAspect filter(INKFConvenienceHelper context, IURAspect iur) {
-            IURAspect retValue = null;
-
-            try {
-                INKFRequest req = context.createSubRequest();
-                req.setURI("active:xslt");
-                req.addArgument("operand", iur);
-                req.addArgument("operator", "ffcpl:/filters/domain.xsl");
-                req.setAspectClass(IAspectString.class);
-                retValue = context.issueSubRequestForAspect(req);
-            } catch(NKFException nfe) {
-                // TODO: return something other than the raw user
-                nfe.printStackTrace();
-            }
-
-            return retValue;
-        }
-
-    }
     
     static private class DomainAutoCreateCommand extends PURLCommand {
         
         private PURLCommand createCmd;
-        private ResourceFilter domainFilter = new DomainPrivateDataFilter();
-        private ResourceStorage domainStorage;
+        private ResourceFilter domainFilter = new XSLTResourceFilter("ffcpl:/filters/domain.xsl");
         
         private DomainAutoCreateCommand() {
             super(null, null, null, null);
@@ -309,7 +158,6 @@ public class DomainAccessor extends AbstractAccessor {
         public DomainAutoCreateCommand(PURLCommand createCmd, ResourceStorage domainStorage) {
             super(createCmd.getType(), createCmd.getURIResolver(), createCmd.getAccessController(), createCmd.getResourceStorage());            
             this.createCmd = createCmd;
-            this.domainStorage = domainStorage;
         }
 
         @Override

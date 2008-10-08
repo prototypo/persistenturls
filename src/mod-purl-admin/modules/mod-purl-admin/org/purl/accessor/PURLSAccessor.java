@@ -70,10 +70,11 @@ public class PURLSAccessor extends NKFAccessorImpl {
             req.setAspectClass(IAspectXDA.class);
             IAspectXDA xda = (IAspectXDA)context.issueSubRequestForAspect(req);
             IXDAReadOnly xdaRO = xda.getXDA();
+            boolean valid = xdaRO.isTrue("/b/text()='t'");
             
             // TODO: Make this more declarative
             // TODO: What's the best way to do this?
-            if(xdaRO.isTrue("/b/text()='t'")) {
+            if(valid) {
                 try {
                      xdaParam = checkPURLsAndUsers(context, xdaParam);
                      xdaParam = checkForClones(context, xdaParam);
@@ -86,6 +87,9 @@ public class PURLSAccessor extends NKFAccessorImpl {
                 }  catch(PURLException pe) {
                     errorMessage = pe.getMessage();
                     errorCode = pe.getResponseCode();
+                } catch(Throwable t) {
+                	errorMessage = "Error Processing Batchload";
+                	errorCode = 500;
                 }
              } else {
                  errorMessage = "Batch Load does not validate against schema.";
@@ -199,14 +203,23 @@ public class PURLSAccessor extends NKFAccessorImpl {
 	            }
 	        }
 	        
-	        xdaROItor = batchXDA.getXDA().readOnlyIterator("//maintainers/maintainer");
+	        xdaROItor = batchXDA.getXDA().readOnlyIterator("//maintainers/uid");
 	        
 	        Set<String> maintainerSet = new HashSet<String>();
 	        
 	        // TODO: Add this to the larger iteration
 	        while(xdaROItor.hasNext()) {
 	            xdaROItor.next();
-	            String maintainer = xdaROItor.getText("./@id", true);
+	            String maintainer = xdaROItor.getText(".", true);
+	            maintainerSet.add(maintainer);
+	        }
+	        
+	        xdaROItor = batchXDA.getXDA().readOnlyIterator("//maintainers/gid");
+	        
+	        // TODO: Add this to the larger iteration
+	        while(xdaROItor.hasNext()) {
+	            xdaROItor.next();
+	            String maintainer = xdaROItor.getText(".", true);
 	            maintainerSet.add(maintainer);
 	        }
 	        
@@ -214,8 +227,8 @@ public class PURLSAccessor extends NKFAccessorImpl {
 	        
 	        while(maintainerItor.hasNext()) {
 	            String next = maintainerItor.next();
-	            if(!NKHelper.validUser(context, next)) {
-	                throw new PURLException("Invalid user: " + next + " in batch.", 400);
+	            if(!NKHelper.validUser(context, next) && !NKHelper.validGroup(context, next)) {
+	                throw new PURLException("Invalid user or group: " + next + " in batch.", 400);
 	            }
 	        }
 	    } catch (XPathLocationException e) {
@@ -338,7 +351,6 @@ public class PURLSAccessor extends NKFAccessorImpl {
                    retValue.append(targetShimDOMXDA.getXDA(), "/", xdaROItor.getCurrentXPath());
                    modified = true;
                } else {
-                   System.out.println("**********" + baseURI);                   
                    throw new PURLException("Invalid chained PURL: " + basepurl + " for PURL:" 
                            + xdaROItor.getText("@id", true), 400);
                }

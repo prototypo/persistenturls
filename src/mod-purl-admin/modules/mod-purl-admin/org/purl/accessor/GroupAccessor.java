@@ -62,10 +62,7 @@ package org.purl.accessor;
 */
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
-import java.util.StringTokenizer;
 
 import org.purl.accessor.command.CreateResourceCommand;
 import org.purl.accessor.command.DeleteResourceCommand;
@@ -75,28 +72,20 @@ import org.purl.accessor.command.UpdateResourceCommand;
 import org.purl.accessor.util.AccessController;
 import org.purl.accessor.util.AllowableResource;
 import org.purl.accessor.util.GroupAccessController;
-import org.purl.accessor.util.GroupHelper;
+import org.purl.accessor.util.GroupCreator;
 import org.purl.accessor.util.GroupResolver;
 import org.purl.accessor.util.GroupResourceStorage;
 import org.purl.accessor.util.GroupSearchHelper;
-import org.purl.accessor.util.NKHelper;
-import org.purl.accessor.util.PURLException;
 import org.purl.accessor.util.ResourceCreator;
+import org.purl.accessor.util.ResourceFilter;
 import org.purl.accessor.util.ResourceStorage;
 import org.purl.accessor.util.URIResolver;
 import org.purl.accessor.util.UnconstrainedGETAccessController;
 import org.purl.accessor.util.UserGroupAllowableResource;
-import org.purl.accessor.util.UserHelper;
 import org.purl.accessor.util.UserResolver;
 import org.purl.accessor.util.UserResourceStorage;
+import org.purl.accessor.util.XSLTResourceFilter;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
-import org.ten60.netkernel.layer1.nkf.INKFRequest;
-import org.ten60.netkernel.layer1.nkf.NKFException;
-import org.ten60.netkernel.layer1.representation.IAspectNVP;
-
-import com.ten60.netkernel.urii.IURAspect;
-import com.ten60.netkernel.urii.aspect.IAspectString;
-import com.ten60.netkernel.urii.aspect.StringAspect;
 
 public class GroupAccessor extends AbstractAccessor {
 
@@ -111,7 +100,7 @@ public class GroupAccessor extends AbstractAccessor {
         URIResolver userResolver = new UserResolver();
         URIResolver groupResolver = new GroupResolver();
 
-        ResourceFilter groupFilter = new GroupPrivateDataFilter();
+        ResourceFilter groupFilter = new XSLTResourceFilter("ffcpl:/filters/group.xsl");
         ResourceStorage groupStorage = new GroupResourceStorage();
         ResourceStorage userStorage = new UserResourceStorage();
         
@@ -128,140 +117,5 @@ public class GroupAccessor extends AbstractAccessor {
 
     protected PURLCommand getCommand(INKFConvenienceHelper context, String method) {
         return commandMap.get(method);
-    }
-
-    static public class GroupCreator implements ResourceCreator {
-
-        private URIResolver userResolver;
-        private URIResolver groupResolver;
-
-        public GroupCreator(URIResolver userResolver, URIResolver groupResolver) {
-            this.userResolver = userResolver;
-            this.groupResolver = groupResolver;
-        }
-
-        public IURAspect createResource(INKFConvenienceHelper context, IAspectNVP params) throws NKFException {
-
-            String currentUser = NKHelper.getUser(context);
-            String maintainers = params.getValue("maintainers");
-            String members = params.getValue("members");
-
-            StringTokenizer st = new StringTokenizer(maintainers, "\n, ");
-            while(st.hasMoreTokens()) {
-                String next = st.nextToken();
-                if(!UserHelper.isValidUser(context, userResolver.getURI(next)) &&
-                   !GroupHelper.isValidGroup(context, groupResolver.getURI(next))) 
-                {
-                    throw new PURLException(next + " does not exist or is not an approved user.", 400);
-                }
-            }
-
-            st = new StringTokenizer(members, "\n, ");
-            while(st.hasMoreTokens()) {
-                String next = st.nextToken();
-                if(!UserHelper.isValidUser(context, userResolver.getURI(next)) &&
-                   !GroupHelper.isValidGroup(context, groupResolver.getURI(next))) 
-                {                
-                    throw new PURLException(next + " does not exist or is not an approved user.", 400);
-                }
-            }
-
-            String groupId = groupResolver.getURI(context);
-            StringBuffer sb = new StringBuffer("<group>");
-            sb.append("<id>");
-            sb.append(groupResolver.getDisplayName(groupId));
-            sb.append("</id>");
-            sb.append("<name>");
-            sb.append(cleanseInput(params.getValue("name")));
-            sb.append("</name>");
-            sb.append("<maintainers>");
-            
-            Set<String> maintainerList = new HashSet<String>();
-            
-            st = new StringTokenizer(maintainers, ", ");
-            while(st.hasMoreElements()) {
-                String maintainer = st.nextToken().trim();
-                
-                // Avoid duplicates                
-                if(maintainerList.contains(maintainer)) {
-                    continue; 
-                }
-                
-                if(UserHelper.isValidUser(context, userResolver.getURI(maintainer))) {
-                    sb.append("<uid>");
-                    sb.append(maintainer);
-                    sb.append("</uid>");
-                } else {
-                    sb.append("<gid>");
-                    sb.append(maintainer);
-                    sb.append("</gid>");                    
-                }
-                
-                maintainerList.add(maintainer);
-            }
-            
-            if(!maintainerList.contains(currentUser)) {
-                sb.append("<uid>");
-                sb.append(currentUser);
-                sb.append("</uid>");
-            }
-            
-            sb.append("</maintainers>");
-            
-            maintainerList.clear();
-            
-            sb.append("<members>");
-            st = new StringTokenizer(members, "\n, ");
-            while(st.hasMoreElements()) {
-                String member = st.nextToken().trim();
-                
-                // Avoid duplicates                
-                if(maintainerList.contains(member)) {
-                    continue; 
-                }
-                
-                if(UserHelper.isValidUser(context, userResolver.getURI(member))) {
-                    sb.append("<uid>");
-                    sb.append(member);
-                    sb.append("</uid>");
-                } else {
-                    sb.append("<gid>");
-                    sb.append(member);
-                    sb.append("</gid>");                    
-                }
-                
-                maintainerList.add(member);
-            }
-            
-            sb.append("</members>");
-            sb.append("<comments>");
-            sb.append(cleanseInput(params.getValue("comments")));
-            sb.append("</comments>");
-            sb.append("</group>");
-            
-            return new StringAspect(sb.toString());
-        }
-    }
-    
-    static public class GroupPrivateDataFilter implements ResourceFilter {
-
-        public IURAspect filter(INKFConvenienceHelper context, IURAspect iur) {
-            IURAspect retValue = null;
-
-            try {
-                INKFRequest req = context.createSubRequest();
-                req.setURI("active:xslt");
-                req.addArgument("operand", iur);
-                req.addArgument("operator", "ffcpl:/filters/group.xsl");
-                req.setAspectClass(IAspectString.class);
-                retValue = context.issueSubRequestForAspect(req);
-            } catch(NKFException nfe) {
-                // TODO: return something other than the raw user
-                nfe.printStackTrace();
-            }
-
-            return retValue;
-        }
-
     }
 }
