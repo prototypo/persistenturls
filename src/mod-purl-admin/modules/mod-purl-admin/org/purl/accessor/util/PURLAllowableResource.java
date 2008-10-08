@@ -17,7 +17,8 @@ public class PURLAllowableResource extends DefaultAllowableResource {
         // to create a PURL for this domain, we allow the resource
         
         String domain = NKHelper.getDomainForPURL(context, resourceName);
-        return (domain != null) 
+        
+        return (domain != null)
                && super.allow(context, resourceName)
                && NKHelper.domainIsValid(context, domain)
                && (UserHelper.isAdminUser(context, NKHelper.getUser(context)) ||
@@ -27,6 +28,7 @@ public class PURLAllowableResource extends DefaultAllowableResource {
     public String getDenyMessage(INKFConvenienceHelper context, String resourceName) {
         String retValue = null;
         String displayName = getResourceResolver().getDisplayName(resourceName);
+        String uri = getResourceResolver().getURI(resourceName);
         
         if(!super.allow(context, resourceName)) {
             retValue = "PURL: " + displayName + " already exists.";

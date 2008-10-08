@@ -131,7 +131,7 @@ public class PURLCreator implements ResourceCreator {
         String purl = purlResolver.getDisplayName(NKHelper.getArgument(context, "path"));
         
         sb.append("<id>");
-        sb.append(purl);
+        sb.append(StringHelper.escapeURL(purl));
         sb.append("</id>");
         sb.append("<type>");
         sb.append(type);
@@ -145,8 +145,7 @@ public class PURLCreator implements ResourceCreator {
                 throw new PURLException(type + " PURLs must have a target URL", 400);
             }
             sb.append("<target><url>");
-            target = target.replaceAll("&", "&amp;");
-            sb.append(target);
+            sb.append(StringHelper.escapeURL(target));
             sb.append("</url></target>");
             break;
         case 303:

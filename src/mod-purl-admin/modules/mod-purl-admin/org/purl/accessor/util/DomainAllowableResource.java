@@ -15,23 +15,18 @@ public class DomainAllowableResource implements AllowableResource {
 
     public boolean allow(INKFConvenienceHelper context, String resourceName) {
         boolean retValue = false;
-        boolean done = false;
         
         try {
             String domain = resourceName;
-
-            while(!done) {
-                done = domainStorage.resourceExists(context, domain);
-                if(!done) {
-                    int lastSlash = domain.lastIndexOf("/");
-
-                    if(lastSlash <= 13){
-                        done = true;
-                        retValue = true;
-                    } else {
-                        domain = domain.substring(0, lastSlash);
-                    }
-                }
+            if(!domainStorage.resourceExists(context, domain)) {
+            	String root = null;
+            	DomainIterator itor = new DomainIterator(domain);
+           		root = domainResolver.getURI(itor.next());
+           		if(root != null) {
+           			retValue = domainStorage.resourceExists(context, root);
+           		} else {
+           			retValue = true;
+           		}
             }
         } catch(NKFException nfe) {
             nfe.printStackTrace();

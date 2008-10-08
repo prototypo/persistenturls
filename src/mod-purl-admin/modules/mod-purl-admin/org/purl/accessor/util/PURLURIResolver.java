@@ -29,7 +29,8 @@ public class PURLURIResolver extends URIResolver {
         String retValue = null;
         
         if(!path.startsWith("ffcpl:/purl")) {
-            path="ffcpl:/purl" + getDisplayName(path);
+        	String displayName = getDisplayName(path);
+            path="ffcpl:/purl" + displayName;
         }
         
         retValue = path;
@@ -42,7 +43,11 @@ public class PURLURIResolver extends URIResolver {
         String retValue = null;
         
         if(!path.startsWith("ffcpl:/purl")) {
-            retValue = (!path.startsWith("/") ? ("/"+path) : path);
+        	if(path.startsWith("ffcpl:/")){
+        		retValue = path.substring(6);
+        	} else {
+        		retValue = (!path.startsWith("/") ? ("/"+path) : path);
+        	}
         } else {
             retValue = path.substring(11);
         }
@@ -52,5 +57,11 @@ public class PURLURIResolver extends URIResolver {
         }
         
         return retValue;
+    }
+    
+    private String cleanseInput(String path) {
+    	String retValue = path.replaceAll("&", "&amp;");
+    	retValue = retValue.replaceAll("'", "&apos;");
+    	return retValue;
     }
 }
