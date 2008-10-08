@@ -18,12 +18,12 @@ package org.purl.accessor.command;
  *
  */
 
-import org.purl.accessor.ResourceFilter;
 import org.purl.accessor.util.AccessController;
 import org.purl.accessor.util.AllowableResource;
 import org.purl.accessor.util.NKHelper;
 import org.purl.accessor.util.PURLException;
 import org.purl.accessor.util.ResourceCreator;
+import org.purl.accessor.util.ResourceFilter;
 import org.purl.accessor.util.ResourceStorage;
 import org.purl.accessor.util.URIResolver;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
@@ -74,7 +74,7 @@ public class CreateResourceCommand extends PURLCommand {
             } else {
                 try {
                     IURAspect iur = resCreator.createResource(context, params);
-
+                    
                     // Store the full resource
                     iur = resStorage.storeResource(context, uriResolver, iur);
                     

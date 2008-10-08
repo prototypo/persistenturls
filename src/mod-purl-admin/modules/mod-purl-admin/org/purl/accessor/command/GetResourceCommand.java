@@ -25,9 +25,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import org.purl.accessor.ResourceFilter;
 import org.purl.accessor.util.AccessController;
 import org.purl.accessor.util.NKHelper;
+import org.purl.accessor.util.ResourceFilter;
 import org.purl.accessor.util.ResourceStorage;
 import org.purl.accessor.util.SearchHelper;
 import org.purl.accessor.util.URIResolver;
