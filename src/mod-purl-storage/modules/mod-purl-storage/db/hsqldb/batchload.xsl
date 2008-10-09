@@ -14,14 +14,22 @@
         <sql>
         	INSERT INTO purlhistory VALUES(null, IDENTITY(), @@CURRENTUSER@@, 0, '<xsl:value-of select="@type"/>', '<xsl:value-of select="*/@url"/>', NOW);
         </sql>        
-        <xsl:for-each select="maintainers/maintainer">
+        <xsl:for-each select="maintainers/uid">
             <sql>
-                INSERT INTO purlmaintainers VALUES(null, 0, @@MAINTAINER-<xsl:value-of select="@id"/>@@, 0);
+                INSERT INTO purlmaintainers VALUES(null, 0, @@MAINTAINER-<xsl:value-of select="."/>@@, 0);
             </sql>
             <sql>
             	UPDATE purlmaintainers set "p_id" = (select "z_id" from purls where "p_id" = '<xsl:value-of select="../../@id"/>') where "z_id" = IDENTITY();
             </sql>
         </xsl:for-each>
+        <xsl:for-each select="maintainers/gid">
+            <sql>
+                INSERT INTO purlmaintainers VALUES(null, 0, @@MAINTAINER-<xsl:value-of select="."/>@@, 1);
+            </sql>
+            <sql>
+            	UPDATE purlmaintainers set "p_id" = (select "z_id" from purls where "p_id" = '<xsl:value-of select="../../@id"/>') where "z_id" = IDENTITY();
+            </sql>
+        </xsl:for-each>        
         <xsl:apply-templates/>
     </xsl:template>  
 </xsl:stylesheet>
