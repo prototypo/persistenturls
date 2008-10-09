@@ -162,6 +162,7 @@ indexPURLs() {
 	req=context.createSubRequest("active:purl-storage-unindexed-purls");
 	req.setAspectClass(IAspectXDA.class);
 	res=context.issueSubRequestForAspect(req);
+
 	xdaRO = res.getXDA().readOnlyIterator("/results/row");
 	sb = null;
 	count = 0;
@@ -171,7 +172,8 @@ indexPURLs() {
 		while(xdaRO.hasNext()) {
 			xdaRO.next();
 			pID = xdaRO.getText("p_id", true);
-			zID = xdaRO.getText("z_id", true);			
+			zID = xdaRO.getText("z_id", true);
+			
 			req = context.createSubRequest("active:purl-storage-query-purl");
         	req.addArgument("uri", "ffcpl:/purl" + pID);
 			req.setAspectClass(IAspectString.class);
@@ -179,7 +181,7 @@ indexPURLs() {
 		
 			NKHelper.indexResource(context, "ffcpl:/index/purl", uriResolver.getURI(pID), sa);
 			
-			sb.append("<purl><id>" + pID + "</id><z_id>" + zID + "</z_id></purl>");
+			sb.append("<purl><id>" + StringHelper.escapeURL(pID) + "</id><z_id>" + zID + "</z_id></purl>");
 			
 			count++;
 		}
