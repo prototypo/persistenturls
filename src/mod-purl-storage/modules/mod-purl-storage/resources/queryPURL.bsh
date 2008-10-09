@@ -13,9 +13,11 @@ main() {
     purl = null;
     
     try {
+	
         ruri = context.getThisRequest().getArgument("uri");
         purl = ruri.substring(11);
-        
+		purl = purl.replaceAll("&", "&amp;");
+		
         purlSQL = context.sourceAspect("ffcpl:/sql/db/purlQuery.xml", IAspectXDA.class);
         purlSQL = generatePURLQuerySQL(purlSQL, purl);
         results = issueSQLQuery(purlSQL);
@@ -81,6 +83,8 @@ generatePURLQuerySQL(purlSQL, purl) {
     // TODO: Turn this into a cacheable resource request
     
     sedSB = new StringBuffer("<sed><pattern><regex>@@PID@@</regex><replace>");
+	purl = purl.replaceAll("'", "''");
+	purl = purl.replaceAll("&", "&amp;");
     sedSB.append(purl);
     sedSB.append("</replace></pattern></sed>");
     sed = new StringAspect(sedSB.toString());
@@ -113,7 +117,7 @@ processSQL(purlMaintainersSQL, purlID) {
     req.addArgument("operator", sed);
     req.addArgument("operand", purlMaintainersSQL);
     req.setAspectClass(IAspectXDA.class);
-    context.issueSubRequestForAspect(req);      
+    context.issueSubRequestForAspect(req);
 }
 
 addPURLMaintainers(xda, itor) {

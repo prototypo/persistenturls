@@ -95,6 +95,14 @@ main() {
         }
         
         maintainerSB.append("</sed>");
+
+		param = context.transrept(param, IAspectString.class);
+		paramStr = param.getString();
+		
+		if(paramStr.contains("'")) {
+			paramStr = paramStr.replaceAll("'", "''");
+			param = new StringAspect(paramStr);
+		}
         
         req = context.createSubRequest("active:xslt");
         req.addArgument("operand", param);
@@ -106,7 +114,7 @@ main() {
         req.addArgument("operator", new StringAspect(maintainerSB.toString()));
         req.addArgument("operand", iur);
         iur = context.issueSubRequest(req);
-        
+
         req = context.createSubRequest("active:sqlBatch");
         req.addArgument("operand", iur);
         iur = context.issueSubRequest(req);
