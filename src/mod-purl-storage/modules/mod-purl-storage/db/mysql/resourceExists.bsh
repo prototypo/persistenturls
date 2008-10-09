@@ -1,5 +1,6 @@
 import org.ten60.netkernel.xml.representation.*;
 import com.ten60.netkernel.urii.aspect.*;
+import org.purl.storage.util.*;
 
 main() {
 	ruri = context.getThisRequest().getArgument("uri");
@@ -27,6 +28,9 @@ main() {
 		value = ruri.substring(12);		
 		break;
 	}
+	
+	value = StorageHelper.convertForStorage(value);
+	
 	query = new StringAspect("<query><id>" + value + "</id></query>");
 	
 	req = context.createSubRequest("active:dpml");
