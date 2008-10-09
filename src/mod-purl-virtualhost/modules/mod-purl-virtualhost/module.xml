@@ -6,7 +6,7 @@
 	-->
     <identity>
 		<uri>urn:org:purl:virtual:host</uri>
-		<version>1.0.56</version>
+		<version>1.0.60</version>
     </identity>
 	<info>
 		<name>PURLS Virtual Host Module</name>
@@ -49,12 +49,20 @@
             <to>ffcpl:/static/$1</to>
 		</rewrite> -->
   		<rewrite>
-		    <match>jetty://.*?(/.*.(html|css|png))</match>
+		    <match>jetty://.*?(/.*.(html|css|png|js))</match>
             <to>ffcpl:$1</to>
 		</rewrite>
 		<rewrite>
-			<match>jetty://.*?/(.*)</match>
+			<match>jetty://.*?/(admin/login/.*)</match>
     		<to>ffcpl:/$1</to>
+		</rewrite>		
+   		<rewrite>
+			<match>jetty://.*?/(admin/.*)(\+param.*)</match>
+    		<to>ffcpl:/$e1$2</to>
+		</rewrite>
+		<rewrite>
+			<match>jetty://.*?/(.*)((\+param|\+cookie).*)</match>
+    		<to>ffcpl:/$e1$2</to>
 		</rewrite>
 		<import>
 			<uri>urn:org:purl:gatekeeper</uri>
