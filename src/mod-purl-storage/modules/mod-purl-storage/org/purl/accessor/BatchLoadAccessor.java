@@ -58,23 +58,27 @@ public class BatchLoadAccessor extends NKFAccessorImpl {
             throw new IllegalArgumentException("Missing param argument");
         }
         
-        IAspectXDA xdaParam = (IAspectXDA) context.sourceAspect("this:param:param", IAspectXDA.class);
-        String currentUser = ((IAspectString) context.sourceAspect("this:param:currentuser", IAspectString.class)).getString();
-        
-        // TODO: Authenticate the batch format
-
-        // Validate the input document against the batch schema
+        IURRepresentation iur = context.source("this:param:param");
         INKFRequest req = null; 
         INKFResponse resp = null;
         
+        // If the batch file contains any apostrophes, escape them for processing below
+        req=context.createSubRequest("active:SQLEscapeXML");
+        req.addArgument("operand", iur);
+        iur=context.issueSubRequest(req);
+        
+        IAspectXDA xdaParam = (IAspectXDA) context.transrept(iur, IAspectXDA.class);
+        String currentUser = ((IAspectString) context.sourceAspect("this:param:currentuser", IAspectString.class)).getString();
+        
+        // TODO: Authenticate the batch format
         // TODO: THIS IS DANGEROUS. WE NEED TO DETERMINE WHAT THE TRANSACTIONAL PROPERTIES OF BATCH LOADS ARE.
         int count = Integer.valueOf(xdaParam.getXDA().eval("count(/purls/purl)").getStringValue()).intValue();
 
-        IXDAReadOnlyIterator maintainerItor = xdaParam.getXDA().readOnlyIterator("//maintainers/maintainer");
+        IXDAReadOnlyIterator maintainerItor = xdaParam.getXDA().readOnlyIterator("//maintainers/uid");
         
         while(maintainerItor.hasNext()) {
             maintainerItor.next();
-            String maintainer = maintainerItor.getText("./@id", true);
+            String maintainer = maintainerItor.getText(".", true);
             String z_id = maintainerMap.get(maintainer);
             
             if(z_id == null) {
@@ -83,6 +87,33 @@ public class BatchLoadAccessor extends NKFAccessorImpl {
                 req.setAspectClass(IAspectXDA.class);
                 IAspectXDA maintainerXDA = (IAspectXDA)context.issueSubRequestForAspect(req);
                 z_id = maintainerXDA.getXDA().getText("/user/z_id", true);
+                maintainerMap.put(maintainer, z_id);
+            }
+        }
+        
+        if(!maintainerMap.containsKey(currentUser)) {
+            req = context.createSubRequest("active:purl-storage-query-user");
+            req.addArgument("uri", "ffcpl:/user/" + currentUser);
+            req.setAspectClass(IAspectXDA.class);
+            IAspectXDA maintainerXDA = (IAspectXDA)context.issueSubRequestForAspect(req);
+            String z_id = maintainerXDA.getXDA().getText("/user/z_id", true);
+            maintainerMap.put(currentUser, z_id);           
+        }
+        
+        // Iterate over the groups
+        maintainerItor = xdaParam.getXDA().readOnlyIterator("//maintainers/gid");
+        
+        while(maintainerItor.hasNext()) {
+            maintainerItor.next();
+            String maintainer = maintainerItor.getText(".", true);
+            String z_id = maintainerMap.get(maintainer);
+            
+            if(z_id == null) {
+                req = context.createSubRequest("active:purl-storage-query-group");
+                req.addArgument("uri", "ffcpl:/group/" + maintainer);
+                req.setAspectClass(IAspectXDA.class);
+                IAspectXDA maintainerXDA = (IAspectXDA)context.issueSubRequestForAspect(req);
+                z_id = maintainerXDA.getXDA().getText("/group/z_id", true);
                 maintainerMap.put(maintainer, z_id);
             }
         }
@@ -118,23 +149,21 @@ public class BatchLoadAccessor extends NKFAccessorImpl {
         req.setURI("active:xsltc");
         req.addArgument("operand", xdaParam);
         req.addArgument("operator", "ffcpl:/sql/db/batchload.xsl");
-        IURRepresentation iur = context.issueSubRequest(req);
+        iur = context.issueSubRequest(req);
  
-        IAspectString sa = (IAspectString) context.transrept(iur, IAspectString.class);
-        String sas = sa.getString();
-        
-        req = context.createSubRequest();
+         req = context.createSubRequest();
         req.setURI("active:sed");
         req.addArgument("operator", new StringAspect(maintainerSB.toString()));
         req.addArgument("operand", iur);
         iur = context.issueSubRequest(req);
         
-        sa = (IAspectString) context.transrept(iur, IAspectString.class);
-        sas = sa.getString();
-        
+        try {
         req = context.createSubRequest("active:sqlBatch");
         req.addArgument("operand", iur);
         iur = context.issueSubRequest(req);
+        } catch(Throwable t) {
+        	t.printStackTrace();
+        }
         
         StringBuffer sb = new StringBuffer("<purl-batch-success numCreated=\"");
         sb.append(count);
