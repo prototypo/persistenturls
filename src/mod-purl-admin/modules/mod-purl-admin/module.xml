@@ -6,7 +6,7 @@
 	-->
     <identity>
 		<uri>urn:org:purl:admin</uri>
-		<version>0.0.1546</version>
+		<version>0.0.1611</version>
     </identity>
 	<info>
 		<name>PURL Admin Module</name>
@@ -19,6 +19,10 @@
     </publisher>
 	<export>
 		<uri>
+			<match>purl:/.*</match>
+			<match>domain:/.*</match>
+			<match>user:.*</match>
+			<match>group:.*</match>
  			<match>ffcpl:/domain.*</match>
 			<match>ffcpl:/group.*</match>
 			<match>ffcpl:/purls.*</match>
@@ -35,13 +39,25 @@
 			<match>active:purl-user-authenticate\+.*</match>			
 			<match>active:purl-initialize</match>
 			<match>active:purl-entries-reindex</match>
-			<match>ffcpl:/etc/HTTPBridgeConfig.xml</match>
+            <match>active:des\+.*</match>
+            <match>ffcpl:/etc/HTTPBridgeConfig.xml</match>
 			<match>ffcpl:/etc/LogConfig.xml</match>
+			<match>ffcpl:/etc/PURLConfig.xml</match>
 			<match>ffcpl:/entrypoints.xml</match>
 			<match>ffcpl:/etc/CRONConfig.xml</match>
+			<match>ffcpl:/etc/PURLConfig.xml</match>
 			<match>ffcpl:/.*</match>
 		</uri>
+		<class>
+			<match>org\.purl\.accessor\.util\..*</match>
+		</class>
 	</export>
+ 	<rewrite>
+ 	<rule>
+      <match>(.*\.bsh)(.*)</match>
+      <to>active:beanshell+operator@$1$2</to>
+    </rule>
+    </rewrite>
 	<mapping>
 		<this>
 			<match>ffcpl:/entrypoints.xml</match>
@@ -61,15 +77,20 @@
 			<match>ffcpl:/scripts/.*</match>
 			<match>ffcpl:/index/.*</match>
 			<match>ffcpl:/schemas/.*</match>
+			<match>ffcpl:/somefolder/.*</match>			
 		</this>
 <!-- 		<rewrite>
 			<match>ffcpl:(/admin/)(domain|group|purl|purls|user)(/.*)</match>
 			<to>active:purl-http+type@$2+path@$1$2$e3</to>
-		</rewrite>-->
+		</rewrite>-->	
 		<rewrite>
 			<match>ffcpl:/admin/(.*.bsh.*)</match>
 			<to>active:beanshell+operator@ffcpl:/resources/$1</to>
 		</rewrite>
+        <rewrite>
+        	<match>(purl:/.*)</match>
+        	<to>active:purl-resolver+path@$1</to>
+        </rewrite>		
 		<rewrite>
 			<match>(ffcpl:/purl.*)</match>
 			<to>active:purl-resolver+path@$1</to>
@@ -96,6 +117,10 @@
 			<to>active:purl+path@ffcpl:/purl$2</to>
 		</rewrite>
 		<rewrite>
+			<match>(ffcpl:/admin/purl)(.*)(\+param.*)</match>
+			<to>active:purl+path@ffcpl:/purl$e2$3</to>
+		</rewrite>				
+		<rewrite>
 			<match>(ffcpl:/admin/targeturls)(.*)</match>
 			<to>active:purls-validate+path@ffcpl:$2</to>
 		</rewrite>
@@ -103,6 +128,10 @@
 			<match>(ffcpl:/admin/targeturl)(.*)</match>
 			<to>active:purl-validate+mode@mode:validate+path@ffcpl:$2</to>
 		</rewrite>
+		<rewrite>
+			<match>(domain:/.*)</match>
+			<to>active:purl-domain+path@$1</to>
+		</rewrite>		
 		<rewrite>
 			<match>(ffcpl:/domain.*)</match>
 			<to>active:purl-domain+path@$1</to>
@@ -112,6 +141,10 @@
 			<to>active:purl-domain+path@$1</to>
 		</rewrite>
 		<rewrite>
+			<match>(group:.*)</match>
+			<to>active:purl-group+path@$1</to>
+		</rewrite>		
+		<rewrite>
 			<match>(ffcpl:/group.*)</match>
 			<to>active:purl-group+path@$1</to>
 		</rewrite>
@@ -119,6 +152,10 @@
 			<match>(ffcpl:/admin/group.*)</match>
 			<to>active:purl-group+path@$1</to>
 		</rewrite>
+		<rewrite>
+			<match>(user:.*)</match>
+			<to>active:purl-user+path@$1</to>
+		</rewrite>		
 		<rewrite>
 			<match>(ffcpl:/user.*)</match>
 			<to>active:purl-user+path@$1</to>
@@ -185,14 +222,14 @@
       		<match>active:purl\+.*</match>
       		<class>org.purl.accessor.PURLAccessor</class>
     	</ura>
- 		<rewrite>
+        <ura>
+            <match>active:des\+.*</match>
+            <class>org.purl.accessor.DESAccessor</class>
+        </ura>      
+         <rewrite>
 			<match>(ffcpl:/(?!static|pub|xlib).*)</match>
 			<to>active:beanshell+operator@ffcpl:/scripts/main.bsh+base@$1</to>
 		</rewrite>
-		<!--
-		<import>
-			<uri>urn:org:purl:static</uri>
-		</import>-->
 		<import>
 			<uri>urn:org:purl:storage</uri>
 		</import>
@@ -202,9 +239,6 @@
 		<import>
 			<uri>urn:org:ten60:netkernel:ext:http:client</uri>
 		</import>
-	<!--	<import>
-			<uri>urn:org:ten60:netkernel:ext:session</uri>
-		</import>-->
 		<import>
 			<uri>urn:org:ten60:netkernel:ext:script</uri>
 		</import>

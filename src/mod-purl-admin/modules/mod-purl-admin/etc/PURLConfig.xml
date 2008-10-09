@@ -1,12 +1,19 @@
 <purl-config>
-	<!--  TODO: Parameterize all server references -->
+	<!-- TODO: Build a user interface to update these preferences -->
+	<!-- TODO: Parameterize all server references -->
 	<serverInfo>2.0; http://localhost:8080</serverInfo>
 	<allowUserAutoCreation/>
 	<allowTopLevelDomainAutoCreation/>	
 	<allowPublicDomains/>
+	<purlsTakePrecedence/>
+	<!-- TODO: Are we creating these? -->
 	<publicDomains>
 		<domain>/net</domain>
 	</publicDomains>
+	<!-- TODO: Are we enforcing these? -->
+	<reservedDomains>
+		<domain>/docs</domain>
+	</reservedDomains>
 	<adminUsers>
 		<user>admin</user>
 	</adminUsers>
@@ -21,4 +28,5 @@
 	<topLevelRedirects>
 	<!-- 		<redirect from="ffcpl:/metadata" to="ffcpl:/static/metadata"/>-->
 	</topLevelRedirects>
+    <!--<passwdFile>/Users/dfeeney/Downloads/passwd</passwdFile>-->
 </purl-config>
