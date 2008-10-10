@@ -5,7 +5,7 @@
 IZPACK=/Applications/IzPack
 
 # PURL server version number.
-VERSION=1.0
+VERSION=1.1
 
 $IZPACK/bin/compile IzPackInstall.xml -b . -o PURLZ-Server-$VERSION.jar -k standard
 
