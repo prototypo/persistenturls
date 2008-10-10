@@ -121,7 +121,8 @@ public class GroupCreator implements ResourceCreator {
         
         sb.append("</members>");
         sb.append("<comments>");
-        sb.append(DataHelper.cleanseInput(params.getValue("comments")));
+        String comments = DataHelper.cleanseInput(params.getValue("comments"), 300);
+        sb.append(comments);
         sb.append("</comments>");
         sb.append("</group>");
         
