@@ -50,7 +50,12 @@ public class UserCreator implements ResourceCreator {
             sb.append(params.getValue("email"));
             sb.append("</email>");
             sb.append("<password>");
-            sb.append(NKHelper.getMD5Value(context, params.getValue("passwd")));
+            String password = params.getValue("passwd");
+            if(password.startsWith("des:")) {
+            	sb.append(password);
+            } else {
+            	sb.append(NKHelper.getMD5Value(context, password));
+            }
             sb.append("</password>");
             sb.append("<hint>");
             sb.append(DataHelper.cleanseInput(params.getValue("hint")));
