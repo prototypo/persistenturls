@@ -21,7 +21,7 @@ main() {
         purlSQL = context.sourceAspect("ffcpl:/sql/db/purlQuery.xml", IAspectXDA.class);
         purlSQL = generatePURLQuerySQL(purlSQL, purl);
         results = issueSQLQuery(purlSQL);
-        
+
         if(results.getXDA().isTrue("/results/row/z_id")) {
         purlID = results.getXDA().getText("/results/row/z_id/text()", true);
 
@@ -34,7 +34,6 @@ main() {
         purlXDA.setText("/purl/z_id", resultsXDA.getText("/results/row/z_id/text()", true));                
         purlXDA.setText("/purl/id", resultsXDA.getText("/results/row/p_id/text()", true));
         purlXDA.setText("/purl/@status", resultsXDA.getText("/results/row/status/text()", true));
-
         
         type = resultsXDA.getText("/results/row/type/text()", true);
         
@@ -63,7 +62,7 @@ main() {
         }
 
     } catch(Throwable t) {
-        t.printStackTrace();
+		System.out.println("Error retrieving purl: " + purl);
         iur = new StringAspect("<error message=\"Could not query purl:" + purl + "\"/>");
     }
 
