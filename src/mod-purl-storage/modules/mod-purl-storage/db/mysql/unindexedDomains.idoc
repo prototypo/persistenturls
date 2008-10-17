@@ -6,7 +6,8 @@
 				<sql>
 					select d_id from domains
 						where indexed = false and
-							status &gt;= 1;
+							status &gt;= 1
+							limit 500;
 				</sql>
 			</operand>
 			<target>this:response</target>
