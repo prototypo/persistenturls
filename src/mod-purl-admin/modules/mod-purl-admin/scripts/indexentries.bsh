@@ -1,6 +1,7 @@
 import org.ten60.netkernel.xml.representation.*;
 import com.ten60.netkernel.urii.aspect.*;
 import org.purl.accessor.util.*;
+import java.util.*;
 
 main() {
 
@@ -17,7 +18,7 @@ main() {
 		
 				resp=context.createResponseFrom(new StringAspect("<indexed-entries/>"));	
 	
-			} finally {
+			} catch(Throwable t) { System.out.println("EXCEPTION");} finally {
 				//releaseLock("active:purl-reindex");
 				Indexer.doneIndexing();
 			}
@@ -42,17 +43,71 @@ indexUsers() {
 	sb = null;
 	count = 0;
 	
+	handleList = new ArrayList();
+	resultList = new ArrayList();
+	sb = new StringBuffer("<users>");
+	count = 0;
+	
 	try {
+
+		while(xdaRO.hasNext()) {
+			xdaRO.next();
+			userID = xdaRO.getText("userid", true);
+			req = context.createSubRequest("active:purl-storage-query-user");
+        	req.addArgument("uri", "ffcpl:/user/" + userID);
+			handleEntry = new Object[2];
+			handleEntry[0] = userID;
+			handleEntry[1] = context.issueAsyncSubRequest(req);
+			handleList.add(handleEntry);
+		}
+		
+		System.out.println("Users Index Count: " + handleList.size());
+		
+		itor = handleList.iterator();
+		while(itor.hasNext()) {
+			handleEntry = itor.next();
+			handle = handleEntry[1];
+			handleEntry[1] = handle.join();
+			resultList.add(handleEntry);
+		}
+		
+		itor = resultList.iterator();
+		while(itor.hasNext()) {
+			handleEntry = itor.next();
+			sa = context.transrept(handleEntry[1], IAspectString.class);
+			System.out.println("Indexing..." + handleEntry[0]);
+			NKHelper.indexResourceNoClose(context, "ffcpl:/index/user", handleEntry[0], sa);
+			sb.append("<user><id>" + handleEntry[0] + "</id></user>");
+			count++;
+		}
+		
+	} finally {
+		NKHelper.closeIndex(context, "ffcpl:/index/user");
+		
+		if(count>0) {
+			sb.append("</users>");
+			
+			req = context.createSubRequest("active:purl-storage-users-indexed");
+			req.addArgument("param", new StringAspect(sb.toString()));
+			req.setAspectClass(IAspectString.class);
+			sa = context.issueSubRequestForAspect(req);
+		
+		}
+	}
+	
+/*	try {
 		sb = new StringBuffer("<users>");
 		while(xdaRO.hasNext()) {
 			xdaRO.next();
 			userID = xdaRO.getText("userid", true);
+			System.out.println("**********INDEXING: " + userID);
 			req = context.createSubRequest("active:purl-storage-query-user");
         	req.addArgument("uri", "ffcpl:/user/" + userID);
 			req.setAspectClass(IAspectString.class);
 			sa = context.issueSubRequestForAspect(req);
 		
 			NKHelper.indexResource(context, "ffcpl:/index/user", uriResolver.getURI(userID), sa);
+			System.out.println("**********DONE INDEXING: " + userID);
 			
 			sb.append("<user><id>" + userID + "</id></user>");
 			
@@ -70,21 +125,72 @@ indexUsers() {
 			sa = context.issueSubRequestForAspect(req);
 		
 		}
-	}
+	} */
 }
 
 indexDomains() {
-	System.out.println("****Checking Domains...");
-
 	uriResolver = new DomainResolver();
 	req=context.createSubRequest("active:purl-storage-unindexed-domains");
 	req.setAspectClass(IAspectXDA.class);
 	res=context.issueSubRequestForAspect(req);
 	xdaRO = res.getXDA().readOnlyIterator("/results/row");
-	sb = null;
+	
+	handleList = new ArrayList();
+	resultList = new ArrayList();
+	sb = new StringBuffer("<domains>");
 	count = 0;
 	
 	try {
+
+		while(xdaRO.hasNext()) {
+			xdaRO.next();
+			dID = xdaRO.getText("d_id", true);
+			
+			req = context.createSubRequest("active:purl-storage-query-domain");
+        	req.addArgument("uri", "ffcpl:/domain/" + dID);
+			handleEntry = new Object[2];
+			handleEntry[0] = dID;
+			handleEntry[1] = context.issueAsyncSubRequest(req);
+			handleList.add(handleEntry);
+		}
+		
+		System.out.println("Domain Index Count: " + handleList.size());
+		
+		itor = handleList.iterator();
+		while(itor.hasNext()) {
+			handleEntry = itor.next();
+			handle = handleEntry[1];
+			handleEntry[1] = handle.join();
+			resultList.add(handleEntry);
+		}
+		
+		itor = resultList.iterator();
+		while(itor.hasNext()) {
+			handleEntry = itor.next();
+			sa = context.transrept(handleEntry[1], IAspectString.class);
+			System.out.println("Indexing..." + handleEntry[0]);
+			NKHelper.indexResourceNoClose(context, "ffcpl:/index/domain", handleEntry[0], sa);
+			sb.append("<domain><id>" + handleEntry[0] + "</id></domain>");
+			count++;
+		}
+		
+		System.out.println("RESULT LIST: " + resultList.size());
+		
+	} finally {
+		NKHelper.closeIndex(context, "ffcpl:/index/domain");
+		
+		if(count>0) {
+			sb.append("</domains>");
+			
+			req = context.createSubRequest("active:purl-storage-domains-indexed");
+			req.addArgument("param", new StringAspect(sb.toString()));
+			req.setAspectClass(IAspectString.class);
+			sa = context.issueSubRequestForAspect(req);
+		
+		}
+	}
+	
+/*	try {
 		sb = new StringBuffer("<domains>");
 		while(xdaRO.hasNext()) {
 			xdaRO.next();
@@ -111,21 +217,69 @@ indexDomains() {
 			req.setAspectClass(IAspectString.class);
 			sa = context.issueSubRequestForAspect(req);
 		}
-	}
+	} */
 }
 
 indexGroups() {
-	System.out.println("****Checking Groups...");
-
 	uriResolver = new GroupResolver();
 	req=context.createSubRequest("active:purl-storage-unindexed-groups");
 	req.setAspectClass(IAspectXDA.class);
 	res=context.issueSubRequestForAspect(req);
 	xdaRO = res.getXDA().readOnlyIterator("/results/row");
-	sb = null;
+	
+	handleList = new ArrayList();
+	resultList = new ArrayList();
+	sb = new StringBuffer("<groups>");
 	count = 0;
 	
 	try {
+
+		while(xdaRO.hasNext()) {
+			xdaRO.next();
+			gID = xdaRO.getText("g_id", true);
+			req = context.createSubRequest("active:purl-storage-query-group");
+        	req.addArgument("uri", "ffcpl:/group/" + gID);
+			handleEntry = new Object[2];
+			handleEntry[0] = gID;
+			handleEntry[1] = context.issueAsyncSubRequest(req);
+			handleList.add(handleEntry);
+		}
+		
+		System.out.println("Group Index Count: " + handleList.size());
+		
+		itor = handleList.iterator();
+		while(itor.hasNext()) {
+			handleEntry = itor.next();
+			handle = handleEntry[1];
+			handleEntry[1] = handle.join();
+			resultList.add(handleEntry);
+		}
+		
+		itor = resultList.iterator();
+		while(itor.hasNext()) {
+			handleEntry = itor.next();
+			sa = context.transrept(handleEntry[1], IAspectString.class);
+			System.out.println("Indexing..." + handleEntry[0]);
+			NKHelper.indexResourceNoClose(context, "ffcpl:/index/group", handleEntry[0], sa);
+			sb.append("<group><id>" + handleEntry[0] + "</id></group>");
+			count++;
+		}
+		
+	} finally {
+		NKHelper.closeIndex(context, "ffcpl:/index/group");
+		
+		if(count>0) {
+			sb.append("</groups>");
+			
+			req = context.createSubRequest("active:purl-storage-groups-indexed");
+			req.addArgument("param", new StringAspect(sb.toString()));
+			req.setAspectClass(IAspectString.class);
+			sa = context.issueSubRequestForAspect(req);
+		
+		}
+	}
+	
+/*	try {
 		sb = new StringBuffer("<groups>");
 		while(xdaRO.hasNext()) {
 			xdaRO.next();
@@ -152,22 +306,75 @@ indexGroups() {
 			req.setAspectClass(IAspectString.class);
 			sa = context.issueSubRequestForAspect(req);
 		}
-	}
+	} */
 }
 
 indexPURLs() {
-	System.out.println("****Checking PURLS...");
-
 	uriResolver = new PURLURIResolver();
 	req=context.createSubRequest("active:purl-storage-unindexed-purls");
 	req.setAspectClass(IAspectXDA.class);
 	res=context.issueSubRequestForAspect(req);
-
+	
 	xdaRO = res.getXDA().readOnlyIterator("/results/row");
-	sb = null;
+	count = 0;
+	pID = null;
+	zID = null;
+	
+	handleList = new ArrayList();
+	resultList = new ArrayList();
+	sb = new StringBuffer("<purls>");
 	count = 0;
 	
 	try {
+
+		while(xdaRO.hasNext()) {
+			xdaRO.next();
+			pID = xdaRO.getText("p_id", true);
+			zID = xdaRO.getText("z_id", true);
+			
+			req = context.createSubRequest("active:purl-storage-query-purl");
+        	req.addArgument("uri", "ffcpl:/purl" + pID);
+			handleEntry = new Object[3];
+			handleEntry[0] = pID;
+			handleEntry[1] = zID;
+			handleEntry[2] = context.issueAsyncSubRequest(req);
+			handleList.add(handleEntry);
+		}
+		
+		System.out.println("PURL Index Count: " + handleList.size());
+		
+		itor = handleList.iterator();
+		while(itor.hasNext()) {
+			handleEntry = itor.next();
+			handle = handleEntry[2];
+			handleEntry[2] = handle.join();
+			resultList.add(handleEntry);
+		}
+		
+		itor = resultList.iterator();
+		while(itor.hasNext()) {
+			handleEntry = itor.next();
+			sa = context.transrept(handleEntry[2], IAspectString.class);
+			System.out.println("Indexing..." + handleEntry[0]);
+			NKHelper.indexResourceNoClose(context, "ffcpl:/index/purl", handleEntry[0], sa);
+			sb.append("<purl><id>" + StringHelper.escapeURL(handleEntry[0]) + "</id><z_id>" + handleEntry[1] + "</z_id></purl>");
+			count++;
+		}
+		
+	} finally {
+		NKHelper.closeIndex(context, "ffcpl:/index/purl");
+		
+		if(count>0) {
+			sb.append("</purls>");
+			
+			req = context.createSubRequest("active:purl-storage-purls-indexed");
+			req.addArgument("param", new StringAspect(sb.toString()));
+			req.setAspectClass(IAspectString.class);
+			sa = context.issueSubRequestForAspect(req);
+		}
+	}
+	
+/*	try {
 		sb = new StringBuffer("<purls>");
 		while(xdaRO.hasNext()) {
 			xdaRO.next();
@@ -197,7 +404,7 @@ indexPURLs() {
 			req.setAspectClass(IAspectString.class);
 			sa = context.issueSubRequestForAspect(req);
 		}
-	}
+	} */
 }
 
 acquireLock(file) {
