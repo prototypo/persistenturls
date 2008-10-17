@@ -179,6 +179,9 @@ public class GetResourceCommand extends PURLCommand {
                         String uris[] = search.processResults(context, keys[i], results[i]);
                         
                         for(String uri: uris) {
+                        	// Make sure we have a URI                        	
+                        	uri = this.getURIResolver().getURI(uri);
+                        	
                             if(!alreadyDoneSet.contains(uri)) {
                                 if(resStorage.resourceExists(context, uri)) {
                                     if(!resStorage.resourceIsTombstoned(context, uri) || includeTombstoned) {
