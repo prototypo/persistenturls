@@ -94,7 +94,8 @@ public class PurlSearchHelper extends AbstractSearchHelper {
             retValue = retValue.replaceAll("/", " ");
         } else if(key.equals("id")) {
             
-            retValue = "docid:ffcpl*" + retValue;
+            //retValue = "docid:ffcpl*" + retValue;
+        	retValue = "docid:" + retValue;
             
             callSuper = false;
         }
