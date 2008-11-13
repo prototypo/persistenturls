@@ -34,8 +34,11 @@ main() {
 		    req.addArgument("requestURL", context.getThisRequest().getArgument("requestURL"));
 			resp=context.issueSubRequest(req);        		    		
 		} else {
-			// This is a raw resource reference
-			resp=context.source(base);
+			// This is a raw resource reference			
+			//resp=context.source(base);
+			
+			// DCF: No, Return a 404 for now			
+			resp =  NKHelper.setResponseCode(context, context.source("ffcpl:/pub/404-gone.html"), 404);
 		} 
 	} else {
 	       //Issue HTTP Redirect

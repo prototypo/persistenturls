@@ -24,7 +24,7 @@
 	</export>
 	<rewrite>
 	    <rule>
-		    <match>ffcpl:/docs/</match>
+		    <match>ffcpl:/docs/(\+.*)?</match>
 		    <to>ffcpl:/resources/index.html</to>
         </rule>	    
 	    <rule>
