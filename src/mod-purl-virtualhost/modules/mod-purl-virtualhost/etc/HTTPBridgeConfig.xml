@@ -8,11 +8,16 @@
 	</zone>
 
 	-->
+	<!--
   	<zone>
 		<match>ffcpl:/static.*</match>
 	</zone>
   	<zone>
 		<match>.*.(html|js|css|png|ico|jpg|rdf)</match>
+	</zone>
+	-->
+	<zone>
+		<match>.*?://.*?/docs/.*</match>
 	</zone>
 	<zone>
 		<match>..*</match>

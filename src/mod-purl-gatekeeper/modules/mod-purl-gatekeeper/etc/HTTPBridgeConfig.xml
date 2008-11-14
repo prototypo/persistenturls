@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <HTTPBridgeConfig>
-  	<zone>
+  	<!-- <zone>
 		<match>.*.(html|js|css|png|ico|jpg|rdf)</match>
-	</zone>
+	</zone> -->
 	<zone>
 		<match>.*/(admin)/.*</match>
 		<processQueries/>

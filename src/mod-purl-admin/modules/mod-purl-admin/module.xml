@@ -227,7 +227,7 @@
             <class>org.purl.accessor.DESAccessor</class>
         </ura>      
          <rewrite>
-			<match>(ffcpl:/(?!static|pub|xlib).*)</match>
+			<match>(ffcpl:/(?!pub|xlib).*)</match>
 			<to>active:beanshell+operator@ffcpl:/scripts/main.bsh+base@$1</to>
 		</rewrite>
 		<import>

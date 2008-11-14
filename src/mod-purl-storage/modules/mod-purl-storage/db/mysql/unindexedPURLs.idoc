@@ -6,7 +6,7 @@
 				<sql>
 					select p_id, z_id from purls
 						where indexed = false
-							limit 500;
+							limit 50;
 				</sql>
 			</operand>
 			<target>this:response</target>

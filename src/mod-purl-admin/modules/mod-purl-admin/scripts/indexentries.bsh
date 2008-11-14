@@ -18,7 +18,11 @@ main() {
 		
 				resp=context.createResponseFrom(new StringAspect("<indexed-entries/>"));	
 	
-			} catch(Throwable t) { System.out.println("EXCEPTION");} finally {
+			} catch(Throwable t) {
+				System.out.println("EXCEPTION");
+				t.printStackTrace();
+				resp = context.createResponseFrom(new StringAspect("<indexing-failed/>"));
+			} finally {
 				//releaseLock("active:purl-reindex");
 				Indexer.doneIndexing();
 			}

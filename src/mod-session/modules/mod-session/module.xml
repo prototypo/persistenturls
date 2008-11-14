@@ -6,7 +6,7 @@
 	-->
     <identity>
 		<uri>urn:org:purl:session</uri>
-		<version>0.0.4</version>
+		<version>0.0.5</version>
     </identity>
 	<info>
 		<name>PURL Session Module</name>
@@ -36,10 +36,10 @@
 			<match>(.*(template|admin)/(?!static).*)</match>
 			<to>active:sessionmapper+uri@$e1</to>
 		</rule>
-		<rule>
+		 <rule>
 			<match>ffcpl:/(template|admin)(/static.*?)(\+.*)</match>
 			<to>ffcpl:/resources$1</to>
-		</rule>
+		</rule> 
 	</rewrite>
 	<mapping>
 		<this>

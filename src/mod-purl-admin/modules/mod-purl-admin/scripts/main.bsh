@@ -22,7 +22,7 @@ main() {
 		// whatnot.
 		
 		System.out.println("Checking if PURL exists...");
-		
+		System.out.println(base);
 		if(NKHelper.purlExists(context, base)) {
 		    method = context.getThisRequest().getArgument("method");
 		    // TODO: Rewrite ffcpl:/ reference to purl:/ reference
@@ -38,7 +38,9 @@ main() {
 			//resp=context.source(base);
 			
 			// DCF: No, Return a 404 for now			
-			resp =  NKHelper.setResponseCode(context, context.source("ffcpl:/pub/404-gone.html"), 404);
+			code =  NKHelper.setResponseCode(context, context.source("ffcpl:/pub/404-gone.html"), 404);
+			resp = context.createResponseFrom(code);
+			resp.setMimeType("text/html");
 		} 
 	} else {
 	       //Issue HTTP Redirect
