@@ -1,7 +1,8 @@
 PURL Server Installation Instructions
-Version 1.0b4
-December 21, 2007
+Version 1.2
+November 14, 2008
 purlz@zepheira.com
+
 
 ----------------
 | Introduction |
@@ -230,6 +231,11 @@ and comment out the following lines:
 
  $ ant all
  $ ant deploy
+
+ To make the graphical installer:
+
+ $ cd installer
+ $ ./mkinstaller.sh
 
 8) Start NetKernel by:
 
