@@ -45,18 +45,35 @@
 
 <!-- 	If you want to have any static rewrites based on the virtualhost
 		uncomment this and add it in. You will need a module that exports
-		the ffcpl:/static URI if you use the following rewrite rule.
+		a URI (e.g. ffcpl:/static) if you use the following rewrite rule.
 		<rewrite>
 		    <match>jetty://<servername>/(.*)</match>
             <to>ffcpl:/static/$1</to>
 		</rewrite> -->
   		<rewrite>
-		    <match>jetty://.*?(/.*.(html|css|png))</match>
-            <to>ffcpl:$1</to>
+		    <match>jetty://.*?/docs(/.*)</match>
+            <to>ffcpl:/docs$1</to>
+		</rewrite>
+		<!-- TODO: Clean this up! BS -->
+		<rewrite>
+			<match>jetty://.*?/(admin/login/.*)</match>
+    		<to>ffcpl:/$1</to>
 		</rewrite>
 		<rewrite>
-			<match>jetty://.*?/(.*)</match>
+			<match>jetty://.*?/(admin/loginstatus.*)</match>
     		<to>ffcpl:/$1</to>
+		</rewrite>					
+   		<rewrite>
+			<match>jetty://.*?/(admin/.*)(\+param.*)</match>
+    		<to>ffcpl:/$e1$2</to>
+		</rewrite>
+		<!-- <rewrite>
+			<match>jetty://.*?/(.*)((\+param|\+cookie).*)</match>
+    		<to>ffcpl:/$e1$2</to>
+		</rewrite> -->
+		<rewrite>
+			<match>jetty://.*?/(.*?)(\+.*)</match>
+			<to>ffcpl:/$e1$2</to>
 		</rewrite>
 		<import>
 			<uri>urn:org:purl:gatekeeper</uri>
