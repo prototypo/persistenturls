@@ -20,7 +20,10 @@
                     		created		DATETIME,
                     		lastmodified	DATETIME,
                     		status		SMALLINT,
-                    		indexed		BOOLEAN
+                    		indexed		BOOLEAN,
+                        
+                            index(userid),index(indexed)
+
                     	)
                     	</sql>
     	            </stm:append>
@@ -34,7 +37,10 @@
                     		created		DATETIME,
                     		lastmodified	DATETIME,
                     		status		SMALLINT,
-                    		indexed		BOOLEAN	
+                    		indexed		BOOLEAN,
+
+                            index(d_id),index(indexed)
+
                     	)
                    	</sql>
     	            </stm:append>
@@ -46,7 +52,12 @@
                     		z_id			INTEGER UNSIGNED NOT NULL AUTO_INCREMENT, PRIMARY KEY (z_id),
                     		d_id			INTEGER,
                     		m_id			INTEGER,
-                    		type			SMALLINT
+                    		type			SMALLINT,
+
+                            index(d_id), index(m_id),
+                            foreign key (d_id) references domains(z_id) on delete cascade,
+                            foreign key (m_id) references users(z_id) on delete cascade
+
                     	)
                    	</sql>
     	            </stm:append>
@@ -57,7 +68,11 @@
                     		z_id			INTEGER UNSIGNED NOT NULL AUTO_INCREMENT, PRIMARY KEY (z_id),
                     		d_id			INTEGER,
                     		w_id			INTEGER,
-                    		type			SMALLINT
+                    		type			SMALLINT,
+
+                            index(d_id), index(w_id),
+                            foreign key (d_id) references domains(z_id) on delete cascade,
+                            foreign key (w_id) references users(z_id) on delete cascade
                     	)
                    	</sql>
     	            </stm:append>
@@ -72,7 +87,9 @@
                     		created		DATETIME,
                     		lastmodified	DATETIME,
                     		status		SMALLINT,
-                    		indexed		BOOLEAN					
+                    		indexed		BOOLEAN,
+                        
+                            index(g_id),index(indexed)
                     	)
                   	</sql>
                    </stm:append>
@@ -83,7 +100,10 @@
                     		z_id			INTEGER UNSIGNED NOT NULL AUTO_INCREMENT, PRIMARY KEY (z_id),
                     		g_id			INTEGER,
                     		m_id			INTEGER,
-                    		type			SMALLINT
+                    		type			SMALLINT,
+                            index(g_id),index(m_id),
+                            foreign key (g_id) references groups(z_id) on delete cascade,
+                            foreign key (m_id) references users(z_id) on delete cascade
                     	)
                   	</sql>
    	            </stm:append>
@@ -94,7 +114,10 @@
                     		z_id			INTEGER UNSIGNED NOT NULL AUTO_INCREMENT, PRIMARY KEY (z_id),
                     		g_id			INTEGER,
                     		m_id			INTEGER,
-                    		type			SMALLINT
+                    		type			SMALLINT,
+                            index(g_id),index(m_id),
+                            foreign key (g_id) references groups(z_id) on delete cascade,
+                            foreign key (m_id) references users(z_id) on delete cascade
                     	)
                  	</sql>
                   </stm:append>
@@ -109,7 +132,8 @@
                     		created		DATETIME,
                     		lastmodified	DATETIME,
                     		status		SMALLINT,
-                    		indexed		BOOLEAN				
+                    		indexed		BOOLEAN,
+                            index(p_id(64)),index(indexed)
             	        )
                	</sql>
                 </stm:append>
@@ -120,7 +144,10 @@
                     		z_id			INTEGER UNSIGNED NOT NULL AUTO_INCREMENT, PRIMARY KEY (z_id),
                     		p_id			INTEGER,
                     		m_id			INTEGER,
-                    		type			SMALLINT
+                    		type			SMALLINT,
+                            index(p_id), index(m_id),
+                            foreign key (p_id) references purls(z_id) on delete cascade,
+                            foreign key (m_id) references users(z_id) on delete cascade
                     	)
                  </sql> 	
                 </stm:append>
@@ -133,7 +160,10 @@
                 			status			SMALLINT,
                     		type			VARCHAR(100),
                     		target			VARCHAR(4000),                			                			
-                			modtime			DATETIME
+                			modtime			DATETIME,
+                            index(p_id), index(u_id),
+                            foreign key (p_id) references purls(z_id) on delete cascade,
+                            foreign key (u_id) references users(z_id) on delete cascade
                 		)
                 </sql>
                 </stm:append>

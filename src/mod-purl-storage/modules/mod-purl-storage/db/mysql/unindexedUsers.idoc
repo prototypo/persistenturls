@@ -7,7 +7,7 @@
 					select userid from users
 						where indexed = false and
 							status &gt;= 1
-							limit 50;
+							limit 500;
 				</sql>
 			</operand>
 			<target>this:response</target>
