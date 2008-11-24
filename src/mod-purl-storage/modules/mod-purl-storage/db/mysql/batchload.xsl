@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
-    <xsl:template match="purls">
-        <batch>
-            <xsl:apply-templates/>
-        </batch>
-    </xsl:template>
+    <!--<xsl:template match="purls">-->
+        <!--<batch>-->
+            <!--<xsl:apply-templates/>-->
+        <!--</batch>-->
+    <!--</xsl:template>-->
     
-    <xsl:template match="purl">       
+    <xsl:template match="purl">
+        <batch>
         <sql>
             INSERT INTO purls VALUES( null, '<xsl:value-of select="@id"/>', '<xsl:value-of select="@type"/>', '<xsl:value-of select="*/@url"/>', NOW(), NOW(), 1, false);
         </sql>
@@ -30,5 +31,6 @@
             </sql>
         </xsl:for-each>        
         <xsl:apply-templates/>
+        </batch>
     </xsl:template>  
 </xsl:stylesheet>

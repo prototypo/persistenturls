@@ -20,7 +20,7 @@
 		"lastmodified"	TIMESTAMP,
 		"status"		SMALLINT,
 		"indexed"		BOOLEAN,
-		UNIQUE( "z_id" )
+		UNIQUE( "z_id" ), UNIQUE( "userid" )
 	);
 
 	CREATE CACHED TABLE domains (
@@ -32,7 +32,7 @@
 		"lastmodified"	TIMESTAMP,
 		"status"		SMALLINT,
 		"indexed"		BOOLEAN,	
-		UNIQUE( "z_id" )
+		UNIQUE( "z_id" ), UNIQUE( "d_id" )
 	);
 	
 	CREATE CACHED TABLE domainmaintainers (
@@ -60,7 +60,7 @@
 		"lastmodified"	TIMESTAMP,
 		"status"		SMALLINT,
 		"indexed"		BOOLEAN,					
-		UNIQUE( "z_id" )
+		UNIQUE( "z_id" ), UNIQUE( "g_id" )
 	);
 	
 	CREATE CACHED TABLE groupmaintainers (
@@ -89,7 +89,7 @@
 		"lastmodified"	TIMESTAMP,
 		"status"		SMALLINT,
 		"indexed"		BOOLEAN,				
-		UNIQUE( "z_id" )
+		UNIQUE( "z_id" ), UNIQUE( "p_id" )
 	);
 	
 	CREATE CACHED TABLE purlmaintainers (

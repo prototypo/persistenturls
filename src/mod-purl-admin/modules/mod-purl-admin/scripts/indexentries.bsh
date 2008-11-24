@@ -368,7 +368,7 @@ indexPURLs() {
 		
 		if(count>0) {
 			sb.append("</purls>");
-			
+
 			req = context.createSubRequest("active:purl-storage-purls-indexed");
 			req.addArgument("param", new StringAspect(sb.toString()));
 			req.setAspectClass(IAspectString.class);

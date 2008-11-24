@@ -366,8 +366,8 @@
     <test>
 		<uri>active:beanshell+operator@ffcpl:/test/accessor/batchLoad.bsh+batch@ffcpl:/testdata/loadtest.xml</uri>    
     	<assert>
-    		<xpath>count(/purl-batch-success) = 1</xpath>
-    		<xpath>/purl-batch-success/@numCreated = '1000'</xpath>    		
+    		<xpath>count(/purl-batch) = 1</xpath>
+    		<xpath>/purl-batch/@successful = '1000'</xpath>    		
     	</assert>
     </test>
     <test>

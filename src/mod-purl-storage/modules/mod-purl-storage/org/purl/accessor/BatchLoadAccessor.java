@@ -18,162 +18,116 @@ package org.purl.accessor;
  *
  */
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
-import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
-import org.ten60.netkernel.layer1.nkf.INKFRequest;
-import org.ten60.netkernel.layer1.nkf.INKFRequestReadOnly;
-import org.ten60.netkernel.layer1.nkf.INKFResponse;
+import org.ten60.netkernel.layer1.nkf.*;
 import org.ten60.netkernel.layer1.nkf.impl.NKFAccessorImpl;
-import org.ten60.netkernel.xml.representation.IAspectXDA;
-import org.ten60.netkernel.xml.xda.IXDAReadOnly;
 import org.ten60.netkernel.xml.xda.IXDAReadOnlyIterator;
+import org.ten60.netkernel.xml.xda.IXDAReadOnly;
 
 import com.ten60.netkernel.urii.IURRepresentation;
-import com.ten60.netkernel.urii.aspect.IAspectString;
 import com.ten60.netkernel.urii.aspect.StringAspect;
+import com.ten60.netkernel.urii.aspect.IAspectString;
 
 public class BatchLoadAccessor extends NKFAccessorImpl {
-    
+
     /**
      * Default constructor to indicate that we are good for source requests
      * and is safe for concurrent use.
-     *
      */
     public BatchLoadAccessor() {
         super(SAFE_FOR_CONCURRENT_USE, INKFRequestReadOnly.RQT_SOURCE);
     }
-    
+
+
     @Override
     public void processRequest(INKFConvenienceHelper context) throws Exception {
-        
-        // We'll maintain a local copy of any maintainer info to avoid unnecessary
-        // kernel request scheduling
-        
-        Map<String,String> maintainerMap = new HashMap<String,String>();
-        
-        if(!context.exists("this:param:param")) {
+
+        if (!context.exists("this:param:param")) {
             throw new IllegalArgumentException("Missing param argument");
         }
-        
-        IURRepresentation iur = context.source("this:param:param");
-        INKFRequest req = null; 
-        INKFResponse resp = null;
-        
-        // If the batch file contains any apostrophes, escape them for processing below
-        req=context.createSubRequest("active:SQLEscapeXML");
-        req.addArgument("operand", iur);
-        iur=context.issueSubRequest(req);
-        
-        IAspectXDA xdaParam = (IAspectXDA) context.transrept(iur, IAspectXDA.class);
-        String currentUser = ((IAspectString) context.sourceAspect("this:param:currentuser", IAspectString.class)).getString();
-        
-        // TODO: Authenticate the batch format
-        // TODO: THIS IS DANGEROUS. WE NEED TO DETERMINE WHAT THE TRANSACTIONAL PROPERTIES OF BATCH LOADS ARE.
-        int count = Integer.valueOf(xdaParam.getXDA().eval("count(/purls/purl)").getStringValue()).intValue();
 
-        IXDAReadOnlyIterator maintainerItor = xdaParam.getXDA().readOnlyIterator("//maintainers/uid");
-        
-        while(maintainerItor.hasNext()) {
-            maintainerItor.next();
-            String maintainer = maintainerItor.getText(".", true);
-            String z_id = maintainerMap.get(maintainer);
-            
-            if(z_id == null) {
-                req = context.createSubRequest("active:purl-storage-query-user");
-                req.addArgument("uri", "ffcpl:/user/" + maintainer);
-                req.setAspectClass(IAspectXDA.class);
-                IAspectXDA maintainerXDA = (IAspectXDA)context.issueSubRequestForAspect(req);
-                z_id = maintainerXDA.getXDA().getText("/user/z_id", true);
-                maintainerMap.put(maintainer, z_id);
+
+        BatchLoadRequest request = new BatchLoadRequest(context);
+
+        // Iterate over the supplied list of purls and process each individually
+        IXDAReadOnly purlXDA = request.getPurlXDA();
+        IXDAReadOnlyIterator it = purlXDA.readOnlyIterator("/purls/purl");
+        int successful = 0,failed = 0;
+        StringBuffer failedSB = new StringBuffer();
+        while (it.next()) {
+            if (processPurl(request, new StringAspect(it.toString()), failedSB)) {
+                successful++;
+            } else {
+                failed++;
             }
+
         }
-        
-        if(!maintainerMap.containsKey(currentUser)) {
-            req = context.createSubRequest("active:purl-storage-query-user");
-            req.addArgument("uri", "ffcpl:/user/" + currentUser);
-            req.setAspectClass(IAspectXDA.class);
-            IAspectXDA maintainerXDA = (IAspectXDA)context.issueSubRequestForAspect(req);
-            String z_id = maintainerXDA.getXDA().getText("/user/z_id", true);
-            maintainerMap.put(currentUser, z_id);           
+
+        // Prepare the results, including any failed PURL descriptions
+        StringBuffer sb = new StringBuffer("<purl-batch total=\"" + request.getPurlCount() + "\" numCreated=\"");
+        sb.append(successful);
+        sb.append("\" failed=\"" + failed + "\">");
+        if (failedSB.length() > 0) {
+            sb.append(failedSB.toString());
         }
-        
-        // Iterate over the groups
-        maintainerItor = xdaParam.getXDA().readOnlyIterator("//maintainers/gid");
-        
-        while(maintainerItor.hasNext()) {
-            maintainerItor.next();
-            String maintainer = maintainerItor.getText(".", true);
-            String z_id = maintainerMap.get(maintainer);
-            
-            if(z_id == null) {
-                req = context.createSubRequest("active:purl-storage-query-group");
-                req.addArgument("uri", "ffcpl:/group/" + maintainer);
-                req.setAspectClass(IAspectXDA.class);
-                IAspectXDA maintainerXDA = (IAspectXDA)context.issueSubRequestForAspect(req);
-                z_id = maintainerXDA.getXDA().getText("/group/z_id", true);
-                maintainerMap.put(maintainer, z_id);
-            }
-        }
-        
-        if(!maintainerMap.containsKey(currentUser)) {
-            req = context.createSubRequest("active:purl-storage-query-user");
-            req.addArgument("uri", "ffcpl:/user/" + currentUser);
-            req.setAspectClass(IAspectXDA.class);
-            IAspectXDA maintainerXDA = (IAspectXDA)context.issueSubRequestForAspect(req);
-            String z_id = maintainerXDA.getXDA().getText("/user/z_id", true);
-            maintainerMap.put(currentUser, z_id);           
-        }
-        
-        Iterator<String> itor = maintainerMap.keySet().iterator();
-        
-        StringBuffer maintainerSB = new StringBuffer("<sed>");
-        
-        while(itor.hasNext()) {
-            String key = itor.next();
-            maintainerSB.append("<pattern><regex>@@MAINTAINER-");
-            maintainerSB.append(key);
-            maintainerSB.append("@@</regex><replace>");
-            maintainerSB.append(maintainerMap.get(key));
-            maintainerSB.append("</replace></pattern>");
-        }
-        
-        maintainerSB.append("<pattern><regex>@@CURRENTUSER@@</regex><replace>");
-        maintainerSB.append(maintainerMap.get(currentUser));
-        maintainerSB.append("</replace></pattern>");        
-        maintainerSB.append("</sed>");
-        
-        req=context.createSubRequest();
-        req.setURI("active:xsltc");
-        req.addArgument("operand", xdaParam);
-        req.addArgument("operator", "ffcpl:/sql/db/batchload.xsl");
-        iur = context.issueSubRequest(req);
- 
-         req = context.createSubRequest();
-        req.setURI("active:sed");
-        req.addArgument("operator", new StringAspect(maintainerSB.toString()));
-        req.addArgument("operand", iur);
-        iur = context.issueSubRequest(req);
-        
-        try {
-        req = context.createSubRequest("active:sqlBatch");
-        req.addArgument("operand", iur);
-        iur = context.issueSubRequest(req);
-        } catch(Throwable t) {
-        	t.printStackTrace();
-        }
-        
-        StringBuffer sb = new StringBuffer("<purl-batch-success numCreated=\"");
-        sb.append(count);
-        sb.append("\"/>");
-        
-        resp = context.createResponseFrom(new StringAspect(sb.toString()));
+        sb.append("</purl-batch>");
+
+        INKFResponse resp = context.createResponseFrom(new StringAspect(sb.toString()));
         context.setResponse(resp);
 
         resp.setMimeType("text/xml");
         resp.setExpired();
         context.setResponse(resp);
+    }
+
+    /**
+     * Attempts to create a purl based on the supplied XML fragment.
+     * @param request The current batch load request
+     * @param purlXML an XML fragment describing the PURL
+     * @param resultBuffer a buffer that failures will be written to
+     * @return true on success
+     */
+    private boolean processPurl(BatchLoadRequest request, IAspectString purlXML, StringBuffer resultBuffer) {
+        try {
+            INKFConvenienceHelper context = request.getContext();
+
+            // Transform the XML fragment to the appropriate SQL statements
+            INKFRequest req = context.createSubRequest();
+            req.setURI("active:xsltc");
+            req.addArgument("operand", purlXML);
+            req.addArgument("operator", "ffcpl:/sql/db/batchload.xsl");
+            IURRepresentation iur = context.issueSubRequest(req);
+
+            // Insert the list of maintainers into the sql statements
+            StringBuffer maintainerSB = new StringBuffer("<sed>");
+            for (String key : request.getMaintainers()) {
+                String maintainerID = request.getMaintainerID(key);
+                if (maintainerID != null) {
+                    maintainerSB.append(generateSedPattern("@@MAINTAINER-" + key + "@@", maintainerID));
+                }
+            }
+            maintainerSB.append(generateSedPattern("@@CURRENTUSER@@", request.getMaintainerID(request.getCurrentUser())));
+            maintainerSB.append("</sed>");
+
+            req = context.createSubRequest();
+            req.setURI("active:sed");
+            req.addArgument("operator", new StringAspect(maintainerSB.toString()));
+            req.addArgument("operand", iur);
+            iur = context.issueSubRequest(req);
+
+            // Submit the batch
+            req = context.createSubRequest("active:sqlBatch");
+            req.addArgument("operand", iur);
+            iur = context.issueSubRequest(req);
+        } catch (Throwable t) {
+            resultBuffer.append("<failure><message>" + t.getMessage() + "</message>" + purlXML.getString() + "</failure>");
+            return false;
+        }
+        return true;
+    }
+
+    private String generateSedPattern(String pattern, String value) {
+        return "<pattern><regex>" + pattern +
+                "</regex><replace>" + value +
+                "</replace></pattern>";
     }
 }
