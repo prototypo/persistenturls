@@ -16,7 +16,9 @@ public class DomainIterator implements Iterator<String> {
         } else if(purl.startsWith("ffcpl:/domain")) {
             purl = purl.substring(13);
         }
-        
+        if (purl.endsWith("/")) {
+            purl = purl.substring(0,purl.length()-1);
+        }
         components = purl.split("/");
     }
 
