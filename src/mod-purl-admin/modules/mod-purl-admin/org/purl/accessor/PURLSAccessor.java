@@ -11,6 +11,9 @@ import org.ten60.netkernel.xml.representation.DOMXDAAspect;
 import org.ten60.netkernel.xml.representation.IAspectXDA;
 import org.ten60.netkernel.xml.xda.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PURLSAccessor extends NKFAccessorImpl {
 
     private URIResolver purlResolver;
@@ -114,6 +117,7 @@ public class PURLSAccessor extends NKFAccessorImpl {
         try {
             IXDAReadOnlyIterator xdaROItor = batchXDA.getXDA().readOnlyIterator("/purls/purl");
             retValue = batchXDA.getClonedXDA();
+            List<String> deleteQueue = new ArrayList();
             while (xdaROItor.hasNext()) {
                 try {
                     xdaROItor.next();
@@ -121,7 +125,7 @@ public class PURLSAccessor extends NKFAccessorImpl {
                     String result = checkPURL(context, xdaROItor);
                     if (result.startsWith(("<failure>"))) {
                         rejected.append(result);
-                        retValue.delete(xdaROItor.getCurrentXPath());
+                        deleteQueue.add(0,xdaROItor.getCurrentXPath());
                         continue;
                     } else {
                         retValue.setText(xdaROItor.getCurrentXPath() + "/@id", result);
@@ -130,7 +134,7 @@ public class PURLSAccessor extends NKFAccessorImpl {
                     result = checkForClone(context, xdaROItor);
                     if (result.startsWith(("<failure>"))) {
                         rejected.append(result);
-                        retValue.delete(xdaROItor.getCurrentXPath());
+                        deleteQueue.add(0,xdaROItor.getCurrentXPath());
                         continue;
                     } else if (result.length() > 0) {
                         retValue.replace(((IAspectXDA) context.transrept(new StringAspect(result), IAspectXDA.class)).getXDA(), "/purl", xdaROItor.getCurrentXPath());
@@ -139,16 +143,21 @@ public class PURLSAccessor extends NKFAccessorImpl {
                     result = checkForChain(context, xdaROItor);
                     if (result.startsWith("<failure>")) {
                         rejected.append(result);
-                        retValue.delete(xdaROItor.getCurrentXPath());
+                        deleteQueue.add(0,xdaROItor.getCurrentXPath());
                         continue;
                     } else if (result.length() > 0) {
                         DOMXDAAspect targetShimDOMXDA = (DOMXDAAspect) context.transrept(new StringAspect(result), DOMXDAAspect.class);
                         retValue.append(targetShimDOMXDA.getXDA(), "/", xdaROItor.getCurrentXPath());
                     }
                 } catch (Exception ex) {
+                    System.out.println("****" + xdaROItor.toString());
+                    ex.printStackTrace();
                     rejected.append("<failure><message>Unable to process PURL</message>" + xdaROItor.toString() + "</failure>");
                     retValue.delete(xdaROItor.getCurrentXPath());
                 }
+            }
+            for (String path : deleteQueue) {
+                retValue.delete(path);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -160,8 +169,12 @@ public class PURLSAccessor extends NKFAccessorImpl {
 
     private String checkPURL(INKFConvenienceHelper context, IXDAReadOnlyIterator xdaROItor) throws Exception {
         String p_id = xdaROItor.getText("@id", true);
+        String target = xdaROItor.getText("target/@url", true);
+        if (target.length() > 4000) {
+            return "<failure><message>Target URL too long</message>" + xdaROItor.toString() + "</failure>";
+        }
         if (!purlAllowableResource.allow(context, purlResolver.getURI(p_id))) {
-            return "<failure><message>" + ("PURL " + purlResolver.getDisplayName(p_id) + " cannot be created.") + "</message>" + xdaROItor.toString() + "</failure>";
+            return "<failure><message>"+purlAllowableResource.getDenyMessage(context, purlResolver.getURI(p_id)) + "</message>" + xdaROItor.toString() + "</failure>";
         }
         return purlResolver.getDisplayName(p_id);
     }

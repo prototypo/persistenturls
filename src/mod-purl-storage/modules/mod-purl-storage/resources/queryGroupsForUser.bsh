@@ -57,14 +57,17 @@ getGroupListForUser(uid) {
 	maintainerFromIDSQL = context.issueSubRequestForAspect(req);
 	
 	results = issueSQLQuery(maintainerFromIDSQL);
-	itor = results.getXDA().readOnlyIterator("/results/row/g_id");
+    groupsSB = new StringBuffer("<groups>");
+
+	if(results.getXDA().isTrue("/results/row/g_id")) {
+	    itor = results.getXDA().readOnlyIterator("/results/row/g_id");
 	
-	groupsSB = new StringBuffer("<groups>");
-	while(itor.hasNext()) {
-		itor.next();
-		groupsSB.append("<group>");
-		groupsSB.append(getGroupFromID(itor.getText(".", true)));
-		groupsSB.append("</group>");		
+	    while(itor.hasNext()) {
+		    itor.next();
+		    groupsSB.append("<group>");
+		    groupsSB.append(getGroupFromID(itor.getText(".", true)));
+		    groupsSB.append("</group>");
+	    }
 	}
 	groupsSB.append("</groups>");
 	

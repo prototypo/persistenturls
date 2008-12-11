@@ -6,7 +6,7 @@
 	-->
     <identity>
 		<uri>urn:org:purl:admin</uri>
-		<version>0.0.1623</version>
+		<version>0.0.1635</version>
     </identity>
 	<info>
 		<name>PURL Admin Module</name>
@@ -92,8 +92,8 @@
         	<to>active:purl-resolver+path@$1</to>
         </rewrite>		
 		<rewrite>
-			<match>(ffcpl:/purl.*)</match>
-			<to>active:purl-resolver+path@$1</to>
+			<match>ffcpl:/purl(/.*)</match>
+			<to>active:purl-resolver+path@ffcpl:/purl$e1</to>
 		</rewrite>
 		<rewrite>
 			<match>active:purl-initialize</match>
@@ -105,17 +105,17 @@
 		</rewrite>
 		<rewrite>
 			<match>ffcpl:/admin/history/purl(/.*)</match>
-			<to>active:purl-storage-query-purl-history+purl@ffcpl:/purl$1</to>
+			<to>active:purl-storage-query-purl-history+purl@ffcpl:/purl$e1</to>
 		</rewrite>
 
  		<rewrite>
 			<match>(ffcpl:/admin/purls.*)</match>
 			<to>active:purls+path@$1</to>
 		</rewrite>
-		<rewrite>
-			<match>(ffcpl:/admin/purl)(.*)</match>
-			<to>active:purl+path@ffcpl:/purl$2</to>
-		</rewrite>
+		<!--<rewrite>-->
+			<!--<match>(ffcpl:/admin/purl)(.*)</match>-->
+			<!--<to>active:purl+path@ffcpl:/purl$e2</to>-->
+		<!--</rewrite>-->
 		<rewrite>
 			<match>(ffcpl:/admin/purl)(.*)(\+param.*)</match>
 			<to>active:purl+path@ffcpl:/purl$e2$3</to>

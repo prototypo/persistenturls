@@ -33,8 +33,10 @@ main() {
         groupXDA = groupTemplate.getClonedXDA();
         groupXDA.setText("/group/@status", resultsXDA.getText("/results/row/status/text()", true));
 
-        groupXDA.setText("/group/z_id", resultsXDA.getText("/results/row/z_id/text()", true));                
-        groupXDA.setText("/group/id", resultsXDA.getText("/results/row/g_id/text()", true));
+        groupXDA.setText("/group/z_id", resultsXDA.getText("/results/row/z_id/text()", true));
+        if(resultsXDA.isTrue("/results/row/g_id")) {
+            groupXDA.setText("/group/id", resultsXDA.getText("/results/row/g_id/text()", true));
+        }
         groupXDA.setText("/group/name", resultsXDA.getText("/results/row/name/text()", true));
 
         if(resultsXDA.isTrue("/results/row/comments/text()")) {

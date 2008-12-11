@@ -119,7 +119,7 @@ public class BatchLoadAccessor extends NKFAccessorImpl {
             req.addArgument("operand", iur);
             iur = context.issueSubRequest(req);
         } catch (Throwable t) {
-            resultBuffer.append("<failure><message>" + t.getMessage() + "</message>" + purlXML.getString() + "</failure>");
+            resultBuffer.append("<failure><message>Failed SQL Batch -- Most likely duplicate</message>" + purlXML.getString() + "</failure>");
             return false;
         }
         return true;
