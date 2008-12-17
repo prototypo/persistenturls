@@ -151,7 +151,7 @@ indexDomains() {
 			dID = xdaRO.getText("d_id", true);
 			
 			req = context.createSubRequest("active:purl-storage-query-domain");
-        	req.addArgument("uri", "ffcpl:/domain/" + dID);
+        	req.addArgument("uri", "ffcpl:/domain" + dID);
 			handleEntry = new Object[2];
 			handleEntry[0] = dID;
 			handleEntry[1] = context.issueAsyncSubRequest(req);
