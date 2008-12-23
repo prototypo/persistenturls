@@ -21,7 +21,11 @@ main() {
 	    user = context.issueSubRequestForAspect(req);
 	
 		z_id = user.getXDA().getText("/user/z_id", true);
-		iur = getGroupListForUser(z_id);
+		if (z_id != null && !"".equals(z_id.trim())) {
+		    iur = getGroupListForUser(z_id);
+		} else {
+		    iur= new StringAspect("<groups></groups>");
+		}
 		
 	} catch(Throwable t) {
 		t.printStackTrace();
@@ -64,13 +68,12 @@ getGroupListForUser(uid) {
 	
 	    while(itor.hasNext()) {
 		    itor.next();
-		    groupsSB.append("<group>");
+		    groupsSB.append("<group id=\"");
 		    groupsSB.append(getGroupFromID(itor.getText(".", true)));
-		    groupsSB.append("</group>");
+		    groupsSB.append("\"/>");
 	    }
 	}
 	groupsSB.append("</groups>");
-	
 	return new StringAspect(groupsSB.toString());
 }
 

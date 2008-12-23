@@ -93,7 +93,7 @@ public class GetResourceCommand extends PURLCommand {
                 INKFAsyncRequestHandle handles[] = null;
                 IURRepresentation results[] = null;
                 String keys[] = null;
-                
+
                 boolean includeTombstoned = false;
 
                 int idx = 0;
@@ -106,82 +106,76 @@ public class GetResourceCommand extends PURLCommand {
                         includeTombstoned = Boolean.valueOf(params.getValue(key));
                         continue;
                     }
-                    
+
                     String value = params.getValue(key);
-                    
+
                     if(value.length() == 0) {
                         continue;
                     }
-                    
+
                     searchList.add(key);
                 }
-                
+
                 handles = new INKFAsyncRequestHandle[searchList.size()];
                 results = new IURRepresentation[searchList.size()];
                 keys = new String[searchList.size()];
-                
+
                 Iterator<String> searchCriteriaItor = searchList.iterator();
-                
+
                 while(searchCriteriaItor.hasNext()) {
                     String key = searchCriteriaItor.next();
                     String value = params.getValue(key);
                     INKFRequest req = context.createSubRequest("active:purl-search");
-                    req.addArgument("index", "ffcpl:/index/" + type);
+
+                    String query = "(";
 
                     // See if the keyword values need any processing or filtering
-                    
+
                     StringTokenizer st = new StringTokenizer(value, ",");
                     int kwidx = 0;
-                    
+
                     // We build up arguments this way to encourage caching of the search results
-                    
+
                     while(st.hasMoreTokens()) {
-                        String next = search.processKeyword(context, key, st.nextToken());
-                        
-                        // If we've expanded the list, we'll add in each of the new keywords
-                        
-                        if(next.contains(" ")) {
-                            StringTokenizer st1 = new StringTokenizer(next, " ");
-                            while(st1.hasMoreTokens()) {
-                                req.addArgument(getKeywordName(kwidx++), "keyword:" + st1.nextToken()); 
-                            }
-                            
-                        } else {
-                            if(next.length() > 0 ) {
-                                req.addArgument(getKeywordName(kwidx++), "keyword:" + next);
-                            }
+                        if (kwidx > 0) {
+                            query += " OR ";
                         }
+                        query += search.processKeyword(context, key, st.nextToken());
+                        kwidx++;
+
+
                     }
-                    
-                    // TODO: Add basis references if you can get it to constrain properly
+                    query += ") AND entity:" + type;
+                    System.out.println(query);
+                    req.addArgument("query", new StringAspect(query));
                     handles[idx] = context.issueAsyncSubRequest(req);
                     keys[idx] = key;
                     idx++;
                 }
-                
+
                 for(int i = 0; i < idx; i++ ) {
                     try {
                         results[i] = handles[i].join();
                     } catch (InterruptedException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
-                    } 
+                    }
                 }
-                
+
                 Set<String> alreadyDoneSet = new HashSet<String>();
                 StringBuffer sb = new StringBuffer("<results>");
-                
+
                 for(int i = 0; i < idx; i++ ) {
                     if(results[i] != null) {
                         // This assumes XML search results, if that isn't always going to be the case
                         // this might break.
-                        
+
                         String uris[] = search.processResults(context, keys[i], results[i]);
-                        
+
                         for(String uri: uris) {
-                        	// Make sure we have a URI                        	
+                        	// Make sure we have a URI
                         	uri = this.getURIResolver().getURI(uri);
-                        	
+
                             if(!alreadyDoneSet.contains(uri)) {
                                 if(resStorage.resourceExists(context, uri)) {
                                     if(!resStorage.resourceIsTombstoned(context, uri) || includeTombstoned) {
@@ -198,11 +192,11 @@ public class GetResourceCommand extends PURLCommand {
                                     }
                                 }
                                 alreadyDoneSet.add(uri);
-                            }                           
+                            }
                         }
                     }
                 }
-                
+
                 sb.append("</results>");
 
                 retValue = context.createResponseFrom(new StringAspect(sb.toString()));
@@ -216,15 +210,15 @@ public class GetResourceCommand extends PURLCommand {
 
         return retValue;
     }
-    
+
     private boolean isSearch(String path) {
         // TODO: Use regexs
-        return  path.endsWith("/user/") || 
+        return  path.endsWith("/user/") ||
                 path.endsWith("/domain/") ||
                 path.endsWith("/purl/") ||
                 path.endsWith("/group/");
     }
-    
+
     private String getKeywordName(int kwidx) {
         // TODO: Optimize this to avoid object creation for, say up to ten keywords
         // and then return dynamically generated names for pathological cases.

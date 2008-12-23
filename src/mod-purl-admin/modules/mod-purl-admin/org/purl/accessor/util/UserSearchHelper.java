@@ -12,7 +12,7 @@ public class UserSearchHelper extends AbstractSearchHelper {
         keywordBasisMap.put("name", "/user/name");
         keywordBasisMap.put("affiliation", "/user/affiliation");
         keywordBasisMap.put("email", "/user/email");
-        keywordBasisMap.put("id", "/user/id");
+        keywordBasisMap.put("userid", "/user/id");
     }
 
     public UserSearchHelper() {

@@ -10,18 +10,21 @@ main() {
 	req = context.createSubRequest("active:purl-storage-initialize");
 	context.issueSubRequest(req);
 	sb.append("<storage-layer>initialized</storage-layer>");	
-	
-	// Intialize the Lucene Index
-	if(!context.exists("ffcpl:/index/purls-initialized")) {
-		System.out.println("Reinitializing Lucene Index...");
-		NKHelper.initializeLuceneIndex(context, "ffcpl:/index/purl");
-		NKHelper.initializeLuceneIndex(context, "ffcpl:/index/user");
-		NKHelper.initializeLuceneIndex(context, "ffcpl:/index/domain");
-		NKHelper.initializeLuceneIndex(context, "ffcpl:/index/group");		
-		context.sinkAspect("ffcpl:/index/purls-initialized", new StringAspect("Initialized"));
-		sb.append("<lucene-index>initialized</lucene-index>");
-	}
-	
+
+	req = context.createSubRequest("active:purl-search-initialize");
+
+	IAspectXDA dataSource  = (IAspectXDA)context.sourceAspect("ffcpl:/etc/ConfigRDBMS.xml", IAspectXDA.class);
+    String username =  dataSource.getXDA().getText("/config/rdbms/user", true);
+    String password = dataSource.getXDA().getText("/config/rdbms/password", true);
+    String jdbc = dataSource.getXDA().getText("/config/rdbms/jdbcConnection", true);
+
+    req.addArgument("username", new StringAspect(username));
+    req.addArgument("password", new StringAspect(password));
+    req.addArgument("jdbc", new StringAspect(jdbc));
+
+	context.issueSubRequest(req);
+	sb.append("<purl-search>initialized</purl-search>");
+
 	if(installAdminUsers()) {
 		sb.append("<admin-users>created</admin-users>");
 	}

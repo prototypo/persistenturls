@@ -59,8 +59,7 @@
                             type SMALLINT,
 
                             index(d_id), index(m_id),
-                            foreign key (d_id) references domains(z_id) on delete cascade,
-                            foreign key (m_id) references users(z_id) on delete cascade
+                            foreign key (d_id) references domains(z_id) on delete cascade
 
                             ) type=innodb
                         </sql>
@@ -75,8 +74,7 @@
                             type SMALLINT,
 
                             index(d_id), index(w_id),
-                            foreign key (d_id) references domains(z_id) on delete cascade,
-                            foreign key (w_id) references users(z_id) on delete cascade
+                            foreign key (d_id) references domains(z_id) on delete cascade
                             ) type=innodb
                         </sql>
                     </stm:append>
@@ -108,8 +106,7 @@
                             m_id INTEGER UNSIGNED,
                             type SMALLINT,
                             index(g_id),index(m_id),
-                            foreign key (g_id) references groups(z_id) on delete cascade,
-                            foreign key (m_id) references users(z_id) on delete cascade
+                            foreign key (g_id) references groups(z_id) on delete cascade
                             ) type=innodb
                         </sql>
                     </stm:append>
@@ -122,8 +119,7 @@
                             m_id INTEGER UNSIGNED,
                             type SMALLINT,
                             index(g_id),index(m_id),
-                            foreign key (g_id) references groups(z_id) on delete cascade,
-                            foreign key (m_id) references users(z_id) on delete cascade
+                            foreign key (g_id) references groups(z_id) on delete cascade
                             ) type=innodb
                         </sql>
                     </stm:append>
@@ -153,8 +149,7 @@
                             m_id INTEGER UNSIGNED,
                             type SMALLINT,
                             index(p_id), index(m_id),
-                            foreign key (p_id) references purls(z_id) on delete cascade,
-                            foreign key (m_id) references users(z_id) on delete cascade
+                            foreign key (p_id) references purls(z_id) on delete cascade
                             ) type=innodb
                         </sql>
                     </stm:append>
@@ -169,8 +164,7 @@
                             target VARCHAR(4000),
                             modtime DATETIME,
                             index(p_id), index(u_id),
-                            foreign key (p_id) references purls(z_id) on delete cascade,
-                            foreign key (u_id) references users(z_id) on delete cascade
+                            foreign key (p_id) references purls(z_id) on delete cascade
                             ) type=innodb
                         </sql>
                     </stm:append>

@@ -12,7 +12,7 @@ public class GroupSearchHelper extends AbstractSearchHelper {
         keywordBasisMap.put("name", "/group/name");
         keywordBasisMap.put("maintainers", "/group/maintainers/uid");
         keywordBasisMap.put("members", "/group/members/uid");
-        keywordBasisMap.put("id", "/group/id");
+        keywordBasisMap.put("g_id", "/group/id");
     }
 
     public GroupSearchHelper() {

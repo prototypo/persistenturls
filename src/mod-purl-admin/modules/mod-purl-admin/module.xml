@@ -6,7 +6,7 @@
 	-->
     <identity>
 		<uri>urn:org:purl:admin</uri>
-		<version>0.0.1635</version>
+		<version>0.0.1645</version>
     </identity>
 	<info>
 		<name>PURL Admin Module</name>
@@ -101,7 +101,7 @@
 		</rewrite>
 		<rewrite>
 			<match>active:purl-entries-reindex</match>
-			<to>active:beanshell+operator@ffcpl:/scripts/indexentries.bsh</to>
+			<to>active:purl-search-index+importType@delta-import</to>
 		</rewrite>
 		<rewrite>
 			<match>ffcpl:/admin/history/purl(/.*)</match>

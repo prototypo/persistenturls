@@ -7,6 +7,10 @@ import org.ten60.netkernel.layer1.nkf.INKFRequest;
 import org.ten60.netkernel.layer1.nkf.INKFRequestReadOnly;
 import org.ten60.netkernel.layer1.nkf.INKFResponse;
 import org.ten60.netkernel.layer1.nkf.impl.NKFAccessorImpl;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.common.SolrDocumentList;
+import org.apache.solr.common.SolrDocument;
 
 import com.ten60.netkernel.urii.IURRepresentation;
 import com.ten60.netkernel.urii.aspect.StringAspect;
@@ -19,48 +23,39 @@ public class SearchAccessor extends NKFAccessorImpl {
     
     @Override
     public void processRequest(INKFConvenienceHelper context) throws Exception {
-        
-        INKFRequest req = context.createSubRequest("active:luceneSearch");
-        INKFResponse resp = null;
-        String index=context.getThisRequest().getArgument("index");
-        IURRepresentation retValue = null;
-        int kwidx = 0;
-        String kwname = getKeywordName(kwidx);
-        
-        StringBuffer sb = new StringBuffer("<luceneSearch><index>");
-        sb.append(index);
-        sb.append("</index><query>");
-        
-        // TODO: Use a static list of names 'keyword0', 'keyword1', etc.
-        while(context.getThisRequest().argumentExists(kwname)) {
-            if(kwidx > 0) {
-                sb.append(" ");
+
+        String query = ((StringAspect)context.sourceAspect("this:param:query", StringAspect.class)).getString();
+        SolrIndexManager manager = SolrIndexManager.getInstance(context);
+
+        SolrQuery squery = new SolrQuery(query);
+        QueryResponse qr = manager.getServer(context).query(squery);
+        SolrDocumentList results = qr.getResults();
+
+        StringBuffer sb = new StringBuffer();
+        sb.append("<matches>");
+        for (SolrDocument doc : results) {
+            sb.append("<match>");
+            String docid = "";
+            for (String field : doc.getFieldNames()) {
+                String value = doc.getFieldValue(field).toString();
+                if ("id".equals(field)) {
+                    docid = value.substring(value.indexOf(":") +1, value.length());
+                }
+                sb.append("<" + field + ">");
+                sb.append(value);
+                sb.append("</" + field + ">");
             }
-            String terms = URLDecoder.decode(context.getThisRequest().getArgument(kwname).substring(8), "UTF-8");
-            sb.append(terms);
-            kwname=getKeywordName(++kwidx);
+            sb.append("<docid>" + docid + "</docid>");
+            sb.append("</match>");
         }
-        //sb.append(query);
-        sb.append("</query>");
-        sb.append("</luceneSearch>");
+
+
+        sb.append("</matches>");
+
         
-        try {
-            req.addArgument("operator", new StringAspect(sb.toString()));
-            retValue = context.issueSubRequest(req);
-            resp = context.createResponseFrom(retValue);
-        } catch(Throwable t) {
-            t.printStackTrace();
-            resp = context.createResponseFrom(new StringAspect("<results/>"));
-        }
-        
-        resp.setMimeType("text/xml");
-        context.setResponse(resp);
+        System.out.println(sb.toString());
+        context.setResponse(context.createResponseFrom(new StringAspect(sb.toString())));
     }
     
-    private String getKeywordName(int kwidx) {
-        // TODO: Optimize this to avoid object creation for, say up to ten keywords
-        // and then return dynamically generated names for pathological cases.
-        return "keyword" + kwidx;
-    }
 
 }

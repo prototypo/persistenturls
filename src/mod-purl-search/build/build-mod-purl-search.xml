@@ -24,6 +24,9 @@
 					<include name="modules/ext-layer1-*.jar"/>
 					<include name="modules/ext-xml-core-*.jar"/>
 				</fileset>
+                <fileset dir="${mod-purl-search-lib}">
+					<include name="*.jar"/>
+				</fileset>
             </classpath>
         </javac>
     </target>

@@ -14,7 +14,7 @@ public class DomainSearchHelper extends AbstractSearchHelper {
         keywordBasisMap.put("name", "/domain/name");
         keywordBasisMap.put("maintainers", "/domain/maintainers/uid");
         keywordBasisMap.put("writers", "/domain/writers/uid");
-        keywordBasisMap.put("id", "/domain/id");
+        keywordBasisMap.put("d_id", "/domain/id");
     }
 
     public DomainSearchHelper() {
@@ -24,7 +24,7 @@ public class DomainSearchHelper extends AbstractSearchHelper {
     public String processKeyword(INKFConvenienceHelper context, String key, String value) {
         String newValue = value;
         
-        if(key.equals("id") && newValue.startsWith("/")) {
+        if(key.equals("d_id") && newValue.startsWith("/")) {
             newValue = newValue.substring(1);
         }
         

@@ -22,7 +22,9 @@
 			<match>active:purl-storage.*</match>
 			<match>ffcpl:/etc/CRONConfig.xml</match>
 			<match>ffcpl:/etc/ConfigRDBMS.xml</match>
+			<match>ffcpl:/etc/ConfigPURLSDB.xml</match>
 			<match>ffcpl:/entrypoints.xml</match>
+            <match>ffcpl:/db/.*/solr-data-config.xml</match>
 		</uri>
 	</export>
 	<mapping>

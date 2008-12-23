@@ -16,9 +16,9 @@
 		<name>Index the PURL Data</name>
 		<desc>Periodically updates the search indices</desc>
 		<simple>
-			<startTime>10000</startTime>
+			<startTime>60000</startTime>
 			<endTime></endTime>
-			<repeatInterval>30000</repeatInterval>
+			<repeatInterval>60000</repeatInterval>
 		</simple>
 	</job>		
 </jobs>

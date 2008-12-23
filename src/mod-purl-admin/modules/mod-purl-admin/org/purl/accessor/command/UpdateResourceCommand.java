@@ -75,8 +75,7 @@ public class UpdateResourceCommand extends PURLCommand {
                         IAspectNVP params = getParams(context);
                         IURAspect iur = resCreator.createResource(context, params);
                         if(resStorage.updateResource(context, uriResolver, iur)) {
-                            // Trigger a reindex of the updated resource
-                            NKHelper.updateIndices(context);
+
                             recordCommandState(context, "UPDATE", path);
 
                             String message = "Updated resource: " + uriResolver.getDisplayName(resource);
