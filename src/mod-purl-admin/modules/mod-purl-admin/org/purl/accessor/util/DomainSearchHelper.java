@@ -21,14 +21,5 @@ public class DomainSearchHelper extends AbstractSearchHelper {
         super(keywordBasisMap);
     }
     
-    public String processKeyword(INKFConvenienceHelper context, String key, String value) {
-        String newValue = value;
-        
-        if(key.equals("d_id") && newValue.startsWith("/")) {
-            newValue = newValue.substring(1);
-        }
-        
-        return super.processKeyword(context, key, newValue);
-    }
 
 }
