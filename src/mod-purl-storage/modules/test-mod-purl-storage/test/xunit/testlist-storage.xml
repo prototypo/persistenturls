@@ -272,9 +272,9 @@
     	<assert name="Query PURL">
     		<xpath>count(/purl) = 1</xpath>
     	</assert>
-    </test>        
+    </test>
     <test>
-    	<uri>active:beanshell+operator@ffcpl:/test/accessor/createPURL.bsh+purl@ffcpl:/testdata/testpurl301.xml</uri>
+    	<uri>active:beanshell+operator@ffcpl:/test/accessor/createPURL.bsh+purl@ffcpl:/testdata/testpurl301.xml+user@data:text/plain,brian-test</uri>
     	<assert>
     		<xpath>count(/purl) = 1</xpath>
     		<xpath>/purl/id = '/net/purl/301'</xpath>
@@ -291,7 +291,7 @@
     	</assert>
     </test>     
     <test>
-    	<uri>active:beanshell+operator@ffcpl:/test/accessor/createPURL.bsh+purl@ffcpl:/testdata/testpurl302.xml</uri>
+    	<uri>active:beanshell+operator@ffcpl:/test/accessor/createPURL.bsh+purl@ffcpl:/testdata/testpurl302.xml+user@data:text/plain,brian-test</uri>
     	<assert>
     		<xpath>count(/purl) = 1</xpath>
     		<xpath>/purl/id = '/net/purl/302'</xpath>
@@ -302,7 +302,7 @@
     	</assert>
     </test> 
     <test>
-    	<uri>active:beanshell+operator@ffcpl:/test/accessor/createPURL.bsh+purl@ffcpl:/testdata/testpurl303.xml</uri>
+    	<uri>active:beanshell+operator@ffcpl:/test/accessor/createPURL.bsh+purl@ffcpl:/testdata/testpurl303.xml+user@data:text/plain,brian-test</uri>
     	<assert>
     		<xpath>count(/purl) = 1</xpath>
     		<xpath>/purl/id = '/net/purl/303'</xpath>
@@ -313,7 +313,7 @@
     	</assert>
     </test>
     <test>
-    	<uri>active:beanshell+operator@ffcpl:/test/accessor/updatePURL.bsh+purl@ffcpl:/testdata/testpurl303-mod.xml</uri>
+    	<uri>active:beanshell+operator@ffcpl:/test/accessor/updatePURL.bsh+purl@ffcpl:/testdata/testpurl303-mod.xml+user@data:text/plain,brian-test</uri>
     	<assert>
     		<xpath>count(/purl) = 1</xpath>
     		<xpath>/purl/id = '/net/purl/303'</xpath>
@@ -324,7 +324,7 @@
     	</assert>
     </test>    
     <test>
-    	<uri>active:beanshell+operator@ffcpl:/test/accessor/createPURL.bsh+purl@ffcpl:/testdata/testpurl307.xml</uri>
+    	<uri>active:beanshell+operator@ffcpl:/test/accessor/createPURL.bsh+purl@ffcpl:/testdata/testpurl307.xml+user@data:text/plain,brian-test</uri>
     	<assert>
     		<xpath>count(/purl) = 1</xpath>
     		<xpath>/purl/id = '/net/purl/307'</xpath>
@@ -335,7 +335,7 @@
     	</assert>
     </test>
     <test>
-    	<uri>active:beanshell+operator@ffcpl:/test/accessor/createPURL.bsh+purl@ffcpl:/testdata/testpurl404.xml</uri>
+    	<uri>active:beanshell+operator@ffcpl:/test/accessor/createPURL.bsh+purl@ffcpl:/testdata/testpurl404.xml+user@data:text/plain,brian-test</uri>
     	<assert>
     		<xpath>count(/purl) = 1</xpath>
     		<xpath>/purl/id = '/net/purl/404'</xpath>
@@ -346,7 +346,7 @@
     	</assert>
     </test>
     <test>
-    	<uri>active:beanshell+operator@ffcpl:/test/accessor/createPURL.bsh+purl@ffcpl:/testdata/testpurl410.xml</uri>
+    	<uri>active:beanshell+operator@ffcpl:/test/accessor/createPURL.bsh+purl@ffcpl:/testdata/testpurl410.xml+user@data:text/plain,brian-test</uri>
     	<assert>
     		<xpath>count(/purl) = 1</xpath>
     		<xpath>/purl/id = '/net/purl/410'</xpath>
@@ -364,10 +364,12 @@
     	</assert>
     </test>
     <test>
-		<uri>active:beanshell+operator@ffcpl:/test/accessor/batchLoad.bsh+batch@ffcpl:/testdata/loadtest.xml</uri>    
+		<uri>active:beanshell+operator@ffcpl:/test/accessor/batchLoad.bsh+batch@ffcpl:/testdata/loadtest.xml+currentuser@data:text/plain,brian-test</uri>    
     	<assert>
     		<xpath>count(/purl-batch) = 1</xpath>
-    		<xpath>/purl-batch/@successful = '1000'</xpath>    		
+    		<xpath>/purl-batch/@failed = '0'</xpath>
+    		<xpath>/purl-batch/@numCreated = '1000'</xpath>
+    		<xpath>/purl-batch/@total = '1000'</xpath>      		
     	</assert>
     </test>
     <test>
@@ -440,7 +442,7 @@
     	</assert>
     </test>     
     <test>
-    	<uri>active:purl-storage-delete-purl+uri@ffcpl:/purl/net/purl/301</uri>
+    	<uri>active:purl-storage-delete-purl+uri@ffcpl:/purl/net/purl/301+user@data:text/plain,brian-test</uri>
     	<assert>
     		<xpath>count(/deleted) = 1</xpath>
     		<xpath>/deleted/purl/id = '/net/purl/301'</xpath>    		

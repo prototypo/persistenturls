@@ -11,44 +11,40 @@ main() {
     resp = null;
     iur = null;
     group = null;
-    
     try {
         ruri = context.getThisRequest().getArgument("uri");
         group = ruri.substring(13);
-        
         groupSQL = context.sourceAspect("ffcpl:/sql/db/groupQuery.xml", IAspectXDA.class);
         groupSQL = generateGroupQuerySQL(groupSQL, group);
         results = issueSQLQuery(groupSQL);
-
         if(results.getXDA().isTrue("/results/row/z_id")) {
-        groupID = results.getXDA().getText("/results/row/z_id/text()", true);
+            groupID = results.getXDA().getText("/results/row/z_id/text()", true);
 
-        groupMaintainersSQL = context.sourceAspect("ffcpl:/sql/db/groupMaintainersQuery.xml", IAspectXDA.class);
-        groupMaintainersResults = issueSQLQuery(processSQL(groupMaintainersSQL, groupID));
-        groupMembersSQL = context.sourceAspect("ffcpl:/sql/db/groupMembersQuery.xml", IAspectXDA.class);
-        groupMembersResults = issueSQLQuery(processSQL(groupMembersSQL, groupID));        
+            groupMaintainersSQL = context.sourceAspect("ffcpl:/sql/db/groupMaintainersQuery.xml", IAspectXDA.class);
+            groupMaintainersResults = issueSQLQuery(processSQL(groupMaintainersSQL, groupID));
+            groupMembersSQL = context.sourceAspect("ffcpl:/sql/db/groupMembersQuery.xml", IAspectXDA.class);
+            groupMembersResults = issueSQLQuery(processSQL(groupMembersSQL, groupID));
         
-        groupTemplate = context.sourceAspect("ffcpl:/resources/groupTemplate.xml", IAspectXDA.class);     
-        resultsXDA = results.getXDA();
-        groupXDA = groupTemplate.getClonedXDA();
-        groupXDA.setText("/group/@status", resultsXDA.getText("/results/row/status/text()", true));
+            groupTemplate = context.sourceAspect("ffcpl:/resources/groupTemplate.xml", IAspectXDA.class);
+            resultsXDA = results.getXDA();
+            groupXDA = groupTemplate.getClonedXDA();
+            groupXDA.setText("/group/@status", resultsXDA.getText("/results/row/status/text()", true));
 
-        groupXDA.setText("/group/z_id", resultsXDA.getText("/results/row/z_id/text()", true));
-        if(resultsXDA.isTrue("/results/row/g_id")) {
-            groupXDA.setText("/group/id", resultsXDA.getText("/results/row/g_id/text()", true));
-        }
-        groupXDA.setText("/group/name", resultsXDA.getText("/results/row/name/text()", true));
+            groupXDA.setText("/group/z_id", resultsXDA.getText("/results/row/z_id/text()", true));
+            if(resultsXDA.isTrue("/results/row/g_id")) {
+                groupXDA.setText("/group/id", resultsXDA.getText("/results/row/g_id/text()", true));
+            }
+            groupXDA.setText("/group/name", resultsXDA.getText("/results/row/name/text()", true));
 
-        if(resultsXDA.isTrue("/results/row/comments/text()")) {
-            groupXDA.setText("/group/comments", resultsXDA.getText("/results/row/comments/text()", true));
-        }
-        
-        itor = groupMaintainersResults.getXDA().readOnlyIterator("/results/row");
-        addGroupMaintainersAndMembers(groupXDA, itor, "maintainers");
-        itor = groupMembersResults.getXDA().readOnlyIterator("/results/row");
-        addGroupMaintainersAndMembers(groupXDA, itor, "members");        
-        
-        iur = new DOMXDAAspect(groupXDA);
+            if(resultsXDA.isTrue("/results/row/comments/text()")) {
+                groupXDA.setText("/group/comments", resultsXDA.getText("/results/row/comments/text()", true));
+            }
+            itor = groupMaintainersResults.getXDA().readOnlyIterator("/results/row");
+            addGroupMaintainersAndMembers(groupXDA, itor, "maintainers");
+            itor = groupMembersResults.getXDA().readOnlyIterator("/results/row");
+            addGroupMaintainersAndMembers(groupXDA, itor, "members");
+
+            iur = new DOMXDAAspect(groupXDA);
         } else {
             iur = new StringAspect("<group/>");
         }

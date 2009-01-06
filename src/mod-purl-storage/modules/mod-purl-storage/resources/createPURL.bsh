@@ -18,7 +18,6 @@ main() {
         paramXDA = param.getXDA();
         
         purl = paramXDA.getText("/purl/id", true);
-        
         maintainerUserMap = new HashMap();
         maintainerUserItor = paramXDA.readOnlyIterator("//maintainers/uid");
         
@@ -103,7 +102,6 @@ main() {
 			paramStr = paramStr.replaceAll("'", "''");
 			param = new StringAspect(paramStr);
 		}
-        
         req = context.createSubRequest("active:xslt");
         req.addArgument("operand", param);
         req.addArgument("operator", "ffcpl:/sql/db/createPURL.xsl");
@@ -118,7 +116,11 @@ main() {
         req = context.createSubRequest("active:sqlBatch");
         req.addArgument("operand", iur);
         iur = context.issueSubRequest(req);
-        
+
+        req=context.createSubRequest("active:cutGoldenThread");
+        req.addArgument("param", "gt:resource:" + purl);
+        context.issueSubRequest(req);
+
         req = context.createSubRequest("active:purl-storage-query-purl");
         req.addArgument("uri", "ffcpl:/purl" + purl);
         iur = context.issueSubRequest(req);

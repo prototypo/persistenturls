@@ -5,36 +5,36 @@
 			<operand><batch/></operand>
 			<operator>
 			<stm:group xmlns:stm="http://1060.org/stm">
-				<stm:append xpath="/batch">
-					<sql>DROP TABLE IF EXISTS users</sql>
-				</stm:append>
-			    <stm:append xpath="/batch">
-    				<sql>DROP TABLE IF EXISTS domains</sql>
-    			</stm:append>
-				<stm:append xpath="/batch">
-        			<sql>DROP TABLE IF EXISTS domainmaintainers</sql>
-        		</stm:append>
-				<stm:append xpath="/batch">
-            		<sql>DROP TABLE IF EXISTS domainwriters</sql>
-            	</stm:append>								
-				<stm:append xpath="/batch">
-                	<sql>DROP TABLE IF EXISTS groups</sql>
-                </stm:append>
-				<stm:append xpath="/batch">
-                    <sql>DROP TABLE IF EXISTS groupmaintainers</sql>
-				</stm:append>
-				<stm:append xpath="/batch">
-                    <sql>DROP TABLE IF EXISTS groupmembers</sql>
-                </stm:append>					
-				<stm:append xpath="/batch">
-                    <sql>DROP TABLE IF EXISTS purls</sql>
-                </stm:append>
-				<stm:append xpath="/batch">
+                <stm:append xpath="/batch">
                     <sql>DROP TABLE IF EXISTS purlmaintainers</sql>
                 </stm:append>
 				<stm:append xpath="/batch">
                     <sql>DROP TABLE IF EXISTS purlhistory</sql>
-                </stm:append>                					
+                </stm:append>
+				<stm:append xpath="/batch">
+                    <sql>DROP TABLE IF EXISTS purls</sql>
+                </stm:append>
+                <stm:append xpath="/batch">
+        			<sql>DROP TABLE IF EXISTS domainmaintainers</sql>
+        		</stm:append>
+				<stm:append xpath="/batch">
+            		<sql>DROP TABLE IF EXISTS domainwriters</sql>
+            	</stm:append>
+			    <stm:append xpath="/batch">
+    				<sql>DROP TABLE IF EXISTS domains</sql>
+    			</stm:append>
+                <stm:append xpath="/batch">
+                    <sql>DROP TABLE IF EXISTS groupmaintainers</sql>
+				</stm:append>
+				<stm:append xpath="/batch">
+                    <sql>DROP TABLE IF EXISTS groupmembers</sql>
+                </stm:append>
+				<stm:append xpath="/batch">
+                	<sql>DROP TABLE IF EXISTS groups</sql>
+                </stm:append>
+				<stm:append xpath="/batch">
+					<sql>DROP TABLE IF EXISTS users</sql>
+				</stm:append>
 			</stm:group>
 		</operator>
       	<target>var:sql</target>
@@ -44,7 +44,7 @@
 			<operand>var:sql</operand>
 			<target>this:response</target>
 		</instr>
-		
+
 		<instr>
 			<type>copy</type>
 			<operand><db/></operand>
@@ -53,7 +53,7 @@
 		<instr>
 			<type>expire</type>
 			<operand>this:response</operand>
-			<target>this:response</target>			
+			<target>this:response</target>
 		</instr>
 	</seq>
 </idoc>

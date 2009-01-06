@@ -4,8 +4,10 @@ import com.ten60.netkernel.urii.aspect.*;
 
 main() {
 	batch=context.source("this:param:batch");
+	currentUser=context.sourceAspect("this:param:currentuser", IAspectString.class);
 	req=context.createSubRequest("active:purl-storage-batch-load");
 	req.addArgument("param", batch);
+	req.addArgument("currentuser", currentUser);
 	req.addArgument("nocache", new StringAspect("no-cache"));	
 	res = context.issueSubRequest(req);
   	response = context.createResponseFrom(res);

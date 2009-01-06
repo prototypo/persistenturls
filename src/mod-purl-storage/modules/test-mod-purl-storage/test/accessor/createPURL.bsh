@@ -4,9 +4,11 @@ import com.ten60.netkernel.urii.aspect.*;
 
 main() {
 	purl=context.source("this:param:purl");
+	user=context.sourceAspect("this:param:user", IAspectString.class);
 	req=context.createSubRequest("active:purl-storage-create-purl");
-	req.addArgument("param", purl);
 	req.addArgument("nocache", new StringAspect("no-cache"));	
+	req.addArgument("param", purl);
+	req.addArgument("user", user);
 	res = context.issueSubRequest(req);
   	response = context.createResponseFrom(res);
   	response.setMimeType("text/xml");

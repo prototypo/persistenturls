@@ -53,7 +53,7 @@ public class SearchAccessor extends NKFAccessorImpl {
         sb.append("</matches>");
 
         
-        System.out.println(sb.toString());
+        
         context.setResponse(context.createResponseFrom(new StringAspect(sb.toString())));
     }
     

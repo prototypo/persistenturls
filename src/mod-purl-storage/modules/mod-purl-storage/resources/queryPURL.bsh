@@ -17,7 +17,7 @@ main() {
         ruri = context.getThisRequest().getArgument("uri");
         purl = ruri.substring(11);
 		purl = purl.replaceAll("&", "&amp;");
-		
+
         purlSQL = context.sourceAspect("ffcpl:/sql/db/purlQuery.xml", IAspectXDA.class);
         purlSQL = generatePURLQuerySQL(purlSQL, purl);
         results = issueSQLQuery(purlSQL);
@@ -56,7 +56,6 @@ main() {
         addPURLMaintainers(purlXDA, itor);
 
         iur = new DOMXDAAspect(purlXDA);
-        
         } else {
             iur = new StringAspect("<purl/>");
         }

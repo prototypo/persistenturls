@@ -128,7 +128,12 @@ main() {
         req = context.createSubRequest("active:sqlBatch");
         req.addArgument("operand", iur);
         iur = context.issueSubRequest(req);
-        
+
+        req=context.createSubRequest("active:cutGoldenThread");
+        req.addArgument("param", "gt:resource:" + group);
+        context.issueSubRequest(req);
+
+
         req = context.createSubRequest("active:purl-storage-query-group");
         req.addArgument("uri", "ffcpl:/group/" + group);
         iur = context.issueSubRequest(req);
