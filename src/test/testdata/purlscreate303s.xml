@@ -4,7 +4,7 @@
     <!-- Type 303.  See Also URL -->
 		<purl id="/testdomain/test303-1/" type="303">
       <maintainers>
-      	<maintainer id="testuser"/>
+      	<uid>testuser</uid>
     	</maintainers>
       <seealso url="http://example.com/see/also/some/more-1.xml"/>
     </purl>
@@ -12,7 +12,7 @@
     <!-- Type 303.  See Also URL -->
 		<purl id="/testdomain/test303-2/" type="303">
       <maintainers>
-      	<maintainer id="testuser"/>
+      	<uid>testuser</uid>
     	</maintainers>
       <seealso url="http://example.com/see/also/some/more-2.xml"/>
     </purl>

@@ -4,7 +4,7 @@
     <!-- Type 307.  Temporary redirect to a target URL -->
 		<purl id="/testdomain/test307-1" type="307">
       <maintainers>
-      	<maintainer id="testuser"/>
+      	<uid>testuser</uid>
     	</maintainers>
     	<target url="http://example.com/test307-1target/"/>
     </purl>
@@ -12,7 +12,7 @@
     <!-- Type 307.  Temporary redirect to a target URL -->
 		<purl id="/testdomain/test307-2" type="307">
       <maintainers>
-      	<maintainer id="testuser"/>
+      	<uid>testuser</uid>
     	</maintainers>
     	<target url="http://example.com/test307-2target/"/>
     </purl>

@@ -201,7 +201,7 @@ public final class millionPurlLoadTest {
 					int purlNum = (i*1000) + j;
 					fileprint.println ("  <purl id=\"/testdomain/test_" + purlNum + "\" type=\"302\">");
 					fileprint.println ("    <maintainers>");
-					fileprint.println ("      <maintainer id=\"testuser\"/>");
+					fileprint.println ("      <uid>testuser</uid>");
 					fileprint.println ("    </maintainers>");
 					fileprint.println ("    <target url=\"http://example.com/testPURL_" + purlNum + "\"/>");
 					fileprint.println ("  </purl>");

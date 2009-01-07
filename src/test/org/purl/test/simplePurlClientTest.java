@@ -111,7 +111,7 @@ public class simplePurlClientTest extends TestCase {
 			String control = "<results><purl><id>/testdomain/testPURL</id><type>302</type><target><url>http://bbc.co.uk/</url></target><maintainers><uid>testuser</uid></maintainers></purl></results>";
 			String test = client.searchPurl(url);
 			
-			//reportResult("testSearchPurlByTarget", test);
+			reportResult("testSearchPurlByTarget", test);
 			
 			// XML response, so use assertXMLEqual.
             XMLUnit.setIgnoreWhitespace(true);
@@ -474,6 +474,8 @@ public class simplePurlClientTest extends TestCase {
 			String control = "<user admin=\"false\" status=\"1\"><id>testuser</id><name>Test User Modified</name><affiliation>Zepheira, LLC</affiliation><email>tuser@example.com</email></user>";
 			String test = client.searchUser(url);
 
+			reportResult("testSearchUser", test);
+
 			// XML response, so use assertXMLEqual.
             XMLUnit.setIgnoreWhitespace(true);
 			XMLAssert.assertXMLEqual(errMsg, control, test);						
@@ -487,11 +489,13 @@ public class simplePurlClientTest extends TestCase {
 	public void testSearchUserByName() {
 
 		try {
-			String url = "http://" + host + ":" + port + "/admin/user/?name=Test%20User%20Modified";
+			String url = "http://" + host + ":" + port + "/admin/user/?fullname=Test%20User%20Modified";
 
 			String errMsg = "Cannot search user.";
 			String control = "<results><user admin=\"false\" status=\"1\"><id>testuser</id><name>Test User Modified</name><affiliation>Zepheira, LLC</affiliation><email>tuser@example.com</email></user></results>";
 			String test = client.searchUser(url);
+
+			reportResult("testSearchUserByName", test);
 
 			// XML response, so use assertXMLEqual.
             XMLUnit.setIgnoreWhitespace(true);
@@ -509,8 +513,10 @@ public class simplePurlClientTest extends TestCase {
 			String url = "http://" + host + ":" + port + "/admin/user/?affiliation=Zepheira%2C%20LLC";
 
 			String errMsg = "Cannot search user.";
-			String control = "<results><user admin=\"false\" status=\"1\"><id>testuser</id><name>Test User Modified</name><affiliation>Zepheira, LLC</affiliation><email>tuser@example.com</email></user></results>";
+			String control = "<results><user admin=\"false\" status=\"1\"><id>testuser</id><name>Test User Modified</name><affiliation>Zepheira, LLC</affiliation><email>tuser@example.com</email></user><user admin=\"false\" status=\"1\"><id>testuser2</id><name>Another Test User</name><affiliation>Zepheira</affiliation><email>another.test.user@example.com</email></user></results>";
 			String test = client.searchUser(url);
+
+			reportResult("testSearchUserByAffiliation", test);
 
 			// XML response, so use assertXMLEqual.
             XMLUnit.setIgnoreWhitespace(true);
@@ -531,6 +537,8 @@ public class simplePurlClientTest extends TestCase {
 			String control = "<results><user admin=\"false\" status=\"1\"><id>testuser</id><name>Test User Modified</name><affiliation>Zepheira, LLC</affiliation><email>tuser@example.com</email></user></results>";
 			String test = client.searchUser(url);
 
+			reportResult("testSearchUserByEmail", test);
+
 			// XML response, so use assertXMLEqual.
             XMLUnit.setIgnoreWhitespace(true);
 			XMLAssert.assertXMLEqual(errMsg, control, test);						
@@ -549,6 +557,8 @@ public class simplePurlClientTest extends TestCase {
 			String errMsg = "Cannot search user.";
 			String control = "<user admin=\"false\" status=\"1\"><id>testuser</id><name>Test User Modified</name><affiliation>Zepheira, LLC</affiliation><email>tuser@example.com</email></user>";
 			String test = client.searchUser(url);
+
+			reportResult("testSearchUserByIdAndName", test);
 
 			// XML response, so use assertXMLEqual.
             XMLUnit.setIgnoreWhitespace(true);
@@ -910,6 +920,8 @@ public class simplePurlClientTest extends TestCase {
 			String errMsg = "Cannot search group.";
 			String control = "<group status=\"1\"><id>testgroup</id><name>Test Group Modified</name><maintainers><uid>testuser</uid></maintainers><members><uid>testuser</uid></members><comments>A modified group used for unit tests.</comments></group>";
 			String test = client.searchGroup(url);
+
+			reportResult("testSearchGroup", test);
 			
 			// XML response, so use assertXMLEqual.
             XMLUnit.setIgnoreWhitespace(true);
@@ -1731,7 +1743,7 @@ public class simplePurlClientTest extends TestCase {
 			File file = new File(getTestDataFile(filename));
 
 			String errMsg = "Cannot create a batch of PURLs.";
-			String control = "<purl-batch-success numCreated=\"" + numCreated + "\"/>";
+			String control = "<purl-batch total=\"" + numCreated + "\" numCreated=\"" + numCreated + "\" failed=\"0\"></purl-batch>";
 			String test = client.createPurls(url, file);
 			
 			// XML response, so use assertXMLEqual.

@@ -53,6 +53,10 @@ public class BatchLoadAccessor extends NKFAccessorImpl {
         IXDAReadOnlyIterator it = purlXDA.readOnlyIterator("/purls/purl");
         int successful = 0,failed = 0;
         StringBuffer failedSB = new StringBuffer();
+
+		// DBG
+		System.out.println("  ** XML input document:\n" + purlXDA.toString() + "\n  ** end **\n\n");
+		
         while (it.next()) {
             if (processPurl(request, new StringAspect(it.toString()), failedSB)) {
                 successful++;

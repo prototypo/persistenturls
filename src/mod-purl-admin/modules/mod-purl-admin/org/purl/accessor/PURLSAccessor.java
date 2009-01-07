@@ -153,7 +153,7 @@ public class PURLSAccessor extends NKFAccessorImpl {
                     System.out.println("****" + xdaROItor.toString());
                     ex.printStackTrace();
                     rejected.append("<failure><message>Unable to process PURL</message>" + xdaROItor.toString() + "</failure>");
-                    retValue.delete(xdaROItor.getCurrentXPath());
+                    deleteQueue.add(0,xdaROItor.getCurrentXPath());
                 }
             }
             for (String path : deleteQueue) {
@@ -169,10 +169,12 @@ public class PURLSAccessor extends NKFAccessorImpl {
 
     private String checkPURL(INKFConvenienceHelper context, IXDAReadOnlyIterator xdaROItor) throws Exception {
         String p_id = xdaROItor.getText("@id", true);
-        String target = xdaROItor.getText("target/@url", true);
-        if (target.length() > 4000) {
-            return "<failure><message>Target URL too long</message>" + xdaROItor.toString() + "</failure>";
-        }
+		if (xdaROItor.isTrue("target/@url")) {
+        	String target = xdaROItor.getText("target/@url", true);
+	        if (target.length() > 4000) {
+	            return "<failure><message>Target URL too long</message>" + xdaROItor.toString() + "</failure>";
+	        }
+		}
         if (!purlAllowableResource.allow(context, purlResolver.getURI(p_id))) {
             return "<failure><message>"+purlAllowableResource.getDenyMessage(context, purlResolver.getURI(p_id)) + "</message>" + xdaROItor.toString() + "</failure>";
         }

@@ -4,14 +4,14 @@
     <!-- Type 410.  Permanently gone -->
 		<purl id="/testdomain/test410-1" type="410">
       <maintainers>
-      	<maintainer id="testuser"/>
+      	<uid>testuser</uid>
     	</maintainers>
     </purl>
 
     <!-- Type 410.  Permanently gone -->
 		<purl id="/testdomain/test410-2" type="410">
       <maintainers>
-      	<maintainer id="testuser"/>
+      	<uid>testuser</uid>
     	</maintainers>
     </purl>
 

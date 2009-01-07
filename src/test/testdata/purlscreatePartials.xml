@@ -4,7 +4,7 @@
     <!-- Type partial.  Partial-redirect PURL -->
 		<purl id="/testdomain/testPartial-1" type="partial">
       <maintainers>
-      	<maintainer id="testuser"/>
+      	<uid>testuser</uid>
     	</maintainers>
     	<target url="http://example.com/testPartial-1target/"/>
     </purl>
@@ -12,7 +12,7 @@
     <!-- Type partial.  Partial-redirect PURL -->
 		<purl id="/testdomain/testPartial-2" type="partial">
       <maintainers>
-      	<maintainer id="testuser"/>
+      	<uid>testuser</uid>
     	</maintainers>
     	<target url="http://example.com/testPartial-2target/"/>
     </purl>

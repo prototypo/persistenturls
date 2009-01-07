@@ -63,6 +63,13 @@ public class purlClientTestRunner {
         suite.addTest(new simplePurlClientTest("testModifyDomainRemoveWriter"));
         suite.addTest(new simplePurlClientTest("testModifyDomainRemoveGroupAsWriter")); //new
 
+		// Sleep for a while to ensure the SOLR service indexes the information before searching.
+		try {
+			Thread.sleep(240000); // 4 min
+		} catch ( InterruptedException ie ) {
+			System.out.println ("WARNING: InterruptedException while trying to sleep.");
+		}
+
 		/*
 			Search the user, group and domain.
 		*/
@@ -148,8 +155,9 @@ public class purlClientTestRunner {
         suite.addTest(new simplePurlClientTest("testCreateChainPurls"));
         suite.addTest(new simplePurlClientTest("testCreatePartialRedirectPurls"));
         suite.addTest(new simplePurlClientTest("testCreatePurls"));
-        suite.addTest(new simplePurlClientTest("testModifyPurls"));
-		suite.addTest(new simplePurlClientTest("testValidatePurls"));
+// TODO: Implement on server:
+        //suite.addTest(new simplePurlClientTest("testModifyPurls"));
+		//suite.addTest(new simplePurlClientTest("testValidatePurls"));
 		
 		/*
 			Remove the test user, group and domain.
