@@ -17,7 +17,7 @@ import org.restlet.data.Form;
  * @author David Wood.  david at http://zepheira.com
  * @version $Rev$
  */
-public final class simplePurlClient {
+public final class PurlTestClient {
     
 	// Instance vars:
 	// A single RESTlet client for all HTTP transactions.
@@ -27,12 +27,12 @@ public final class simplePurlClient {
 	String cookie;
 	
 	// Constructor
-	public simplePurlClient() {
+	public PurlTestClient() {
 		client = new Client(Protocol.HTTP);
 	}
-	
-	
-	/****************** Log in **************************/
+
+
+    /****************** Log in **************************/
 	
 	/**
 	 * Log in a registered user via an HTTP POST.
@@ -398,7 +398,6 @@ public final class simplePurlClient {
 		try {
 			// Send the request.
 			Response response = client.handle(request);
-
 			// Return the contents of the response.
 			return response.getEntity().getText();
 		} catch (IOException e) {
@@ -419,13 +418,13 @@ public final class simplePurlClient {
 		String encodedValue = "";	
 		try {
 			if( formParameters != null ) {
-				Set parameters = formParameters.keySet();
-				Iterator it = parameters.iterator();
+				Set<String> parameters = formParameters.keySet();
+				Iterator<String> it = parameters.iterator();
 				StringBuffer buffer = new StringBuffer();
 
 				for( int i = 0, paramCount = 0; it.hasNext(); i++ ) {
-					String parameterName = (String) it.next();
-					String parameterValue = (String) formParameters.get( parameterName );
+					String parameterName = it.next();
+					String parameterValue = formParameters.get( parameterName );
 
 					if( parameterValue != null ) {
 						parameterValue = URLEncoder.encode( parameterValue, "UTF-8" );

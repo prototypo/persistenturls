@@ -98,7 +98,7 @@
 		<junit>
 			<classpath refid="classpath.test"/>
 			<formatter type="brief" usefile="false"/>
-			<test name="org.purl.test.purlClientTestRunner"/>
+			<test name="org.purl.test.PurlIntegrationTestRunner"/>
 		</junit>
 	</target>
 </project>

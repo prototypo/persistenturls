@@ -18,7 +18,7 @@
 		<simple>
 			<startTime>60000</startTime>
 			<endTime></endTime>
-			<repeatInterval>120000</repeatInterval>
+			<repeatInterval>60000</repeatInterval>
 		</simple>
 	</job>		
 </jobs>

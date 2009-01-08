@@ -13,24 +13,24 @@ import java.util.Map;
  * @author David Wood.  david at http://zepheira.com
  * @version $Rev$
  */
-public final class millionPurlLoadTest {
+public final class MassivePurlLoadTest {
     	
 	// Set the host and port for all subsequent URLs.
 	private String host = "localhost";
 	private String port = "8080";
-	private simplePurlClient client;
+	private PurlTestClient client;
 	
 	// Constructor
-	public millionPurlLoadTest () {
-		client = new simplePurlClient();
+	public MassivePurlLoadTest() {
+		client = new PurlTestClient();
 	}
-	
-	/**
+
+    /**
 	  * Attempts to load 1 million PURLs
 	  */
 	public static void main(String args[]) {
 		
-		millionPurlLoadTest harness = new millionPurlLoadTest();
+		MassivePurlLoadTest harness = new MassivePurlLoadTest();
 		int delay = 100;  // Default delay 15 minutes between loads.
 		
 		if ( null != args && args.length == 2 ) {

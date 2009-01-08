@@ -303,10 +303,10 @@ but may be good for SKUs.  Can insert dashes in the wrong place and still match.
         <field name="type" type="string" indexed="true" stored="true" required="false"/>
         <field name="target" type="text" indexed="true" stored="true" required="false"/>
 
-
+         <field name="path" type="text_ws" indexed="true" stored="false" required="false"/>
         <!-- catchall field, containing all other searchable text fields (implemented
 via copyField further on in this schema  -->
-        <!-- <field name="text" type="text" indexed="true" stored="false" multiValued="true"/> -->
+         <!--<field name="text" type="text" indexed="true" stored="false" multiValued="true"/>-->
 
         <!-- Here, default is used to create a "timestamp" field indicating
            When each document was indexed.
@@ -339,7 +339,7 @@ via copyField further on in this schema  -->
     <!-- copyField commands copy one field to another at the time a document
 is added to the index.  It's used either to index the same field differently,
 or to add multiple fields to the same field for easier/faster searching.  -->
-    <!-- <copyField source="userid" dest="id"/>
- <copyField source="entity" dest="id"/> -->
-
+    <!-- <copyField source="userid" dest="id"/>-->
+ <copyField source="p_id" dest="path"/>
+ <copyField source="d_id" dest="path"/>
 </schema>

@@ -146,7 +146,7 @@ public class GetResourceCommand extends PURLCommand {
 
                     }
                     query += ") AND entity:" + type;
-                    System.out.println(query);
+                    //System.out.println(query);
                     req.addArgument("query", new StringAspect(query));
                     handles[idx] = context.issueAsyncSubRequest(req);
                     keys[idx] = key;
