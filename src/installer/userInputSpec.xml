@@ -56,17 +56,4 @@
 			</spec>
 		</field>
 	</panel>
-	<panel order="4">
-		<field type="radio" variable="STARTSERVER">
-			<description align="left" txt="Would you like to start the PURL server now?" id="description5.radio"/>
-			<spec>
-				<choice txt="Start the server now" id="radio.label.6" value="true"/>
-				<choice txt="Do not start the server (default)" id="radio.label.7" value="false" set="true"/>
-			</spec>
-		</field>
-		<field type="staticText" align="left" txt=" "/>
-		<field type="staticText" align="left" txt="PLEASE NOTE:"/>
-		<field type="staticText" align="left" txt="1)  Hit http://localhost:8080/docs/index.html once the server is running.  You may log into the server as 'admin' with the password 'password' and change the password after you have logged in by modifying the user record."/>
-		<field type="staticText" align="left" txt="2)  The PURL server will not be stopped when you quit the installer."/>
-	</panel>
 </userInput>

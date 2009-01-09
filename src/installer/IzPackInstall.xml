@@ -41,7 +41,6 @@
  <panel order="3" classname="UserInputPanel"/>
  <panel classname="PacksPanel"/>
  <panel classname="InstallPanel"/>
- <panel order="4" classname="UserInputPanel"/>
  <panel classname="InfoPanel"/>
  <panel classname="FinishPanel"/>
 </panels>
@@ -78,7 +77,10 @@
 		<file targetdir="$INSTALL_PATH/modules" src="../mod-purl-admin/modules/mod-purl-admin"/>
 		<file targetdir="$INSTALL_PATH/modules" src="../mod-purl-admin/modules/test-mod-purl-admin"/>
 		<file targetdir="$INSTALL_PATH/modules" src="../mod-purl-gatekeeper/modules/mod-purl-gatekeeper"/>
-		<!-- Overwrite the file that define installer options,
+                <!-- Overwrite the NetKernel files that point to the PURL modules. -->
+		<singlefile src="options/deployedModules.xml" target="$INSTALL_PATH/etc/deployedModules.xml" override="true"/>
+		<singlefile src="options/mod-fulcrum-frontend/module.xml" target="$INSTALL_PATH/modules/mod-fulcrum-frontend/module.xml" override="true"/>
+		<!-- Overwrite the files that define installer options,
 		     so we can set them later by parsing. -->
 		<singlefile src="options/PURLConfig.xml" target="$INSTALL_PATH/modules/mod-purl-admin/etc/PURLConfig.xml" override="true"/>
 		<singlefile src="options/mod-purl-virtualhost/module.xml" target="$INSTALL_PATH/modules/mod-purl-virtualhost/module.xml" override="true"/>
