@@ -1,0 +1,14 @@
+<idoc>
+	<seq>
+	  <comment>
+		***********
+		An instruction to call the toUpper service
+		***********
+	  </comment>
+	  <instr>
+		<type>toUpper</type>
+		<operand>http://www.1060.org/tutorial/helloWorld.txt</operand>
+		<target>this:response</target>
+	  </instr>
+	</seq>
+</idoc>

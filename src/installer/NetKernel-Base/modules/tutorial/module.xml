@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?><module>
+	<!--
+	***********
+	NetKernel Getting Started Tutorial Module
+	***********
+	-->
+    <identity>
+		<uri>urn:org:ten60:tutorial</uri>
+		<version>1.3.0</version>
+    </identity>
+    <info>
+		<name>Tutorial</name>
+		<description>
+		A module containing NetKernel getting started examples and exercises
+		</description>
+		<dynamic/>
+    </info>
+    <publisher>
+        <name>1060 Research Limited</name>
+		<uri>http://www.1060research.com</uri>
+    </publisher>
+    <licence>
+		<name>1060 Public License v1.0</name>
+		<uri>http://www.1060research.com/license</uri>
+	</licence>
+
+  <!-- Export section defines the exported address space -->
+  <export>
+		<!--
+		***********
+		Export:
+		    * tutorial/ path
+		    * Access to the HTTPBridge configuration information for this zone
+		***********
+		-->
+		<uri>
+			<match>ffcpl:/tutorial/.*</match>
+			<match>ffcpl:/etc/HTTPBridgeConfig.xml</match>
+		</uri>
+	</export>
+
+
+  <!-- Rewrite section maps external requests to new internal requests -->
+  <rewrite>
+		<!--
+		***********
+		This rule maps requests using the extern path ".../tutorial/"
+		to requests based on the internal root path ".../"
+		***********
+		-->
+		<rule>
+			<match>ffcpl:/tutorial/(.*)</match>
+			<to>ffcpl:/$1</to>
+		</rule>
+  </rewrite>
+
+  <!-- Mapping section defines the module internal private address space -->
+  <mapping>
+
+    <!--
+    ****************************
+    HELLO WORLD PROJECT, Java
+    ****************************
+    Maps the external resource address "helloworld-java"
+    to the Java class endpoint.
+    -->
+
+    <ura>
+			<match>ffcpl:/helloworld</match>
+			<class>org.ten60.netkernel.tutorial.HelloWorld</class>
+		</ura>
+
+
+    <!--
+    ****************************
+    HELLO WORLD PROJECT, Java
+    ****************************
+    Maps the external resource address "helloworld-java"
+    to the Java class endpoint.
+    -->
+
+    <ura>
+			<match>ffcpl:/helloworld-java</match>
+			<class>org.ten60.netkernel.tutorial.HelloWorldSubRequest</class>
+		</ura>
+
+
+    <!--
+    ****************************
+    HELLO WORLD PROJECT, Beanshell
+    ****************************
+		Maps the external resource address "helloworld-beanshell"
+		to the beanshell runtime environment and a beanshell script
+    -->
+
+    <rewrite>
+		  <match>ffcpl:/helloworld-beanshell</match>
+		  <to>active:beanshell+operator@ffcpl:/src/helloworld.bsh</to>
+	  </rewrite>
+
+
+    <!--
+    ****************************
+    HELLO WORLD PROJECT, JavaScript
+    ****************************
+		Maps the external resource address "helloworld-javascript"
+		to the JavaScript	runtime environment and a JavaScript script
+    -->
+
+    <rewrite>
+		  <match>ffcpl:/helloworld-javascript</match>
+		  <to>active:javascript+operator@ffcpl:/src/helloworld.js</to>
+	  </rewrite>
+
+
+    <!--
+    ****************************
+    HELLO WORLD PROJECT, XML
+    ****************************
+		Maps the external resource address "helloworld-xml"
+		to an XSLT transform of an XML document
+    -->
+
+    <rewrite>
+		  <match>ffcpl:/helloworld-xml</match>
+		  <to>active:xslt+operator@ffcpl:/src/hellostyle.xsl+operand@ffcpl:/src/helloworld.xml</to>
+	  </rewrite>
+
+
+    <!--
+    ****************************
+    HELLO WORLD PROJECT, static text
+    ****************************
+		Maps the external resource address "helloworld-text"
+		to a static file
+    -->
+
+    <rewrite>
+		  <match>ffcpl:/helloworld-text</match>
+		  <to>ffcpl:/src/helloworld.txt</to>
+	  </rewrite>
+
+
+    <!--
+    ***********
+    Make module resources accessible in the internal address space.
+    ***********
+    -->
+    <this>
+      <match>ffcpl:/src/.*</match>
+	  <match>ffcpl:/etc/HTTPBridgeConfig.xml</match>
+    </this>
+
+
+    <!--
+		***********
+		Import libraries to get Scripting languages and XML support.
+		***********
+		-->
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:script</uri>
+		</import>
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:layer1</uri>
+		</import>
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:xml:ura</uri>
+		</import>
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:xml:core</uri>
+		</import>
+
+    </mapping>
+</module>

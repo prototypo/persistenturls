@@ -1,0 +1,1605 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<changes>
+  <version>
+    <date>2007-10-05</date>
+    <major>3</major>
+    <minor>3</minor>
+    <minorminor>0</minorminor>
+	<change>
+      <title>mod-developer</title>
+      <desc>
+        New visualizer tool provided.
+      </desc>
+    </change>
+    <change>
+      <title>Ruby</title>
+      <desc>
+        JRuby 1.0.1 is now the official release of Ruby support in NetKernel 3.3.
+      </desc>
+    </change>
+
+    <change>
+      <title>mod-smtp</title>
+      <desc>
+        Now includes a port parameter for SMTP connections.
+      </desc>
+    </change>
+
+    <change>
+      <title>mod-db</title>
+      <desc>
+        The HSQLDB JDBC driver updated to the latest version: 1.8.0_8
+      </desc>
+    </change>
+    <change>
+      <title>ext-layer1</title>
+      <desc>
+        Fixed StringAspect compatibility issue with lower layers.
+      </desc>
+    </change>
+    <change>
+      <title>ext-layer1</title>
+      <desc>
+        Added isResponseSet() query method.
+      </desc>
+    </change>
+    <change>
+      <title>ext-layer1</title>
+      <desc>
+        WormHoleAccessor changed to reduce thread use.
+      </desc>
+    </change>
+    <change>
+      <title>ext-xml-ura</title>
+      <desc>
+        Fixed RelaxNG to work with &lt;include/&gt;.
+      </desc>
+    </change>
+    <change>
+      <title>ext-kernel</title>
+      <desc>
+        Module list is cacheable now.
+      </desc>
+    </change>
+    <change>
+      <title>ext-kernel</title>
+      <desc>
+        Logging fixes.
+      </desc>
+    </change>
+    <change>
+      <title>ext-dpml</title>
+      <desc>
+        Documentation fixes.
+      </desc>
+    </change>
+    <change>
+      <title>ext-xquery</title>
+      <desc>
+        Entity names fixed. Eliminated a memory leak.
+      </desc>
+    </change>
+    <change>
+      <title>tpt-http</title>
+      <desc>
+        Added support for if-modified-since and eTags.
+      </desc>
+    </change>
+    <change>
+      <title>mod-ws</title>
+      <desc>
+        Documentation updates.
+      </desc>
+    </change>
+    <change>
+      <title>doc-books</title>
+      <desc>
+        Documentation restructuring.
+      </desc>
+    </change>
+    <change>
+      <title>ext-entrypoint</title>
+      <desc>
+        Changed resolver to save a thread.
+      </desc>
+    </change>
+    <change>
+      <title>ext-entrypoint</title>
+      <desc>
+        Documentation changes and updates.
+      </desc>
+    </change>
+    <change>
+      <title>doc-netkernel</title>
+      <desc>
+        Documentation changes and updates.
+      </desc>
+    </change>
+    <change>
+      <title>ext-debugger</title>
+      <desc>
+        Style and presentation updates with documentation changes.
+      </desc>
+    </change>
+    <change>
+      <title>ext-install</title>
+      <desc>
+        Added force mode to the package deployer.
+      </desc>
+    </change>
+    <change>
+      <title>ext-introspect</title>
+      <desc>
+        New Request Visualizer Tool and assorted documentation changes.
+      </desc>
+    </change>
+    <change>
+      <title>mod-developer</title>
+      <desc>
+        New Request Visualizer Tool and assorted documentation changes.
+      </desc>
+    </change>
+    <change>
+      <title>mod-fulcrum-backend</title>
+      <desc>
+        Documentation updates and book reordering.
+      </desc>
+    </change>
+    <change>
+      <title>mod-db</title>
+      <desc>
+        Database connection timeout added.
+      </desc>
+    </change>
+    <change>
+      <title>mod-db</title>
+      <desc>
+        Documentation updated.
+      </desc>
+    </change>
+    <change>
+      <title>ext-sys</title>
+      <desc>
+        Logging updates adds originator for application logs.
+      </desc>
+    </change>
+    <change>
+      <title>mod-smtp</title>
+      <desc>
+        Added support for outbound port (was fixed to port 25)
+      </desc>
+    </change>
+    <change>
+      <title>ext-script</title>
+      <desc>
+        Jython 2.2 update
+      </desc>
+    </change>
+    <change>
+      <title>ext-script</title>
+      <desc>
+        Documentation updated to increase consistency
+      </desc>
+    </change>
+    <change>
+      <title>ext-unit</title>
+      <desc>
+        Added setup and teardown before tests.
+      </desc>
+    </change>
+    <change>
+      <title>tpt-jms</title>
+      <desc>
+        Improved error handling
+      </desc>
+    </change>
+    <change>
+      <title>workbench</title>
+      <desc>
+        Minor correction and documentation updates.
+      </desc>
+    </change>
+    <change>
+      <title>ext-client-http</title>
+      <desc>
+        Updated to latest Apache commons client
+      </desc>
+    </change>
+    <change>
+      <title>mod-rdf-jena</title>
+      <desc>
+        Documentation updates and general clean up
+      </desc>
+    </change>
+    <change>
+      <title>util-cron</title>
+      <desc>
+        Added support for user metadata fields for jobs.  Added start/end time fields to cron trigger.
+      </desc>
+    </change>
+    <change>
+      <title>mod-json</title>
+      <desc>
+        Documentation updates
+      </desc>
+    </change>
+    <change>
+      <title>mod-dbxml</title>
+      <desc>
+        Added connection timeout configuration and monitoring.
+      </desc>
+    </change>
+    <change>
+      <title>mod-tutorial</title>
+      <desc>
+        Changes to support new approach to documentation - code first then building up to the higher layers.
+      </desc>
+    </change>
+    <change>
+      <title>tpt-http</title>
+      <desc>
+        HTTP Bridge updated to implement ETAG and to handle if-not-modified headers.
+		Added passAsURI flag to enable pass-by-reference of HTTP request data for RESTful
+		services.
+      </desc>
+    </change>
+	<change>
+      <title>ext-lib</title>
+      <desc>
+        Added host name to the control panel for easier server management.
+      </desc>
+    </change>
+	<change>
+      <title>ext-layer</title>
+      <desc>
+        file: resources have change detection and invalidation.
+      </desc>
+    </change>
+	<change>
+		<title>Kernel</title>
+		<desc>
+		Kernel asynchronous threading revised for efficient highly concurrent accessor requests.
+		Deadlock detector has increased responsiveness against thread starvation. 
+		</desc>
+	</change>
+
+  </version>
+
+  <version>
+    <date>2007-05-11</date>
+    <major>3</major>
+    <minor>2</minor>
+    <minorminor>0</minorminor>
+    <change>
+      <title>Ruby</title>
+      <desc>
+        JRuby 0.9.9 library became available before final release.
+        This is now the version included in NetKernel 3.2.
+      </desc>
+    </change>
+  </version>
+  
+  <version>
+		<date>2007-03-22</date>
+		<major>3</major>
+		<minor>2</minor>
+		<minorminor>RC2</minorminor>
+		<change>
+			<title>Ruby</title>
+			<desc>
+      Ruby moved from ext-script to an independent lang-ruby module.  Ruby support is based on JRuby 0.9.8 library
+			which is pre-production beta and was found to have memory leaks.  Moving to a seperate module allows ruby to be used
+			experimentally but allows it be isolated from production systems.
+      </desc>
+    </change>
+    <change>
+			<title>Bootloader</title>
+			<desc>Classloader updated to allow JNI native libraries to be loaded from lib/native/</desc>
+		</change>
+		<change>
+			<title>mod-dbxml</title>
+			<desc>Updated to aggressively cleanup JNI native references</desc>
+		</change>
+  </version>
+
+	<version>
+		<date>2007-03-22</date>
+		<major>3</major>
+		<minor>2</minor>
+		<minorminor>RC1</minorminor>
+		<change>
+			<title>New PiNKY Module</title>
+			<desc>Added PiNKY 0.2 library for feed processing applications.</desc>
+		</change>
+		<change>
+			<title>New BDBXML Module</title>
+			<desc>Added Berkeley DBXML tool set.</desc>
+		</change>
+		<change>
+			<title>Groovy 1.0</title>
+			<desc>Groovy runtime updated to 1.0 language release.</desc>
+		</change>
+		<change>
+			<title>Ruby</title>
+			<desc>Ruby runtime updated to  0.9.8 language release.</desc>
+		</change>
+		<change>
+			<title>ext-xquery</title>
+			<desc>Updated xquery, xslt2 to use Saxon 8.9 library.</desc>
+		</change>
+		<change>
+			<title>mod-smtp</title>
+			<desc>SMTP module updated to improve performance under load and added SMTPSync</desc>
+		</change>
+		<change>
+			<title>Updated Standard Java XML Libraries</title>
+			<desc>Xerces updated to 2.9.0,  Xalan updated to 2.7.0</desc>
+		</change>
+		<change>
+			<title>XmlBeans</title>
+			<desc>Updated to 2.3.0-TRUNK-2007-03-20</desc>
+		</change>
+		<change>
+			<title>Stax</title>
+			<desc>Updated to Codehaus Stax 1.2.0</desc>
+		</change>
+		<change>
+			<title>sed</title>
+			<desc>Performance improvements.</desc>
+		</change>
+		<change>
+			<title>XSLT</title>
+			<desc>Fixed entity resolution for relative entity references.</desc>
+		</change>
+		<change>
+			<title>XML Transreptors</title>
+			<desc>Improved efficiency and memory footprint.</desc>
+		</change>
+		<change>
+			<title>HTTP Mimetypes</title>
+			<desc>Added a local mimetype map for css, idoc.</desc>
+		</change>
+		<change>
+			<title>HTTP Clients</title>
+			<desc>Added proxy setting options and fixed observance of global system proxy settings.</desc>
+		</change>
+		<change>
+			<title>netkernel daemon script</title>
+			<desc>Fixed lost messages for first boot log</desc>
+		</change>
+		<change>
+			<title>Documentation</title>
+			<desc>Revision to architects book + general minor updates.</desc>
+		</change>
+	</version>
+	<version>
+	    <date>2006-10-17</date>
+	    <major>3</major>
+	    <minor>1</minor>
+	    <minorminor>0</minorminor>
+		<change>
+			<title>Documentation</title>
+			<desc>Updates to Getting Started guide - with new hello world tutorial.</desc>
+		</change>
+		<change>
+			<title>Added JSON resource model</title>
+			<desc>JSON now supported with mod-json. JSONAspect can be used in Javascript and any other scripting language. Also provides JSON serializer and parser.</desc>
+		</change>
+		<change>
+			<title>Trace Tool</title>
+			<desc>Trace tool now has option to probe internal and external module address spaces.</desc>
+		</change>
+		<change>
+			<title>Module Installer</title>
+			<desc>Supports installation of expanded modules.</desc>
+		</change>
+		<change>
+			<title>SOAP Service Map</title>
+			<desc>Now supports relative endpoint URLs.</desc>
+		</change>
+		<change>
+			<title>sed streaming editor</title>
+			<desc>ext-sys now has a streaming editor similar to Unix sed.</desc>
+		</change>
+		<change>
+			<title>Experimental support for Ruby</title>
+			<desc>Added active:ruby script engine - based on JRuby v0.9.0</desc>
+		</change>
+		<change>
+			<title>XmlBeans serializer/parser</title>
+			<desc>Patched the XmlBeans library to fix buffer overflows with &amp; as a consequence this also fixes E4X &amp; handling.</desc>
+		</change>
+		<change>
+			<title>XSLT accessor entity resolver</title>
+			<desc>NetKernel is now used as the entity resolver when expanding entity references.</desc>
+		</change>
+		<change>
+			<title>sqlQueryBlob/sqlUpdateBlob</title>
+			<desc>Fixed to report content length and return stream correctly.</desc>
+		</change>
+		<change>
+			<title>XHTMLRedirect</title>
+			<desc>Supports string aspects.</desc>
+		</change>
+		<change>
+			<title>Init Error Handling</title>
+			<desc>Runtime errors thrown during post-boot init are now reported and handled.</desc>
+		</change>
+		<change>
+			<title>Update to Lucene 1.9.1</title>
+			<desc>Updated the mod-lucene module to use Lucene 1.9.1</desc>
+		</change>
+		<change>
+			<title>Update to Saxon 8.8</title>
+			<desc>Updated the ext-xquery module to use Saxon 8.8</desc>
+		</change>
+	</version>
+	<version>
+	    <date>2006-03-24</date>
+	    <major>3</major>
+	    <minor>0</minor>
+	    <minorminor>0</minorminor>
+		<change>
+			<title>Documentation</title>
+			<desc>A few last minute tweaks.</desc>
+		</change>
+	</version>
+	<version>
+	    <date>2006-03-16</date>
+	    <major>3</major>
+	    <minor>0</minor>
+	    <minorminor>RC1</minorminor>
+		<change>
+			<title>Documentation</title>
+			<desc>All documentation has been completed.</desc>
+		</change>
+		<change>
+			<title>I18N content encoding</title>
+			<desc>Content encoding has been tested and updated to be preserved on inbound and outbound interfaces.</desc>
+		</change>
+	</version>
+	<version>
+	    <date>2006-02-08</date>
+	    <major>3</major>
+	    <minor>0</minor>
+	    <minorminor>Preview-7</minorminor>
+		<change>
+			<title>Documentation</title>
+			<desc>Continued refinement to documentation includes completed Extension and Reference Books.</desc>
+		</change>
+		<change>
+			<title>Module Classloader</title>
+			<desc>Module classloader now supports getPackage() for rare situations in which Java libraries need this.</desc>
+		</change>
+	</version>
+	<version>
+	    <date>2006-02-08</date>
+	    <major>3</major>
+	    <minor>0</minor>
+	    <minorminor>Preview-6</minorminor>
+		<change>
+			<title>Documentation</title>
+			<desc>Continued refinement to documentation</desc>
+		</change>
+		<change>
+			<title>Forum Application</title>
+			<desc>The distribution now includes a pre-installed copy of 1060 Forum. A detailed deconstruction guide is also provided in the docs.</desc>
+		</change>
+	</version>
+	<version>
+	    <date>2006-01-03</date>
+	    <major>3</major>
+	    <minor>0</minor>
+	    <minorminor>Preview-5</minorminor>
+		<change>
+			<title>Dynamic Java Compilation</title>
+			<desc>Dynamic compilation of Java source code is now supported for modules. Java development becomes dynamic just like any
+			other scripting language on NetKernel.</desc>
+		</change>
+		<change>
+			<title>Rhino E4X Patches</title>
+			<desc>The Rhino Javascript library has been patched to enable E4X using the XmlBeans 2.1.x library - this improves performance and fixes
+			issues with escaping of literals and a problem manipulating E4X objects caused by a bug in the underlying XmlObject.save() method.</desc>
+		</change>
+		<change>
+			<title>Module ClassLoader equals()</title>
+			<desc>Potential for a ClassCastException has been eliminated with stronger type checking</desc>
+		</change>
+		<change>
+			<title>Documentation Formats/Renderers</title>
+			<desc>A new device independent 'doc-source' format has been added for documentation with a set of associated renderers. 
+			Renderers are supplied in mod-docxter with full backwards compatibility for legacy formats.
+			</desc>
+		</change>
+		<change>
+			<title>HSQLDB v1.8.0.1</title>
+			<desc>The HSQL embedded database shipped in mod-db has been updated to v1.8.0.1</desc>
+		</change>
+		<change>
+			<title>Windows Service Wrapper</title>
+			<desc>the directory [install]/bin/win32-service/ now provides resources to register NetKernel as an NT service on the Windows platform.</desc>
+		</change>
+		<change>
+			<title>1060 Forum</title>
+			<desc>1060 Forum is now shipped as a demonstration application.</desc>
+		</change>
+		<change>
+			<title>XForms library uses Chiba 1.2.0</title>
+			<desc>The XForms library has been updated to use Chiba 1.2.0. The XForms rendering stylesheet 'form-standard.xsl' has been updated. For performance the
+			default XSLT engine is now xsltc.</desc>
+		</change>
+	</version>
+	<version>
+	    <date>2005-11-10</date>
+	    <major>3</major>
+	    <minor>0</minor>
+	    <minorminor>Preview-4</minorminor>
+		<change>
+			<title>Soft Scope Cache</title>
+			<desc>The default cache now uses a Soft Reference design - the cache auto-tunes with no hard-limit imposed on the total number of cached items and has a more
+			efficient cache weighting algorithm. Overall, the new cache is at least 3 times more efficient in memory use and has lower maintanence costs.
+			Furthermore the soft reference design means that it is now impossible to create a bad configuration that in the past could have resulted
+			in heap out-of-memory in extreme situations. After extensive performance analysis it was found that there is now
+			no benefit and a disproportionate cost overhead associated with serialized L2 disk cache - therefore the L2 cache is no longer implemented.
+			A small consequence of the cache changes is that the cache-view-tool only shows metadata about the cached resource and no longer allows the
+			actual cached resource to be viewed.</desc>
+		</change>
+		<change>
+			<title>XRL Recursion Algorithm</title>
+			<desc>The XRL accessor has been rewritten to use a single pass recursion which yields a speed-up of ~3x for large docs.</desc>
+		</change>
+		<change>
+			<title>Exists Dependencies</title>
+			<desc>Unnecessary dependencies generated for Exists requests are no longer accumulated.</desc>
+		</change>
+		<change>
+			<title>Cron Scheduler</title>
+			<desc>A Cron module is provided which gives recurrent and one-shot request scheduling.</desc>
+		</change>
+		<change>
+			<title>XUnit Framework</title>
+			<desc>XUnit has been updated with a new tool to aggregate and run tests from across the system in a single place.</desc>
+		</change>
+		<change>
+			<title>Component Lifecycle</title>
+			<desc>When shutting down/restarting the kernel now calls destroy() on accessors, fragmentors, transreptors and transports to facilitate cleanup.</desc>
+		</change>
+		<change>
+			<title>E4X Rhino Fix</title>
+			<desc>E4X objects constructed from XMLBeans were not consistent with literals and could cause exceptions - a patch to the Rhino library fixes this.</desc>
+		</change>
+		<change>
+			<title>Transreptor Coverage</title>
+			<desc>Transreptors have been migrated to NKF and now implement transreptor pipelining - a comprehensive coverage matrix test has eliminated corner cases.</desc>
+		</change>
+		<change>
+			<title>Asynchronous Deadly Embrace Fixed</title>
+			<desc>A rare but critical deadly embrace between 2 symmetrical async threads forked from a common parent has been fixed.</desc>
+		</change>
+		<change>
+			<title>RDBMS Stored Procedures</title>
+			<desc>A new sqlProc accessor supports calling stored procedures and returning multiple results sets.</desc>
+		</change>
+		<change>
+			<title>Install Wizard Push Upload</title>
+			<desc>Modules can now be installed by uploading from a browser.</desc>
+		</change>
+		<change>
+			<title>Removed Headerless Flag in Image Tools</title>
+			<desc>Image tools no longer arbitrarily set java.awt.headerless - this should be set as a system properties in start.sh for truely headerless servers.</desc>
+		</change>
+		<change>
+			<title>Download Timeouts</title>
+			<desc>When system tools source resources from external servers they no longer throw exception if the download does not complete within the deadlock period.</desc>
+		</change>
+		<change>
+			<title>Bootloader - Paths</title>
+			<desc>System base path is now set as a Java property in startup scripts - see start.sh / startup.bat.</desc>
+		</change>
+		<change>
+			<title>Bootloader - Isolation</title>
+			<desc>Bootloader now provides complete classpath isolation so that external classpaths cannot interfere with the NK system.</desc>
+		</change>
+		<change>
+			<title>fls fix</title>
+			<desc>A bug in which the URI was wrongly reported in file listings has been fixed.</desc>
+		</change>
+		<change>
+			<title>Documentation</title>
+			<desc>Initial work on restructuring the documentation has begun.  All reference documentation has been thoroughly reviewed and updated.</desc>
+		</change>
+		<change>
+			<title>Lucene Indexer</title>
+			<desc>Updated to v1.4 latest release.</desc>
+		</change>
+		<change>
+			<title>Class Trace Tool</title>
+			<desc>A new class trace tool allows classpath testing within the context of module - now featuring extra bling!</desc>
+		</change>
+		<change>
+			<title>Ping Pong GUI Demo</title>
+			<desc>A demonstration application showing a RESTful GUI design-pattern is now shipped pre-installed.</desc>
+		</change>
+	</version>
+	<version>
+	    <date>2005-9-27</date>
+	    <major>3</major>
+	    <minor>0</minor>
+	    <minorminor>Preview-3</minorminor>
+		<change>
+			<title>Process Table</title>
+			<desc>Asynchronous processes whose parent process has ended are now shown in the process table and may be killed.</desc>
+		</change>
+		<change>
+			<title>Grouped Accessor Docs</title>
+			<desc>Accessor Listing is now paginated and linked to the host module.</desc>
+		</change>
+		<change>
+			<title>XRL Documentation</title>
+			<desc>Improved to provide more accuracy and detail.</desc>
+		</change>
+		<change>
+			<title>Logging Configuration</title>
+			<desc>Logging can now be configured to fine granularity - see system.xml</desc>
+		</change>
+		<change>
+			<title>Apache Chainsaw Log Viewer</title>
+			<desc>Chainsaw can now be configured to receive NetKernel logs.</desc>
+		</change>
+		<change>
+			<title>getClonedXDA()</title>
+			<desc>Method added to XDA API to give a safe cloned IXDA</desc>
+		</change>
+		<change>
+			<title>Beanshell Concurrency</title>
+			<desc>Any given Beanshell script may now be run concurrently.</desc>
+		</change>
+		<change>
+			<title>Logging pagination</title>
+			<desc>The NetKernel log viewer now provides paged navigation.</desc>
+		</change>
+		<change>
+			<title>Streaming API for XML (StAX)</title>
+			<desc>ext-xml-core now exports javax.xml.streaming and provides StAXReaderAspect and transreptors.</desc>
+		</change>
+		<change>
+			<title>Look and Feel</title>
+			<desc>The graphic design has been updated.</desc>
+		</change>
+		<change>
+			<title>Thread Stacktrace on deadlock on JDK 1.5</title>
+			<desc>If you are using JDK1.5 you now receive a detailed stack trace if deadlocked thread is killed.</desc>
+		</change>
+		<change>
+			<title>XmlBeans v2.0.0</title>
+			<desc>The Apache XmlBean library provided in xml-core has been updated to v2.0.0 - improvements include better performance
+			and support for XPath and XQuery to place cursors.</desc>
+		</change>
+	</version>
+	<version>
+	    <date>2005-8-17</date>
+	    <major>3</major>
+	    <minor>0</minor>
+	    <minorminor>Preview-2</minorminor>
+		<change>
+			<title>LDAP Module</title>
+			<desc>A new LDAP library provides support for querying, adding and modifying LDAP records.</desc>
+		</change>
+		<change>
+			<title>RDF Module</title>
+			<desc>A new RDF library provides support for working with RDF models - this library is large and so it is not shipped
+			with the distribution it can be installed from the 1060 servers using the install wizard.</desc>
+		</change>
+		<change>
+			<title>Application Logger</title>
+			<desc>The logger now supports application specific logs - with granularity down to individual
+			modules.  The log inspection tool now provides views of each log separately.
+			</desc>
+		</change>
+		<change>
+			<title>Panel Plug-ins</title>
+			<desc>It is now possible to export control panel plugins from your modules which will
+			be automatically added as panels to the backend admin tools.
+			</desc>
+		</change>
+		<change>
+			<title>Module RSS Feeds</title>
+			<desc>A plug-in panel may be configured to automatically render an RSS v2.0 feed, exposed as service by a
+			module, for display in the panel in the back-end tools.
+			</desc>
+		</change>
+		<change>
+			<title>Control Panel</title>
+			<desc>The control panel has been tweaked to group related services together.  The developer tools
+			panel is now available from a primary link in the toolbar.
+			</desc>
+		</change>
+		<change>
+			<title>JVM File Handle Workaround</title>
+			<desc>A JVM bug which leaves file handles open when accessing resources from JAR has been worked around.</desc>
+		</change>
+	</version>
+	<version>
+	    <date>2005-8-5</date>
+	    <major>3</major>
+	    <minor>0</minor>
+	    <minorminor>Preview-1</minorminor>
+		<change>
+		    <title>Python Language Support</title>
+		    <desc>Full support for modules containing either scripts of classes or both. Modules are compiled and stored in bytecode form inside the NetKernel cache.
+			Dependency checking so that scripts and their results are invalidated and recompiled
+			if a modules source is edited. Imports working from with NetKernel address space rather than filesystem. Both relative and absolute import resolution.
+			Error handling integrated into NetKernels stack traces (i.e. Python stack traces appear properly format
+			inside a NetKernel exception)
+			</desc>
+	    </change>
+		<change>
+		    <title>Linear Resource Accumulation</title>
+		    <desc>Improvements to the metadata cost accumulation algorithm now ensures that the same dependency doesn't accumulate multiple times
+			for a resource ensuring a more accurate cost rating</desc>
+	    </change>
+		<change>
+		    <title>Dependency Visualization</title>
+		    <desc>Improved dependency introspection on trace and debugger tools - both the debugger and the trace tools incorporate an advanced resource
+			metadata view which shows all dependencies which effect the expiry of a resource and a foldable depdenency tree for the resource visualising expiry and cost.</desc>
+	    </change>
+		<change>
+		    <title>JDBC Result Sets</title>
+		    <desc>JDBC result set aspect reintroduced - the connection leaking and reuse issues of IAspectResultSet have been fixed. This is
+			useful for processing large result sets with NetKernel scripts</desc>
+	    </change>
+		<change>
+		    <title>CLOB Support</title>
+		    <desc>CLOB update and query support has been added to the RDBMS library</desc>
+	    </change>
+		<change>
+		    <title>mod-db driver JARs located in context</title>
+		    <desc>Vendor specific JDBC driver JARs are now located by searching the super stack of requests. This allows driver JARs to be installed
+			without modifying the syatem classpath or altering mod-db - as a consequence mod-db is now shipped as a jar.</desc>
+	    </change>
+		<change>
+		    <title>NKF improvements</title>
+		    <desc>Added method IBasicHelper.createSubRequest(String aBaseURI) to combine the creation of a subrequest with setting it's base URI
+			(which is mandatory). Added an implicit INKFBasicHelper.setResponse() inside INKFBasicHelper.createResponseFrom() methods which saves an extra line of code.</desc>
+	    </change>
+		<change>
+		    <title>Email Transport</title>
+		    <desc>Email transport has improved error handling and reporting</desc>
+	    </change>
+		<change>
+		    <title>Log Level Persistence</title>
+		    <desc>Log level settings now persist across shutdowns.</desc>
+	    </change>
+		<change>
+		    <title>Tidy serialisation in tools</title>
+		    <desc>The install wizard and new module wizard both serialize all XML configuration files in a tidy indented form which is easier for human editing</desc>
+	    </change>
+		<change>
+		    <title>Session Mapper</title>
+		    <desc>Session mapper config is now (consistently) located in the ffcpl:/etc directory</desc>
+	    </change>
+		<change>
+		    <title>Tools</title>
+		    <desc>various improvements to introspect tools - extra fields on healthcheck, uptime not reset by hot restart, reindex all link
+			and better formatting of search results page</desc>
+	    </change>
+		<change>
+		    <title>JAXP1.3 XML Libraries</title>
+		    <desc>The core XML libraries have been updated to support JAXP1.3 and
+			now provide forwards compatibility to J2SE 5.0  It is recommended that you test
+			your code for compatibilty.  You may need to rebuild against lib/endorsed/*.jar to
+			avoid linkage errors.
+			</desc>
+	    </change>
+		<change>
+		    <title>ext-xquery Saxonb8-4</title>
+		    <desc>The Xquery and xslt2 library has been updated to use version 8-4 of Saxon.  You may need to 
+			check your xquery code to ensure that it complies with the latest changes to the XQuery specification.
+			</desc>
+	    </change>
+		<change>
+			<title>Cache Reap Algorithm</title>
+			<desc>The cache reap algorithm has been enhanced to improve reap efficiency and will yield significant
+			performance gains for systems with large cache sizes.</desc>
+		</change>
+		<change>
+			<title>New Throttle Accessor</title>
+			<desc>The throttle accessor provides a concurrency management wrapper which may layered over any set
+			of NetKernel services to control the maximum thread concurrency entering the services.  This can be
+			very useful to throttle concurrent requests to external services such as databases or integrated web-services.</desc>
+		</change>
+		<change>
+			<title>NetKernel Foundation API</title>
+			<desc>The NetKernel Foundation API has been enhanced to provide an asynchronous Accessor base-class - this
+			enables both asynchronous client and asynchronous server design patterns.</desc>
+		</change>
+		<change>
+		    <title>ext-xforms</title>
+		    <desc>Updated XForms services to use Chiba v1.1.1.</desc>
+	    </change>
+		
+		<change>
+			<title>ext-xml-core</title>
+			<desc>The xml-core library has been enhanced to provide wider coverage for XML object model transreption.
+			In particular XmlObject is now broadly supported enabling full use of the E4X capability in Javascript.</desc>
+		</change>
+	</version>
+	<version>
+	    <date>2005-5-8</date>
+	    <major>2</major>
+	    <minor>0</minor>
+	    <minorminor>6</minorminor>
+		<change>
+		    <title>System version added to Healthcheck</title>
+		    <desc>The version of the distribution is now shown in thes system healthcheck tool.</desc>
+	    </change>
+		<change>
+		    <title>Duplicate Entrypoints in Docs</title>
+		    <desc>When two modules of different versions co-exist only the most recent docs are displayed to prevent duplication.</desc>
+	    </change>
+		<change>
+		    <title>Win32 File URIs Fixed</title>
+		    <desc>A JVM bug in File causes Win32 files to have invalid URIs - fixes have been made to module wizard and introspect tools to workaround.</desc>
+	    </change>
+		<change>
+		    <title>Command Line Mode</title>
+		    <desc>dexter.sh script has been updated and NK can be used from native OS script</desc>
+	    </change>
+	</version>
+	<version>
+	    <date>2005-5-1</date>
+	    <major>2</major>
+	    <minor>0</minor>
+	    <minorminor>5</minorminor>
+		<change>
+		    <title>XmlObject Transreption</title>
+		    <desc>New transreptors provide full coverage to and from XmlObjects</desc>
+	    </change>
+		<change>
+		    <title>Javascript Updated to Rhino1_6</title>
+		    <desc>Javascript updated to Rhino 1_6 with support for E4X</desc>
+	    </change>
+		<change>
+		    <title>Mod-DB</title>
+		    <desc>A bug in which connections could remain open after using a ResultSetAspect has been fixed</desc>
+	    </change>
+		<change>
+		    <title>Module Installer Defaults to Update</title>
+		    <desc>The module installer now defaults to update rather than add to maintain existing modules - it is recommended to use update to maintain a standard system.</desc>
+	    </change>
+		<change>
+		    <title>HTTP Client Library shuts down HTTPConnectionPool properly</title>
+		    <desc>The HTTPConnectionPool is now properly shutdown if the HTTP client accessor is closed.  New instances of the accessor are able to create connections.</desc>
+	    </change>
+		<change>
+		    <title>JMS supports JMSReplyTo</title>
+		    <desc>JMSReplyTo supports has been added to JMS transport</desc>
+	    </change>
+	</version>
+	<version>
+	    <date>2005-4-12</date>
+	    <major>2</major>
+	    <minor>0</minor>
+	    <minorminor>4</minorminor>
+		<change>
+		    <title>Hot Restart</title>
+		    <desc>Hot Restart now correctly detects modules invalidated when code libraries are changed.</desc>
+	    </change>
+		<change>
+		    <title>Cummulative Memory Leak</title>
+		    <desc>A bug which caused a small but cummulative memory leak on each restart has been fixed.</desc>
+	    </change>
+		<change>
+		    <title>HTTP Client Library</title>
+		    <desc>A new HTTP client library provides services for making HTTP client requests.</desc>
+	    </change>
+		<change>
+		    <title>Improved SQL Support</title>
+		    <desc>Updated to provide connection pooling and transaction support on SQL operations.</desc>
+	    </change>
+		<change>
+		    <title>ext-xml-core</title>
+		    <desc>Adds Boolean2XML transreptor</desc>
+	    </change>
+		<change>
+		    <title>ext-layer1</title>
+		    <desc>Improved NKF to support dynamic expiry metadata</desc>
+	    </change>
+		<change>
+		    <title>Control Panel News</title>
+		    <desc>Latest news on 1060 NetKernel, including important and critical updates, is now provided in the control panel.</desc>
+	    </change>
+		<change>
+		    <title>FrontEnd-Fulcrum</title>
+		    <desc>Localhost cookie no longer causes root path 404.</desc>
+	    </change>
+		<change>
+		    <title>Documentation Updated</title>
+		    <desc>Updated documentation based on customer feedback.</desc>
+	    </change>
+	</version>
+	<version>
+	    <date>2005-2-10</date>
+	    <major>2</major>
+	    <minor>0</minor>
+	    <minorminor>3</minorminor>
+		<change>
+		    <title>Documentation</title>
+		    <desc>Corrections have been made to the docs to fix typos etc.</desc>
+	    </change>
+		<change>
+		    <title>Win32 File Handles</title>
+		    <desc>The Module Resource accessor in the Kernel was not correctly closing file handles on Win32 resulting in locked resources. This is fixed.</desc>
+	    </change>
+		<change>
+		    <title>DPML RNG Schema Fixed</title>
+		    <desc>A bug in the seq element has been fixed.</desc>
+	    </change>
+		<change>
+		    <title>WS-Test module</title>
+		    <desc>Some broken links to test services have been fixed.</desc>
+	    </change>
+		<change>
+		    <title>Administration Backend-Fulcrum</title>
+		    <desc>The backend fulcrum is now shipped as a directory rather than as a JAR file, enabling applications to install their own web admin
+			to the fulcrum.</desc>
+	    </change>
+	</version>
+	<version>
+	    <date>2005-1-17</date>
+	    <major>2</major>
+	    <minor>0</minor>
+	    <minorminor>2</minorminor>
+		<change>
+		    <title>Introductory Documentation Refactor</title>
+		    <desc>The early introductory documentation has been refactored to improve readability and to improve
+			the learning curve.</desc>
+	    </change>
+		<change>
+		    <title>Hello World Trailmaps</title>
+		    <desc>Several new trailmaps to get new users into creating services with NetKernel and understanding the most basic NetKernel concepts.</desc>
+	    </change>
+	    <change>
+		    <title>Module Introspection Tool</title>
+		    <desc>The module introspection tool now provides links to enable drilling down to explore imported modules.</desc>
+	    </change>
+		<change>
+		    <title>Workbench</title>
+		    <desc>Due to popular demand the workbench has made a reappearance. The workbench is a pre-configured
+			module that is ready to have scripts and applications dropped into it and run.</desc>
+	    </change>
+		<change>
+		    <title>Resource Browser now supports resource viewing</title>
+		    <desc>The Resource Browser is a tool in the developer tools section of the System Services
+			Fulcrum. It now supports the ability to retrieve an resource in any module and
+			return it to the developer.</desc>
+	    </change>
+		<change>
+		    <title>Module Schema</title>
+		    <desc>The module schema is now provided in the xlib module.</desc>
+	    </change>
+		<change>
+		    <title>New Module Wizard</title>
+		    <desc>A bug in the error handling of the module wizard has been fixed.</desc>
+	    </change>
+		<change>
+		    <title>Scripting Accessors</title>
+		    <desc>A new document describes how accessors can be implemented using dynamic languages.</desc>
+	    </change>
+		<change>
+		    <title>DynamicURLClassloader</title>
+		    <desc>Double buffering has been added to improve memory footprint and performance.</desc>
+	    </change>
+	</version>
+	<version>
+	    <date>2004-12-10</date>
+	    <major>2</major>
+	    <minor>0</minor>
+	    <minorminor>1</minorminor>
+	    <change>
+		    <title>JMS Connection Module</title>
+		    <desc>A new JMS module provides JMS topic/queue transport and accessor.</desc>
+	    </change>
+		<change>
+		    <title>Cache Config Editor</title>
+		    <desc>The cache can now be graphically configured using a control panel plug-in. </desc>
+	    </change>
+		<change>
+		    <title>HSQLDB 1.7.3</title>
+		    <desc>The shipped HSQLDB library has been updated to 1.7.3</desc>
+	    </change>
+		<change>
+		    <title>Enhanced Module Introspection</title>
+		    <desc>Provides an enhanced view of the resources and services provided by a module.</desc>
+	    </change>
+		<change>
+		    <title>Fix: Debugger Deadlock NP</title>
+		    <desc>Fixes a Null Pointer exception in the debugger which occurred after the Deadlock detector had killed a process stopped in the debugger.</desc>
+	    </change>
+		<change>
+		    <title>Fix: Backend Fulcrum Cookie</title>
+		    <desc>Fixes problem resolving docs if the browser had a cookie set on the localhost root path.</desc>
+	    </change>
+		<change>
+		    <title>Fix: Expired Accessor Bug</title>
+		    <desc>Fixes a rare problem of expired cached accessor which have a very long latency between accesses.</desc>
+	    </change>
+		<change>
+		    <title>Fix: Default Encoding of Serialize Accessor</title>
+		    <desc>Fixes the default encoding of the serialize accessor to be UTF-8 irrespective of platform default.</desc>
+	    </change>
+		<change>
+		    <title>Fix: Thread Safety of ClassLoader</title>
+		    <desc>Precautionary fix to the main NetKernel classloader to guarantee thread safety when cocurrently accessed.</desc>
+	    </change>
+	</version>
+	<version>
+	    <date>2004-11-01</date>
+	    <major>2</major>
+	    <minor>0</minor>
+	    <minorminor>0</minorminor>
+	    <change>
+		    <title>NetKernel Foundation API</title>
+		    <desc>A new foundation API provides a clean abstraction upon which accessor and scripts can be developed.</desc>
+	    </change>
+		<change>
+		    <title>NetKernel Scripting Framework</title>
+		    <desc>A script framework which supports Javasript, Beanshell and Python scripts on NetKernel.</desc>
+	    </change>
+		<change>
+		    <title>XUnit Testing Framework</title>
+		    <desc>A service oriented unit testing suite provides XML and graphical unit test framework.</desc>
+	    </change>
+		<change>
+		    <title>JDOM Object Model</title>
+		    <desc>XML resources may be requested with JDOM aspects.</desc>
+	    </change>
+		<change>
+		    <title>XmlBean Object Model</title>
+		    <desc>Apache XmlBean objects may be requested as Aspects of any XML resource.</desc>
+	    </change>
+		<change>
+		    <title>Scripting Playpen</title>
+		    <desc>The scripting playpen allows scipts to be tested/developed interactively.</desc>
+	    </change>
+		<change>
+		    <title>Asynchronous processes with join</title>
+		    <desc>active:asynch and active:join provide support for forking and joining asynchronous processes.</desc>
+	    </change>
+		<change>
+		    <title>Fragmentation Services</title>
+		    <desc>A generic URI fragment infrastructure has been added to the kernel. Representations of resources may use fragmentor services
+			for post-processing URI fragments.  XPointer is implemented as a  Fragmentor for any XML resource and so XPointer URI fragments may be specified
+			with any resource request.</desc>
+	    </change>
+		<change>
+		    <title>Aspect Transreption</title>
+		    <desc>The kernel will now create an aspect from the low-level binary stream if a high-level aspect-to-aspect transreption is not found.</desc>
+	    </change>
+		<change>
+		    <title>Debugger super-stack</title>
+		    <desc>The debugger now provides a view of the superstack for the stopped request.</desc>
+	    </change>
+		<change>
+		    <title>Single Module Install Wizard</title>
+		    <desc>The install wizard now supports installation of a single URI sourced module.</desc>
+	    </change>
+		<change>
+		    <title>DPML Literals passed by reference</title>
+		    <desc>DPML literals are now passed by reference with XPointer URIs.</desc>
+	    </change>
+		<change>
+			<title>Dynamic HTTP Bridge Config</title>
+			<desc>The HTTP Bridge config can now be generated dynamically by mapping ffcpl:/etc/HTTPBridgeConfig.xml to the active:http-bridge-config
+			accessor.</desc>
+		</change>
+		<change>
+			<title>New system status report</title>
+			<desc>A new system status report provides general system status including uptime</desc>
+		</change>
+		<change>
+			<title>Processes can now be Killed</title>
+			<desc>It is now possible to kill a process via a new process view control panel</desc>
+		</change>
+		<change>
+			<title>New MailTransport/Mailbox accessor</title>
+			<desc>A new mail transport provides polled servicing of POP and IMAP mailboxes.  The transport can be used as an accessor for
+			single shot mailbox polling.</desc>
+		</change>
+		<change>
+			<title>Module Classloader</title>
+			<desc>The module classloader now traverses the super stack module classloader before finally trying the 
+			base JVM classpath.</desc>
+		</change>
+		<change>
+			<title>Module Installer Supports Rollback</title>
+			<desc>The module installer now supports rollback allowing module configuration to be reverted to a previous known state.</desc>
+		</change>
+		<change>
+			<title>Accessor migration into ext-sys module</title>
+			<desc>System level accessors that were previously held in ext-layer1 and ext-xml-ura (eg active:log) have been migrated to the ext-sys module. 
+			ext-sys is now the standard library to import for system-level accessors and services.</desc>
+		</change>
+		<change>
+			<title>MailTransport</title>
+			<desc>A new mail transport allows mailboxes to be polled for mail messages and issued to NetKernel for processing.</desc>
+		</change>
+		<change>
+			<title>Image Utilities</title>
+			<desc>New image utilities include an Image parser, serializer and fragmentors for image pipelines.</desc>
+		</change>
+		<change>
+			<title>Cache Reap Fixed</title>
+			<desc>A cache reap cycle bug which could have lead to deadlock in highly loaded systems has been fixed.</desc>
+		</change>
+		<change>
+			<title>Xalan Memory Leak Fixed</title>
+			<desc>A custom build of Xalan is supplied which fixes a serious Xalan bug which resulted in memory leaks after system restarts.</desc>
+		</change>
+	</version>
+	<version>
+	    <date>2004-06-04</date>
+	    <major>1</major>
+	    <minor>3</minor>
+	    <minorminor>0</minorminor>
+	    <change>
+		    <title>SOAP Infrastructure</title>
+		    <desc>A comprehensive SOAP infrastructure allows NetKernel to host SOAP services, act as client to remote services and
+		    processes SOAP messages with a suite of tools.</desc>
+	    </change>
+	    <change>
+		    <title>xslt2</title>
+		    <desc>A new xslt2 accessor provides W3C XSLT v 2.0 compatible transformations</desc>
+	    </change>
+	    <change>
+		    <title>xpath2eval</title>
+		    <desc>A new xpath2eval accessor provides W3C XPATH v 2.0 xpath evaluation</desc>
+	    </change>
+	    <change>
+		    <title>STM</title>
+		    <desc>A fix was made to the parameter substitution code to prevent the stm namespace declaration appearing in result documents</desc>
+	    </change>
+	    <change>
+		    <title>Updated XML Libraries</title>
+		    <desc>The Xalan and Xerces Apache libraries have been updated to the latest 2.6.x releases.</desc>
+	    </change>
+	    <change>
+		    <title>SOAP HTTP Binding</title>
+		    <desc>A SOAPMode has been added to the HTTP Bridge Accessor to support SOAP 1.1 and 1.2 HTTP Bindings.</desc>
+	    </change>
+	    <change>
+		    <title>DOMXDA</title>
+		    <desc>A new declareNS method allows namespace declarations to be made at an XPath location.  Other methods were updated to
+		    ensure that changes to namespaces are reflected in the Xpath prefix resolver.</desc>
+	    </change>
+	    <change>
+		    <title>DOM2SAX and SAX2DOM Transreptors</title>
+		    <desc>New transreptors enable DOM and SAX XML Aspects to be used transparently within any processing pipeline.</desc>
+	    </change>
+	    <change>
+		    <title>Debugger Dependency Introspection</title>
+		    <desc>The debugger now display the dependency hierarchy of resultant resources when
+			a request is stopped post-execution.</desc>
+	    </change>
+	    <change>
+		    <title>Front-end Error Handler</title>
+		    <desc>The front-end fulcrum now formats exceptions using a default error handler.</desc>
+	    </change>
+	    <change>
+		    <title>Transaction Report Enhanced</title>
+		    <desc>New columns of total elapsed time and total local time have been added to
+			the transaction report to aid performance tuning.</desc>
+	    </change>
+	    <change>
+		    <title>Kernel Error Handling</title>
+		    <desc>Minor changes to the Kernel error handling to improve formatting when nesting NetKernelExceptions inside
+		    non-NetKernelExceptions</desc>
+	    </change>
+	    <change>
+		    <title>Documentation System Tuned</title>
+		    <desc>The documentation system performance has been improved for the following
+			cases: first document, subsequent documents, reindexing documents.</desc>
+	    </change>
+	</version>
+	<version>
+	    <date>2004-05-13</date>
+	    <major>1</major>
+	    <minor>2</minor>
+	    <minorminor>1</minorminor>
+	    <change>
+		    <title>Front-end Fulcrum</title>
+		    <desc>Some minor configuration changes were made to the Front End fulcrum.</desc>
+	    </change>
+	</version>
+	<version>
+	    <date>2004-04-27</date>
+	    <major>1</major>
+	    <minor>2</minor>
+	    <minorminor>0</minorminor>
+	    <change>
+		    <title>Structured Documentation</title>
+		    <desc>Based on user feedback the documentation has been completely restructured and improved.</desc>
+	    </change>
+	    <change>
+		    <title>HTTP Transport</title>
+		    <desc>
+			The HTTP transport has been refactored into a low-level HTTP transport and a high-level HTTP adaptor bridge.
+			The bridge processes the raw HTTP request and response from the transport and provides high-level application
+			support such as HTTP Header extraction, method type, parameter and query processing...
+		    </desc>
+	    </change>
+	    <change>
+		    <title>RDBMS Blob support</title>
+		    <desc>mod_db now provides accessors for getting and setting RDBMS blobs</desc>
+	    </change>
+	    <change>
+		    <title>Faster Startup</title>
+		    <desc>The post-boot Module Deployment Verification has been optimized</desc>
+	    </change>
+	    <change>
+		    <title>Deprecated create() factory methods on Aspect implementations</title>
+		    <desc>The create factory methods have been deprecated.  The old API convention was ambiguous
+			as it generated a representation from a method on the aspect. This was contrary to the RAT abstraction.</desc>
+	    </change>
+	    <change>
+		    <title>Win32 URL Resource Loading</title>
+		    <desc>The JDK 1.4.x has a bug in File.getURL() which fails to escape whitespace in a Win32 filename - this
+		    problem has been fixed.</desc>
+	    </change>
+	</version>
+	<version>
+		<date>2004-03-12</date>
+		<major>1</major>
+		<minor>1</minor>
+		<minorminor>1</minorminor>
+		<change>
+			<title>Kernel Cache Manager</title>
+			<desc>The cache manager has been tweaked to support the L1, L2 caches</desc>
+		</change>
+		<change>
+			<title>Cache</title>
+			<desc>The standard cache now has a file-based L2 cache. Cached resources are now automatically migrated from the in-memory L1 cache
+			to the file-based L2 cache.</desc>
+		</change>
+		<change>
+			<title>SMTP Server</title>
+			<desc>New SMTP Server module provides email message queue for Mulitpart MIME email messages.</desc>
+		</change>
+		<change>
+			<title>DPML</title>
+			<desc>Set intermediate accessor added - by default DPML results are cacheable, this accessor allows a process to explicitly
+			declare its result intermediate.</desc>
+		</change>
+		<change>
+			<title>formURIEncode/Decode</title>
+			<desc>Utility accessors to encode/decode between NVP and x-form-url-encoded binary stream.</desc>
+		</change>
+		<change>
+			<title>get/setURIQuery</title>
+			<desc>Utility accessors to get URI query parts as NVP and set query from NVP.</desc>
+		</change>
+		<change>
+			<title>mod_db</title>
+			<desc>Some minor updates to the XML result set code.  Configuration now supports separate user and password fields.  HSQLDB embedded
+			SQL database provided as lib for development/testing/demos.</desc>
+		</change>
+		<change>
+			<title>XRL</title>
+			<desc>XRL mapper results are now cacheable - previously they defaulted to intermediate.</desc>
+		</change>
+		<change>
+			<title>HTML Serializer</title>
+			<desc>Apostrophe escaping is now automatic for XHTML.</desc>
+		</change>
+		<change>
+			<title>Doc Engine</title>
+			<desc>The dynamic menu generator has been improved.</desc>
+		</change>
+		<change>
+			<title>Cache Performance Analysis Document</title>
+			<desc>A document presenting performance/cache trade-offs and cache optimizations.</desc>
+		</change>
+		<change>
+			<title>HTTP</title>
+			<desc>Redirects now set expirey header.</desc>
+		</change>
+	</version>
+	<version>
+		<date>2004-02-24</date>
+		<major>1</major>
+		<minor>1</minor>
+		<minorminor>0</minorminor>
+		<change>
+			<title>Kernel Scheduler</title>
+			<desc>The Kernel scheduler now supports a debug API.  It features improved deadlock prevention/detection. Scheduler
+			thread management has also been improved.</desc>
+		</change>
+		<change>
+			<title>Debugger</title>
+			<desc>A new debugger application enables detailed inspection and examination of request state.</desc>
+		</change>
+		<change>
+			<title>XForms</title>
+			<desc>The XForms module now uses Chiba 0.9.4 for the XForm model.  The controller interface has been
+			extended to support submission/instance URIs</desc>
+		</change>
+		<change>
+			<title>Session</title>
+			<desc>Revised session mapper adds throttle, variable timeout, prevents the potential of unbounded memory use.</desc>
+		</change>
+		<change>
+			<title>attachDependency Acccessor</title>
+			<desc>Allows a dependent resource to be explicitly attached to another resource as a dependency.</desc>
+		</change>
+		<change>
+			<title>Lucene Index</title>
+			<desc>The lucene XML indexer now supports additional named indexes.</desc>
+		</change>
+		<change>
+			<title>WebDAV module</title>
+			<desc>A new WebDAV client module add accessors for interacting with a WebDAV repository.</desc>
+		</change>
+		<change>
+			<title>Module Installer Fix</title>
+			<desc>The module installer now correctly provides version number on expanded JAR files.</desc>
+		</change>
+		<change>
+			<title>DPML</title>
+			<desc>this:param / this:param:* / this:session:* now support EXISTS - means no longer need exception blocks to handle defaults.</desc>
+		</change>
+		<change>
+			<title>HTTP Transport</title>
+			<desc>HTTP Status Codes now use correct defaults</desc>
+		</change>
+		<change>
+			<title>XInclude</title>
+			<desc>Updated to be complient with latest W3C spec.</desc>
+		</change>
+		<change>
+			<title>Documentation</title>
+			<desc>Some errata fixes in documentation have been made.</desc>
+		</change>
+	</version>
+	<version>
+		<date>2004-01-15</date>
+		<major>1</major>
+		<minor>0</minor>
+		<minorminor>0</minorminor>
+		<change>
+			<title>NetKernel Control Interface</title>
+			<desc>All control operations of NetKernel are exposed via HTTP on port 1060.  A control panel
+			provides access to all NetKernel administration tools and services.</desc>
+		</change>
+		
+		<change>
+			<title>NetKernel v2.2.0 Hot/Cold Restart</title>
+			<desc>NetKernel now supports both Cold and Hot restart.  Cold restart quickly reboots the entire
+			OS stack without stopping the JVM however all transport requests are lost during the reboot.  Hot Restart 
+			reboots the system and detects/installs new or updated modules based on version number - it
+			preserves all transport requests so an application can be patched/upgraded with no loss of service </desc>
+		</change>
+		<change>
+			<title>NetKernel v2.2.0 Memory Optimizations</title>
+			<desc>The Kernel and some XML modules have been optimized to minimize object creation - memory footprint can be up
+			to 50% lower in some applications</desc>
+		</change>
+		<change>
+			<title>NetKernel v2.2.0 Improved performance</title>
+			<desc>General optimization and refinements have provide significant performance gains.</desc>
+		</change>
+		<change>
+			<title>NetKernel v2.2.0 Hot System Config</title>
+			<desc>The Kernel can now be configured at runtime - Threads counts, Throttle parameters, Housekeeping and many other Kernel settings
+			can now be changed at runtime.</desc>
+		</change>
+		<change>
+			<title>Dynamic Entrypoint Management</title>
+			<desc>A new entrypoint managment system is provided. All modules can now be dynamically deployed, there entrypoints will be
+			detected and published on the admin interface.  Documentation can be automatically discovered and indexed.</desc>
+		</change>
+		<change>
+			<title>New Documentation System</title>
+			<desc>Documents are dynamically discovered in installed modules and full-text indexing is performed.</desc>
+		</change>
+		<change>
+			<title>Front/Backend Fulcrums</title>
+			<desc>The system now ships with a front-end fulcrum which provides an HTTP transport on port 8080 - applications should be installed
+			here.  The backend fulcrum provides an HTTP transport on port 1060 and provides the NetKernel managment interface with control panel
+			and documentation.</desc>
+		</change>
+		<change>
+			<title>HTTP Proxy Configuration</title>
+			<desc>The HTTP proxy can now be set and modified at runtime</desc>
+		</change>
+		<change>
+			<title>data: URIs supported</title>
+			<desc>The data: URI scheme is now supported.  data: is a IETF draft URI type that enables in-line literal
+			data to be placed in a URI.</desc>
+		</change>
+		<change>
+			<title>Image Library Module</title>
+			<desc>A new set of image processing accessor provide useful utilities.</desc>
+		</change>
+		<change>
+			<title>BootLoader</title>
+			<desc>The Kernel is now booted from a BootLoader.  This enables the Kernel to be upgraded at runtime.</desc>
+		</change>
+		<change>
+			<title>Runtime Inspection of System Log</title>
+			<desc>The System log can now be inspected interactively at runtime.</desc>
+		</change>
+		<change>
+			<title>Transport View</title>
+			<desc>The current transport configurations can be viewed from the control panel</desc>
+		</change>
+		<change>
+			<title>Improved Resource Trace Tool</title>
+			<desc>The resource trace tool has been enhanced - it can now issue a request and show the results</desc>
+		</change>
+		<change>
+			<title>RDBMS Database Module</title>
+			<desc>A new suite of RDBMS database accessors has been added.</desc>
+		</change>
+		<change>
+			<title>Trailmaps</title>
+			<desc>New demonstrations and worked examples are provided in the trailmaps section of the documentation.</desc>
+		</change>
+		<change>
+			<title>DPML Cookbook</title>
+			<desc>This allows DPML examples to be tried out and enables interactive editing and execution of the DPML</desc>
+		</change>
+		<change>
+			<title>Cummulative v Local Time on Transaction Report</title>
+			<desc>The transaction report now provides statistics on the local time a request spends in an accessor.
+			This is useful for performance analysis.</desc>
+		</change>
+		<change>
+			<title>Full XQuery Support</title>
+			<desc>XQuery implementation is now 100% compliant with the W3C XQuery specification.  XQueries are now compiled and cached rather
+			than interpreted.</desc>
+		</change>
+		<change>
+			<title>Multiple Parameters in DPML</title>
+			<desc>DPML now allows any named argument to be provided to an instruction.  This means that XSLT/XQuery can receive multiple
+			parameters.  It also enables accessors to be more flexible.</desc>
+		</change>
+		<change>
+			<title>JMX Deprecated</title>
+			<desc>JMX has been deprecated though is still available for download.  All administration is now provided by the
+			HTTP admin interface on port 1060 - this is more flexible and also more secure as only the 1060 port needs to be locked down
+			on a server. Also admin can now be tunnelled over SSH (not possible with JMX).</desc>
+		</change>
+		<change>
+			<title>GoldenThread Accessors</title>
+			<desc>New accessors allow virtual URIs to be attached to any process result.  The URI Golden Thread can be cut at any time
+			and all dependent resources are instantly invalidated.  Very useful for RDBMS and integration of legacy processing.</desc>
+		</change>
+		<change>
+			<title>In-tray Transport</title>
+			<desc>A new transport allows an in-directory to out-directory processor. See PDF Distiller trailmap</desc>
+		</change>
+		<change>
+			<title>HTTP Transport</title>
+			<desc>HTTP transport now supports file uploads.</desc>
+		</change>
+		<change>
+			<title>Module GateKeeper</title>
+			<desc>A simple declarative way of adding security to a module. It provides zone-based access control using the requested URI.</desc>
+		</change>
+		<change>
+			<title>Abstract Session Support</title>
+			<desc>The session module provides declarative mapping of HTTP Cookies to Session URIs and is extensible to
+			other transport types.</desc>
+		</change>
+		<change>
+			<title>Improved New-Module Wizard</title>
+			<desc>The new module wizard enables creation and installation of new modules.  It has options
+			to initialise features such as entrypoints and accessors. It automatically configures and
+			installs a new module ready for a developer to populate it's services.</desc>
+		</change>
+		<change>
+			<title>Install Wizard</title>
+			<desc>The install wizard connects to 1060.org to provide managements and installation of modules.  New modules and
+			applications can be installed dynamically.</desc>
+		</change>
+		<change>
+			<title>Throttle View</title>
+			<desc>The transport throttle can now be inspected to see a dynamic view of server load
+			and service levels.</desc>
+		</change>
+	</version>
+	<version>
+		<date>2003-10-08</date>
+		<major>0</major>
+		<minor>7</minor>
+		<minorminor>0</minorminor>
+		<change>
+			<title>Internal request support added to trace tool</title>
+			<desc>A checkbox has been added to the trace tool in ext_introspect to
+			allow tracing an instruction that originates inside a module rather than
+			one entering a module.</desc>
+		</change>
+		<change>
+			<title>New XRL CMS solution</title>
+			<desc>Full extensible content management solution released. This is used to power the
+			1060 Research and 1060 org sites though is not yet integrated into the distribution
+			documentation.</desc>
+		</change>
+		<change>
+			<title>Denial of service attack defence increased</title>
+			<desc>The throttle works by limiting the maximum number of concurrent
+			requests that the kernel will process. The excess requests are queued.
+			This enhancement limits the size that the queue will grow to by returning
+			a system busy exception quickly. This gives load buffering without the
+			chance of unbounded queue sizes causing out-of-memory errors. Full
+			configuration is available in system.xml</desc>
+		</change>
+		<change>
+			<title>Servlet support added</title>
+			<desc>
+			A Servlet is supplied which starts NetKernel and directs all requests to it. This
+			is a useful deployment option for those who require servlet support.
+			</desc>
+		</change>
+	</version>
+	<version>
+		<date>2003-09-22</date>
+		<major>0</major>
+		<minor>6</minor>
+		<minorminor>0</minorminor>
+		<change>
+			<title>Ext_xml module refactored</title>
+			<desc>The ext_xml [urn:org:ten60:netkernel:ext:xml] module has been	refactored into
+			ext_xml-core [urn:org:ten60:netkernel:ext:xml:core] which contains the core XML APIs and
+			utilities and ext_xml-ura [urn:org:ten60:netkernel:ext:xml:ura] which contains only the standard XML accessors.
+			This is cleaner and removes a number of circular dependencies.</desc>
+		</change>
+		<change>
+			<title>file: sink support added to NewSimpleNetAccessor</title>
+			<desc>ext_layer1. Now supports sinking to file: URI's.  Enables full filesystem interaction.</desc>
+		</change>
+		<change>
+			<title>New trace tool with module context</title>
+			<desc>New trace introspection tool added. http://localhost:1060/introspect/trace. The trace accessor
+			has been enhanced to enable traces to be issued in the context of a module.</desc>
+		</change>
+		<change>
+			<title>New mod_cgi</title>
+			<desc>Added module to support CGI access from NetKernel.  Includes support for PHP</desc>
+		</change>
+		<change>
+			<title>New init process/system integrity check</title>
+			<desc>Added kernel support for a post boot, init process.  Specified in system.xml.  Salisbury
+			distribution now does post boot system integrity check of all modules</desc>
+		</change>
+		<change>
+			<title>New module dependency report</title>
+			<desc>A new introspection tool http://localhost:1060/introspect/dependencies allows module dependencies to be viewed.</desc>
+		</change>
+		<change>
+			<title>New module wizard</title>
+			<desc>Added a new wizard to help create new modules.</desc>
+		</change>
+		<change>
+			<title>New installer</title>
+			<desc>Moved to IzPack installer added improved package management, thanks to Julien Ponge for IzPack</desc>
+		</change>
+		<change>
+			<title>Module Manager supports XAR *or* JARs</title>
+			<desc>Developers found it difficult to handle .xar archives with IDEs.  The module manager now supports both .xar and .jar
+			archived module extensions in a module directory.  By default we now ship modules with .jar extension so that they can
+			be easily mounted by IDEs.</desc>
+		</change>
+	</version>
+	<version>
+		<date>2003-09-15</date>
+		<major>0</major>
+		<minor>5</minor>
+		<minorminor>0</minorminor>
+		<change>
+			<title>Fixed cookie on localhost bug</title>
+			<desc>A simple configuration bug in the distribution modules meant that cookies on localhost broke
+			the whole distribution.</desc>
+		</change>
+	</version>
+</changes>

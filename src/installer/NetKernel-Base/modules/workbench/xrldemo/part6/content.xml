@@ -1,0 +1,22 @@
+<div xmlns:xrl="http://1060.org/xrl" style="background-color: silver; padding:10px;">
+	<div>Part 6 Content</div>
+	<xrl:include href="xrl:service-box-table">
+		<data>
+			<set>
+				<box>red</box>
+				<box>red</box>
+				<box>red</box>
+			</set>
+			<set>
+				<box>blue</box>
+				<box>red</box>
+				<box>green</box>
+			</set>
+			<set>
+				<box>green</box>
+				<box>blue</box>
+				<box>red</box>
+			</set>	
+		</data>
+	</xrl:include>
+</div>

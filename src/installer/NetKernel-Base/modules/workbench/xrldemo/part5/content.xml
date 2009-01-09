@@ -1,0 +1,9 @@
+<div xmlns:xrl="http://1060.org/xrl" style="background-color: silver; padding:10px;">
+	<div>Part 5 Content</div>
+	<div>
+	<xrl:include href="xrl:buttons"/>
+	</div>
+	<div id="box">
+		<xrl:include href="xrl:red-box"/>
+	</div>
+</div>

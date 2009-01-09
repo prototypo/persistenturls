@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div xmlns:xrl="http://1060.org/xrl">
+	<table>
+	<tr>
+	<td><button type="button" onclick="javascript:loadResource('[[xrl:red-box]]', 'box')" xrl:resolve="onclick" name="red" value="red">RED</button></td>
+	<td><button type="button" onclick="javascript:loadResource('[[xrl:green-box]]', 'box')" xrl:resolve="onclick" name="green" value="green">GREEN</button></td>
+	<td><button type="button" onclick="javascript:loadResource('[[xrl:blue-box]]', 'box')" xrl:resolve="onclick" name="blue" value="blue">BLUE</button></td>
+	</tr>
+	</table>
+</div>

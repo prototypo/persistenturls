@@ -1,0 +1,17 @@
+<idoc>
+  <seq>
+	<instr>
+      <type>dpml</type>
+      <operand>filter-default-param.idoc</operand>
+	  <param>this:param:param</param>
+	  <target>var:param</target>
+	</instr>
+	<instr>
+      <type>xslt</type>
+      <operand><null/></operand>
+      <operator>style-dynamic-box-table.xsl</operator>
+	  <param>var:param</param>
+      <target>this:response</target>
+    </instr>
+  </seq>
+</idoc>

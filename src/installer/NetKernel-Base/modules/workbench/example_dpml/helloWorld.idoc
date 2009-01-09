@@ -1,0 +1,14 @@
+<idoc>
+  <seq>
+    <comment>
+      *****************
+      Hello World
+      *****************
+    </comment>
+    <instr>
+      <type>source</type>
+      <uri>http://www.1060.org/tutorial/helloWorld.txt</uri>
+      <target>this:response</target>
+    </instr>
+  </seq>
+</idoc>

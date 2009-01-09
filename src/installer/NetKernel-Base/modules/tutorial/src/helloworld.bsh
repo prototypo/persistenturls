@@ -1,0 +1,11 @@
+import org.ten60.netkernel.layer1.representation.StringAspect;
+
+main()
+{ aspect = context.sourceAspect("ffcpl:/src/helloworld.txt", StringAspect.class);
+  message = aspect.getString();
+  message = message.concat(" from BeanShell");
+  literal  = new StringAspect(message);
+  response = context.createResponseFrom(literal);
+  response.setMimeType("text/plain");
+  response.setCacheable();
+}

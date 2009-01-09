@@ -1,0 +1,14 @@
+<idoc>
+	<seq>
+	  <comment>
+		***********
+		An instruction to SOURCE the uri and return it as the response of this script
+		***********
+	  </comment>
+	  <instr>
+		<type>source</type>
+		<uri>http://www.1060.org/tutorial/helloWorld.txt</uri>
+		<target>this:response</target>
+	  </instr>
+	</seq>
+</idoc>

@@ -1,0 +1,121 @@
+import com.ten60.netkernel.urii.IURRepresentation;
+import org.ten60.netkernel.layer1.nkf.*;
+import org.ten60.netkernel.layer1.representation.*;
+import org.ten60.netkernel.xml.representation.IAspectXDA;
+import java.awt.Point;
+
+/** last direction of movement global */
+Point lastD;
+
+/* main method, generate svg and convert to png */
+void main()
+{   
+    int width=256;
+    int iterations=4;
+
+    StringBuffer sb=new StringBuffer(1024);
+    sb.append("<?xml version='1.0' encoding='iso-8859-1'?>");
+    sb.append("<!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 20000303 Stylable//EN' 'http://www.w3.org/TR/2000/03/WD-SVG-20000303/DTD/svg-20000303-stylable.dtd'>");
+    sb.append("<svg xmlns='http://www.w3.org/2000/svg' xml:space='preserve' width='"+width+"' height='"+width+"'>");
+    hilbert( sb, iterations, width );
+
+    sb.append("</svg>");
+
+    opd = new StringAspect(sb.toString());
+    opt = new StringAspect("<SVG2PNG><width>"+width+"</width></SVG2PNG>");
+    INKFRequest req = context.createSubRequest();
+    req.setURI("active:org.ten60.util.image.SVG2PNG");
+    req.addArgument("operand",opd);
+    req.addArgument("operator",opt);
+    IURRepresentation result = context.issueSubRequest(req);
+    INKFResponse response = context.createResponseFrom(result);
+    context.setResponse(response);
+}
+
+/* add a polyline element for a hilbert curve to the string buffer */
+void hilbert(StringBuffer aSB, int aIterations, int aWidth)
+{   lastD=null;
+    aSB.append("<polyline points='");
+
+    int size=aWidth/((int)Math.pow(2,aIterations));
+    Point p = new Point(size/2,aWidth-size/2);
+    Point d = new Point(size,0);
+
+    lhilbert(aSB,p,d,aIterations);
+    aSB.append(p.x);
+    aSB.append(',');
+    aSB.append(p.y);
+
+    aSB.append("' style='");
+    aSB.append("fill: none; stroke: black; stroke-width:");
+    aSB.append(size/2);
+    aSB.append("'/>");
+}
+
+/* right-hand hilbert curve */
+void rhilbert(StringBuffer aSB, Point aP, Point aD, int aLevel)
+{   if (aLevel>0)
+    {   aLevel--;
+        right(aD);
+        lhilbert(aSB,aP,aD,aLevel);
+        forward(aP,aD,aSB);
+        left(aD);
+        rhilbert(aSB,aP,aD,aLevel);
+        forward(aP,aD,aSB);
+        rhilbert(aSB,aP,aD,aLevel);
+        left(aD);
+        forward(aP,aD,aSB);
+        lhilbert(aSB,aP,aD,aLevel);
+        right(aD);
+    }
+}
+
+/* left-hand hilbert curve */
+void lhilbert(StringBuffer aSB, Point aP, Point aD, int aLevel)
+{   if (aLevel>0)
+    {   aLevel--;
+        left(aD);
+        rhilbert(aSB,aP,aD,aLevel);
+        forward(aP,aD,aSB);
+        right(aD);
+        lhilbert(aSB,aP,aD,aLevel);
+        forward(aP,aD,aSB);
+        lhilbert(aSB,aP,aD,aLevel);
+        right(aD);
+        forward(aP,aD,aSB);
+        rhilbert(aSB,aP,aD,aLevel);
+        left(aD);
+    }
+}
+
+/* rotate right by 90 degrees */
+void right(Point aD)
+{   int x = -aD.y;
+    int y = aD.x;
+    aD.x=x;
+    aD.y=y;
+}
+
+
+/** rotate left by 90 degrees **/
+void left(Point aD)
+{   int x = aD.y;
+    int y = -aD.x;
+    aD.x=x;
+    aD.y=y;
+}
+
+/* move forward */
+void forward(Point aPoint, Point aD, StringBuffer aSB)
+{   
+    if (lastD==null || !aD.equals(lastD))
+    {
+        aSB.append(aPoint.x);
+        aSB.append(',');
+        aSB.append(aPoint.y);
+        aSB.append(' ');
+        lastD=new Point(aD.x,aD.y);
+    }
+    aPoint.x+=aD.x;
+    aPoint.y+=aD.y;
+}

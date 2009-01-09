@@ -1,0 +1,15 @@
+<idoc>
+  <seq>
+    <comment>
+      *****************
+      Two Stage XSLT using a direct active URI
+      *****************
+    </comment>
+    <instr>
+      <type>xslt</type>
+      <operand>active:xslt+operand@ffcpl:/example_dpml/myfirst_data.xml+operator@ffcpl:/example_dpml/select_red.xsl</operand>
+      <operator>myfirst_transform.xsl</operator>
+      <target>this:response</target>
+    </instr>
+  </seq>
+</idoc>

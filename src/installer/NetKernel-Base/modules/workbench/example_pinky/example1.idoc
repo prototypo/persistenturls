@@ -1,0 +1,30 @@
+<idoc>
+	<seq>
+		<instr>
+			<type>httpGet</type>
+			<url>http://newsrss.bbc.co.uk/rss/sportonline_uk_edition/football/rss.xml</url>
+			<target>var:feed1</target>
+		</instr>
+		<instr>
+			<type>httpGet</type>
+			<url>http://newsrss.bbc.co.uk/rss/sportonline_uk_edition/cricket/rss.xml</url>
+			<target>var:feed2</target>
+		</instr>
+		<instr>
+			<type>feedUnion</type>
+			<feed1>var:feed1</feed1>
+			<feed2>var:feed2</feed2>
+			<target>this:response</target>
+		</instr>
+		<instr>
+			<type>feedSetFeedInfo</type>
+			<feed>this:response</feed>
+			<operator>
+				<info>
+					<title>Combi-Feed: BBC Football and Cricket Feeds</title>
+				</info>
+			</operator>
+			<target>this:response</target>
+		</instr>
+	</seq>
+</idoc>

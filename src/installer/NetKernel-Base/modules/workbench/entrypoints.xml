@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entrypoints>
+  <entrypoint>
+    <name>icon</name>
+    <uri>ffcpl:/icon.png</uri>
+    <indexable>
+      <title>Icon</title>
+      <desc></desc>
+      <keywords/>
+    </indexable>
+    <categories>img hidden</categories>
+    <group>workbench</group>
+    <icon/>
+  </entrypoint>
+</entrypoints>

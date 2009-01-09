@@ -1,0 +1,27 @@
+import org.ten60.netkernel.layer1.nkf.*;
+import org.ten60.netkernel.layer1.representation.*;
+
+/**
+*	Scripted XSLT Pipeline
+*/
+void main()
+{
+	//Select Act1 from King Lear (.../lear.xml)
+	req=context.createSubRequest();
+	req.setURI("active:xslt");
+	req.addArgument("operand","ffcpl:/support/resources/lear.xml");
+	req.addArgument("operator","ffcpl:/support/resources/act1.xsl");
+	result=context.issueSubRequest(req);
+
+	//Transform result to XHTML
+	req=context.createSubRequest();
+	req.setURI("active:xslt");
+	req.addArgument("operand",result);
+	req.addArgument("operator","ffcpl:/support/resources/act_to_html.xsl");
+	result=context.issueSubRequest(req);
+
+	//Issue response
+	resp=context.createResponseFrom(result);
+	resp.setMimeType("text/html");		
+	context.setResponse(resp);
+}

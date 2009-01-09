@@ -1,0 +1,15 @@
+<idoc>
+  <seq>
+    <comment>
+      *****************
+      Execute an XSLT:
+      *****************
+    </comment>
+    <instr>
+      <type>xslt</type>
+      <operand>myfirst_data.xml</operand>
+      <operator>myfirst_transform.xsl</operator>
+      <target>this:response</target>
+    </instr>
+  </seq>
+</idoc>

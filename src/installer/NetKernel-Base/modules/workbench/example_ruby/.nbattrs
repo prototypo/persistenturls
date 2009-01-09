@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE attributes PUBLIC "-//NetBeans//DTD DefaultAttributes 1.0//EN" "http://www.netbeans.org/dtds/attributes-1_0.dtd">
+<attributes version="1.0">
+    <fileobject name="OccursTestHarness.rb">
+        <attr name="org.netbeans.modules.text.IsTextFile" boolvalue="true"/>
+    </fileobject>
+    <fileobject name="RubyHelloWorld.rb">
+        <attr name="org.netbeans.modules.text.IsTextFile" boolvalue="true"/>
+    </fileobject>
+    <fileobject name="occurs.rb">
+        <attr name="org.netbeans.modules.text.IsTextFile" boolvalue="true"/>
+    </fileobject>
+</attributes>

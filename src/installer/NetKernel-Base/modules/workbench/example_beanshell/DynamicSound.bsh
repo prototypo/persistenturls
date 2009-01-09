@@ -1,0 +1,22 @@
+import javax.sound.sampled.*;
+import java.io.*;
+import org.ten60.netkernel.layer1.representation.*;
+
+main()
+{ int size=10000;
+  byte[] data = new byte[size];
+  for (int i=0; i<size; i++)
+  { amp = 64.0*(size-i)/size;
+    data[i] = (byte)((Math.sin(0.4*i)+Math.sin(0.402*i))*amp);
+  }
+
+  audioFormat = new AudioFormat(11025.0f,8,1,true,false);
+  audioInputStream = new AudioInputStream(new ByteArrayInputStream(data), 
+                    audioFormat,size);
+  output = new ByteArrayOutputStream(4096);
+  AudioSystem.write(audioInputStream,AudioFileFormat.Type.WAVE,output);
+  output.flush();
+  response = context.createResponseFrom(new ByteArrayAspect(output));
+  response.setMimeType("audio/x-wav");
+  context.setResponse(response);
+}

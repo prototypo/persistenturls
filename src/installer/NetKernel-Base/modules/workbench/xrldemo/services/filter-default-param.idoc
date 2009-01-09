@@ -1,0 +1,17 @@
+<idoc>
+  <seq>
+	<instr>
+      <type>copy</type>
+      <operand>this:param:param</operand>
+	  <target>this:response</target>
+	</instr>
+	<exception>
+		<comment>If there is no parameter then default to 3x3</comment>
+		<instr>
+		  <type>copy</type>
+		  <operand><nvp><size>3</size></nvp></operand>
+		  <target>this:response</target>
+		</instr>
+	</exception>
+  </seq>
+</idoc>

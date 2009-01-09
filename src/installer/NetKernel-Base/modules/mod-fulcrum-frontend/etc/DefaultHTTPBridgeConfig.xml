@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<HTTPBridgeConfig>
+
+	<defaultExceptionURI>ffcpl:/org/ten60/netkernel/tpt/http/error</defaultExceptionURI>
+
+  <zone>
+    <match>.*/workbench/.*</match>
+    <processQueries/>
+  </zone>
+
+  <!--SOAP HTTP Server Binding Zone-->
+	<zone>
+		<match>.*/soap/.*</match>
+		<SOAPMode/>
+	</zone>
+
+</HTTPBridgeConfig>

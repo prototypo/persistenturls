@@ -1,0 +1,7 @@
+import org.ten60.netkernel.layer1.representation.StringAspect;
+main()
+{ literal = new StringAspect("<hello>world</hello>");
+  response = context.createResponseFrom(literal);
+  response.setMimeType("text/xml");
+  context.setResponse(response);
+}

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list>
+	<this>app_fulcrum_backend_support</this>
+	<entrypoints>
+		<entrypoint>app_ext_introspect_entrypoint_search</entrypoint>
+		<entrypoint external="">service_1060_forum</entrypoint>
+		<entrypoint external="">service_1060_bugxter</entrypoint>
+		<entrypoint external="">service_1060_support</entrypoint>
+		<entrypoint>app_ext_introspect_feedback</entrypoint>
+	</entrypoints>
+</list>
