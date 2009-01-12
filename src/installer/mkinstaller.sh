@@ -13,7 +13,7 @@ UNZIP=/usr/bin/unzip
 # Unzip the NetKernel directory, if needed.
 if [ -d NetKernel-Base ]; then
   # do nothing
-elif
+else
   # Unzip the directory
   $UNZIP NetKernel-Base.zip
 fi
