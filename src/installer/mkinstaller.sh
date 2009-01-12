@@ -11,8 +11,9 @@ VERSION=1.3
 UNZIP=/usr/bin/unzip
 
 # Unzip the NetKernel directory, if needed.
-if [ -d NetKernel-Base ]; then
+if [ -d 'NetKernel-Base' ]; then
   # do nothing
+  echo "No need to unzip NetKernel-Base... skipping.\n";
 else
   # Unzip the directory
   $UNZIP NetKernel-Base.zip
