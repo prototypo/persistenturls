@@ -17,31 +17,18 @@ main() {
 		// PURLs take precedence over local references. If you need to 
 		// serve up static content from a PURL installation, reserve
 		// the top level domains in the ffcpl:/etc/PURLConfig.xml file.
-		
-		// TODO: Make sure the following works for partial redirects and
-		// whatnot.
-		
-		System.out.println("Checking if PURL exists...");
-		System.out.println(base);
-		if(NKHelper.purlExists(context, base)) {
-		    method = context.getThisRequest().getArgument("method");
-		    // TODO: Rewrite ffcpl:/ reference to purl:/ reference
+        // TODO: Do we really want to do this?  There was a partial implementation
+
+		method = context.getThisRequest().getArgument("method");
+		// TODO: Rewrite ffcpl:/ reference to purl:/ reference
 		    
-		    req=context.createSubRequest("active:purl-resolver");
-		    req.addArgument("mode", "mode:resolve");
-		    req.addArgument("path", base);
-		    req.addArgument("method", method);
-		    req.addArgument("requestURL", context.getThisRequest().getArgument("requestURL"));
-			resp=context.issueSubRequest(req);        		    		
-		} else {
-			// This is a raw resource reference			
-			//resp=context.source(base);
-			
-			// DCF: No, Return a 404 for now			
-			code =  NKHelper.setResponseCode(context, context.source("ffcpl:/pub/404-gone.html"), 404);
-			resp = context.createResponseFrom(code);
-			resp.setMimeType("text/html");
-		} 
+		req=context.createSubRequest("active:purl-resolver");
+		req.addArgument("mode", "mode:resolve");
+		req.addArgument("path", base);
+		req.addArgument("method", method);
+		req.addArgument("requestURL", context.getThisRequest().getArgument("requestURL"));
+        resp=context.issueSubRequest(req);
+
 	} else {
 	       //Issue HTTP Redirect
         req=context.createSubRequest("active:HTTPRedirect");

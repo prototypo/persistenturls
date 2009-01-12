@@ -22,7 +22,6 @@ import org.ten60.netkernel.layer1.nkf.NKFException;
 import org.ten60.netkernel.layer1.nkf.impl.NKFAccessorImpl;
 import org.ten60.netkernel.xml.representation.IAspectXDA;
 import org.ten60.netkernel.xml.xda.IXDAReadOnly;
-import org.ten60.netkernel.xml.xda.IXDAReadOnlyIterator;
 
 import com.ten60.netkernel.urii.IURAspect;
 import com.ten60.netkernel.urii.IURRepresentation;
@@ -60,12 +59,10 @@ public class PURLResolverAccessor extends NKFAccessorImpl {
 
     @Override
     public void processRequest(INKFConvenienceHelper context) throws Exception {
-        IAspectXDA configXDA = (IAspectXDA) context.sourceAspect("ffcpl:/etc/PURLConfig.xml", IAspectXDA.class);
         String path = NKHelper.getArgument(context, "path");
         String mode = NKHelper.getArgument(context, "mode");
 
         String purlloc = path.substring(6);
-        String purllocOrig = purlloc;
         String errMsg = null;
 
         INKFResponse resp = null;
@@ -76,7 +73,6 @@ public class PURLResolverAccessor extends NKFAccessorImpl {
         boolean done = false;
 
         // Partial redirects require some special handling
-
         while(!found && !done) {
             found = purlStorageResolver.resourceExists(context, purlResolver.getURI(purlloc));
 
@@ -126,33 +122,13 @@ public class PURLResolverAccessor extends NKFAccessorImpl {
 
         } else {
             if(mode != null && !mode.equals("mode:validate")) {
-                // TODO: This may go away
-                IXDAReadOnly xdaRO = (IXDAReadOnly) configXDA.getClonedXDA();
-                IXDAReadOnlyIterator xdaItor = xdaRO.readOnlyIterator("/purl-config/topLevelRedirects/redirect");
-                boolean matched = false;
+                //  TODO: it seems the original intention here was to check the config for a redirect based on the path.
+                //  For now, we will return a 404 until we sort out what we want to do.
 
-                // TODO: Optimize this
-                while(xdaItor.hasNext() && !matched) {
-                    xdaItor.next();
-                    String from = xdaItor.getText("@from", true);
-                    String to = null;
-                    if(path.startsWith(from)) {
-                        to = xdaItor.getText("@to", true);
-                        path = path.replace(from, to);
-                        matched = true;
-                    }
-                }
+                IURRepresentation code =  NKHelper.setResponseCode(context, (IURAspect)context.source("ffcpl:/pub/404-gone.html"), 404);
+			    resp = context.createResponseFrom(code);
+			    resp.setMimeType("text/html");
 
-                if(matched) {
-                    IURRepresentation iur = context.source(path);
-                    resp = context.createResponseFrom(iur);
-                } else {
-                    IURRepresentation iur = generatePURLResolveErrorResponse(context, 
-                            purllocOrig,
-                            "ffcpl:/pub/purl-notfound.html");
-                    resp = context.createResponseFrom(iur);
-                    resp.setMimeType("text/html");
-                }
             } else {
                 cmd = commandMap.get("validate");
                 resp = cmd.execute(context, null);

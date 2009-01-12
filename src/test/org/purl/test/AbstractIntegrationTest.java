@@ -62,19 +62,18 @@ public class AbstractIntegrationTest extends TestCase {
 		String content = "";
 		FileInputStream fis = null;
 		BufferedInputStream bis = null;
-		DataInputStream dis = null;
 
 		fis = new FileInputStream(file);
 		bis = new BufferedInputStream(fis);
-		dis = new DataInputStream(bis);
-
-		while (dis.available() != 0) {
-			content += dis.readLine();
+        BufferedReader br = new BufferedReader(new InputStreamReader(bis));
+        String in;
+		while ((in = br.readLine()) != null) {
+			content += in;
 		}
 
 		fis.close();
 		bis.close();
-		dis.close();
+		br.close();
 
 		return content;
     }
