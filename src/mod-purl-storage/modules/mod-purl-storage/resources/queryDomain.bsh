@@ -33,7 +33,11 @@ main() {
 		domainXDA.setText("/domain/@status", resultsXDA.getText("/results/row/status/text()", true));
 		domainXDA.setText("/domain/z_id", resultsXDA.getText("/results/row/z_id/text()", true));				
 		domainXDA.setText("/domain/id", resultsXDA.getText("/results/row/d_id/text()", true));
-		domainXDA.setText("/domain/name", resultsXDA.getText("/results/row/name/text()", true));
+		if (resultsXDA.isTrue("/results/row/name/text()")) {
+		    domainXDA.setText("/domain/name", resultsXDA.getText("/results/row/name/text()", true));
+		} else {
+		    domainXDA.setText("/domain/name", "");
+		}
 		domainXDA.setText("/domain/public", resultsXDA.getText("/results/row/public/text()", true));
 		
 		itor = domainMaintainersResults.getXDA().readOnlyIterator("/results/row");

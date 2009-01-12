@@ -34,8 +34,11 @@ main() {
             if(resultsXDA.isTrue("/results/row/g_id")) {
                 groupXDA.setText("/group/id", resultsXDA.getText("/results/row/g_id/text()", true));
             }
-            groupXDA.setText("/group/name", resultsXDA.getText("/results/row/name/text()", true));
-
+            if (resultsXDA.isTrue("/results/row/name/text()")) {
+                groupXDA.setText("/group/name", resultsXDA.getText("/results/row/name/text()", true));
+            } else {
+                groupXDA.setText("/group/name", "");
+            }
             if(resultsXDA.isTrue("/results/row/comments/text()")) {
                 groupXDA.setText("/group/comments", resultsXDA.getText("/results/row/comments/text()", true));
             }
