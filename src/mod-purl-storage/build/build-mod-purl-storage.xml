@@ -24,6 +24,9 @@
 					<include name="modules/ext-layer1-*.jar"/>
 					<include name="modules/ext-xml-core-*.jar"/>
 				</fileset>
+				<fileset dir="${base}/../test/lib">
+				    <include name="junit.jar"/>
+			    </fileset>
             </classpath>
         </javac>
     </target>

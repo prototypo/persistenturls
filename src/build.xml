@@ -6,7 +6,7 @@
 		<property name="test.dir" value="${basedir}/test"/>
 		<property name="test.lib.dir" value="${basedir}/test/lib"/>
 		<property name="versions.properties" value="${basedir}/config/deploy.properties"/>
-		<property name="netkernel.home.dir" value="/Applications/1060-NKSEDK-3.3.0/"/>
+		<property name="netkernel.home.dir" value="/Applications/1060-NKSEDK-3.3.1/"/>
 		<property name="verbose" value="false"/>
 		<path id="classpath.base">
 				</path>
