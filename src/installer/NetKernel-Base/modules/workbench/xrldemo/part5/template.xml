@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<html xmlns:xrl="http://1060.org/xrl">
-	<body>
-		<h1>Part5 Template</h1>
-		<xrl:include href="xrl:ajax-script"/>
-		<xrl:include href="xrl:content"/>
-	</body>
-</html>

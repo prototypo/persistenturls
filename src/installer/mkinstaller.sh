@@ -7,6 +7,17 @@ IZPACK=/Applications/IzPack
 # PURL server version number.
 VERSION=1.3
 
+# Location of UNZIP utility
+UNZIP=/usr/bin/unzip
+
+# Unzip the NetKernel directory, if needed.
+if [ -d NetKernel-Base ]; then
+  # do nothing
+elif
+  # Unzip the directory
+  $UNZIP NetKernel-Base.zip
+fi
+
 $IZPACK/bin/compile IzPackInstall.xml -b . -o PURLZ-Server-$VERSION.jar -k standard
 
 echo 'REMINDER: Did you run "ant all" and "ant deploy" in the ../src directory before this script?'

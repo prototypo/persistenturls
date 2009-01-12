@@ -1,5 +1,0 @@
-<div xmlns:xrl="http://1060.org/xrl" style="background-color: silver; padding:10px;">
-	<div>Part 7 Content</div>
-	<xrl:include href="xrl:part7-form"/>
-	<xrl:include href="xrl:service-dynamic-box-table"/>
-</div>
