@@ -28,7 +28,7 @@ public class SearchAccessor extends NKFAccessorImpl {
         SolrIndexManager manager = SolrIndexManager.getInstance(context);
 
         SolrQuery squery = new SolrQuery(query);
-        QueryResponse qr = manager.getServer(context).query(squery);
+        QueryResponse qr = manager.getServer().query(squery);
         SolrDocumentList results = qr.getResults();
 
         StringBuffer sb = new StringBuffer();

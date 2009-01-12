@@ -35,14 +35,6 @@
     <file>purlTombstoned.idoc</file>              
     <file>deletePURL.idoc</file>
     <file>queryPURLMaintainers.idoc</file>
-    <file>unindexedDomains.idoc</file>
-    <file>unindexedGroups.idoc</file>
-    <file>unindexedPURLs.idoc</file>
-    <file>unindexedUsers.idoc</file>
-    <file>domainsIndexed.idoc</file>
-    <file>groupsIndexed.idoc</file>
-    <file>purlsIndexed.idoc</file>
-    <file>usersIndexed.idoc</file>
     <file>batchload.xsl</file>
     <file>updatePURLHistory.idoc</file>
     <file>queryPURLHistory.idoc</file>

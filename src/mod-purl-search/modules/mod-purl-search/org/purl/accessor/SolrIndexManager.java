@@ -46,7 +46,7 @@ public class SolrIndexManager {
     private SolrServer server;
 
 
-    public SolrServer getServer(INKFConvenienceHelper context) throws Exception {
+    public SolrServer getServer() throws Exception {
         return server;
     }
 

@@ -151,27 +151,6 @@ public class NKHelper {
             e.printStackTrace();
         }
     }
-
-    public static IURRepresentation search(INKFConvenienceHelper context, String indexName, String query) {
-        IURRepresentation retValue = null;
-
-        try {
-            INKFRequest req = context.createSubRequest("active:luceneSearch");
-            StringBuffer sb = new StringBuffer("<luceneSearch><index>");
-            sb.append(indexName);
-            sb.append("</index><query>");
-            sb.append(query);
-            sb.append("</query>");
-            sb.append("</luceneSearch>");
-            req.addArgument("operator", new StringAspect(sb.toString()));
-            retValue = context.issueSubRequest(req);
-
-        } catch(NKFException e) {
-            e.printStackTrace();
-        }
-
-        return retValue;
-    }
     
     public static String getMD5Value(INKFConvenienceHelper context, String value) {
         String retValue = null;
@@ -587,15 +566,4 @@ public class NKHelper {
         }
     }
     
-    public static void acquireLock(INKFConvenienceHelper context, String uri) throws NKFException {
-        INKFRequest req=context.createSubRequest("active:lock");
-        req.addArgument("operand", uri);
-        context.issueSubRequest(req);
-    }
-    
-    public static void releaseLock(INKFConvenienceHelper context, String uri) throws NKFException {
-        INKFRequest req=context.createSubRequest("active:unlock");
-        req.addArgument("operand", uri);
-        context.issueSubRequest(req);
-    }
 }

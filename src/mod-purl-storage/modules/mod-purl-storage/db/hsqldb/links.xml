@@ -253,54 +253,6 @@
 		<args>all</args>	
 	</link>
 	<link>
-		<name>Unindexed Domains</name>
-		<ext>/unindexed-domains</ext>
-		<int>active:dpml+operand@ffcpl:/sql/db/unindexedDomains.idoc</int>
-		<args>all</args>
-	</link>
-	<link>
-		<name>Unindexed Groups</name>
-		<ext>/unindexed-groups</ext>
-		<int>active:dpml+operand@ffcpl:/sql/db/unindexedGroups.idoc</int>
-		<args>all</args>
-	</link>
-	<link>
-		<name>Unindexed PURLs</name>
-		<ext>/unindexed-purls</ext>
-		<int>active:dpml+operand@ffcpl:/sql/db/unindexedPURLs.idoc</int>
-		<args>all</args>
-	</link>		
-	<link>
-		<name>Unindexed Users</name>
-		<ext>/unindexed-users</ext>
-		<int>active:dpml+operand@ffcpl:/sql/db/unindexedUsers.idoc</int>
-		<args>all</args>
-	</link>
-	<link>
-		<name>Domains indexed</name>
-		<ext>/domains-indexed</ext>
-		<int>active:dpml+operand@ffcpl:/sql/db/domainsIndexed.idoc</int>
-		<args>all</args>
-	</link>	
-	<link>
-		<name>Groups indexed</name>
-		<ext>/groups-indexed</ext>
-		<int>active:dpml+operand@ffcpl:/sql/db/groupsIndexed.idoc</int>
-		<args>all</args>
-	</link>		
-	<link>
-		<name>PURLs indexed</name>
-		<ext>/purls-indexed</ext>
-		<int>active:dpml+operand@ffcpl:/sql/db/purlsIndexed.idoc</int>
-		<args>all</args>
-	</link>		
-	<link>
-		<name>Users indexed</name>
-		<ext>/users-indexed</ext>
-		<int>active:dpml+operand@ffcpl:/sql/db/usersIndexed.idoc</int>
-		<args>all</args>
-	</link>
-	<link>
 		<name>Batch Load</name>
 		<ext>/batch-load</ext>
 		<int>active:purl-storage-fast-batch-load</int>
