@@ -119,10 +119,16 @@ createPublicDomains() {
 	        req = context.createSubRequest("active:purl-storage-create-domain");
 	        req.addArgument("param", sa);
 	        res = context.issueSubRequest(req);
-	        
+
 	        req=context.createSubRequest("active:purl-storage-approve-domain");
 			req.addArgument("param", sa);
 			res = context.issueSubRequest(req);
+			
+			// TODO: This should be handled by the active:purl-storage-approve-domain
+			req=context.createSubRequest("active:cutGoldenThread");
+            req.addArgument("param", "gt:resource:" + name);
+            context.issueSubRequest(req);
+			
 		} else {
 			System.out.println("Ignoring auto-created public domain: " + name);
 		}

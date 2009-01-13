@@ -180,6 +180,7 @@ public class DomainAccessor extends AbstractAccessor {
                     req.addArgument("param", new StringAspect("<domain><id>" + domain + "</id></domain>")); 
                     context.issueSubRequest(req);
                     
+        			// TODO: This should be handled by the active:purl-storage-approve-domain
                     req=context.createSubRequest("active:cutGoldenThread");
                     req.addArgument("param", "gt:resource:" + domain);
                     context.issueSubRequest(req);
