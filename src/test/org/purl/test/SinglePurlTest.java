@@ -88,4 +88,20 @@ public class SinglePurlTest extends AbstractPurlTest {
         resolvePurl("/testdomain/testPURL", "http://bbc.co.uk/");
     }
 
+    public void testCreateAndDeletePurlInPublicDomain() {
+        Map<String, String> formParameters = new HashMap<String, String>();
+        formParameters.put("type", "302");
+        formParameters.put("target", "http://cnn.com/");
+        formParameters.put("maintainers", "testuser");
+
+        String control = "<purl status=\"1\">" +
+                "<id>/net/testPURL</id>" +
+                "<type>302</type>" +
+                "<maintainers><uid>testuser</uid></maintainers>" +
+                "<target><url>http://cnn.com/</url></target></purl>";
+
+        createPurl("/net/testPURL", formParameters, control, true);
+        deletePurl("/net/testPURL", true);
+    }
+
 }

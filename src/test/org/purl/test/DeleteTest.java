@@ -174,35 +174,7 @@ public class DeleteTest extends AbstractIntegrationTest {
         deletePurl(path, true);
     }
 
-    /** Delete a PURL via HTTP DELETE.
-      * @param path A PURL path or id (starting with a '/' and containing its domains and name, e.g. /testdomain/subdomain/purlName).
-      * @param expectSuccess Whether the test should expect to succeed.  If false, it will expect to fail.
-    */
-    public void deletePurl(String path, boolean expectSuccess) {
 
-        try {
-            String url = "http://" + host + ":" + port + "/admin/purl" + path;
-            String purlName = path;//.substring(path.lastIndexOf('/') + 1, path.length() );
-
-            String errMsg = "Cannot delete PURL.";
-            String control = "Deleted resource: " + purlName;
-            String test = client.deletePurl(url);
-
-            if (expectSuccess) {
-                // This test expects to succeed.
-                // Textual response, so use assertEquals().
-                assertEquals(errMsg, control, test);
-            } else {
-                // This test expects to fail.
-                control = "No such resource: " + purlName;
-                // Textual response, so use assertEquals().
-                assertEquals(errMsg, control, test);
-            }
-
-        } catch (Exception e) {
-            reportException("Failed to resolve URL: ", e);
-        }
-    }
 
     
 

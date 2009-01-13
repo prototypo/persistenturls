@@ -4,6 +4,7 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.XMLUnit;
+import org.custommonkey.xmlunit.Diff;
 
 /**
  *
@@ -64,11 +65,8 @@ public class SearchTest extends AbstractIntegrationTest {
             String control = "<results><user admin=\"false\" status=\"1\"><id>testuser</id><name>Test User Modified</name><affiliation>Zepheira, LLC</affiliation><email>tuser@example.com</email></user></results>";
             String test = client.searchUser(url);
 
-            reportResult("testSearchUserByName", test);
-
-            // XML response, so use assertXMLEqual.
-            XMLUnit.setIgnoreWhitespace(true);
-            XMLAssert.assertXMLEqual(errMsg, control, test);
+            XMLAssert.assertXpathExists("/results/user[id='testuser']",test);
+            XMLAssert.assertXpathNotExists("/results/user[id='testuser2']",test);
 
         } catch (Exception e) {
             reportException("Failed to resolve URL: ", e);
@@ -106,11 +104,8 @@ public class SearchTest extends AbstractIntegrationTest {
             String control = "<results><user admin=\"false\" status=\"1\"><id>testuser</id><name>Test User Modified</name><affiliation>Zepheira, LLC</affiliation><email>tuser@example.com</email></user></results>";
             String test = client.searchUser(url);
 
-            reportResult("testSearchUserByEmail", test);
-
-            // XML response, so use assertXMLEqual.
-            XMLUnit.setIgnoreWhitespace(true);
-            XMLAssert.assertXMLEqual(errMsg, control, test);
+            XMLAssert.assertXpathExists("/results/user[id='testuser']",test);
+            XMLAssert.assertXpathNotExists("/results/user[id='testuser2']",test);
 
         } catch (Exception e) {
             reportException("Failed to resolve URL: ", e);
@@ -170,12 +165,11 @@ public class SearchTest extends AbstractIntegrationTest {
             String control = "<results><group status=\"1\"><id>testgroup5</id><name>Test Group 5 Modified</name><comments>A modified group used for unit tests.</comments><maintainers><uid>testuser2</uid><uid>testuser</uid></maintainers><members><uid>testuser2</uid></members></group></results>";
 
             String test = client.searchGroup(url);
-
-            reportResult("testSearchGroupByName", test);
-
-            // XML response, so use assertXMLEqual.
-            XMLUnit.setIgnoreWhitespace(true);
-            XMLAssert.assertXMLEqual(errMsg, control, test);
+            XMLAssert.assertXpathNotExists("/results/group[id='testgroup']",test);
+            XMLAssert.assertXpathNotExists("/results/group[id='testgroup2']",test);
+            XMLAssert.assertXpathNotExists("/results/group[id='testgroup3']",test);
+            XMLAssert.assertXpathNotExists("/results/group[id='testgroup4']",test);
+            XMLAssert.assertXpathExists("/results/group[id='testgroup5']",test);
 
         } catch (Exception e) {
             reportException("Failed to resolve URL: ", e);
@@ -192,12 +186,11 @@ public class SearchTest extends AbstractIntegrationTest {
             String control = "<results><group status=\"1\"><id>testgroup2</id><name>Test Group 2</name><comments>A group used for unit tests.</comments><maintainers><uid>testuser</uid><uid>testuser2</uid></maintainers><members><uid>testuser</uid></members></group><group status=\"1\"><id>testgroup5</id><name>Test Group 5 Modified</name><comments>A modified group used for unit tests.</comments><maintainers><uid>testuser2</uid><uid>testuser</uid></maintainers><members><uid>testuser2</uid></members></group></results>";
 
             String test = client.searchGroup(url);
-
-            reportResult("testSearchGroupByMaintainer", test);
-
-            // XML response, so use assertXMLEqual.
-            XMLUnit.setIgnoreWhitespace(true);
-            XMLAssert.assertXMLEqual(errMsg, control, test);
+            XMLAssert.assertXpathNotExists("/results/group[id='testgroup']",test);
+            XMLAssert.assertXpathExists("/results/group[id='testgroup2']",test);
+            XMLAssert.assertXpathNotExists("/results/group[id='testgroup3']",test);
+            XMLAssert.assertXpathNotExists("/results/group[id='testgroup4']",test);
+            XMLAssert.assertXpathExists("/results/group[id='testgroup5']",test);
 
         } catch (Exception e) {
             reportException("Failed to resolve URL: ", e);
@@ -218,11 +211,11 @@ public class SearchTest extends AbstractIntegrationTest {
 
             String test = client.searchGroup(url);
 
-            reportResult("testSearchGroupByMember", test);
-
-            // XML response, so use assertXMLEqual.
-            XMLUnit.setIgnoreWhitespace(true);
-            XMLAssert.assertXMLEqual(errMsg, control, test);
+            XMLAssert.assertXpathNotExists("/results/group[id='testgroup']",test);
+            XMLAssert.assertXpathNotExists("/results/group[id='testgroup2']",test);
+            XMLAssert.assertXpathNotExists("/results/group[id='testgroup3']",test);
+            XMLAssert.assertXpathExists("/results/group[id='testgroup4']",test);
+            XMLAssert.assertXpathExists("/results/group[id='testgroup5']",test);
 
         } catch (Exception e) {
             reportException("Failed to resolve URL: ", e);
@@ -235,16 +228,13 @@ public class SearchTest extends AbstractIntegrationTest {
         try {
             String url = "http://" + host + ":" + port + "/admin/group/?id=testgroup&name=Test%20Group%205%20Modified";
 
-            String errMsg = "Cannot search group.";
-            String control = "<results><group status=\"1\"><id>testgroup5</id><name>Test Group 5 Modified</name><comments>A modified group used for unit tests.</comments>" +
-                    "<maintainers><uid>testuser2</uid><uid>testuser</uid></maintainers><members><uid>testuser2</uid></members></group></results>";
             String test = client.searchGroup(url);
 
-            reportResult("testSearchGroupByIdAndName", test);
-
-            // XML response, so use assertXMLEqual.
-            XMLUnit.setIgnoreWhitespace(true);
-            XMLAssert.assertXMLEqual(errMsg, control, test);
+            XMLAssert.assertXpathExists("/results/group[id='testgroup']",test);
+            XMLAssert.assertXpathNotExists("/results/group[id='testgroup2']",test);
+            XMLAssert.assertXpathNotExists("/results/group[id='testgroup3']",test);
+            XMLAssert.assertXpathNotExists("/results/group[id='testgroup4']",test);
+            XMLAssert.assertXpathExists("/results/group[id='testgroup5']",test);
 
         } catch (Exception e) {
             reportException("Failed to resolve URL: ", e);
@@ -258,14 +248,12 @@ public class SearchTest extends AbstractIntegrationTest {
         try {
             String url = "http://" + host + ":" + port + "/admin/domain/testdomain";
 
-            String errMsg = "Cannot search domain.";
-            String control = "<domain status=\"1\"><id>/testdomain</id><name>Test Domain Modified</name><maintainers><uid>testuser</uid></maintainers><writers><uid>testuser</uid></writers><public>true</public></domain>";
             String test = client.searchDomain(url);
-
-            // XML response, so use assertXMLEqual.
-            XMLUnit.setIgnoreWhitespace(true);
-            XMLAssert.assertXMLEqual(errMsg, control, test);
-
+            XMLAssert.assertXpathExists("/domain[id='/testdomain']", test);
+            XMLAssert.assertXpathNotExists("/domain[id='/testdomain2']", test);
+            XMLAssert.assertXpathNotExists("/domain[id='/testdomain3']", test);
+            XMLAssert.assertXpathNotExists("/domain[id='/testdomain4']", test);
+            XMLAssert.assertXpathNotExists("/domain[id='/testdomain5']", test);
         } catch (Exception e) {
             reportException("Failed to resolve URL: ", e);
         }
@@ -277,13 +265,13 @@ public class SearchTest extends AbstractIntegrationTest {
         try {
             String url = "http://" + host + ":" + port + "/admin/domain/?name=Test%20Domain%203%20Modified";
 
-            String errMsg = "Cannot search domain.";
-            String control = "<results><domain status=\"1\"><id>/testdomain3</id><name>Test Domain 3 Modified</name><maintainers><uid>testuser</uid></maintainers><writers><uid>testuser</uid></writers><public>true</public></domain></results>";
             String test = client.searchDomain(url);
 
-            // XML response, so use assertXMLEqual.
-            XMLUnit.setIgnoreWhitespace(true);
-            XMLAssert.assertXMLEqual(errMsg, control, test);
+            XMLAssert.assertXpathNotExists("/results/domain[id='/testdomain']", test);
+            XMLAssert.assertXpathNotExists("/results/domain[id='/testdomain2']", test);
+            XMLAssert.assertXpathExists("/results/domain[id='/testdomain3']", test);
+            XMLAssert.assertXpathNotExists("/results/domain[id='/testdomain4']", test);
+            XMLAssert.assertXpathNotExists("/results/domain[id='/testdomain5']", test);
 
         } catch (Exception e) {
             reportException("Failed to resolve URL: ", e);
@@ -296,19 +284,13 @@ public class SearchTest extends AbstractIntegrationTest {
         try {
             String url = "http://" + host + ":" + port + "/admin/domain/?maintainers=testuser2";
 
-            String errMsg = "Cannot search domain.";
-            String control = "<results><domain status=\"1\"><id>/testdomain2</id><name>Test Domain 2</name><public>false</public>" +
-                    "<maintainers><uid>testuser</uid><uid>testuser2</uid></maintainers><writers><uid>testuser</uid></writers></domain><domain status=\"1\">" +
-                    "<id>/testdomain5</id><name>Test Domain 5 Modified</name><public>true</public><maintainers><uid>testuser2</uid><uid>testuser</uid></maintainers>" +
-                    "<writers><uid>testuser2</uid></writers></domain></results>";
-
             String test = client.searchDomain(url);
 
-            reportResult("testSearchDomainByMaintainer", test);
-
-            // XML response, so use assertXMLEqual.
-            XMLUnit.setIgnoreWhitespace(true);
-            XMLAssert.assertXMLEqual(errMsg, control, test);
+            XMLAssert.assertXpathNotExists("/results/domain[id='/testdomain']", test);
+            XMLAssert.assertXpathExists("/results/domain[id='/testdomain2']", test);
+            XMLAssert.assertXpathNotExists("/results/domain[id='/testdomain3']", test);
+            XMLAssert.assertXpathNotExists("/results/domain[id='/testdomain4']", test);
+            XMLAssert.assertXpathExists("/results/domain[id='/testdomain5']", test);
 
         } catch (Exception e) {
             reportException("Failed to resolve URL: ", e);
@@ -321,19 +303,13 @@ public class SearchTest extends AbstractIntegrationTest {
         try {
             String url = "http://" + host + ":" + port + "/admin/domain/?writers=testuser2";
 
-            String errMsg = "Cannot search domain.";
-            String control = "<results><domain status=\"1\"><id>/testdomain5</id><name>Test Domain 5 Modified</name><public>true</public>" +
-                    "<maintainers><uid>testuser2</uid><uid>testuser</uid></maintainers><writers><uid>testuser2</uid></writers></domain><domain status=\"1\">" +
-                    "<id>/testdomain4</id><name>Test Domain 4</name><public>false</public><maintainers><uid>testuser</uid></maintainers>" +
-                    "<writers><uid>testuser</uid><uid>testuser2</uid></writers></domain></results>";
-
             String test = client.searchDomain(url);
 
-            reportResult("testSearchDomainByWriter", test);
-
-            // XML response, so use assertXMLEqual.
-            XMLUnit.setIgnoreWhitespace(true);
-            XMLAssert.assertXMLEqual(errMsg, control, test);
+            XMLAssert.assertXpathNotExists("/results/domain[id='/testdomain']", test);
+            XMLAssert.assertXpathNotExists("/results/domain[id='/testdomain2']", test);
+            XMLAssert.assertXpathNotExists("/results/domain[id='/testdomain3']", test);
+            XMLAssert.assertXpathExists("/results/domain[id='/testdomain4']", test);
+            XMLAssert.assertXpathExists("/results/domain[id='/testdomain5']", test);
 
         } catch (Exception e) {
             reportException("Failed to resolve URL: ", e);
@@ -344,19 +320,15 @@ public class SearchTest extends AbstractIntegrationTest {
     public void testSearchDomainByIdAndName() {
 
         try {
-            String url = "http://" + host + ":" + port + "/admin/domain/?id=testdomain5&name=Test%20Domain%205%20Modified";
-
-            String errMsg = "Cannot search domain.";
-            String control = "<results><domain status=\"1\"><id>/testdomain5</id><name>Test Domain 5 Modified</name><public>true</public>" +
-                    "<maintainers><uid>testuser2</uid><uid>testuser</uid></maintainers><writers><uid>testuser2</uid></writers></domain></results>";
+            String url = "http://" + host + ":" + port + "/admin/domain/?id=/testdomain5&name=Test%20Domain%205%20Modified";
 
             String test = client.searchDomain(url);
 
-            reportResult("testSearchDomainByIdAndName", test);
-
-            // XML response, so use assertXMLEqual.
-            XMLUnit.setIgnoreWhitespace(true);
-            XMLAssert.assertXMLEqual(errMsg, control, test);
+            XMLAssert.assertXpathNotExists("/results/domain[id='/testdomain']", test);
+            XMLAssert.assertXpathNotExists("/results/domain[id='/testdomain2']", test);
+            XMLAssert.assertXpathNotExists("/results/domain[id='/testdomain3']", test);
+            XMLAssert.assertXpathNotExists("/results/domain[id='/testdomain4']", test);
+            XMLAssert.assertXpathExists("/results/domain[id='/testdomain5']", test);
 
         } catch (Exception e) {
             reportException("Failed to resolve URL: ", e);
@@ -369,14 +341,17 @@ public class SearchTest extends AbstractIntegrationTest {
 
         try {
             String url = "http://" + host + ":" + port + "/admin/purl/?path=/testdomain/testPURL";
-
-            String errMsg = "Cannot search PURL.  Returned message was: ";
-            String control = "<results><purl status=\"1\"><id>/testdomain/testPURL</id><type>302</type><maintainers><uid>testuser</uid></maintainers><target><url>http://bbc.co.uk/</url></target></purl></results>";
             String test = client.searchPurl(url);
-
-            // XML response, so use assertXMLEqual.
-            XMLUnit.setIgnoreWhitespace(true);
-            XMLAssert.assertXMLEqual(errMsg + test, control, test);
+            XMLAssert.assertXpathExists("/results/purl[id='/testdomain/testPURL']", test);
+            XMLAssert.assertXpathNotExists("/results/purl[id='/testdomain/test301PURL']", test);
+            XMLAssert.assertXpathNotExists("/results/purl[id='/testdomain/test302PURL']", test);
+            XMLAssert.assertXpathNotExists("/results/purl[id='/testdomain/test303PURL']", test);
+            XMLAssert.assertXpathNotExists("/results/purl[id='/testdomain/test307PURL']", test);
+            XMLAssert.assertXpathNotExists("/results/purl[id='/testdomain/test404PURL']", test);
+            XMLAssert.assertXpathNotExists("/results/purl[id='/testdomain/test410PURL']", test);
+            XMLAssert.assertXpathNotExists("/results/purl[id='/testdomain/testClonePURL']", test);
+            XMLAssert.assertXpathNotExists("/results/purl[id='/testdomain/testChainPURL']", test);
+            XMLAssert.assertXpathNotExists("/results/purl[id='/testdomain/testPartialPURL']", test);
 
         } catch (Exception e) {
             reportException("Failed to resolve URL: ", e);
@@ -388,16 +363,18 @@ public class SearchTest extends AbstractIntegrationTest {
 
         try {
             String url = "http://" + host + ":" + port + "/admin/purl/?target=http://bbc.co.uk/";
-
-            String errMsg = "Cannot search PURL.  Returned message was: ";
-            String control = "<results><purl status=\"1\"><id>/testdomain/testPURL</id><type>302</type><maintainers><uid>testuser</uid></maintainers><target><url>http://bbc.co.uk/</url></target></purl></results>";
             String test = client.searchPurl(url);
 
-            reportResult("testSearchPurlByTarget", test);
-
-            // XML response, so use assertXMLEqual.
-            XMLUnit.setIgnoreWhitespace(true);
-            XMLAssert.assertXMLEqual(errMsg + test, control, test);
+            XMLAssert.assertXpathExists("/results/purl[id='/testdomain/testPURL']", test);
+            XMLAssert.assertXpathNotExists("/results/purl[id='/testdomain/test301PURL']", test);
+            XMLAssert.assertXpathNotExists("/results/purl[id='/testdomain/test302PURL']", test);
+            XMLAssert.assertXpathNotExists("/results/purl[id='/testdomain/test303PURL']", test);
+            XMLAssert.assertXpathNotExists("/results/purl[id='/testdomain/test307PURL']", test);
+            XMLAssert.assertXpathNotExists("/results/purl[id='/testdomain/test404PURL']", test);
+            XMLAssert.assertXpathNotExists("/results/purl[id='/testdomain/test410PURL']", test);
+            XMLAssert.assertXpathNotExists("/results/purl[id='/testdomain/testClonePURL']", test);
+            XMLAssert.assertXpathNotExists("/results/purl[id='/testdomain/testChainPURL']", test);
+            XMLAssert.assertXpathNotExists("/results/purl[id='/testdomain/testPartialPURL']", test);             
 
         } catch (Exception e) {
             reportException("Failed to resolve URL: ", e);
@@ -410,57 +387,17 @@ public class SearchTest extends AbstractIntegrationTest {
         try {
             String url = "http://" + host + ":" + port + "/admin/purl/?maintainers=testuser";
 
-            String errMsg = "Cannot search PURL.  Returned message was: ";
-            String control = "<results><purl status=\"1\"><id>/testdomain/testPURL</id><type>302</type><maintainers><uid>testuser</uid></maintainers>" +
-                    "<target><url>http://bbc.co.uk/</url></target></purl><purl status=\"1\"><id>/testdomain/test301PURL</id><type>301</type>" +
-                    "<maintainers><uid>testuser</uid></maintainers>" +
-                    "<target><url>http://example.com/test301PURL</url></target></purl><purl status=\"1\">" +
-
-                    "	<id>/testdomain/test302PURL</id>" +
-                    "	<type>302</type>" +
-                    "	<maintainers><uid>testuser</uid></maintainers>" +
-                    "<target><url>http://example.com/test302PURL</url></target></purl><purl status=\"1\">" +
-
-                    "	<id>/testdomain/test303PURL</id>" +
-                    "	<type>303</type>" +
-                    "	<maintainers><uid>testuser</uid></maintainers>" +
-                    "<seealso><url>http://example.com/test303PURL</url></seealso></purl><purl status=\"1\">" +
-
-                    "	<id>/testdomain/test307PURL</id>" +
-                    "	<type>307</type>" +
-                    "	<maintainers><uid>testuser</uid></maintainers>" +
-                    "<target><url>http://example.com/test307PURL</url></target></purl><purl status=\"1\">" +
-
-                    "	<id>/testdomain/test404PURL</id>" +
-                    "	<type>404</type>" +
-                    "	<maintainers><uid>testuser</uid></maintainers>" +
-                    "</purl><purl status=\"1\">" +
-
-                    "	<id>/testdomain/test410PURL</id>" +
-                    "	<type>410</type>" +
-                    "	<maintainers><uid>testuser</uid></maintainers>" +
-                    "</purl><purl status=\"1\">" +
-
-                    "	<id>/testdomain/testClonePURL</id>" +
-                    "	<type>302</type>" +
-                    "	<maintainers><uid>testuser</uid></maintainers>" +
-                    "<target><url>http://example.com/test302PURL</url></target></purl><purl status=\"1\">" +
-
-                    "	<id>/testdomain/testChainPURL</id>" +
-                    "	<type>chain</type>" +
-                    "	<maintainers><uid>testuser</uid></maintainers>" +
-                    "<target><url>/testdomain/test302PURL</url></target></purl><purl status=\"1\">" +
-
-                    "	<id>/testdomain/testPartialPURL</id> " +
-                    "	<type>partial</type>" +
-                    "	<maintainers><uid>testuser</uid></maintainers>" +
-                    "<target><url>http://example.com/testPartialPURL</url></target></purl></results>";
-
             String test = client.searchPurl(url);
-
-            // XML response, so use assertXMLEqual.
-            XMLUnit.setIgnoreWhitespace(true);
-            XMLAssert.assertXMLEqual(errMsg + test, control, test);
+            XMLAssert.assertXpathExists("/results/purl[id='/testdomain/testPURL']", test);
+            XMLAssert.assertXpathExists("/results/purl[id='/testdomain/test301PURL']", test);
+            XMLAssert.assertXpathExists("/results/purl[id='/testdomain/test302PURL']", test);
+            XMLAssert.assertXpathExists("/results/purl[id='/testdomain/test303PURL']", test);
+            XMLAssert.assertXpathExists("/results/purl[id='/testdomain/test307PURL']", test);
+            XMLAssert.assertXpathExists("/results/purl[id='/testdomain/test404PURL']", test);
+            XMLAssert.assertXpathExists("/results/purl[id='/testdomain/test410PURL']", test);
+            XMLAssert.assertXpathExists("/results/purl[id='/testdomain/testClonePURL']", test);
+            XMLAssert.assertXpathExists("/results/purl[id='/testdomain/testChainPURL']", test);
+            XMLAssert.assertXpathExists("/results/purl[id='/testdomain/testPartialPURL']", test);
 
         } catch (Exception e) {
             reportException("Failed to resolve URL: ", e);

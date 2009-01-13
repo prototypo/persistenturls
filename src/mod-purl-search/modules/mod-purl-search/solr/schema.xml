@@ -282,7 +282,11 @@ but may be good for SKUs.  Can insert dashes in the wrong place and still match.
             best performance.
         -->
 
-        <field name="id" type="string" indexed="true" stored="true" required="true"/>
+        <field name="uid" type="string" indexed="true" stored="true" required="true"/>
+
+
+        <field name="id" type="string" indexed="true" stored="true" required="false"/>
+
         <field name="entity" type="string" indexed="true" stored="true" required="true"/>
 
         <field name="userid" type="text_ws" indexed="true" stored="true" required="false"/>
@@ -328,7 +332,7 @@ via copyField further on in this schema  -->
     <!-- Field to use to determine and enforce document uniqueness.
        Unless this field is marked with required="false", it will be a required field
     -->
-    <uniqueKey>id</uniqueKey>
+    <uniqueKey>uid</uniqueKey>
 
     <!-- field for the QueryParser to use when an explicit fieldname is absent -->
     <defaultSearchField>id</defaultSearchField>
@@ -342,4 +346,9 @@ or to add multiple fields to the same field for easier/faster searching.  -->
     <!-- <copyField source="userid" dest="id"/>-->
  <copyField source="p_id" dest="path"/>
  <copyField source="d_id" dest="path"/>
+
+ <copyField source="userid" dest="id"/>
+ <copyField source="g_id" dest="id"/>
+ <copyField source="p_id" dest="id"/>
+ <copyField source="d_id" dest="id"/>   
 </schema>

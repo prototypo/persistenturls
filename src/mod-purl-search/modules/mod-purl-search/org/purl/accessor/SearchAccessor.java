@@ -28,11 +28,17 @@ public class SearchAccessor extends NKFAccessorImpl {
         SolrIndexManager manager = SolrIndexManager.getInstance(context);
 
         SolrQuery squery = new SolrQuery(query);
+
+        // TODO: We will want to be able to parameterize the number of results coming back from a query.  Return the first 100 records for now.
+        squery.setRows(100);
+
         QueryResponse qr = manager.getServer().query(squery);
+
         SolrDocumentList results = qr.getResults();
 
         StringBuffer sb = new StringBuffer();
         sb.append("<matches>");
+        System.out.println("Results: " + results.size());
         for (SolrDocument doc : results) {
             sb.append("<match>");
             String docid = "";

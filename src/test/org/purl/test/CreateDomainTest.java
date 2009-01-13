@@ -44,6 +44,7 @@ public class CreateDomainTest extends AbstractIntegrationTest {
         }
     }
 
+    
     // Test creating a new domain via an HTTP POST.
     public void testCreateDomainWithMultipleMaintainers() {
 
