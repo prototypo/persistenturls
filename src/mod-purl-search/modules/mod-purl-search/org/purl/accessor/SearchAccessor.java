@@ -38,7 +38,6 @@ public class SearchAccessor extends NKFAccessorImpl {
 
         StringBuffer sb = new StringBuffer();
         sb.append("<matches>");
-        System.out.println("Results: " + results.size());
         for (SolrDocument doc : results) {
             sb.append("<match>");
             String docid = "";

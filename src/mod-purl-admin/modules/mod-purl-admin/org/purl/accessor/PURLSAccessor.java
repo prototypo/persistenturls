@@ -150,7 +150,6 @@ public class PURLSAccessor extends NKFAccessorImpl {
                         retValue.append(targetShimDOMXDA.getXDA(), "/", xdaROItor.getCurrentXPath());
                     }
                 } catch (Exception ex) {
-                    System.out.println("****" + xdaROItor.toString());
                     ex.printStackTrace();
                     rejected.append("<failure><message>Unable to process PURL</message>" + xdaROItor.toString() + "</failure>");
                     deleteQueue.add(0,xdaROItor.getCurrentXPath());
@@ -237,7 +236,7 @@ public class PURLSAccessor extends NKFAccessorImpl {
                         break;
                 }
             } else {
-                System.out.println("************************THIS NEEDS DOING");
+                // TODO: Figure out what needs to be done here
             }
 
             sb.append("</purl>");

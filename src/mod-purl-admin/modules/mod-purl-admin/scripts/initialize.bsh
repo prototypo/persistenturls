@@ -78,9 +78,7 @@ installAdminUsers() {
 	        req=context.createSubRequest("active:purl-storage-approve-user");
 			req.addArgument("param", sa);
 			res = context.issueSubRequest(req);
-		} else {
-			System.out.println("Ignoring auto-created admin user: " + name);
-		}
+		} 
 	}
 	
 	return true;
@@ -129,8 +127,6 @@ createPublicDomains() {
             req.addArgument("param", "gt:resource:" + name);
             context.issueSubRequest(req);
 			
-		} else {
-			System.out.println("Ignoring auto-created public domain: " + name);
 		}
 	}
 	

@@ -61,7 +61,6 @@ main() {
         }
 
     } catch(Throwable t) {
-		System.out.println("Error retrieving purl: " + purl);
         iur = new StringAspect("<error message=\"Could not query purl:" + purl + "\"/>");
     }
 

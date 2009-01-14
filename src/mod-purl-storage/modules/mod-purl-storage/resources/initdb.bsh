@@ -6,9 +6,7 @@ import org.purl.accessor.*;
 main() {
 	dbconfig = context.sourceAspect("ffcpl:/etc/ConfigPURLSDB.xml", IAspectXDA.class);
 	dbtype = dbconfig.getXDA().getText("/config/type", true);
-	
-	System.out.println("Initializing Database: " + dbtype);
-	
+		
 	resp = null;
 	dbInitFile = "ffcpl:/sql/" + dbtype + "-initialized";
 	
