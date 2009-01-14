@@ -56,7 +56,7 @@ public final class PurlTestClient {
 		CookieFactory.setCookie(cookie);
 		
 		// DBG
-		System.out.println("Cookie returned from server: " + cookie);
+		//System.out.println("Cookie returned from server: " + cookie);
 		
 		String output = response.getEntity().getText();
 		

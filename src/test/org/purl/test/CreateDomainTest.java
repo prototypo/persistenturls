@@ -1,7 +1,5 @@
 package org.purl.test;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
 import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.XMLUnit;
 
@@ -18,145 +16,72 @@ public class CreateDomainTest extends AbstractIntegrationTest {
      */
 
     // Test creating a new domain via an HTTP POST.
-    public void testCreateDomain() {
-
-        try {
-            String url = "http://" + host + ":" + port + "/admin/domain/testdomain";
-
-            Map<String, String> formParameters = new HashMap<String, String>();
-            formParameters.put("name", "Test Domain");
-            formParameters.put("maintainers", "testuser");
-            formParameters.put("writers", "testuser");
-            formParameters.put("public", "false");
-
-            String errMsg = "Cannot create a new domain.";
-            String control = "<domain status=\"1\"><id>/testdomain</id><name>Test Domain</name><maintainers><uid>testuser</uid></maintainers><writers><uid>testuser</uid></writers><public>false</public></domain>";
-            String test = client.createDomain(url, formParameters);
-
-            // XML response, so use assertXMLEqual.
-            XMLUnit.setIgnoreWhitespace(true);
-            XMLAssert.assertXMLEqual(errMsg + " : " + test, control, test);
-            // TODO: DBG
-            //assertEquals(errMsg + test, control, test);
-
-        } catch (Exception e) {
-            reportException("Failed to resolve URL: ", e);
-        }
+    public void testCreateDomain() throws Exception {
+        assertCreated("/testdomain","Test Domain", "testuser", "testuser", false);
     }
 
-    
+
     // Test creating a new domain via an HTTP POST.
-    public void testCreateDomainWithMultipleMaintainers() {
-
-        try {
-            String url = "http://" + host + ":" + port + "/admin/domain/testdomain2";
-
-            Map<String, String> formParameters = new HashMap<String, String>();
-            formParameters.put("name", "Test Domain 2");
-            formParameters.put("maintainers", "testuser,testuser2");
-            formParameters.put("writers", "testuser");
-            formParameters.put("public", "false");
-
-            String errMsg = "Cannot create a new domain.";
-            String control = "<domain status=\"1\"><id>/testdomain2</id><name>Test Domain 2</name><maintainers><uid>testuser</uid><uid>testuser2</uid></maintainers><writers><uid>testuser</uid></writers><public>false</public></domain>";
-            String test = client.createDomain(url, formParameters);
-
-            // XML response, so use assertXMLEqual.
-            XMLUnit.setIgnoreWhitespace(true);
-            XMLAssert.assertXMLEqual(errMsg + " : " + test, control, test);
-            // TODO: DBG
-            //assertEquals(errMsg + test, control, test);
-
-        } catch (Exception e) {
-            reportException("Failed to resolve URL: ", e);
-        }
+    public void testCreateDomainWithMultipleMaintainers() throws Exception {
+        assertCreated("/testdomain2","Test Domain 2", "testuser,testuser2", "testuser", false);
     }
 
     // Test creating a new domain via an HTTP POST.
-    public void testCreateDomainWithAGroupAsMaintainer() {
-
-        try {
-            String url = "http://" + host + ":" + port + "/admin/domain/testdomain3";
-
-            Map<String, String> formParameters = new HashMap<String, String>();
-            formParameters.put("name", "Test Domain 3");
-            formParameters.put("maintainers", "testgroup, testuser");
-            formParameters.put("writers", "testuser");
-            formParameters.put("public", "false");
-
-            String errMsg = "Cannot create a new domain.";
-            String control = "<domain status=\"1\"><id>/testdomain3</id><name>Test Domain 3</name><maintainers><uid>testuser</uid><gid>testgroup</gid></maintainers><writers><uid>testuser</uid></writers><public>false</public></domain>";
-            String test = client.createDomain(url, formParameters);
-
-            // XML response, so use assertXMLEqual.
-            XMLUnit.setIgnoreWhitespace(true);
-            XMLAssert.assertXMLEqual(errMsg + " : " + test, control, test);
-            // TODO: DBG
-            //assertEquals(errMsg + test, control, test);
-
-        } catch (Exception e) {
-            reportException("Failed to resolve URL: ", e);
-        }
+    public void testCreateDomainWithAGroupAsMaintainer() throws Exception {        
+        assertCreated("/testdomain3","Test Domain 3", "testgroup,testuser", "testuser", false);
     }
 
     // Test creating a new domain via an HTTP POST.
-    public void testCreateDomainWithMultipleWriters() {
-
-        try {
-            String url = "http://" + host + ":" + port + "/admin/domain/testdomain4";
-
-            Map<String, String> formParameters = new HashMap<String, String>();
-            formParameters.put("name", "Test Domain 4");
-            formParameters.put("maintainers", "testuser");
-            formParameters.put("writers", "testuser,testuser2");
-            formParameters.put("public", "false");
-
-            String errMsg = "Cannot create a new domain.";
-            String control = "<domain status=\"1\"><id>/testdomain4</id><name>Test Domain 4</name><maintainers><uid>testuser</uid></maintainers><writers><uid>testuser</uid><uid>testuser2</uid></writers><public>false</public></domain>";
-            String test = client.createDomain(url, formParameters);
-
-            // XML response, so use assertXMLEqual.
-            XMLUnit.setIgnoreWhitespace(true);
-            XMLAssert.assertXMLEqual(errMsg + " : " + test, control, test);
-            // TODO: DBG
-            //assertEquals(errMsg + test, control, test);
-
-        } catch (Exception e) {
-            reportException("Failed to resolve URL: ", e);
-        }
+    public void testCreateDomainWithMultipleWriters() throws Exception {
+        assertCreated("/testdomain4","Test Domain 4", "testuser", "testuser,testuser2", false);
     }
 
     // Test creating a new domain via an HTTP POST.
-    public void testCreateDomainWithAGroupAsWriter() {
-
-        try {
-            String url = "http://" + host + ":" + port + "/admin/domain/testdomain5";
-
-            Map<String, String> formParameters = new HashMap<String, String>();
-            formParameters.put("name", "Test Domain 5");
-            formParameters.put("maintainers", "testuser");
-            formParameters.put("writers", "testgroup");
-            formParameters.put("public", "false");
-
-            String errMsg = "Cannot create a new domain.";
-            String control = "<domain status=\"1\"><id>/testdomain5</id><name>Test Domain 5</name><maintainers><uid>testuser</uid></maintainers><writers><gid>testgroup</gid></writers><public>false</public></domain>";
-            String test = client.createDomain(url, formParameters);
-
-            // XML response, so use assertXMLEqual.
-            XMLUnit.setIgnoreWhitespace(true);
-            XMLAssert.assertXMLEqual(errMsg + " : " + test, control, test);
-            // TODO: DBG
-            //assertEquals(errMsg + test, control, test);
-
-        } catch (Exception e) {
-            reportException("Failed to resolve URL: ", e);
-        }
+    public void testCreateDomainWithAGroupAsWriter() throws Exception {
+        assertCreated("/testdomain5","Test Domain 5", "testuser", "testgroup", false);
     }
 
-    public static Test suite() {
-        TestSuite suite = new TestSuite();
+    // Test creating a nested domain.  A root should be required.
+    public void testCreateNestedDomains() throws Exception {
+        assertNotCreatedNoRoot("/testroot/testdomain6", "Test Domain 6", "testuser", "testuser", false);
+        assertCreated("/testroot", "Test Root Domain", "testuser", "testuser", false);
+        assertCreated("/testroot/testdomain6",  "Test Domain 6", "testuser", "testuser", false);
+    }
 
-        return suite;
+    public void testCreateDuplicateDomains() throws Exception {
+        assertCreated("/testdomain7", "Test Domain 7", "testuser", "testuser", false);
+        assertNotCreatedAlreadyExists("/testdomain7", "Test Domain 7", "testuser", "testuser", false);
+
+    }
+
+    public void assertCreated(String path, String name, String maintainers, String writers, boolean isPublic) throws Exception {
+        String test = createDomain(path, name, maintainers, writers, isPublic);
+        XMLAssert.assertXpathExists("/domain[@status='1']", test);
+        XMLAssert.assertXpathExists("/domain[id='" + path + "']", test);
+    }
+
+    public void assertNotCreatedAlreadyExists(String path, String name, String maintainers, String writers, boolean isPublic) throws Exception {
+        String test = createDomain(path, name, maintainers, writers, isPublic);
+        assertTrue("Expected " + path + " to already exist.  Received message: " + test, test.endsWith("cannot be created because it already exists."));
+    }
+
+    public void assertNotCreatedNoRoot(String path, String name, String maintainers, String writers, boolean isPublic) throws Exception {
+        String test = createDomain(path, name, maintainers, writers, isPublic);
+        assertTrue("Expected " + path + " to require root domain.  Received message: " + test, test.contains("cannot be created because the root domain"));
+    }
+
+    public String createDomain(String path, String name, String maintainers, String writers, boolean isPublic) throws Exception {
+
+        String url = "http://" + host + ":" + port + "/admin/domain" + path;
+
+        Map<String, String> formParameters = new HashMap<String, String>();
+        formParameters.put("name", name);
+        formParameters.put("maintainers", maintainers);
+        formParameters.put("writers", writers);
+        formParameters.put("public", Boolean.toString(isPublic));
+
+        return client.createDomain(url, formParameters);
+
     }
 
 }

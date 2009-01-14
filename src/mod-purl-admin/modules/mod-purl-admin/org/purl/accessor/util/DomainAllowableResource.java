@@ -36,6 +36,15 @@ public class DomainAllowableResource implements AllowableResource {
     }
 
     public String getDenyMessage(INKFConvenienceHelper context, String resourceName) {
-        return "Domain: " + domainResolver.getDisplayName(resourceName) + " cannot be created because it or a parent domain already exist.";
+        try {
+            if (domainStorage.resourceExists(context, resourceName)) {
+                return "Domain: " + domainResolver.getDisplayName(resourceName) + " cannot be created because it already exists.";
+            } else {
+                String root = domainResolver.getDisplayName(domainResolver.getURI(new DomainIterator(resourceName).next()));
+                return "Domain: " + domainResolver.getDisplayName(resourceName) + " cannot be created because the root domain " + root + " does not exist.";
+            }
+        } catch (NKFException nfe) {
+             return "Domain: " + domainResolver.getDisplayName(resourceName) + " cannot be created due to a database connection failure.";
+        }
     }
 }
