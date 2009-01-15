@@ -645,9 +645,13 @@ function onResponse(message, headers, callingContext) {
 			content += "<div class='withresults'>";
 			content += simpleHtmlResults;
 			content += "</div></body></html>";
-			var historyWindow = window.open('','historyWindow','width=1024,height=768,status=yes,resizable=yes');
-			historyWindow.document.write(content);
-			historyWindow.document.close();
+			try {
+				var historyWindow = window.open('','historyWindow','width=1024,height=768,status=yes,resizable=yes');
+				historyWindow.document.write(content);
+				historyWindow.document.close();
+			} catch (error) {
+				alert("You seem to have blocked pop-up windows.  The history window could not be opened.");
+			}
 		} else {
 			// Write the results to the results area on the current page.
 			resultBlock.innerHTML = resultsTop;
