@@ -77,11 +77,12 @@ handles results from the server in response to form submissions.
 		} else {
 			signalLoadingResults();
 			maintainers = scrubTextareaInput($('c_maintainers').value);
+			members = scrubTextareaInput($('c_members').value);
 			urlVars = {}
 			bodyVars = {
 				name: $('c_name').value,
 				maintainers: maintainers,
-				members: $('c_members').value,
+				members: members,
 				comments: $('c_comments').value
 			};
 			ajaxCaller.postVars("/admin/group/" + my_id, bodyVars, urlVars, onResponse, false, "Create");
