@@ -489,6 +489,13 @@ SAXEventHandler.prototype._fullCharacterDataReceived = function(fullCharacterDat
         fullCharacterData contains all of the character data for the element
     *****************************************************************************/
 
+    var styleData = function(element, data) {
+        if (element=="gid") {
+            return "<it>" + data + "</it>";
+        }
+        return data;
+    }
+
     //place character (text) event handling code below this line
 	// DHW
 	
@@ -508,17 +515,17 @@ SAXEventHandler.prototype._fullCharacterDataReceived = function(fullCharacterDat
 		} else if ( ( currentElement == "uid" || currentElement == "gid" ) && previousElement == "maintainers" ) {
 			// Store uids and gids to account for possible multiple maintainers.
 			// We will write them into the array when the document is fully parsed.
-			maintainers = maintainers + "," + fullCharacterData;
+			maintainers = maintainers + "," + styleData(currentElement, fullCharacterData);
 			
 		} else if ( ( currentElement == "uid" || currentElement == "gid" )  && previousElement == "writers" ) {
 			// Store uids and gids to account for possible multiple writers.
 			// We will write them into the array when the document is fully parsed.
-			writers = writers + "," + fullCharacterData;
+			writers = writers + "," + styleData(currentElement, fullCharacterData);
 			
 		} else if ( ( currentElement == "uid" || currentElement == "gid" )  && previousElement == "members" ) {
 			// Store uids and gids to account for possible multiple members.
 			// We will write them into the array when the document is fully parsed.
-			members = members + "," + fullCharacterData;
+			members = members + "," + styleData(currentElement, fullCharacterData);
 			
 		} else if ( currentElement == "uid" && previousElement == "modifiedby" ) {
 			// There should only be one uid that modified a resource in history.
