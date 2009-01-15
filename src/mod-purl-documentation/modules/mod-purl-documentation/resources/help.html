@@ -302,7 +302,7 @@
 				The single most important task that one can accomplish on a PURL server is the creation of a new PURL. Other administrative actions, from user, group or domain maintenance to the other operations on the PURLs themselves are secondary to that main task. This section addresses the creation of simple (HTTP redirection) PURLs and advanced PURLs, along with the other things that may be done to a PURL.
 			</p>
 			<p>
-				A &quot;maintainer&quot; is someone who can modify a PURL.  A maintainer of a PURL may modify the record for that PURL.
+				A &quot;maintainer&quot; is someone who can modify a PURL.  A maintainer of a PURL may modify the record for that PURL.  A user who creates a PURL is automatically added as a maintainer.
 			</p>
 			<p>
 				Six actions may be taken on a PURL: Creation, Advanced Creation, Modification, Searching, Validation or Deletion. These six actions may be accessed in the PURL Web user interface as shown in Figure 3. The same six actions may be taken by other PURL clients. See <a href="#rest">Creating RESTful PURL Clients</a> for details.
@@ -330,7 +330,7 @@
 				Simple PURLs may be created via the <a href="purl.html#create">PURL Creation Form</a>.
 			</p>
 			<p>
-				Figure 4(a) shows the creation of an example simple PURL. A target URL is the URL to which the PURL will redirect. A maintainer is a user or group authorized to administer a PURL. Figure 4(b) shows a typical response upon success. Search results may be "torn off" for later use by selecting the icon labeled <b>A</b> in Figure 4(b). Individual records may be brought into the <a href="purl.html#modify">PURL Modification Form</a> by selecting any of the icons labeled <b>B</b> in Figure 4(b).
+				Figure 4(a) shows the creation of an example simple PURL. A target URL is the URL to which the PURL will redirect. A maintainer is a user or group authorized to administer a PURL. A user who creates a PURL is automatically added as a maintainer.  Figure 4(b) shows a typical response upon success. Search results may be "torn off" for later use by selecting the icon labeled <b>A</b> in Figure 4(b). Individual records may be brought into the <a href="purl.html#modify">PURL Modification Form</a> by selecting any of the icons labeled <b>B</b> in Figure 4(b).
 			</p>
 			<p>
 				In this case, a PURL will be created on a PURL server with the path "/zepheira/examples/BBC". If the PURL server was running on a machine called purlz.org, then the resolution of http://purlz.org/zepheira/examples/BBC would result in an HTTP 302 response directing the user (or Web browser, or other computer application) to look for the desired resource at http://bbc.co.uk/, the British Broadcasting Service's Web site. Three maintainers are listed for this PURL; the users "david" and "brian" and the group "examplegroup".
@@ -586,7 +586,7 @@
 				5. Administering Groups of Users
 			</h2>
 			<p>
-				It can be convenient to create groups of users to facilitate administration. For example, if you create a large number of PURLs and each PURL may be changed by the same list of people, it will be easier to create a single group to represent those people than to individually list all people as maintainers.
+				It can be convenient to create groups of users to facilitate administration. For example, if you create a large number of PURLs and each PURL may be changed by the same list of people, it will be easier to create a single group to represent those people than to individually list all people as maintainers.  A user who creates a group is automatically added as a maintainer.
 			</p>
 			<p>
 				Four actions may be taken on a group: Creation, Modification, Searching or Deletion. These four actions may be accessed in the PURL Web user interface as shown in Figure 16. The same four actions may be taken by other PURL clients. See <a href="#rest">Creating RESTful PURL Clients</a> for details.
@@ -672,7 +672,7 @@
 				PURLs are created within domains. A domain is the path portion of the PURL URL form, as shown in Figure 1. PURLs may not be created unless they are within a domain; that helps to ensure order and security on a PURL server.
 			</p>
 			<p>
-				A &quot;maintainer&quot; is someone who can modify a domain.  A maintainer of a domain may modify the record for that domain.  A &quot;writer&quot; is someone who may create a new PURL under a domain.
+				A &quot;maintainer&quot; is someone who can modify a domain.  A maintainer of a domain may modify the record for that domain.  A &quot;writer&quot; is someone who may create a new PURL under a domain.  A user who creates a domain is automatically added as a maintainer.
 			</p>
 			<p>
 				Some PURL servers allow one or more domains to act as public spaces. This is the case with the /NET domain on the oldest PURL server at <a href="http://purl.org/">http://purl.org/</a>. Public domains allow for subdomains and PURLs to be created within them by the general public. Most domains, however, will be private and writing to them requires that you are either a maintainer or a writer of those domains.
