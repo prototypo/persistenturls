@@ -129,10 +129,14 @@ handles results from the server in response to form submissions.
 			maintainers = scrubTextareaInput($('m_maintainers').value);
 			urlVars = {
 				type: $('m_type').value,
-				target: $('m_target').value,
 				seealso: $('m_seealso').value,
 				maintainers: maintainers
 			}
+            if (urlVars.type == 'chain') {
+                urlVars.basepurl = $('m_target').value;
+            } else {
+                urlVars.target = $('m_target').value; 
+            }
 			bodyType = "text/html";
 			body = "";
 			parameters = {
