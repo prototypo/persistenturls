@@ -393,6 +393,8 @@ function getHTMLFromXMLArray(xmlArray) {
 			dataString = "";
 			for ( innerKey in xmlArray[outerKey] ) {
 				escapedValue = xmlArray[outerKey][innerKey][1].replace(/\n/g, "%LINEBREAK%");
+				escapedValue = escapedValue.replace(/<i>/g, "");
+				escapedValue = escapedValue.replace(/<\/i>/g, "");
 				dataString += xmlArray[outerKey][innerKey][0] + "=" + escapedValue + "&";
 			}
 			// Write an HTML list item for each element in a record.

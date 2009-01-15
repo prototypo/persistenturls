@@ -491,7 +491,7 @@ SAXEventHandler.prototype._fullCharacterDataReceived = function(fullCharacterDat
 
     var styleData = function(element, data) {
         if (element=="gid") {
-            return "<it>" + data + "</it>";
+            return "<i>" + data + "</i>";
         }
         return data;
     }
