@@ -84,11 +84,13 @@
 		     so we can set them later by parsing. -->
 		<singlefile src="options/PURLConfig.xml" target="$INSTALL_PATH/modules/mod-purl-admin/etc/PURLConfig.xml" override="true"/>
 		<singlefile src="options/mod-purl-virtualhost/module.xml" target="$INSTALL_PATH/modules/mod-purl-virtualhost/module.xml" override="true"/>
+		<singlefile src="options/mod-fulcrum-frontend/etc/TransportJettyConfig.xml" target="$INSTALL_PATH/modules/mod-fulcrum-frontend/etc/TransportJettyConfig.xml" override="true"/>
 		<!-- PURL files with variable substitution upon installation. -->
 		<parsable targetfile="$INSTALL_PATH/etc/deployedModules.xml"/>
 		<parsable targetfile="$INSTALL_PATH/modules/mod-purl-admin/etc/PURLConfig.xml"/>
 		<parsable targetfile="$INSTALL_PATH/README.txt"/>
 		<parsable targetfile="$INSTALL_PATH/modules/mod-purl-virtualhost/module.xml"/>
+		<parsable targetfile="$INSTALL_PATH/modules/mod-fulcrum-frontend/etc/TransportJettyConfig.xml"/>
 		<!-- NetKernel files with variable substitution upon installation. -->
 		<parsable targetfile="$INSTALL_PATH/etc/bootloader.cfg"/>
 		<parsable targetfile="$INSTALL_PATH/bin/start.sh"/>

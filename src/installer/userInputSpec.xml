@@ -5,8 +5,11 @@
 		<field type="text" variable="PURLHOST">
 			<spec txt="PURL server host name:" id="text.label.0" size="25" set="${HOST_NAME}"/>
 		</field>
+		<field type="text" variable="PURLPORT">
+			<spec txt="Port:" id="text.label.4" size="25" set="8080"/>
+		</field>
 		<field type="staticText" align="left" txt=" "/>
-		<field type="staticText" align="left" txt="NB: You may change or add to the list of host names later by editing the configuration file $INSTALL_PATH/modules/mod-purl-virtualhost/module.xml"/>
+		<field type="staticText" align="left" txt="NB: You may change or add to the list of host names later by editing the configuration file $INSTALL_PATH/modules/mod-purl-virtualhost/module.xml.  The port may be changed by modifying the file $INSTALL_PATH/modules/mod-fulcrum-frontend/etc/TransportJettyConfig.xml."/>
 	</panel>
 	<panel order="1">
 		<field type="staticText" align="left" txt="The PURL server is architected to use alternative persistent storage systems." id="staticText.text"/>
