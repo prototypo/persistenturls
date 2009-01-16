@@ -66,6 +66,29 @@ public class SinglePurlTest extends AbstractPurlTest {
     }
 
 
+        // Test modifying an existing PURL via an HTTP PUT.
+    public void testModifyPurlAddGroupAsMaintainer() {
+
+        try {
+            String url = "http://" + host + ":" + port + "/admin/purl/testdomain/testPURL";
+
+            Map<String, String> formParameters = new HashMap<String, String>();
+            formParameters.put("type", "302");
+            formParameters.put("target", "http://bbc.co.uk/");
+            formParameters.put("maintainers", "testuser,testgroup");
+
+            String errMsg = "Cannot modify a PURL: ";
+            String control = "Updated resource: /testdomain/testPURL";
+            String test = client.modifyPurl(url, formParameters);
+
+            // Textual response, so use assertEquals.
+            assertEquals(errMsg + test, control, test);
+
+        } catch (Exception e) {
+            reportException("Failed to resolve URL: ", e);
+        }
+    }
+
     // Test validating an existing PURL via an HTTP GET.
     public void testValidatePurl() {
 
