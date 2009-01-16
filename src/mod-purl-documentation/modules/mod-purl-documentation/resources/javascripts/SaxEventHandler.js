@@ -285,6 +285,10 @@ SAXEventHandler.prototype.startElement = function(name, atts) {
 					elementMap[elementMapIndex] = ["status", value];
 					elementMapIndex++;
 				}
+                if ("validation" == atts.getName([i])) {
+                    elementMap[elementMapIndex] = ["validation", atts.getValue([i])];
+					elementMapIndex++;
+                }
 			}
 		}
 	// For history entries.
@@ -533,10 +537,10 @@ SAXEventHandler.prototype._fullCharacterDataReceived = function(fullCharacterDat
 			elementMapIndex++;
 		
 		// All other entries we want to retain go here.	
-		} else if ( currentElement == "id" || currentElement == "name" || currentElement == "type"  || currentElement == "comments"  || currentElement == "public"  || currentElement == "affiliation" || currentElement == "email" || currentElement == "modifieddate" ) {
+		} else if ( currentElement == "id" || currentElement == "name" || currentElement == "type"  || currentElement == "comments"  || currentElement == "public"  || currentElement == "affiliation" || currentElement == "email" || currentElement == "modifieddate" || currentElement =="message" ) {
 			elementMap[elementMapIndex] = [currentElement, fullCharacterData];
 			elementMapIndex++;
-		}
+        }
 	}
 
 }  // end function _fullCharacterDataReceived
