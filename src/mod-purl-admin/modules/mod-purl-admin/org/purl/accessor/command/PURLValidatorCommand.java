@@ -34,12 +34,12 @@ public class PURLValidatorCommand extends PURLResolveCommand {
 
                 try {
                     DOMXDA result = (DOMXDA)purl.getClonedXDA();
-                    result.appendPath("/purl", "validation", null);
                     String type = purl.getXDA().getText("/purl/type", true);
                     String pid = purl.getXDA().getText("/purl/id", true);
 
                     if(type.equals("404") || type.equals("410")) {
-                        result.appendPath("/purl/validation", "@result", "validated");
+
+                            result.appendPath("/purl", "@validation", "validated");
                         //sb.append("<status result=\"validated\">Validated</status></purl>");
                     } else if(type.equals("301") || type.equals("302") || type.equals("303") || type.equals("307")) {
 
@@ -61,7 +61,8 @@ public class PURLValidatorCommand extends PURLResolveCommand {
 
                             //sb.append("<status result=\"success\">Success</status>");
 
-                            result.appendPath("/purl/validation", "@result", "success");
+                            result.appendPath("/purl", "@validation", "success");
+
                         } catch(NKFException e) {
                             String error = null;
                             Throwable t = e.getCause();
@@ -77,8 +78,10 @@ public class PURLValidatorCommand extends PURLResolveCommand {
                             if(error==null) {
                                 error = "Could not validate purl: " + pid;
                             }
-                            result.appendPath("/purl/validation", "@result", "failure");
-                            result.setText("/purl/validation", error);
+
+                            result.appendPath("/purl", "@validation", "failure");
+                            result.appendPath("/purl", "message", error);
+
                             //sb.append("<status result=\"failure\">ERROR: ");
                             //sb.append(error);
                             //sb.append("</status>");
@@ -93,20 +96,20 @@ public class PURLValidatorCommand extends PURLResolveCommand {
                 } catch(XPathLocationException xple) {
                     xple.printStackTrace();
                     StringBuffer sb = new StringBuffer();
-                    sb.append("<purl><id>");
+                    sb.append("<purl validation=\"failure\"><id>");
                     sb.append(path.substring(6));
                     sb.append("</id>");
-                    sb.append("<validation result=\"failure\">Invalid input XML</status></purl>");
+                    sb.append("<message>Invalid input XML</message></purl>");
                     sb.append("</purl>");
                     asp = new StringAspect(sb.toString());
                 }
 
             } else {
                 StringBuffer sb = new StringBuffer();
-                sb.append("<purl><id>");
+                sb.append("<purl validation=\"failure\"><id>");
                 sb.append(path.substring(6));
                 sb.append("</id>");            
-                sb.append("<validation result=\"failure\">PURL does not exist.</validation>");
+                sb.append("<message >PURL does not exist.</message>");
                 sb.append("</purl>");
                 asp = new StringAspect(sb.toString());
             }

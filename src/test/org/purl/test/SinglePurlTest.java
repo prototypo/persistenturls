@@ -74,7 +74,7 @@ public class SinglePurlTest extends AbstractPurlTest {
             String result = client.validatePurl(url);
 
             XMLAssert.assertXpathExists("/purl[id='/testdomain/testPURL']", result);
-            XMLAssert.assertXpathExists("/purl/validation[@result='success']", result);
+            XMLAssert.assertXpathExists("/purl[@validation='success']", result);
         } catch (Exception e) {
             reportException("Failed to resolve URL: ", e);
         }
@@ -86,7 +86,7 @@ public class SinglePurlTest extends AbstractPurlTest {
             String result = client.validatePurl(url);
             
             XMLAssert.assertXpathExists("/purl[id='/nosuchdomain/nosuchurl']", result);
-            XMLAssert.assertXpathExists("/purl/validation[@result='failure']", result);
+            XMLAssert.assertXpathExists("/purl[@validation='failure']", result);
         } catch (Exception e) {
             reportException("Failed to resolve URL: ", e);
         }
