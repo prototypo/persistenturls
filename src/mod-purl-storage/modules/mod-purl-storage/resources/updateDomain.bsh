@@ -53,11 +53,11 @@ main() {
             z_id = groupMaintainerMap.get(maintainer);
             
             if(z_id == null) {
-                req = context.createSubRequest("active:purl-storage-query-user");
-                req.addArgument("uri", "ffcpl:/user/" + maintainer);
+                req = context.createSubRequest("active:purl-storage-query-group");
+                req.addArgument("uri", "ffcpl:/group/" + maintainer);
                 req.setAspectClass(IAspectXDA.class);
                 maintainerXDA = (IAspectXDA)context.issueSubRequestForAspect(req);
-                z_id = maintainerXDA.getXDA().getText("/user/z_id", true);
+                z_id = maintainerXDA.getXDA().getText("/group/z_id", true);
                 groupMaintainerMap.put(maintainer, z_id);
             }
         }
@@ -87,11 +87,11 @@ main() {
             z_id = groupMaintainerMap.get(maintainer);
             
             if(z_id == null) {
-                req = context.createSubRequest("active:purl-storage-query-user");
-                req.addArgument("uri", "ffcpl:/user/" + maintainer);
+                req = context.createSubRequest("active:purl-storage-query-group");
+                req.addArgument("uri", "ffcpl:/group/" + maintainer);
                 req.setAspectClass(IAspectXDA.class);
                 maintainerXDA = (IAspectXDA)context.issueSubRequestForAspect(req);
-                z_id = maintainerXDA.getXDA().getText("/user/z_id", true);
+                z_id = maintainerXDA.getXDA().getText("/group/z_id", true);
                 groupMaintainerMap.put(maintainer, z_id);
             }
         }               
