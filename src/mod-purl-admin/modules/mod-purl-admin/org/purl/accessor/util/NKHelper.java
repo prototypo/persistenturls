@@ -314,43 +314,43 @@ public class NKHelper {
     
     public static boolean userIsDomainMaintainer(INKFConvenienceHelper context, String user, String domain) {
         boolean retValue = false;
-        
         try {
             INKFRequest req=context.createSubRequest("active:purl-storage-query-domain");
             req.addArgument("uri", domain);
             req.setAspectClass(IAspectXDA.class);
             IAspectXDA res = (IAspectXDA) context.issueSubRequestForAspect(req);
             IXDAReadOnlyIterator itor = res.getXDA().readOnlyIterator("/domain/maintainers/uid");
-            
+
             while(!retValue && itor.hasNext()) {
+                itor.next();
                 String uid = itor.getText(".", true);
                 retValue = uid.equalsIgnoreCase(user);
+
             }
-            
+
             //retValue = res.getXDA().isTrue("/domain/maintainers/uid = '" + user + "'");
-            
+
             if(!retValue && res.getXDA().isTrue("/domain/maintainers/gid")) {
-                // If the user is not spelled out explicitly, see if he/she is a member of a 
+                // If the user is not spelled out explicitly, see if he/she is a member of a
                 // group that is a maintainer
-                
+
                 IAspectXDA groupListXDA = (IAspectXDA) context.transrept(UserHelper.getGroupsForUser(context, user), IAspectXDA.class);
                 itor = groupListXDA.getXDA().readOnlyIterator("/groups/group");
-                
+
                 while(!retValue && itor.hasNext()) {
-                    retValue = res.getXDA().isTrue("/domain/maintainers/gid = '" + itor.getText(".", true) + "'");
                     itor.next();
+                    retValue = res.getXDA().isTrue("/domain/maintainers/gid = '" + itor.getText(".", true) + "'");                    
                 }
-            }            
+            }
         } catch(Exception e) {
-         e.printStackTrace();   
+         e.printStackTrace();
         }
-        
+
         return retValue;
     }
     
     public static boolean userIsDomainWriter(INKFConvenienceHelper context, String user, String domain) {
         boolean retValue = false;
-        
         try {
             INKFRequest req=context.createSubRequest("active:purl-storage-query-domainwriters");
             req.addArgument("param", new StringAspect("<domain><id>" + domain.substring(13) + "</id></domain>"));

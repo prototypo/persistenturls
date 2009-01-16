@@ -11,6 +11,8 @@ import java.util.Map;
  */
 public class ModifyDomainTest extends AbstractIntegrationTest {
 
+
+
     // Test modifying an existing domain via an HTTP PUT.
     public void testModifyDomain() {
 
@@ -34,6 +36,8 @@ public class ModifyDomainTest extends AbstractIntegrationTest {
             reportException("Failed to resolve URL: ", e);
         }
     }
+
+
 
     // Test modifying an existing domain via an HTTP PUT.
     public void testModifyDomainAddMaintainer() {
@@ -155,7 +159,7 @@ public class ModifyDomainTest extends AbstractIntegrationTest {
         }
     }
 
-    // Test modifying an existing domain via an HTTP PUT.
+        // Test modifying an existing domain via an HTTP PUT.
     public void testModifyDomainRemoveGroupAsWriter() {
 
         try {
@@ -188,7 +192,7 @@ public class ModifyDomainTest extends AbstractIntegrationTest {
             Map<String, String> formParameters = new HashMap<String, String>();
             formParameters.put("name", "Test Domain 7 Modified");
             formParameters.put("maintainers", "testuser2");
-            formParameters.put("writers", "testuser2, testgroup");
+            formParameters.put("writers", "testuser,testgroup");
             formParameters.put("public", "true");
 
             String errMsg = "Cannot modify a Domain: ";
@@ -207,16 +211,16 @@ public class ModifyDomainTest extends AbstractIntegrationTest {
     public void testModifyDomainAddGroupAsMaintainer() {
 
         try {
-            String url = "http://" + host + ":" + port + "/admin/domain/testdomain5";
+            String url = "http://" + host + ":" + port + "/admin/domain/testdomain7";
 
             Map<String, String> formParameters = new HashMap<String, String>();
-            formParameters.put("name", "Test Domain 5 Modified");
+            formParameters.put("name", "Test Domain 7 Modified");
             formParameters.put("maintainers", "testuser2,testgroup");
-            formParameters.put("writers", "testuser2, testgroup");
+            formParameters.put("writers", "testuser2,testgroup");
             formParameters.put("public", "true");
 
             String errMsg = "Cannot modify a Domain: ";
-            String control = "Updated resource: /testdomain5";
+            String control = "Updated resource: /testdomain7";
             String test = client.modifyDomain(url, formParameters);
 
             // Textual response, so use assertEquals.
