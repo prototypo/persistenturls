@@ -23,7 +23,7 @@ public class PURLValidatorCommand extends PURLResolveCommand {
     @Override
     public INKFResponse execute(INKFConvenienceHelper context, IAspectXDA purl) {
         INKFResponse retValue = null;
-
+        int responseCode = 200;
         try {
             String path = NKHelper.getArgument(context, "path");
             //StringBuffer sb = new StringBuffer("<purl><id>");
@@ -81,13 +81,9 @@ public class PURLValidatorCommand extends PURLResolveCommand {
 
                             result.appendPath("/purl", "@validation", "failure");
                             result.appendPath("/purl", "message", error);
-
-                            //sb.append("<status result=\"failure\">ERROR: ");
-                            //sb.append(error);
-                            //sb.append("</status>");
+                            responseCode = 409;
                         }
 
-                        //sb.append("</purl>");
 
                     } else {
                         System.out.println("**********");
@@ -102,6 +98,7 @@ public class PURLValidatorCommand extends PURLResolveCommand {
                     sb.append("<message>Invalid input XML</message></purl>");
                     sb.append("</purl>");
                     asp = new StringAspect(sb.toString());
+                    responseCode = 409;
                 }
 
             } else {
@@ -112,10 +109,11 @@ public class PURLValidatorCommand extends PURLResolveCommand {
                 sb.append("<message >PURL does not exist.</message>");
                 sb.append("</purl>");
                 asp = new StringAspect(sb.toString());
+                responseCode = 409;
             }
 
 
-            IURRepresentation rep = NKHelper.setResponseCode(context, asp, 200);
+            IURRepresentation rep = NKHelper.setResponseCode(context, asp, responseCode);
             rep = NKHelper.attachGoldenThread(context, "gt:" + path , rep);
             retValue = context.createResponseFrom(rep);
             retValue.setCacheable();
