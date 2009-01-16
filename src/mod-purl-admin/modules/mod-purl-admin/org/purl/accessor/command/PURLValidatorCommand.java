@@ -9,7 +9,9 @@ import org.ten60.netkernel.layer1.nkf.INKFRequest;
 import org.ten60.netkernel.layer1.nkf.INKFResponse;
 import org.ten60.netkernel.layer1.nkf.NKFException;
 import org.ten60.netkernel.xml.representation.IAspectXDA;
+import org.ten60.netkernel.xml.representation.DOMXDAAspect;
 import org.ten60.netkernel.xml.xda.XPathLocationException;
+import org.ten60.netkernel.xml.xda.DOMXDA;
 
 import com.ten60.netkernel.urii.IURAspect;
 import com.ten60.netkernel.urii.IURRepresentation;
@@ -24,16 +26,21 @@ public class PURLValidatorCommand extends PURLResolveCommand {
 
         try {
             String path = NKHelper.getArgument(context, "path");
-            StringBuffer sb = new StringBuffer("<purl><id>");
-            sb.append(path.substring(6));
-            sb.append("</id>");
+            //StringBuffer sb = new StringBuffer("<purl><id>");
+            //sb.append(path.substring(6));
+            //sb.append("</id>");
+            IURAspect asp;
             if(purl!=null) {
+
                 try {
+                    DOMXDA result = (DOMXDA)purl.getClonedXDA();
+                    result.appendPath("/purl", "validation", null);
                     String type = purl.getXDA().getText("/purl/type", true);
                     String pid = purl.getXDA().getText("/purl/id", true);
 
                     if(type.equals("404") || type.equals("410")) {
-                        sb.append("<status result=\"validated\">Validated</status></purl>");
+                        result.appendPath("/purl/validation", "@result", "validated");
+                        //sb.append("<status result=\"validated\">Validated</status></purl>");
                     } else if(type.equals("301") || type.equals("302") || type.equals("303") || type.equals("307")) {
 
                         String url = null;
@@ -52,8 +59,9 @@ public class PURLValidatorCommand extends PURLResolveCommand {
                             req.addArgument("operand", iur);
                             context.issueSubRequest(req);
 
-                            sb.append("<status result=\"success\">Success</status>");
+                            //sb.append("<status result=\"success\">Success</status>");
 
+                            result.appendPath("/purl/validation", "@result", "success");
                         } catch(NKFException e) {
                             String error = null;
                             Throwable t = e.getCause();
@@ -69,25 +77,41 @@ public class PURLValidatorCommand extends PURLResolveCommand {
                             if(error==null) {
                                 error = "Could not validate purl: " + pid;
                             }
-
-                            sb.append("<status result=\"failure\">ERROR: ");
-                            sb.append(error);
-                            sb.append("</status>");
+                            result.appendPath("/purl/validation", "@result", "failure");
+                            result.setText("/purl/validation", error);
+                            //sb.append("<status result=\"failure\">ERROR: ");
+                            //sb.append(error);
+                            //sb.append("</status>");
                         }
 
-                        sb.append("</purl>");
+                        //sb.append("</purl>");
 
                     } else {
                         System.out.println("**********");
                     }
+                    asp = new DOMXDAAspect(result);
                 } catch(XPathLocationException xple) {
                     xple.printStackTrace();
+                    StringBuffer sb = new StringBuffer();
+                    sb.append("<purl><id>");
+                    sb.append(path.substring(6));
+                    sb.append("</id>");
+                    sb.append("<validation result=\"failure\">Invalid input XML</status></purl>");
+                    sb.append("</purl>");
+                    asp = new StringAspect(sb.toString());
                 }
+
             } else {
-                sb.append("<status result=\"failure\">ERROR: PURL does not exist.</status></purl>");
+                StringBuffer sb = new StringBuffer();
+                sb.append("<purl><id>");
+                sb.append(path.substring(6));
+                sb.append("</id>");            
+                sb.append("<validation result=\"failure\">PURL does not exist.</validation>");
+                sb.append("</purl>");
+                asp = new StringAspect(sb.toString());
             }
 
-            IURAspect asp = new StringAspect(sb.toString());
+
             IURRepresentation rep = NKHelper.setResponseCode(context, asp, 200);
             rep = NKHelper.attachGoldenThread(context, "gt:" + path , rep);
             retValue = context.createResponseFrom(rep);

@@ -112,8 +112,9 @@ public class PURLResolverAccessor extends NKFAccessorImpl {
                 resp.setMimeType("text/xml");
             }
 
+        } else if (mode.equals("mode:validate")) {
+            resp = commandMap.get("validate").execute(context, null);     
         } else {
-
             // Iterate over the reserved domains in PurlConfig.xml.  If found, source the resource.  Otherwise,
             // return a 404
 
