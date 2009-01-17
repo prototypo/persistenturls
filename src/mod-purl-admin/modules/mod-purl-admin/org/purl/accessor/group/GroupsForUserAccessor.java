@@ -1,4 +1,4 @@
-package org.purl.accessor;
+package org.purl.accessor.group;
 
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFRequest;

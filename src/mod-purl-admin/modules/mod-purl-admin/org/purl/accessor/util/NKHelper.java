@@ -13,11 +13,11 @@ import org.ten60.netkernel.xml.representation.IAspectXDA;
 import org.ten60.netkernel.xml.xda.IXDAReadOnly;
 import org.ten60.netkernel.xml.xda.IXDAReadOnlyIterator;
 import org.ten60.netkernel.xml.xda.XPathLocationException;
-import org.purl.accessor.util.domain.Domain;
-import org.purl.accessor.util.domain.DomainIterator;
-import org.purl.accessor.util.domain.DomainResolver;
-import org.purl.accessor.util.purl.PURLURIResolver;
-import org.purl.accessor.util.user.UserHelper;
+import org.purl.accessor.domain.Domain;
+import org.purl.accessor.purl.PURLURIResolver;
+import org.purl.accessor.user.UserHelper;
+import org.purl.accessor.domain.DomainIterator;
+import org.purl.accessor.domain.DomainResolver;
 
 import com.ten60.netkernel.urii.IURAspect;
 import com.ten60.netkernel.urii.IURRepresentation;

@@ -1,4 +1,4 @@
-package org.purl.accessor.util.group;
+package org.purl.accessor.group;
 
 import com.ten60.netkernel.urii.IURAspect;
 import com.ten60.netkernel.urii.aspect.StringAspect;
@@ -6,8 +6,8 @@ import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.NKFException;
 import org.ten60.netkernel.layer1.representation.IAspectNVP;
 import org.purl.accessor.util.*;
-import org.purl.accessor.util.user.UserHelper;
-import org.purl.accessor.util.purl.PURLException;
+import org.purl.accessor.user.UserHelper;
+import org.purl.accessor.util.PURLException;
 
 import java.util.HashSet;
 import java.util.Set;

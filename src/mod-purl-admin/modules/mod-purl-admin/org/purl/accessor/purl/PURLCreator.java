@@ -1,4 +1,4 @@
-package org.purl.accessor.util.purl;
+package org.purl.accessor.purl;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -17,9 +17,9 @@ import org.ten60.netkernel.xml.xda.DOMXDA;
 import org.ten60.netkernel.xml.xda.IXDA;
 import org.ten60.netkernel.xml.xda.XDOIncompatibilityException;
 import org.ten60.netkernel.xml.xda.XPathLocationException;
-import org.purl.accessor.util.group.GroupHelper;
+import org.purl.accessor.group.GroupHelper;
 import org.purl.accessor.util.*;
-import org.purl.accessor.util.user.UserHelper;
+import org.purl.accessor.user.UserHelper;
 
 import com.ten60.netkernel.urii.IURAspect;
 import com.ten60.netkernel.urii.aspect.StringAspect;

@@ -1,4 +1,4 @@
-package org.purl.accessor;
+package org.purl.accessor.domain;
 
 /**
  * @version 1.0, 16 August 2007
@@ -71,19 +71,19 @@ import org.purl.accessor.command.PURLCommand;
 import org.purl.accessor.command.UpdateResourceCommand;
 import org.purl.accessor.util.AccessController;
 import org.purl.accessor.util.AllowableResource;
-import org.purl.accessor.util.domain.DomainResolver;
-import org.purl.accessor.util.domain.DomainResourceStorage;
-import org.purl.accessor.util.domain.DomainSearchHelper;
-import org.purl.accessor.util.group.GroupResolver;
+import org.purl.accessor.domain.DomainResolver;
+import org.purl.accessor.domain.DomainResourceStorage;
+import org.purl.accessor.domain.DomainSearchHelper;
+import org.purl.accessor.group.GroupResolver;
 import org.purl.accessor.util.ResourceCreator;
 import org.purl.accessor.util.ResourceFilter;
 import org.purl.accessor.util.ResourceStorage;
 import org.purl.accessor.util.URIResolver;
-import org.purl.accessor.util.user.UserResolver;
-import org.purl.accessor.util.user.UserResourceStorage;
+import org.purl.accessor.user.UserResolver;
+import org.purl.accessor.user.UserResourceStorage;
 import org.purl.accessor.util.XSLTResourceFilter;
-import org.purl.accessor.util.domain.DomainAccessController;
-import org.purl.accessor.util.domain.*;
+import org.purl.accessor.domain.DomainAccessController;
+import org.purl.accessor.AbstractAccessor;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFRequest;
 import org.ten60.netkernel.layer1.nkf.INKFResponse;

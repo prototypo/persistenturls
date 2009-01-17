@@ -180,35 +180,35 @@
 
 		<ura>
       		<match>active:purl-user\+.*</match>
-      		<class>org.purl.accessor.UserAccessor</class>
+      		<class>org.purl.accessor.user.UserAccessor</class>
     	</ura>
     	<ura>
       		<match>active:purl-groups-for-user\+.*</match>
-      		<class>org.purl.accessor.GroupsForUserAccessor</class>
+      		<class>org.purl.accessor.group.GroupsForUserAccessor</class>
     	</ura>
 		<ura>
       		<match>active:purl-group\+.*</match>
-      		<class>org.purl.accessor.GroupAccessor</class>
+      		<class>org.purl.accessor.group.GroupAccessor</class>
     	</ura>
 		<ura>
       		<match>active:purl-domain\+.*</match>
-      		<class>org.purl.accessor.DomainAccessor</class>
+      		<class>org.purl.accessor.domain.DomainAccessor</class>
     	</ura>
 		<ura>
       		<match>active:purls-validate\+.*</match>
-      		<class>org.purl.accessor.BatchPURLValidateAccessor</class>
+      		<class>org.purl.accessor.purl.BatchPURLValidateAccessor</class>
     	</ura>
 		<ura>
       		<match>active:purl-validate\+.*</match>
-      		<class>org.purl.accessor.PURLResolverAccessor</class>
+      		<class>org.purl.accessor.purl.PURLResolverAccessor</class>
     	</ura>
 		<ura>
       		<match>active:purls\+.*</match>
-      		<class>org.purl.accessor.PURLSAccessor</class>
+      		<class>org.purl.accessor.purl.PURLSAccessor</class>
     	</ura>
 		<ura>
       		<match>active:purl-resolver\+.*</match>
-      		<class>org.purl.accessor.PURLResolverAccessor</class>
+      		<class>org.purl.accessor.purl.PURLResolverAccessor</class>
     	</ura>
     	<ura>
     		<match>active:purl-admin-pending-users\+.*</match>
@@ -220,7 +220,7 @@
     	</ura>    	
 		<ura>
       		<match>active:purl\+.*</match>
-      		<class>org.purl.accessor.PURLAccessor</class>
+      		<class>org.purl.accessor.purl.PURLAccessor</class>
     	</ura>
         <ura>
             <match>active:des\+.*</match>

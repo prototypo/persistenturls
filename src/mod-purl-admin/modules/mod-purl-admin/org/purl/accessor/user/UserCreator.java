@@ -1,4 +1,4 @@
-package org.purl.accessor.util.user;
+package org.purl.accessor.user;
 
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.NKFException;
@@ -6,7 +6,7 @@ import org.ten60.netkernel.layer1.representation.IAspectNVP;
 import org.ten60.netkernel.xml.representation.IAspectXDA;
 import org.ten60.netkernel.xml.xda.IXDAReadOnly;
 import org.ten60.netkernel.xml.xda.XPathLocationException;
-import org.purl.accessor.util.purl.PURLException;
+import org.purl.accessor.util.PURLException;
 import org.purl.accessor.util.ResourceCreator;
 import org.purl.accessor.util.NKHelper;
 import org.purl.accessor.util.DataHelper;

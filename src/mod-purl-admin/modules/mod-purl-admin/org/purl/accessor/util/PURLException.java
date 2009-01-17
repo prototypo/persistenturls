@@ -1,4 +1,4 @@
-package org.purl.accessor.util.purl;
+package org.purl.accessor.util;
 
 public class PURLException extends Error {
     private static final long serialVersionUID = 1L;

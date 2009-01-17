@@ -1,4 +1,4 @@
-package org.purl.accessor.util.purl;
+package org.purl.accessor.purl;
 
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.NKFException;

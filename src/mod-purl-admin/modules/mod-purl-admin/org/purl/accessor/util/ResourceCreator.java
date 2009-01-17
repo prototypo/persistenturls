@@ -3,7 +3,7 @@ package org.purl.accessor.util;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.NKFException;
 import org.ten60.netkernel.layer1.representation.IAspectNVP;
-import org.purl.accessor.util.purl.PURLException;
+import org.purl.accessor.util.PURLException;
 
 import com.ten60.netkernel.urii.IURAspect;
 

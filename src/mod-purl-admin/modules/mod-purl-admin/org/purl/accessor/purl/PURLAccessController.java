@@ -1,8 +1,8 @@
-package org.purl.accessor.util.purl;
+package org.purl.accessor.purl;
 
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.purl.accessor.util.AccessController;
-import org.purl.accessor.util.user.UserHelper;
+import org.purl.accessor.user.UserHelper;
 import org.purl.accessor.util.NKHelper;
 
 public class PURLAccessController implements AccessController {

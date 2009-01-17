@@ -1,4 +1,4 @@
-package org.purl.accessor;
+package org.purl.accessor.group;
 
 /**
  * @version 1.0, 16 August 2007
@@ -71,20 +71,21 @@ import org.purl.accessor.command.PURLCommand;
 import org.purl.accessor.command.UpdateResourceCommand;
 import org.purl.accessor.util.AccessController;
 import org.purl.accessor.util.AllowableResource;
-import org.purl.accessor.util.group.GroupAccessController;
-import org.purl.accessor.util.group.GroupCreator;
-import org.purl.accessor.util.group.GroupResolver;
-import org.purl.accessor.util.group.GroupResourceStorage;
-import org.purl.accessor.util.group.GroupSearchHelper;
+import org.purl.accessor.group.GroupAccessController;
+import org.purl.accessor.group.GroupCreator;
+import org.purl.accessor.group.GroupResolver;
+import org.purl.accessor.group.GroupResourceStorage;
+import org.purl.accessor.group.GroupSearchHelper;
 import org.purl.accessor.util.ResourceCreator;
 import org.purl.accessor.util.ResourceFilter;
 import org.purl.accessor.util.ResourceStorage;
 import org.purl.accessor.util.URIResolver;
 import org.purl.accessor.util.UnconstrainedGETAccessController;
-import org.purl.accessor.util.user.UserGroupAllowableResource;
-import org.purl.accessor.util.user.UserResolver;
-import org.purl.accessor.util.user.UserResourceStorage;
+import org.purl.accessor.user.UserGroupAllowableResource;
+import org.purl.accessor.user.UserResolver;
+import org.purl.accessor.user.UserResourceStorage;
 import org.purl.accessor.util.XSLTResourceFilter;
+import org.purl.accessor.AbstractAccessor;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 
 public class GroupAccessor extends AbstractAccessor {

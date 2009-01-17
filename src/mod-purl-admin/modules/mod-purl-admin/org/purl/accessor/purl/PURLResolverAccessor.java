@@ -1,12 +1,12 @@
-package org.purl.accessor;
+package org.purl.accessor.purl;
 
 import com.ten60.netkernel.urii.IURAspect;
 import com.ten60.netkernel.urii.IURRepresentation;
 import com.ten60.netkernel.urii.aspect.StringAspect;
 import org.purl.accessor.command.*;
 import org.purl.accessor.util.NKHelper;
-import org.purl.accessor.util.purl.PURLResourceStorage;
-import org.purl.accessor.util.purl.PURLURIResolver;
+import org.purl.accessor.purl.PURLResourceStorage;
+import org.purl.accessor.purl.PURLURIResolver;
 import org.purl.accessor.util.ResourceStorage;
 import org.ten60.netkernel.layer1.nkf.*;
 import org.ten60.netkernel.layer1.nkf.impl.NKFAccessorImpl;

@@ -21,7 +21,7 @@ package org.purl.accessor.command;
 import org.purl.accessor.util.AccessController;
 import org.purl.accessor.util.AllowableResource;
 import org.purl.accessor.util.NKHelper;
-import org.purl.accessor.util.purl.PURLException;
+import org.purl.accessor.util.PURLException;
 import org.purl.accessor.util.ResourceCreator;
 import org.purl.accessor.util.ResourceFilter;
 import org.purl.accessor.util.ResourceStorage;

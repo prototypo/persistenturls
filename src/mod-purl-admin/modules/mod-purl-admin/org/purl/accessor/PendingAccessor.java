@@ -3,9 +3,9 @@ package org.purl.accessor;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.purl.accessor.util.domain.DomainResolver;
+import org.purl.accessor.domain.DomainResolver;
 import org.purl.accessor.util.URIResolver;
-import org.purl.accessor.util.user.UserResolver;
+import org.purl.accessor.user.UserResolver;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFRequest;
 import org.ten60.netkernel.layer1.nkf.INKFRequestReadOnly;

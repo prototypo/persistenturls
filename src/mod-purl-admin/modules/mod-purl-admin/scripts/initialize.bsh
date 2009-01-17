@@ -1,8 +1,8 @@
 import org.ten60.netkernel.layer1.representation.*;
 import org.ten60.netkernel.xml.representation.*;
 import com.ten60.netkernel.urii.aspect.*;
-import org.purl.accessor.util.user.UserResolver;
-import org.purl.accessor.util.domain.DomainResolver;
+import org.purl.accessor.user.UserResolver;
+import org.purl.accessor.domain.DomainResolver;
 import org.purl.accessor.util.NKHelper;
 
 main() {
