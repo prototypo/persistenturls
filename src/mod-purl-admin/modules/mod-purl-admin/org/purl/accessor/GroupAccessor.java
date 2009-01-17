@@ -71,19 +71,19 @@ import org.purl.accessor.command.PURLCommand;
 import org.purl.accessor.command.UpdateResourceCommand;
 import org.purl.accessor.util.AccessController;
 import org.purl.accessor.util.AllowableResource;
-import org.purl.accessor.util.GroupAccessController;
-import org.purl.accessor.util.GroupCreator;
-import org.purl.accessor.util.GroupResolver;
-import org.purl.accessor.util.GroupResourceStorage;
-import org.purl.accessor.util.GroupSearchHelper;
+import org.purl.accessor.util.group.GroupAccessController;
+import org.purl.accessor.util.group.GroupCreator;
+import org.purl.accessor.util.group.GroupResolver;
+import org.purl.accessor.util.group.GroupResourceStorage;
+import org.purl.accessor.util.group.GroupSearchHelper;
 import org.purl.accessor.util.ResourceCreator;
 import org.purl.accessor.util.ResourceFilter;
 import org.purl.accessor.util.ResourceStorage;
 import org.purl.accessor.util.URIResolver;
 import org.purl.accessor.util.UnconstrainedGETAccessController;
-import org.purl.accessor.util.UserGroupAllowableResource;
-import org.purl.accessor.util.UserResolver;
-import org.purl.accessor.util.UserResourceStorage;
+import org.purl.accessor.util.user.UserGroupAllowableResource;
+import org.purl.accessor.util.user.UserResolver;
+import org.purl.accessor.util.user.UserResourceStorage;
 import org.purl.accessor.util.XSLTResourceFilter;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 
@@ -104,7 +104,7 @@ public class GroupAccessor extends AbstractAccessor {
         ResourceStorage groupStorage = new GroupResourceStorage();
         ResourceStorage userStorage = new UserResourceStorage();
         
-        AllowableResource userGroupAllowableResource = new UserGroupAllowableResource(userStorage, userResolver, groupStorage, groupResolver);        
+        AllowableResource userGroupAllowableResource = new UserGroupAllowableResource(userStorage, userResolver, groupStorage, groupResolver);
         ResourceCreator groupCreator = new GroupCreator(new UserResolver(), groupResolver);
         
         AccessController groupAccessController = new GroupAccessController();

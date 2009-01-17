@@ -20,7 +20,7 @@ package org.purl.accessor.command;
 
 import org.purl.accessor.util.AccessController;
 import org.purl.accessor.util.NKHelper;
-import org.purl.accessor.util.PURLException;
+import org.purl.accessor.util.purl.PURLException;
 import org.purl.accessor.util.ResourceCreator;
 import org.purl.accessor.util.ResourceStorage;
 import org.purl.accessor.util.URIResolver;
@@ -32,7 +32,6 @@ import org.ten60.netkernel.layer1.representation.IAspectNVP;
 
 import com.ten60.netkernel.urii.IURAspect;
 import com.ten60.netkernel.urii.IURRepresentation;
-import com.ten60.netkernel.urii.aspect.IAspectString;
 import com.ten60.netkernel.urii.aspect.StringAspect;
 
 public class UpdateResourceCommand extends PURLCommand {
