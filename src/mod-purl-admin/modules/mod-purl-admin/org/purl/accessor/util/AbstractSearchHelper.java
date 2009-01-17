@@ -7,6 +7,7 @@ import org.ten60.netkernel.xml.representation.IAspectXDA;
 import org.ten60.netkernel.xml.xda.IXDAReadOnly;
 import org.ten60.netkernel.xml.xda.IXDAReadOnlyIterator;
 import org.ten60.netkernel.xml.xda.XPathLocationException;
+import org.purl.accessor.SearchHelper;
 
 import java.util.ArrayList;
 import java.util.List;

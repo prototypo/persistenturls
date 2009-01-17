@@ -8,7 +8,7 @@ import org.ten60.netkernel.xml.xda.IXDAReadOnlyIterator;
 import org.ten60.netkernel.xml.xda.XPathLocationException;
 import org.purl.accessor.util.AbstractSearchHelper;
 import org.purl.accessor.util.URIResolver;
-import org.purl.accessor.util.ResourceStorage;
+import org.purl.accessor.ResourceStorage;
 
 import java.util.HashMap;
 import java.util.Map;

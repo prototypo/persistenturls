@@ -20,6 +20,8 @@ import org.ten60.netkernel.xml.xda.XPathLocationException;
 import org.purl.accessor.group.GroupHelper;
 import org.purl.accessor.util.*;
 import org.purl.accessor.user.UserHelper;
+import org.purl.accessor.ResourceCreator;
+import org.purl.accessor.ResourceStorage;
 
 import com.ten60.netkernel.urii.IURAspect;
 import com.ten60.netkernel.urii.aspect.StringAspect;

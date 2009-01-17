@@ -3,6 +3,7 @@ package org.purl.accessor.purl;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.purl.accessor.util.*;
 import org.purl.accessor.user.UserHelper;
+import org.purl.accessor.ResourceStorage;
 
 public class PURLAllowableResource extends DefaultAllowableResource {
     

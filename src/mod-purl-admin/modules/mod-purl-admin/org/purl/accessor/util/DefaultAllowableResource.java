@@ -2,6 +2,8 @@ package org.purl.accessor.util;
 
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.NKFException;
+import org.purl.accessor.AllowableResource;
+import org.purl.accessor.ResourceStorage;
 
 public class DefaultAllowableResource implements AllowableResource {
     private ResourceStorage resStorage;

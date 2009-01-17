@@ -8,6 +8,7 @@ import org.ten60.netkernel.layer1.representation.IAspectNVP;
 import org.purl.accessor.util.*;
 import org.purl.accessor.user.UserHelper;
 import org.purl.accessor.util.PURLException;
+import org.purl.accessor.ResourceCreator;
 
 import java.util.HashSet;
 import java.util.Set;

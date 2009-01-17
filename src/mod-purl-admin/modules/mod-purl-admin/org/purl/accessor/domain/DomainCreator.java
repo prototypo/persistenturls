@@ -10,6 +10,8 @@ import org.ten60.netkernel.layer1.representation.IAspectNVP;
 import org.purl.accessor.util.*;
 import org.purl.accessor.user.UserHelper;
 import org.purl.accessor.util.PURLException;
+import org.purl.accessor.ResourceCreator;
+import org.purl.accessor.ResourceStorage;
 
 import com.ten60.netkernel.urii.IURAspect;
 import com.ten60.netkernel.urii.aspect.StringAspect;
