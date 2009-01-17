@@ -1,4 +1,4 @@
-package org.purl.accessor.command;
+package org.purl.accessor.purl.command;
 
 /**
  *=========================================================================

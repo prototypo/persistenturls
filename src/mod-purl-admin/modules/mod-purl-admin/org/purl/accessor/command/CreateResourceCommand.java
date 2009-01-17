@@ -26,6 +26,7 @@ import org.purl.accessor.ResourceStorage;
 import org.purl.accessor.util.URIResolver;
 import org.purl.accessor.AccessController;
 import org.purl.accessor.AllowableResource;
+import org.purl.accessor.command.PURLCommand;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFResponse;
 import org.ten60.netkernel.layer1.nkf.NKFException;

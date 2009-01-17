@@ -23,6 +23,7 @@ import org.purl.accessor.util.*;
 import org.purl.accessor.AccessController;
 import org.purl.accessor.ResourceCreator;
 import org.purl.accessor.ResourceStorage;
+import org.purl.accessor.command.PURLCommand;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFRequest;
 import org.ten60.netkernel.layer1.nkf.INKFResponse;

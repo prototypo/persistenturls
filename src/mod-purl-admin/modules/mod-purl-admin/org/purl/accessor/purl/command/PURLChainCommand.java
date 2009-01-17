@@ -1,11 +1,9 @@
-package org.purl.accessor.command;
+package org.purl.accessor.purl.command;
 
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFResponse;
 import org.ten60.netkernel.xml.representation.IAspectXDA;
 import org.ten60.netkernel.xml.xda.IXDAReadOnly;
-
-import com.ten60.netkernel.urii.aspect.IAspectString;
 
 public class PURLChainCommand extends PURLResolveCommand {
 

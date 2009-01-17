@@ -64,11 +64,8 @@ package org.purl.accessor.user;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.purl.accessor.command.CreateResourceCommand;
-import org.purl.accessor.command.DeleteResourceCommand;
-import org.purl.accessor.command.GetResourceCommand;
 import org.purl.accessor.command.PURLCommand;
-import org.purl.accessor.command.UpdateResourceCommand;
+import org.purl.accessor.command.*;
 import org.purl.accessor.group.GroupResolver;
 import org.purl.accessor.group.GroupResourceStorage;
 import org.purl.accessor.ResourceFilter;

@@ -1,4 +1,4 @@
-package org.purl.accessor.command;
+package org.purl.accessor.purl.command;
 
 /**
  *=========================================================================
@@ -25,7 +25,7 @@ import org.ten60.netkernel.xml.xda.IXDAReadOnly;
 
 import com.ten60.netkernel.urii.IURRepresentation;
 
-public class PURLSeeAlsoResolveCommand extends PURLResolveCommand {
+public class PURLGoneResolveCommand extends PURLResolveCommand {
 
     @Override
     public INKFResponse execute(INKFConvenienceHelper context, IAspectXDA purl) {
@@ -33,15 +33,12 @@ public class PURLSeeAlsoResolveCommand extends PURLResolveCommand {
         IXDAReadOnly purlXDARO = purl.getXDA();
         try {
             String type = purlXDARO.getText("/purl/type", true);
-            String url = purlXDARO.getText("/purl/seealso/url", true);
-            url = url.replaceAll("&", "&amp;");
-
-            IURRepresentation bodyDoc = context.source("ffcpl:/pub/redirect.html");
-            
-            resp = generateResponseCode(context, type, url, 
-                    parameterizeBodyDoc(context, bodyDoc, type, url), 
-                    "text/html; charset=iso-8859-1");
-            
+            IAspectXDA configXDA = (IAspectXDA) context.sourceAspect("ffcpl:/etc/PURLConfig.xml", IAspectXDA.class);
+            // Find out how this installation wants us to indicate missing resources
+            String xpath="/purl-config/goneURIs/gone-uri[@type=\"" + type + "\"]";
+            String uri = configXDA.getXDA().getText(xpath, true);
+            IURRepresentation page = context.source(uri);
+            resp = generateResponseCode(context, type, null, page, "text/html");
         } catch(Throwable t) {
             t.printStackTrace();
         }

@@ -1,4 +1,4 @@
-package org.purl.accessor.command;
+package org.purl.accessor.purl.command;
 
 /**
  *=========================================================================
@@ -23,22 +23,31 @@ import org.ten60.netkernel.layer1.nkf.INKFResponse;
 import org.ten60.netkernel.xml.representation.IAspectXDA;
 import org.ten60.netkernel.xml.xda.IXDAReadOnly;
 
-import com.ten60.netkernel.urii.IURRepresentation;
-
-public class PURLGoneResolveCommand extends PURLResolveCommand {
+public class PURLPartialRedirectResolveCommand extends PURLResolveCommand {
 
     @Override
     public INKFResponse execute(INKFConvenienceHelper context, IAspectXDA purl) {
         INKFResponse resp = null;
         IXDAReadOnly purlXDARO = purl.getXDA();
         try {
-            String type = purlXDARO.getText("/purl/type", true);
-            IAspectXDA configXDA = (IAspectXDA) context.sourceAspect("ffcpl:/etc/PURLConfig.xml", IAspectXDA.class);
-            // Find out how this installation wants us to indicate missing resources
-            String xpath="/purl-config/goneURIs/gone-uri[@type=\"" + type + "\"]";
-            String uri = configXDA.getXDA().getText(xpath, true);
-            IURRepresentation page = context.source(uri);
-            resp = generateResponseCode(context, type, null, page, "text/html");
+            String path = context.getThisRequest().getArgument("path").substring(6);
+
+            String pid = purlXDARO.getText("/purl/id", true);
+            String url = purlXDARO.getText("/purl/target/url", true);
+
+            if(!path.startsWith(pid)) {
+                // TODO : handle exception
+            }
+
+            if(!path.equals(pid)) {
+                url = url + path.substring(pid.length());
+            }
+
+            url = url.replaceAll("&", "&amp;");
+
+            // We treat the partial redirect as a 302
+            resp = generateResponseCode(context, "302", url);
+
         } catch(Throwable t) {
             t.printStackTrace();
         }
