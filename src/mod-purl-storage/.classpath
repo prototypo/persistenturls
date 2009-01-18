@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-    <classpathentry kind="src" path="modules/mod-purl-storage" />
-    <classpathentry kind="src" path="modules/test-mod-purl-storage" />
-    <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER" />
-    <classpathentry kind="src" path="/common" combineaccessrules="false" />
-    <classpathentry kind="var" path="NETKERNEL_HOME/modules/ext-xml-core-1.5.2.jar" />
-    <classpathentry kind="output" path="bin" />
+	<classpathentry kind="src" path="modules/mod-purl-storage"/>
+	<classpathentry kind="src" path="modules/test-mod-purl-storage"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/common"/>
+	<classpathentry kind="var" path="NETKERNEL_HOME/modules/ext-xml-core-1.5.2.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
+	<classpathentry kind="output" path="bin"/>
 </classpath>
-
