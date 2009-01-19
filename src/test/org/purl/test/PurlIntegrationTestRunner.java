@@ -36,9 +36,12 @@ public class PurlIntegrationTestRunner {
 
 
         suite.addTestSuite(SearchTest.class);
-        
-        suite.addTestSuite(DeleteTest.class);
+
         suite.addTestSuite(HierarchicalGroupTest.class);
+
+        suite.addTestSuite(DeleteTest.class);
+        suite.addTestSuite(DeleteUserTest.class);
+
         return suite;
     }
 

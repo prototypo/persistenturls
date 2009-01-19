@@ -26,7 +26,7 @@ public class AdvancedPurlTest extends AbstractPurlTest {
         formParameters.put("target", "http://example.com/test301PURL");
         formParameters.put("maintainers", "testuser");
 
-        createPurl("/testdomain/test301PURL", formParameters, control, true);
+        assertPurlCreated("/testdomain/test301PURL", formParameters);
 
     }
 
@@ -51,7 +51,7 @@ public class AdvancedPurlTest extends AbstractPurlTest {
         formParameters.put("target", "http://example.com/test302PURL");
         formParameters.put("maintainers", "testuser");
 
-        createPurl("/testdomain/test302PURL", formParameters, control, true);
+        assertPurlCreated("/testdomain/test302PURL", formParameters);
     }
 
     // Test resolving an existing 302 PURL via an HTTP GET.
@@ -74,7 +74,7 @@ public class AdvancedPurlTest extends AbstractPurlTest {
         formParameters.put("seealso", "http://example.com/test303PURL");
         formParameters.put("maintainers", "testuser");
 
-        createPurl("/testdomain/test303PURL", formParameters, control, true);
+        assertPurlCreated("/testdomain/test303PURL", formParameters);
 
     }
 
@@ -100,7 +100,7 @@ public class AdvancedPurlTest extends AbstractPurlTest {
         formParameters.put("target", "http://example.com/test307PURL");
         formParameters.put("maintainers", "testuser");
 
-        createPurl("/testdomain/test307PURL", formParameters, control, true);
+        assertPurlCreated("/testdomain/test307PURL", formParameters);
     }
 
     // Test resolving an existing 307 PURL via an HTTP GET.
@@ -123,7 +123,7 @@ public class AdvancedPurlTest extends AbstractPurlTest {
         formParameters.put("type", "404");
         formParameters.put("maintainers", "testuser");
 
-        createPurl("/testdomain/test404PURL", formParameters, control, true);
+        assertPurlCreated("/testdomain/test404PURL", formParameters);
     }
 
     // Test resolving an existing 404 PURL via an HTTP GET.
@@ -144,7 +144,7 @@ public class AdvancedPurlTest extends AbstractPurlTest {
         formParameters.put("type", "410");
         formParameters.put("maintainers", "testuser");
 
-        createPurl("/testdomain/test410PURL", formParameters, control, true);
+        assertPurlCreated("/testdomain/test410PURL", formParameters);
     }
 
     // Test resolving an existing 410 PURL via an HTTP GET.
@@ -166,7 +166,7 @@ public class AdvancedPurlTest extends AbstractPurlTest {
         formParameters.put("type", "clone");
         formParameters.put("basepurl", "/testdomain/test302PURL");
 
-        createPurl("/testdomain/testClonePURL", formParameters, control, true);
+        assertPurlCreated("/testdomain/testClonePURL", formParameters);
     }
 
     // Test resolving an existing Clone PURL via an HTTP GET.
@@ -190,7 +190,7 @@ public class AdvancedPurlTest extends AbstractPurlTest {
         formParameters.put("basepurl", "/testdomain/test302PURL");
         formParameters.put("maintainers", "testuser");
 
-        createPurl("/testdomain/testChainPURL", formParameters, control, true);
+        assertPurlCreated("/testdomain/testChainPURL", formParameters);
     }
 
     // Test resolving an existing Chain PURL via an HTTP GET.
@@ -214,7 +214,7 @@ public class AdvancedPurlTest extends AbstractPurlTest {
         formParameters.put("target", "http://example.com/testPartialPURL");
         formParameters.put("maintainers", "testuser");
 
-        createPurl("/testdomain/testPartialPURL", formParameters, control, true);
+        assertPurlCreated("/testdomain/testPartialPURL", formParameters);
 
     }
 

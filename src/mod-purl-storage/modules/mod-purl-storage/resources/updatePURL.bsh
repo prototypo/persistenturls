@@ -78,7 +78,7 @@ main() {
         iur = context.issueSubRequest(req);
         
         sa = context.transrept(iur, IAspectString.class);
-        System.out.println(sa.getString());
+        
         req = context.createSubRequest("active:sqlBatch");
         req.addArgument("operand", iur);
         iur = context.issueSubRequest(req);

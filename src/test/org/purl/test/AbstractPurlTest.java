@@ -41,22 +41,6 @@ public class AbstractPurlTest extends AbstractIntegrationTest {
 
 
 
-    protected void createPurl(String path, Map<String, String> formParameters, String control, boolean isXML) {
-        try {
-            String url = "http://" + host + ":" + port + "/admin/purl" + path;
 
-
-            String errMsg = "Cannot create a new " + formParameters.get("type") + " PURL: ";
-            String test = client.createPurl(url, formParameters);
-            if (isXML) {
-                XMLUnit.setIgnoreWhitespace(true);
-                XMLAssert.assertXMLEqual(errMsg + test, control, test);
-            } else {
-                assertEquals(errMsg, control, test);
-            }
-        } catch (Exception e) {
-            reportException("Failed to resolve URL: ", e);
-        }
-    }
 
 }

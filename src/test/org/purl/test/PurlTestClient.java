@@ -55,7 +55,7 @@ public final class PurlTestClient {
 		cookie = response.getCookieSettings().getValues("NETKERNELSESSION");
 		
 		CookieFactory.setCookie(cookie);
-		
+
 		// DBG
 		//System.out.println("Cookie returned from server: " + cookie);
 		
@@ -87,7 +87,18 @@ public final class PurlTestClient {
 		
 		return output;
 	}
-	
+
+    /**
+     * Fetch the login status
+     * @param url
+     * @return
+     * @throws IOException
+     */
+    public String loginstatus(String url) throws IOException {
+        return handleRequest(url, Method.GET,  null);
+		
+    }
+
 	/****************** Single PURLs **************************/
 	
 	/**
@@ -417,6 +428,7 @@ public final class PurlTestClient {
 		String cookie = CookieFactory.getCookie();
 		// Add the session cookie and the representation.
 		request.getCookies().add(new Cookie("NETKERNELSESSION", cookie));
+        
 		request.setEntity(rep);
 		
 		try {

@@ -29,14 +29,14 @@ public class AbstractIntegrationTest extends TestCase {
     }
 
     // Create an instance of the PURL test client for all methods to use.
-    protected void setUp() {
+    protected void setUp() throws Exception {
         if (client == null) {
             client = new PurlTestClient();
         }
     }
 
-	// Log in a registered user.
-	public void assertLoginUser(String user, String password) {
+    // Log in a registered user.
+    public void assertLoginUser(String user, String password) {
         try {
             String url = "http://" + host + ":" + port + "/admin/login/login-submit.bsh";
 
@@ -51,13 +51,27 @@ public class AbstractIntegrationTest extends TestCase {
 
             // Textual response, so use assertEquals.
             assertEquals(errMsg + test, control, test);
+            assertLoggedIn(user);
 
         } catch (Exception e) {
             reportException("Failed to login user: ", e);
         }
     }
 
-	// Log out the user associated with the currently set cookie.
+    public void assertFailLoginUser(String user, String password) {
+        try {
+
+            String errMsg = "Cannot login " + user + ": ";
+            String control = "";
+            String test = loginUser(user, password);
+
+            assertLoggedOut();
+
+        } catch (Exception e) {
+            reportException("Failed to login user: ", e);
+        }
+    }
+
     public void assertLogoutUser() {
         try {
             String url = "http://" + host + ":" + port + "/admin/logout";
@@ -68,13 +82,69 @@ public class AbstractIntegrationTest extends TestCase {
 
             // Textual response, so use assertEquals.
             assertEquals(errMsg + test, control, test);
+            assertLoggedOut();
 
         } catch (Exception e) {
             reportException("Failed to logout user: ", e);
         }
     }
 
-    
+    protected String logoutUser() throws Exception {
+        String url = "http://" + host + ":" + port + "/admin/logout";
+
+        return client.logout(url);
+
+    }
+
+    protected void assertLoggedIn(String user) {
+        try {
+            String url = "http://" + host + ":" + port + "/admin/loginstatus";
+
+            String status = client.loginstatus(url);
+
+            
+            XMLAssert.assertXpathExists("/login[uid='" + user + "']", status);
+
+        } catch (Exception e) {
+            reportException("Failed to fetch login status: ", e);
+        }
+    }
+
+    protected void assertLoggedOut() {
+        try {
+            String url = "http://" + host + ":" + port + "/admin/loginstatus";
+
+            String status = client.loginstatus(url);
+
+            XMLAssert.assertXpathExists("/login[status='logged out']", status);
+
+        } catch (Exception e) {
+            reportException("Failed to fetch login status: ", e);
+        }
+    }
+
+    protected boolean isLoggedIn() throws Exception {
+        String url = "http://" + host + ":" + port + "/admin/loginstatus";
+
+        String status = client.loginstatus(url);
+        if (status.contains("logged in"))
+            return true;
+        return false;
+    }
+
+    protected String loginUser(String user, String password) throws Exception {
+        String url = "http://" + host + ":" + port + "/admin/login/login-submit.bsh";
+
+        Map<String, String> formParameters = new HashMap<String, String>();
+        formParameters.put("id", user);
+        formParameters.put("passwd", password);
+        formParameters.put("referrer", "/docs/index.html");
+
+
+        String result = client.login(url, formParameters);
+        return result;
+    }
+
 
     protected String getTestDataFile(String filename) {
         String separator = System.getProperty("file.separator");
@@ -212,4 +282,138 @@ public class AbstractIntegrationTest extends TestCase {
 
     }
 
+    protected void assertPurlCreated(String path, Map<String, String> formParameters) {
+        try {
+
+
+            String errMsg = "Cannot create a new " + formParameters.get("type") + " PURL: ";
+            String test = createPurl(path, formParameters);
+            XMLAssert.assertXpathExists("/purl[@status='1']", test);
+            XMLAssert.assertXpathExists("/purl[id='" + path + "']", test);
+
+        } catch (Exception e) {
+            reportException("Failed to resolve URL: ", e);
+        }
+    }
+
+    protected void assertPurlNotCreated(String path, Map<String, String> formParameters, String control) {
+        try {
+
+
+            String errMsg = "Cannot create a new " + formParameters.get("type") + " PURL: ";
+            String test = createPurl(path, formParameters);
+
+            assertEquals(errMsg, control, test);
+        } catch (Exception e) {
+            reportException("Failed to resolve URL: ", e);
+        }
+    }
+
+
+    protected void assertPurlNotCreated(String path, Map<String, String> formParameters) {
+        try {
+
+
+            String errMsg = "Cannot create a new " + formParameters.get("type") + " PURL: ";
+            String test = createPurl(path, formParameters);
+
+            assertFalse(errMsg, test.contains("<purl"));
+        } catch (Exception e) {
+            reportException("Failed to resolve URL: ", e);
+        }
+    }
+
+
+    protected void assertPurlNotCreatedAlreadyExists(String path, Map<String, String> formParameters) {
+        try {
+
+
+            String errMsg = "Cannot create a new " + formParameters.get("type") + " PURL: ";
+            String test = createPurl(path, formParameters);
+
+            assertTrue(test.contains("already exists."));
+        } catch (Exception e) {
+            reportException("Failed to resolve URL: ", e);
+        }
+    }
+
+    protected void assertPurlModified(String path, Map<String, String> formParameters) {
+        try {
+
+
+            String errMsg = "Cannot create a new " + formParameters.get("type") + " PURL: ";
+            String test = modifyPurl(path, formParameters);
+            assertEquals(errMsg, "Updated resource: " + path, test);
+
+        } catch (Exception e) {
+            reportException("Failed to resolve URL: ", e);
+        }
+    }
+
+    protected void assertPurlNotModified(String path, Map<String, String> formParameters) {
+        try {
+
+
+            String errMsg = "Cannot create a new " + formParameters.get("type") + " PURL: ";
+            String test = modifyPurl(path, formParameters);
+
+
+            assertFalse(errMsg, ("Updated resource: " + path).equals(test));
+        } catch (Exception e) {
+            reportException("Failed to resolve URL: ", e);
+        }
+    }
+
+    protected void assertPurlNotModifiedNoSuchResource(String path, Map<String, String> formParameters) {
+        try {
+
+
+            String errMsg = "Cannot create a new " + formParameters.get("type") + " PURL: ";
+            String test = modifyPurl(path, formParameters);
+
+
+            assertTrue(errMsg, test.contains("No such resource"));
+        } catch (Exception e) {
+            reportException("Failed to resolve URL: ", e);
+        }
+    }
+
+    protected void assertPurlNotModifiedNotAllowed(String path, Map<String, String> formParameters) {
+        try {
+
+
+            String errMsg = "Cannot create a new " + formParameters.get("type") + " PURL: ";
+            String test = modifyPurl(path, formParameters);
+
+
+            assertTrue(errMsg, test.contains("Not allowed to update"));
+        } catch (Exception e) {
+            reportException("Failed to resolve URL: ", e);
+        }
+    }
+
+
+    protected String createPurl(String path, Map<String, String> formParameters) throws Exception {
+        String url = "http://" + host + ":" + port + "/admin/purl" + path;
+        return client.createPurl(url, formParameters);
+    }
+
+
+    protected String modifyPurl(String path, Map<String, String> formParameters) throws Exception {
+        String url = "http://" + host + ":" + port + "/admin/purl" + path;
+        return client.modifyPurl(url, formParameters);
+    }
+
+
+    protected String modifyGroup(String group, String name, String maintainers, String members, String comments) throws Exception {
+        String url = "http://" + host + ":" + port + "/admin/group/" + group;
+
+        Map<String, String> formParameters = new HashMap<String, String>();
+        formParameters.put("name", name);
+        formParameters.put("maintainers", maintainers);
+        formParameters.put("members", members);
+        formParameters.put("comments", comments);
+
+        return client.modifyGroup(url, formParameters);
+    }
 }

@@ -325,7 +325,7 @@ public class NKHelper {
                 // Get groups that the user is a member of.
                 Set<String> groups = UserHelper.getGroupsForUser(context, user);
                 for (String group : groups) {
-                    System.out.println(group);
+                    
                     retValue = retValue || res.getXDA().isTrue("/" + resourceType + "/" + key + "/gid = '" + group + "'");
                 }
             }

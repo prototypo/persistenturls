@@ -54,9 +54,15 @@ public class CreateDomainTest extends AbstractIntegrationTest {
     }
 
     public void testCreateDomainWithHierarchicalGroup() throws Exception {
-        assertDomainCreated("/hierarchdomain1", "", "testgroup6", "testgroup6", false);
-        assertDomainCreated("/hierarchdomain2", "", "testgroup7", "testgroup7", false);
-        assertDomainCreated("/hierarchdomain3", "", "testgroup8", "testgroup8", false);
+        assertLogoutUser();
+        assertLoginUser("admin", "password");
+
+        assertDomainCreated("/hierarchdomain1", "", "hierarchgroup1", "hierarchgroup1", false);
+        assertDomainCreated("/hierarchdomain2", "", "hierarchgroup2", "hierarchgroup2", false);
+        assertDomainCreated("/hierarchdomain3", "", "hierarchgroup3", "hierarchgroup3", false);
+
+        assertLogoutUser();
+        assertLoginUser("testuser", "Testing!");
     }
 
 

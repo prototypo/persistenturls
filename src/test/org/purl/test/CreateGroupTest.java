@@ -145,16 +145,16 @@ public class CreateGroupTest extends AbstractIntegrationTest {
         }
     }
 
-        public static Test suite() {
-        TestSuite suite = new TestSuite();
-
-        return suite;
-    }
 
     public void testCreateHierachicalGroups() throws Exception {
-         createGroup("testgroup6", "testuser", "testuser", "");
-         createGroup("testgroup7", "testgroup6", "testgroup6", "");
-         createGroup("testgroup8", "testgroup7", "testgroup7", "");
+
+        assertLogoutUser();
+        assertLoginUser("admin", "password");
+        createGroup("hierarchgroup1", "testuser", "testuser", "");
+        createGroup("hierarchgroup2", "hierarchgroup1", "hierarchgroup1", "");
+        createGroup("hierarchgroup3", "hierarchgroup2", "hierarchgroup2", "");
+        assertLogoutUser();
+        assertLoginUser("testuser", "Testing!");
     }
 
 

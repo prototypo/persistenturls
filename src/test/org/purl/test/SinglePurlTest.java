@@ -1,7 +1,6 @@
 package org.purl.test;
 
 import org.custommonkey.xmlunit.XMLAssert;
-import org.custommonkey.xmlunit.XMLUnit;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,13 +20,7 @@ public class SinglePurlTest extends AbstractPurlTest {
         formParameters.put("target", "http://cnn.com/");
         formParameters.put("maintainers", "testuser");
 
-        String control = "<purl status=\"1\">" +
-                "<id>/testdomain/testPURL</id>" +
-                "<type>302</type>" +
-                "<maintainers><uid>testuser</uid></maintainers>" +
-                "<target><url>http://cnn.com/</url></target></purl>";
-
-        createPurl("/testdomain/testPURL", formParameters, control, true);
+        assertPurlCreated("/testdomain/testPURL", formParameters);
     }
 
     // Test re-creating a new PURL via an HTTP POST (should fail because it already exists).
@@ -37,9 +30,7 @@ public class SinglePurlTest extends AbstractPurlTest {
         formParameters.put("target", "http://cnn.com/");
         formParameters.put("maintainers", "testuser");
 
-        String control = "PURL: /testdomain/testPURL already exists.";
-
-        createPurl("/testdomain/testPURL", formParameters, control, false);
+        assertPurlNotCreatedAlreadyExists("/testdomain/testPURL", formParameters);
     }
 
     // Test modifying an existing PURL via an HTTP PUT.
@@ -132,7 +123,7 @@ public class SinglePurlTest extends AbstractPurlTest {
                 "<maintainers><uid>testuser</uid></maintainers>" +
                 "<target><url>http://cnn.com/</url></target></purl>";
 
-        createPurl("/net/testPURL", formParameters, control, true);
+        assertPurlCreated("/net/testPURL", formParameters);
         deletePurl("/net/testPURL", true);
     }
 
