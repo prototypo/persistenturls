@@ -19,7 +19,13 @@ public class SearchTest extends AbstractIntegrationTest {
 
 
     protected void setUp() {
-        super.setUp();
+		try {
+        	super.setUp();
+		} catch (Exception e) {
+			System.out.println("ERROR: Unexpected Exception in setup: " + e);
+			System.out.println("Exiting...");
+			System.exit(1);
+		}
         if (!slept) {
             // TODO This is EVIL.  Move integration tests out of junit
             // Sleep for a while to ensure the SOLR service indexes the information before searching.
