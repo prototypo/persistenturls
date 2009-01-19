@@ -299,52 +299,38 @@ public class NKHelper {
         
         return retValue;
     }
-    
-    public static boolean userIsGroupMaintainer(INKFConvenienceHelper context, String user, String group) {
-        boolean retValue = false;
-        
-        try {
-            INKFRequest req=context.createSubRequest("active:purl-storage-query-groupmaintainers");
-            req.addArgument("param", new StringAspect("<group><id>" + group + "</id></group>"));
-            req.setAspectClass(IAspectXDA.class);
-            IAspectXDA res = (IAspectXDA) context.issueSubRequestForAspect(req);
-            retValue = res.getXDA().isTrue("/maintainers/uid = '" + user + "'") ||
-                       res.getXDA().isTrue("/maintainers/gid = '" + user + "'");
-        } catch(Exception e) {
-         e.printStackTrace();   
-        }
-        
-        return retValue;
-    }
-    
-    public static boolean userIsDomainMaintainer(INKFConvenienceHelper context, String user, String domain) {
-        boolean retValue = false;
-        try {
-            INKFRequest req=context.createSubRequest("active:purl-storage-query-domain");
-            req.addArgument("uri", domain);
-            req.setAspectClass(IAspectXDA.class);
-            IAspectXDA res = (IAspectXDA) context.issueSubRequestForAspect(req);
-            IXDAReadOnlyIterator itor = res.getXDA().readOnlyIterator("/domain/maintainers/uid");
 
+    private static boolean userHasPermission(INKFConvenienceHelper context, String user, String resource, String resourceType, String key) {
+        boolean retValue = false;
+        try {
+            INKFRequest req=context.createSubRequest("active:purl-storage-query-" + resourceType);
+            req.addArgument("uri", resource);
+            req.setAspectClass(IAspectXDA.class);
+            IAspectXDA res = (IAspectXDA) context.issueSubRequestForAspect(req);
+            IXDAReadOnlyIterator itor = res.getXDA().readOnlyIterator("/" + resourceType + "/" + key  + "/uid");
+            System.out.println(key);
+            System.out.println(res.getXDA().toString());
             while(!retValue && itor.hasNext()) {
                 itor.next();
                 String uid = itor.getText(".", true);
                 retValue = uid.equalsIgnoreCase(user);
-
+                System.out.println(uid);
             }
 
             //retValue = res.getXDA().isTrue("/domain/maintainers/uid = '" + user + "'");
 
-            if(!retValue && res.getXDA().isTrue("/domain/maintainers/gid")) {
+            if(!retValue && res.getXDA().isTrue("/" + resourceType + "/" + key + "/gid")) {
                 // If the user is not spelled out explicitly, see if he/she is a member of a
                 // group that is a maintainer
 
+            	// Get groups that the user is a member of.
                 IAspectXDA groupListXDA = (IAspectXDA) context.transrept(UserHelper.getGroupsForUser(context, user), IAspectXDA.class);
                 itor = groupListXDA.getXDA().readOnlyIterator("/groups/group");
 
+                // Iterate through each group that the user is a member of, looking for matches of groups allowed to maintain the domain.
                 while(!retValue && itor.hasNext()) {
                     itor.next();
-                    retValue = res.getXDA().isTrue("/domain/maintainers/gid = '" + itor.getText(".", true) + "'");                    
+                    retValue = res.getXDA().isTrue("/" + resourceType + "/" + key + "/gid = '" + itor.getText(".", true) + "'");                    
                 }
             }
         } catch(Exception e) {
@@ -352,45 +338,22 @@ public class NKHelper {
         }
 
         return retValue;
+    }   
+    
+    public static boolean userIsGroupMaintainer(INKFConvenienceHelper context, String user, String group) {
+    	return userHasPermission(context, user, group, "group", "maintainers");
+    }
+    
+    public static boolean userIsDomainMaintainer(INKFConvenienceHelper context, String user, String domain) {
+    	return userHasPermission(context, user, domain, "domain", "maintainers");
     }
     
     public static boolean userIsDomainWriter(INKFConvenienceHelper context, String user, String domain) {
-        boolean retValue = false;
-        try {
-            INKFRequest req=context.createSubRequest("active:purl-storage-query-domainwriters");
-            req.addArgument("param", new StringAspect("<domain><id>" + domain.substring(13) + "</id></domain>"));
-            req.setAspectClass(IAspectXDA.class);
-            IAspectXDA res = (IAspectXDA) context.issueSubRequestForAspect(req);
-            retValue = res.getXDA().isTrue("/writers/uid = '" + user + "'");
-            
-            if(!retValue && res.getXDA().isTrue("/writers/gid")) {
-                // If the user is not spelled out explicitly, see if he/she is a member of a 
-                // group that is a writer
-                
-                IAspectXDA groupListXDA = (IAspectXDA) context.transrept(UserHelper.getGroupsForUser(context, user), IAspectXDA.class);
-                retValue = groupListXDA.getXDA().isTrue("/groups/group = '" + user + "'");
-            }
-        } catch(Exception e) {
-            e.printStackTrace();   
-        }
-        
-        return retValue;
+    	return userHasPermission(context, user, domain, "domain", "writers");
     }
     
     public static boolean userIsPURLMaintainer(INKFConvenienceHelper context, String user, String purl) {
-        boolean retValue = false;
-
-        try {
-            INKFRequest req=context.createSubRequest("active:purl-storage-query-purlmaintainers");
-            req.addArgument("param", new StringAspect("<purl><id>" + purl.substring(11) + "</id></purl>"));
-            req.setAspectClass(IAspectXDA.class);
-            IAspectXDA res = (IAspectXDA) context.issueSubRequestForAspect(req);
-            retValue = res.getXDA().isTrue("/maintainers/uid = '" + user + "'");
-        } catch(Exception e) {
-         e.printStackTrace();   
-        }
-        
-        return retValue;
+    	return userHasPermission(context, user, purl, "purl", "maintainers");
     }
     
     public static boolean allSuperDomainsExist(INKFConvenienceHelper context, String resource) {
