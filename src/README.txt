@@ -1,6 +1,6 @@
 PURL Server Installation Instructions
-Version 1.2
-November 14, 2008
+Version 1.3
+January 19, 2009
 purlz@zepheira.com
 purl-interest@purlz.org
 purl-dev@purlz.org
@@ -15,8 +15,9 @@ software may be found at http://purlz.org.  Please consider joining
 the mailing lists and participating in the online community so we can
 serve you better.
 
-Please note that version 1.2 replaces version 1.1 entirely.  Version 1.1
-should not be used.
+Please note that version 1.3 replaces version 1.2 entirely.  Earlier versions
+should not be used.  Details of changes in this release are noted in the
+file RELEASENOTES.txt.
 
 This software is licensed as defined in the accompanying files
 LICENSE.txt and LEGAL.txt.  These files may be found in the

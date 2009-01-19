@@ -1,0 +1,37 @@
+PURL Server Release Notes
+Version 1.3
+January 19, 2009
+http://purlz.org
+
+
+This file contains release notes for the PURL server.
+
+-------------------------
+| Version 1.3 Bug Fixes |
+-------------------------
+
+Ticket numbers and descriptions refer to content on http://purlz.org/project/purl/development/
+
+#1053 The Modify PURL UI should track the create PURL interface
+#1002 Lucene Index process blocks all requests with large numbers of purls
+#999 Batch loader allows duplicate PURLs to be created
+#998 PURLs ending in common file extensions cause a java.lang.IllegalArgumentException
+#997 Rewrite batch handling to continue processing after single PURL error
+#996 Fix broken URL resolution when cookie not set
+#993 purl search by maintainer doesn't work
+#992 error on 307 redirect
+#989 Error during startup
+#928 Port number to run service on is not offered in installer
+#927 can't modify a partial redirect purl
+#45 Can't create a PURL that matches the domain
+#40 Delete (Tombstone) of PURLS, then search for PURLS with tombstone not working.
+#38 Searching for USERs, return 2 instances for each record.
+#37 Multiple Maintainer, Writers, Members Creation
+#35 purl properties are not populated to purl modification form after purl validation
+#28 auto-population of group fields when modifying groups causes bad characters to be passed to server
+#27 clarify default maintainer assumption to the user
+#24 groups treated as users
+#22 include PURL prefix in interface where appropriate
+#18 batch loading problem
+#16 PURL User Login feedback
+
