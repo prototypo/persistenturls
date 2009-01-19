@@ -31,28 +31,9 @@ public class RegisterUserTest extends AbstractIntegrationTest {
         registerUser("testuser2", "Another Test User", "Zepheira", "another.test.user@example.com", "passWord!", "", "");
     }
 
-    // Test logging in as testuser.
-    public void testLoginUser() {
-        try {
-            String url = "http://" + host + ":" + port + "/admin/login/login-submit.bsh";
-
-            Map<String, String> formParameters = new HashMap<String, String>();
-            formParameters.put("id", "testuser");
-            formParameters.put("passwd", "Testing!");
-            formParameters.put("referrer", "/docs/index.html");
-
-            String errMsg = "Cannot login testuser: ";
-            String control = "";
-            String test = client.login(url, formParameters);
-
-            // Textual response, so use assertEquals.
-            assertEquals(errMsg + test, control, test);
-
-        } catch (Exception e) {
-            reportException("Failed to login user: ", e);
-        }
-    }
-
+	// Log in as testuser.
+	AssertLoginUser("testuser", "Testing!");
+	
 
     /**
      * Register a new user via an HTTP POST.
