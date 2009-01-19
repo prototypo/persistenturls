@@ -151,4 +151,27 @@ public class CreateGroupTest extends AbstractIntegrationTest {
         return suite;
     }
 
+    public void testCreateHierachicalGroups() throws Exception {
+         createGroup("testgroup6", "testuser", "testuser", "");
+         createGroup("testgroup7", "testgroup6", "testgroup6", "");
+         createGroup("testgroup8", "testgroup7", "testgroup7", "");
+    }
+
+
+
+    protected String createGroup(String group, String maintainers, String members, String comments) throws Exception {
+
+            String url = "http://" + host + ":" + port + "/admin/group/" + group;
+
+            Map<String, String> formParameters = new HashMap<String, String>();
+            formParameters.put("name", group);
+            formParameters.put("maintainers", maintainers);
+            formParameters.put("members", members);
+            formParameters.put("comments", comments);
+            return client.createGroup(url, formParameters);
+
+    }
+
+
+
 }

@@ -1,8 +1,5 @@
 package org.purl.test;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,7 +7,6 @@ import java.util.Map;
  *
  */
 public class ModifyDomainTest extends AbstractIntegrationTest {
-
 
 
     // Test modifying an existing domain via an HTTP PUT.
@@ -36,7 +32,6 @@ public class ModifyDomainTest extends AbstractIntegrationTest {
             reportException("Failed to resolve URL: ", e);
         }
     }
-
 
 
     // Test modifying an existing domain via an HTTP PUT.
@@ -159,7 +154,7 @@ public class ModifyDomainTest extends AbstractIntegrationTest {
         }
     }
 
-        // Test modifying an existing domain via an HTTP PUT.
+    // Test modifying an existing domain via an HTTP PUT.
     public void testModifyDomainRemoveGroupAsWriter() {
 
         try {
@@ -183,7 +178,7 @@ public class ModifyDomainTest extends AbstractIntegrationTest {
         }
     }
 
-        // Test modifying an existing domain via an HTTP PUT.
+    // Test modifying an existing domain via an HTTP PUT.
     public void testModifyDomainAddGroupAsWriter() {
 
         try {
@@ -207,7 +202,7 @@ public class ModifyDomainTest extends AbstractIntegrationTest {
         }
     }
 
-            // Test modifying an existing domain via an HTTP PUT.
+    // Test modifying an existing domain via an HTTP PUT.
     public void testModifyDomainAddGroupAsMaintainer() {
 
         try {
@@ -229,6 +224,23 @@ public class ModifyDomainTest extends AbstractIntegrationTest {
         } catch (Exception e) {
             reportException("Failed to resolve URL: ", e);
         }
+    }
+
+    public void testModifyDomainWithHierarchicalGroups() {
+
+    }
+
+
+    public String modifyDomain(String domain, String maintainers, String writers, String isPublic) throws Exception {
+        String url = "http://" + host + ":" + port + "/admin/domain" + domain;
+
+        Map<String, String> formParameters = new HashMap<String, String>();
+        formParameters.put("name", domain);
+        formParameters.put("maintainers", maintainers);
+        formParameters.put("writers", writers);
+        formParameters.put("public", isPublic);
+
+        return client.modifyDomain(url, formParameters);
     }
 
 }

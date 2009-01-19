@@ -54,6 +54,12 @@ public class CreateDomainTest extends AbstractIntegrationTest {
 
     }
 
+    public void testCreateDomainWithHierarchicalGroup() throws Exception {
+        assertCreated("/hierarchdomain1", "", "testgroup6", "testgroup6", false);
+        assertCreated("/hierarchdomain2", "", "testgroup7", "testgroup7", false);
+        assertCreated("/hierarchdomain3", "", "testgroup8", "testgroup8", false);
+    }
+
     public void assertCreated(String path, String name, String maintainers, String writers, boolean isPublic) throws Exception {
         String test = createDomain(path, name, maintainers, writers, isPublic);
         XMLAssert.assertXpathExists("/domain[@status='1']", test);
@@ -69,6 +75,7 @@ public class CreateDomainTest extends AbstractIntegrationTest {
         String test = createDomain(path, name, maintainers, writers, isPublic);
         assertTrue("Expected " + path + " to require root domain.  Received message: " + test, test.contains("cannot be created because the root domain"));
     }
+
 
     public String createDomain(String path, String name, String maintainers, String writers, boolean isPublic) throws Exception {
 
