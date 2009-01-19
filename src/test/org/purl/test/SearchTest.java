@@ -30,7 +30,7 @@ public class SearchTest extends AbstractIntegrationTest {
             // TODO This is EVIL.  Move integration tests out of junit
             // Sleep for a while to ensure the SOLR service indexes the information before searching.
             try {
-                Thread.sleep(70000); // The index updates every 60 seconds
+                Thread.sleep(80000); // The index updates every 60 seconds
                 slept = true;
             } catch (InterruptedException ie) {
                 System.out.println("WARNING: InterruptedException while trying to sleep.");
