@@ -35,6 +35,46 @@ public class AbstractIntegrationTest extends TestCase {
         }
     }
 
+	// Log in a registered user.
+	public void loginUser(String user, String password) {
+        try {
+            String url = "http://" + host + ":" + port + "/admin/login/login-submit.bsh";
+
+            Map<String, String> formParameters = new HashMap<String, String>();
+            formParameters.put("id", user);
+            formParameters.put("passwd", password);
+            formParameters.put("referrer", "/docs/index.html");
+
+            String errMsg = "Cannot login " + user + ": ";
+            String control = "";
+            String test = client.login(url, formParameters);
+
+            // Textual response, so use assertEquals.
+            assertEquals(errMsg + test, control, test);
+
+        } catch (Exception e) {
+            reportException("Failed to login user: ", e);
+        }
+    }
+
+	// Log out the user associated with the currently set cookie.
+    public void logoutUser() {
+        try {
+            String url = "http://" + host + ":" + port + "/admin/logout";
+
+            String errMsg = "Cannot logout user: ";
+            String control = "";
+            String test = client.logout(url);
+
+            // Textual response, so use assertEquals.
+            assertEquals(errMsg + test, control, test);
+
+        } catch (Exception e) {
+            reportException("Failed to logout user: ", e);
+        }
+    }
+
+    
 
     protected String getTestDataFile(String filename) {
         String separator = System.getProperty("file.separator");

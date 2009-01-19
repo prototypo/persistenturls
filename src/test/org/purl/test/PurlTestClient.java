@@ -38,6 +38,7 @@ public final class PurlTestClient {
 	 * Log in a registered user via an HTTP POST.
 	 *
 	 * @param  url A URL addressing a login service for PURLs.
+	 * @param  formParameters Parameters to the login service (id, password, referrer).
 	 * @return The response from the server.
 	 */
 	public String login (String url, Map<String, String> formParameters) throws IOException {
@@ -63,6 +64,29 @@ public final class PurlTestClient {
 		return output;
 	}
 	
+	/**
+	 * Log out a registered user via an HTTP POST.
+	 *
+	 * @param  url A URL addressing a logout service for PURLs.
+	 * @return The response from the server.
+	 */
+	public String logout (String url) throws IOException {
+		
+		// Request the resource and return its textual content.
+		Response response = client.post(url, null);
+		
+		// Retain the session cookie set by the server.
+		cookie = response.getCookieSettings().getValues("NETKERNELSESSION");
+		
+		CookieFactory.setCookie(cookie);
+		
+		// DBG
+		//System.out.println("Cookie returned from server: " + cookie);
+		
+		String output = response.getEntity().getText();
+		
+		return output;
+	}
 	
 	/****************** Single PURLs **************************/
 	
