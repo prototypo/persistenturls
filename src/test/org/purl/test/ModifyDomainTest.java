@@ -226,9 +226,7 @@ public class ModifyDomainTest extends AbstractIntegrationTest {
         }
     }
 
-    public void testModifyDomainWithHierarchicalGroups() {
 
-    }
 
 
 
