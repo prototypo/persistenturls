@@ -25,6 +25,7 @@ Ticket numbers and descriptions refer to content on http://purlz.org/project/pur
 #927 can't modify a partial redirect purl
 #45 Can't create a PURL that matches the domain
 #40 Delete (Tombstone) of PURLS, then search for PURLS with tombstone not working.
+#39 Search purls with group IDs, not working
 #38 Searching for USERs, return 2 instances for each record.
 #37 Multiple Maintainer, Writers, Members Creation
 #35 purl properties are not populated to purl modification form after purl validation
