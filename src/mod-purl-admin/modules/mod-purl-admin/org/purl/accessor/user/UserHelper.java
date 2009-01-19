@@ -7,6 +7,7 @@ import org.ten60.netkernel.xml.representation.IAspectXDA;
 import org.ten60.netkernel.xml.xda.XPathLocationException;
 import org.ten60.netkernel.xml.xda.IXDAReadOnlyIterator;
 import org.purl.accessor.util.URIResolver;
+import org.purl.accessor.group.GroupResolver;
 
 import com.ten60.netkernel.urii.IURRepresentation;
 import com.ten60.netkernel.urii.aspect.IAspectBoolean;
@@ -16,6 +17,7 @@ import java.util.HashSet;
 
 public class UserHelper {
     private static URIResolver userResolver = new UserResolver();
+    private static URIResolver groupResolver = new GroupResolver();
     
     public static boolean isValidUser(INKFConvenienceHelper context, String userURI) {
         boolean retValue = false;
@@ -83,12 +85,39 @@ public class UserHelper {
                 String group = itor.getText("@id",true);
 
                 retValue.add(group);
+
+                getGroupsForGroup(context, group, retValue);
             }
-            
+
+
         } catch(Exception nfe) {
             nfe.printStackTrace();
         }
         
         return retValue;
+    }
+
+    private static void getGroupsForGroup(INKFConvenienceHelper context, String group, Set<String> knownGroups) {
+        try {
+            INKFRequest req = context.createSubRequest("active:purl-storage-groups-for-group");
+            req.addArgument("uri", groupResolver.getURI(group));
+            req.setAspectClass(IAspectXDA.class);
+            IAspectXDA groups = (IAspectXDA)context.transrept(context.issueSubRequest(req), IAspectXDA.class);
+
+            IXDAReadOnlyIterator itor = groups.getXDA().readOnlyIterator("/groups/group");
+
+            while (itor.hasNext()) {
+                itor.next();
+                String current = itor.getText("@id",true);
+                if (!knownGroups.contains(current)) {
+                    knownGroups.add(current);
+                    getGroupsForGroup(context, current, knownGroups);
+                }
+
+            }
+
+        } catch(Exception nfe) {
+            nfe.printStackTrace();
+        }
     }
 }
