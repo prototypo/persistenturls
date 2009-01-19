@@ -31,8 +31,10 @@ public class RegisterUserTest extends AbstractIntegrationTest {
         registerUser("testuser2", "Another Test User", "Zepheira", "another.test.user@example.com", "passWord!", "", "");
     }
 
-	// Log in as testuser.
-	AssertLoginUser("testuser", "Testing!");
+    public void testLoginUser() {
+	    // Log in as testuser.
+	    assertLoginUser("testuser", "Testing!");
+    }
 	
 
     /**

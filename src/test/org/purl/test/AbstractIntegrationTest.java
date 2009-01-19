@@ -36,7 +36,7 @@ public class AbstractIntegrationTest extends TestCase {
     }
 
 	// Log in a registered user.
-	public void loginUser(String user, String password) {
+	public void assertLoginUser(String user, String password) {
         try {
             String url = "http://" + host + ":" + port + "/admin/login/login-submit.bsh";
 
@@ -58,7 +58,7 @@ public class AbstractIntegrationTest extends TestCase {
     }
 
 	// Log out the user associated with the currently set cookie.
-    public void logoutUser() {
+    public void assertLogoutUser() {
         try {
             String url = "http://" + host + ":" + port + "/admin/logout";
 
