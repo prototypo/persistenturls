@@ -159,18 +159,7 @@ public class CreateGroupTest extends AbstractIntegrationTest {
 
 
 
-    protected String createGroup(String group, String maintainers, String members, String comments) throws Exception {
 
-            String url = "http://" + host + ":" + port + "/admin/group/" + group;
-
-            Map<String, String> formParameters = new HashMap<String, String>();
-            formParameters.put("name", group);
-            formParameters.put("maintainers", maintainers);
-            formParameters.put("members", members);
-            formParameters.put("comments", comments);
-            return client.createGroup(url, formParameters);
-
-    }
 
 
 

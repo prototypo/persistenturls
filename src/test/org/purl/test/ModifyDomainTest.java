@@ -231,16 +231,5 @@ public class ModifyDomainTest extends AbstractIntegrationTest {
     }
 
 
-    public String modifyDomain(String domain, String maintainers, String writers, String isPublic) throws Exception {
-        String url = "http://" + host + ":" + port + "/admin/domain" + domain;
-
-        Map<String, String> formParameters = new HashMap<String, String>();
-        formParameters.put("name", domain);
-        formParameters.put("maintainers", maintainers);
-        formParameters.put("writers", writers);
-        formParameters.put("public", isPublic);
-
-        return client.modifyDomain(url, formParameters);
-    }
 
 }
