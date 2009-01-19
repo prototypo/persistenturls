@@ -66,22 +66,23 @@ public class UserHelper {
 
         return retValue;
     }
-    
+
     public static Set<String> getGroupsForUser(INKFConvenienceHelper context, String user) {
         Set<String> retValue = new HashSet<String>();
-        
+
         try {
             INKFRequest req = context.createSubRequest("active:purl-storage-groups-for-user");
             req.addArgument("uri", userResolver.getURI(user));
             req.setAspectClass(IAspectXDA.class);
-            IAspectXDA groups = (IAspectXDA)context.issueSubRequest(req);
+            IAspectXDA groups = (IAspectXDA)context.transrept(context.issueSubRequest(req), IAspectXDA.class);
 
             IXDAReadOnlyIterator itor = groups.getXDA().readOnlyIterator("/groups/group");
+
             while (itor.hasNext()) {
                 itor.next();
-                String group = itor.getText(".",true);
+                String group = itor.getText("@id",true);
+
                 retValue.add(group);
-                System.out.println(group);
             }
             
         } catch(Exception nfe) {
