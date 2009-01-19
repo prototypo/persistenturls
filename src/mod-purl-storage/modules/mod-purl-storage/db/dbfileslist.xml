@@ -43,7 +43,8 @@
     <file>domainQuery.xml</file>
     <file>domainMaintainersQuery.xml</file>
     <file>queryMaintainerFromID.xml</file>
-    <file>queryGroupsForUser.xml</file>    
+    <file>queryGroupsForUser.xml</file>
+    <file>queryGroupsForGroup.xml</file>    
     <file>queryGroupFromID.xml</file>
     <file>createPURL.xsl</file>
     <file>updatePURL.xsl</file>

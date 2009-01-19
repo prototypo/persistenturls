@@ -121,13 +121,19 @@
 		<int>active:dpml+operand@ffcpl:/sql/db/queryGroupMembers.idoc</int>
 		<args>all</args>		
 	</link>
-    	<link>
+    <link>
 		<name>Groups For User</name>
 		<ext>/groups-for-user</ext>
 		<int>active:beanshell+operator@ffcpl:/resources/queryGroupsForUser.bsh</int>
 		<args>all</args>
 	</link>	    
 	<link>
+		<name>Groups For Group</name>
+		<ext>/groups-for-group</ext>
+		<int>active:beanshell+operator@ffcpl:/resources/queryGroupsForGroup.bsh</int>
+		<args>all</args>
+	</link>
+    <link>
 		<name>Group Tombstoned</name>
 		<ext>/group-tombstoned</ext>
 		<int>active:beanshell+operator@ffcpl:/sql/db/resourceTombstoned.bsh</int>		

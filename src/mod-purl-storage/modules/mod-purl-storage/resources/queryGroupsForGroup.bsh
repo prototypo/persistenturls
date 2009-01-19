@@ -1,0 +1,103 @@
+import org.ten60.netkernel.layer1.representation.*;
+import org.ten60.netkernel.xml.representation.*;
+import com.ten60.netkernel.urii.aspect.*;
+import org.ten60.netkernel.xml.representation.IAspectXDA;
+import org.ten60.netkernel.xml.xda.IXDAReadOnly;
+import org.ten60.netkernel.xml.xda.IXDAReadOnlyIterator;
+
+import java.util.*;
+
+main() {
+	resp = null;
+	iur = null;
+	group = null;
+	uri = null;
+
+	try {
+		uri = context.getThisRequest().getArgument("uri");
+		req = context.createSubRequest("active:purl-storage-query-group");
+		req.addArgument("uri", uri);
+	 	req.setAspectClass(IAspectXDA.class);
+	    group = context.issueSubRequestForAspect(req);
+
+		z_id = group.getXDA().getText("/group/z_id", true);
+		if (z_id != null && !"".equals(z_id.trim())) {
+		    iur = getGroupListForGroup(z_id);
+		} else {
+		    iur= new StringAspect("<groups></groups>");
+		}
+
+	} catch(Throwable t) {
+		t.printStackTrace();
+		iur = new StringAspect("<error message=\"Could not query groups for group:" + uri.substring(13) + "\"/>");		
+	}
+
+	resp = context.createResponseFrom(iur);
+	resp.setMimeType("text/xml");
+	resp.setExpired();
+	context.setResponse(resp);
+}
+
+issueSQLQuery(sql) {
+	// Issue the query and return the results as IAspectXDA
+	req = context.createSubRequest("active:sqlQuery");
+	req.addArgument("operand", sql);
+	req.setAspectClass(IAspectXDA.class);
+	context.issueSubRequestForAspect(req);
+}
+
+getGroupListForGroup(uid) {
+	groupsForGroupSQL = context.source("ffcpl:/sql/db/queryGroupsForGroup.xml");
+
+	sedSB = new StringBuffer("<sed><pattern><regex>@@UID@@</regex><replace>");
+	sedSB.append(uid);
+	sedSB.append("</replace></pattern></sed>");
+	sed = new StringAspect(sedSB.toString());
+
+	req = context.createSubRequest("active:sed");
+	req.addArgument("operator", sed);
+	req.addArgument("operand", groupsForGroupSQL);
+	req.setAspectClass(IAspectXDA.class);
+	maintainerFromIDSQL = context.issueSubRequestForAspect(req);
+
+	results = issueSQLQuery(maintainerFromIDSQL);
+    groupsSB = new StringBuffer("<groups>");
+
+	if(results.getXDA().isTrue("/results/row/g_id")) {
+	    itor = results.getXDA().readOnlyIterator("/results/row/g_id");
+
+	    while(itor.hasNext()) {
+		    itor.next();
+		    groupsSB.append("<group id=\"");
+		    groupsSB.append(getGroupFromID(itor.getText(".", true)));
+		    groupsSB.append("\"/>");
+	    }
+	}
+	groupsSB.append("</groups>");
+	return new StringAspect(groupsSB.toString());
+}
+
+getGroupFromID(gid) {
+	groupFromIDSQL = context.source("ffcpl:/sql/db/queryGroupFromID.xml");
+
+	sedSB = new StringBuffer("<sed><pattern><regex>@@GID@@</regex><replace>");
+	sedSB.append(gid);
+	sedSB.append("</replace></pattern></sed>");
+	sed = new StringAspect(sedSB.toString());
+
+	req = context.createSubRequest("active:sed");
+	req.addArgument("operator", sed);
+	req.addArgument("operand", groupFromIDSQL);
+	req.setAspectClass(IAspectXDA.class);
+	maintainerFromIDSQL = context.issueSubRequestForAspect(req);
+
+	results = issueSQLQuery(maintainerFromIDSQL).getXDA();
+
+	retValue = null;
+
+	if(results.isTrue("/results/row/g_id")) {
+		retValue = results.getText("/results/row/g_id", true);
+	}
+
+	return retValue;
+}

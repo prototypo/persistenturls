@@ -5,10 +5,14 @@ import org.ten60.netkernel.layer1.nkf.INKFRequest;
 import org.ten60.netkernel.layer1.nkf.NKFException;
 import org.ten60.netkernel.xml.representation.IAspectXDA;
 import org.ten60.netkernel.xml.xda.XPathLocationException;
+import org.ten60.netkernel.xml.xda.IXDAReadOnlyIterator;
 import org.purl.accessor.util.URIResolver;
 
 import com.ten60.netkernel.urii.IURRepresentation;
 import com.ten60.netkernel.urii.aspect.IAspectBoolean;
+
+import java.util.Set;
+import java.util.HashSet;
 
 public class UserHelper {
     private static URIResolver userResolver = new UserResolver();
@@ -63,14 +67,24 @@ public class UserHelper {
         return retValue;
     }
     
-    public static IURRepresentation getGroupsForUser(INKFConvenienceHelper context, String user) {
-        IURRepresentation retValue = null;
+    public static Set<String> getGroupsForUser(INKFConvenienceHelper context, String user) {
+        Set<String> retValue = new HashSet<String>();
         
         try {
             INKFRequest req = context.createSubRequest("active:purl-storage-groups-for-user");
             req.addArgument("uri", userResolver.getURI(user));
-            retValue = context.issueSubRequest(req);
-        } catch(NKFException nfe) {
+            req.setAspectClass(IAspectXDA.class);
+            IAspectXDA groups = (IAspectXDA)context.issueSubRequest(req);
+
+            IXDAReadOnlyIterator itor = groups.getXDA().readOnlyIterator("/groups/group");
+            while (itor.hasNext()) {
+                itor.next();
+                String group = itor.getText(".",true);
+                retValue.add(group);
+                System.out.println(group);
+            }
+            
+        } catch(Exception nfe) {
             nfe.printStackTrace();
         }
         

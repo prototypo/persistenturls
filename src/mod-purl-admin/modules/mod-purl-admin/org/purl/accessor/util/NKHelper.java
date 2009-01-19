@@ -1,10 +1,15 @@
 package org.purl.accessor.util;
 
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-
+import com.ten60.netkernel.urii.IURAspect;
+import com.ten60.netkernel.urii.IURRepresentation;
+import com.ten60.netkernel.urii.aspect.IAspectBoolean;
+import com.ten60.netkernel.urii.aspect.IAspectString;
+import com.ten60.netkernel.urii.aspect.StringAspect;
+import org.purl.accessor.domain.Domain;
+import org.purl.accessor.domain.DomainIterator;
+import org.purl.accessor.domain.DomainResolver;
+import org.purl.accessor.purl.PURLURIResolver;
+import org.purl.accessor.user.UserHelper;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFRequest;
 import org.ten60.netkernel.layer1.nkf.INKFRequestReadOnly;
@@ -13,24 +18,19 @@ import org.ten60.netkernel.xml.representation.IAspectXDA;
 import org.ten60.netkernel.xml.xda.IXDAReadOnly;
 import org.ten60.netkernel.xml.xda.IXDAReadOnlyIterator;
 import org.ten60.netkernel.xml.xda.XPathLocationException;
-import org.purl.accessor.domain.Domain;
-import org.purl.accessor.purl.PURLURIResolver;
-import org.purl.accessor.user.UserHelper;
-import org.purl.accessor.domain.DomainIterator;
-import org.purl.accessor.domain.DomainResolver;
 
-import com.ten60.netkernel.urii.IURAspect;
-import com.ten60.netkernel.urii.IURRepresentation;
-import com.ten60.netkernel.urii.aspect.IAspectBoolean;
-import com.ten60.netkernel.urii.aspect.IAspectString;
-import com.ten60.netkernel.urii.aspect.StringAspect;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.Set;
 
 public class NKHelper {
     public static final String
-        MIME_TEXT = "text/plain",
-        MIME_XML = "text/xml",
-        MIME_HTML = "text/html";
-    
+            MIME_TEXT = "text/plain",
+            MIME_XML = "text/xml",
+            MIME_HTML = "text/html";
+
     private static URIResolver domainResolver = new DomainResolver();
     private static URIResolver purlResolver = new PURLURIResolver();
 
@@ -44,10 +44,10 @@ public class NKHelper {
     public static String getLastSegment(INKFConvenienceHelper context) throws NKFException {
         return getLastSegment(getArgument(context, "path"));
     }
-    
+
     public static String getLastSegment(String path) {
-        String[] parts=path.split("/");
-        return parts[parts.length-1];
+        String[] parts = path.split("/");
+        return parts[parts.length - 1];
     }
 
     /**
@@ -63,7 +63,7 @@ public class NKHelper {
 
         INKFRequestReadOnly req = context.getThisRequest();
 
-        if(req.argumentExists(argument)) {
+        if (req.argumentExists(argument)) {
             retValue = req.getArgument(argument);
         }
 
@@ -72,6 +72,7 @@ public class NKHelper {
 
     /**
      * Associate an HTTP response code with the specified aspect
+     *
      * @param context
      * @param aspect
      * @param code
@@ -111,7 +112,7 @@ public class NKHelper {
     /**
      * Attach a Golden Thread to a representation.
      */
-    public static IURRepresentation attachGoldenThread(INKFConvenienceHelper context, String goldenThreadName, IURRepresentation representation){
+    public static IURRepresentation attachGoldenThread(INKFConvenienceHelper context, String goldenThreadName, IURRepresentation representation) {
         IURRepresentation retValue = null;
 
         try {
@@ -129,7 +130,7 @@ public class NKHelper {
     /**
      * Attach a Golden Thread to a resource.
      */
-    public static IURRepresentation attachGoldenThread(INKFConvenienceHelper context, String goldenThreadName, IURAspect resource){
+    public static IURRepresentation attachGoldenThread(INKFConvenienceHelper context, String goldenThreadName, IURAspect resource) {
         IURRepresentation retValue = null;
 
         try {
@@ -147,7 +148,7 @@ public class NKHelper {
     /**
      * Delete a Golden Thread to a representation.
      */
-    public static void cutGoldenThread(INKFConvenienceHelper context, String goldenThreadName){
+    public static void cutGoldenThread(INKFConvenienceHelper context, String goldenThreadName) {
         try {
             INKFRequest req = context.createSubRequest("active:cutGoldenThread");
             req.addArgument("param", goldenThreadName);
@@ -156,24 +157,24 @@ public class NKHelper {
             e.printStackTrace();
         }
     }
-    
+
     public static String getMD5Value(INKFConvenienceHelper context, String value) {
         String retValue = null;
-        
+
         try {
             INKFRequest req = context.createSubRequest("active:md5");
             req.addArgument("operand", new StringAspect("<key>" + value + "</key>"));
             req.setAspectClass(IAspectXDA.class);
             IAspectXDA result = (IAspectXDA) context.issueSubRequestForAspect(req);
             retValue = result.getXDA().getText("/md5", true);
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
         return retValue;
     }
 
-   public static String getDESValue(INKFConvenienceHelper context, String salt, String key) {
+    public static String getDESValue(INKFConvenienceHelper context, String salt, String key) {
         String retValue = null;
 
         try {
@@ -183,7 +184,7 @@ public class NKHelper {
             req.setAspectClass(IAspectXDA.class);
             IAspectXDA result = (IAspectXDA) context.issueSubRequestForAspect(req);
             retValue = result.getXDA().getText("/des", true);
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -194,207 +195,201 @@ public class NKHelper {
         String retValue = null;
 
         try {
-            String sessionURI=context.getThisRequest().getArgument("session");
-            String tokenURI=sessionURI+"+key@ffcpl:/credentials";
-            IAspectString credentials = (IAspectString)context.sourceAspect(tokenURI,IAspectString.class);
+            String sessionURI = context.getThisRequest().getArgument("session");
+            String tokenURI = sessionURI + "+key@ffcpl:/credentials";
+            IAspectString credentials = (IAspectString) context.sourceAspect(tokenURI, IAspectString.class);
             retValue = credentials.getString().trim().toLowerCase();
-        } catch(NKFException nfe) {
+        } catch (NKFException nfe) {
             nfe.printStackTrace();
         }
 
         return retValue;
     }
-    
+
     public static boolean purlExists(INKFConvenienceHelper context, String path) {
-    	boolean retValue = false;
-    	
-    	try {
-    		String purl = purlResolver.getURI(path);
-    		purl = purl.replaceAll("\\+", "%2B");
-    		
-    		INKFRequest req = context.createSubRequest("active:purl-storage-purl-exists");
-    		req.addArgument("uri", purl);
-    		req.setAspectClass(IAspectBoolean.class);
+        boolean retValue = false;
+
+        try {
+            String purl = purlResolver.getURI(path);
+            purl = purl.replaceAll("\\+", "%2B");
+
+            INKFRequest req = context.createSubRequest("active:purl-storage-purl-exists");
+            req.addArgument("uri", purl);
+            req.setAspectClass(IAspectBoolean.class);
             IAspectBoolean result = (IAspectBoolean) context.issueSubRequestForAspect(req);
-            retValue = result.isTrue();    		
-    		
-    	} catch(NKFException nfe) {
-    		nfe.printStackTrace();
-    	}
-    	
-    	return retValue;
+            retValue = result.isTrue();
+
+        } catch (NKFException nfe) {
+            nfe.printStackTrace();
+        }
+
+        return retValue;
     }
-    
+
     public static boolean validUser(INKFConvenienceHelper context, String user) {
         boolean retValue = false;
-        
+
         try {
             INKFRequest req = context.createSubRequest("active:purl-storage-user-valid");
-            req.addArgument("uri", "ffcpl:/user/" + user); 
+            req.addArgument("uri", "ffcpl:/user/" + user);
             req.setAspectClass(IAspectBoolean.class);
             IAspectBoolean result = (IAspectBoolean) context.issueSubRequestForAspect(req);
             retValue = result.isTrue();
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
         return retValue;
     }
-    
+
     public static boolean validGroup(INKFConvenienceHelper context, String group) {
         boolean retValue = false;
-        
+
         try {
             INKFRequest req = context.createSubRequest("active:purl-storage-group-valid");
-            req.addArgument("uri", "ffcpl:/group/" + group); 
+            req.addArgument("uri", "ffcpl:/group/" + group);
             req.setAspectClass(IAspectBoolean.class);
             IAspectBoolean result = (IAspectBoolean) context.issueSubRequestForAspect(req);
             retValue = result.isTrue();
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
         return retValue;
     }
-    
+
     public static boolean validDomain(INKFConvenienceHelper context, String domain) {
         boolean retValue = false;
-        
+
         try {
             INKFRequest req = context.createSubRequest("active:purl-storage-domain-valid");
             req.addArgument("uri", domainResolver.getURI(domain));
             req.setAspectClass(IAspectBoolean.class);
             IAspectBoolean result = (IAspectBoolean) context.issueSubRequestForAspect(req);
             retValue = result.isTrue();
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
         return retValue;
     }
-    
+
     public static boolean validURL(String url) {
-    	boolean retValue = false;
-    	
-    	try {
-    		URL u = new URL(url);
-    		retValue = true;
-    	} catch(MalformedURLException mue) {
-    		mue.printStackTrace();
-    	}
-    	
-    	return retValue;
+        boolean retValue = false;
+
+        try {
+            URL u = new URL(url);
+            retValue = true;
+        } catch (MalformedURLException mue) {
+            mue.printStackTrace();
+        }
+
+        return retValue;
     }
-    
+
     public static boolean validURI(String uri) {
         boolean retValue = false;
-        
+
         try {
             URI u = new URI(uri);
             retValue = true;
         } catch (URISyntaxException e) {
             // Swallow this silently, we'll report
             // the failure elsewhere
-        } 
-        
+        }
+
         return retValue;
     }
 
     private static boolean userHasPermission(INKFConvenienceHelper context, String user, String resource, String resourceType, String key) {
         boolean retValue = false;
         try {
-            INKFRequest req=context.createSubRequest("active:purl-storage-query-" + resourceType);
+            INKFRequest req = context.createSubRequest("active:purl-storage-query-" + resourceType);
             req.addArgument("uri", resource);
             req.setAspectClass(IAspectXDA.class);
             IAspectXDA res = (IAspectXDA) context.issueSubRequestForAspect(req);
-            IXDAReadOnlyIterator itor = res.getXDA().readOnlyIterator("/" + resourceType + "/" + key  + "/uid");
-            System.out.println(key);
-            System.out.println(res.getXDA().toString());
-            while(!retValue && itor.hasNext()) {
+            IXDAReadOnlyIterator itor = res.getXDA().readOnlyIterator("/" + resourceType + "/" + key + "/uid");
+
+            while (!retValue && itor.hasNext()) {
                 itor.next();
                 String uid = itor.getText(".", true);
                 retValue = uid.equalsIgnoreCase(user);
-                System.out.println(uid);
             }
 
             //retValue = res.getXDA().isTrue("/domain/maintainers/uid = '" + user + "'");
 
-            if(!retValue && res.getXDA().isTrue("/" + resourceType + "/" + key + "/gid")) {
+            if (!retValue && res.getXDA().isTrue("/" + resourceType + "/" + key + "/gid")) {
                 // If the user is not spelled out explicitly, see if he/she is a member of a
                 // group that is a maintainer
 
-            	// Get groups that the user is a member of.
-                IAspectXDA groupListXDA = (IAspectXDA) context.transrept(UserHelper.getGroupsForUser(context, user), IAspectXDA.class);
-                itor = groupListXDA.getXDA().readOnlyIterator("/groups/group");
-
-                // Iterate through each group that the user is a member of, looking for matches of groups allowed to maintain the domain.
-                while(!retValue && itor.hasNext()) {
-                    itor.next();
-                    retValue = res.getXDA().isTrue("/" + resourceType + "/" + key + "/gid = '" + itor.getText(".", true) + "'");                    
+                // Get groups that the user is a member of.
+                Set<String> groups = UserHelper.getGroupsForUser(context, user);
+                for (String group : groups) {
+                    retValue = res.getXDA().isTrue("/" + resourceType + "/" + key + "/gid = '" + group + "'");
                 }
             }
-        } catch(Exception e) {
-         e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return retValue;
-    }   
-    
+    }
+
     public static boolean userIsGroupMaintainer(INKFConvenienceHelper context, String user, String group) {
-    	return userHasPermission(context, user, group, "group", "maintainers");
+        return userHasPermission(context, user, group, "group", "maintainers");
     }
-    
+
     public static boolean userIsDomainMaintainer(INKFConvenienceHelper context, String user, String domain) {
-    	return userHasPermission(context, user, domain, "domain", "maintainers");
+        return userHasPermission(context, user, domain, "domain", "maintainers");
     }
-    
+
     public static boolean userIsDomainWriter(INKFConvenienceHelper context, String user, String domain) {
-    	return userHasPermission(context, user, domain, "domain", "writers");
+        return userHasPermission(context, user, domain, "domain", "writers");
     }
-    
+
     public static boolean userIsPURLMaintainer(INKFConvenienceHelper context, String user, String purl) {
-    	return userHasPermission(context, user, purl, "purl", "maintainers");
+        return userHasPermission(context, user, purl, "purl", "maintainers");
     }
-    
+
     public static boolean allSuperDomainsExist(INKFConvenienceHelper context, String resource) {
         boolean retValue = false;
         boolean done = false;
-        
-        DomainIterator itor = new DomainIterator(resource);
-        
-        while(itor.hasNext() && !done) {
-             done = !domainIsValid(context, itor.next());
-        }
-        
-        // If we didn't stop prematurely we should be good
-        retValue = !done;
-        
-        return retValue;
-    }
-    
-    public static String getDomainForPURL(INKFConvenienceHelper context, String resource) {
-        String retValue = null;
-        
+
         DomainIterator itor = new DomainIterator(resource);
 
-        while(itor.hasNext()) {
+        while (itor.hasNext() && !done) {
+            done = !domainIsValid(context, itor.next());
+        }
+
+        // If we didn't stop prematurely we should be good
+        retValue = !done;
+
+        return retValue;
+    }
+
+    public static String getDomainForPURL(INKFConvenienceHelper context, String resource) {
+        String retValue = null;
+
+        DomainIterator itor = new DomainIterator(resource);
+
+        while (itor.hasNext()) {
             String domain = itor.next();
             try {
                 INKFRequest req = context.createSubRequest("active:purl-storage-domain-exists");
                 req.addArgument("uri", domain);
                 req.setAspectClass(IAspectBoolean.class);
                 IAspectBoolean resp = (IAspectBoolean) context.issueSubRequestForAspect(req);
-                if(resp.isTrue()) {
+                if (resp.isTrue()) {
                     retValue = domain;
                 }
             } catch (NKFException e) {
                 e.printStackTrace();
-            } 
+            }
         }
-        
+
         return retValue;
     }
-    
+
     public static boolean domainIsPublic(INKFConvenienceHelper context, String domain) {
         boolean retValue = false;
 
@@ -404,49 +399,49 @@ public class NKHelper {
             req.setAspectClass(IAspectXDA.class);
             IAspectXDA result = (IAspectXDA) context.issueSubRequestForAspect(req);
             retValue = result.getXDA().isTrue("/domain/public = 'true'");
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
         return retValue;
     }
-    
+
     public static boolean domainIsValid(INKFConvenienceHelper context, String domain) {
         boolean retValue = false;
 
         try {
             String uri = domainResolver.getURI(domain);
-            
-            if(uri != null) {
+
+            if (uri != null) {
                 INKFRequest req = context.createSubRequest("active:purl-storage-query-domain");
                 req.addArgument("uri", uri);
                 req.setAspectClass(IAspectXDA.class);
                 IAspectXDA result = (IAspectXDA) context.issueSubRequestForAspect(req);
                 retValue = result.getXDA().isTrue("/domain[@status='1']");
-                
+
                 //@TODO Check to see if the domain is allowed by the config 
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
         return retValue;
-    }    
-    
-    
+    }
+
+
     public static boolean userCanCreatePURL(INKFConvenienceHelper context, String resource) {
         return userCanCreatePURL(context, NKHelper.getUser(context), resource);
     }
-    
+
     public static boolean userCanCreatePURL(INKFConvenienceHelper context, String user, String resource) {
         String domain = getDomainForPURL(context, resource);
         return domain != null && validDomain(context, domain) &&
-                ( domainIsPublic(context, domain) ||
-                (userIsDomainMaintainer(context, user, domain) || 
-                userIsDomainWriter(context, user, domain) )
-              );
+                (domainIsPublic(context, domain) ||
+                        (userIsDomainMaintainer(context, user, domain) ||
+                                userIsDomainWriter(context, user, domain))
+                );
     }
-    
+
     public static void createNecessarySubdomains(INKFConvenienceHelper context, String purl) {
 
         DomainIterator pdi = new DomainIterator(purl);
@@ -454,34 +449,34 @@ public class NKHelper {
         IAspectXDA tldXDA = null;
         boolean needToCreate = false;
         Domain d = null;
-        
+
         String[] maintainers = null;
-        String[] writers = null;                    
-        
-        while(pdi.hasNext()) {
+        String[] writers = null;
+
+        while (pdi.hasNext()) {
             String domain = pdi.next();
-            
-            if(tld == null) {
+
+            if (tld == null) {
                 tld = domain;
             }
-            
+
             INKFRequest req = null;
 
             String domainName = null;
             boolean tldIsPublic = false;
 
             try {
-                if(!needToCreate) {
-                    req = context.createSubRequest("active:purl-storage-domain-exists");            
+                if (!needToCreate) {
+                    req = context.createSubRequest("active:purl-storage-domain-exists");
                     req.addArgument("uri", domain);
                     req.setAspectClass(IAspectBoolean.class);
                     IAspectBoolean res = (IAspectBoolean) context.issueSubRequestForAspect(req);
                     needToCreate = !res.isTrue();
                 }
-                
-                if(needToCreate) {
-                    if(tldXDA == null) {
-                        req = context.createSubRequest("active:purl-storage-query-domain");    
+
+                if (needToCreate) {
+                    if (tldXDA == null) {
+                        req = context.createSubRequest("active:purl-storage-query-domain");
                         req.addArgument("uri", tld);
                         req.setAspectClass(IAspectXDA.class);
                         tldXDA = (IAspectXDA) context.issueSubRequestForAspect(req);
@@ -496,42 +491,42 @@ public class NKHelper {
                             int index = 0;
                             IXDAReadOnlyIterator itor = tldXDARO.readOnlyIterator("/domain/maintainers/uid");
 
-                            while(itor.hasNext()) {
+                            while (itor.hasNext()) {
                                 itor.next();
                                 maintainers[index++] = tldXDARO.getText(itor.getCurrentXPath(), true);
                             }
-                            
+
                             itor = tldXDARO.readOnlyIterator("/domain/writers/uid");
                             index = 0;
 
-                            while(itor.hasNext()) {
+                            while (itor.hasNext()) {
                                 itor.next();
                                 writers[index++] = tldXDARO.getText(itor.getCurrentXPath(), true);
                             }
 
                         } catch (XPathLocationException e) {
                             e.printStackTrace();
-                        } 
+                        }
                     }
-                    
+
                     String domainID = domainResolver.getDisplayName(domain);
                     d = new Domain(domainID, tldIsPublic, domainName + "(subdomain)", maintainers, writers);
 
-                    req=context.createSubRequest("active:purl-storage-create-domain");
+                    req = context.createSubRequest("active:purl-storage-create-domain");
                     req.addArgument("param", new StringAspect(d.toString()));
                     context.issueSubRequest(req);
-                    
+
                     // Auto-approve these domains
-                    
+
                     req = context.createSubRequest("active:purl-storage-approve-domain");
-                    req.addArgument("param", new StringAspect("<domain><id>" + domainID + "</id></domain>")); 
+                    req.addArgument("param", new StringAspect("<domain><id>" + domainID + "</id></domain>"));
                     context.issueSubRequest(req);
                 }
 
-            } catch(NKFException nfe) {
+            } catch (NKFException nfe) {
                 nfe.printStackTrace();
             }
         }
     }
-    
+
 }

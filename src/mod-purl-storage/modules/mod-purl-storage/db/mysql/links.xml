@@ -139,7 +139,15 @@
 		<ext>/groups-for-user</ext>
 		<int>active:beanshell+operator@ffcpl:/resources/queryGroupsForUser.bsh</int>
 		<args>all</args>
-	</link>			
+	</link>
+
+    <link>
+		<name>Groups For Group</name>
+		<ext>/groups-for-group</ext>
+		<int>active:beanshell+operator@ffcpl:/resources/queryGroupsForGroup.bsh</int>
+		<args>all</args>
+	</link>
+
 	<link>
 		<name>Domain Exists</name>
 		<ext>/domain-exists</ext>

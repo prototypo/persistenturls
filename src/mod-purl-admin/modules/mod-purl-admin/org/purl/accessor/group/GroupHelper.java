@@ -24,24 +24,4 @@ public class GroupHelper {
         return retValue;
     }
     
- /*   public static boolean isGroupMember(INKFConvenienceHelper context, String groupURI, String member) {
-        
-    }
-    
-    public static boolean isGroupMaintainer(INKFConvenienceHelper context, String groupURI, String maintainer) {
-        boolean retValue = false;
-        
-        try {
-            INKFRequest req=context.createSubRequest("active:purl-storage-query-groupmaintainers");
-            req.addArgument("param", new StringAspect("<group><id>" + group + "</id></group>"));
-            req.setAspectClass(IAspectXDA.class);
-            IAspectXDA res = (IAspectXDA) context.issueSubRequestForAspect(req);
-            retValue = res.getXDA().isTrue("/maintainers/uid = '" + user + "'") ||
-                       res.getXDA().isTrue("/maintainers/gid = '" + user + "'");
-        } catch(Exception e) {
-         e.printStackTrace();   
-        }
-        
-        return retValue;       
-    } */
 }
