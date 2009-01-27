@@ -9,7 +9,7 @@ public class UserAccessController implements AccessController {
         boolean retValue = false;
         
         if(user != null) {
-            retValue = UserHelper.isAdminUser(context, user) || uri.endsWith(user);
+            retValue = UserHelper.isAdminUser(context, user) || uri.toLowerCase().endsWith(user.toLowerCase());
         }
         
         return retValue;
