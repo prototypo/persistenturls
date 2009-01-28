@@ -147,7 +147,7 @@ public class GetResourceCommand extends PURLCommand {
 
                     }
                     query += ") AND entity:" + type;
-                    //System.out.println(query);
+                    
                     req.addArgument("query", new StringAspect(query));
                     handles[idx] = context.issueAsyncSubRequest(req);
                     keys[idx] = key;
@@ -218,11 +218,5 @@ public class GetResourceCommand extends PURLCommand {
                 path.endsWith("/domain/") ||
                 path.endsWith("/purl/") ||
                 path.endsWith("/group/");
-    }
-
-    private String getKeywordName(int kwidx) {
-        // TODO: Optimize this to avoid object creation for, say up to ten keywords
-        // and then return dynamically generated names for pathological cases.
-        return "keyword" + kwidx;
     }
 }

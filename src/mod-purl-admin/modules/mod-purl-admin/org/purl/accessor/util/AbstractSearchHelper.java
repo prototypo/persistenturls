@@ -16,18 +16,8 @@ import java.util.Map;
 abstract public class AbstractSearchHelper implements SearchHelper {
     private Map<String, String> keywordBasisMap;
 
-    private AbstractSearchHelper() {
-    }
-
     protected AbstractSearchHelper(Map<String, String> keywordBasisMap) {
         this.keywordBasisMap = keywordBasisMap;
-    }
-
-    private boolean keywordBasisMatches(String keyword, String basis) {
-        boolean retValue = false;
-        String registeredBasis = keywordBasisMap.get(keyword);
-        retValue = (registeredBasis != null) && registeredBasis.equals(basis);
-        return retValue;
     }
 
     public String[] processResults(INKFConvenienceHelper context, String key, IURRepresentation result) {
@@ -66,16 +56,16 @@ abstract public class AbstractSearchHelper implements SearchHelper {
     }
 
     public String processKeyword(INKFConvenienceHelper context, String key, String value) {
-
-        String retValue = "";
         // By default, no special handling
+
+        value = value.toLowerCase();
+
         String parts[] = value.split(" ");
         StringBuffer sb = new StringBuffer(key + ":");
 
         if (parts.length > 1) {
             sb.append("(");
             for (String s : parts) {
-                // Skip over blanks and ignore terms that start with a '*'
 
                 if (s.length() > 0) {
                     sb.append("+");
@@ -87,17 +77,10 @@ abstract public class AbstractSearchHelper implements SearchHelper {
             }
             sb.append(")");
         } else {
-
-            int starIdx = value.indexOf("*");
-
-            if (starIdx < 0 || starIdx == value.lastIndexOf("*")) {
-                sb.append(value);
-            }
+            sb.append(value);
         }
 
-        retValue = sb.toString();
+        return sb.toString();
 
-
-        return retValue;
     }
 }

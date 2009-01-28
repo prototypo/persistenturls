@@ -61,14 +61,28 @@ public class SearchTest extends AbstractIntegrationTest {
         }
     }
 
+        // Test searching for users via an HTTP GET.
+    public void testSearchUserWildcard() {
+
+        try {
+            String url = "http://" + host + ":" + port + "/admin/user/?userid=t*r";
+
+            String test = client.searchUser(url);
+
+            XMLAssert.assertXpathExists("/results/user[id='testuser']",test);
+            XMLAssert.assertXpathNotExists("/results/user[id='testuser2']",test);
+
+        } catch (Exception e) {
+            reportException("Failed to resolve URL: ", e);
+        }
+    }
+
     // Test searching for users via an HTTP GET.
     public void testSearchUserByName() {
 
         try {
             String url = "http://" + host + ":" + port + "/admin/user/?fullname=Test%20User%20Modified";
 
-            String errMsg = "Cannot search user.";
-            String control = "<results><user admin=\"false\" status=\"1\"><id>testuser</id><name>Test User Modified</name><affiliation>Zepheira, LLC</affiliation><email>tuser@example.com</email></user></results>";
             String test = client.searchUser(url);
 
             XMLAssert.assertXpathExists("/results/user[id='testuser']",test);
@@ -349,6 +363,50 @@ public class SearchTest extends AbstractIntegrationTest {
             String url = "http://" + host + ":" + port + "/admin/purl/?path=/testdomain/testPURL";
             String test = client.searchPurl(url);
             XMLAssert.assertXpathExists("/results/purl[id='/testdomain/testPURL']", test);
+            XMLAssert.assertXpathNotExists("/results/purl[id='/testdomain/test301PURL']", test);
+            XMLAssert.assertXpathNotExists("/results/purl[id='/testdomain/test302PURL']", test);
+            XMLAssert.assertXpathNotExists("/results/purl[id='/testdomain/test303PURL']", test);
+            XMLAssert.assertXpathNotExists("/results/purl[id='/testdomain/test307PURL']", test);
+            XMLAssert.assertXpathNotExists("/results/purl[id='/testdomain/test404PURL']", test);
+            XMLAssert.assertXpathNotExists("/results/purl[id='/testdomain/test410PURL']", test);
+            XMLAssert.assertXpathNotExists("/results/purl[id='/testdomain/testClonePURL']", test);
+            XMLAssert.assertXpathNotExists("/results/purl[id='/testdomain/testChainPURL']", test);
+            XMLAssert.assertXpathNotExists("/results/purl[id='/testdomain/testPartialPURL']", test);
+
+        } catch (Exception e) {
+            reportException("Failed to resolve URL: ", e);
+        }
+    }
+
+        // Test searching for PURLs via an HTTP GET.
+    public void testSearchPurlWildcard() {
+
+        try {
+            String url = "http://" + host + ":" + port + "/admin/purl/?path=/test*/te%3FtPURL";
+            String test = client.searchPurl(url);
+            XMLAssert.assertXpathExists("/results/purl[id='/testdomain/testPURL']", test);
+            XMLAssert.assertXpathNotExists("/results/purl[id='/testdomain/test301PURL']", test);
+            XMLAssert.assertXpathNotExists("/results/purl[id='/testdomain/test302PURL']", test);
+            XMLAssert.assertXpathNotExists("/results/purl[id='/testdomain/test303PURL']", test);
+            XMLAssert.assertXpathNotExists("/results/purl[id='/testdomain/test307PURL']", test);
+            XMLAssert.assertXpathNotExists("/results/purl[id='/testdomain/test404PURL']", test);
+            XMLAssert.assertXpathNotExists("/results/purl[id='/testdomain/test410PURL']", test);
+            XMLAssert.assertXpathNotExists("/results/purl[id='/testdomain/testClonePURL']", test);
+            XMLAssert.assertXpathNotExists("/results/purl[id='/testdomain/testChainPURL']", test);
+            XMLAssert.assertXpathNotExists("/results/purl[id='/testdomain/testPartialPURL']", test);
+
+        } catch (Exception e) {
+            reportException("Failed to resolve URL: ", e);
+        }
+    }
+
+        // Test searching for PURLs via an HTTP GET.
+    public void testSearchPurlWildcardFail() {
+
+        try {
+            String url = "http://" + host + ":" + port + "/admin/purl/?path=/test%3F/testPURL";
+            String test = client.searchPurl(url);
+            XMLAssert.assertXpathNotExists("/results/purl[id='/testdomain/testPURL']", test);
             XMLAssert.assertXpathNotExists("/results/purl[id='/testdomain/test301PURL']", test);
             XMLAssert.assertXpathNotExists("/results/purl[id='/testdomain/test302PURL']", test);
             XMLAssert.assertXpathNotExists("/results/purl[id='/testdomain/test303PURL']", test);
