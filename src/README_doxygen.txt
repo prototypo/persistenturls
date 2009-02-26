@@ -8,14 +8,18 @@ the "Load" button in the GUI.
 
 2) Start the Doxygen run by pressing the "Start" button in the GUI.
 
-3) Remove the old Doxygen content from svn - the Doxygen application
+3) Copy the old stylesheet from the existing Doxygen content, because
+it lives in a tree we are about to remove.
+
+4) Remove the old Doxygen content from svn - the Doxygen application
 doesn't replace the files otherwise...
 
   $svn remove .../site/project/purl/documentation/doxygen/
 
-4) Put the new Doxygen output in place and add to svn:
+5) Put the new Doxygen output in place and add to svn:
 
   $ mv .../src/doxygen .../site/project/purl/documentation
   $ svn add .../site/project/purl/documentation/doxygen/
   $ svn commit -m 'Updated Doxygen for current version'
 
+6) Replace the stylesheet and any necessary calls to it.
