@@ -327,7 +327,7 @@ function loadModify(recordData) {
 						currentElement.checked = true;
 					}
 				} else {
-					currentElement.value = records[key];
+					currentElement.value = unescape(records[key]);
 				}
 			}
 		}
@@ -395,7 +395,7 @@ function getHTMLFromXMLArray(xmlArray) {
 				escapedValue = xmlArray[outerKey][innerKey][1].replace(/\n/g, "%LINEBREAK%");
 				escapedValue = escapedValue.replace(/<i>/g, "");
 				escapedValue = escapedValue.replace(/<\/i>/g, "");
-				dataString += xmlArray[outerKey][innerKey][0] + "=" + escapedValue + "&";
+				dataString += xmlArray[outerKey][innerKey][0] + "=" + escape(escapedValue) + "&";
 			}
 			// Write an HTML list item for each element in a record.
 			for ( innerKey in xmlArray[outerKey] ) {
