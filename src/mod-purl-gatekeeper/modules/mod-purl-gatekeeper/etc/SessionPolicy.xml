@@ -10,8 +10,8 @@
 	</zone>
 	<meta>
 		<id>1060NetKernelSession</id>
-		<max-sessions>500</max-sessions>
-		<max-duration>7200000</max-duration>  <!--2 hours-->
+		<max-sessions>3000</max-sessions>
+		<max-duration>14400000</max-duration>  <!--2 hours-->
 		<min-duration>0</min-duration>  <!--Oldest drop when max-sessions is reached-->
 	</meta>
 </SessionPolicy>

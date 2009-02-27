@@ -3,7 +3,7 @@
     <dataSource type="JdbcDataSource" driver="com.mysql.jdbc.Driver" url="@@JDBC-URL@@" user="@@USERNAME@@" password="@@PASSWORD@@" batchSize="-1"/>
     <document name="users">
         <entity name="user" pk="z_id" rootEntity="true" query="select *,concat('user:',userid) as uid, 'user' as entity from users"
-            deltaQuery="select z_id from users where lastmodified &gt; '${dataimporter.last_index_time}'" 
+            deltaQuery="select z_id from users where lastmodified &gt;= '${dataimporter.last_index_time}'"
             deltaImportQuery="select *,concat('user:',userid) as uid, 'user' as entity from users where z_id=${dataimporter.delta.z_id}">
             <field column="uid" name="uid"/>
             
@@ -14,7 +14,7 @@
             <field column="userid" name="userid"/>
         </entity>
         <entity name="domain" rootEntity="true" pk="z_id" query="select *, concat('domain:', d_id) as uid, 'domain' as entity from domains"
-            deltaQuery="select z_id from domains where lastmodified &gt; '${dataimporter.last_index_time}'" 
+            deltaQuery="select z_id from domains where lastmodified &gt;= '${dataimporter.last_index_time}'"
             deltaImportQuery="select *, concat('domain:', d_id) as uid, 'domain' as entity from domains where z_id=${dataimporter.delta.z_id}">
             <field column="uid" name="uid"/>
             <field column="entity" name="entity"/>
@@ -43,7 +43,7 @@
         </entity>
         <entity name="group" rootEntity="true" pk="z_id" 
             query="select *, concat('group:', g_id) as uid, 'group' as entity from groups"
-            deltaQuery="select z_id from groups where lastmodified &gt; '${dataimporter.last_index_time}'" 
+            deltaQuery="select z_id from groups where lastmodified &gt;= '${dataimporter.last_index_time}'"
             deltaImportQuery="select *, concat('group:', g_id) as uid, 'group' as entity from groups where z_id=${dataimporter.delta.z_id}">
             <field column="uid" name="uid"/>
             <field column="name" name="name"/>
@@ -71,7 +71,7 @@
             </entity>
         </entity>
         <entity name="purl" rootEntity="true" pk="z_id" query="select *, concat('purl:', p_id) as uid, 'purl' as entity from purls"
-            deltaQuery="select  z_id from purls where lastmodified &gt; '${dataimporter.last_index_time}'" 
+            deltaQuery="select  z_id from purls where lastmodified &gt;= '${dataimporter.last_index_time}'" 
             deltaImportQuery="select *, concat('purl:', p_id) as uid, 'purl' as entity from purls where z_id=${dataimporter.delta.z_id}">
             <field column="uid" name="uid"/>
             <field column="entity" name="entity"/>

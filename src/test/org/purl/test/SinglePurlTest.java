@@ -33,6 +33,16 @@ public class SinglePurlTest extends AbstractPurlTest {
         assertPurlNotCreatedAlreadyExists("/testdomain/testPURL", formParameters);
     }
 
+    public void testCreatePurlWithParameters() {
+        Map<String, String> formParameters = new HashMap<String, String>();
+        formParameters.put("type", "302");
+        formParameters.put("target", "http://yahoo.com?blah=blah&more=more&lessthan=%3C");
+        formParameters.put("maintainers", "testuser");
+
+
+        assertPurlCreated("/testdomain/testPURLWithParameters", formParameters);
+    }
+
     // Test modifying an existing PURL via an HTTP PUT.
     public void testModifyPurl() {
 

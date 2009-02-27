@@ -51,7 +51,7 @@ public class PURLCreator implements ResourceCreator {
             sb.append("</id>");
             sb.append("<type>chain</type>");
             sb.append("<target><url>");
-            sb.append(purlResolver.getDisplayName(oldURI));
+            sb.append(StringHelper.escapeURL(purlResolver.getDisplayName(oldURI)));
             sb.append("</url></target>");
 
             addMaintainerList(context, sb, params.getValue("maintainers"));
@@ -115,8 +115,7 @@ public class PURLCreator implements ResourceCreator {
         sb.append("<type>partial</type>");
 
         sb.append("<target><url>");
-        target = target.replaceAll("&", "&amp;");
-        sb.append(target);
+        sb.append(StringHelper.escapeURL(target));
         sb.append("</url></target>");
         
         addMaintainerList(context, sb, params.getValue("maintainers"));
@@ -318,10 +317,10 @@ public class PURLCreator implements ResourceCreator {
     /**
      * Build up the maintainer list in the StringBuffer adding the currentUser if they
      * have not been explicitly stated as a maintainer.
-     * 
+     *
+     * @param context
      * @param sb
-     * @param maintainerList
-     * @param currentUser
+     * @param maintainersList
      */
     private void addMaintainerList(INKFConvenienceHelper context, StringBuffer sb, String maintainersList) {
         

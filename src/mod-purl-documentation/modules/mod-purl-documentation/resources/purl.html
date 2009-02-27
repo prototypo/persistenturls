@@ -84,7 +84,7 @@ handles results from the server in response to form submissions.
 			urlVars = {}
 			bodyVars = {
 				type: "302",
-				target: $('c_target').value,
+				target: escape($('c_target').value),
 				maintainers: maintainers
 			}
 			ajaxCaller.postVars("/admin/purl" + my_id, bodyVars, urlVars, onResponse, false, "Create");
@@ -106,8 +106,8 @@ handles results from the server in response to form submissions.
 			urlVars = {}
 			bodyVars = {
 				type: $('a_type').value,
-				target: $('a_target').value,
-				seealso: $('a_seealso').value,
+				target: escape($('a_target').value),
+				seealso: escape($('a_seealso').value),
 				maintainers: maintainers,
 				basepurl: $('a_basepurl').value
 			}
@@ -129,13 +129,13 @@ handles results from the server in response to form submissions.
 			maintainers = scrubTextareaInput($('m_maintainers').value);
 			urlVars = {
 				type: $('m_type').value,
-				seealso: $('m_seealso').value,
+				seealso: escape($('m_seealso').value),
 				maintainers: maintainers
 			}
             if (urlVars.type == 'chain') {
                 urlVars.basepurl = $('m_target').value;
             } else {
-                urlVars.target = $('m_target').value; 
+                urlVars.target = escape($('m_target').value);
             }
 			bodyType = "text/html";
 			body = "";
@@ -156,8 +156,8 @@ handles results from the server in response to form submissions.
 		signalLoadingResults();
 		bodyVars =  {
 			p_id: $('s_id').value,
-			target: $('s_target').value,
-			seealso: $('s_seealso').value,
+			target: escape($('s_target').value),
+			seealso: escape($('s_seealso').value),
 			maintainers: $('s_maintainers').value,
 			explicitmaintainers: $('s_explicitmaintainers').value,
 			tombstone: $('s_tombstone').checked

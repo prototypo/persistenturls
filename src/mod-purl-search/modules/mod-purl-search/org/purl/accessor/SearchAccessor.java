@@ -11,6 +11,7 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrDocument;
+import org.apache.lucene.util.StringHelper;
 
 import com.ten60.netkernel.urii.IURRepresentation;
 import com.ten60.netkernel.urii.aspect.StringAspect;
@@ -47,7 +48,7 @@ public class SearchAccessor extends NKFAccessorImpl {
                     docid = value.substring(value.indexOf(":") +1, value.length());
                 }
                 sb.append("<" + field + ">");
-                sb.append(value);
+                sb.append(escapeURL(value));
                 sb.append("</" + field + ">");
             }
             sb.append("<docid>" + docid + "</docid>");
@@ -62,5 +63,7 @@ public class SearchAccessor extends NKFAccessorImpl {
         context.setResponse(context.createResponseFrom(new StringAspect(sb.toString())));
     }
     
-
+    public String escapeURL(String s) {
+		return s.replaceAll("&", "&amp;");
+	}
 }

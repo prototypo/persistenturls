@@ -290,7 +290,9 @@ public class AbstractIntegrationTest extends TestCase {
             String test = createPurl(path, formParameters);
             XMLAssert.assertXpathExists("/purl[@status='1']", test);
             XMLAssert.assertXpathExists("/purl[id='" + path + "']", test);
-
+            if (formParameters.get("target") != null) {
+                XMLAssert.assertXpathExists("/purl[target='" + formParameters.get("target") + "']", test);
+            }
         } catch (Exception e) {
             reportException("Failed to resolve URL: ", e);
         }

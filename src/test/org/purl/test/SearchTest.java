@@ -299,22 +299,17 @@ public class SearchTest extends AbstractIntegrationTest {
     }
 
     // Test searching for domains via an HTTP GET.
-    public void testSearchDomainByMaintainer() {
+    public void testSearchDomainByMaintainer() throws Exception {
+        String url = "http://" + host + ":" + port + "/admin/domain/?maintainers=testuser2";
 
-        try {
-            String url = "http://" + host + ":" + port + "/admin/domain/?maintainers=testuser2";
+        String test = client.searchDomain(url);
 
-            String test = client.searchDomain(url);
+        XMLAssert.assertXpathNotExists("/results/domain[id='/testdomain']", test);
+        XMLAssert.assertXpathExists("/results/domain[id='/testdomain2']", test);
+        XMLAssert.assertXpathNotExists("/results/domain[id='/testdomain3']", test);
+        XMLAssert.assertXpathNotExists("/results/domain[id='/testdomain4']", test);
+        XMLAssert.assertXpathExists("/results/domain[id='/testdomain5']", test);
 
-            XMLAssert.assertXpathNotExists("/results/domain[id='/testdomain']", test);
-            XMLAssert.assertXpathExists("/results/domain[id='/testdomain2']", test);
-            XMLAssert.assertXpathNotExists("/results/domain[id='/testdomain3']", test);
-            XMLAssert.assertXpathNotExists("/results/domain[id='/testdomain4']", test);
-            XMLAssert.assertXpathExists("/results/domain[id='/testdomain5']", test);
-
-        } catch (Exception e) {
-            reportException("Failed to resolve URL: ", e);
-        }
     }
 
     // Test searching for domains via an HTTP GET.

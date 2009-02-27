@@ -8,7 +8,7 @@
                 pk="Z_ID"
                 rootEntity="true"
                 query="select &quot;z_id&quot; as Z_ID, &quot;fullname&quot; as fullname, &quot;affiliation&quot; as affiliation, &quot;email&quot; as email, &quot;userid&quot; as userid,concat('user:',&quot;userid&quot;) as uid, 'user' as entity from users"
-                deltaQuery="select &quot;z_id&quot; as z_id from users where &quot;lastmodified&quot; &gt; '${dataimporter.last_index_time}'"
+                deltaQuery="select &quot;z_id&quot; as z_id from users where &quot;lastmodified&quot; &gt;= '${dataimporter.last_index_time}'"
                 deltaImportQuery="select &quot;z_id&quot; as Z_ID, &quot;fullname&quot; as fullname, &quot;affiliation&quot; as affiliation, &quot;email&quot; as email, &quot;userid&quot; as userid ,concat('user:',&quot;userid&quot;) as uid, 'user' as entity from users where &quot;z_id&quot;=${dataimporter.delta.Z_ID}">
             <field column="uid" name="uid"/>
 
@@ -24,7 +24,7 @@
                 rootEntity="true"
                 pk="Z_ID"
                 query="select &quot;z_id&quot; as Z_ID, &quot;name&quot; as name, &quot;d_id&quot; as d_id, concat('domain:', &quot;d_id&quot;) as uid, 'domain' as entity from domains"
-                deltaQuery="select &quot;z_id&quot; as Z_ID from domains where &quot;lastmodified&quot; &gt; '${dataimporter.last_index_time}'"
+                deltaQuery="select &quot;z_id&quot; as Z_ID from domains where &quot;lastmodified&quot; &gt;= '${dataimporter.last_index_time}'"
                 deltaImportQuery="select &quot;z_id&quot; as Z_ID, &quot;name&quot; as name, &quot;d_id&quot; as d_id, concat('domain:', &quot;d_id&quot;) as uid, 'domain' as entity from domains where &quot;z_id&quot;=${dataimporter.delta.Z_ID}">
 
             <field column="uid" name="uid"/>
@@ -60,7 +60,7 @@
 
         <entity name="group" rootEntity="true" pk="Z_ID"
             query="select &quot;z_id&quot; as Z_ID,&quot;name&quot; as name, &quot;g_id&quot; as g_id, concat('group:', &quot;g_id&quot;) as uid, 'group' as entity from groups"
-            deltaQuery="select &quot;z_id&quot; as Z_ID from groups where &quot;lastmodified&quot; &gt; '${dataimporter.last_index_time}'"
+            deltaQuery="select &quot;z_id&quot; as Z_ID from groups where &quot;lastmodified&quot; &gt;= '${dataimporter.last_index_time}'"
             deltaImportQuery="select &quot;z_id&quot; as Z_ID,&quot;name&quot; as name, &quot;g_id&quot; as g_id, concat('group:', &quot;g_id&quot;) as uid, 'group' as entity from groups where &quot;z_id&quot;=${dataimporter.delta.Z_ID}">
             <field column="uid" name="uid"/>
             <field column="name" name="name"/>
@@ -90,7 +90,7 @@
 
 
         <entity name="purl" rootEntity="true" pk="Z_ID" query="select &quot;z_id&quot; as Z_ID, &quot;p_id&quot; as p_id, &quot;type&quot; as type, &quot;target&quot; as target, concat('purl:', &quot;p_id&quot;) as uid, 'purl' as entity from purls"
-            deltaQuery="select  &quot;z_id&quot; as Z_ID from purls where &quot;lastmodified&quot; &gt; '${dataimporter.last_index_time}'"
+            deltaQuery="select  &quot;z_id&quot; as Z_ID from purls where &quot;lastmodified&quot; &gt;= '${dataimporter.last_index_time}'"
             deltaImportQuery="select &quot;z_id&quot; as Z_ID, &quot;p_id&quot; as p_id, &quot;type&quot; as type, &quot;target&quot; as target, concat('purl:', &quot;p_id&quot;) as uid, 'purl' as entity from purls where &quot;z_id&quot;=${dataimporter.delta.Z_ID}">
             <field column="uid" name="uid"/>
             <field column="entity" name="entity"/>
