@@ -20,6 +20,6 @@ $ ./mkinstaller.sh
 
 Then, run the instaler, e.g.:
 
-$ java -jar PURLZ-Server-1.3.jar
+$ java -jar PURLZ-Server-1.4.jar
 
 

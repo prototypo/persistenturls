@@ -1,8 +1,8 @@
 <installation version="1.0">
 
 <info>
-	<appname>PURLZ-Server-1.3</appname>
-	<appversion>1.3</appversion>
+	<appname>PURLZ-Server-1.4</appname>
+	<appversion>1.4</appversion>
 	<url>http://purlz.org/</url>
 	<authors>
 		<author name="Zepheira, LLC" email="contact@zepheira.com"/>
@@ -27,7 +27,7 @@
 </resources>
 
 <variables>
-  <variable name="JARVERSION" value="0.0.1"/>
+  <variable name="JARVERSION" value="1.4.0"/>
 	<!-- Most variables moved to userInputSpec.xml -->
 </variables>
 
@@ -64,12 +64,12 @@
 		<file targetdir="$INSTALL_PATH" src="../LEGAL.txt"/>
 		<file targetdir="$INSTALL_PATH" src="../LICENSE.txt"/>
 		<!-- PURL JARs. -->
-		<file targetdir="$INSTALL_PATH/modules" src="../deploy/mod-purl-documentation-0.0.1.jar"/>
-		<file targetdir="$INSTALL_PATH/modules" src="../deploy/mod-purl-search-0.0.1.jar"/>
-		<file targetdir="$INSTALL_PATH/modules" src="../deploy/mod-session-0.0.1.jar"/>
-		<file targetdir="$INSTALL_PATH/modules" src="../deploy/mod-template-0.0.1.jar"/>
-		<file targetdir="$INSTALL_PATH/modules" src="../deploy/test-mod-purl-search-0.0.1.jar"/>
-		<file targetdir="$INSTALL_PATH/modules" src="../deploy/test-mod-template-0.0.1.jar"/>
+		<file targetdir="$INSTALL_PATH/modules" src="../deploy/mod-purl-documentation-1.4.0.jar"/>
+		<file targetdir="$INSTALL_PATH/modules" src="../deploy/mod-purl-search-1.4.0.jar"/>
+		<file targetdir="$INSTALL_PATH/modules" src="../deploy/mod-session-1.4.0.jar"/>
+		<file targetdir="$INSTALL_PATH/modules" src="../deploy/mod-template-1.4.0.jar"/>
+		<file targetdir="$INSTALL_PATH/modules" src="../deploy/test-mod-purl-search-1.4.0.jar"/>
+		<file targetdir="$INSTALL_PATH/modules" src="../deploy/test-mod-template-1.4.0.jar"/>
 		<!-- NB: Cannot use JAR files for these because we need to parse files within them. -->
 		<file targetdir="$INSTALL_PATH/modules" src="../mod-purl-storage/modules/mod-purl-storage"/>
 		<file targetdir="$INSTALL_PATH/modules" src="../mod-purl-storage/modules/test-mod-purl-storage"/>

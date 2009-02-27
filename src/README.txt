@@ -1,6 +1,6 @@
 PURL Server Installation Instructions
-Version 1.3
-January 19, 2009
+Version 1.4
+February 27, 2009
 purlz@zepheira.com
 purl-interest@purlz.org
 purl-dev@purlz.org
