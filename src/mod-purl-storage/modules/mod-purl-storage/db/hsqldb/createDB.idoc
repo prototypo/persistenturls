@@ -11,8 +11,8 @@
 		"admin"			BOOLEAN,
 		"fullname"		VARCHAR(100),
 		"affiliation"	VARCHAR(100),
-		"email"			VARCHAR(100),
-		"userid"		VARCHAR(32),
+		"email"			VARCHAR_IGNORECASE(100),
+		"userid"		VARCHAR_IGNORECASE(32),
 		"password"		VARCHAR(100),
 		"password_hint"	VARCHAR(100),
 		"justification"	VARCHAR(300),
@@ -26,7 +26,7 @@
 	CREATE CACHED TABLE domains (
 		"z_id"        	INTEGER IDENTITY,
 		"name"			VARCHAR(100),
-		"d_id"			VARCHAR(100),
+		"d_id"			VARCHAR_IGNORECASE(100),
 		"public"		BOOLEAN,		
 		"created"		TIMESTAMP,
 		"lastmodified"	TIMESTAMP,
@@ -54,7 +54,7 @@
 	CREATE CACHED TABLE groups (
 		"z_id"        	INTEGER IDENTITY,
 		"name"			VARCHAR(100),
-		"g_id"			VARCHAR(100),
+		"g_id"			VARCHAR_IGNORECASE(100),
 		"comments"		VARCHAR(300),
 		"created"		TIMESTAMP,
 		"lastmodified"	TIMESTAMP,
@@ -82,7 +82,7 @@
 
 	CREATE CACHED TABLE purls (
 		"z_id"        	INTEGER IDENTITY,
-		"p_id"			VARCHAR(1000),
+		"p_id"			VARCHAR_IGNORECASE(1000),
 		"type"			VARCHAR(100),
 		"target"		VARCHAR(4000),
 		"created"		TIMESTAMP,
