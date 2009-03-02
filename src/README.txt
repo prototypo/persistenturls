@@ -1,6 +1,6 @@
 PURL Server Installation Instructions
 Version 1.4
-February 27, 2009
+March 2, 2009
 purlz@zepheira.com
 purl-interest@purlz.org
 purl-dev@purlz.org
@@ -15,7 +15,7 @@ software may be found at http://purlz.org.  Please consider joining
 the mailing lists and participating in the online community so we can
 serve you better.
 
-Please note that version 1.3 replaces version 1.2 entirely.  Earlier versions
+Please note that version 1.4 replaces version 1.4 entirely.  Earlier versions
 should not be used.  Details of changes in this release are noted in the
 file RELEASENOTES.txt.
 
@@ -99,7 +99,7 @@ and 1060 for the Back End Fulcrum).  Note that Option A (Installing
 from a JAR Installer) allows you to install a new NetKernel and
 manually set the port numbers.
 
-1) Install NetKernel 3.3.0, available from:
+1) Install NetKernel 3.3.1, available from:
 
   http://www.1060.org/download/
 
@@ -147,7 +147,7 @@ customize their installation.
 
 To install a PURL server from a Subversion checkout, do the following:
 
-1) Install NetKernel 3.3.0, available from:
+1) Install NetKernel 3.3.1, available from:
 
   http://www.1060.org/download/
 
