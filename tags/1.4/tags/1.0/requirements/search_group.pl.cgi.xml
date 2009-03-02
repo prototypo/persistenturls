@@ -1,0 +1,105 @@
+<document>
+
+	<name>Search Group CGI</name>
+	
+	<reference>search_group.pl.cgi</reference>
+		
+	<url>TODO</url>
+		
+	<formerurl>http://purl.org/maint/search_group.pl.cgi</formerurl>
+	
+	<depiction>
+		
+		<url>images/search_group.pl.cgi.jpg</url>
+		<alt>Flow Diagram of Search Group CGI</alt>
+		
+	</depiction>
+
+	<history>Exists in PURL 1.0</history>
+
+  
+	<!-- items may have rel='new' or 'todo' -->
+	<functionality>
+		<item>Accept a form with (partial) Group identification details and return matching Groups.</item>
+		<item>Return a page with any matching Groups.</item>
+		<item>Return an error page on error.</item>
+		<item rel="todo">Refactor all search.*.pl.cgi scripts into one?</item>
+		<item rel="new">Modify to allow searching of &quot;tombstoned&quot; Groups</item>
+	</functionality>
+
+	<graphics>
+		<!--
+		<item>
+			<url>http://www.oclc.org/common/images/logos/oclclogo_gray.gif</url>
+			<label>OCLC Logo</label>
+			<linksto>http://www.oclc.org/</linksto>
+		</item>
+		-->
+	</graphics>
+		
+	<assumptions>This page is served by a Web server and is URL addressable.  It is a dynamic script.</assumptions>
+	
+	<preconditions>Search criteria must be provided.</preconditions>
+	
+	<postconditions>None.</postconditions>
+
+	<linksto>
+		
+		<!--
+		<parentof>Dynamically generated confirmation page.</parentof>
+		<parentof>Dynamically generated error page (on error condition).</parentof>
+		<parentoflink></parentoflink>
+		-->
+	
+		<!--
+		<childof></childof>
+		<childoflink>search_group</childoflink>
+		-->
+	
+		<!--
+		<external>Community links (TBD)</external>
+		<externallink>
+			<url></url>
+			<description></description>
+		</externallink>
+	-->
+	
+	</linksto>
+	
+	<formerlylinkedto>
+		
+		<parentof>Dynamically generated confirmation page.</parentof>
+		<parentof>Dynamically generated error page (on error condition).</parentof>
+		<!--
+		<parentoflink></parentoflink>
+		-->
+	
+		<!--
+		<childof></childof>
+		-->
+		<childoflink>search_group</childoflink>
+		
+	
+		<!--
+		<external>Community links (TBD)</external>
+		<externallink>
+			<url></url>
+			<description></description>
+		</externallink>
+	-->
+	
+	</formerlylinkedto>
+	
+	<assignedto>
+		<name></name>
+		<url></url>
+	</assignedto>
+	
+	<status>Not started.</status>
+	
+	<definedby>
+		<name>David Wood</name>
+		<url>http://zepheira.com/team/dave/</url>
+	</definedby>
+	
+</document>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jobs>
+	<job>
+		<uri>active:template+path@ffcpl:/template/initialize</uri>
+		<name>Kick the template accessor</name>
+		<desc>Kick the template accessor</desc>
+		<simple>
+			<startTime></startTime>
+			<endTime></endTime>
+			<repeatCount>0</repeatCount>
+			<repeatInterval>1000</repeatInterval>
+		</simple>
+	</job>
+</jobs>

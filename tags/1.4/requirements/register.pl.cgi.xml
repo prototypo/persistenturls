@@ -1,0 +1,101 @@
+<document>
+
+	<name>Register User CGI</name>
+	
+	<reference>register.pl.cgi</reference>
+		
+	<formerurl>http://purl.org/maint/register.pl.cgi</formerurl>
+	
+	<depiction>
+		
+		<url>images/register.pl.cgi.jpg</url>
+		<alt>Flow Diagram of User Registration CGI</alt>
+		
+	</depiction>
+
+	<history>Exists in PURL 1.0</history>
+
+  
+	<!-- items may have rel='new' or 'todo' -->
+	<functionality>
+		<item>Accept a user information from a form and update details in database.</item>
+		<item>Return a confirmation page.</item>
+		<item>Return an error page on error.</item>
+	</functionality>
+
+	<graphics>
+		<!--
+		<item>
+			<url>http://www.oclc.org/common/images/logos/oclclogo_gray.gif</url>
+			<label>OCLC Logo</label>
+			<linksto>http://www.oclc.org/</linksto>
+		</item>
+		-->
+	</graphics>
+		
+	<assumptions>This page is served by a Web server and is URL addressable.  It is a dynamic script.</assumptions>
+	
+	<preconditions>The user account exists.</preconditions>
+	
+	<postconditions>The user account exists, modified appropriately.</postconditions>
+
+	<linksto>
+		
+		<!--
+		<parentof>Dynamically generated confirmation page.</parentof>
+		<parentof>Dynamically generated error page (on error condition).</parentof>
+		<parentoflink></parentoflink>
+		-->
+	
+		<!--
+		<childof></childof>
+		<childoflink>modify_user</childoflink>
+		-->
+	
+		<!--
+		<external>Community links (TBD)</external>
+		<externallink>
+			<url></url>
+			<description></description>
+		</externallink>
+	-->
+	
+	</linksto>
+	
+	<formerlylinkedto>
+		
+		<parentof>Dynamically generated confirmation page.</parentof>
+		<parentof>Dynamically generated error page (on error condition).</parentof>
+		<!--
+		<parentoflink></parentoflink>
+		-->
+	
+		<!--
+		<childof></childof>
+		-->
+		<childoflink>modify_user</childoflink>
+		
+	
+		<!--
+		<external>Community links (TBD)</external>
+		<externallink>
+			<url></url>
+			<description></description>
+		</externallink>
+	-->
+	
+	</formerlylinkedto>
+	
+	<assignedto>
+		<name></name>
+		<url></url>
+	</assignedto>
+	
+	<status>Not started.</status>
+	
+	<definedby>
+		<name>David Wood</name>
+		<url>http://zepheira.com/team/dave/</url>
+	</definedby>
+	
+</document>

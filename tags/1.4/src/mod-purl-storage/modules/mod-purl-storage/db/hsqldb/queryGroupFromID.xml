@@ -1,0 +1,3 @@
+<sql>
+	SELECT "g_id" from groups where "z_id" = @@GID@@;
+</sql>

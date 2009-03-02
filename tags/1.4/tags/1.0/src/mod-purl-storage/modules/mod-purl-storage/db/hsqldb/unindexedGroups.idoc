@@ -1,0 +1,19 @@
+<idoc>
+	<seq>
+		<instr>
+			<type>sqlQuery</type>
+			<operand>
+				<sql>
+					select "g_id" from groups
+						where "indexed" = false;
+				</sql>
+			</operand>
+			<target>this:response</target>
+		</instr>
+		<instr>
+			<type>expire</type>
+			<operand>this:response</operand>
+			<target>this:response</target>
+		</instr>
+	</seq>
+</idoc>

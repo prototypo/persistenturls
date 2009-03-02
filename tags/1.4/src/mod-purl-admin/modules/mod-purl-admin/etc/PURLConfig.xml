@@ -1,0 +1,32 @@
+<purl-config>
+	<!-- TODO: Build a user interface to update these preferences -->
+	<!-- TODO: Parameterize all server references -->
+	<serverInfo>2.0; http://localhost:8080</serverInfo>
+	<allowUserAutoCreation/>
+	<allowTopLevelDomainAutoCreation/>	
+	<allowPublicDomains/>
+	<purlsTakePrecedence/>
+	<!-- TODO: Are we creating these? -->
+	<publicDomains>
+		<domain>/net</domain>
+	</publicDomains>
+	<!-- TODO: Are we enforcing these? -->
+	<reservedDomains>
+		<domain>/docs</domain>
+	</reservedDomains>
+	<adminUsers>
+		<user>admin</user>
+	</adminUsers>
+	<goneURIs>
+		<gone-uri type="404">ffcpl:/pub/404-gone.html</gone-uri>
+		<gone-uri type="410">ffcpl:/pub/410-gone.html</gone-uri>
+	</goneURIs>
+	<invalidPURLURI>ffcpl:/pub/invalid-purl.html</invalidPURLURI>
+	<errorResolvingPURL>ffcpl:/pub/error-resolving-purl.html</errorResolvingPURL>
+	<dateFormat>yyyy/MM/dd HH:mm:ss</dateFormat>
+	<!-- Do we still need this?? -->
+	<topLevelRedirects>
+	<!-- 		<redirect from="ffcpl:/metadata" to="ffcpl:/static/metadata"/>-->
+	</topLevelRedirects>
+    <!--<passwdFile>/Users/dfeeney/Downloads/passwd</passwdFile>-->
+</purl-config>

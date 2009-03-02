@@ -1,0 +1,299 @@
+body {
+	background: #FFF url("./images/purl-128.jpg") fixed top right no-repeat;
+	padding: 15px 0px 0px 0px;
+	margin: 23px 28px;
+	min-width: 800px;
+	font-family: "Trebuchet MS", sans-serif;
+	text-align: justify;
+	line-height: 1.4em;
+	font-size: 0.85em;
+}
+
+pre {
+	text-indent: 30px;
+}
+
+pre.code {
+	text-indent: 20px;
+	border:1px dashed #000;
+	background: #FFF;
+}
+
+#tabmenu {
+	color: #F0F8FF;
+	border-bottom: 2px solid #6495ED;
+	margin: 12px 0px 0px 0px;
+	padding: 0px;
+	z-index: 1;
+	padding-left: 10px;
+	line-height: 1.1em;
+	font-weight: bold;
+}
+
+#tabmenu li {
+	display: inline;
+	overflow: hidden;
+	list-style-type: none; 
+}
+
+#tabmenu a.active {
+	color: #000;
+	background: #FFFAFA;
+	border: 2px solid #5F9EA0; 
+	/* border-style: outset;  */
+	padding: 2px 5px 0px 5px;
+	margin: 0;
+	text-decoration: none; 
+}
+
+#tabmenu a.inactive {
+	color: #708090;
+	background: #FFFAFA;
+	border: 1px solid #5F9EA0; 
+	/* border-style: outset;  */
+	padding: 2px 5px 0px 5px;
+	margin: 0;
+	text-decoration: none; 
+}
+
+#tabmenu a.active {
+	background: #F0F8FF; /* alice blue */
+	border-bottom: 2px solid #F0F8FF; /* alice blue */
+}
+
+#tabmenu a:hover {
+	/* color: #FFF; */
+	color:  #0000CD; /* medium blue */
+	/* background:  #6495ED; */ /* corn flower blue */
+}
+
+#tabmenu a:visited {
+}
+
+#tabmenu a.active:hover {
+	color:  #000; 
+	/* background: #FFFF; */
+	/* color: #DEDECF; */
+}
+
+#content {
+	text-align: left;
+	background: #F0F8FF;
+	padding: 10px;
+	border: 2px solid #6495ED;
+	border-top: none;
+	z-index: 2;	
+	opacity: 0.90;
+}
+
+#content a {
+}
+
+#content a:hover { 
+}
+
+
+#navigation {
+}
+
+#navigation p {
+	font-size: 1.1em;
+	font-weight: bold;
+}
+
+#navigation img {
+	padding: 10px 0px 0px 20px;
+}
+
+#create {
+}
+
+a.tooltip{
+    position:relative; /*this is the key*/
+    z-index:24; background-color:#fff;
+    color:#000;
+    text-decoration:none}
+
+a.tooltip:hover{z-index:25; background-color:#fff}
+
+a.tooltip span{display: none}
+
+a.tooltip:hover span{ /*the span will display just on :hover state*/
+    display:block;
+    position:absolute;
+    top:2em; left:2em; width:15em;
+    border:1px solid #0cf;
+    background-color:#CAE8EA; color:#000;
+	font-family: "Trebuchet MS", sans-serif;
+	text-align: justify;
+	line-height: 1.4em;
+	font-size: 0.85em;
+	font-weight: bold;
+    text-align: center}
+
+div.noresults {
+}
+
+div.withresults {
+	color: #708090;
+	background: #FFFAFA;
+	border: 1px solid #5F9EA0; 
+	/* border-style: outset;  */
+	padding: 2px 5px 0px 5px;
+	margin: 0;
+	text-decoration: none;
+}
+
+h3.error {
+	font-weight: bold;
+	color: red;
+}
+p.actiontext {
+	font-size: 1.1em;
+	font-weight: bold;
+}
+
+p.response {
+	font-size: 1.1em;
+	font-weight: bold;
+	margin-left: 2.5em;
+}
+
+p.error {
+	font-size: 1.1em;
+	font-weight: bold;
+	color: red;
+	margin-left: 2.5em;
+}
+
+p.approved {
+	font-size: 1.1em;
+	font-weight: bold;
+	margin-left: 2.5em;
+}
+
+p.rejected {
+	font-size: 1.1em;
+	font-weight: bold;
+	color: red;
+	margin-left: 2.5em;
+}
+
+p.warning {
+	font-size: 1.1em;
+	font-weight: bold;
+	color: red;
+}
+
+form {
+	padding: 10px 0px 0px 0px;
+}
+
+form .instructions {
+ 	margin: 0.5em 0.5em;
+	padding: 10px 10px 10px 10px;
+	background-color: #E6E6FA;	/* cornsilk */
+	font-style: italic;
+}
+
+fieldset {
+	border: 2px solid #C1DAD7;
+	/* width: 30em  */
+}
+
+legend {
+	background: #CAE8EA url(images/bg_header.jpg) no-repeat;
+	border: 1px solid #5F9EA0;
+	padding: 2px 6px;
+	font-size: 1.0em;
+	font-weight: bold;
+}
+
+select {
+	margin: 10px 10px;
+}
+
+.submit input {
+	margin-left: 4.5em;
+}
+
+input {
+}
+
+.submit input {
+	color: #000;
+	background: #ffa20f;
+	border: 2px outset #d7b9c9
+}
+
+
+
+table {
+	table-layout: fixed;
+	padding: 0;
+	/* margin: 10px 10px; */
+}
+
+
+
+table.display {
+	border: 2px solid #C1DAD7;
+	text-align: left;
+}
+
+table.display th {
+	background: #CAE8EA url(./images/bg_header.jpg) no-repeat;
+	border: 1px solid #5F9EA0;
+	padding: 2px 6px;
+	font-size: 1.1em;
+	font-weight: bold;
+}
+
+table.display ul {
+	margin: 10px 0px 10px 20px;
+	padding: 0; 
+}
+
+table.display ul li {
+}
+
+
+
+table.docstable {
+	table-layout: fixed;
+	padding: 0;
+	width: 100%;
+}
+
+td {
+	/* border-bottom: 1px solid #C1DAD7; */
+	/* padding: 6px 6px 6px 12px; */
+}
+
+td.property {
+}
+
+td.error {
+	color: red;
+}
+
+th.row {
+}
+
+th.rowalt {
+	border-left: 1px solid #C1DAD7;
+	border-top: 0;
+	background: #f5fafa url(./images/bullet2.gif) no-repeat;
+	font: bold 10px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #797268;
+}
+
+
+img {
+  border: 0;
+}
+
+
+div#footer {
+	padding: 5px 5px 5px 5px;
+}

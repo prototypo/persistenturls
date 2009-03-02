@@ -1,0 +1,102 @@
+<document>
+
+	<name>Creating Your First PURL</name>
+	
+	<reference>getting_started</reference>
+	
+	<url>http://purlz.org/getting_started.html</url>
+	
+	<formerurl>http://purl.org/getting_started.html</formerurl>
+	
+	<depiction>
+		
+		<url>images/getting_started.jpg</url>
+		<alt>Screenshot of getting started page</alt>
+		<width>640px</width> 
+		<height>480px</height>
+	
+	</depiction>
+
+	<history>Exists in PURL 1.0</history>
+
+  
+	<!-- items may have rel='new' or 'todo' -->
+	<functionality>
+		<item>Describes how a new user creates their first PURL.</item>
+	</functionality>
+
+	<graphics>
+		
+		<item>
+			<url>http://www.oclc.org/common/images/logos/oclclogo_gray.gif</url>
+			<label>OCLC Logo</label>
+			<linksto>http://www.oclc.org/</linksto>
+		</item>
+	
+	</graphics>
+		
+	<assumptions>This page is served by a Web server and is URL addressable.</assumptions>
+	
+	<preconditions>None</preconditions>
+	
+	<postconditions>None</postconditions>
+
+	<linksto>
+		
+		<!--
+		<parentof></parentof>
+		<parentoflink>request_user</parentoflink>
+		<parentoflink>choose</parentoflink>
+		-->
+	
+		<!--
+		<childof>None</childof>
+		<childoflink>home</childoflink>
+		-->
+	
+		<!--
+		<external>Community links (TBD)</external>
+		<externallink>
+			<url></url>
+			<description></description>
+		</externallink>
+	-->
+	
+	</linksto>
+	
+	<formerlylinkedto>
+		
+		<!--
+		<parentof></parentof>
+		-->
+		<parentoflink>request_user</parentoflink>
+		<parentoflink>choose</parentoflink>
+	
+		<!--
+		<childof>None</childof>
+		-->
+		<childoflink>home</childoflink>
+	
+		<!--
+		<external>Community links (TBD)</external>
+		<externallink>
+			<url></url>
+			<description></description>
+		</externallink>
+	-->
+	
+	</formerlylinkedto>
+	
+	<assignedto>
+		<name></name>
+		<url></url>
+	</assignedto>
+	
+	<status>Not started.</status>
+	
+	<definedby>
+		<name>David Wood</name>
+		<url>http://zepheira.com/team/dave/</url>
+	</definedby>
+	
+</document>

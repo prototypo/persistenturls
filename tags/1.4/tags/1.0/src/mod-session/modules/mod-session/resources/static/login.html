@@ -1,0 +1,38 @@
+<html>
+  <head>
+    <title></title>
+  </head>
+  <body>
+	<div>
+	<script language="javascript" type="text/javascript">
+	<!--
+	function setURL()
+	{	loginform.url.setAttribute("value", window.location.href);
+		loginform.submit();
+	}
+	function init()
+	{	document.loginform.userid.focus();
+		setURL();
+	}
+	-->
+	</script>
+
+		<form name="loginform" action="/template/login/login-submit.bsh" xrl:resolve="action" method="POST">
+			<input type="hidden" name="url" value="" />
+			<table width="100%" cellspacing="0" cellpadding="2" style="background: url([[xrl:img-flat]]);" xrl:resolve="style">
+				<tr><td colspan="2" class="group-header">Please Sign In</td></tr>
+				<tr>
+					<td class="label">User ID:</td><td><input name="userid"/></td>
+				</tr>
+				<tr>
+					<td class="label">Password:</td><td><input name="password" type="password"/></td>
+				</tr>
+				<tr>
+					<td class="label"></td><td><input type="submit" value="Login" onclick="setURL()"/></td>
+				</tr>
+			</table>
+		</form>
+</div>
+
+  </body>
+</html>

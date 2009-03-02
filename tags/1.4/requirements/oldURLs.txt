@@ -1,0 +1,62 @@
+Static Documentation
+--------------------
+http://purl.org/index.html
+http://purl.org/getting_started.html
+http://purl.org/maint/power.html
+http://purl.org/maint/user_concepts.html
+http://purl.org/maint/first_time_note.html
+http://purl.org/maint/validate/Manifest
+http://purl.org/problems.html
+
+Brief Intro: http://purl.oclc.org/OCLC/PURL/SUMMARY
+Longer Intro: http://purl.oclc.org/OCLC/PURL/INET96
+FAQ: http://purl.oclc.org/OCLC/PURL/FAQ
+Community:
+http://purl.oclc.org/OCLC/PURL/DOWNLOAD
+http://purl.oclc.org/OCLC/PURL/PURL-L
+index
+Actions (30)
+------------
+http://purl.org/maint/batch.pl.cgi
+http://purl.org/maint/batch_modify.html
+http://purl.org/maint/choose.html
+http://purl.org/maint/choose_redirect.html
+http://purl.org/maint/clone.html
+http://purl.org/maint/create_all.html
+http://purl.org/maint/create_group.html
+http://purl.org/maint/create_subdomain.html
+http://purl.org/maint/display.html
+http://purl.org/maint/display.pl.cgi
+http://purl.org/maint/modify.html
+http://purl.org/maint/modify_all.html
+http://purl.org/maint/modify_domain.html
+http://purl.org/maint/modify_domain.pl.cgi
+http://purl.org/maint/modify_group.html
+http://purl.org/maint/modify_group.pl.cgi
+http://purl.org/maint/modify_user.html
+http://purl.org/maint/new.pl.cgi
+http://purl.org/maint/register.pl.cgi
+http://purl.org/maint/rename.html
+http://purl.org/maint/request_domain.html
+http://purl.org/maint/request_user.html
+http://purl.org/maint/request_user.pl.cgi
+
+http://purl.org/maint/search.html
+http://purl.org/maint/search_domain.html
+http://purl.org/maint/search_domain.pl.cgi
+http://purl.org/maint/search_group.html
+http://purl.org/maint/search_group.pl.cgi
+http://purl.org/maint/search_user.html
+http://purl.org/maint/search_user.pl.cgi
+
+Do we want to continue putting "action" URLs under http://purl.org/maint/?
+  - No, put only those that change persistent data under /admin/
+  - Put search-related ones at the top level.
+
+How do we want to name handlers?
+  - We don't!  They will become scripts in NK modules and will handle URLs as appropriate.
+
+We do want to combine the search functionality.
+We don't want to split the state machine currently behind http://purl.org/maint/display.pl.cgi although we will completely recode it.
+
+See URLs.html for final design.

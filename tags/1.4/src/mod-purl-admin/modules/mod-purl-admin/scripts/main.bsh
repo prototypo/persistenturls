@@ -1,0 +1,42 @@
+import org.ten60.netkernel.layer1.representation.*;
+import org.ten60.netkernel.xml.representation.*;
+import com.ten60.netkernel.urii.aspect.*;
+import org.purl.accessor.*;
+import org.purl.accessor.util.*;
+
+main() {
+	base=context.getThisRequest().getArgument("base");
+	req = null;
+	resp = null;
+	
+	// If we didn't get a root HTTP context, see if we have a PURL
+	// that matches, otherwise redirect to the main documentation
+	// page.
+	
+	if(!base.equals("ffcpl:/")) {
+		// PURLs take precedence over local references. If you need to 
+		// serve up static content from a PURL installation, reserve
+		// the top level domains in the ffcpl:/etc/PURLConfig.xml file.
+        // TODO: Do we really want to do this?  There was a partial implementation
+
+		method = context.getThisRequest().getArgument("method");
+		// TODO: Rewrite ffcpl:/ reference to purl:/ reference
+		    
+		req=context.createSubRequest("active:purl-resolver");
+		req.addArgument("mode", "mode:resolve");
+		req.addArgument("path", base);
+		req.addArgument("method", method);
+		req.addArgument("requestURL", context.getThisRequest().getArgument("requestURL"));
+        resp=context.issueSubRequest(req);
+
+	} else {
+	       //Issue HTTP Redirect
+        req=context.createSubRequest("active:HTTPRedirect");
+        req.addArgument("operator", new StringAspect("<url>/docs/index.html</url>"));
+        result=context.issueSubRequest(req);
+        resp=context.createResponseFrom(result);
+        resp.setMimeType("text/xml");
+	}
+
+	context.setResponse(resp);
+}
