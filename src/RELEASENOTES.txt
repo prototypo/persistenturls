@@ -1,6 +1,6 @@
 PURL Server Release Notes
 Version 1.4
-February 27, 2009
+March 2, 2009
 http://purlz.org
 
 
@@ -9,6 +9,9 @@ This file contains release notes for the PURL server.
 -------------------------
 | Version 1.4 Bug Fixes |
 -------------------------
+
+Ticket numbers and descriptions refer to content on http://purlz.org/project/purl/development/
+
 FIXED:
 #1061 Max number of user sessions is too small
 #1060 User ID's are case insensitive in the database, but not in search.
