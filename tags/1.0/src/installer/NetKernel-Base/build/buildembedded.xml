@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="all" name="1060netkernel-embedded">
+	
+	<target name="init">
+        <property name="app" value="1060netkernel-embedded"/>
+        <property name="version" value="1.0.1"/>
+        <property name="src" value="../src/embedded"/>
+	<property name="dst" value="./netkernel-embedded"/>
+	<mkdir dir="${dst}"/>
+	<mkdir dir="${dst}/class"/>
+	<mkdir dir="${dst}/docs"/>
+    </target>
+    
+    <target depends="init" name="compile">
+        <javac debug="true" deprecation="true" destdir="${dst}/class" srcdir="${src}">
+            <classpath>
+		<pathelement location="1060netkernel-2.8.4.jar"/>
+            </classpath>
+        </javac>
+    </target>
+	
+    <target depends="init,compile" name="jar">
+        <jar basedir="${dst}/class" compress="true" jarfile="${app}-${version}.jar">
+		<include name="com"/>
+		<include name="img"/>
+		<include name="**/*.gif"/>
+		<include name="**/*.html"/>
+		<include name="**/*.class"/>
+		<include name="**/*.xml"/>
+		<include name="**/*.png"/>
+		<exclude name="**/*.java~"/>
+        <exclude name="**/*.form"/>
+		<exclude name="**/*.zip"/>
+		<exclude name="**/*.exe"/>
+		<exclude name="**/*.sh"/>
+		<exclude name="${app}.mf"/>
+		<exclude name="**/*.jar"/>
+		<exclude name="./package"/>
+		<exclude name="./shell_scripts"/>
+		<exclude name="apidoc"/>
+        </jar>
+    </target>
+	
+	<target depends="init,clean, build, javadoc" description="Build everything." name="all">
+        <echo message="${app}  built."/>
+    </target>
+	
+	<target depends="init,clean,compile,jar" description="Build kernel." name="build">
+        <echo message="${app} built."/>
+    </target>
+		
+    <target depends="init" description="Clean all build products." name="clean">
+        <delete file="${app}-${version}.jar"/>
+        <delete dir="${dst}/*"/>
+    </target>
+
+	<target depends="init" description="Generate Javadoc" name="javadoc">
+		<javadoc	packagenames="com.ten60.netkernel.embedded.*"
+					sourcepath="${src}"
+					destdir="${dst}/docs"
+					author="false"
+					version="true"
+					Verbose="false"
+					use="true"
+					windowtitle="1060 NetKernel Embedded API">
+				 <classpath>
+					<pathelement location="../src/"/>
+				  </classpath>
+				<doctitle><![CDATA[<h1>1060 NetKernel v2.0.0</h1><h2>Embedded API</h2>]]></doctitle>
+				<bottom><![CDATA[<i>Copyright &#169; 2002-2003 1060 Research Limited. Licensed under 1060 Public License v1.0. All Rights Reserved.</i>]]></bottom>				
+		  </javadoc>
+	</target>
+	
+</project>

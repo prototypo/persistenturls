@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<purls>
+
+    <!-- Type 410.  Permanently gone -->
+		<purl id="/testdomain/test410-1" type="410">
+      <maintainers>
+      	<uid>testuser</uid>
+    	</maintainers>
+    </purl>
+
+    <!-- Type 410.  Permanently gone -->
+		<purl id="/testdomain/test410-2" type="410">
+      <maintainers>
+      	<uid>testuser</uid>
+    	</maintainers>
+    </purl>
+
+</purls>
+

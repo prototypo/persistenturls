@@ -1,0 +1,18 @@
+<config>
+	<rdbms>
+    	    <!-- hsql -->
+            <jdbcDriver>org.hsqldb.jdbcDriver</jdbcDriver>
+            <jdbcConnection>jdbc:hsqldb:purl</jdbcConnection>
+            <user>sa</user>
+            <password/>
+            <shutdown>true</shutdown>
+            <poolSize>50</poolSize>
+
+            <!-- mysql -->
+            <!--<jdbcDriver>com.mysql.jdbc.Driver</jdbcDriver>
+            <jdbcConnection>jdbc:mysql://localhost:3306/purls</jdbcConnection>
+            <user>root</user>
+            <password>password</password>
+            <poolSize>100</poolSize> -->
+	</rdbms>
+</config>

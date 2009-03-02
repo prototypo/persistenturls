@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entrypoints>
+	<entrypoint>
+		<name>control_reload</name>
+		<uri>ffcpl:/netkernel-control/reload</uri>
+		<indexable>
+			<title>Reload</title>
+			<desc>Make this NK instance reload application set and hot-restart.</desc>
+			<keywords/>
+		</indexable>
+		<categories>app</categories>
+		<group>NetKernel Control</group>
+		<icon/>
+	</entrypoint>
+	<entrypoint>
+		<name>control_panic</name>
+		<uri>ffcpl:/netkernel-control/panic</uri>
+		<indexable>
+			<title>Panic</title>
+			<desc>Rollback system to last known good state.</desc>
+			<keywords/>
+		</indexable>
+		<categories>app</categories>
+		<group>NetKernel Control</group>
+		<icon/>
+	</entrypoint>
+</entrypoints>

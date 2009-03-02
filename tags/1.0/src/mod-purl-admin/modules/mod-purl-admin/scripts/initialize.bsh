@@ -1,0 +1,80 @@
+import org.ten60.netkernel.layer1.representation.*;
+import org.ten60.netkernel.xml.representation.*;
+import com.ten60.netkernel.urii.aspect.*;
+import org.purl.accessor.util.*;
+
+main() {
+
+	sb = new StringBuffer("<purl-initialization>");
+	
+	req = context.createSubRequest("active:purl-storage-initialize");
+	context.issueSubRequest(req);
+	sb.append("<storage-layer>initialized</storage-layer>");	
+	
+	// Intialize the Lucene Index
+	if(!context.exists("ffcpl:/index/purls-initialized")) {
+		System.out.println("Reinitializing Lucene Index...");
+		NKHelper.initializeLuceneIndex(context, "ffcpl:/index/purl");
+		NKHelper.initializeLuceneIndex(context, "ffcpl:/index/user");
+		NKHelper.initializeLuceneIndex(context, "ffcpl:/index/domain");
+		NKHelper.initializeLuceneIndex(context, "ffcpl:/index/group");		
+		context.sinkAspect("ffcpl:/index/purls-initialized", new StringAspect("Initialized"));
+		sb.append("<lucene-index>initialized</lucene-index>");
+	}
+	
+	if(installAdminUsers()) {
+		sb.append("<admin-users>created</admin-users>");
+	}
+	
+	sb.append("</purl-initialization>");
+	resp=context.createResponseFrom(new StringAspect(sb.toString()));
+	resp.setMimeType("text/xml");
+	context.setResponse(resp);
+}
+
+installAdminUsers() {
+	userResolver = new UserResolver();
+	
+	config = context.sourceAspect("ffcpl:/etc/PURLConfig.xml", IAspectXDA.class);
+	xdaItor = config.getXDA().readOnlyIterator("/purl-config/adminUsers/user");
+	while(xdaItor.hasNext()) {
+		xdaItor.next();
+		name = xdaItor.getText(xdaItor.getCurrentXPath(), true);
+		userURI = userResolver.getURI(name);
+		
+		req = context.createSubRequest("active:purl-storage-user-exists");
+		req.addArgument("uri", userURI);
+		req.setAspectClass(IAspectBoolean.class);
+		resp = context.issueSubRequestForAspect(req);
+		
+		if(!resp.isTrue()) {
+			sb = new StringBuffer("<user admin=\"true\">");
+			sb.append("<id>");
+			sb.append(name);
+			sb.append("</id>");
+			sb.append("<name>User of Steel</name>");
+			sb.append("<affiliation>PURL Server</affiliation>");
+	        sb.append("<email/>");
+	        sb.append("<password>");
+	        sb.append(NKHelper.getMD5Value(context, "password"));
+	        sb.append("</password>");
+	        sb.append("<hint>It is a bad security practice.</hint>");
+	        sb.append("<justification/>");
+	        sb.append("</user>");
+	        
+	        sa = new StringAspect(sb.toString());
+	        
+	        req = context.createSubRequest("active:purl-storage-create-user");
+	        req.addArgument("param", sa);
+	        res = context.issueSubRequest(req);
+	        
+	        req=context.createSubRequest("active:purl-storage-approve-user");
+			req.addArgument("param", sa);
+			res = context.issueSubRequest(req);
+		} else {
+			System.out.println("Ignoring auto-created admin user: " + name);
+		}
+	}
+	
+	return true;
+}

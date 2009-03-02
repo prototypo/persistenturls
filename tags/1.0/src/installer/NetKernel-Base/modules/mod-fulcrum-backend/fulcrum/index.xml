@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list>
+	<this>app_fulcrum_backend_index</this>
+	<entrypoints>
+		<entrypoint>doc_books_readme</entrypoint>
+		<entrypoint>app_fulcrum_backend_documents</entrypoint>
+		<entrypoint>app_fulcrum_backend_support</entrypoint>
+		<entrypoint>app_ext_introspect_info</entrypoint>
+	</entrypoints>
+</list>

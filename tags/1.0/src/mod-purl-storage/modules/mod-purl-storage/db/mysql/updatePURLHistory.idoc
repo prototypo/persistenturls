@@ -1,0 +1,38 @@
+<idoc>
+	<seq>
+		<instr>
+			<type>stm</type>
+			<operand><sql/></operand>
+			<operator>
+				<stm:group xmlns:stm="http://1060.org/stm">
+				<stm:set xpath="/sql">
+					INSERT INTO purlhistory VALUES ( null,
+						'<stm:param xpath="/history/p_id/text()"/>',
+						'<stm:param xpath="/history/u_id/text()"/>',
+						'<stm:param xpath="/history/status/text()"/>',
+						'<stm:param xpath="/history/type/text()"/>',
+						'<stm:param xpath="/history/target/text()"/>',												
+						NOW()								
+						);																				
+				</stm:set>
+				</stm:group>
+			</operator>
+			<param>this:param</param>
+			<target>var:sql</target>
+		</instr>
+      	<instr>
+      		<type>sqlUpdate</type>
+      		<operand>var:sql</operand>
+      		<target>var:response</target>
+      	</instr>
+      	<instr>
+      		<type>copy</type>
+      		<operand><purl-history-updated/></operand>
+      		<target>this:response</target>
+      	</instr>
+		<instr>
+			<type>expire</type>
+			<operand>this:response</operand>
+		</instr>
+	</seq>
+</idoc>

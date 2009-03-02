@@ -1,0 +1,3 @@
+<sql>
+	SELECT g_id FROM groupmembers WHERE m_id = @@UID@@ and type=0;
+</sql>

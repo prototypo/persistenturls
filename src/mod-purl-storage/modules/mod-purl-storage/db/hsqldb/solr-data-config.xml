@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+<dataConfig>
+    <dataSource type="JdbcDataSource" driver="com.mysql.jdbc.Driver" url="@@JDBC-URL@@" user="@@USERNAME@@" password="@@PASSWORD@@" batchSize="-1"/>
+    <document name="users">
+
+
+        <entity name="user"
+                pk="Z_ID"
+                rootEntity="true"
+                query="select &quot;z_id&quot; as Z_ID, &quot;fullname&quot; as fullname, &quot;affiliation&quot; as affiliation, &quot;email&quot; as email, &quot;userid&quot; as userid,concat('user:',&quot;userid&quot;) as uid, 'user' as entity from users"
+                deltaQuery="select &quot;z_id&quot; as z_id from users where &quot;lastmodified&quot; &gt;= '${dataimporter.last_index_time}'"
+                deltaImportQuery="select &quot;z_id&quot; as Z_ID, &quot;fullname&quot; as fullname, &quot;affiliation&quot; as affiliation, &quot;email&quot; as email, &quot;userid&quot; as userid ,concat('user:',&quot;userid&quot;) as uid, 'user' as entity from users where &quot;z_id&quot;=${dataimporter.delta.Z_ID}">
+            <field column="uid" name="uid"/>
+
+            <field column="entity" name="entity"/>
+            <field column="fullname" name="fullname"/>
+            <field column="affiliation" name="affiliation"/>
+            <field column="email" name="email"/>
+            <field column="userid" name="userid"/>
+        </entity>
+
+
+        <entity name="domain"
+                rootEntity="true"
+                pk="Z_ID"
+                query="select &quot;z_id&quot; as Z_ID, &quot;name&quot; as name, &quot;d_id&quot; as d_id, concat('domain:', &quot;d_id&quot;) as uid, 'domain' as entity from domains"
+                deltaQuery="select &quot;z_id&quot; as Z_ID from domains where &quot;lastmodified&quot; &gt;= '${dataimporter.last_index_time}'"
+                deltaImportQuery="select &quot;z_id&quot; as Z_ID, &quot;name&quot; as name, &quot;d_id&quot; as d_id, concat('domain:', &quot;d_id&quot;) as uid, 'domain' as entity from domains where &quot;z_id&quot;=${dataimporter.delta.Z_ID}">
+
+            <field column="uid" name="uid"/>
+            <field column="entity" name="entity"/>
+            <field column="name" name="name"/>
+            <field column="d_id" name="d_id"/>
+
+            <entity name="domainwritersuser" pk="Z_ID" query="select &quot;z_id&quot; as Z_ID,&quot;w_id&quot; as W_ID from domainwriters where &quot;d_id&quot;=${domain.Z_ID} and &quot;type&quot;=0">
+                <entity name="writer" pk="z_id" query="select &quot;userid&quot; as &quot;domainwritersuser&quot; from users where &quot;z_id&quot;=${domainwritersuser.W_ID}">
+                    <field column="domainwritersuser" name="writers"/>
+                </entity>
+            </entity>
+
+            <entity name="domainwritersgroup" pk="Z_ID" query="select &quot;z_id&quot; as Z_ID,&quot;w_id&quot; as W_ID from domainwriters where &quot;d_id&quot;=${domain.Z_ID} and &quot;type&quot;=1">
+                <entity name="writer" pk="Z_ID" query="select &quot;g_id&quot; as &quot;domainwritersgroup&quot; from groups where &quot;z_id&quot;=${domainwritersgroup.W_ID}">
+                    <field column="domainwritersgroup" name="writers"/>
+                </entity>
+            </entity>
+
+            <entity name="domainmaintainersgroup" pk="Z_ID" query="select &quot;z_id&quot; as Z_ID,&quot;m_id&quot; as M_ID from domainmaintainers where &quot;d_id&quot;=${domain.Z_ID} and &quot;type&quot;=1">
+                <entity name="maintainer" pk="Z_ID" query="select &quot;g_id&quot; as &quot;domainmaintainersgroup&quot; from groups where &quot;z_id&quot;=${domainmaintainersgroup.M_ID}">
+                    <field column="domainmaintainersgroup" name="maintainers"/>
+                </entity>
+            </entity>
+
+            <entity name="domainmaintainersuser" pk="Z_ID" query="select &quot;z_id&quot; as Z_ID,&quot;m_id&quot; as M_ID from domainmaintainers where &quot;d_id&quot;=${domain.Z_ID} and &quot;type&quot;=0">
+                <entity name="maintainer" pk="Z_ID" query="select &quot;userid&quot; as &quot;domainmaintainersuser&quot; from users where &quot;z_id&quot;=${domainmaintainersuser.M_ID}">
+                    <field column="domainmaintainersuser" name="maintainers"/>
+                </entity>
+            </entity>
+        </entity>
+
+
+        <entity name="group" rootEntity="true" pk="Z_ID"
+            query="select &quot;z_id&quot; as Z_ID,&quot;name&quot; as name, &quot;g_id&quot; as g_id, concat('group:', &quot;g_id&quot;) as uid, 'group' as entity from groups"
+            deltaQuery="select &quot;z_id&quot; as Z_ID from groups where &quot;lastmodified&quot; &gt;= '${dataimporter.last_index_time}'"
+            deltaImportQuery="select &quot;z_id&quot; as Z_ID,&quot;name&quot; as name, &quot;g_id&quot; as g_id, concat('group:', &quot;g_id&quot;) as uid, 'group' as entity from groups where &quot;z_id&quot;=${dataimporter.delta.Z_ID}">
+            <field column="uid" name="uid"/>
+            <field column="name" name="name"/>
+            <field column="g_id" name="g_id"/>
+            <field column="entity" name="entity"/>
+            <entity name="groupmembersgroup" pk="Z_ID" query="select &quot;z_id&quot; as Z_ID, &quot;m_id&quot; as M_ID from groupmembers where &quot;g_id&quot;=${group.Z_ID} and &quot;type&quot;=1">
+                <entity name="member" pk="z_id" query="select &quot;g_id&quot; as &quot;groupmembersgroup&quot; from groups where &quot;z_id&quot;=${groupmembersgroup.M_ID}">
+                    <field column="groupmembersgroup" name="members"/>
+                </entity>
+            </entity>
+            <entity name="groupmembersuser" pk="Z_ID" query="select &quot;z_id&quot; as Z_ID, &quot;m_id&quot; as M_ID from groupmembers where &quot;g_id&quot;=${group.Z_ID} and &quot;type&quot;=0">
+                <entity name="member" pk="z_id" query="select &quot;userid&quot; as &quot;groupmembersuser&quot; from users where &quot;z_id&quot;=${groupmembersuser.M_ID}">
+                    <field column="groupmembersuser" name="members"/>
+                </entity>
+            </entity>
+            <entity name="groupmaintainersgroup" pk="Z_ID" query="select &quot;z_id&quot; as Z_ID,&quot;m_id&quot; as M_ID from groupmaintainers where &quot;g_id&quot;=${group.Z_ID} and &quot;type&quot;=1">
+                <entity name="maintainer" pk="z_id" query="select &quot;g_id&quot; as &quot;groupmaintainersgroup&quot; from groups where &quot;z_id&quot;=${groupmaintainersgroup.M_ID}">
+                    <field column="groupmaintainersgroup" name="maintainers"/>
+                </entity>
+            </entity>
+            <entity name="groupmaintainersuser" pk="Z_ID" query="select &quot;z_id&quot; as Z_ID,&quot;m_id&quot; as M_ID from groupmaintainers where &quot;g_id&quot;=${group.Z_ID} and &quot;type&quot;=0">
+                <entity name="maintainer" pk="z_id" query="select &quot;userid&quot; as &quot;groupmaintainersuser&quot; from users where &quot;z_id&quot;=${groupmaintainersuser.M_ID}">
+                    <field column="groupmaintainersuser" name="maintainers"/>
+                </entity>
+            </entity>
+        </entity>
+
+
+        <entity name="purl" rootEntity="true" pk="Z_ID" query="select &quot;z_id&quot; as Z_ID, &quot;p_id&quot; as p_id, &quot;type&quot; as type, &quot;target&quot; as target, concat('purl:', &quot;p_id&quot;) as uid, 'purl' as entity from purls"
+            deltaQuery="select  &quot;z_id&quot; as Z_ID from purls where &quot;lastmodified&quot; &gt;= '${dataimporter.last_index_time}'"
+            deltaImportQuery="select &quot;z_id&quot; as Z_ID, &quot;p_id&quot; as p_id, &quot;type&quot; as type, &quot;target&quot; as target, concat('purl:', &quot;p_id&quot;) as uid, 'purl' as entity from purls where &quot;z_id&quot;=${dataimporter.delta.Z_ID}">
+            <field column="uid" name="uid"/>
+            <field column="entity" name="entity"/>
+            <field column="p_id" name="p_id"/>
+            <field column="type" name="type"/>
+            <field column="target" name="target"/>
+            <entity name="purlmaintainersgroup" pk="Z_ID"
+                query="select &quot;m_id&quot; as M_ID from purlmaintainers where &quot;p_id&quot;=${purl.Z_ID} and &quot;type&quot;=1">
+                <entity name="maintainer" pk="Z_ID"
+                    query="select &quot;g_id&quot; as &quot;purlmaintainersgroup&quot; from groups where &quot;z_id&quot;=${purlmaintainersgroup.M_ID}">
+                    <field column="purlmaintainersgroup" name="maintainers"/>
+                </entity>
+            </entity>
+            <entity name="purlmaintainersuser" pk="Z_ID"
+                query="select &quot;m_id&quot; as M_ID from purlmaintainers where &quot;p_id&quot;=${purl.Z_ID} and &quot;type&quot;=0">
+                <entity name="maintainer" pk="Z_ID"
+                    query="select &quot;userid&quot; as &quot;purlmaintainersuser&quot; from users where &quot;z_id&quot;=${purlmaintainersuser.M_ID}">
+                    <field column="purlmaintainersuser" name="maintainers"/>
+                </entity>
+            </entity>
+        </entity>
+    </document>
+</dataConfig>

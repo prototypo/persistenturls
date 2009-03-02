@@ -1,0 +1,112 @@
+<document>
+
+	<name>Modify PURL CGI</name>
+	
+	<reference>display.pl.cgi</reference>
+		
+	<url>TODO</url>
+		
+	<formerurl>http://purl.org/maint/display.pl.cgi</formerurl>
+	
+	<depiction>
+		
+		<url>images/display.pl.cgi.jpg</url>
+		<alt>Flow Diagram of Modify PURL CGI</alt>
+		
+	</depiction>
+
+	<history>Exists in PURL 1.0</history>
+
+  
+	<!-- items may have rel='new' or 'todo' -->
+	<functionality>
+		<item>Accept a form to with PURL modification details and store details in database.</item>
+		<item>Return a confirmation page noting that the PURL has been updated.</item>
+		<item>Return an error page on error.</item>
+		<item rel="todo">This script seems to be a huge state machine. Refactor functionality?</item>
+		<item rel="new">Modify to allow searching of &quot;tombstoned&quot; PURLs</item>
+	</functionality>
+
+	<graphics>
+		<!--
+		<item>
+			<url>http://www.oclc.org/common/images/logos/oclclogo_gray.gif</url>
+			<label>OCLC Logo</label>
+			<linksto>http://www.oclc.org/</linksto>
+		</item>
+		-->
+	</graphics>
+		
+	<assumptions>This page is served by a Web server and is URL addressable.  It is a dynamic script.</assumptions>
+	
+	<preconditions>The PURL must exist.</preconditions>
+	
+	<postconditions>The PURL is updated.</postconditions>
+
+	<linksto>
+		
+		<!--
+		<parentof>Dynamically generated confirmation page.</parentof>
+		<parentof>Dynamically generated error page (on error condition).</parentof>
+		<parentoflink></parentoflink>
+		-->
+	
+		<!--
+		<childof></childof>
+		<childoflink>display</childoflink>
+		<childoflink>modify</childoflink>
+		<childoflink>rename</childoflink>
+		<childoflink>clone</childoflink>
+		-->
+		
+	
+		<!--
+		<external>Community links (TBD)</external>
+		<externallink>
+			<url></url>
+			<description></description>
+		</externallink>
+	-->
+	
+	</linksto>
+	
+	<formerlylinkedto>
+		
+		<parentof>Dynamically generated confirmation page.</parentof>
+		<parentof>Dynamically generated error page (on error condition).</parentof>
+		<!--
+		<parentoflink></parentoflink>
+		-->
+	
+		<!--
+		<childof></childof>
+		-->
+		<childoflink>display</childoflink>
+		<childoflink>modify</childoflink>
+		<childoflink>rename</childoflink>
+		<childoflink>clone</childoflink>
+		
+	
+		<!--
+		<external>Community links (TBD)</external>
+		<externallink>
+			<url></url>
+			<description></description>
+		</externallink>
+	-->
+	
+	</formerlylinkedto>
+	
+	<assignedto>
+		<name></name>
+		<url></url>
+	</assignedto>
+	
+	<status>Not started.</status>
+	
+	<definedby>
+		<name>David Wood</name>
+		<url>http://zepheira.com/team/dave/</url>
+	</definedby>
+	
+</document>

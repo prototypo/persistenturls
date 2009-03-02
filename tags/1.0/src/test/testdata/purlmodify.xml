@@ -1,0 +1,7 @@
+<purl>
+	<type>302</type>
+	<target><url>http://www.your.abc.net.au/</url></target>
+	<maintainers>
+		<uid>testuser</uid>
+	</maintainers>
+</purl>

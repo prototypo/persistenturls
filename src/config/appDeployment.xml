@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<appModules>
+<!--	<update>
+		<match>@mod-control-name@</match>
+		<uri>file:@deploy-dir@/@mod-control-name@-@mod-control-version@.jar</uri>
+	</update> -->
+	<update>
+		<match>@mod-session-name@</match>
+		<uri>file:@deploy-dir@/@mod-session-name@-@mod-session-version@.jar</uri>
+	</update>
+	<update>
+		<match>@mod-template-name@</match>
+		<uri>file:@deploy-dir@/@mod-template-name@-@mod-template-version@.jar</uri>
+	</update>
+	<update>
+		<match>@test-mod-template-name@</match>
+		<uri>file:@deploy-dir@/@test-mod-template-name@-@test-mod-template-version@.jar</uri>
+	</update>
+	<update>
+		<match>@mod-admin-name@</match>
+		<uri>file:@deploy-dir@/@mod-admin-name@-@mod-admin-version@.jar</uri>
+	</update>
+	<update>
+		<match>@test-mod-admin-name@</match>
+		<uri>file:@deploy-dir@/@test-mod-admin-name@-@test-mod-admin-version@.jar</uri>
+	</update>	
+	
+</appModules>

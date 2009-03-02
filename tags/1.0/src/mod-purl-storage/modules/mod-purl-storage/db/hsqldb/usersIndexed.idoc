@@ -1,0 +1,57 @@
+<idoc>
+	<seq>
+		<instr>
+			<type>copy</type>
+			<operand>this:param</operand>
+			<target>var:users</target>
+		</instr>
+		<instr>
+			<type>copy</type>
+			<operand><batch/></operand>
+			<target>var:sqlBatch</target>
+		</instr>		
+		<while>
+	    	<cond>
+        	<instr>
+          		<type>xpatheval</type>
+          		<operand>var:users</operand>
+          		<operator>
+            		<xpath>count(/users/user)&gt;= 1</xpath>
+          		</operator>
+          		<target>this:cond</target>
+        	</instr>
+      		</cond>
+      		<seq>
+      			<instr>
+      				<type>stm</type>
+      				<operand>var:sqlBatch</operand>
+      				<operator>
+      					<stm:group xmlns:stm="http://1060.org/stm">
+							<stm:append xpath="/batch">
+								<sql>update users set "indexed" = true
+									where "userid" = '<stm:param xpath="/users/user[1]/id/text()"/>';</sql>
+      						</stm:append>
+      					</stm:group>
+      				</operator>
+      				<param>var:users</param>      		
+      				<target>var:sqlBatch</target>
+      			</instr>
+      		        <instr>
+          <type>stm</type>
+          <operand>var:users</operand>
+          <operator>
+            <stm:group xmlns:stm="http://1060.org/stm">
+              <stm:delete xpath="/users/user[1]" />
+            </stm:group>
+          </operator>
+          <target>var:users</target>
+        </instr>
+      	</seq>
+    	</while> 					
+		<instr>
+			<type>sqlBatch</type>
+			<operand>var:sqlBatch</operand>
+	      	<target>this:response</target>
+		</instr>
+	</seq>
+</idoc>

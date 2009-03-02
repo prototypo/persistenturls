@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+<title></title>
+<!--***************Cascading Style Sheets***************-->
+<csslist>
+	<css>/xlib/styles/css_ten60_lnf.css</css>
+	<css>/xlib/styles/xmlverbatim.css</css>
+</csslist>
+<!--***************Table of Contents***************-->
+<toc>
+	<section name="purpose"/>
+</toc>
+
+<section name="purpose" styleuri="/xusr/share/doc/styles_1060/style_basic.xsl">
+	<content>
+		<h2>Module</h2>
+		<b>urn:org:ten60:netkernel:mod:db</b>
+		<h2>Class</h2>
+		<b>org.ten60.rdbms.representation.IAspectResultSet</b>
+		<h2>Purpose</h2>
+		<p>
+		Holds a raw java.sql.ResultSet. This must be aquired and released to stop
+		concurrent access to its single cursor.</p>
+		<p>This is aspect is useful for scripting languages to iterate over a result set
+		without holding it all in memory.</p>
+    </content>
+	<includes/>
+</section>
+
+</document>

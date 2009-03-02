@@ -1,0 +1,108 @@
+<document>
+
+	<name>Validate PURLs</name>
+	
+	<reference>validate</reference>
+	
+	<!--	
+	<url></url>
+	-->
+	
+	<!--
+	<depiction>	
+		<url>images/choose.jpg</url>
+		<alt>Screenshot of Template page</alt>
+		<width>640px</width> 
+		<height>585px</height>	
+	</depiction>
+	-->
+
+	<history>Exists in PURL 1.0, but may require modification.</history>
+  
+	<!-- items may have rel="new" or "todo" -->
+	<functionality>
+		<item rel="todo">Evaluate requirements (see Validation Manifest below) for validation procedures and existing provisions for returning results.  Refactor requirements?</item>
+	</functionality>
+
+	<graphics>
+		
+		<item>
+			<url>http://www.oclc.org/common/images/logos/oclclogo_gray.gif</url>
+			<label>OCLC Logo</label>
+			<linksto>http://www.oclc.org/</linksto>
+		</item>
+	
+	</graphics>
+		
+	<assumptions>These pages are served by a Web server and are URL addressable.</assumptions>
+	
+	<preconditions>A user must have an account and currently must be listed as a maintainer of a domain being validated.</preconditions>
+	
+	<postconditions>None.</postconditions>
+
+	<linksto>
+		
+		<!--
+		<parentof></parentof>
+		<parentoflink></parentoflink>
+		-->
+	
+		<!--
+		<childof></childof>
+		<childoflink></childoflink>
+		-->
+	
+		<!--
+		<external></external>
+		<externallink>
+			<url>http://purl.oclc.org/OCLC/PURL/FAQ</url>
+			<description>FAQ</description>
+		</externallink>
+		<externallink>
+			<url>http://purl.org/maint/validate/Manifest</url>
+			<description>Validation Manifest</description>
+		</externallink>
+		-->
+	
+	</linksto>
+	
+	<formerlylinkedto>
+		
+		<!--
+		<parentof></parentof>
+		<parentoflink></parentoflink>
+		-->
+	
+		<!--
+		<childof></childof>
+		<childoflink></childoflink>
+		-->
+	
+		<!--
+		<external></external>
+		<externallink>
+			<url>http://purl.oclc.org/OCLC/PURL/FAQ</url>
+			<description>FAQ</description>
+		</externallink>
+		-->
+			
+		<externallink>
+			<url>http://purl.org/maint/validate/Manifest</url>
+			<description>Validation Manifest</description>
+		</externallink>
+	
+	</formerlylinkedto>
+	
+	<assignedto>
+		<name></name>
+		<url></url>
+	</assignedto>
+	
+	<status>Not started.</status>
+	
+	<definedby>
+		<name>David Wood</name>
+		<url>http://zepheira.com/team/dave/</url>
+	</definedby>
+	
+</document>

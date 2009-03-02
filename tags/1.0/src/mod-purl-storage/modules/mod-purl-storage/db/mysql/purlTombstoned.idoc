@@ -1,0 +1,24 @@
+<idoc>
+	<seq>
+		<instr>
+			<type>stm</type>
+			<operand><sql/></operand>
+			<operator>
+				<stm:group xmlns:stm="http://1060.org/stm">
+					<stm:set xpath="/sql">
+						select z_id from purls where
+							p_id = '<stm:param xpath="/query/id/text()"/>' and
+							status = 2
+					</stm:set>
+				</stm:group>
+			</operator>
+			<param>this:param</param>
+			<target>var:sql</target>
+		</instr>
+		<instr>
+			<type>sqlBooleanQuery</type>
+			<operand>var:sql</operand>
+			<target>this:response</target>
+		</instr>
+	</seq>
+</idoc>
