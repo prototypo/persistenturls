@@ -16,8 +16,8 @@ void main()
 	}
 	
 	req=context.createSubRequest("active:purl-user-authenticate");
-	req.addArgument("user", "data:text/plain," + id);
-	req.addArgument("password", "data:text/plain," + passwd);
+	req.addArgument("user", new StringAspect(id));
+	req.addArgument("password", new StringAspect(passwd));
 	req.setAspectClass(BooleanAspect.class);
 	resp = context.issueSubRequestForAspect(req);
 	
