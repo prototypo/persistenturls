@@ -62,7 +62,7 @@ public class CreateDomainTest extends AbstractIntegrationTest {
         assertDomainCreated("/hierarchdomain3", "", "hierarchgroup3", "hierarchgroup3", false);
 
         assertLogoutUser();
-        assertLoginUser("testuser", "Testing!");
+        assertLoginUser("testuser", "Testing!^$%^#");
     }
 
 

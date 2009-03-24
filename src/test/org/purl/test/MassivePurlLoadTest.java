@@ -42,11 +42,11 @@ public final class MassivePurlLoadTest {
 		System.out.println("Delaying " + delay + " millseconds between loads.");
 		
 		// Create a user.
-		String userResult = harness.registerUser("testuser", "Test User", "Zepheira", "test.user@example.com", "Testing!", "testing", "Testing.");
+		String userResult = harness.registerUser("testuser", "Test User", "Zepheira", "test.user@example.com", "Testing!^$%^#", "testing", "Testing.");
 		System.out.println("Result of user registration: " + userResult);
 		
 		// Log in as user.
-		String loginResult = harness.login("testuser", "Testing!");
+		String loginResult = harness.login("testuser", "Testing!^$%^#");
 		System.out.println("User login result: " + loginResult);
 		
 		// Write test files to the filesystem, if needed.
@@ -148,7 +148,7 @@ public final class MassivePurlLoadTest {
 			String url = "http://" + host + ":" + port + "/admin/login/login-submit.bsh";			
 			Map<String, String> formParameters = new HashMap<String,String> ();
 			formParameters.put("id", "testuser");
-			formParameters.put("passwd", "Testing!");
+			formParameters.put("passwd", "Testing!^$%^#");
 			formParameters.put("referrer", "/docs/index.html");
 			String test = client.login(url, formParameters);
 			return test;

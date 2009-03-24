@@ -35,7 +35,7 @@ public class HierarchicalGroupTest extends AbstractIntegrationTest {
         formParameters.put("target", "http://cnn.com/");
         formParameters.put("maintainers", "hierarchgroup1");
 
-        assertLoginUser("testuser", "Testing!");
+        assertLoginUser("testuser", "Testing!^$%^#");
         assertPurlCreated("/hierarchdomain1/test1TierPURL", formParameters);
     }
 
@@ -55,7 +55,7 @@ public class HierarchicalGroupTest extends AbstractIntegrationTest {
         formParameters.put("target", "http://cnn.com/");
         formParameters.put("maintainers", "hierarchgroup2");
 
-        assertLoginUser("testuser", "Testing!");
+        assertLoginUser("testuser", "Testing!^$%^#");
         assertPurlCreated("/hierarchdomain2/test2TierPURL", formParameters);
     }
 
@@ -75,7 +75,7 @@ public class HierarchicalGroupTest extends AbstractIntegrationTest {
         formParameters.put("target", "http://cnn.com/");
         formParameters.put("maintainers", "hierarchgroup3");
 
-        assertLoginUser("testuser", "Testing!");
+        assertLoginUser("testuser", "Testing!^$%^#");
         assertPurlCreated("/hierarchdomain3/test3TierPURL", formParameters);
 
     }
@@ -96,7 +96,7 @@ public class HierarchicalGroupTest extends AbstractIntegrationTest {
         formParameters.put("target", "http://cnn.com/");
         formParameters.put("maintainers", "hierarchgroup1");
 
-        assertLoginUser("testuser", "Testing!");
+        assertLoginUser("testuser", "Testing!^$%^#");
         assertPurlModified("/hierarchdomain1/test1TierPURL", formParameters);
     }
 
@@ -116,7 +116,7 @@ public class HierarchicalGroupTest extends AbstractIntegrationTest {
         formParameters.put("type", "302");
         formParameters.put("target", "http://cnn.com/");
         formParameters.put("maintainers", "hierarchgroup2");
-        assertLoginUser("testuser", "Testing!");
+        assertLoginUser("testuser", "Testing!^$%^#");
 
         assertPurlModified("/hierarchdomain2/test2TierPURL", formParameters);
     }
@@ -138,7 +138,7 @@ public class HierarchicalGroupTest extends AbstractIntegrationTest {
         formParameters.put("target", "http://cnn.com/");
         formParameters.put("maintainers", "hierarchgroup3");
 
-        assertLoginUser("testuser", "Testing!");
+        assertLoginUser("testuser", "Testing!^$%^#");
         assertPurlModified("/hierarchdomain3/test3TierPURL", formParameters);
     }
 
@@ -151,7 +151,7 @@ public class HierarchicalGroupTest extends AbstractIntegrationTest {
     }
 
     public void testModifyDomainWith1TierGroup() throws Exception {
-        assertLoginUser("testuser", "Testing!");
+        assertLoginUser("testuser", "Testing!^$%^#");
         assertEquals("Failed modifying domain with 1-tier group",
                 "Updated resource: /hierarchdomain1",
                 modifyDomain("/hierarchdomain1", "domain modified", "hierarchgroup1", "hierarchgroup1", "false"));
@@ -168,7 +168,7 @@ public class HierarchicalGroupTest extends AbstractIntegrationTest {
 
 
     public void testModifyDomainWith2TierGroup() throws Exception {
-        assertLoginUser("testuser", "Testing!");
+        assertLoginUser("testuser", "Testing!^$%^#");
         assertEquals("Failed modifying domain with 2-tier group",
                 "Updated resource: /hierarchdomain2",
                 modifyDomain("/hierarchdomain2", "domain modified", "hierarchgroup2", "hierarchgroup2", "false"));
@@ -183,7 +183,7 @@ public class HierarchicalGroupTest extends AbstractIntegrationTest {
     }
 
     public void testModifyDomainWith3TierGroup() throws Exception {
-        assertLoginUser("testuser", "Testing!");
+        assertLoginUser("testuser", "Testing!^$%^#");
         assertEquals("Failed modifying domain with 3-tier group",
                 "Updated resource: /hierarchdomain3",
                 modifyDomain("/hierarchdomain3", "domain modified", "hierarchgroup3", "hierarchgroup3", "false"));
@@ -199,7 +199,7 @@ public class HierarchicalGroupTest extends AbstractIntegrationTest {
     }
 
     public void testModify3TierGroup() throws Exception {
-        assertLoginUser("testuser", "Testing!");
+        assertLoginUser("testuser", "Testing!^$%^#");
         assertEquals("Failed modifying group with 3-tier group",
                 "Updated resource: hierarchgroup3",
                 modifyGroup("hierarchgroup3", "group modified", "hierarchgroup2", "hierarchgroup2", "group modified"));
@@ -214,7 +214,7 @@ public class HierarchicalGroupTest extends AbstractIntegrationTest {
     }
 
     public void testModify2TierGroup() throws Exception {
-        assertLoginUser("testuser", "Testing!");
+        assertLoginUser("testuser", "Testing!^$%^#");
          assertEquals("Failed modifying group with 2-tier group",
                 "Updated resource: hierarchgroup2",
                 modifyGroup("hierarchgroup2", "group modified", "hierarchgroup1", "hierarchgroup1", "group modified"));
@@ -229,7 +229,7 @@ public class HierarchicalGroupTest extends AbstractIntegrationTest {
     }
 
     public void testModify1TierGroup() throws Exception {
-        assertLoginUser("testuser", "Testing!");
+        assertLoginUser("testuser", "Testing!^$%^#");
         assertEquals("Failed modifying group with 1-tier group",
                 "Updated resource: hierarchgroup1",
                 modifyGroup("hierarchgroup1", "group modified", "testuser", "testuser", "group modified"));

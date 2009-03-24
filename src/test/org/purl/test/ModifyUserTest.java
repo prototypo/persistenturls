@@ -44,7 +44,7 @@ public class ModifyUserTest extends AbstractIntegrationTest {
             formParameters.put("name", "Test User Modified");
             formParameters.put("affiliation", "Zepheira, LLC");
             formParameters.put("email", "tuser@example.com");
-            formParameters.put("passwd", "Testing!");
+            formParameters.put("passwd", "Testing!^$%^#");
             formParameters.put("hint", "We are still testing.");
             formParameters.put("justification", "Because we like unit tests.");
 
@@ -69,7 +69,7 @@ public class ModifyUserTest extends AbstractIntegrationTest {
             formParameters.put("name", "Test User Modified");
             formParameters.put("affiliation", "Zepheira, LLC");
             formParameters.put("email", "tuser@example.com");
-            formParameters.put("passwd", "Testing!");
+            formParameters.put("passwd", "Testing!^$%^#");
             formParameters.put("hint", "We are still testing.");
             formParameters.put("justification", "Because we like unit tests.");
 
