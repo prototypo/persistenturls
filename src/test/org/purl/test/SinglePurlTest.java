@@ -14,13 +14,50 @@ public class SinglePurlTest extends AbstractPurlTest {
      */
 
     // Test creating a new PURL via an HTTP POST.
-    public void testCreatePurl() {
+    public void testCreatePurl() throws Exception {
         Map<String, String> formParameters = new HashMap<String, String>();
         formParameters.put("type", "302");
         formParameters.put("target", "http://cnn.com/");
         formParameters.put("maintainers", "testuser");
 
         assertPurlCreated("/testdomain/testPURL", formParameters);
+        resolvePurlMetdata("/testdomain/testPURL");
+    }
+
+    public void testCreateTopLevelPurl() throws Exception {
+        Map<String, String> formParameters = new HashMap<String, String>();
+        formParameters.put("type", "302");
+        formParameters.put("target", "http://cnn.com/");
+        formParameters.put("maintainers", "testuser");
+
+        assertPurlCreated("/testdomain", formParameters);
+        resolvePurlMetdata("/testdomain");
+    }
+
+    public void testCreateTopLevelPurlWithSlash() throws Exception {
+        Map<String, String> formParameters = new HashMap<String, String>();
+        formParameters.put("type", "302");
+        formParameters.put("target", "http://washingtonpost.com/");
+        formParameters.put("maintainers", "testuser");
+
+        assertPurlCreated("/testdomain/", formParameters);
+        resolvePurlMetdata("/testdomain/");
+    }
+
+    public void testCreatePurlTrailingSlash() throws Exception {
+        Map<String, String> formParameters = new HashMap<String, String>();
+        formParameters.put("type", "302");
+        formParameters.put("target", "http://washingtonpost.com/");
+        formParameters.put("maintainers", "testuser");
+
+        assertPurlCreated("/testdomain/testPURL/", formParameters);
+        resolvePurlMetdata("/testdomain/testPURL/");
+    }
+
+    public void testResolvePurlMetadata() throws Exception {
+       String url1 = "http://" + host + ":" + port + "/purl/testPURL";
+       String url2 = "http://" + host + ":" + port + "/purl/testPURL/";
+       this.assertFalse(client.searchPurl(url1).equals(client.searchPurl(url2)));
     }
 
     // Test re-creating a new PURL via an HTTP POST (should fail because it already exists).
@@ -136,5 +173,7 @@ public class SinglePurlTest extends AbstractPurlTest {
         assertPurlCreated("/net/testPURL", formParameters);
         deletePurl("/net/testPURL", true);
     }
+
+
 
 }

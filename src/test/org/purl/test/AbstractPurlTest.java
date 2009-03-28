@@ -39,6 +39,12 @@ public class AbstractPurlTest extends AbstractIntegrationTest {
         }
     }
 
+   public void resolvePurlMetdata(String path) throws Exception {
+       String url1 = "http://" + host + ":" + port + "/purl" + path;
+       String url2 = "http://" + host + ":" + port + "/admin/purl" + path; 
+       assertEquals(client.searchPurl(url1), client.searchPurl(url2));
+   }
+
 
 
 

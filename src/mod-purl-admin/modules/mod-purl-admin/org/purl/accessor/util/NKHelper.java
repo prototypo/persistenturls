@@ -352,22 +352,6 @@ public class NKHelper {
         return userHasPermission(context, user, purl, "purl", "maintainers");
     }
 
-    public static boolean allSuperDomainsExist(INKFConvenienceHelper context, String resource) {
-        boolean retValue = false;
-        boolean done = false;
-
-        DomainIterator itor = new DomainIterator(resource);
-
-        while (itor.hasNext() && !done) {
-            done = !domainIsValid(context, itor.next());
-        }
-
-        // If we didn't stop prematurely we should be good
-        retValue = !done;
-
-        return retValue;
-    }
-
     public static String getDomainForPURL(INKFConvenienceHelper context, String resource) {
         String retValue = null;
 

@@ -293,6 +293,7 @@ public class AbstractIntegrationTest extends TestCase {
             if (formParameters.get("target") != null) {
                 XMLAssert.assertXpathExists("/purl[target='" + formParameters.get("target") + "']", test);
             }
+            resolvePurlMetdata(path);
         } catch (Exception e) {
             reportException("Failed to resolve URL: ", e);
         }
@@ -418,4 +419,10 @@ public class AbstractIntegrationTest extends TestCase {
 
         return client.modifyGroup(url, formParameters);
     }
+
+    public void resolvePurlMetdata(String path) throws Exception {
+       String url1 = "http://" + host + ":" + port + "/purl" + path;
+       String url2 = "http://" + host + ":" + port + "/admin/purl" + path;
+       assertEquals(client.resolvePurl(url1), client.resolvePurl(url2));
+   }
 }

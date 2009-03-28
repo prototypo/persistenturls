@@ -45,6 +45,7 @@ public class PURLPartialRedirectResolveCommand extends PURLResolveCommand {
 
             url = url.replaceAll("&", "&amp;");
 
+            
             // We treat the partial redirect as a 302
             resp = generateResponseCode(context, "302", url);
 

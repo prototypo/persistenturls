@@ -25,7 +25,7 @@ public class DomainIterator implements Iterator<String> {
     }
 
     public boolean hasNext() {
-        return index < components.length - 2;
+        return index < components.length - 1;
     }
 
     public String next() {
@@ -36,7 +36,7 @@ public class DomainIterator implements Iterator<String> {
             sb.append(components[++index]);
             retValue = domainResolver.getURI(sb.toString());
         }
-        
+
         return retValue;
     }
 

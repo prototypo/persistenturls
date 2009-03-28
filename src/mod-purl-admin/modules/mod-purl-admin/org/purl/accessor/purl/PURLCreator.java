@@ -258,9 +258,6 @@ public class PURLCreator implements ResourceCreator {
         if(!type.equals("clone")) {
             checkMaintainersList(context, params);
         }
-        
-        String purl = purlResolver.getDisplayName(NKHelper.getArgument(context, "path"));
-        NKHelper.createNecessarySubdomains(context, purl);
 
         if(type != null) {
             if(!isNumber(type)) {

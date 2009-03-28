@@ -25,7 +25,7 @@ public class DomainAllowableResource implements AllowableResource {
             	String root = null;
             	DomainIterator itor = new DomainIterator(domain);
            		root = domainResolver.getURI(itor.next());
-           		if(root != null) {
+           		if(itor.hasNext() && root != null) {
            			retValue = domainStorage.resourceExists(context, root);
            		} else {
            			retValue = true;
