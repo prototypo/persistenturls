@@ -22,12 +22,26 @@ public class DataLoader {
     private static PURLClient client = new PURLClient();
     private static String host = "localhost";
     private static String port = "8080";
+    private static String admin = "admin";
+    private static String adminPassword = "password";
+    private static int purlsPerBatch = 50;
+
+    private static final Set<Pattern> purlIgnorePatterns = new HashSet<Pattern>();
 
     private static final Set<String> seenUsersSet = new HashSet<String>();
     private static final Set<String> seenGroupsSet = new HashSet<String>();
     private static Set<String> seenDomainSet = new HashSet<String>();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception  {
+        // Load properties
+
+        InputStream in = DataLoader.class.getResourceAsStream("DataLoader.properties");
+        if (in != null) {
+            Properties prop = new Properties();
+            prop.load(in);
+            parseProperties(prop);
+        }
+
         if (args.length != 1 && args.length != 5) {
             //error("Expecting single directory indicating root directory containing legacy data.");
             DataLoader.usage();
@@ -49,16 +63,30 @@ public class DataLoader {
             System.exit(-2);
         }
 
-        try {
-            // TODO: Parameterize this
-            login("admin", "password");
-            loadUsers(rootDir);
-            loadGroups(rootDir);
-            loadDomains(rootDir);
-            loadPURLs(rootDir);
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
+        // TODO: Parameterize this
+        login(admin, adminPassword);
+        loadUsers(rootDir);
+        loadGroups(rootDir);
+        loadDomains(rootDir);
+        loadPURLs(rootDir);
+
+    }
+
+    private static void parseProperties(Properties props) {
+         for (Enumeration e = props.propertyNames() ; e.hasMoreElements() ;) {
+             String key = (String)e.nextElement();
+             if ("host".equals(key)) {
+                 host = props.getProperty(key);
+             } else if ("port".equals(key)) {
+                 port = props.getProperty(key);
+             } else if ("admin.username".equals(key)) {
+                 admin = props.getProperty(key);
+             } else if ("admin.password".equals(key)) {
+                 adminPassword = props.getProperty(key);
+             } else if (key.startsWith("purl.ignore")) {
+                 purlIgnorePatterns.add(Pattern.compile(props.getProperty(key)));
+             }
+         }
     }
 
     private static void login(String username, String password)
@@ -139,39 +167,38 @@ public class DataLoader {
                                      String type, String url, String maintainer) throws IOException {
         String retValue = null;
 
-        if ((purl != null) && (type != null) && (url != null)
+        if ((purl != null) && (type != null)
                 && (maintainer != null)) {
-            StringBuffer sb = new StringBuffer();
 
+            StringBuffer sb = new StringBuffer();
             if (!validatePURL(purl)) {
                 bw.append("Ignoring PURL: " + purl
                         + " because it does not result in a valid URL\n");
                 return null;
             }
-            try {
-                url = cleanseTargetURL(url);
-                new URL(url);
-//                bw.append("Processed PURL: " + purl + ", type: " + type
-//                        + ", target:" + url);
-//                bw.append("\n");
-            } catch (IllegalStateException ise) {
-                bw.append("Ignoring PURL: " + purl
-                        + " because of bogus target URL : " + url);
-                bw.append("\n");
-                return null;
-            } catch (MalformedURLException mue) {
-                bw.append("Ignoring PURL: " + purl
-                        + " because of bogus target URL : " + url + "\n");
-                bw.append("\n");
-                return null;
+            if (url != null) {
+                try {
+                    url = cleanseTargetURL(url);
+                } catch (IllegalStateException ise) {
+                    bw.append("Creating 410 PURL: " + purl
+                            + " because of bogus target URL : " + url);
+                    bw.append("\n");
+                    type = "410";
+                }
+
+                url = url.replaceAll("&", "&amp;");
+                url = url.replaceAll("'", "&apos;");
+                url = url.replaceAll("\"", "&quot;");
+                url = url.replaceAll("<", "&lt;");
+                url = url.replaceAll(">", "&gt;");
+            } else if (!"410".equals(type)) {
+                bw.append("Creating 410 PURL: " + purl
+                            + " because of missing URL : " + url);
+                    bw.append("\n");
+                type="410";
             }
 
             purl = purl.replaceAll("'", "&apos;");
-            url = url.replaceAll("&", "&amp;");
-            url = url.replaceAll("'", "&apos;");
-            url = url.replaceAll("\"", "&quot;");
-            url = url.replaceAll("<", "&lt;");
-            url = url.replaceAll(">", "&gt;");
             sb.append("<purl id=\"");
             sb.append(purl);
             sb.append("\" type=\"");
@@ -197,12 +224,6 @@ public class DataLoader {
                     if (!handledAdminSubstitution) {
                         sb.append("<uid>admin</uid>\n");
                         handledAdminSubstitution = true;
-//                        bw.append("Substituting admin for maintainer: " + m);
-//                        bw.append("\n");
-                    } else {
-//                        bw.append("Ignoring missing maintainer: " + m
-//                                + ", already substituted admin in.");
-//                        bw.append("\n");
                     }
                 }
             }
@@ -212,10 +233,11 @@ public class DataLoader {
                 sb.append("<target url=\"");
                 sb.append(url);
                 sb.append("\"/>\n");
-                sb.append("</purl>\n");
-                retValue = sb.toString();
+
             } else {
             }
+            sb.append("</purl>\n");
+            retValue = sb.toString();
         }
 
         return retValue;
@@ -239,9 +261,6 @@ public class DataLoader {
 
     private static void loadPURLs(File rootDir) {
 
-
-        int purlsPerBatch = 50;
-
         BufferedWriter bw = null;
         try {
             File purlLogFile = new File(rootDir, "purl-"
@@ -264,9 +283,9 @@ public class DataLoader {
             BufferedReader br = getReader(rootDir, PURL_FILE);
 
             String line = null;
-            int lineCount = 0;
             int incompleteCount = 0;
             int ignoredCount = 0;
+            int goneCount = 0;
             int unprocessedCount = 0;
             int successes = 0;
             int failures = 0;
@@ -292,6 +311,19 @@ public class DataLoader {
 
                 if (matched.find()) {
                     String purl = extractGroupMatch(line, matched, 1);
+
+                    boolean ignored = false;
+                    for (Pattern p : purlIgnorePatterns) {
+                        Matcher m = p.matcher(purl);
+                        if (m.find()) {
+                            ignoredCount++;
+                            ignored = true;
+                            continue;
+                        }
+                    }
+                    if (ignored) {
+                        continue;
+                    }
 
                     String modify = null;
                     String create = null;
@@ -335,34 +367,32 @@ public class DataLoader {
                         if (idMatched.find()) {
                             id = extractGroupMatch(line, idMatched, 1);
                         }
-
-                        if ((purl != null) && (url != null) && (id != null)) {
+                        if (id == null) {
+                            id = "ADMIN";
+                        }
+                        if (purl != null) {
+                            if (url == null) {
+                                type = "410";
+                                bw.append("Creating 410 PURL: Incomplete: " + purl);
+                                bw.append("\n");
+                                goneCount++;
+                            }
                             if (type == null) {
                                 type = "302";
-                            }
-                            if ("partial".equals(type) && url.endsWith("/")) {
-                                url = url.substring(0,url.length()-1);
                             }
                             String purlString = createPURL(bw, purl, type,
                                     url, id);
 
                             if (purlString != null) {
                                 purlList.add(purlString);
-                                lineCount++;
-//                                    bw.append("Registered: " + purl);
-//                                    bw.append("\n");
                             } else {
-//                                bw.append("*****Unprocessed: " + purl
-//                                        + ", type: " + type + ", target: "
-//                                        + url);
-//                                bw.append("\n");
                                 unprocessedCount++;
                             }
 
                         } else {
                             bw.append("Incomplete: " + purl);
                             bw.append("\n");
-                            incompleteCount++;
+                            unprocessedCount++;
                         }
 
                         if (purlList.size() == purlsPerBatch) {
@@ -407,18 +437,13 @@ public class DataLoader {
             }
 
             bw.append("\nRegistered PURLS: " + successes);
-            bw.append("\n");
-            bw.append("Failed PURLS: " + failures);
-            bw.append("\n");
-            bw.append("Incomplete PURLS: " + incompleteCount);
-            bw.append("\n");
-            bw.append("Ignored ECO PURLS: " + ignoredCount);
-            bw.append("\n");
-            bw.append("Unprocessed PURLS: " + unprocessedCount);
-            bw.append("\n");
-            bw.append("Failed Batch PURLS: " + failedBatchCount);
-            bw.append("\n");
-            bw.append("Total: " + (successes + failures + incompleteCount + ignoredCount + unprocessedCount + failedBatchCount));
+            bw.append("\nFailed PURLS: " + failures);
+            bw.append("\nIncomplete PURLS: " + incompleteCount);
+            bw.append("\nIgnored ECO PURLS: " + ignoredCount);
+            bw.append("\nMarked as 410: " + goneCount);
+            bw.append("\nUnprocessed PURLS: " + unprocessedCount);
+            bw.append("\nFailed Batch PURLS: " + failedBatchCount);
+            bw.append("\nTotal: " + (successes + failures + incompleteCount + ignoredCount + unprocessedCount + failedBatchCount));
             bw.append("\n");
         } catch (IOException e) {
             e.printStackTrace();

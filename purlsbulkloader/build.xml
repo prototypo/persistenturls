@@ -13,6 +13,9 @@
 		
 		<mkdir dir="${dst}"/>
 		<mkdir dir="${dist}"/>
+        <copy todir="${dst}">
+            <fileset dir="${src}" includes="**/*.properties"/>
+        </copy>
     </target>
 	
 	<target name="compile" depends="init">
@@ -27,9 +30,12 @@
 	
 	<target name="dist" depends="compile">
         <jar basedir="${dst}" compress="true" destfile="${dist}/legacyloader.jar">
+
 		    <include name="**/*"/>
 		    <exclude name="**/.svn"/>		    
 	        <exclude name="**/*.java"/>
+            <exclude  name="out/**"/>
+            <exclude  name="build/**"/>
         </jar>		
 	</target>
 </project>
