@@ -98,12 +98,12 @@ handles results from the server in response to form submissions.
 			signalLoadingResults();
 			urlVars = {}
 			bodyVars = {
-				name: $('c_name').value,
-				affiliation: $('c_affiliation').value,
-				email: $('c_email').value,
-				passwd: $('c_passwd').value,
-				hint: $('c_hint').value,
-				justification: $('c_justification').value
+				name: escape($('c_name').value),
+				affiliation: escape($('c_affiliation').value),
+				email: escape($('c_email').value),
+				passwd: escape($('c_passwd').value),
+				hint: escape($('c_hint').value),
+				justification: escape($('c_justification').value)
 			}
 			ajaxCaller.postVars("/admin/user/" + my_id, bodyVars, urlVars, onResponse, false, "Create");
 		}
@@ -119,12 +119,12 @@ handles results from the server in response to form submissions.
 		} else {
 			signalLoadingResults();
 			urlVars = {
-				name: $('m_name').value,
-				affiliation: $('m_affiliation').value,
-				email: $('m_email').value,
-				passwd: $('m_passwd').value,
-				hint: $('m_hint').value,
-				justification: $('m_justification').value
+				name: escape($('m_name').value),
+				affiliation: escape($('m_affiliation').value),
+				email: escape($('m_email').value),
+				passwd: escape($('m_passwd').value),
+				hint: escape($('m_hint').value),
+				justification: escape($('m_justification').value)
 			}
 			bodyType = "text/html";
 			body = "";
@@ -143,10 +143,10 @@ handles results from the server in response to form submissions.
 	function searchSubmit() {
 		signalLoadingResults();
 		bodyVars =  {
-				userid: $('s_id').value,
-				fullname: $('s_name').value,
-				affiliation: $('s_affiliation').value,
-				email: $('s_email').value,
+				userid: escape($('s_id').value),
+				fullname: escape($('s_name').value),
+				affiliation: escape($('s_affiliation').value),
+				email: escape($('s_email').value),
 				tombstone: $('s_tombstone').checked
 		}
 

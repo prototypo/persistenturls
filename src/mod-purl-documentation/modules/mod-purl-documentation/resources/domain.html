@@ -94,9 +94,9 @@ handles results from the server in response to form submissions.
 			writers = scrubTextareaInput($('c_writers').value);
 			urlVars = {}
 			bodyVars = {
-				name: $('c_name').value,
-				maintainers: maintainers,
-				writers: writers,
+				name: escape($('c_name').value),
+				maintainers: escape(maintainers),
+				writers: escape(writers),
 				public: $('c_public').checked
 			}
 			//ajaxCaller.postVars("/admin/domain/" + my_id, bodyVars, urlVars, onResponse, false, "Create");
@@ -116,9 +116,9 @@ handles results from the server in response to form submissions.
 			maintainers = scrubTextareaInput($('m_maintainers').value);
 			writers = scrubTextareaInput($('m_writers').value);
 			urlVars = {
-				name: $('m_name').value,
-				maintainers: maintainers,
-				writers: writers,
+				name: escape($('m_name').value),
+				maintainers: escape(maintainers),
+				writers: escape(writers),
 				public: $('c_public').checked
 			}
 			bodyType = "text/html";
@@ -139,10 +139,10 @@ handles results from the server in response to form submissions.
 	function searchSubmit() {
 		signalLoadingResults();
 		bodyVars =  {
-				d_id: $('s_id').value,
-				name: $('s_name').value,
-				maintainers: $('s_maintainers').value,
-				writers: $('s_writers').value,
+				d_id: escape($('s_id').value),
+				name: escape($('s_name').value),
+				maintainers: escape($('s_maintainers').value),
+				writers: escape($('s_writers').value),
 				tombstone: $('s_tombstone').checked
 		}
 		ajaxCaller.get("/admin/domain/", bodyVars, onResponse, false, "Search");

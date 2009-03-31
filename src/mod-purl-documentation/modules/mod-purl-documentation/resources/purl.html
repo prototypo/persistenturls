@@ -85,7 +85,7 @@ handles results from the server in response to form submissions.
 			bodyVars = {
 				type: "302",
 				target: escape($('c_target').value),
-				maintainers: maintainers
+				maintainers: escape(maintainers)
 			}
 			ajaxCaller.postVars("/admin/purl" + my_id, bodyVars, urlVars, onResponse, false, "Create");
 		}
@@ -108,8 +108,8 @@ handles results from the server in response to form submissions.
 				type: $('a_type').value,
 				target: escape($('a_target').value),
 				seealso: escape($('a_seealso').value),
-				maintainers: maintainers,
-				basepurl: $('a_basepurl').value
+				maintainers: escape(maintainers),
+				basepurl: escape($('a_basepurl').value)
 			}
 			ajaxCaller.postVars("/admin/purl" + my_id, bodyVars, urlVars, onResponse, false, "Create");
 		}
@@ -130,10 +130,10 @@ handles results from the server in response to form submissions.
 			urlVars = {
 				type: $('m_type').value,
 				seealso: escape($('m_seealso').value),
-				maintainers: maintainers
+				maintainers: escape(maintainers)
 			}
             if (urlVars.type == 'chain') {
-                urlVars.basepurl = $('m_target').value;
+                urlVars.basepurl = escape($('m_target').value);
             } else {
                 urlVars.target = escape($('m_target').value);
             }
@@ -158,8 +158,8 @@ handles results from the server in response to form submissions.
 			p_id: $('s_id').value,
 			target: escape($('s_target').value),
 			seealso: escape($('s_seealso').value),
-			maintainers: $('s_maintainers').value,
-			explicitmaintainers: $('s_explicitmaintainers').value,
+			maintainers: escape($('s_maintainers').value),
+			explicitmaintainers: escape($('s_explicitmaintainers').value),
 			tombstone: $('s_tombstone').checked
 		}
 		if ( my_id.indexOf("/") != 0 && my_id.length > 0 ) {

@@ -5,7 +5,7 @@
 IZPACK=/Applications/IzPack
 
 # PURL server version number.
-VERSION=1.4
+VERSION=1.4.1
 
 # Location of UNZIP utility
 UNZIP=/usr/bin/unzip
