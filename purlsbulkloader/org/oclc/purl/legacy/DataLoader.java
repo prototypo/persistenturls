@@ -375,15 +375,16 @@ public class DataLoader {
                                 type = "410";
                                 bw.append("Creating 410 PURL: Incomplete: " + purl);
                                 bw.append("\n");
-                                goneCount++;
                             }
                             if (type == null) {
                                 type = "302";
                             }
                             String purlString = createPURL(bw, purl, type,
                                     url, id);
-
                             if (purlString != null) {
+                                if (purlString.contains("type=\"410\"")) {
+                                    goneCount++;
+                                }
                                 purlList.add(purlString);
                             } else {
                                 unprocessedCount++;
@@ -440,10 +441,12 @@ public class DataLoader {
             bw.append("\nFailed PURLS: " + failures);
             bw.append("\nIncomplete PURLS: " + incompleteCount);
             bw.append("\nIgnored ECO PURLS: " + ignoredCount);
-            bw.append("\nMarked as 410: " + goneCount);
             bw.append("\nUnprocessed PURLS: " + unprocessedCount);
             bw.append("\nFailed Batch PURLS: " + failedBatchCount);
             bw.append("\nTotal: " + (successes + failures + incompleteCount + ignoredCount + unprocessedCount + failedBatchCount));
+            bw.append("\n");
+
+            bw.append("\nRegistered 410 PURLs: " + goneCount);
             bw.append("\n");
         } catch (IOException e) {
             e.printStackTrace();
