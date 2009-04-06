@@ -15,7 +15,6 @@ public class DataLoader {
             DOMAIN_INI_FILE = "domain.ini.gz",
             DOMAIN_FILE = "domain.gz",
             PURL_FILE = "main.list.gz",
-            SIMPLE_PURL_FILE = "main.table.txt.gz",
             SORTED_USERNAMES = "users.txt",
             SORTED_GROUPNAMES = "groupnames.txt";
 
@@ -25,6 +24,9 @@ public class DataLoader {
     private static String admin = "admin";
     private static String adminPassword = "password";
     private static int purlsPerBatch = 50;
+    private static boolean loadUsers = true;
+    private static boolean loadGroups = true;
+    private static boolean loadDomains = true;
 
     private static final Set<Pattern> purlIgnorePatterns = new HashSet<Pattern>();
 
@@ -65,9 +67,15 @@ public class DataLoader {
 
         // TODO: Parameterize this
         login(admin, adminPassword);
-        loadUsers(rootDir);
-        loadGroups(rootDir);
-        loadDomains(rootDir);
+        if (loadUsers) {
+            loadUsers(rootDir);
+        }
+        if (loadGroups) {
+            loadGroups(rootDir);
+        }
+        if (loadDomains) {
+            loadDomains(rootDir);
+        }
         loadPURLs(rootDir);
 
     }
@@ -85,6 +93,12 @@ public class DataLoader {
                  adminPassword = props.getProperty(key);
              } else if (key.startsWith("purl.ignore")) {
                  purlIgnorePatterns.add(Pattern.compile(props.getProperty(key)));
+             } else if ("user.load".equals("key")) {
+                 loadUsers = Boolean.getBoolean(props.getProperty(key));
+             } else if ("group.load".equals("key")) {
+                 loadGroups = Boolean.getBoolean(props.getProperty(key));
+             } else if ("domain.load".equals("key")) {
+                 loadDomains = Boolean.getBoolean(props.getProperty(key));
              }
          }
     }
@@ -193,7 +207,7 @@ public class DataLoader {
                 url = url.replaceAll(">", "&gt;");
             } else if (!"410".equals(type)) {
                 bw.append("Creating 410 PURL: " + purl
-                            + " because of missing URL : " + url);
+                            + " because of missing URL ");
                     bw.append("\n");
                 type="410";
             }
