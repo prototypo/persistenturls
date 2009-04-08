@@ -45,7 +45,7 @@ public class PURLAllowableResource extends DefaultAllowableResource {
                         + " is not authorized to create: " + displayName;
                 }
             } else {
-                retValue = "Top Level Domain does not exist for PURL: " + getResourceResolver().getDisplayName(resourceName) + ". See <a href=\"http://localhost:8080/docs/domain.html#create\">domain creation</a> to create a new top-level domain.";
+                retValue = "Top Level Domain does not exist for PURL: " + getResourceResolver().getDisplayName(resourceName) + ". See <a href=\"/docs/domain.html#create\">domain creation</a> to create a new top-level domain.";
             }
         }
         
