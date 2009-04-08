@@ -8,7 +8,7 @@ public class DeleteUserTest extends AbstractIntegrationTest {
         if (isLoggedIn()) {
             assertLogoutUser();
         }
-        assertLoginUser("testuser", "Testing!^$%^#");
+        assertLoginUser("testuser", "%Testing!^$%^#*");
         assertNotAllowedToDeleteUser("testuser2");
 
     }
@@ -18,7 +18,7 @@ public class DeleteUserTest extends AbstractIntegrationTest {
         if (isLoggedIn()) {
             assertLogoutUser();
         }
-        assertLoginUser("testuser", "Testing!^$%^#");
+        assertLoginUser("testuser", "%Testing!^$%^#*");
         assertDeleteUser("testuser");
 
     }

@@ -11,7 +11,7 @@ public class DeleteTest extends AbstractIntegrationTest {
         if (isLoggedIn()) {
             assertLogoutUser();
         }
-        assertLoginUser("testuser", "Testing!^$%^#");
+        assertLoginUser("testuser", "%Testing!^$%^#*");
         deletePurl("/testdomain/testPURL");
     }
 
@@ -21,7 +21,7 @@ public class DeleteTest extends AbstractIntegrationTest {
         if (isLoggedIn()) {
             assertLogoutUser();
         }
-        assertLoginUser("testuser", "Testing!^$%^#");
+        assertLoginUser("testuser", "%Testing!^$%^#*");
         deletePurl("/testdomain/test301PURL");
     }
 
@@ -30,7 +30,7 @@ public class DeleteTest extends AbstractIntegrationTest {
         if (isLoggedIn()) {
             assertLogoutUser();
         }
-        assertLoginUser("testuser", "Testing!^$%^#");
+        assertLoginUser("testuser", "%Testing!^$%^#*");
         deletePurl("/testdomain/test302PURL");
     }
 
@@ -40,7 +40,7 @@ public class DeleteTest extends AbstractIntegrationTest {
         if (isLoggedIn()) {
             assertLogoutUser();
         }
-        assertLoginUser("testuser", "Testing!^$%^#");
+        assertLoginUser("testuser", "%Testing!^$%^#*");
         deletePurl("/testdomain/test303PURL");
     }
 
@@ -49,7 +49,7 @@ public class DeleteTest extends AbstractIntegrationTest {
         if (isLoggedIn()) {
             assertLogoutUser();
         }
-        assertLoginUser("testuser", "Testing!^$%^#");
+        assertLoginUser("testuser", "%Testing!^$%^#*");
         deletePurl("/testdomain/test307PURL");
     }
 
@@ -58,7 +58,7 @@ public class DeleteTest extends AbstractIntegrationTest {
         if (isLoggedIn()) {
             assertLogoutUser();
         }
-        assertLoginUser("testuser", "Testing!^$%^#");
+        assertLoginUser("testuser", "%Testing!^$%^#*");
         deletePurl("/testdomain/test404PURL");
     }
 
@@ -67,7 +67,7 @@ public class DeleteTest extends AbstractIntegrationTest {
         if (isLoggedIn()) {
             assertLogoutUser();
         }
-        assertLoginUser("testuser", "Testing!^$%^#");
+        assertLoginUser("testuser", "%Testing!^$%^#*");
         deletePurl("/testdomain/test410PURL");
     }
 
@@ -76,7 +76,7 @@ public class DeleteTest extends AbstractIntegrationTest {
         if (isLoggedIn()) {
             assertLogoutUser();
         }
-        assertLoginUser("testuser", "Testing!^$%^#");
+        assertLoginUser("testuser", "%Testing!^$%^#*");
         deletePurl("/testdomain/testClonePURL");
     }
 
@@ -85,7 +85,7 @@ public class DeleteTest extends AbstractIntegrationTest {
         if (isLoggedIn()) {
             assertLogoutUser();
         }
-        assertLoginUser("testuser", "Testing!^$%^#");
+        assertLoginUser("testuser", "%Testing!^$%^#*");
         deletePurl("/testdomain/testChainPURL");
     }
 
@@ -94,7 +94,7 @@ public class DeleteTest extends AbstractIntegrationTest {
         if (isLoggedIn()) {
             assertLogoutUser();
         }
-        assertLoginUser("testuser", "Testing!^$%^#");
+        assertLoginUser("testuser", "%Testing!^$%^#*");
         deletePurl("/testdomain/testPartialPURL");
     }
 
@@ -103,7 +103,7 @@ public class DeleteTest extends AbstractIntegrationTest {
         if (isLoggedIn()) {
             assertLogoutUser();
         }
-        assertLoginUser("testuser", "Testing!^$%^#");
+        assertLoginUser("testuser", "%Testing!^$%^#*");
 
         try {
             String url = "http://" + host + ":" + port + "/admin/group/testgroup";
@@ -126,7 +126,7 @@ public class DeleteTest extends AbstractIntegrationTest {
         if (isLoggedIn()) {
             assertLogoutUser();
         }
-        assertLoginUser("testuser", "Testing!^$%^#");
+        assertLoginUser("testuser", "%Testing!^$%^#*");
 
         try {
             String url = "http://" + host + ":" + port + "/admin/domain/testdomain";
