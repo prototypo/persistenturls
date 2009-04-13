@@ -22,6 +22,7 @@ import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFResponse;
 import org.ten60.netkernel.xml.representation.IAspectXDA;
 import org.ten60.netkernel.xml.xda.IXDAReadOnly;
+import org.apache.commons.lang.StringEscapeUtils;
 
 public class PURLPartialRedirectResolveCommand extends PURLResolveCommand {
 
@@ -42,9 +43,6 @@ public class PURLPartialRedirectResolveCommand extends PURLResolveCommand {
             if(!path.equals(pid)) {
                 url = url + path.substring(pid.length());
             }
-
-            url = url.replaceAll("&", "&amp;");
-
             
             // We treat the partial redirect as a 302
             resp = generateResponseCode(context, "302", url);

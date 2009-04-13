@@ -34,7 +34,6 @@ public class PURLSeeAlsoResolveCommand extends PURLResolveCommand {
         try {
             String type = purlXDARO.getText("/purl/type", true);
             String url = purlXDARO.getText("/purl/seealso/url", true);
-            url = url.replaceAll("&", "&amp;");
 
             IURRepresentation bodyDoc = context.source("ffcpl:/pub/redirect.html");
             

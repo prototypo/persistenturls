@@ -25,6 +25,7 @@ import org.ten60.netkernel.layer1.nkf.INKFResponse;
 import org.ten60.netkernel.layer1.nkf.NKFException;
 import org.ten60.netkernel.xml.representation.IAspectXDA;
 import org.ten60.netkernel.xml.xda.XPathLocationException;
+import org.apache.commons.lang.StringEscapeUtils;
 
 import com.ten60.netkernel.urii.IURRepresentation;
 import com.ten60.netkernel.urii.aspect.StringAspect;
@@ -66,7 +67,7 @@ abstract public class PURLResolveCommand {
 
         if(url!=null) {
             respCode.append("<header><name>Location</name><value>");
-            respCode.append(url);
+            respCode.append(StringEscapeUtils.escapeXml(url));
             respCode.append("</value></header>");
         }
 
@@ -100,7 +101,7 @@ abstract public class PURLResolveCommand {
             StringBuffer sed = new StringBuffer("<sed><pattern><regex>@@PURL_TYPE@@</regex><replace>");
             sed.append(type);
             sed.append("</replace></pattern><pattern><regex>@@PURL_TARGET@@</regex><replace>");
-            sed.append(url);
+            sed.append(StringEscapeUtils.escapeXml(url));
             sed.append("</replace></pattern></sed>");
             
             INKFRequest req = context.createSubRequest("active:sed");

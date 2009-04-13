@@ -1,5 +1,7 @@
 package org.purl.accessor.util;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 import java.util.Iterator;
 import java.util.List;
 
@@ -10,9 +12,9 @@ public class DataHelper {
     
     public static String cleanseInput(String input, int maxLength) {
         // For now, fix the apostrophe problem
-    	String retValue = input.replaceAll("'", "''");
-    	retValue = retValue.replaceAll("&", "&amp;");
-    	
+        String retValue = input.replaceAll("'", "''"); 
+        retValue = StringEscapeUtils.escapeXml(retValue);
+        
     	if(maxLength > 0 && retValue.length() > maxLength) {
     		retValue = retValue.substring(0, maxLength);
     	}

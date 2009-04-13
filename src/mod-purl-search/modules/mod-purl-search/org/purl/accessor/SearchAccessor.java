@@ -64,4 +64,5 @@ public class SearchAccessor extends NKFAccessorImpl {
         context.setResponse(context.createResponseFrom(new StringAspect(sb.toString())));
     }
 
+
 }

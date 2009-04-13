@@ -4,6 +4,7 @@ import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFResponse;
 import org.ten60.netkernel.xml.representation.IAspectXDA;
 import org.ten60.netkernel.xml.xda.IXDAReadOnly;
+import org.apache.commons.lang.StringEscapeUtils;
 
 public class PURLChainCommand extends PURLResolveCommand {
 
@@ -14,7 +15,7 @@ public class PURLChainCommand extends PURLResolveCommand {
         try {
             String chainedPURL = purlXDARO.getText("/purl/target/url", true);
             String requestURL = context.getThisRequest().getArgument("requestURL");
-            requestURL = requestURL.replaceAll("&", "&amp;");
+            requestURL = StringEscapeUtils.escapeXml(requestURL);
             int slashIdx = requestURL.indexOf("/", 7);
             String url = requestURL.substring(0, slashIdx) + chainedPURL;
 

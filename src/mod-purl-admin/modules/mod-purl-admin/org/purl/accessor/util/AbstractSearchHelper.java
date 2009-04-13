@@ -59,7 +59,7 @@ abstract public class AbstractSearchHelper implements SearchHelper {
         // By default, no special handling
 
         value = value.toLowerCase();
-
+        value = value.replaceAll("'", "''").replaceAll("\"", "\"\"");
         String parts[] = value.split(" ");
         StringBuffer sb = new StringBuffer(key + ":");
 

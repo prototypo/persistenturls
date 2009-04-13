@@ -22,6 +22,7 @@ import org.purl.accessor.util.*;
 import org.purl.accessor.user.UserHelper;
 import org.purl.accessor.ResourceCreator;
 import org.purl.accessor.ResourceStorage;
+import org.apache.commons.lang.StringEscapeUtils;
 
 import com.ten60.netkernel.urii.IURAspect;
 import com.ten60.netkernel.urii.aspect.StringAspect;
@@ -51,7 +52,7 @@ public class PURLCreator implements ResourceCreator {
             sb.append("</id>");
             sb.append("<type>chain</type>");
             sb.append("<target><url>");
-            sb.append(StringHelper.escapeURL(purlResolver.getDisplayName(oldURI)));
+            sb.append(StringEscapeUtils.escapeXml(purlResolver.getDisplayName(oldURI)));
             sb.append("</url></target>");
 
             addMaintainerList(context, sb, params.getValue("maintainers"));
@@ -115,7 +116,7 @@ public class PURLCreator implements ResourceCreator {
         sb.append("<type>partial</type>");
 
         sb.append("<target><url>");
-        sb.append(StringHelper.escapeURL(target));
+        sb.append(StringEscapeUtils.escapeXml(target));
         sb.append("</url></target>");
         
         addMaintainerList(context, sb, params.getValue("maintainers"));
@@ -135,7 +136,7 @@ public class PURLCreator implements ResourceCreator {
         String purl = purlResolver.getDisplayName(NKHelper.getArgument(context, "path"));
         
         sb.append("<id>");
-        sb.append(StringHelper.escapeURL(purl));
+        sb.append(StringEscapeUtils.escapeXml(purl));
         sb.append("</id>");
         sb.append("<type>");
         sb.append(type);
@@ -149,7 +150,7 @@ public class PURLCreator implements ResourceCreator {
                 throw new PURLException(type + " PURLs must have a target URL", 400);
             }
             sb.append("<target><url>");
-            sb.append(StringHelper.escapeURL(target));
+            sb.append(StringEscapeUtils.escapeXml(target));
             sb.append("</url></target>");
             break;
         case 303:

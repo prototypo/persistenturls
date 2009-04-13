@@ -34,7 +34,6 @@ public class PURLRedirectResolveCommand extends PURLResolveCommand {
         try {
             String type = purlXDARO.getText("/purl/type", true);
             String url = purlXDARO.getText("/purl/target/url", true);
-            url = url.replaceAll("&", "&amp;");
             
             IURRepresentation bodyDoc = context.source("ffcpl:/pub/redirect.html");
             
