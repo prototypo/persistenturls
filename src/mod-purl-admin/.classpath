@@ -6,6 +6,7 @@
     <classpathentry kind="var" path="JUNIT_HOME/junit.jar" />
     <classpathentry combineaccessrules="false" kind="src" path="/common" />
     <classpathentry kind="var" path="NETKERNEL_HOME/modules/ext-xml-core-1.5.2.jar" />
+    <classpathentry kind="lib" path="modules/mod-purl-admin/lib/commons-lang-2.4.jar" />
     <classpathentry kind="output" path="modules/mod-purl-admin" />
 </classpath>
 

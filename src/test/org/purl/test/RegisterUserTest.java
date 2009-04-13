@@ -23,7 +23,7 @@ public class RegisterUserTest extends AbstractIntegrationTest {
 
     // Test registering a new user via an HTTP POST.
     public void testRegisterUser() {
-        registerUser("testuser", "Test User", "Zepheira", "test.user@example.com", "%Testing!^$%^#*", "We are testing just now.", "Because unit tests are a necessary part of modern software development.");
+        registerUser("testuser", "Test User", "Zepheira", "test.user@example.com", ":'[]{}Testing~!@#$%^&*()_+|\\,./';<>?\"", "We are testing just now.", "Because unit tests are a necessary part of modern software development.");
     }
 
     // Test registering another user via an HTTP POST.
@@ -33,7 +33,7 @@ public class RegisterUserTest extends AbstractIntegrationTest {
 
     public void testLoginUser() {
 	    // Log in as testuser.
-	    assertLoginUser("testuser", "%Testing!^$%^#*");
+	    assertLoginUser("testuser", ":'[]{}Testing~!@#$%^&*()_+|\\,./';<>?\"");
     }
 	
 

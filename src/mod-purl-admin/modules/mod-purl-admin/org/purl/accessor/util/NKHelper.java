@@ -18,6 +18,7 @@ import org.ten60.netkernel.xml.representation.IAspectXDA;
 import org.ten60.netkernel.xml.xda.IXDAReadOnly;
 import org.ten60.netkernel.xml.xda.IXDAReadOnlyIterator;
 import org.ten60.netkernel.xml.xda.XPathLocationException;
+import org.apache.commons.lang.StringEscapeUtils;
 
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -163,7 +164,7 @@ public class NKHelper {
 
         try {
             INKFRequest req = context.createSubRequest("active:md5");
-            req.addArgument("operand", new StringAspect("<key>" + value + "</key>"));
+            req.addArgument("operand", new StringAspect("<key>" + StringEscapeUtils.escapeXml(value) + "</key>"));
             req.setAspectClass(IAspectXDA.class);
             IAspectXDA result = (IAspectXDA) context.issueSubRequestForAspect(req);
             retValue = result.getXDA().getText("/md5", true);
@@ -180,7 +181,7 @@ public class NKHelper {
         try {
             INKFRequest req = context.createSubRequest("active:des");
             req.addArgument("operand", new StringAspect("<des><salt>" + salt + "</salt>" +
-                    "<key>" + key + "</key></des>"));
+                    "<key>" + StringEscapeUtils.escapeXml(key)+ "</key></des>"));
             req.setAspectClass(IAspectXDA.class);
             IAspectXDA result = (IAspectXDA) context.issueSubRequestForAspect(req);
             retValue = result.getXDA().getText("/des", true);

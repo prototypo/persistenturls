@@ -57,9 +57,4 @@ public class PURLURIResolver extends URIResolver {
         return retValue;
     }
     
-    private String cleanseInput(String path) {
-    	String retValue = path.replaceAll("&", "&amp;");
-    	retValue = retValue.replaceAll("'", "&apos;");
-    	return retValue;
-    }
 }

@@ -24,6 +24,10 @@
 					<include name="modules/ext-layer1-*.jar"/>
 					<include name="modules/ext-xml-core-*.jar"/>
 				</fileset>
+                <fileset dir="${src}/lib">
+                    <include  name="*.jar"/>
+                    <exclude  name="mysql-*.jar"/>
+                </fileset>
             </classpath>
         </javac>
     </target>

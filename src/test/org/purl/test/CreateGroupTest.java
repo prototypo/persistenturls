@@ -154,7 +154,7 @@ public class CreateGroupTest extends AbstractIntegrationTest {
         createGroup("hierarchgroup2", "hierarchgroup1", "hierarchgroup1", "");
         createGroup("hierarchgroup3", "hierarchgroup2", "hierarchgroup2", "");
         assertLogoutUser();
-        assertLoginUser("testuser", "%Testing!^$%^#*");
+        assertLoginUser("testuser", ":'[]{}Testing~!@#$%^&*()_+|\\,./';<>?\"");
     }
 
 
