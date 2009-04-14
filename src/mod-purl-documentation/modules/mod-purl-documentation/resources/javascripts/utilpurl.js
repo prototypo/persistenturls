@@ -97,8 +97,8 @@ function onLoginStatusResponse (message, headers, referrer) {
 	resultBlock = $("loginstatus");
 	resultBlock.innerHTML = "<p>Getting login status...<\/p>";
 	
-	if ( headers["Content-Type"] == "text/xml" ||
-				headers["Content-Type"] == "application/xml" ) {
+	if (getContentType(headers) == "text/xml" ||
+				getContentType(headers) == "application/xml" ) {
 
 		// Parse the XML
 		if ( message.indexOf("logged out") > -1 ) {
@@ -537,8 +537,8 @@ function onPendingResponse(message, headers, callingContext) {
 	// pending approval.
 	var pendingBlock = $("pending");
 	
-	if ( headers["Content-Type"] == "text/xml" ||
-				headers["Content-Type"] == "application/xml" ) {
+	if ( getContentType(headers) == "text/xml" ||
+				getContentType(headers) == "application/xml" ) {
 		
 		// Parse the XML
 		startParserForPending(message);
@@ -548,7 +548,7 @@ function onPendingResponse(message, headers, callingContext) {
 		// Write the results to the results area.
 		pendingBlock.innerHTML = htmlResults;
 	
-	} else if ( headers["Content-Type"].indexOf("text/html") != -1 ) {
+	} else if ( getContentType(headers).indexOf("text/html") != -1 ) {
 		// Write the results to the results area.
 		pendingBlock.innerHTML = message;
 		
@@ -565,8 +565,8 @@ function onPendingResultsResponse(message, headers, callingContext) {
 	var submitBlock = $(submitBlockId);
 	var resultsBlock = $(callingContext + "_results");
 	
-	if ( headers["Content-Type"] == "text/xml" ||
-				headers["Content-Type"] == "application/xml" ) {
+	if ( getContentType(headers) == "text/xml" ||
+				getContentType(headers) == "application/xml" ) {
 
 		// "Parse" the XML
 		if ( message.indexOf("rejected") > -1 ) {
@@ -623,13 +623,18 @@ function onResponse(message, headers, callingContext) {
 						"<span>Open results in a new window</span></a>" +
 						" " + resultHeader + "<\/h3>";
 
+    var contentType = getContentType(headers);
+    
+    if (contentType) {
+        contentType = contentType.split(";")[0];
+    }
 	// Style the results based on their Content-Type.
-	if ( headers["Content-Type"] == "text/plain" || headers["Content-Type"] == "text/html") {
+	if ( contentType == "text/plain" || contentType == "text/html") {
 		resultBlock.innerHTML = resultsTop;
 		resultBlock.innerHTML += "<p class='" + resultClass + "'>" + message + "<\/p>";
 		
-	} else if ( headers["Content-Type"] == "text/xml" ||
-				headers["Content-Type"] == "application/xml" ) {
+	} else if ( contentType == "text/xml" ||
+				contentType == "application/xml" ) {
 		
 		// Parse the XML
 		startParser(message);
@@ -660,12 +665,15 @@ function onResponse(message, headers, callingContext) {
 			resultBlock.innerHTML += htmlResults;
 		}
 
-	} else if ( headers["Content-Type"] == "text/html" ) {
+	} else if ( contentType == "text/html" || contentType == "text/plain") {
 		
 		// Display the HTML directly.
 		resultBlock.innerHTML = resultsTop;
 		resultBlock.innerHTML += message;
-		
+    } else if ( contentType == "text/plain") {
+                                         
+		resultBlock.innerHTML = resultsTop;
+		resultBlock.innerHTML += "<p class='" + resultClass + "'>" + message + "<\/p>";
 	} else {
 		resultBlock.innerHTML = resultsTop;
 		resultBlock.innerHTML += "<p class='error'>Warning: Content-Type of results not supported.  Trying anyway:<\/p>";
@@ -692,3 +700,10 @@ function getSelectedRadio(name) {
 	return value;
 }
 
+function getContentType(headers) {
+    var contentType = headers["Content-Type"];
+    if (contentType) {
+        contentType = contentType.split(";")[0]
+    }
+    return contentType;
+}
