@@ -45,13 +45,23 @@ public class PURLResolverAccessor extends NKFAccessorImpl {
         super(SAFE_FOR_CONCURRENT_USE, INKFRequestReadOnly.RQT_SOURCE);
     }
 
+    private String getPurlPath(String fullpath) {
+        String result = fullpath.substring(6);
+        if (result.indexOf("?") > 0) {
+            result = result.substring(0, result.indexOf("?"));
+        } else if (result.indexOf("#") > 0) {
+            result = result.substring(0, result.indexOf("#"));
+        }
+        return result;
+    }
+
     @Override
     public void processRequest(INKFConvenienceHelper context) throws Exception {
 
         String path = NKHelper.getArgument(context, "path");
         String mode = NKHelper.getArgument(context, "mode");
 
-        String purlloc = path.substring(6);
+        String purlloc = getPurlPath(path);
         String purllocOrig = purlloc;
         String errMsg = null;
         INKFResponse resp = null;

@@ -1,21 +1,14 @@
 package org.purl.accessor;
 
-import java.net.URLDecoder;
-
-import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
-import org.ten60.netkernel.layer1.nkf.INKFRequest;
-import org.ten60.netkernel.layer1.nkf.INKFRequestReadOnly;
-import org.ten60.netkernel.layer1.nkf.INKFResponse;
-import org.ten60.netkernel.layer1.nkf.impl.NKFAccessorImpl;
-import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.common.SolrDocumentList;
-import org.apache.solr.common.SolrDocument;
-import org.apache.lucene.util.StringHelper;
-import org.apache.commons.lang.StringEscapeUtils;
-
-import com.ten60.netkernel.urii.IURRepresentation;
 import com.ten60.netkernel.urii.aspect.StringAspect;
+import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrDocumentList;
+import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
+import org.ten60.netkernel.layer1.nkf.INKFRequestReadOnly;
+import org.ten60.netkernel.layer1.nkf.impl.NKFAccessorImpl;
 
 public class SearchAccessor extends NKFAccessorImpl {
     

@@ -14,13 +14,6 @@ public class AdvancedPurlTest extends AbstractPurlTest {
     // Test creating a new 301 PURL via an HTTP POST.
     public void testCreate301Purl() {
 
-        String control = "<purl status=\"1\">" +
-                "<id>/testdomain/test301PURL</id>" +
-                "<type>301</type>" +
-                "<maintainers><uid>testuser</uid></maintainers>" +
-                "<target><url>http://example.com/test301PURL</url></target></purl>";
-
-
         Map<String, String> formParameters = new HashMap<String, String>();
         formParameters.put("type", "301");
         formParameters.put("target", "http://example.com/test301PURL");
@@ -38,14 +31,6 @@ public class AdvancedPurlTest extends AbstractPurlTest {
 
     // Test creating a new 302 PURL via an HTTP POST.
     public void testCreate302Purl() {
-
-        String control = "<purl status=\"1\">" +
-                "<id>/testdomain/test302PURL</id>" +
-                "<type>302</type>" +
-                "<maintainers><uid>testuser</uid></maintainers>" +
-                "<target><url>http://example.com/test302PURL</url></target></purl>";
-
-
         Map<String, String> formParameters = new HashMap<String, String>();
         formParameters.put("type", "302");
         formParameters.put("target", "http://example.com/test302PURL");
@@ -62,13 +47,6 @@ public class AdvancedPurlTest extends AbstractPurlTest {
 
     // Test creating a new 303 PURL via an HTTP POST.
     public void testCreate303Purl() {
-        String control = "<purl status=\"1\">" +
-                "<id>/testdomain/test303PURL</id>" +
-                "<type>303</type>" +
-                "<maintainers><uid>testuser</uid></maintainers>" +
-                "<seealso><url>http://example.com/test303PURL</url></seealso></purl>";
-
-
         Map<String, String> formParameters = new HashMap<String, String>();
         formParameters.put("type", "303");
         formParameters.put("seealso", "http://example.com/test303PURL");
@@ -87,14 +65,6 @@ public class AdvancedPurlTest extends AbstractPurlTest {
     // Test creating a new 307 PURL via an HTTP POST.
     public void testCreate307Purl() {
 
-
-        String control = "<purl status=\"1\">" +
-                "<id>/testdomain/test307PURL</id>" +
-                "<type>307</type>" +
-                "<maintainers><uid>testuser</uid></maintainers>" +
-                "<target><url>http://example.com/test307PURL</url></target></purl>";
-
-
         Map<String, String> formParameters = new HashMap<String, String>();
         formParameters.put("type", "307");
         formParameters.put("target", "http://example.com/test307PURL");
@@ -112,13 +82,6 @@ public class AdvancedPurlTest extends AbstractPurlTest {
     // Test creating a new 404 PURL via an HTTP POST.
     public void testCreate404Purl() {
 
-
-        String control = "<purl status=\"1\">" +
-                "<id>/testdomain/test404PURL</id>" +
-                "<type>404</type>" +
-                "<maintainers><uid>testuser</uid></maintainers></purl>";
-
-
         Map<String, String> formParameters = new HashMap<String, String>();
         formParameters.put("type", "404");
         formParameters.put("maintainers", "testuser");
@@ -134,11 +97,6 @@ public class AdvancedPurlTest extends AbstractPurlTest {
 
     // Test creating a new 410 PURL via an HTTP POST.
     public void testCreate410Purl() {
-        String control = "<purl status=\"1\">" +
-                "<id>/testdomain/test410PURL</id>" +
-                "<type>410</type>" +
-                "<maintainers><uid>testuser</uid></maintainers></purl>";
-
 
         Map<String, String> formParameters = new HashMap<String, String>();
         formParameters.put("type", "410");
@@ -155,12 +113,6 @@ public class AdvancedPurlTest extends AbstractPurlTest {
 
     // Test creating a new Clone PURL via an HTTP POST.
     public void testCreateClonePurl() {
-        String control = "<purl status=\"1\">" +
-                "<id>/testdomain/testClonePURL</id>" +
-                "<type>302</type>" +
-                "<maintainers><uid>testuser</uid></maintainers>" +
-                "<target><url>http://example.com/test302PURL</url></target></purl>";
-
 
         Map<String, String> formParameters = new HashMap<String, String>();
         formParameters.put("type", "clone");
@@ -177,13 +129,6 @@ public class AdvancedPurlTest extends AbstractPurlTest {
 
     // Test creating a new Chain PURL via an HTTP POST.
     public void testCreateChainPurl() {
-
-        String control = "<purl status=\"1\">" +
-                "<id>/testdomain/testChainPURL</id>" +
-                "<type>chain</type>" +
-                "<maintainers><uid>testuser</uid></maintainers>" +
-                "<target><url>/testdomain/test302PURL</url></target></purl>";
-
 
         Map<String, String> formParameters = new HashMap<String, String>();
         formParameters.put("type", "chain");
@@ -202,12 +147,6 @@ public class AdvancedPurlTest extends AbstractPurlTest {
     // Test creating a new Partial PURL via an HTTP POST.
     public void testCreatePartialPurl() {
 
-        String control = "<purl status=\"1\">" +
-                "<id>/testdomain/testPartialPURL</id>" +
-                "<type>partial</type>" +
-                "<maintainers><uid>testuser</uid></maintainers>" +
-                "<target><url>http://example.com/testPartialPURL</url></target></purl>";
-
 
         Map<String, String> formParameters = new HashMap<String, String>();
         formParameters.put("type", "partial");
@@ -221,6 +160,13 @@ public class AdvancedPurlTest extends AbstractPurlTest {
     // Test resolving an existing Partial PURL via an HTTP GET.
     public void testResolvePartialPurl() {
         resolvePurl("/testdomain/testPartialPURL/foobar", "http://example.com/testPartialPURL/foobar");
+    }
+
+    public void testResolvePartialPurlsWithParameter() {
+        resolvePurl("/testdomain/testPartialPURL/foobar?blah", "http://example.com/testPartialPURL/foobar?blah");
+    }
+    public void testResolvePartialPurlRoot() {        
+        resolvePurl("/testdomain/testPartialPURL?blah", "http://example.com/testPartialPURL?blah");
     }
 
 
