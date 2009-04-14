@@ -66,12 +66,12 @@
 	<module>modules/test-mod-purl-storage/</module>
 	<module>modules/mod-purl-admin/</module>
 	<module>modules/test-mod-purl-admin/</module>	
-	<module>modules/mod-purl-search-$JARVERSION.jar</module>	
-	<module>modules/test-mod-purl-search-$JARVERSION.jar</module>
+	<module>modules/mod-purl-search-${JARVERSION}.jar</module>	
+	<module>modules/test-mod-purl-search-${JARVERSION}.jar</module>
 	<module>modules/mod-purl-virtualhost/</module>
-	<module>modules/mod-session-$JARVERSION.jar</module>
-	<module>modules/mod-template-$JARVERSION.jar</module>
-	<module>modules/test-mod-template-$JARVERSION.jar</module>
-	<module>modules/mod-purl-documentation-$JARVERSION.jar</module>
+	<module>modules/mod-session-${JARVERSION}.jar</module>
+	<module>modules/mod-template-${JARVERSION}.jar</module>
+	<module>modules/test-mod-template-${JARVERSION}.jar</module>
+	<module>modules/mod-purl-documentation-${JARVERSION}.jar</module>
 	
 </modules>

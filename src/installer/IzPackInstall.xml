@@ -1,8 +1,8 @@
 <installation version="1.0">
 
 <info>
-	<appname>PURLZ-Server-1.4.1</appname>
-	<appversion>1.4.1</appversion>
+	<appname>PURLZ-Server-1.5</appname>
+	<appversion>1.5</appversion>
 	<url>http://purlz.org/</url>
 	<authors>
 		<author name="Zepheira, LLC" email="contact@zepheira.com"/>
@@ -23,6 +23,7 @@
  <res id="HTMLInfoPanel.info" src="README.html"/>
  <res id="installer.langsel.img" src="images/installer_splash.jpg" />
  <res id="userInputSpec.xml" src="userInputSpec.xml" />
+ <res id="userInputLang.xml_eng" src="userInputLang.xml_eng" />
  <res id="conditions.xml" src="conditions.xml" />
 </resources>
 
@@ -50,8 +51,8 @@
    <pack name="Core" id="Core" required="yes">
        <description>Main distribution.  Contains 1060 NetKernel with PURL server modules and documentation.</description>	
 		<!-- NetKernel installation. -->
-       <file targetdir="$INSTALL_PATH" src="NetKernel-Base/bin"/>
-       <file targetdir="$INSTALL_PATH" src="NetKernel-Base/etc"/>
+		<file targetdir="$INSTALL_PATH" src="NetKernel-Base/bin"/>
+		<file targetdir="$INSTALL_PATH" src="NetKernel-Base/etc"/>
 		<file targetdir="$INSTALL_PATH" src="NetKernel-Base/lib"/>
 		<file targetdir="$INSTALL_PATH" src="NetKernel-Base/licenses"/>
 		<file targetdir="$INSTALL_PATH" src="NetKernel-Base/log"/>
@@ -71,13 +72,37 @@
 		<file targetdir="$INSTALL_PATH/modules" src="../deploy/test-mod-purl-search-1.4.0.jar"/>
 		<file targetdir="$INSTALL_PATH/modules" src="../deploy/test-mod-template-1.4.0.jar"/>
 		<!-- NB: Cannot use JAR files for these because we need to parse files within them. -->
-		<file targetdir="$INSTALL_PATH/modules" src="../mod-purl-storage/modules/mod-purl-storage"/>
-		<file targetdir="$INSTALL_PATH/modules" src="../mod-purl-storage/modules/test-mod-purl-storage"/>
-		<file targetdir="$INSTALL_PATH/modules" src="../mod-purl-virtualhost/modules/mod-purl-virtualhost"/>
-		<file targetdir="$INSTALL_PATH/modules" src="../mod-purl-admin/modules/mod-purl-admin"/>
-		<file targetdir="$INSTALL_PATH/modules" src="../mod-purl-admin/modules/test-mod-purl-admin"/>
-		<file targetdir="$INSTALL_PATH/modules" src="../mod-purl-gatekeeper/modules/mod-purl-gatekeeper"/>
-                <!-- Overwrite the NetKernel files that point to the PURL modules. -->
+		<fileset targetdir="$INSTALL_PATH/modules/" dir="../mod-purl-storage/modules/">
+			<include name="mod-purl-storage/**/*"/>
+			<exclude name="**/.svn"/>
+			<exclude name="**/.svn/**"/>
+		</fileset>
+		<fileset targetdir="$INSTALL_PATH/modules/" dir="../mod-purl-storage/modules/">
+			<include name="test-mod-purl-storage/**/*"/>
+			<exclude name="**/.svn"/>
+			<exclude name="**/.svn/**"/>
+		</fileset>
+		<fileset targetdir="$INSTALL_PATH/modules/" dir="../mod-purl-virtualhost/modules/">
+			<include name="mod-purl-virtualhost/**/*"/>
+			<exclude name="**/.svn"/>
+			<exclude name="**/.svn/**"/>
+		</fileset>
+		<fileset targetdir="$INSTALL_PATH/modules/" dir="../mod-purl-admin/modules/">
+			<include name="mod-purl-admin/**/*"/>
+			<exclude name="**/.svn"/>
+			<exclude name="**/.svn/**"/>
+		</fileset>
+		<fileset targetdir="$INSTALL_PATH/modules/" dir="../mod-purl-admin/modules/">
+			<include name="test-mod-purl-admin/**/*"/>
+			<exclude name="**/.svn"/>
+			<exclude name="**/.svn/**"/>
+		</fileset>
+		<fileset targetdir="$INSTALL_PATH/modules" dir="../mod-purl-gatekeeper/modules/">
+			<include name="mod-purl-gatekeeper/**/*"/>
+			<exclude name="**/.svn"/>
+			<exclude name="**/.svn/**"/>
+		</fileset>
+		<!-- Overwrite the NetKernel files that point to the PURL modules. -->
 		<singlefile src="options/deployedModules.xml" target="$INSTALL_PATH/etc/deployedModules.xml" override="true"/>
 		<singlefile src="options/mod-fulcrum-frontend/module.xml" target="$INSTALL_PATH/modules/mod-fulcrum-frontend/module.xml" override="true"/>
 		<!-- Overwrite the files that define installer options,
@@ -122,20 +147,60 @@
 
 	<pack name="Javadoc" id="Javadoc" required="no" preselected="no">
 	    <description>Javadoc documentation for developers.</description>
-	    <file targetdir="$INSTALL_PATH/" src="../javadoc"/>
+	    <fileset targetdir="$INSTALL_PATH/" dir="..">
+		<include name="javadoc/**/*"/>
+		<exclude name="**/.svn"/>
+		<exclude name="**/.svn/**"/>
+		</fileset>
 	</pack>
 	
 	<pack name="Source Code" id="Source Code" required="no" preselected="no">
 	    <description>Source code for the PURL server.</description>
-	    <file targetdir="$INSTALL_PATH" src="NetKernel-Base/build"/>
-	    <file targetdir="$INSTALL_PATH/src/1060-NetKernel/" src="NetKernel-Base/src"/>
-	    <file targetdir="$INSTALL_PATH/src/purl" src="../mod-purl-admin"/>
-	    <file targetdir="$INSTALL_PATH/src/purl" src="../mod-purl-documentation"/>
-	    <file targetdir="$INSTALL_PATH/src/purl" src="../mod-purl-search"/>
-	    <file targetdir="$INSTALL_PATH/src/purl" src="../mod-purl-storage"/>
-	    <file targetdir="$INSTALL_PATH/src/purl" src="../mod-purl-virtualhost"/>
-	    <file targetdir="$INSTALL_PATH/src/purl" src="../mod-session"/>
-	    <file targetdir="$INSTALL_PATH/src/purl" src="../mod-template"/>
+	    <fileset targetdir="$INSTALL_PATH" dir="NetKernel-Base">
+			<include name="build/**/*"/>
+			<exclude name="**/.svn"/>
+			<exclude name="**/.svn/**"/>
+		</fileset>
+	    <fileset targetdir="$INSTALL_PATH/src/1060-NetKernel/" dir="NetKernel-Base">
+			<include name="src/**/*"/>
+			<exclude name="**/.svn"/>
+			<exclude name="**/.svn/**"/>
+		</fileset>
+	    <fileset targetdir="$INSTALL_PATH/src/purl" dir="..">
+			<include name="mod-purl-admin/**/*"/>
+			<exclude name="**/.svn"/>
+			<exclude name="**/.svn/**"/>
+		</fileset>
+	    <fileset targetdir="$INSTALL_PATH/src/purl" dir="..">
+			<include name="mod-purl-documentation/**/*"/>
+			<exclude name="**/.svn"/>
+			<exclude name="**/.svn/**"/>
+		</fileset>
+	    <fileset targetdir="$INSTALL_PATH/src/purl" dir="..">
+			<include name="mod-purl-search/**/*"/>
+			<exclude name="**/.svn"/>
+			<exclude name="**/.svn/**"/>
+		</fileset>
+	    <fileset targetdir="$INSTALL_PATH/src/purl" dir="..">
+			<include name="mod-purl-storage/**/*"/>
+			<exclude name="**/.svn"/>
+			<exclude name="**/.svn/**"/>
+		</fileset>
+	    <fileset targetdir="$INSTALL_PATH/src/purl" dir="..">
+			<include name="mod-purl-virtualhost/**/*"/>
+			<exclude name="**/.svn"/>
+			<exclude name="**/.svn/**"/>
+		</fileset>
+	    <fileset targetdir="$INSTALL_PATH/src/purl" dir="..">
+			<include name="mod-session/**/*"/>
+			<exclude name="**/.svn"/>
+			<exclude name="**/.svn/**"/>
+		</fileset>
+	    <fileset targetdir="$INSTALL_PATH/src/purl" dir="..">
+			<include name="mod-template/**/*"/>
+			<exclude name="**/.svn"/>
+			<exclude name="**/.svn/**"/>
+		</fileset>
 	</pack>
 
 </packs>
