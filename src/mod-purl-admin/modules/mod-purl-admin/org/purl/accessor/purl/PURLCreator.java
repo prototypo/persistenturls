@@ -44,7 +44,10 @@ public class PURLCreator implements ResourceCreator {
         String purl = purlResolver.getURI(context);
         String existingPurl = params.getValue("basepurl");
         String oldURI = purlResolver.getURI(existingPurl);
-
+        String target = purlResolver.getDisplayName(oldURI);
+        if((target == null) || target.length() == 0) {
+                throw new PURLException("Chain PURLs must have a target URL", 400);
+            }
         if(purlStorage.resourceExists(context, oldURI)) {
             StringBuffer sb = new StringBuffer("<purl>");
             sb.append("<id>");
@@ -102,14 +105,18 @@ public class PURLCreator implements ResourceCreator {
         return retValue;
     }
 
-    private IURAspect createPartialRedirectPURL(INKFConvenienceHelper context, IAspectNVP params) throws NKFException {
+    private IURAspect createPartialRedirectPURL(INKFConvenienceHelper context, IAspectNVP params) throws NKFException, PURLException {
         IURAspect retValue = null;
 
         StringBuffer sb = new StringBuffer("<purl>");
         String target = params.getValue("target");
         String purlURI = purlResolver.getURI(context);
         String purl = purlResolver.getDisplayName(purlURI);
-        
+
+        if((target == null) || target.length() == 0) {
+            throw new PURLException("Partial PURLs must have a target URL", 400);
+        }
+
         sb.append("<id>");
         sb.append(purl);
         sb.append("</id>");
