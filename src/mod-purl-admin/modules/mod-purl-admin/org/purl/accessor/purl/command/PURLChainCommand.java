@@ -5,6 +5,7 @@ import org.ten60.netkernel.layer1.nkf.INKFResponse;
 import org.ten60.netkernel.xml.representation.IAspectXDA;
 import org.ten60.netkernel.xml.xda.IXDAReadOnly;
 import org.apache.commons.lang.StringEscapeUtils;
+import com.ten60.netkernel.urii.IURRepresentation;
 
 public class PURLChainCommand extends PURLResolveCommand {
 
@@ -21,7 +22,12 @@ public class PURLChainCommand extends PURLResolveCommand {
 
             // TODO: Resolve the terminal PURL here without doing all the redirects
             // in case there are multiple PURLs chained together
-            resp = generateResponseCode(context, "302", url);
+            IURRepresentation bodyDoc = context.source("ffcpl:/pub/redirect.html");
+
+            // We treat the partial redirect as a 302
+            resp = generateResponseCode(context, "302", url,
+                    parameterizeBodyDoc(context, bodyDoc, "302", url),
+                    "text/html; charset=iso-8859-1");
 
         } catch(Throwable t) {
             t.printStackTrace();
