@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <userInput>
 	<panel order="0" layout="right" id="choosehost">
-		<field type="staticText" align="left" txt="Please provide the name of the host on which the PURL server will run.  If this machine has more than one name, you may change it here.  Please provide a fully qualified host name (e.g. myhost.example.com)" id="staticText.1"/>
+		<field type="staticText" align="left" txt="Please provide the name of the host on which the PURL server will run.  PURLs will only resolve to the hostname you enter here!  Please provide a fully qualified host name (e.g. myhost.example.com)" id="staticText.1"/>
 		<field type="text" variable="PURLHOST">
 			<spec txt="PURL server host name:" id="text.label.0" size="25" set="${HOST_NAME}"/>
 		</field>
