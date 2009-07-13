@@ -17,7 +17,7 @@
 	</zone>
 	-->
 	<zone>
-		<match>.*?://.*?/docs/.*</match>
+		<match>.*?://[^/]*?/docs/.*</match>
 	</zone>
 	<zone>
 		<match>..*</match>

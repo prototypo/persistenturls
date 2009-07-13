@@ -49,20 +49,20 @@
             <to>ffcpl:/static/$1</to>
 		</rewrite> -->
   		<rewrite>
-		    <match>jetty://.*?/docs(/.*)</match>
+		    <match>jetty://[^/]*?/docs(/.*)</match>
             <to>ffcpl:/docs$1</to>
 		</rewrite>
 		<!-- TODO: Clean this up! BS -->
 		<rewrite>
-			<match>jetty://.*?/(admin/login/.*)</match>
+			<match>jetty://[^/]*?/(admin/login/.*)</match>
     		<to>ffcpl:/$1</to>
 		</rewrite>
 		<rewrite>
-			<match>jetty://.*?/(admin/loginstatus.*)</match>
+			<match>jetty://[^/]*?/(admin/loginstatus.*)</match>
     		<to>ffcpl:/$1</to>
 		</rewrite>					
    		<rewrite>
-			<match>jetty://.*?/(admin/.*)(\+param.*)</match>
+			<match>jetty://[^/]*?/(admin/.*)(\+param.*)</match>
     		<to>ffcpl:/$e1$2</to>
 		</rewrite>
 		<!-- <rewrite>
