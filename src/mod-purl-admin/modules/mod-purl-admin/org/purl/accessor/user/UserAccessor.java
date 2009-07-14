@@ -72,6 +72,7 @@ import org.purl.accessor.ResourceFilter;
 import org.purl.accessor.ResourceStorage;
 import org.purl.accessor.SearchHelper;
 import org.purl.accessor.util.URIResolver;
+import org.purl.accessor.util.DataHelper;
 import org.purl.accessor.user.UserAccessController;
 import org.purl.accessor.user.UserCreator;
 import org.purl.accessor.user.UserGroupAllowableResource;
@@ -215,7 +216,7 @@ public class UserAccessor extends AbstractAccessor {
                     String user = uriResolver.getDisplayName(uri);
                 
                     req = context.createSubRequest("active:purl-storage-approve-user");                
-                    req.addArgument("param", new StringAspect("<user><id>" + user + "</id></user>")); 
+                    req.addArgument("param", new StringAspect("<user><id>" + DataHelper.cleanseInput(user) + "</id></user>")); 
                     context.issueSubRequest(req);
                 
                     req=context.createSubRequest("active:purl-storage-query-user");

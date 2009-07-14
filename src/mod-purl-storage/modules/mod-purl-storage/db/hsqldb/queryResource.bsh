@@ -1,6 +1,10 @@
 import org.ten60.netkernel.xml.representation.*;
 import com.ten60.netkernel.urii.aspect.*;
 
+
+import org.apache.commons.lang.StringEscapeUtils;
+
+
 main() {
 	ruri = context.getThisRequest().getArgument("uri");
 	parts = ruri.split("/");
@@ -13,27 +17,27 @@ main() {
 		case "purl":
 		uri = "ffcpl:/sql/db/queryPURL.idoc";
 		value = ruri.substring(11);
-		param = new StringAspect("<purl><id>" + value + "</id></purl>");
+		param = new StringAspect("<purl><id>" + StringEscapeUtils.escapeXml(value) + "</id></purl>");
 		break;
 		case "domain":
 		uri = "ffcpl:/sql/db/queryDomain.idoc";
 		value = ruri.substring(13);
-		param = new StringAspect("<domain><id>" + value + "</id></domain>");
+		param = new StringAspect("<domain><id>" + StringEscapeUtils.escapeXml(value) + "</id></domain>");
 		break;
 		case "group":
 		uri = "ffcpl:/sql/db/queryGroup.idoc";
 		value = ruri.substring(13);
-		param = new StringAspect("<group><id>" + value + "</id></group>");		
+		param = new StringAspect("<group><id>" + StringEscapeUtils.escapeXml(value) + "</id></group>");
 		break;
 		case "user":
 		uri = "ffcpl:/sql/db/queryUser.idoc";
 		value = ruri.substring(12);
-		param = new StringAspect("<user><id>" + value + "</id></user>");						
+		param = new StringAspect("<user><id>" + StringEscapeUtils.escapeXml(value) + "</id></user>");
 		break;
 		case "validuser":
 		uri = "ffcpl:/sql/db/validUser.idoc";
 		value = ruri.substring(12);
-		param = new StringAspect("<user><id>" + value + "</id></user>");						
+		param = new StringAspect("<user><id>" + StringEscapeUtils.escapeXml(value) + "</id></user>");						
 		break;
 	}
 

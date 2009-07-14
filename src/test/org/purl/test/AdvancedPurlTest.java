@@ -105,6 +105,11 @@ public class AdvancedPurlTest extends AbstractPurlTest {
         assertPurlCreated("/testdomain/test410PURL", formParameters);
     }
 
+    public void testResolveReservedSubDomainPurl() {
+        resolvePurl("/testdomain/docs/", "Not Found");
+
+    }
+
     // Test resolving an existing 410 PURL via an HTTP GET.
     public void testResolve410Purl() {
         resolvePurl("/testdomain/test410PURL", "Gone");

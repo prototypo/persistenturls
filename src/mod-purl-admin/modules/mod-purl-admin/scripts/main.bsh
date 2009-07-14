@@ -3,9 +3,12 @@ import org.ten60.netkernel.xml.representation.*;
 import com.ten60.netkernel.urii.aspect.*;
 import org.purl.accessor.*;
 import org.purl.accessor.util.*;
+import java.net.URLEncoder;
 
 main() {
 	base=context.getThisRequest().getArgument("base");
+	base = base.substring(6);
+	//base = URLEncoder.encode(base, "UTF-8");
 	req = null;
 	resp = null;
 	
@@ -13,7 +16,7 @@ main() {
 	// that matches, otherwise redirect to the main documentation
 	// page.
 	
-	if(!base.equals("ffcpl:/")) {
+	if(!base.equals("/")) {
 		// PURLs take precedence over local references. If you need to 
 		// serve up static content from a PURL installation, reserve
 		// the top level domains in the ffcpl:/etc/PURLConfig.xml file.
@@ -23,8 +26,9 @@ main() {
 		// TODO: Rewrite ffcpl:/ reference to purl:/ reference
 
 		ru = context.getThisRequest().getArgument("requestURL");
+		ru = ru.substring(ru.indexOf("://")+3);;
 
-		fullpath = ru.substring(ru.indexOf(base.substring(6)));
+		fullpath = ru.substring(ru.indexOf("/"));
 		req=context.createSubRequest("active:purl-resolver");
 		req.addArgument("mode", "mode:resolve");
 		req.addArgument("path", "ffcpl:" + fullpath);

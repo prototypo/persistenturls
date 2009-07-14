@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.purl.accessor.domain.DomainResolver;
-import org.purl.accessor.util.URIResolver;
+import org.purl.accessor.util.*;
 import org.purl.accessor.user.UserResolver;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFRequest;
@@ -85,11 +85,11 @@ public class PendingAccessor extends NKFAccessorImpl {
                 
                 if(type.equals("user")) {
                     resource = userResolver.getURI(context).substring(12);
-                    param = new StringAspect("<user><id>" + resource + "</id></user>");
+                    param = new StringAspect("<user><id>" + DataHelper.cleanseInput(resource )+ "</id></user>");
 
                 } else if(type.equals("domain")) {
                     resource = domainResolver.getURI(context).substring(13);
-                    param = new StringAspect("<domain><id>" + resource + "</id></domain>");                    
+                    param = new StringAspect("<domain><id>" + DataHelper.cleanseInput(resource) + "</id></domain>");                    
                 } else {
                     // TODO: Handle Error
                 }

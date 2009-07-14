@@ -1,6 +1,9 @@
 import org.ten60.netkernel.xml.representation.*;
 import com.ten60.netkernel.urii.aspect.*;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
+
 main() {
 	ruri = context.getThisRequest().getArgument("uri");
 	parts = ruri.split("/");
@@ -27,7 +30,7 @@ main() {
 		value = ruri.substring(12);		
 		break;
 	}
-	query = new StringAspect("<query><id>" + value + "</id></query>");
+	query = new StringAspect("<query><id>" + StringEscapeUtils.escapeXml(value) + "</id></query>");
 	
 	req = context.createSubRequest("active:dpml");
 	req.addArgument("operand", uri);
