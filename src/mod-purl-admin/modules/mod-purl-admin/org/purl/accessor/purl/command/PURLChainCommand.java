@@ -24,7 +24,7 @@ public class PURLChainCommand extends PURLResolveCommand {
             // in case there are multiple PURLs chained together
             IURRepresentation bodyDoc = context.source("ffcpl:/pub/redirect.html");
 
-            // We treat the partial redirect as a 302
+            // We treat the chain redirect as a 302
             resp = generateResponseCode(context, "302", url,
                     parameterizeBodyDoc(context, bodyDoc, "302", url),
                     "text/html; charset=iso-8859-1");

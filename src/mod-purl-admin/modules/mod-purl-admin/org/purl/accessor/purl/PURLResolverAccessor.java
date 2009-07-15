@@ -27,6 +27,7 @@ public class PURLResolverAccessor extends NKFAccessorImpl {
         PURLResolveCommand goneResolver = new PURLGoneResolveCommand();
         PURLResolveCommand seeAlsoResolver = new PURLSeeAlsoResolveCommand();
         PURLResolveCommand partialRedirectResolver = new PURLPartialRedirectResolveCommand();
+        PURLResolveCommand partialWithExtensionRedirectResolver = new PURLPartialWithExtensionRedirectResolveCommand();
         PURLResolveCommand purlValidator = new PURLValidatorCommand();
         PURLResolveCommand chainResolver = new PURLChainCommand();
 
@@ -37,6 +38,7 @@ public class PURLResolverAccessor extends NKFAccessorImpl {
         commandMap.put("404", goneResolver);
         commandMap.put("410", goneResolver);
         commandMap.put("partial", partialRedirectResolver);
+        commandMap.put("partial-with-extension", partialWithExtensionRedirectResolver);
         commandMap.put("validate", purlValidator);
         commandMap.put("chain", chainResolver);
     }
@@ -89,7 +91,7 @@ public class PURLResolverAccessor extends NKFAccessorImpl {
             IXDAReadOnly purlXDARO = purlXDA.getXDA();
             String type = mode.equals("mode:validate") ? "validate" : purlXDARO.getText("/purl/type", true);
             
-            if ("partial".equals(type) || "chain".equals(type) || purlloc.equals(purllocOrig)) {
+            if ("partial".equals(type) || "partial-with-extension".equals(type) || "chain".equals(type) || purlloc.equals(purllocOrig)) {
                 if (!purlStorageResolver.resourceIsTombstoned(context, uri)) {
                     try {
 

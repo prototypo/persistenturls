@@ -45,6 +45,7 @@ main() {
         case "302":
         case "307":
         case "partial":
+        case "partial-with-extension":
         case "chain":
             purlXDA.appendPath("/purl", "target/url", resultsXDA.getText("/results/row/target/text()", true));
             break;
