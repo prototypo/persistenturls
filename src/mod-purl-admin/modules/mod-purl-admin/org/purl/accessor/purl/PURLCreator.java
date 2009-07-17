@@ -105,7 +105,7 @@ public class PURLCreator implements ResourceCreator {
         return retValue;
     }
 
-    private IURAspect createPartialRedirectPURL(INKFConvenienceHelper context, IAspectNVP params) throws NKFException, PURLException {
+    private IURAspect createPartialRedirectPURL(INKFConvenienceHelper context, IAspectNVP params, String type) throws NKFException, PURLException {
         IURAspect retValue = null;
 
         StringBuffer sb = new StringBuffer("<purl>");
@@ -120,37 +120,7 @@ public class PURLCreator implements ResourceCreator {
         sb.append("<id>");
         sb.append(purl);
         sb.append("</id>");
-        sb.append("<type>partial</type>");
-
-        sb.append("<target><url>");
-        sb.append(StringEscapeUtils.escapeXml(target));
-        sb.append("</url></target>");
-        
-        addMaintainerList(context, sb, params.getValue("maintainers"));
-
-        sb.append("</purl>");
-
-        retValue = new StringAspect(sb.toString());
-
-        return retValue;
-    }
-
-    private IURAspect createPartialWithExtensionRedirectPURL(INKFConvenienceHelper context, IAspectNVP params) throws NKFException, PURLException {
-        IURAspect retValue = null;
-
-        StringBuffer sb = new StringBuffer("<purl>");
-        String target = params.getValue("target");
-        String purlURI = purlResolver.getURI(context);
-        String purl = purlResolver.getDisplayName(purlURI);
-
-        if((target == null) || target.length() == 0) {
-            throw new PURLException("Partial PURLs must have a target URL", 400);
-        }
-
-        sb.append("<id>");
-        sb.append(purl);
-        sb.append("</id>");
-        sb.append("<type>partial-with-extension</type>");
+        sb.append("<type>" + type + "</type>");
 
         sb.append("<target><url>");
         sb.append(StringEscapeUtils.escapeXml(target));
@@ -303,10 +273,8 @@ public class PURLCreator implements ResourceCreator {
                     retValue = createChainedPURL(context, params);
                 } else if(type.equals("clone")) {
                     retValue = createClonedPURL(context, params);
-                } else if(type.equals("partial")) {
-                    retValue = createPartialRedirectPURL(context, params);
-                } else if(type.equals("partial-with-extension")) {
-                    retValue = createPartialWithExtensionRedirectPURL(context, params);                    
+                } else if(type.startsWith("partial")) {
+                    retValue = createPartialRedirectPURL(context, params, type);                
                 } else {
                     // TODO: Handle unexpected
                 }

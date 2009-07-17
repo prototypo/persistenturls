@@ -27,6 +27,13 @@ import com.ten60.netkernel.urii.IURRepresentation;
 
 public class PURLPartialRedirectResolveCommand extends PURLResolveCommand {
 
+    private boolean ignoreExtension = false;
+
+    public PURLPartialRedirectResolveCommand(boolean ignoreExtension) {
+        this.ignoreExtension = ignoreExtension;
+
+    }
+
     @Override
     public INKFResponse execute(INKFConvenienceHelper context, IAspectXDA purl) {
         INKFResponse resp = null;
@@ -37,12 +44,21 @@ public class PURLPartialRedirectResolveCommand extends PURLResolveCommand {
             String pid = purlXDARO.getText("/purl/id", true);
             String url = purlXDARO.getText("/purl/target/url", true);
 
-            if(!path.startsWith(pid)) {
-                // TODO : handle exception
-            }
-
             if(!path.equals(pid)) {
-                url = url + path.substring(pid.length());
+                String remainder =  path.substring(pid.length());
+                if (url.contains("?")) {
+
+                    if (remainder.contains("?")) {
+                        remainder = remainder.replaceFirst("\\?", "&");
+                    }
+                    if (remainder.startsWith("/")) {
+                        remainder = remainder.replaceFirst("/", ""); 
+                    }
+                }
+                if (ignoreExtension && remainder.contains(".")) {
+                    remainder = remainder.substring(0,remainder.lastIndexOf('.'));
+                }
+                url = url + remainder;
             }
             
             IURRepresentation bodyDoc = context.source("ffcpl:/pub/redirect.html");

@@ -205,7 +205,7 @@ handles results from the server in response to form submissions.
 
 		function showAdvancedPURLFields() {
 		var purlType = document.getElementById('a_type').value;
-		if ( purlType == "301" || purlType == "302" || purlType == "307" || purlType == "partial" || purlType == "partial-with-extension") {
+		if ( purlType == "301" || purlType == "302" || purlType == "307" || purlType.indexOf("partial") === 0) {
 			setVisibility('maintainerstable', 'inline');
 			setVisibility('seealsourltable', 'none');
 			setVisibility('targeturltable', 'inline');
@@ -417,9 +417,15 @@ handles results from the server in response to form submissions.
 														<option value="partial">
 															Partial-redirect PURL
 														</option>
-														<option value="partial-with-extension">
-															Partial-redirect PURL with file extension(s)
-														</option>
+                                                        <option value="partial-append-extension">
+                                                            Partial-redirect PURL with appended file extension(s)
+                                                        </option>
+                                                        <option value="partial-ignore-extension">
+                                                            Partial-redirect PURL with ignored file extension(s)
+                                                        </option>
+                                                        <option value="partial-replace-extension">
+                                                            Partial-redirect PURL with replaced file extension(s)
+                                                        </option>
 													</select>
 												</td>
 											</tr>
@@ -545,8 +551,14 @@ handles results from the server in response to form submissions.
 															<option value="partial">
 																Partial-redirect PURL
 															</option>
-															<option value="partial-with-extension">
-																Partial-redirect PURL with file extension(s)
+															<option value="partial-append-extension">
+																Partial-redirect PURL with appended file extension(s)
+															</option>
+                                                            <option value="partial-ignore-extension">
+																Partial-redirect PURL with ignored file extension(s)
+															</option>
+                                                            <option value="partial-replace-extension">
+																Partial-redirect PURL with replaced file extension(s)
 															</option>
 														</select>
 													</td>

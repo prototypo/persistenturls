@@ -40,18 +40,14 @@ main() {
         
         purlXDA.setText("/purl/type", type);
         
-        switch(type) {
-        case "301":
-        case "302":
-        case "307":
-        case "partial":
-        case "partial-with-extension":
-        case "chain":
+        if ("301".equals(type)
+            || "302".equals(type)
+            || "307".equals(type)
+            || type.startsWith("partial")
+            || "chain".equals(type)) {
             purlXDA.appendPath("/purl", "target/url", resultsXDA.getText("/results/row/target/text()", true));
-            break;
-        case "303":
+        } else if ("303".equals(type)) {
             purlXDA.appendPath("/purl", "seealso/url", resultsXDA.getText("/results/row/target/text()", true));            
-            break;
         }
         
         itor = purlMaintainersResults.getXDA().readOnlyIterator("/results/row");

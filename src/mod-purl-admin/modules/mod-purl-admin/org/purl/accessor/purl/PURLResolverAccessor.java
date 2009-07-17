@@ -26,8 +26,10 @@ public class PURLResolverAccessor extends NKFAccessorImpl {
         PURLResolveCommand redirectResolver = new PURLRedirectResolveCommand();
         PURLResolveCommand goneResolver = new PURLGoneResolveCommand();
         PURLResolveCommand seeAlsoResolver = new PURLSeeAlsoResolveCommand();
-        PURLResolveCommand partialRedirectResolver = new PURLPartialRedirectResolveCommand();
-        PURLResolveCommand partialWithExtensionRedirectResolver = new PURLPartialWithExtensionRedirectResolveCommand();
+        PURLResolveCommand partialRedirectResolver = new PURLPartialRedirectResolveCommand(false);
+        PURLResolveCommand partialIgnoreExtensionRedirectResolver = new PURLPartialRedirectResolveCommand(true);
+        PURLResolveCommand partialAppendExtensionRedirectResolveCommand = new PURLPartialWithExtensionRedirectResolveCommand(false);
+        PURLResolveCommand partialReplaceExtensionRedirectResolver = new PURLPartialWithExtensionRedirectResolveCommand(true);
         PURLResolveCommand purlValidator = new PURLValidatorCommand();
         PURLResolveCommand chainResolver = new PURLChainCommand();
 
@@ -38,7 +40,9 @@ public class PURLResolverAccessor extends NKFAccessorImpl {
         commandMap.put("404", goneResolver);
         commandMap.put("410", goneResolver);
         commandMap.put("partial", partialRedirectResolver);
-        commandMap.put("partial-with-extension", partialWithExtensionRedirectResolver);
+        commandMap.put("partial-append-extension", partialAppendExtensionRedirectResolveCommand);
+        commandMap.put("partial-ignore-extension", partialIgnoreExtensionRedirectResolver);
+        commandMap.put("partial-replace-extension", partialReplaceExtensionRedirectResolver);
         commandMap.put("validate", purlValidator);
         commandMap.put("chain", chainResolver);
     }
@@ -91,7 +95,7 @@ public class PURLResolverAccessor extends NKFAccessorImpl {
             IXDAReadOnly purlXDARO = purlXDA.getXDA();
             String type = mode.equals("mode:validate") ? "validate" : purlXDARO.getText("/purl/type", true);
             
-            if ("partial".equals(type) || "partial-with-extension".equals(type) || "chain".equals(type) || purlloc.equals(purllocOrig)) {
+            if (type.startsWith("partial") || "chain".equals(type) || purlloc.equals(purllocOrig)) {
                 if (!purlStorageResolver.resourceIsTombstoned(context, uri)) {
                     try {
 

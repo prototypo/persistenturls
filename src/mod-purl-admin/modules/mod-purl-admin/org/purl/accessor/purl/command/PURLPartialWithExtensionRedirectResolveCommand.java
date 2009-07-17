@@ -22,10 +22,15 @@ import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
 import org.ten60.netkernel.layer1.nkf.INKFResponse;
 import org.ten60.netkernel.xml.representation.IAspectXDA;
 import org.ten60.netkernel.xml.xda.IXDAReadOnly;
-import org.apache.commons.lang.StringEscapeUtils;
 import com.ten60.netkernel.urii.IURRepresentation;
 
 public class PURLPartialWithExtensionRedirectResolveCommand extends PURLResolveCommand {
+
+    private boolean replaceExtension;
+
+    public PURLPartialWithExtensionRedirectResolveCommand(boolean replaceExtension) {
+        this.replaceExtension = replaceExtension;
+    }
 
     @Override
     public INKFResponse execute(INKFConvenienceHelper context, IAspectXDA purl) {
@@ -37,42 +42,47 @@ public class PURLPartialWithExtensionRedirectResolveCommand extends PURLResolveC
             String pid = purlXDARO.getText("/purl/id", true);
             String url = purlXDARO.getText("/purl/target/url", true);
 
-            if(!path.startsWith(pid)) {
-                // TODO : handle exception
-            }
-
             if(!path.equals(pid)) {
                 String remainder = path.substring(pid.length());
                 String query = "";
-                
+
                 if (remainder.contains("?")) {
                     query = remainder.substring(remainder.indexOf("?"));
+                    if (url.contains("?")) {
+                        query.replaceFirst("\\?", "&");
+                    }
                     remainder = remainder.substring(0, remainder.indexOf("?"));
                 }
 
-                if (remainder.contains("/")) {
+                if (remainder.contains("/") && remainder.lastIndexOf("/") > 0) {
+                    if (remainder.startsWith("/")) {
+                        remainder = remainder.replaceFirst("/", "");
+                    }
                     String extension = remainder.substring(0, remainder.indexOf("/"));
                     remainder = remainder.substring(remainder.indexOf("/") + 1);
-                    
+
                     if (!url.endsWith("/")) {
                         url += "/";
                     }
-                    
+
                     if (remainder.length() == 0 || "/".equals(remainder)) {
                         url = url + extension + "/" +remainder;
                     } else {
                         if (remainder.endsWith("/")) {
                             remainder = remainder.substring(0, remainder.length() - 1);
                         }
+                        if (replaceExtension && remainder.contains(".")) {
+                            remainder = remainder.substring(0,remainder.lastIndexOf('.'));
+                        }
                         url = url + remainder + "." +  extension;
                     }
                 } else {
                     url = url + remainder;
                 }
-                
+
                 url = url + query;
             }
-            
+
             IURRepresentation bodyDoc = context.source("ffcpl:/pub/redirect.html");
 
             // We treat the partial redirect as a 302
