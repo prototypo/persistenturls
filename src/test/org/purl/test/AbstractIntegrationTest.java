@@ -299,6 +299,16 @@ public class AbstractIntegrationTest extends TestCase {
         }
     }
 
+    protected void assertPurlCreated(String path, String target, String type) {
+
+        Map<String, String> formParameters = new HashMap<String, String>();
+        formParameters.put("type", type);
+        formParameters.put("target", target);
+        formParameters.put("maintainers", "testuser");
+
+        assertPurlCreated(path, formParameters);
+    }
+
     protected void assertPurlNotCreated(String path, Map<String, String> formParameters, String control) {
         try {
 

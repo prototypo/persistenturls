@@ -174,5 +174,61 @@ public class AdvancedPurlTest extends AbstractPurlTest {
         resolvePurl("/testdomain/testPartialPURL?blah", "http://example.com/testPartialPURL?blah");
     }
 
+    public void testPartialAppend() {
+        assertPurlCreated("/testdomain/testAppend", "http://example.com/testAppend", "partial-append-extension");
+        resolvePurl("/testdomain/testAppend", "http://example.com/testAppend");
+        resolvePurl("/testdomain/testAppend/", "http://example.com/testAppend/");
+        resolvePurl("/testdomain/testAppend/xml", "http://example.com/testAppend/xml");
+        resolvePurl("/testdomain/testAppend/xml/", "http://example.com/testAppend/xml/");
+        resolvePurl("/testdomain/testAppend/xml/blah", "http://example.com/testAppend/blah.xml");
+        resolvePurl("/testdomain/testAppend/xml/blah/", "http://example.com/testAppend/blah.xml");
+
+
+        assertPurlCreated("/testdomain/testAppend2/", "http://example.com/testAppend2/", "partial-append-extension");
+        resolvePurlNotFound("/testdomain/testAppend2");
+        resolvePurl("/testdomain/testAppend2/", "http://example.com/testAppend2/");
+        resolvePurl("/testdomain/testAppend2/xml", "http://example.com/testAppend2/xml");
+        resolvePurl("/testdomain/testAppend2/xml/", "http://example.com/testAppend2/xml/");
+        resolvePurl("/testdomain/testAppend2/xml/blah", "http://example.com/testAppend2/blah.xml");
+        resolvePurl("/testdomain/testAppend2/xml/blah/", "http://example.com/testAppend2/blah.xml");
+        resolvePurl("/testdomain/testAppend2/xml/blah/?param=true", "http://example.com/testAppend2/blah.xml?param=true");
+    }
+
+    public void testPartialReplace() {
+        assertPurlCreated("/testdomain/testReplace", "http://example.com/testReplace", "partial-replace-extension");
+        resolvePurl("/testdomain/testReplace", "http://example.com/testReplace");
+        resolvePurl("/testdomain/testReplace/", "http://example.com/testReplace/");
+        resolvePurl("/testdomain/testReplace/xml", "http://example.com/testReplace/xml");
+        resolvePurl("/testdomain/testReplace/xml/", "http://example.com/testReplace/xml/");
+        resolvePurl("/testdomain/testReplace/xml/blah", "http://example.com/testReplace/blah.xml");
+        resolvePurl("/testdomain/testReplace/xml/blah/", "http://example.com/testReplace/blah.xml");
+        resolvePurl("/testdomain/testReplace/xml/blah.html", "http://example.com/testReplace/blah.xml");
+
+        assertPurlCreated("/testdomain/testReplace2/", "http://example.com/testReplace2/", "partial-replace-extension");
+        resolvePurlNotFound("/testdomain/testReplace2");
+        resolvePurl("/testdomain/testReplace2/", "http://example.com/testReplace2/");
+        resolvePurl("/testdomain/testReplace2/xml", "http://example.com/testReplace2/xml");
+        resolvePurl("/testdomain/testReplace2/xml/", "http://example.com/testReplace2/xml/");
+        resolvePurl("/testdomain/testReplace2/xml/blah", "http://example.com/testReplace2/blah.xml");
+        resolvePurl("/testdomain/testReplace2/xml/blah/", "http://example.com/testReplace2/blah.xml");
+        resolvePurl("/testdomain/testReplace2/xml/blah.html", "http://example.com/testReplace2/blah.xml");
+        resolvePurl("/testdomain/testReplace2/xml/blah.html?param=true", "http://example.com/testReplace2/blah.xml?param=true");
+    }
+
+
+    public void testPartialIgnore() {
+        assertPurlCreated("/testdomain/testIgnore/xml", "http://example.com/testIgnore?format=xml&id=", "partial-ignore-extension");
+        resolvePurl("/testdomain/testIgnore/xml", "http://example.com/testIgnore?format=xml&id=");
+        resolvePurl("/testdomain/testIgnore/xml/1", "http://example.com/testIgnore?format=xml&id=1");
+        resolvePurl("/testdomain/testIgnore/xml/1.xml", "http://example.com/testIgnore?format=xml&id=1");
+        resolvePurl("/testdomain/testIgnore/xml/1.xml?param=true", "http://example.com/testIgnore?format=xml&id=1&param=true");
+
+        assertPurlCreated("/testdomain/testIgnore/html", "http://example.com/testIgnore/html", "partial-ignore-extension");
+        resolvePurl("/testdomain/testIgnore/html", "http://example.com/testIgnore/html");
+        resolvePurl("/testdomain/testIgnore/html/1", "http://example.com/testIgnore/html/1");
+        resolvePurl("/testdomain/testIgnore/html/1.xml", "http://example.com/testIgnore/html/1");
+        resolvePurl("/testdomain/testIgnore/html/1.xml?param=true", "http://example.com/testIgnore/html/1?param=true");
+
+    }
 
 }

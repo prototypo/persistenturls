@@ -43,20 +43,29 @@ public class PURLPartialRedirectResolveCommand extends PURLResolveCommand {
 
             String pid = purlXDARO.getText("/purl/id", true);
             String url = purlXDARO.getText("/purl/target/url", true);
-
+            String queryChar = "?";
             if(!path.equals(pid)) {
                 String remainder =  path.substring(pid.length());
-                if (url.contains("?")) {
+                if (url.contains(queryChar)) {
 
-                    if (remainder.contains("?")) {
+                    if (remainder.contains(queryChar)) {
                         remainder = remainder.replaceFirst("\\?", "&");
+                        queryChar="&";
                     }
                     if (remainder.startsWith("/")) {
                         remainder = remainder.replaceFirst("/", ""); 
                     }
                 }
-                if (ignoreExtension && remainder.contains(".")) {
-                    remainder = remainder.substring(0,remainder.lastIndexOf('.'));
+                if (ignoreExtension) {
+                    String query = "";
+                    if (remainder.contains(queryChar)) {
+                        query = remainder.substring(remainder.indexOf(queryChar));
+                        remainder = remainder.substring(0, remainder.indexOf(queryChar));
+                    }
+                    if (remainder.contains(".")) {
+                        remainder = remainder.substring(0,remainder.lastIndexOf('.'));
+                    }
+                    remainder = remainder+query;
                 }
                 url = url + remainder;
             }

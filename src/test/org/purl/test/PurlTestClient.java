@@ -31,7 +31,6 @@ public final class PurlTestClient {
 		client = new Client(Protocol.HTTP);
 	}
 
-
     /****************** Log in **************************/
 	
 	/**
@@ -60,7 +59,8 @@ public final class PurlTestClient {
 		//System.out.println("Cookie returned from server: " + cookie);
 		
 		String output = response.getEntity().getText();
-		
+
+        response = null ; System.gc();
 		return output;
 	}
 	
@@ -84,7 +84,7 @@ public final class PurlTestClient {
 		//System.out.println("Cookie returned from server: " + cookie);
 		
 		String output = response.getEntity().getText();
-		
+		response = null ; System.gc();
 		return output;
 	}
 
@@ -138,8 +138,7 @@ public final class PurlTestClient {
 	 * @return The response from the server (a String of XML or text).
 	 */
 	public String searchPurl(String url) throws IOException {
-	
-		return client.get(url).getEntity().getText();
+        return doSimpleGet(url);
 	}
 
 	/**
@@ -149,8 +148,7 @@ public final class PurlTestClient {
 	 * @return The response from the server (a String of XML or text).
 	 */
 	public String validatePurl(String url) throws IOException {
-
-		return client.get(url).getEntity().getText();
+        return doSimpleGet(url);
 	}
 
 	/**
@@ -167,13 +165,17 @@ public final class PurlTestClient {
 		try {		
 			Form headersForm = (Form) responseAttrs.get( "org.restlet.http.headers" );
 			result = headersForm.getFirst("Location").getValue();
+
+
 		} catch (Exception e){
 			// Map<K,V>.get() will throw a NullPointerException if it
 			// can't find the key.  This will occur for PURLs of type 404 and 410.
 			// In that case, we return the HTTP status description (e.g. "Gone").
 			result = response.getStatus().getDescription();
 		}
-		return result;
+        response = null;
+		System.gc();
+        return result;
 	}
 
 	/**
@@ -243,8 +245,11 @@ public final class PurlTestClient {
 		String form = urlEncode(formParameters);
 		Representation rep = new StringRepresentation( form, MediaType.APPLICATION_WWW_FORM );
 		
-		// Request the resource and return its textual content.		
-		return client.post(url, rep).getEntity().getText();
+		// Request the resource and return its textual content.
+        Response response = client.post(url, rep);
+        String result = response.getEntity().getText();
+        response = null ; System.gc();
+        return result;
 	}
 	
 	/**
@@ -269,8 +274,8 @@ public final class PurlTestClient {
 	 * @return The response from the server (a String of XML or text).
 	 */
 	public String searchUser(String url) throws IOException {
-	
-		return client.get(url).getEntity().getText();
+
+        return doSimpleGet(url);
 	}
 
 	/**
@@ -342,7 +347,7 @@ public final class PurlTestClient {
 	 */
 	public String searchGroup(String url) throws IOException {
 	
-		return client.get(url).getEntity().getText();
+        return doSimpleGet(url);
 	}
 
 	/**
@@ -395,7 +400,7 @@ public final class PurlTestClient {
 	 * @return The response from the server (a String of XML or text).
 	 */
 	public String searchDomain(String url) throws IOException {
-		return client.get(url).getEntity().getText();
+        return doSimpleGet(url);
 	}
 
 	/**
@@ -441,7 +446,7 @@ public final class PurlTestClient {
 			return e.toString() + ":" + e.getCause();
 		}
 	}
-	
+
 	
 	/**
 	 * URL encode a series of name-value pairs so they may be used in HTTP requests.
@@ -483,4 +488,10 @@ public final class PurlTestClient {
 		return encodedValue;
 	}
 
+     private String doSimpleGet(String url) throws IOException{
+        Response response = client.get(url);
+        String result = response.getEntity().getText();
+        response = null ; System.gc();
+        return result;
+     }
 } // class

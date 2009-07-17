@@ -39,6 +39,21 @@ public class AbstractPurlTest extends AbstractIntegrationTest {
         }
     }
 
+    public void resolvePurlNotFound(String path) {
+         try {
+            String url = "http://" + host + ":" + port + path;
+
+
+            String test = client.resolvePurl(url);
+             
+            // Textual response, so use assertEquals().
+            assertEquals("Not Found", test);
+
+        } catch (Exception e) {
+            reportException("Failed to resolve URL: ", e);
+        }
+    }
+
    public void resolvePurlMetdata(String path) throws Exception {
        String url1 = "http://" + host + ":" + port + "/purl" + path;
        String url2 = "http://" + host + ":" + port + "/admin/purl" + path; 
