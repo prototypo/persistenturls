@@ -6,7 +6,7 @@
 	-->
     <identity>
 		<uri>urn:org:purl:virtual:host</uri>
-		<version>1.0.66</version>
+		<version>1.0.72</version>
     </identity>
 	<info>
 		<name>PURLS Virtual Host Module</name>
@@ -62,7 +62,7 @@
     		<to>ffcpl:/$1</to>
 		</rewrite>					
    		<rewrite>
-			<match>jetty://[^/]*?/(admin/.*)(\+param.*)</match>
+			<match>jetty://[^/]*?/(admin/.*?)(\+[^\+]*?@.*)</match>
     		<to>ffcpl:/$e1$2</to>
 		</rewrite>
 		<!-- <rewrite>
@@ -70,7 +70,7 @@
     		<to>ffcpl:/$e1$2</to>
 		</rewrite> -->
 		<rewrite>
-			<match>jetty://.*?/(.*?)(\+.*)</match>
+			<match>jetty://.*?/(.*?)(\+[^\+]*?@.*)</match>
 			<to>ffcpl:/$e1$2</to>
 		</rewrite>
 		<import>

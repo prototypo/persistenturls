@@ -6,7 +6,7 @@
 	-->
     <identity>
 		<uri>urn:org:purl:admin</uri>
-		<version>0.0.1793</version>
+		<version>0.0.1798</version>
     </identity>
 	<info>
 		<name>PURL Admin Module</name>
@@ -88,7 +88,7 @@
 			<to>active:beanshell+operator@ffcpl:/resources/$1</to>
 		</rewrite>
         <rewrite>
-			<match>(ffcpl:/purl)(/.*?)(\+.*)</match>
+			<match>(ffcpl:/purl)(/.*?)(\+[^\+]*?@.*)</match>
 			<to>active:purl+path@ffcpl:/purl$e2$3</to>
 		</rewrite>
         <rewrite>
@@ -96,8 +96,8 @@
         	<to>active:purl-resolver+path@$1</to>
         </rewrite>		
 		<rewrite>
-			<match>ffcpl:/purl(/.*)</match>
-			<to>active:purl-resolver+path@ffcpl:/purl$e1</to>
+			<match>ffcpl:/purl(/.*?)(\+[^\+]*?@.*)</match>
+			<to>active:purl-resolver+path@ffcpl:/purl$e1$2</to>
 		</rewrite>
 		<rewrite>
 			<match>active:purl-initialize</match>
@@ -108,13 +108,13 @@
 			<to>active:purl-search-index+importType@delta-import</to>
 		</rewrite>
 		<rewrite>
-			<match>ffcpl:/admin/history/purl(/.*)</match>
-			<to>active:purl-storage-query-purl-history+purl@ffcpl:/purl$e1</to>
+			<match>ffcpl:/admin/history/purl(/.*?)(\+[^\+]*?@.*)</match>
+			<to>active:purl-storage-query-purl-history+purl@ffcpl:/purl$e1$2</to>
 		</rewrite>
 
  		<rewrite>
-			<match>(ffcpl:/admin/purls.*)</match>
-			<to>active:purls+path@$1</to>
+			<match>(ffcpl:/admin/purls.*?)(\+[^\+]*?@.*)</match>
+			<to>active:purls+path@$e1$2</to>
 		</rewrite>
 		<!--<rewrite>-->
 			<!--<match>(ffcpl:/admin/purl)(.*)</match>-->
@@ -122,7 +122,7 @@
 		<!--</rewrite>-->
 
 		<rewrite>
-			<match>(ffcpl:/admin/purl)(/.*?)(\+.*)</match>
+			<match>(ffcpl:/admin/purl)(/.*?)(\+[^\+]*?@.*)</match>
 			<to>active:purl+path@ffcpl:/purl$e2$3</to>
 		</rewrite>				
 		<rewrite>
@@ -134,10 +134,6 @@
 			<to>active:purl-validate+mode@mode:validate+path@ffcpl:$2</to>
 		</rewrite>
 		<rewrite>
-			<match>(domain:/.*)</match>
-			<to>active:purl-domain+path@$1</to>
-		</rewrite>		
-		<rewrite>
 			<match>(ffcpl:/domain.*)</match>
 			<to>active:purl-domain+path@$1</to>
 		</rewrite>
@@ -146,10 +142,6 @@
 			<to>active:purl-domain+path@$1</to>
 		</rewrite>
 		<rewrite>
-			<match>(group:.*)</match>
-			<to>active:purl-group+path@$1</to>
-		</rewrite>		
-		<rewrite>
 			<match>(ffcpl:/group.*)</match>
 			<to>active:purl-group+path@$1</to>
 		</rewrite>
@@ -157,10 +149,6 @@
 			<match>(ffcpl:/admin/group.*)</match>
 			<to>active:purl-group+path@$1</to>
 		</rewrite>
-		<rewrite>
-			<match>(user:.*)</match>
-			<to>active:purl-user+path@$1</to>
-		</rewrite>		
 		<rewrite>
 			<match>(ffcpl:/user.*)</match>
 			<to>active:purl-user+path@$1</to>
@@ -232,8 +220,8 @@
             <class>org.purl.accessor.DESAccessor</class>
         </ura>      
          <rewrite>
-			<match>(ffcpl:/(?!pub|xlib).*)</match>
-			<to>active:beanshell+operator@ffcpl:/scripts/main.bsh+base@$1</to>
+			<match>(ffcpl:/(?!pub|xlib).*?)(\+[^\+]*@.*)</match>
+			<to>active:beanshell+operator@ffcpl:/scripts/main.bsh+base@$e1$2</to>
 		</rewrite>
 		<import>
 			<uri>urn:org:purl:storage</uri>
