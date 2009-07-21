@@ -53,6 +53,7 @@
 	<file>createGroup.xsl</file>
 	<file>groupQuery.xml</file>
 	<file>groupMaintainersQuery.xml</file>
-	<file>groupMembersQuery.xml</file>      
+	<file>groupMembersQuery.xml</file>
 	<file>updateGroup.xsl</file>
+	<file>db-timestamp.groovy</file>
 </dbfiles>

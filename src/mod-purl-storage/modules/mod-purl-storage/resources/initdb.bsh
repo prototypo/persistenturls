@@ -12,17 +12,17 @@ main() {
 	
 	try {
 		acquireLock(dbInitFile);
-		
-		if(!context.exists(dbInitFile)) {
-			dbfiles = context.sourceAspect("ffcpl:/db/dbfileslist.xml", IAspectXDA.class);
-			filesItor=dbfiles.getXDA().readOnlyIterator("/dbfiles/file");
-	
-			while(filesItor.hasNext()) {
-				filesItor.next();
-				file=filesItor.getText(".", true);
-				copyFiles(dbtype, file);
-			}
 
+        dbfiles = context.sourceAspect("ffcpl:/db/dbfileslist.xml", IAspectXDA.class);
+        filesItor=dbfiles.getXDA().readOnlyIterator("/dbfiles/file");
+
+        while(filesItor.hasNext()) {
+            filesItor.next();
+            file=filesItor.getText(".", true);
+            copyFiles(dbtype, file);
+        }
+
+		if(!context.exists(dbInitFile)) {
 			if(dbtype.equals("hsqldb")) {
 				req = context.createSubRequest("active:purl-storage-destroy-db");
 				res = context.issueSubRequest(req);

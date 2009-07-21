@@ -286,5 +286,11 @@
 		<ext>/query-purl-history</ext>
 		<int>active:beanshell+operator@ffcpl:/resources/queryPURLHistory.bsh</int>
 		<args>all</args>
-	</link>								
+	</link>			    
+    <link>
+        <name>Database Timestamp</name>
+        <ext>/db-timestamp</ext>
+        <int>active:groovy+operator@ffcpl:/sql/db/db-timestamp.groovy</int>
+        <args>all</args>
+    </link>
 </links>

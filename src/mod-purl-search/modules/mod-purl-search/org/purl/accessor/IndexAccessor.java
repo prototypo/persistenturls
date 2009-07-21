@@ -8,6 +8,10 @@ import org.ten60.netkernel.layer1.nkf.impl.NKFAccessorImpl;
 import org.ten60.netkernel.xml.representation.IAspectXDA;
 import org.ten60.netkernel.xml.xda.IXDAReadOnlyIterator;
 
+import java.util.Properties;
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
+
 public class IndexAccessor extends NKFAccessorImpl {
 
 
@@ -38,6 +42,7 @@ public class IndexAccessor extends NKFAccessorImpl {
         if (manager.isIndexing()) {
             response = "<already-indexing/>";
         } else {
+            updateTimestamp(context);
             manager.startIndexing(type);
             response = "<indexing/>";
         }
@@ -95,6 +100,20 @@ public class IndexAccessor extends NKFAccessorImpl {
 
     }
 
+    private void updateTimestamp(INKFConvenienceHelper context) throws Exception {
+        if (context.exists("ffcpl:/solr/conf/db-timestamp.properties")) {
+            StringAspect ts = (StringAspect)context.sourceAspect("ffcpl:/solr/conf/db-timestamp.properties", StringAspect.class);
+            context.sinkAspect("ffcpl:/solr/conf/dataimport.properties", ts);
+        }
+
+        StringAspect timestamp = (StringAspect)context.sourceAspect("active:purl-storage-db-timestamp", StringAspect.class);
+        Properties p = new Properties();
+        p.put("last_index_time", timestamp.getString());
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        p.store(out, "last database timestamp");
+        context.sinkAspect("ffcpl:/solr/conf/db-timestamp.properties", new StringAspect(out.toString()));
+
+    }
 
     private void copyFiles(INKFConvenienceHelper context, String file) throws Exception {
         StringBuffer sb = new StringBuffer("<sed>");

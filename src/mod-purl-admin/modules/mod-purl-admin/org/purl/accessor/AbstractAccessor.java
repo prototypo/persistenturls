@@ -30,7 +30,7 @@ abstract public class AbstractAccessor extends NKFAccessorImpl {
     @Override
     public void processRequest(INKFConvenienceHelper context) throws Exception {
         INKFResponse resp = null;
-
+        
         // TODO: Can this fail?
         String methodArg = context.getThisRequest().getArgument("method");
         String method = ((StringAspect)context.sourceAspect(methodArg, IAspectString.class)).getString();
