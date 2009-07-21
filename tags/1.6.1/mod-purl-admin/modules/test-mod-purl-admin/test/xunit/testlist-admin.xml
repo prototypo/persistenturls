@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testlist  title="Admin Accessor Unit Tests">
+    <desc>
+	<div>
+	<b>Admin</b> accessor unit tests for the <b>PURLs</b> service.
+	</div>
+    </desc>
+    <test>
+        <uri>active:beanshell+operator@ffcpl:/test/accessor/createUser.bsh</uri>
+		<assert name="User Created">
+			<uri>active:javascript+operator@ffcpl:/test/something.js</uri>
+		</assert>
+    </test>
+    <test>
+        <uri>active:beanshell+operator@ffcpl:/test/accessor/deleteUser.bsh</uri>
+		<assert name="User Deleted">
+			<uri>active:javascript+operator@ffcpl:/test/something.js</uri>
+		</assert>
+    </test>
+    <test>
+        <uri>active:beanshell+operator@ffcpl:/test/accessor/noGroupForNonExistentUser.bsh</uri>
+		<assert name="No Groups For Non-Existent User">
+			<uri>active:javascript+operator@ffcpl:/test/isTrue.js</uri>
+		</assert>
+    </test>
+    <test>
+        <uri>active:beanshell+operator@ffcpl:/test/accessor/newGroupForUser.bsh</uri>
+		<assert>
+			<xpath>count(/groups/group) = 2</xpath>
+		</assert>
+    </test>
+    <test>
+        <uri>active:beanshell+operator@ffcpl:/test/accessor/deleteGroupsForUser.bsh</uri>
+		<assert name="Delete Groups For User">
+			<uri>active:javascript+operator@ffcpl:/test/something.js</uri>
+		</assert>    
+    </test>  
+<!--  <test>
+      <uri>active:javascript+operator@ffcpl:/test/accessor/template-test1.js</uri>
+		<assert>
+			<xpath>count(//hello) = 1</xpath>
+		</assert>
+    </test>
+    <test>
+      <uri>active:javascript+operator@ffcpl:/test/accessor/template-test1.js</uri>
+		<assert>
+			<xpath>//hello = 'template'</xpath>
+		</assert>
+    </test> -->
+</testlist>

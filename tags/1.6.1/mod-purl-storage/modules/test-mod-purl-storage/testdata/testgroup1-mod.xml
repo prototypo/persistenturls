@@ -1,0 +1,11 @@
+<group>
+	<id>purlworkers</id>
+	<name>My Other Group</name>
+	<maintainers>
+		<uid>brian-test</uid>
+	</maintainers>
+	<members>
+		<uid>brian-test</uid>
+	</members>
+	<comments>For those about to rock, we salute you.</comments>
+</group>

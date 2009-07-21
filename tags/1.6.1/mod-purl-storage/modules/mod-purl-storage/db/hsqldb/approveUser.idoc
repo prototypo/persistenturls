@@ -1,0 +1,83 @@
+<idoc>
+	<seq>
+		<instr>
+			<type>stm</type>
+			<operand><sql/></operand>
+			<operator>
+				<stm:group xmlns:stm="http://1060.org/stm">
+					<stm:set xpath="/sql">
+						select * from users where
+						    "userid" = '<stm:param xpath="/user/id/text()"/>' and
+							"status" = 0;						
+					</stm:set>
+			</stm:group>
+			</operator>
+			<param>this:param</param>
+			<target>var:sql</target>
+		</instr>
+		<if>
+			<cond>
+				<instr>
+					<type>sqlBooleanQuery</type>
+					<operand>var:sql</operand>
+					<target>this:cond</target>
+				</instr>
+			</cond>
+			<then>
+				<instr>
+					<type>stm</type>
+					<operand><sql/></operand>
+					<operator>
+						<stm:group xmlns:stm="http://1060.org/stm">
+							<stm:set xpath="/sql">
+								update users set 
+									"status" = 1,
+									"lastmodified" = NOW  
+								where "userid" = '<stm:param xpath="/user/id/text()"/>';						
+							</stm:set>
+					</stm:group>
+				</operator>
+				<param>this:param</param>
+      			<target>var:sql</target>
+			</instr>
+			<instr>
+			<type>sqlUpdate</type>
+			<operand>var:sql</operand>
+			<target>var:response</target>
+			</instr>
+			<instr>
+					<type>stm</type>
+					<operand><results><user><id/><status>approved</status></user></results></operand>
+					<operator>
+						<stm:group xmlns:stm="http://1060.org/stm">
+							<stm:set xpath="/results/user/id">
+								<stm:param xpath="/user/id/text()"/>
+							</stm:set>
+						</stm:group>			
+					</operator>
+					<param>this:param</param>
+					<target>this:response</target>
+			</instr>
+		</then>
+			<else>
+				<instr>
+					<type>stm</type>
+					<operand><ex><id>Invalid User Approval Request</id><message/></ex></operand>
+					<operator>
+						<stm:group xmlns:stm="http://1060.org/stm">
+						<stm:set xpath="/ex/message">
+							User <stm:param xpath="/user/id/text()"/> does not exist or is not in pending state.
+						</stm:set>
+						</stm:group>
+					</operator>
+					<param>this:param</param>
+					<target>var:exception</target>
+				</instr>
+				<instr>
+					<type>throw</type>
+					<operand>var:exception</operand>
+				</instr>				
+			</else>
+		</if>
+	</seq>
+</idoc>

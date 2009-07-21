@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?><module>
+	<!--
+	***********
+	Example of virtual host
+	***********
+	-->
+    <identity>
+		<uri>urn:org:purl:virtual:host</uri>
+		<version>1.0.75</version>
+    </identity>
+	<info>
+		<name>PURLS Virtual Host Module</name>
+        <description>A module to allow raw PURL rewrites</description>
+		<dynamic/>
+    </info>
+    <publisher>
+        <name>OCLC</name>
+		<uri>http://www.purl.org</uri>
+    </publisher>
+	<export>
+		<!--
+		***********
+		Export all of host address space - note could export multiple hosts here.
+		(Note have added localhost so you can test it)
+		***********
+		-->
+		<uri>
+			<match>jetty://localhost.*</match>
+			<!-- Add any other jetty://<servername> matches that you want
+				 to match.  -->
+			<match>ffcpl:/etc/HTTPBridgeConfig.xml</match>
+		</uri>
+	</export>
+	<mapping>
+		<!--
+		**************
+		Route all requests to echo script - could have different routing for each host
+		*************
+		-->
+		<this>
+			<match>ffcpl:/etc/HTTPBridgeConfig.xml</match>		
+		</this>
+
+<!-- 	If you want to have any static rewrites based on the virtualhost
+		uncomment this and add it in. You will need a module that exports
+		a URI (e.g. ffcpl:/static) if you use the following rewrite rule.
+		<rewrite>
+		    <match>jetty://<servername>/(.*)</match>
+            <to>ffcpl:/static/$1</to>
+		</rewrite> -->
+  		<rewrite>
+		    <match>jetty://[^/]*?/docs(/.*)</match>
+            <to>ffcpl:/docs$1</to>
+		</rewrite>
+		<!-- TODO: Clean this up! BS -->
+		<rewrite>
+			<match>jetty://[^/]*?/(admin/login/.*)</match>
+    		<to>ffcpl:/$1</to>
+		</rewrite>
+		<rewrite>
+			<match>jetty://[^/]*?/(admin/loginstatus.*)</match>
+    		<to>ffcpl:/$1</to>
+		</rewrite>					
+   		<rewrite>
+			<match>jetty://[^/]*?/(admin/.*?)(\+[^\+]*?@.*)</match>
+    		<to>ffcpl:/$e1$2</to>
+		</rewrite>
+		<!-- <rewrite>
+			<match>jetty://.*?/(.*)((\+param|\+cookie).*)</match>
+    		<to>ffcpl:/$e1$2</to>
+		</rewrite> -->
+		<rewrite>
+			<match>jetty://.*?/(.*?)(\+[^\+]*?@.*)</match>
+			<to>ffcpl:/$e1$2</to>
+		</rewrite>
+		<import>
+			<uri>urn:org:purl:gatekeeper</uri>
+		</import>
+		<import>
+		    <uri>urn:org:purl:documentation</uri>
+		</import>						
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:xsecurity</uri>
+		</import>
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:session</uri>
+		</import>
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:script</uri>
+		</import>
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:sys</uri>
+		</import>
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:xml:core</uri>
+		</import>
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:xml:ura</uri>
+		</import>
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:layer1</uri>
+		</import>
+		<super/>
+    </mapping>
+</module>

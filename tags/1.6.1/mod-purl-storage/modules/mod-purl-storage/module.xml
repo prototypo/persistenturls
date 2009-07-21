@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?><module>
+	<!--
+	***********
+	PURLs Storage Module
+	***********
+	-->
+    <identity>
+		<uri>urn:org:purl:storage</uri>
+		<version>0.0.1</version>
+    </identity>
+	<info>
+		<name>PURL Storage Module</name>
+        <description>A module to store PURL-related data</description>
+    </info>
+    <publisher>
+        <name>OCLC</name>
+		<uri>http://www.oclc.org</uri>
+    </publisher>
+	<export>
+		<uri>
+			<match>ffcpl:/store.*</match>
+			<match>active:purl-storage.*</match>
+			<match>ffcpl:/etc/CRONConfig.xml</match>
+			<match>ffcpl:/etc/ConfigRDBMS.xml</match>
+			<match>ffcpl:/etc/ConfigPURLSDB.xml</match>
+			<match>ffcpl:/entrypoints.xml</match>
+            <match>ffcpl:/db/.*/solr-data-config.xml</match>
+		</uri>
+	</export>
+	<mapping>
+		<this>
+			<match>ffcpl:/entrypoints.xml</match>
+			<match>ffcpl:/etc/CRONConfig.xml</match>
+			<match>ffcpl:/etc/ConfigPURLSDB.xml</match>
+			<match>ffcpl:/filters/.*</match>			
+			<match>ffcpl:/tables/.*</match>
+			<match>ffcpl:/org/.*</match>
+			<match>ffcpl:/resources/.*</match>
+			<match>ffcpl:/sql/.*</match>
+			<match>ffcpl:/db/.*</match>
+			<match>ffcpl:/xrl/.*</match>
+		</this>
+
+		<rewrite>
+			<match>active:purl-storage-initialize</match>
+			<to>active:beanshell+operator@ffcpl:/resources/initdb.bsh</to>
+		</rewrite>
+
+		<rewrite>
+			<match>active:purl-storage-delete-purl(\+.*)</match>
+			<to>active:beanshell+operator@ffcpl:/resources/deleteResource.bsh$1</to>
+		</rewrite>		
+		
+		<rewrite>
+			<match>active:purl-storage-delete-(.*)(\+.*)</match>
+			<to>active:beanshell+operator@ffcpl:/resources/deleteResource.bsh$2</to>
+		</rewrite>
+		
+		<ura>
+      		<match>active:purl-storage-fast-batch-load\+.*</match>
+      		<class>org.purl.accessor.BatchLoadAccessor</class>
+    	</ura>
+
+		<rewrite>
+			<match>active:purl-storage-(.*)</match>
+			<to>active:mapper+operator@ffcpl:/sql/db/links.xml+operand@ffcpl:/xrl/$1</to>
+		</rewrite>
+	
+    	<import>
+    		<uri>urn:org:ten60:netkernel:ext:xrl</uri>
+    	</import>
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:session</uri>
+		</import>
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:script</uri>
+		</import>
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:dpml</uri>
+		</import>
+    	<import>
+      		<uri>urn:org:ten60:netkernel:mod:db</uri>
+	    </import>
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:sys</uri>
+		</import>
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:xml:core</uri>
+		</import>
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:xml:ura</uri>
+		</import>
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:layer1</uri>
+		</import>
+		<super/>
+    </mapping>
+</module>

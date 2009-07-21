@@ -1,0 +1,13 @@
+import org.ten60.netkernel.layer1.representation.*;
+import org.ten60.netkernel.xml.representation.*;
+import com.ten60.netkernel.urii.aspect.*;
+
+main() {
+  req = context.createSubRequest("active:template");
+  req.addArgument("path", "ffcpl:/template/something" );
+  req.setAspectClass(IAspectXDA.class);
+  r=context.issueSubRequest(req);
+  response = context.createResponseFrom(r);
+  response.setMimeType("text/xml");
+  context.setResponse(response);
+}
