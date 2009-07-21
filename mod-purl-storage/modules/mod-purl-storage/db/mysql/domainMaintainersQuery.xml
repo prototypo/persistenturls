@@ -1,0 +1,3 @@
+<sql>
+	SELECT * from @@TABLE_NAME@@ where d_id = @@DID@@;
+</sql>

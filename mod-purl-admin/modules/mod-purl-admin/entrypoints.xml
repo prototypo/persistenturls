@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entrypoints>
+  <entrypoint>
+    <name>purl_cron_config</name>
+    <uri>ffcpl:/etc/CRONConfig.xml</uri>
+    <indexable>
+      <title>config for initializing the PURL Accessor</title>
+      <desc></desc>
+      <keywords/>
+    </indexable>
+    <categories>cron hidden</categories>
+    <group>Cron</group>
+    <icon/>
+  </entrypoint>
+</entrypoints>

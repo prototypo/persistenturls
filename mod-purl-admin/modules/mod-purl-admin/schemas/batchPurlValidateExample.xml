@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<purls>
+
+	<purl pid="/net/foo/bar" type="302" />
+	<purl pid="/tld/subdomain/test302" type="302" />
+<!-- Type 301.  Moved Permanently to a target URL -->
+	<purl pid="/testdomain/test301" type="301" />
+<!-- Type 302.  Simple redirection to a target URL -->
+	<purl pid="/testdomain/test302" type="302" />
+<!-- Type 303.  See Also URL -->
+	<purl pid="/testdomain/test303/" type="303" />
+<!-- Type 307.  Temporary redirect to a target URL -->
+	<purl pid="/testdomain/test307" type="307" />
+<!-- Type 404.  Temporarily gone -->
+	<purl pid="/testdomain/test404" type="404" />
+<!-- Type 410.  Permanently gone -->
+	<purl pid="/testdomain/test410" type="410" />
+</purls>

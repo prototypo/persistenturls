@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<purls>
+
+    <!-- Type clone.  Clone an existing PURL -->
+		<!-- PURL /testdomain/test301-1 must exist first! -->
+		<purl id="/testdomain/testClone-1" type="clone">
+			<basepurl path="/testdomain/test301-1"/>
+    	</purl>
+
+    <!-- Type clone.  Clone an existing PURL -->
+		<!-- PURL /testdomain/test301-2 must exist first! -->
+		<purl id="/testdomain/testClone-2" type="clone">
+			<basepurl path="/testdomain/test301-2"/>
+    	</purl>
+
+</purls>
+

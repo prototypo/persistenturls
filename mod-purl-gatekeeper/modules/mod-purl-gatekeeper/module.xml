@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?><module>
+    <identity>
+		<uri>urn:org:purl:gatekeeper</uri>
+		<version>0.0.48</version>
+    </identity>
+	<info>
+		<name>PURLS Gatekeeper Module</name>
+        <description>A module to protect PURL Admin Resources</description>
+		<dynamic/>
+    </info>
+    <publisher>
+        <name>OCLC</name>
+		<uri>http://www.purl.org</uri>
+    </publisher>
+	<export>
+		<uri>
+			<!--Export the application address space space-->
+			<match>ffcpl:/(admin)/.*</match>
+			<match>ffcpl:/(?!entrypoints).*</match>
+		</uri>
+	</export>
+	<rewrite>
+		<!--*** Route all paths to the gatekeeper ***-->
+		<rule>
+			<match>(ffcpl:/(admin)/(logout).*)</match>
+			<to>ffcpl:/admin/login/logout.bsh</to>
+		</rule>
+		<rule>
+			<match>(ffcpl:/(admin)/(loginstatus).*)</match>
+			<to>ffcpl:/admin/login/login-status.bsh+path@$1</to>
+		</rule>		
+		<rule>
+			<match>(ffcpl:/(admin)/(?!login/).*)</match>
+			<to>active:gk+uri@$1</to>
+		</rule>		
+		<!--*** Route gatekeeper requests to session mapper ***-->
+		<rule>
+			<match>(.*admin.*)</match>
+			<to>active:sessionmapper+uri@$e1</to>
+		</rule>
+	</rewrite>
+	<mapping>
+		<!--Map the resources/ and etc/ directories into the internal address space-->
+		<this>
+			<match>ffcpl:/resources/.*</match>
+			<match>ffcpl:/etc/(SessionPolicy|GateKeeperPolicy)\.xml</match>
+		</this>
+		<!-- <rewrite>
+			<match>(ffcpl:/.*.html).*</match>
+			<to>$1</to>
+		</rewrite> -->
+		<rewrite>
+			<match>ffcpl:/(admin/login/)(.*.bsh.*)</match>
+			<to>active:beanshell+operator@ffcpl:/resources/$2</to>
+		</rewrite>
+	<!--	<rewrite>
+			<match>(ffcpl:/admin/login/logout.*)</match>
+			<to>active:beanshell+operator@ffcpl:/resources/logout.bsh</to>
+		</rewrite>-->	
+		<!--Import libraries-->
+		<import>
+			<uri>urn:org:ten60:netkernel:tpt:http</uri>
+		</import>
+		<import>
+		    <uri>urn:org:purl:documentation</uri>
+		</import>
+		<!--  <import>
+			<uri>urn:org:purl:legacy</uri>
+		</import>-->
+		<import>
+			<uri>urn:org:purl:admin</uri>
+		</import>
+		<import>
+			<uri>urn:org:purl:storage</uri>
+		</import>
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:xml:core</uri>
+		</import>				
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:xsecurity</uri>
+		</import>
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:session</uri>
+		</import>
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:script</uri>
+		</import>
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:layer1</uri>
+		</import>
+		<super/>
+    </mapping>
+</module>

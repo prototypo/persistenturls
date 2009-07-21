@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<module>
+    <identity>
+		<uri>urn:org:purl:storage:test</uri>
+		<version>0.0.1</version>
+    </identity>
+	<info>
+	    <name>PURL Storage Library Tests</name>
+	    <description>Tests for mod-purl-storage</description>
+	</info>
+    <publisher>
+        <name>OCLC</name>
+		<uri>http://www.purl.org</uri>
+    </publisher>
+    <export>
+		<uri>
+			<match>ffcpl:/test/test-mod-purl-storage/.*</match>
+			<match>ffcpl:/(entrypoints.xml)</match>
+		</uri>
+    </export>
+    <rewrite>
+		<rule>
+			<match>ffcpl:/test/test-mod-purl-storage/xunit(.*)</match>
+			<to>active:xunit+testlist@ffcpl:/test/xunit/testlist.xml$1</to>
+		</rule>
+		<rule>
+			<match>ffcpl:/test/test-mod-purl-storage/(.*)</match>
+			<to>ffcpl:/test/$1</to>
+		</rule>
+		<rule>
+			<match>(.*?bsh.*)</match>
+			<to>active:beanshell+operator@$1</to>
+		</rule>
+	</rewrite>
+    <mapping>
+		<this>
+			<match>ffcpl:/(entrypoints.xml|test/.*)</match>
+			<match>ffcpl:/testdata/.*</match>
+			<match>ffcpl:/etc/.*</match>
+		</this>
+		<import>
+			<uri>urn:org:purl:storage</uri>
+		</import>
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:layer1</uri>
+		</import>
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:xml:core</uri>
+		</import>
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:xml:ura</uri>
+		</import>
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:sys</uri>
+		</import>
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:dpml</uri>
+		</import>
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:script</uri>
+		</import>
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:http:client</uri>
+		</import>
+		<import>
+			<uri>urn:org:ten60:netkernel:ext:xunit</uri>
+		</import>
+		<import>
+			<uri>urn:org:ten60:netkernel:tpt:http</uri>
+		</import>
+		<super/>
+    </mapping>
+</module>

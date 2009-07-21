@@ -1,0 +1,8 @@
+<solrfiles>
+    <file>protwords.txt</file>
+    <file>schema.xml</file>
+    <file>solrconfig.xml</file>
+    <file>spellings.txt</file>
+    <file>stopwords.txt</file>
+    <file>synonyms.txt</file>
+</solrfiles>

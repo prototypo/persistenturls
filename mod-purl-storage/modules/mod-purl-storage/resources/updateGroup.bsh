@@ -1,0 +1,87 @@
+import org.ten60.netkernel.layer1.representation.*;
+import org.ten60.netkernel.xml.representation.*;
+import com.ten60.netkernel.urii.aspect.*;
+import org.ten60.netkernel.xml.representation.IAspectXDA;
+import org.ten60.netkernel.xml.xda.IXDAReadOnly;
+import org.ten60.netkernel.xml.xda.IXDAReadOnlyIterator;
+import org.purl.storage.util.StorageHelper;
+import java.util.*;
+
+main() {
+    resp = null;
+    iur = null;
+    group = null;
+    
+    try {
+        param = context.sourceAspect("this:param:param", IAspectXDA.class);
+        paramXDA = param.getXDA();
+        
+        group = paramXDA.getText("/group/id", true);
+        
+        req = context.createSubRequest("active:purl-storage-query-group");
+        req.addArgument("uri", "ffcpl:/group/" + group);
+        req.setAspectClass(IAspectXDA.class);
+        oldGroupXDA = context.issueSubRequestForAspect(req);
+
+        userMaintainerMap = StorageHelper.generateUserMap(context, paramXDA);
+        groupMaintainerMap = StorageHelper.generateGroupMap(context, paramXDA);
+        
+        userItor = userMaintainerMap.keySet().iterator();
+        groupItor = groupMaintainerMap.keySet().iterator();        
+        
+        maintainerSB = new StringBuffer("<sed>");
+        
+        while(userItor.hasNext()) {
+            key = userItor.next();
+            maintainerSB.append("<pattern><regex>@@USER-");
+            maintainerSB.append(key);
+            maintainerSB.append("@@</regex><replace>");
+            maintainerSB.append(userMaintainerMap.get(key));
+            maintainerSB.append("</replace></pattern>");
+        }
+        
+        while(groupItor.hasNext()) {
+            key = groupItor.next();
+            maintainerSB.append("<pattern><regex>@@GROUP-");
+            maintainerSB.append(key);
+            maintainerSB.append("@@</regex><replace>");
+            maintainerSB.append(groupMaintainerMap.get(key));
+            maintainerSB.append("</replace></pattern>");
+        }        
+        
+        maintainerSB.append("<pattern><regex>@@GID@@</regex><replace>");
+        maintainerSB.append(oldGroupXDA.getXDA().getText("/group/z_id", true));
+        maintainerSB.append("</replace></pattern>");
+        maintainerSB.append("</sed>");
+        
+        req = context.createSubRequest("active:xslt");
+        req.addArgument("operand", param);
+        req.addArgument("operator", "ffcpl:/sql/db/updateGroup.xsl");
+        iur = context.issueSubRequest(req);
+        
+        req = context.createSubRequest();
+        req.setURI("active:sed");
+        req.addArgument("operator", new StringAspect(maintainerSB.toString()));
+        req.addArgument("operand", iur);
+        iur = context.issueSubRequest(req);
+        
+        req = context.createSubRequest("active:sqlBatch");
+        req.addArgument("operand", iur);
+        iur = context.issueSubRequest(req);
+        
+        req=context.createSubRequest("active:cutGoldenThread");
+        req.addArgument("param", "gt:resource:" + group);
+        context.issueSubRequest(req);
+        
+        req = context.createSubRequest("active:purl-storage-query-group");
+        req.addArgument("uri", "ffcpl:/group/" + group);
+        iur = context.issueSubRequest(req);
+    } catch(Throwable t) {
+        t.printStackTrace();
+        iur = new StringAspect("<error message=\"Could not update group:" + group + "\"/>");
+    }
+    
+    resp = context.createResponseFrom(iur);
+    resp.setMimeType("text/xml");
+    context.setResponse(resp);
+}

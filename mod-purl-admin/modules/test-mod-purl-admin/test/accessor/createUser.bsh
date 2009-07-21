@@ -1,0 +1,14 @@
+import org.ten60.netkernel.layer1.representation.*;
+import org.ten60.netkernel.xml.representation.*;
+import com.ten60.netkernel.urii.aspect.*;
+
+main() {
+	nvp="<nvp><id>unittestguy</id><name>Unit TestGuy</name><affiliation>TDD</affiliation><email>u.t.guy@tdd.com</email><passwd>JUn1t4m3!</passwd><hint>what, what?</hint><justification>Needed.</justification></nvp>";
+	req=context.createSubRequest();
+	req.setURI("active:purl-user");
+	req.addArgument("param",new StringAspect(nvp));
+	req.addArgument("method", "data:text/plain,POST");
+	req.addArgument("path", "ffcpl:/admin/user/unittestguy");
+  	response = context.issueSubRequest(req);
+  	context.setResponse(response);
+}

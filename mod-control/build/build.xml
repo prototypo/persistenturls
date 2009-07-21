@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="all" name="Control Module">
+
+	<target name="init">
+		<property environment="env"/>
+		<property file="./version.properties"/>
+		<echo message="Building: ${mod-control-name} version ${mod-control-version}"/>
+		<property name="app" value="${mod-control-name}"/>
+		<property name="version" value="${mod-control-version}"/>
+		<property name="base" value=".."/>
+		<property name="src" value="${base}/modules/mod-control"/>
+		<property name="dst" value="${src}"/>
+		<property name="lib" value="${base}/lib"/>
+		<property name="mod-control-lib" value="${src}/lib"/>
+		<property name="dist.dir" value="../../dist"/>
+	</target>
+
+    <target depends="init" name="compile">
+        <javac debug="true" deprecation="true" destdir="${dst}" srcdir="${src}">
+            <classpath>
+				<fileset dir="${netkernel.home.dir}">
+					<include name="lib/1060netkernel-2.8.3.jar"/>
+					<include name="modules/ext-layer1-1.3.3.jar"/>
+					<include name="modules/ext-xml-core-1.5.0.jar"/>
+				</fileset>
+            </classpath>
+        </javac>
+    </target>
+
+    <target depends="init,compile" name="jar">
+        <jar basedir="${dst}" compress="true" destfile="${dist.dir}/${app}-${version}.jar">
+		    <include name="**/*"/>
+		    <exclude name="**/.nbattrs*"/>
+		    <exclude name="**/.svn"/>
+	        <exclude name="**/*.java"/>
+        </jar>
+    </target>
+
+	<target depends="init,clean,jar" description="Build everything." name="all">
+        <echo message="${app}  built."/>
+    </target>
+
+    <target depends="init" description="Clean all build products." name="clean">
+        <delete file="${dist.dir}/${app}-${version}.jar"/>
+    </target>
+
+</project>
