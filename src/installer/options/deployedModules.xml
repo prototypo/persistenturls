@@ -51,25 +51,15 @@
 	<module>modules/mod-ws-1.1.2.jar</module>
 	<module>modules/demo-xml-tech-1.0.0.jar</module>
 	
-	<!--Demonstration Apps - remove these for production systems-->
-	<!--
-	<module>modules/app-address-book-1.1.4.jar</module>
-	<module>modules/pingpong-1.2.0.jar</module>
-	<module>modules/forum-web-1.1.6.jar</module>
-	<module>modules/forum-services-lite-1.0.0.jar</module>
-	<module>modules/forum-style-2.0.1.jar</module>
-	-->
-	
 	<!-- PURL Server modules -->
 	<module>modules/mod-purl-gatekeeper/</module>
 	<module>modules/mod-purl-storage/</module>
-	<module>modules/test-mod-purl-storage/</module>
+    <!-- <module>modules/test-mod-purl-storage/</module> -->
 	<module>modules/mod-purl-admin/</module>
-	<module>modules/test-mod-purl-admin/</module>	
+    <!-- <module>modules/test-mod-purl-admin/</module>   -->
 	<module>modules/mod-purl-search-${JARVERSION}.jar</module>	
 	<module>modules/mod-purl-virtualhost/</module>
 	<module>modules/mod-session-${JARVERSION}.jar</module>
-	<module>modules/mod-template-${JARVERSION}.jar</module>
 	<module>modules/mod-purl-documentation-${JARVERSION}.jar</module>
 	
 </modules>

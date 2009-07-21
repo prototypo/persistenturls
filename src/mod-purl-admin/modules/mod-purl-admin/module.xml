@@ -6,7 +6,7 @@
 	-->
     <identity>
 		<uri>urn:org:purl:admin</uri>
-		<version>0.0.1798</version>
+		<version>0.0.1799</version>
     </identity>
 	<info>
 		<name>PURL Admin Module</name>
@@ -126,12 +126,12 @@
 			<to>active:purl+path@ffcpl:/purl$e2$3</to>
 		</rewrite>				
 		<rewrite>
-			<match>(ffcpl:/admin/targeturls)(.*)</match>
-			<to>active:purls-validate+path@ffcpl:$2</to>
+			<match>(ffcpl:/admin/targeturls)(/.*?)(\+[^\+]*?@.*)</match>
+			<to>active:purls-validate+path@ffcpl:$e2$3</to>
 		</rewrite>
 		<rewrite>
-			<match>(ffcpl:/admin/targeturl)(.*)</match>
-			<to>active:purl-validate+mode@mode:validate+path@ffcpl:$2</to>
+			<match>(ffcpl:/admin/targeturl)(/.*?)(\+[^\+]*?@.*)</match>
+			<to>active:purl-validate+mode@mode:validate+path@ffcpl:$e2$3</to>
 		</rewrite>
 		<rewrite>
 			<match>(ffcpl:/domain.*)</match>

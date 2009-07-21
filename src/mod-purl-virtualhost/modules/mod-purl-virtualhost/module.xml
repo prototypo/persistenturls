@@ -6,7 +6,7 @@
 	-->
     <identity>
 		<uri>urn:org:purl:virtual:host</uri>
-		<version>1.0.72</version>
+		<version>1.0.75</version>
     </identity>
 	<info>
 		<name>PURLS Virtual Host Module</name>

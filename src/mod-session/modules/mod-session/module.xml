@@ -54,9 +54,6 @@
 			<uri>urn:org:ten60:netkernel:ext:session</uri>
 		</import>
 		<import>
-			<uri>urn:org:purl:template</uri>
-		</import>
-		<import>
 			<uri>urn:org:purl:admin</uri>
 		</import>
 		<import>
