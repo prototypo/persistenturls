@@ -1,0 +1,489 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<!-- 
+
+group.html - Provides a Web UI for the administration of PURL groups.
+
+version 1.0, 16 August 2007
+David Wood (david at http://zepheira.com/)
+
+=========================================================================
+
+Copyright (C) 2007 OCLC (http://oclc.org)
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+=========================================================================
+
+MAINTENANCE HINTS:
+1)  There are five HTML forms on this page: 'naviform' is used to choose
+at most ONE of the other forms to show at any moment.  Showing one of the
+others (create, modify, search or delete) will hide the others.
+2)  HTML forms are submitted via the functions createSubmit(), modifySubmit(),
+searchSubmit() and deleteSubmit() via AJAX (all defined on this page).  The
+remainder of the Javascript functions are in external Javascript files.
+Importantly, look for the callback function onResponse() in utilpurl.js, which
+handles results from the server in response to form submissions.
+
+-->
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link type="text/css" rel="stylesheet" href="style.css" />
+		<title>
+			PURL Group Administration
+		</title><!--[if lt IE 7]>
+	<script defer type="text/javascript" src="javascripts/pngfix.js"></script>
+	<![endif]-->
+
+<script type="text/javascript" src="javascripts/utilajax.js">
+</script>
+<script type="text/javascript" src="javascripts/ajaxCaller.js">
+</script><!-- http://ajaxify.com/run/Lib/js/ -->
+
+<script type="text/javascript" src="javascripts/xmlsax.js">
+</script>
+<script type="text/javascript" src="javascripts/SaxEventHandler.js">
+</script><!-- http://xmljs.sourceforge.net -->
+
+<script type="text/javascript" src="javascripts/utilpurl.js">
+</script>
+<script type="text/javascript">
+//<![CDATA[
+
+	var debugThisPage = false;
+	
+	var context = "group";
+	
+	// Number of forms on this page that need to be locked out
+	// when the user is not logged in.
+	var numNeedsAuth = 3;
+
+	// NB: This array contains the names of each element that represents a label for an HTML form item.  If you add a new form item and want it highlighted upon a "bad parameter" error, you MUST add it's id to this array.
+	var labelElements = ["c_name_label", "c_id_label", "c_maintainers_label", "c_members_label", "c_comments_label", "m_name_label", "m_id_label", "m_maintainers_label", "m_members_label", "m_comments_label", "s_name_label", "s_id_label", "s_maintainers_label", "s_members_label", "s_tombstone_label", "d_id_label"];
+
+	// Send a Create command via HTTP POST.
+	function createSubmit() {
+		var my_id = $('c_id').value;
+		if ( my_id == "" | my_id == null ) {
+			alert("You must provide a group id to identify the group you wish to create.  Please enter a group id.");
+		} else {
+			signalLoadingResults();
+			maintainers = scrubTextareaInput($('c_maintainers').value);
+			members = scrubTextareaInput($('c_members').value);
+			urlVars = {}
+			bodyVars = {
+				name: escape($('c_name').value),
+				maintainers: escape(maintainers),
+				members: escape(members),
+				comments: escape($('c_comments').value)
+			};
+			ajaxCaller.postVars("/admin/group/" + my_id, bodyVars, urlVars, onResponse, false, "Create");
+		}
+		clearErrorIndications();
+		return false;
+	}
+
+	// Send a Modify command via HTTP PUT.
+	function modifySubmit() {
+		var my_id = $('m_id').value;
+		if ( my_id == "" | my_id == null ) {
+			alert("You must provide a group id to identify the group you wish to modify.  Please enter a group id.");
+		} else {
+			signalLoadingResults();
+			maintainers = scrubTextareaInput($('m_maintainers').value);
+			members = scrubTextareaInput($('m_members').value);
+			urlVars = {
+				name: escape($('m_name').value),
+				maintainers: escape(maintainers),
+				members: escape(members),
+				comments: escape($('m_comments').value)
+			};
+			bodyType = "text/html";
+			body = "";
+			parameters = {
+				urlVars: urlVars,
+				bodyType: bodyType,
+				body: body
+			};
+			ajaxCaller.putBody("/admin/group/" + my_id, parameters.urlVars, onResponse, false, "Modify", parameters.bodyType, parameters.body);
+		}
+		clearErrorIndications();
+		return false;
+	}
+
+	// Send a Search command via HTTP GET.
+	function searchSubmit() {
+		signalLoadingResults();
+		bodyVars =  {
+				g_id: escape($('s_id').value),
+				name: escape($('s_name').value),
+				maintainers: escape($('s_maintainers').value),
+				members: escape($('s_members').value),
+				tombstone: $('s_tombstone').checked
+		};
+		ajaxCaller.get("/admin/group/", bodyVars, onResponse, false, "Search");
+			
+		clearErrorIndications();
+		return false;
+	}
+
+	// Send a Delete command via HTTP DELETE.
+	function deleteSubmit() {
+		var my_id = $('d_id').value;
+		if ( my_id == "" | my_id == null ) {
+			alert("You must provide a group id to identify the group you wish to delete.  Please enter a group id.");
+		} else {
+			signalLoadingResults();
+			bodyVars =  {};
+			ajaxCaller.deleteIt("/admin/group/" + my_id, bodyVars, onResponse, false, "Delete");
+		}
+		clearErrorIndications();
+		return false;
+	}
+
+//]]>
+</script>
+	</head>
+	<body onload="load('/docs/group.html')">
+		<div id="loginstatus">
+			<p>
+				Login status not determined. Do you have Javascript and cookies enabled?
+			</p>
+		</div>
+		<div id="header">
+			<h1>
+				PURL Group Administration
+			</h1>
+			<ul id="tabmenu">
+				<li>
+					<a class="inactive" href="index.html">Home</a>
+				</li>
+				<li>
+					<a class="inactive" href="purl.html">PURLs</a>
+				</li>
+				<li>
+					<a class="inactive" href="user.html">Users</a>
+				</li>
+				<li>
+					<a class="active" href="group.html">Groups</a>
+				</li>
+				<li>
+					<a class="inactive" href="domain.html">Domains</a>
+				</li>
+				<li>
+					<a class="inactive" href="pending/index.html">Admin</a>
+				</li>
+				<li>
+					<a class="inactive" href="help.html#group">Help</a>
+				</li>
+			</ul>
+		</div>
+		<div id="content">
+			<table class="navtable" summary="purl interface" width="100%">
+				<tr valign="top">
+					<td class="navtable_action" width="35%">
+						<div id="navigation">
+							<form name="naviform" id="naviform">
+								<fieldset>
+									<legend>1) Choose an action to take on groups</legend>
+									<div class="instructions">
+										Group administration options.
+									</div><select name="naviselect" onchange="showAction()">
+										<option value="">
+											--- Select your action ---
+										</option>
+										<option value="create">
+											Create a new group
+										</option>
+										<option value="modify">
+											Modify an existing group
+										</option>
+										<option value="search">
+											Search for a group
+										</option>
+										<option value="delete">
+											Delete a group
+										</option>
+									</select>
+								</fieldset>
+							</form><img src="./images/groups.png" alt="groups" />
+						</div>
+					</td>
+					<td class="navtable_form">
+						<div id="create" style="display: none;">
+							<form action="#" name="createForm" onsubmit="return createSubmit()" id="createForm">
+								<fieldset>
+									<legend>2) Create a new group</legend>
+									<div class="instructions">
+										Fill in the following information to create a new group.
+									</div>
+									<div id="needAuth_0">
+										<table class="actiontable" summary="action table">
+											<tbody>
+												<tr>
+													<td class="property" id="c_name_label">
+														Name:
+													</td>
+													<td class="value">
+														<input id="c_name" name="c_name" type="text" />
+													</td>
+												</tr>
+												<tr>
+													<td class="property" id="c_id_label">
+														Group ID:
+													</td>
+													<td class="value">
+														<input id="c_id" name="c_id" type="text" />
+													</td>
+												</tr>
+												<tr>
+													<td class="property" id="c_maintainers_label">
+														Maintainer IDs (one per line):
+													</td>
+													<td class="value">
+														<textarea rows="5" cols="40" id="c_maintainers" name="c_maintainers">
+</textarea>
+													</td>
+												</tr>
+												<tr>
+													<td class="property" id="c_members_label">
+														Member IDs (one per line):
+													</td>
+													<td class="value">
+														<textarea rows="5" cols="40" id="c_members" name="c_members">
+</textarea>
+													</td>
+												</tr>
+												<tr>
+													<td class="property" id="c_comments_label">
+														Public comments:
+													</td>
+													<td class="value">
+														<textarea rows="5" cols="40" id="c_comments" name="c_comments">
+</textarea>
+													</td>
+												</tr>
+											</tbody>
+										</table><input value="Submit" type="submit" /><br />
+									</div>
+									<div id="needAuthDiv_0"></div>
+									<table class="docstable" summary="documentation table">
+										<tbody>
+											<tr>
+												<td align="right">
+													<a href="help.html#groupcreate">Help</a>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</fieldset>
+							</form>
+						</div>
+						<div id="modify" style="display: none;">
+							<form action="#" name="modifyForm" onsubmit="return modifySubmit()" id="modifyForm">
+								<fieldset>
+									<legend>2) Modify a group</legend>
+									<div class="instructions">
+										Modify any of the following group information.
+									</div>
+									<div id="needAuth_1">
+										<table class="actiontable" summary="action table">
+											<tbody>
+												<tr>
+													<td class="property" id="m_name_label">
+														Name:
+													</td>
+													<td class="value">
+														<input id="m_name" name="m_name" type="text" />
+													</td>
+												</tr>
+												<tr>
+													<td class="property" id="m_id_label">
+														Group ID:
+													</td>
+													<td class="value">
+														<input id="m_id" name="m_id" type="text" />
+													</td>
+												</tr>
+												<tr>
+													<td class="property" id="m_maintainers_label">
+														Maintainer IDs (one per line):
+													</td>
+													<td class="value">
+														<textarea rows="5" cols="40" id="m_maintainers" name="m_maintainers">
+</textarea>
+													</td>
+												</tr>
+												<tr>
+													<td class="property" id="m_members_label">
+														Member IDs (one per line):
+													</td>
+													<td class="value">
+														<textarea rows="5" cols="40" id="m_members" name="m_members">
+</textarea>
+													</td>
+												</tr>
+												<tr>
+													<td class="property" id="m_comments_label">
+														Public comments:
+													</td>
+													<td class="value">
+														<textarea rows="5" cols="40" id="m_comments" name="m_comments">
+</textarea>
+													</td>
+												</tr>
+											</tbody>
+										</table><input value="Submit" type="submit" /><br />
+									</div>
+									<div id="needAuthDiv_1"></div>
+									<table class="docstable" summary="documentation table">
+										<tbody>
+											<tr>
+												<td align="right">
+													<a href="help.html#groupmodify">Help</a>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</fieldset>
+							</form>
+						</div>
+						<div id="search" style="display: none;">
+							<form action="#" name="searchForm" onsubmit="return searchSubmit()" id="searchForm">
+								<fieldset>
+									<legend>2) Search for a group</legend>
+									<div class="instructions">
+										Search groups based on any of the following characteristics.
+									</div>
+									<table class="actiontable" summary="action table">
+										<tbody>
+											<tr>
+												<td class="property" id="s_name_label">
+													Name:
+												</td>
+												<td class="value">
+													<input id="s_name" name="s_name" type="text" />
+												</td>
+											</tr>
+											<tr>
+												<td align="center">
+													<b>or</b>
+												</td>
+											</tr>
+											<tr>
+												<td class="property" id="s_id_label">
+													Group ID:
+												</td>
+												<td class="value">
+													<input id="s_id" name="s_id" type="text" />
+												</td>
+											</tr>
+											<tr>
+												<td align="center">
+													<b>or</b>
+												</td>
+											</tr>
+											<tr>
+												<td class="property" id="s_maintainers_label">
+													Maintainer ID:
+												</td>
+												<td class="value">
+													<input id="s_maintainers" name="s_maintainers" type="text" />
+												</td>
+											</tr>
+											<tr>
+												<td align="center">
+													<b>or</b>
+												</td>
+											</tr>
+											<tr>
+												<td class="property" id="s_members_label">
+													Member ID:
+												</td>
+												<td class="value">
+													<input id="s_members" name="s_members" type="text" />
+												</td>
+											</tr>
+											<tr>
+												<td class="property" id="s_tombstone_label">
+													Search tombstoned groups:
+												</td>
+												<td class="value">
+													<input id="s_tombstone" name="s_tombstone" type="checkbox" value="true" />
+												</td>
+											</tr>
+										</tbody>
+									</table><input value="Submit" type="submit" />
+									<table class="docstable" summary="documentation table">
+										<tbody>
+											<tr>
+												<td align="right">
+													<a href="help.html#groupsearch">Help</a>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</fieldset>
+							</form>
+						</div>
+						<div id="delete" style="display: none;">
+							<form action="#" name="deleteForm" onsubmit="return checkDeleteSubmit('group', 'd_id')" id="deleteForm">
+								<fieldset>
+									<legend>2) Delete a group</legend>
+									<div class="instructions">
+										Delete a group based on its Group ID. You will be prompted for confirmation to complete this action.
+									</div>
+									<div id="needAuth_2">
+										<table class="actiontable" summary="action table">
+											<tbody>
+												<tr>
+													<td class="property" id="d_id_label">
+														Group ID:
+													</td>
+													<td class="value">
+														<input id="d_id" name="d_id" type="text" />
+													</td>
+												</tr>
+											</tbody>
+										</table><input value="Submit" type="submit" /><br />
+									</div>
+									<div id="needAuthDiv_2"></div>
+									<table class="docstable" summary="documentation table">
+										<tbody>
+											<tr>
+												<td align="right">
+													<a href="help.html#groupdelete">Help</a>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</fieldset>
+							</form>
+						</div><!-- navigation -->
+					</td>
+				</tr>
+			</table>
+		</div><!-- content -->
+		<div id="results" class="noresults"></div>
+		<div id="footer">
+			<table width="100%" summary="supporters">
+				<tr>
+					<td>
+						<a href="http://www.oclc.org/"><img align="left" src="images/oclclogo.png" alt="oclc" /></a>
+					</td>
+					<td>
+						<a href="http://zepheira.com/"><img align="right" src="images/zepheiralogo.png" alt="zepheira" /></a>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</body>
+</html>

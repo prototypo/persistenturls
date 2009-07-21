@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testlist title="PURL Search Unit Tests">
+  <desc>
+    <div>
+      This is the set of unit tests for the PURL Search Module.
+    </div>
+  </desc>
+  <group title="Search Accessor Tests">
+    <uri>ffcpl:/test/xunit/testlist-purl-search.xml</uri>
+  </group>
+</testlist>

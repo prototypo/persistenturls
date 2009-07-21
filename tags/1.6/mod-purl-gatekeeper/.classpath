@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+    <classpathentry kind="src" path="modules/mod-purl-gatekeeper" />
+    <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER" />
+    <classpathentry kind="src" path="/common" combineaccessrules="false" />
+    <classpathentry kind="var" path="NETKERNEL_HOME/modules/ext-xml-core-1.5.2.jar" />
+    <classpathentry kind="output" path="modules/mod-purl-gatekeeper" />
+</classpath>
+

@@ -1,0 +1,42 @@
+import org.ten60.netkernel.xml.representation.*;
+import com.ten60.netkernel.urii.aspect.*;
+
+
+import org.apache.commons.lang.StringEscapeUtils;
+
+
+main() {
+	ruri = context.getThisRequest().getArgument("uri");
+	parts = ruri.split("/");
+	type = parts[1];
+	value = null;
+	uri = null;
+	param = null;
+	
+	switch(type) {
+		case "user":
+		uri = "ffcpl:/sql/db/userValid.idoc";
+		value = ruri.substring(12);
+		param = new StringAspect("<user><id>" + StringEscapeUtils.escapeXml(value) + "</id></user>");
+		break;
+		case "group":
+		uri = "ffcpl:/sql/db/groupExists.idoc";
+		value = ruri.substring(13);
+		// This stupid variance is because we are simply looking for group existence
+		param = new StringAspect("<query><id>" + StringEscapeUtils.escapeXml(value) + "</id></query>");
+		break;
+		case "domain":
+		uri = "ffcpl:/sql/db/domainValid.idoc";
+		value = ruri.substring(13);
+		param = new StringAspect("<domain><id>" + StringEscapeUtils.escapeXml(value) + "</id></domain>");								
+		break;		
+	}
+
+	req = context.createSubRequest("active:dpml");
+	req.addArgument("operand", uri);
+	req.addArgument("param", param);
+	res = context.issueSubRequest(req);
+	resp = context.createResponseFrom(res);
+	resp.setExpired();
+	context.setResponse(resp);
+}
