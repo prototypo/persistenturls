@@ -1,10 +1,80 @@
 PURL Server Release Notes
-Version 1.4
-March 2, 2009
+Version 1.6.1
+July 21, 2009
 http://purlz.org
 
 
 This file contains release notes for the PURL server.
+
+------------------------- 
+| Version 1.6.1 Changes |
+-------------------------
+Further fixes for resolution of URL's with invalid characters, fix for database timestamp 
+sync issue, suppression of search indexer log messages
+
+FIXED:
+#1063 Items fail to index when the database clock is out of sync with the server's 
+      -- Indexing now relies solely on the database server's timestamp
+#1075 http code for syntax error in urls, should be 400 code
+#1076 PURLs with percent-encoded or reserved sub-delims characters being http 500 code
+      -- fix enhances that carried over from v1.6
+
+
+----------------------- 
+| Version 1.6 Changes |
+-----------------------
+
+Major changes:
+* Feature request http://purlz.org/project/purl/development/ticket/1073
+  partially addressed.  Three new variations on partial-redirect PURLs
+  are introduced to support various use cases.  Directions for use and
+  a full desription of functionality are available in the help file.
+
+Minor:
+* URLs with non-standard characters (e.g. '/dc/elements/1.1/\">') should
+  now redirect instead of returning a 500-series error code.  URLs
+  including the '$' character will still fail.
+* Repaired a bug where a 500 status is being returned for all PURLs with
+  a '/docs/' path segment.
+
+Outstanding:
+* This release (and previous releases) do not support input of Unicode
+characters.
+
+FIXED:
+#1071
+#1074
+#1069
+#1068
+#1067
+#1066
+#1065
+#1064
+#32
+
+
+------------------------- 
+| Version 1.5 Bug Fixes |
+-------------------------
+
+Version 1.5 of the PURL server subtly changes the relationship between
+PURLs and domains to better support legacy PURLs.  Domains may now be
+created that contain PURLs of the same name (that is, a PURL with a name
+cooresponding to an empty string or a '/' character).
+
+PURLs may now be created with names that differ only by a trailing '/'
+(e.g. /net/foo and /net/foo/).
+
+
+These features were added in support legacy PURL migration.  Naming
+new PURLs with these patterns is not encouraged.
+
+No reported bugs were addressed in this release.  However, some
+additional URL-encoding of form elements was added to the Web user
+interface to better support special characters.
+
+FIXED:
+#1062
 
 -------------------------
 | Version 1.4 Bug Fixes |
