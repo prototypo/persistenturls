@@ -1,0 +1,77 @@
+import org.ten60.netkernel.layer1.representation.*;
+import org.ten60.netkernel.xml.representation.*;
+import com.ten60.netkernel.urii.aspect.*;
+import org.purl.accessor.*;
+
+main() {
+	dbconfig = context.sourceAspect("ffcpl:/etc/ConfigPURLSDB.xml", IAspectXDA.class);
+	dbtype = dbconfig.getXDA().getText("/config/type", true);
+		
+	resp = null;
+	dbInitFile = "ffcpl:/sql/" + dbtype + "-initialized";
+	
+	try {
+		acquireLock(dbInitFile);
+
+        dbfiles = context.sourceAspect("ffcpl:/db/dbfileslist.xml", IAspectXDA.class);
+        filesItor=dbfiles.getXDA().readOnlyIterator("/dbfiles/file");
+
+        while(filesItor.hasNext()) {
+            filesItor.next();
+            file=filesItor.getText(".", true);
+            copyFiles(dbtype, file);
+        }
+
+		if(!context.exists(dbInitFile)) {
+			if(dbtype.equals("hsqldb")) {
+				req = context.createSubRequest("active:purl-storage-destroy-db");
+				res = context.issueSubRequest(req);
+			}
+			
+			req = context.createSubRequest("active:purl-storage-create-db");
+			res = context.issueSubRequest(req);
+			context.sinkAspect(dbInitFile, new StringAspect("<db type=\"" + dbtype + "\" initialized=\"" + new Date() + "\"/>"));
+		}
+		
+		resp=context.createResponseFrom(context.source(dbInitFile));
+	
+	} finally {
+		releaseLock(dbInitFile);
+	}
+	
+
+	resp.setMimeType("text/xml");
+	context.setResponse(resp);
+}
+
+copyFiles(dbtype, file) {
+	sb=new StringBuffer("<sed><pattern><regex>src-dir</regex><replace>");
+	sb.append("db/");
+	sb.append(dbtype);
+	sb.append("</replace></pattern>");
+	sb.append("<pattern><regex>src-file</regex><replace>");
+	sb.append(file);
+	sb.append("</replace></pattern></sed>");
+	
+	copyTemplate=context.source("ffcpl:/db/copyFileTemplate.idoc");
+	req = context.createSubRequest("active:sed");
+	req.addArgument("operand", copyTemplate);
+	req.addArgument("operator", new StringAspect(sb.toString())); 
+	res=context.issueSubRequest(req);
+	
+	req=context.createSubRequest("active:dpml");
+	req.addArgument("operand", res);
+	res=context.issueSubRequest(req);
+}
+
+acquireLock(file) {
+	req=context.createSubRequest("active:lock");
+    req.addArgument("operand", file);
+    context.issueSubRequest(req);
+}
+
+releaseLock(file) {
+	req=context.createSubRequest("active:unlock");
+    req.addArgument("operand", file);
+    context.issueSubRequest(req);
+}

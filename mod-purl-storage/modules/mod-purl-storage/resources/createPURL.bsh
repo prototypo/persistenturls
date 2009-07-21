@@ -1,0 +1,137 @@
+import org.ten60.netkernel.layer1.representation.*;
+import org.ten60.netkernel.xml.representation.*;
+import com.ten60.netkernel.urii.aspect.*;
+import org.ten60.netkernel.xml.representation.IAspectXDA;
+import org.ten60.netkernel.xml.xda.IXDAReadOnly;
+import org.ten60.netkernel.xml.xda.IXDAReadOnlyIterator;
+
+import java.util.*;
+
+main() {
+    resp = null;
+    iur = null;
+    purl = null;
+    
+    try {
+        param = context.sourceAspect("this:param:param", IAspectXDA.class);
+        currentUser = context.sourceAspect("this:param:user", IAspectString.class).getString();
+        paramXDA = param.getXDA();
+        
+        purl = paramXDA.getText("/purl/id", true);
+        maintainerUserMap = new HashMap();
+        maintainerUserItor = paramXDA.readOnlyIterator("//maintainers/uid");
+        
+        while(maintainerUserItor.hasNext()) {
+            maintainerUserItor.next();
+            maintainer = maintainerUserItor.getText(".", true);
+            z_id = maintainerUserMap.get(maintainer);
+            
+            if(z_id == null) {
+                req = context.createSubRequest("active:purl-storage-query-user");
+                req.addArgument("uri", "ffcpl:/user/" + maintainer);
+                req.setAspectClass(IAspectXDA.class);
+                maintainerXDA = (IAspectXDA)context.issueSubRequestForAspect(req);
+                z_id = maintainerXDA.getXDA().getText("/user/z_id", true);
+                maintainerUserMap.put(maintainer, z_id);
+            }
+        }
+        
+        if(!maintainerUserMap.containsKey(currentUser)) {
+            req = context.createSubRequest("active:purl-storage-query-user");
+            req.addArgument("uri", "ffcpl:/user/" + currentUser);
+            req.setAspectClass(IAspectXDA.class);
+            maintainerXDA = (IAspectXDA)context.issueSubRequestForAspect(req);
+            z_id = maintainerXDA.getXDA().getText("/user/z_id", true);
+            maintainerUserMap.put(currentUser, z_id);            
+        }
+        
+        maintainerGroupMap = new HashMap();
+        maintainerGroupItor = paramXDA.readOnlyIterator("//maintainers/gid");
+        
+        while(maintainerGroupItor.hasNext()) {
+            maintainerGroupItor.next();
+            maintainer = maintainerGroupItor.getText(".", true);
+            z_id = maintainerGroupMap.get(maintainer);
+            
+            if(z_id == null) {
+                req = context.createSubRequest("active:purl-storage-query-group");
+                req.addArgument("uri", "ffcpl:/group/" + maintainer);
+                req.setAspectClass(IAspectXDA.class);
+                maintainerXDA = (IAspectXDA)context.issueSubRequestForAspect(req);
+                z_id = maintainerXDA.getXDA().getText("/group/z_id", true);
+                maintainerGroupMap.put(maintainer, z_id);
+            }
+        }
+        
+        maintainerSB = new StringBuffer("<sed>");
+                
+        itor = maintainerUserMap.keySet().iterator();
+        
+        while(itor.hasNext()) {
+            key = itor.next();
+            maintainerSB.append("<pattern><regex>@@USER-");
+            maintainerSB.append(key);
+            maintainerSB.append("@@</regex><replace>");
+            maintainerSB.append(maintainerUserMap.get(key));
+            maintainerSB.append("</replace></pattern>");
+        }
+        
+        itor = maintainerGroupMap.keySet().iterator();
+        
+        while(itor.hasNext()) {
+            key = itor.next();
+            maintainerSB.append("<pattern><regex>@@GROUP-");
+            maintainerSB.append(key);
+            maintainerSB.append("@@</regex><replace>");
+            maintainerSB.append(maintainerGroupMap.get(key));
+            maintainerSB.append("</replace></pattern>");
+        }
+        
+        if(currentUser!=null) {
+            maintainerSB.append("<pattern><regex>@@CURRENTUSER@@</regex><replace>");
+            maintainerSB.append(maintainerUserMap.get(currentUser));
+            maintainerSB.append("</replace></pattern>");
+        }
+        
+        maintainerSB.append("</sed>");
+
+		param = context.transrept(param, IAspectString.class);
+		paramStr = param.getString();
+		
+		if(paramStr.contains("'")) {
+			paramStr = paramStr.replaceAll("'", "''");
+			param = new StringAspect(paramStr);
+		}
+        req = context.createSubRequest("active:xslt");
+        req.addArgument("operand", param);
+        req.addArgument("operator", "ffcpl:/sql/db/createPURL.xsl");
+        iur = context.issueSubRequest(req);
+        
+        req = context.createSubRequest();
+        req.setURI("active:sed");
+        req.addArgument("operator", new StringAspect(maintainerSB.toString()));
+        req.addArgument("operand", iur);
+        iur = context.issueSubRequest(req);
+
+        req = context.createSubRequest("active:sqlBatch");
+        req.addArgument("operand", iur);
+        iur = context.issueSubRequest(req);
+
+        req=context.createSubRequest("active:cutGoldenThread");
+        req.addArgument("param", "gt:resource:" + purl);
+        context.issueSubRequest(req);
+
+        req = context.createSubRequest("active:purl-storage-query-purl");
+        req.addArgument("uri", "ffcpl:/purl" + purl);
+        iur = context.issueSubRequest(req);
+        
+    } catch(Throwable t) {
+        t.printStackTrace();
+        iur = new StringAspect("<error message=\"Could not store purl:" + purl + "\"/>");
+    }
+    
+    resp = context.createResponseFrom(iur);
+    resp.setMimeType("text/xml");
+
+    context.setResponse(resp);
+}

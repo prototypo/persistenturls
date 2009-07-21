@@ -1,0 +1,26 @@
+<purl-batch-validate>
+	<purl>
+		<id>/testdomain/test301</id>
+		<status result="success">Success</status>
+	</purl>
+	<purl>
+		<id>/testdomain/test302</id>
+		<status result="failure">ERROR: Error resolving PURL target: http://example.com/test302target/</status>
+	</purl>
+	<purl>
+		<id>/testdomain/test303/</id>
+		<status result="failure">ERROR: Error resolving PURL target: http://example.com/see/also/some/more.xml</status>
+	</purl>
+	<purl>
+		<id>/testdomain/test307</id>
+		<status result="failure">ERROR: Error resolving PURL target: http://example.com/test307target/</status>
+	</purl>
+	<purl>
+		<id>/testdomain/test404</id>
+		<status result="validated">Validated</status>
+	</purl>
+	<purl>
+		<id>/testdomain/test410</id>
+		<status result="validated">Validated</status>
+	</purl>
+</purl-batch-validate>

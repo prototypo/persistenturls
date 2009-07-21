@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<purls>
+	
+    <!-- Type 302.  Simple redirection to a target URL -->
+		<purl id="/testdomain/test302-1" type="302">
+      <maintainers>
+      	<uid>testuser</uid>
+    	</maintainers>
+    	<target url="http://example.com/test302-1target/"/>
+    </purl>
+
+    <!-- Type 302.  Simple redirection to a target URL -->
+		<purl id="/testdomain/test302-2" type="302">
+      <maintainers>
+      	<uid>testuser</uid>
+    	</maintainers>
+    	<target url="http://example.com/test302-2target/"/>
+    </purl>
+
+</purls>
+

@@ -1,0 +1,9 @@
+Thank you for installing the PURL server!
+
+Get started with the server by going to:
+
+  http://localhost:8080/docs/index.html
+
+You may log into the server as 'admin' with the password
+'password' and change the password after you have logged
+in by modifying the user record.

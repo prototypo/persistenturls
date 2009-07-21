@@ -1,0 +1,24 @@
+import org.ten60.netkernel.layer1.representation.*;
+import org.ten60.netkernel.layer1.nkf.*;
+import com.ten60.netkernel.urii.aspect.*;
+
+void main()
+{
+	referrer = null;
+	
+	if(context.exists("this:param:param")) {
+		nvp=context.sourceAspect("this:param:param", IAspectNVP.class);
+		referrer = nvp.getValue("referrer");
+	}
+
+	if(referrer==null) {
+		referrer = "/docs/index.html";
+	}
+	
+	logindoc=context.sourceAspect("ffcpl:/docs/login.html", IAspectString.class);
+	login=logindoc.getString().replaceAll("REPLACEME", referrer);
+	
+	resp = context.createResponseFrom(new StringAspect(login));
+	resp.setMimeType("text/html");
+	context.setResponse(resp);
+}
