@@ -8,6 +8,10 @@ import org.apache.solr.common.params.ModifiableSolrParams;
 import org.apache.solr.core.*;
 import org.apache.solr.schema.IndexSchema;
 import org.ten60.netkernel.layer1.nkf.INKFConvenienceHelper;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  */
@@ -24,7 +28,7 @@ public class SolrIndexManager {
     }
 
     private SolrIndexManager(INKFConvenienceHelper context) throws Exception {
-
+        Logger.getLogger("org.apache.solr").setLevel(Level.WARNING);
         String coreName = "";
 
         String dataDirectory = context.getKernelHelper().getOwningModule().getScratchDir() + "solr/";
