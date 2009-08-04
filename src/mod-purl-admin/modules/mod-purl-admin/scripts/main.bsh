@@ -17,27 +17,32 @@ main() {
 	// page.
 	
 	if(!base.equals("/")) {
-		// PURLs take precedence over local references. If you need to 
-		// serve up static content from a PURL installation, reserve
-		// the top level domains in the ffcpl:/etc/PURLConfig.xml file.
-        // TODO: Do we really want to do this?  There was a partial implementation
+	    try {
+            // PURLs take precedence over local references. If you need to
+            // serve up static content from a PURL installation, reserve
+            // the top level domains in the ffcpl:/etc/PURLConfig.xml file.
+            // TODO: Do we really want to do this?  There was a partial implementation
 
-		method = context.getThisRequest().getArgument("method");
-		// TODO: Rewrite ffcpl:/ reference to purl:/ reference
+            method = context.getThisRequest().getArgument("method");
 
-		ru = context.getThisRequest().getArgument("requestURL");
-		ru = ru.substring(ru.indexOf("://")+3);;
+            ru = context.getThisRequest().getArgument("requestURL");
+            ru = ru.substring(ru.indexOf("://")+3);;
 
-		fullpath = ru.substring(ru.indexOf("/"));
-		req=context.createSubRequest("active:purl-resolver");
-		req.addArgument("mode", "mode:resolve");
-		req.addArgument("path", "ffcpl:" + fullpath);
-		req.addArgument("method", method);
-		req.addArgument("requestURL", context.getThisRequest().getArgument("requestURL"));
-        resp=context.issueSubRequest(req);
+            fullpath = ru.substring(ru.indexOf("/"));
+            req=context.createSubRequest("active:purl-resolver");
+            req.addArgument("mode", "mode:resolve");
+            req.addArgument("path", "ffcpl:" + fullpath);
+            req.addArgument("method", method);
+            req.addArgument("requestURL", context.getThisRequest().getArgument("requestURL"));
+            resp=context.issueSubRequest(req);
 
+        } catch (Exception ex) {
+            resp = context.createResponseFrom(NKHelper.setResponseCode(context, 
+                                    context.source("ffcpl:/pub/400-invalid.html"), 400));
+            resp.setMimeType("text/html");
+        }
 	} else {
-	       //Issue HTTP Redirect
+	    //Issue HTTP Redirect
         req=context.createSubRequest("active:HTTPRedirect");
         req.addArgument("operator", new StringAspect("<url>/docs/index.html</url>"));
         result=context.issueSubRequest(req);
