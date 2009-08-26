@@ -528,6 +528,7 @@ public class DataLoader {
         if (!url.startsWith("http://")
                 && !url.startsWith("gopher:")
                 && !url.startsWith("telnet:")
+                && !url.startsWith("mailto:")
                 && !url.startsWith("javascript:")
                 && !url.startsWith("ftp:")) {
             // There are some that start with http:, but not http://
