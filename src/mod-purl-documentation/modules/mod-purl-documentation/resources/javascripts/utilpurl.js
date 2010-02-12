@@ -56,6 +56,7 @@ var resultBlock = $("results");
 var htmlResults = "";
 
 function load(referrer) {
+    
 	// Get the current URL and look for fragments.
 	// If found, attempt to show desired form.
 	var location = document.URL;
@@ -85,6 +86,7 @@ function load(referrer) {
 
 
 function showLoginStatus(referrer) {
+
 	resultBlock = $("loginstatus");
 	resultBlock.innerHTML = "<p>Getting login status...<\/p>";
 	// The referrer (the page we are on when we submit) is the callingContext
@@ -93,6 +95,7 @@ function showLoginStatus(referrer) {
 
 
 function onLoginStatusResponse (message, headers, referrer) {
+
 	// Fill the appropriate 'loginstatus' div with a login status indication.
 	resultBlock = $("loginstatus");
 	resultBlock.innerHTML = "<p>Getting login status...<\/p>";
@@ -113,7 +116,7 @@ function onLoginStatusResponse (message, headers, referrer) {
 				setVisibility("needAuth_" + i, 'none');
 				
 				// Add warning messages about not being logged in.
-				document.getElementById("needAuthDiv_" + i).innerHTML = "(You must be logged in to perform this action)";
+				document.getElementById("needAuthDiv_" + i).innerHTML = "(Please log in to perform this action)";
 			}
 		} else if ( message.indexOf("logged in") > -1 ) {
 			/*

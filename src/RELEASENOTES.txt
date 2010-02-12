@@ -1,28 +1,23 @@
 PURL Server Release Notes
-Version 1.6.1
-July 21, 2009
+Version 1.6.2
+February 12, 2010
 http://purlz.org
 
 
 This file contains release notes for the PURL server.
 
 ------------------------- 
-| Version 1.6.1 Changes |
+| Version 1.6.2 Changes |
 -------------------------
-Further fixes for resolution of URL's with invalid characters, fix for database timestamp 
-sync issue, suppression of search indexer log messages
-
-FIXED:
-#1063 Items fail to index when the database clock is out of sync with the server's 
-      -- Indexing now relies solely on the database server's timestamp
-#1075 http code for syntax error in urls, should be 400 code
-#1076 PURLs with percent-encoded or reserved sub-delims characters being http 500 code
-      -- fix enhances that carried over from v1.6
+Provides a single file (simplepurl.html) to facilitate the creation of 
+simple (302) PURLs via a Javascript bookmarklet.  The bookmarklet itself
+is accessible from:
+  http://purlz.org/project/purl/documentation/
 
 
------------------------ 
-| Version 1.6 Changes |
------------------------
+----------------------------- 
+| Version 1.6-1.6.1 Changes |
+-----------------------------
 
 Major changes:
 * Feature request http://purlz.org/project/purl/development/ticket/1073
@@ -36,12 +31,18 @@ Minor:
   including the '$' character will still fail.
 * Repaired a bug where a 500 status is being returned for all PURLs with
   a '/docs/' path segment.
+* Further fixes for resolution of URL's with invalid characters, fix for database timestamp 
+  sync issue, suppression of search indexer log messages
+
 
 Outstanding:
 * This release (and previous releases) do not support input of Unicode
 characters.
 
 FIXED:
+#1063
+#1075
+#1076
 #1071
 #1074
 #1069

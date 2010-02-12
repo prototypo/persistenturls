@@ -1,6 +1,6 @@
 PURL Server Installation Instructions
-Version 1.6.1
-July 21, 2009
+Version 1.6.2
+February 12, 2010
 purlz@zepheira.com
 purl-interest@purlz.org
 purl-dev@purlz.org
@@ -14,10 +14,6 @@ Thank you for your interest in the Persistent Uniform Resource Locator
 software may be found at http://purlz.org.  Please consider joining
 the mailing lists and participating in the online community so we can
 serve you better.
-
-Please note that version 1.4 replaces version 1.4 entirely.  Earlier versions
-should not be used.  Details of changes in this release are noted in the
-file RELEASENOTES.txt.
 
 This software is licensed as defined in the accompanying files
 LICENSE.txt and LEGAL.txt.  These files may be found in the

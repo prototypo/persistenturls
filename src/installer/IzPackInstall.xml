@@ -1,8 +1,8 @@
 <installation version="1.0">
 
 <info>
-	<appname>PURLZ-Server-1.6.1</appname>
-	<appversion>1.6.1</appversion>
+	<appname>PURLZ-Server-1.6.2</appname>
+	<appversion>1.6.2</appversion>
 	<url>http://purlz.org/</url>
 	<authors>
 		<author name="Zepheira, LLC" email="contact@zepheira.com"/>
@@ -28,7 +28,7 @@
 </resources>
 
 <variables>
-  <variable name="JARVERSION" value="1.6.1"/>
+  <variable name="JARVERSION" value="1.6.2"/>
 	<!-- Most variables moved to userInputSpec.xml -->
 </variables>
 
