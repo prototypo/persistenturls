@@ -65,12 +65,12 @@
 		<file targetdir="$INSTALL_PATH" src="../LEGAL.txt"/>
 		<file targetdir="$INSTALL_PATH" src="../LICENSE.txt"/>
 		<!-- PURL JARs. -->
-		<file targetdir="$INSTALL_PATH/modules" src="../deploy/mod-purl-documentation-1.6.1.jar"/>
-		<file targetdir="$INSTALL_PATH/modules" src="../deploy/mod-purl-search-1.6.1.jar"/>
-		<file targetdir="$INSTALL_PATH/modules" src="../deploy/mod-session-1.6.1.jar"/>
-        <!-- <file targetdir="$INSTALL_PATH/modules" src="../deploy/mod-template-1.6.1.jar"/> -->
-		<file targetdir="$INSTALL_PATH/modules" src="../deploy/test-mod-purl-search-1.6.1.jar"/>
-        <!-- <file targetdir="$INSTALL_PATH/modules" src="../deploy/test-mod-template-1.6.1.jar"/> -->
+		<file targetdir="$INSTALL_PATH/modules" src="../deploy/mod-purl-documentation-1.6.2.jar"/>
+		<file targetdir="$INSTALL_PATH/modules" src="../deploy/mod-purl-search-1.6.2.jar"/>
+		<file targetdir="$INSTALL_PATH/modules" src="../deploy/mod-session-1.6.2.jar"/>
+        <!-- <file targetdir="$INSTALL_PATH/modules" src="../deploy/mod-template-1.6.2.jar"/> -->
+		<file targetdir="$INSTALL_PATH/modules" src="../deploy/test-mod-purl-search-1.6.2.jar"/>
+        <!-- <file targetdir="$INSTALL_PATH/modules" src="../deploy/test-mod-template-1.6.2.jar"/> -->
 		<!-- NB: Cannot use JAR files for these because we need to parse files within them. -->
 		<fileset targetdir="$INSTALL_PATH/modules/" dir="../mod-purl-storage/modules/">
 			<include name="mod-purl-storage/**/*"/>

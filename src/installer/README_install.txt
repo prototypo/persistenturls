@@ -4,6 +4,10 @@ mkinstaller.sh
 IzPackInstall.xml
 README.html
 
+NB:  If you change the JAR version number, you *must* update the
+'version.properties' files for each module and change the JAR file names
+in IzPackInstall.xml.
+
 If any of the files under the options/ directory are changed in the main distribution directories, they must be updated under options manually.
 
 Both of these problems are hackish and should be automated.
