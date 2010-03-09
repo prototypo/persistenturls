@@ -38,6 +38,7 @@
 		<build-subdir dir="mod-purl-gatekeeper"/>		
 		<build-subdir dir="mod-session"/>
 		<build-subdir dir="mod-template"/>
+		<build-subdir dir="ext-http-client"/>
 	</target>
 	<target description="Deploy everything" name="deploy" depends="all">
 		<mkdir dir="${deploy.dir}"/>
@@ -60,6 +61,7 @@
 		<build-subdir dir="mod-control" target="clean"/>
 		<build-subdir dir="mod-session" target="clean"/>
 		<build-subdir dir="mod-template" target="clean"/>
+		<build-subdir dir="ext-http-client" target="clean"/>
 	</target>
 	<target name="prepare-app-deployment">
 		<filter filtersFile="mod-purl-storage/build/version.properties"/>	    
@@ -71,6 +73,7 @@
 		<filter filtersFile="mod-control/build/version.properties"/>
 		<filter filtersFile="mod-session/build/version.properties"/>
 		<filter filtersFile="mod-template/build/version.properties"/>
+		<filter filtersFile="ext-http-client/build/version.properties"/>
 		<copy todir="mod-control/modules/mod-control/etc" filtering="true" overwrite="true">
 			<filterset>
 				<filter token="deploy-dir" value="${deploy.dir}"/>

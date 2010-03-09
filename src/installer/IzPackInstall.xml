@@ -1,8 +1,8 @@
 <installation version="1.0">
 
 <info>
-	<appname>PURLZ-Server-1.6.2</appname>
-	<appversion>1.6.2</appversion>
+	<appname>PURLZ-Server-1.6.3</appname>
+	<appversion>1.6.3</appversion>
 	<url>http://purlz.org/</url>
 	<authors>
 		<author name="Zepheira, LLC" email="contact@zepheira.com"/>
@@ -28,7 +28,7 @@
 </resources>
 
 <variables>
-  <variable name="JARVERSION" value="1.6.2"/>
+  <variable name="JARVERSION" value="1.6.3"/>
 	<!-- Most variables moved to userInputSpec.xml -->
 </variables>
 
@@ -65,12 +65,13 @@
 		<file targetdir="$INSTALL_PATH" src="../LEGAL.txt"/>
 		<file targetdir="$INSTALL_PATH" src="../LICENSE.txt"/>
 		<!-- PURL JARs. -->
-		<file targetdir="$INSTALL_PATH/modules" src="../deploy/mod-purl-documentation-1.6.2.jar"/>
-		<file targetdir="$INSTALL_PATH/modules" src="../deploy/mod-purl-search-1.6.2.jar"/>
-		<file targetdir="$INSTALL_PATH/modules" src="../deploy/mod-session-1.6.2.jar"/>
-        <!-- <file targetdir="$INSTALL_PATH/modules" src="../deploy/mod-template-1.6.2.jar"/> -->
-		<file targetdir="$INSTALL_PATH/modules" src="../deploy/test-mod-purl-search-1.6.2.jar"/>
-        <!-- <file targetdir="$INSTALL_PATH/modules" src="../deploy/test-mod-template-1.6.2.jar"/> -->
+		<file targetdir="$INSTALL_PATH/modules" src="../deploy/mod-purl-documentation-1.6.3.jar"/>
+		<file targetdir="$INSTALL_PATH/modules" src="../deploy/mod-purl-search-1.6.3.jar"/>
+		<file targetdir="$INSTALL_PATH/modules" src="../deploy/mod-session-1.6.3.jar"/>
+        <!-- <file targetdir="$INSTALL_PATH/modules" src="../deploy/mod-template-1.6.3.jar"/> -->
+		<file targetdir="$INSTALL_PATH/modules" src="../deploy/test-mod-purl-search-1.6.3.jar"/>
+		<file targetdir="$INSTALL_PATH/modules" src="../deploy/ext-http-client-1.2.1.jar"/>
+        <!-- <file targetdir="$INSTALL_PATH/modules" src="../deploy/test-mod-template-1.6.3.jar"/> -->
 		<!-- NB: Cannot use JAR files for these because we need to parse files within them. -->
 		<fileset targetdir="$INSTALL_PATH/modules/" dir="../mod-purl-storage/modules/">
 			<include name="mod-purl-storage/**/*"/>

@@ -51,7 +51,7 @@ public class PURLValidatorCommand extends PURLResolveCommand {
                         }
 
                         try {
-                            INKFRequest req = context.createSubRequest("active:httpGet");
+                            INKFRequest req = context.createSubRequest("active:httpHead");
                             req.addArgument("url", url);
                             IURRepresentation iur = context.issueSubRequest(req);
 
