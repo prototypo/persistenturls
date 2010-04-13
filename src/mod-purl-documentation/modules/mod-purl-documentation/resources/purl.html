@@ -181,7 +181,7 @@ handles results from the server in response to form submissions.
 		} else {
 			signalLoadingResults();
 			bodyVars =  {}
-			ajaxCaller.deleteIt("/admin/targeturl" + my_id, bodyVars, onResponse, false, "Validate");
+			ajaxCaller.get("/admin/targeturl" + my_id, bodyVars, onResponse, false, "Validate");
 		}
 		clearErrorIndications();
 		return false;
