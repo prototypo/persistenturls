@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<!--
+
+login.html - Provides a page to redirect to upon failure to log into a PURL server.
+
+version 1.0, 20 December 2007
+David Wood (david at http://zepheira.com/)
+
+=========================================================================
+
+Copyright (C) 2007 OCLC (http://oclc.org)
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+=========================================================================
+
+-->
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link type="text/css" rel="stylesheet" href="style.css" />
+		<title>
+			PURL Login Failure
+		</title><!--[if lt IE 7]>
+	<script defer type="text/javascript" src="javascripts/pngfix.js"></script>
+	<![endif]-->
+	</head>
+	<body>
+		<div id="header">
+			<h1>
+				PURL User Login Failure
+			</h1>
+			<ul id="tabmenu">
+				<li>
+					<a class="inactive" href="/docs/index.html">Home</a>
+				</li>
+				<li>
+					<a class="inactive" href="/docs/purl.html">PURLs</a>
+				</li>
+				<li>
+					<a class="inactive" href="/docs/user.html">Users</a>
+				</li>
+				<li>
+					<a class="inactive" href="/docs/group.html">Groups</a>
+				</li>
+				<li>
+					<a class="inactive" href="/docs/domain.html">Domains</a>
+				</li>
+				<li>
+					<a class="inactive" href="/docs/pending/index.html">Admin</a>
+				</li>
+				<li>
+					<a class="inactive" href="/docs/help.html#login">Help</a>
+				</li>
+			</ul>
+		</div>
+		<div id="content">
+			<table class="navtable" summary="purl interface" width="100%">
+				<tr valign="top">
+					<td class="navtable_action">
+						<div id="login" style="display: inline;">
+							<form action="#" name="loginForm" onsubmit="return loginSubmit()" id="loginForm">
+								<fieldset>
+									<legend>Log in failed</legend>
+									<div class="instructions">
+										Invalid login. Either the user id or password were incorrect.
+									</div><a href="/admin/login/login.bsh">try again</a>
+								</fieldset>
+							</form>
+						</div>
+					</td>
+				</tr>
+			</table>
+		</div><!-- content -->
+		<div id="results" class="noresults"></div>
+		<div id="footer">
+			<table width="100%" summary="supporters">
+				<tr>
+					<td>
+						<a href="http://www.oclc.org/"><img align="left" src="images/oclclogo.png" alt="oclc" /></a>
+					</td>
+					<td>
+						<a href="http://zepheira.com/"><img align="right" src="images/zepheiralogo.png" alt="zepheira" /></a>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</body>
+</html>
