@@ -1,0 +1,106 @@
+<project name="project" default="dist" basedir=".">
+	<!-- set global properties for this build -->
+	<property name="src" location="src" />
+	<property name="build" location="build" />
+	<property name="dist" location="dist" />
+	<property name="lib" location="lib" />
+	<property name="bin" location="bin" />
+	<property name="callimachus.url" value="callimachusproject.zip" />
+	<property name="main" value="org.callimachusproject.Server" />
+	<property name="jvmargs" value="-ea -server -mx512m -Djava.library.path=${bin}" />
+
+	<target name="init">
+		<!-- Create the time stamp and build directory -->
+		<tstamp />
+		<mkdir dir="${build}" />
+		<available file="lib" property="lib.present" />
+		<property file="build.properties" />
+	</target>
+
+	<target name="dependencies" unless="lib.present">
+		<mkdir dir="${lib}" />
+		<parallel>
+			<get src="${callimachus.url}" dest="${lib}/callimachus.zip" />
+		</parallel>
+		<unzip src="${lib}/callimachus.zip" dest="${lib}">
+			<patternset>
+				<include name="lib/*.jar" />
+				<include name="dist/*.jar" />
+			</patternset>
+			<mapper type="flatten" />
+		</unzip>
+		<delete file="${lib}/callimachus.zip" />
+	</target>
+
+	<target name="dist-clean" description="clean up everything for a new version" depends="clean">
+		<delete dir="${lib}" />
+	</target>
+
+	<target name="clean" description="clean up">
+		<!-- Delete the directory trees -->
+		<delete dir="${build}" />
+		<delete dir="${dist}" />
+	</target>
+
+	<target name="compile" depends="init,dependencies" description="compile the source ">
+		<!-- Compile the java code from ${src} into ${build} -->
+		<javac srcdir="${src}" destdir="${build}">
+			<classpath>
+				<fileset dir="${lib}">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</javac>
+		<copy todir="${build}">
+			<fileset dir="${src}" excludes="**/*.java"/>
+		</copy>
+	</target>
+
+	<target name="dist" depends="compile" description="generate the distribution">
+		<!-- Create the distribution directory and create the jar -->
+		<mkdir dir="${dist}" />
+		<property name="jar.file" value="${dist}/purlz-${DSTAMP}.jar" />
+		<manifestclasspath property="jar.classpath" jarfile="${jar.file}">
+			<classpath>
+				<fileset dir="${lib}">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</manifestclasspath>
+		<jar jarfile="${jar.file}">
+			<fileset dir="${build}" />
+			<manifest>
+				<attribute name="Main-Class" value="${main}" />
+				<attribute name="Class-Path" value="${jar.classpath}" />
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="start" depends="compile">
+		<java classname="${main}" fork="true" spawn="true">
+			<jvmarg line="${jvmargs}" />
+			<arg line="${args}" />
+			<classpath>
+				<pathelement location="${build}/" />
+				<fileset dir="${lib}">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</java>
+	</target>
+
+	<target name="run" depends="compile">
+		<parallel failonany="true">
+			<java classname="${main}" fork="true">
+				<jvmarg line="${jvmargs}" />
+				<arg line="${args}" />
+				<classpath>
+					<pathelement location="${build}/" />
+					<fileset dir="${lib}">
+						<include name="**/*.jar" />
+					</fileset>
+				</classpath>
+			</java>
+		</parallel>
+	</target>
+</project>

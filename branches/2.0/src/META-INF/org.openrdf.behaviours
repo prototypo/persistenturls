@@ -1,0 +1,10 @@
+name.persistent.behaviours.DisabledPURLSupport
+name.persistent.behaviours.ServerSupport
+name.persistent.behaviours.DomainSupport
+name.persistent.behaviours.GroupSupport
+name.persistent.behaviours.PartialPURLSupport
+name.persistent.behaviours.PURLSupport
+name.persistent.behaviours.RemoteGraphSupport
+name.persistent.behaviours.RemoteResourceSupport
+name.persistent.behaviours.TombstonedPURLSupport
+name.persistent.behaviours.UserSupport

@@ -1,0 +1,48 @@
+@prefix xsd:<http://www.w3.org/2001/XMLSchema#>.
+@prefix rdfs:<http://www.w3.org/2000/01/rdf-schema#>.
+@prefix owl:<http://www.w3.org/2002/07/owl#>.
+@prefix obj:<http://www.openrdf.org/rdf/2009/object#>.
+@prefix http:<http://www.openrdf.org/rdf/2009/httpobject#>.
+@prefix calli:<http://callimachusproject.org/rdf/2009/framework#>.
+@prefix purl:<http://persistent.name/rdf/2010/purl#>.
+
+</> a purl:Server .
+
+<#resolve> rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom [owl:complementOf
+			[obj:matches </>, "/docs/*", "/admin/*", "/callimachus/*"]]
+		];
+	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
+		owl:allValuesFrom <java:org.apache.http.HttpResponse>];
+	http:method "GET";
+	http:type "message/x-response";
+	http:cache-control "max-age=3600";
+	obj:groovy """
+		def max = msg.max == null ? 21 : msg.max
+		return msg.target.resolvePURL(toString(), msg.qs, msg.accept, msg.language, max)
+	""".
+
+<#resolve-qs> a owl:DatatypeProperty; a owl:FunctionalProperty;
+	rdfs:domain <#resolve>;
+	rdfs:range xsd:string;
+	http:parameter "*";
+	obj:name "qs".
+
+<#resolve-accept> a owl:DatatypeProperty; a owl:FunctionalProperty;
+	rdfs:domain <#resolve>;
+	rdfs:range xsd:string;
+	http:header "Accept";
+	obj:name "accept".
+
+<#resolve-language> a owl:DatatypeProperty; a owl:FunctionalProperty;
+	rdfs:domain <#resolve>;
+	rdfs:range xsd:string;
+	http:header "Accept-Language";
+	obj:name "language".
+
+<#resolve-max> a owl:DatatypeProperty; a owl:FunctionalProperty;
+	rdfs:domain <#resolve>;
+	rdfs:range xsd:int;
+	http:header "Max-Forward";
+	obj:name "max".

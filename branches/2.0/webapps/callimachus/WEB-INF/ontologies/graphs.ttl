@@ -1,0 +1,73 @@
+# 
+#    Copyright 2010 Zepheira LLC
+# 
+#    Licensed under the Apache License, Version 2.0 (the "License");
+#    you may not use this file except in compliance with the License.
+#    You may obtain a copy of the License at
+# 
+#        http://www.apache.org/licenses/LICENSE-2.0
+# 
+#    Unless required by applicable law or agreed to in writing, software
+#    distributed under the License is distributed on an "AS IS" BASIS,
+#    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#    See the License for the specific language governing permissions and
+#    limitations under the License.
+
+@prefix xsd:<http://www.w3.org/2001/XMLSchema#>.
+@prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs:<http://www.w3.org/2000/01/rdf-schema#>.
+@prefix owl:<http://www.w3.org/2002/07/owl#>.
+@prefix obj:<http://www.openrdf.org/rdf/2009/object#>.
+@prefix http:<http://www.openrdf.org/rdf/2009/httpobject#>.
+@prefix :<http://callimachusproject.org/rdf/2009/framework#>.
+
+:NamedGraph a owl:Class.
+
+:put-graph rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:objectResponse;
+		owl:allValuesFrom owl:Nothing];
+	http:method "PUT";
+	http:realm :graph-realm;
+	obj:imports <java:org.openrdf.rio.RDFFormat>;
+	obj:imports :NamedGraph;
+	obj:groovy """
+		String type = msg.contentType;
+		if (type.contains(";")) {
+			type = type.substring(0, type.indexOf(';'));
+		}
+		objectConnection.addDesignation(this, NamedGraph.class);
+		objectConnection.clear(getResource());
+		objectConnection.add(msg.body, toUri().toASCIIString(), RDFFormat.forMIMEType(type), getResource());
+	""".
+
+:put-graph-type a owl:DatatypeProperty; a owl:FunctionalProperty;
+	rdfs:domain :put-graph;
+	rdfs:range xsd:string;
+	http:header "Content-Type";
+	obj:name "contentType".
+
+:put-graph-body a owl:ObjectProperty; a owl:FunctionalProperty;
+	rdfs:domain :put-graph;
+	rdfs:range <java:java.io.InputStream>;
+	http:type "application/rdf+xml", "application/x-turtle";
+	obj:name "body".
+
+:get-graph rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom :NamedGraph];
+	rdfs:subClassOf [owl:onProperty obj:objectResponse;
+		owl:allValuesFrom obj:GraphResult];
+	http:method "GET";
+	obj:sparql "CONSTRUCT { ?s ?p ?o } WHERE { GRAPH $this { ?s ?p ?o } }".
+
+:delete-graph rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom :NamedGraph];
+	rdfs:subClassOf [owl:onProperty obj:objectResponse;
+		owl:allValuesFrom owl:Nothing];
+	http:method "DELETE";
+	http:realm :graph-realm;
+	obj:groovy """
+		objectConnection.removeDesignation(this, NamedGraph.class);
+		objectConnection.clear(getResource());
+	""".

@@ -1,0 +1,266 @@
+@prefix xsd:<http://www.w3.org/2001/XMLSchema#>.
+@prefix rdfs:<http://www.w3.org/2000/01/rdf-schema#>.
+@prefix owl:<http://www.w3.org/2002/07/owl#>.
+@prefix obj:<http://www.openrdf.org/rdf/2009/object#>.
+@prefix http:<http://www.openrdf.org/rdf/2009/httpobject#>.
+@prefix calli:<http://callimachusproject.org/rdf/2009/framework#>.
+@prefix purl:<http://persistent.name/rdf/2010/purl#>.
+
+@base <http://persistent.name/rdf/2010/purl>.
+
+################################
+# Ontology
+################################
+
+<> a owl:Ontology.
+
+################################
+# Class
+################################
+
+<#PURL> a owl:Class;
+	rdfs:comment "A Persistent URL.".
+
+<#PartialPURL> a owl:Class;
+	rdfs:comment "A PURL that also matches subpaths, if this path ends in a '/'.";
+	rdfs:subClassOf <#PURL>.
+
+<#ZonedPURL> a owl:Class;
+	rdfs:comment "A PURL that matches authorities with a DNS domain of this PURL's DNS host name.";
+	rdfs:subClassOf <#PURL>.
+
+<#DisabledPURL> a owl:Class;
+	rdfs:comment "Temporarily gone (404)";
+	rdfs:subClassOf <#PURL>.
+
+<#TombstonedPURL> a owl:Class;
+	rdfs:comment "Permanently gone (410)";
+	rdfs:subClassOf <#PURL>.
+
+<#Unresolvable> a owl:Class;
+	rdfs:comment "A URL that unexpectly does not resolve to anything meaningful.".
+
+<#Server> a owl:Class;
+	rdfs:comment "The protocol, hostname, and port of a server with PURL domains and list of services can resolve PURLs. This IRI should have a path of '/'.".
+
+<#Origin> a owl:Class;
+	rdfs:comment "A common scheme and authority of a set of PURLs. This IRI should have a path of '/'.".
+
+<#RequestedDomain> a owl:Class;
+	rdfs:comment "A possible prefix to URLs. This URI must end with '/'.".
+
+<#Domain> a owl:Class;
+	rdfs:comment "A prefix to a set of PURLs (endings with '/').";
+	rdfs:subClassOf <#RequestedDomain>.
+
+<#Service> a owl:Class;
+	rdfs:comment "The priority and weight of a server capable of resolving PURLs.".
+
+<#MirroredResource> a owl:Class;
+	rdfs:comment "Indicates that this origin or domain has been completely loaded.".
+
+<#RemoteResource> a owl:Class;
+	rdfs:comment "Indicates that this resource can be loaded using its definedBy target.".
+
+<#RemoteGraph> a owl:Class;
+	rdfs:comment "Indicates that theses triples were loaded externally and need to be refreshed regularly.".
+
+<#Party> a owl:Class;
+	rdfs:comment "An individual or group.".
+
+<#RequestedUser> a owl:Class;
+	rdfs:comment "Possible credential for administrating PURLs.";
+	rdfs:subClassOf <#Party>.
+
+<#User> a owl:Class;
+	rdfs:comment "Approved credential for administrating PURLs.";
+	rdfs:subClassOf <#RequestedUser>.
+
+<#Group> a owl:Class;
+	rdfs:comment "A collection of users that share administrating privileges.";
+	rdfs:subClassOf <#Party>.
+
+################################
+# Annotation
+################################
+
+<#rel> a owl:AnnotationProperty;
+	rdfs:comment "Placed on PURL object properties that relate the PURL to its target.".
+
+################################
+# Property
+################################
+
+<#renamedTo> a owl:ObjectProperty, owl:FunctionalProperty;
+	rdfs:comment "Moved permanently (301)";
+	rdfs:domain <#PURL>;
+	purl:rel "canonical".
+
+<#alternative> a owl:ObjectProperty;
+	rdfs:comment "Simple redirection (302)";
+	rdfs:domain <#PURL>;
+	purl:rel "alternative".
+
+<#describedBy> a owl:ObjectProperty;
+	rdfs:comment "See other (303)";
+	rdfs:domain <#PURL>;
+	purl:rel "describedby".
+
+<#redirectsTo> a owl:ObjectProperty, owl:FunctionalProperty;
+	rdfs:comment "Temporary redirection (307)";
+	rdfs:domain <#PURL>;
+	purl:rel "located".
+
+<#pattern> a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:comment "Regular Expression of source URI, used to populate target URI";
+	rdfs:domain <#PartialPURL>;
+	rdfs:range xsd:string.
+
+<#partOf> a owl:ObjectProperty, owl:FunctionalProperty;
+	rdfs:comment "Associates a PURL with a prefix domain.";
+	rdfs:domain <#PURL>;
+	rdfs:range <#Domain>.
+
+<#title> a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:comment "Placed on PURL targets for used with the Link header.";
+	rdfs:range xsd:string.
+
+<#type> a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:comment "Placed on PURL targets for used with the Link header.";
+	rdfs:range xsd:string.
+
+<#media> a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:comment "Placed on PURL targets for used with the Link header.";
+	rdfs:range xsd:string.
+
+<#lang> a owl:DatatypeProperty;
+	rdfs:comment "Placed on PURL targets for used with the Link header.";
+	rdfs:range xsd:string.
+
+<#last-resolved> a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:comment "The most recent day this URL was attempted to be resolved.";
+	rdfs:range xsd:date.
+
+<#serves> a owl:ObjectProperty;
+	rdfs:domain <#Server>;
+	rdfs:range <#Origin>.
+
+<#part> a owl:ObjectProperty;
+	rdfs:domain <#Origin>;
+	rdfs:range <#Domain>.
+
+<#label> a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:domain <#RequestedDomain>;
+	rdfs:range xsd:string.
+
+<#max-unresolved-days> a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:comment "Number of days between validating resolution of explicit PURL targets.";
+	rdfs:domain <#RequestedDomain>;
+	rdfs:range xsd:int.
+
+<#target-count> a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:comment "Number of explicit PURL targets in this Domain.";
+	rdfs:domain <#Domain>;
+	rdfs:range xsd:int.
+
+<#service> a owl:ObjectProperty;
+	rdfs:domain <#RequestedDomain>;
+	rdfs:range <#Service>.
+
+<#server> a owl:ObjectProperty, owl:FunctionalProperty;
+	rdfs:domain <#Service>;
+	rdfs:range <#Server>.
+
+<#priority> a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:domain <#Service>;
+	rdfs:range xsd:byte.
+
+<#weight> a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:domain <#Service>;
+	rdfs:range xsd:byte.
+
+<#mirroredBy> a owl:ObjectProperty;
+	rdfs:comment "A URL that will resolve to an RDF description all the domains or purls associated with this resource.";
+	rdfs:domain [owl:unionOf (<#Origin> <#Domain>)];
+	rdfs:range <#RemoteGraph>.
+
+<#definedBy> a owl:ObjectProperty;
+	rdfs:comment "A URL that will resolve to an RDF description of this resource.";
+	rdfs:domain <#RemoteResource>;
+	rdfs:range <#RemoteGraph>.
+
+<#allowedOrigin> a owl:ObjectProperty;
+	rdfs:comment "Only this resource and resources that start with the given origin can be loaded from this remote graph.";
+	rdfs:domain <#RemoteGraph>;
+	rdfs:range <#Origin>.
+
+<#content-type> a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:comment "Content-Type HTTP header that was use when this graph was loaded.";
+	rdfs:domain <#RemoteGraph>;
+	rdfs:range xsd:string.
+
+<#etag> a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:comment "ETag HTTP header that was use when this graph was loaded.";
+	rdfs:domain <#RemoteGraph>;
+	rdfs:range xsd:string.
+
+<#last-modified> a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:comment "Last-Modified HTTP header that was used when this graph was loaded.";
+	rdfs:domain <#RemoteGraph>;
+	rdfs:range xsd:dateTime.
+
+<#last-validated> a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:comment "Date header that was used when this graph was last validated.";
+	rdfs:domain <#RemoteGraph>;
+	rdfs:range xsd:dateTime.
+
+<#cache-control> a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:comment "Cache-Control HTTP header that was used when this graph was loaded.";
+	rdfs:domain <#RemoteGraph>;
+	rdfs:range xsd:string.
+
+<#curator> a owl:ObjectProperty;
+	rdfs:comment "Someone who may create a new PURL in this box under any of the associated domains.";
+	rdfs:domain <#Domain>;
+	rdfs:range <#Party>.
+
+<#maintainer> a owl:ObjectProperty;
+	rdfs:comment "Someone who may modify this resource.";
+	rdfs:domain [owl:unionOf (<#Origin> <#Domain> <#PURL> <#Group>)];
+	rdfs:range <#Party>.
+
+<#name> a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:domain <#Party>;
+	rdfs:range xsd:string.
+
+<#note> a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:domain <#Group>;
+	rdfs:range xsd:string.
+
+<#member> a owl:ObjectProperty;
+	rdfs:domain <#Group>;
+	rdfs:range <#User>.
+
+<#algorithm> a owl:ObjectProperty, owl:FunctionalProperty;
+	rdfs:domain <#RequestedUser>;
+	rdfs:range xsd:string.
+
+<#encoded> a owl:ObjectProperty, owl:FunctionalProperty;
+	rdfs:domain <#RequestedUser>;
+	rdfs:range xsd:hexBinary.
+
+<#hint> a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:domain <#RequestedUser>;
+	rdfs:range xsd:string.
+
+<#mbox> a owl:ObjectProperty, owl:FunctionalProperty;
+	rdfs:domain <#RequestedUser>.
+
+<#affiliation> a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:domain <#RequestedUser>;
+	rdfs:range xsd:string.
+
+<#justification> a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:domain <#RequestedUser>;
+	rdfs:range xsd:string.
+
