@@ -55,7 +55,7 @@
 :get-graph rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom :NamedGraph];
-	rdfs:subClassOf [owl:onProperty obj:objectResponse;
+	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
 		owl:allValuesFrom obj:GraphResult];
 	http:method "GET";
 	obj:sparql "CONSTRUCT { ?s ?p ?o } WHERE { GRAPH $this { ?s ?p ?o } }".

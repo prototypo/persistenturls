@@ -22,36 +22,51 @@
 @prefix :<http://callimachusproject.org/rdf/2009/framework#>.
 
 :starting rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom [owl:oneOf (:boot)]];
 	rdfs:subClassOf [owl:onProperty obj:objectResponse;
 		owl:allValuesFrom owl:Nothing];
 	http:method "POST";
+	http:operation "starting";
 	http:realm :boot-realm;
 	obj:java "".
 
 :started rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom [owl:oneOf (:boot)]];
 	rdfs:subClassOf [owl:onProperty obj:objectResponse;
 		owl:allValuesFrom owl:Nothing];
 	http:method "POST";
+	http:operation "started";
 	http:realm :boot-realm;
 	obj:java "".
 
 :reloading rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom [owl:oneOf (:boot)]];
 	rdfs:subClassOf [owl:onProperty obj:objectResponse;
 		owl:allValuesFrom owl:Nothing];
 	http:method "POST";
+	http:operation "reloading";
 	http:realm :boot-realm;
 	obj:java "".
 
 :reloaded rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom [owl:oneOf (:boot)]];
 	rdfs:subClassOf [owl:onProperty obj:objectResponse;
 		owl:allValuesFrom owl:Nothing];
 	http:method "POST";
+	http:operation "reloaded";
 	http:realm :boot-realm;
 	obj:java "".
 
 :stopping rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom [owl:oneOf (:boot)]];
 	rdfs:subClassOf [owl:onProperty obj:objectResponse;
 		owl:allValuesFrom owl:Nothing];
 	http:method "POST";
+	http:operation "stopping";
 	http:realm :boot-realm;
 	obj:java "".
