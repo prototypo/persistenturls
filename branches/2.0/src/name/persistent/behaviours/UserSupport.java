@@ -41,6 +41,11 @@ public abstract class UserSupport implements User, RDFObject {
 
 	private static final String PREFIX = "PREFIX purl:<http://persistent.name/rdf/2010/purl#>\n";
 
+	public String getPurlId() {
+		String uri = getResource().stringValue();
+		int idx = uri.indexOf('/', uri.indexOf("/admin/") + "/admin/".length());
+		return uri.substring(idx + 1);
+	}
 
 	public void setPasswd(String passwd) {
 		if (passwd == null) {
