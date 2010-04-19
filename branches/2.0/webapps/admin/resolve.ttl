@@ -11,7 +11,7 @@
 <#resolve> rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom [owl:complementOf
-			[obj:matches </>, "/docs/*", "/admin/*", "/callimachus/*"]]
+			[obj:matches </>, "/docs/*", "/admin/*", "/data*", "/callimachus/*"]]
 		];
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
 		owl:allValuesFrom <java:org.apache.http.HttpResponse>];

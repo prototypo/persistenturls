@@ -46,21 +46,21 @@ calli:profile-post-copy rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom calli:Copyable];
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
-		owl:allValuesFrom <java:java.io.InputStream>];
+		owl:allValuesFrom rdfs:Resource];
 	http:method "POST";
 	http:operation "copy";
 	http:expect "201-created";
-	obj:groovy "return msg.target.copyDescription('copy', msg.in)".
+	obj:groovy "return copyDescription('copy', msg.in, findCopyPrefix().toString())".
 
 calli:profile-post-pre-copy rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom calli:Copyable];
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
-		owl:allValuesFrom <java:java.io.InputStream>];
+		owl:allValuesFrom rdfs:Resource];
 	http:method "POST";
 	http:operation "pre-copy";
 	http:expect "201-created";
-	obj:groovy "return msg.target.copyDescription('pre-copy', msg.in)".
+	obj:groovy "return copyDescription('pre-copy', msg.in, findCopyPrefix().toString())".
 
 calli:profile-post-copy-in a owl:ObjectProperty; a owl:FunctionalProperty;
 	rdfs:domain [owl:unionOf (calli:profile-post-copy calli:profile-post-pre-copy)];
@@ -73,4 +73,12 @@ calli:find-copy-profile rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
 		owl:allValuesFrom <urn:mimetype:application/xml>];
 	obj:name "findCopyProfile";
-	obj:sparql "SELECT REDUCED ?profile WHERE { $this calli:copy ?profile }".
+	obj:sparql "SELECT REDUCED ?profile WHERE { $this a [calli:copy ?profile] }".
+
+calli:find-copy-prefix rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom calli:Copyable];
+	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
+		owl:allValuesFrom rdfs:Resource];
+	obj:name "findCopyPrefix";
+	obj:sparql "SELECT REDUCED ?prefix WHERE { $this a [calli:newPrefix ?prefix] }".

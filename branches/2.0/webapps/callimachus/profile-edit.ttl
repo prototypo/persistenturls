@@ -49,7 +49,7 @@ calli:profile-post-edit rdfs:subClassOf obj:Message;
 		owl:allValuesFrom <java:java.io.InputStream>];
 	http:method "POST";
 	http:operation "edit";
-	obj:groovy "return msg.target.editDescription('edit', msg.in)".
+	obj:groovy "return editDescription('edit', msg.in)".
 
 calli:profile-post-pre-edit rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
@@ -58,7 +58,7 @@ calli:profile-post-pre-edit rdfs:subClassOf obj:Message;
 		owl:allValuesFrom <java:java.io.InputStream>];
 	http:method "POST";
 	http:operation "pre-edit";
-	obj:groovy "return msg.target.editDescription('pre-edit', msg.in)".
+	obj:groovy "return editDescription('pre-edit', msg.in)".
 
 calli:profile-post-edit-in a owl:ObjectProperty; a owl:FunctionalProperty;
 	rdfs:domain [owl:unionOf (calli:profile-post-edit calli:profile-post-pre-edit)];
