@@ -65,6 +65,7 @@ calli:profile-post-pre-copy rdfs:subClassOf obj:Message;
 calli:profile-post-copy-in a owl:ObjectProperty; a owl:FunctionalProperty;
 	rdfs:domain [owl:unionOf (calli:profile-post-copy calli:profile-post-pre-copy)];
 	rdfs:range <java:java.io.InputStream>;
+	http:type "application/rdf+xml";
 	obj:name "in".
 
 calli:find-copy-profile rdfs:subClassOf obj:Message;

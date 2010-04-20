@@ -24,52 +24,52 @@
 @prefix http:<http://www.openrdf.org/rdf/2009/httpobject#>.
 @prefix calli:<http://callimachusproject.org/rdf/2009/framework#>.
 
-calli:profile-edit rdfs:subClassOf obj:Message;
+calli:profile-delete rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom calli:Editable];
+		owl:allValuesFrom calli:Deletable];
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
 		owl:allValuesFrom <java:java.io.InputStream>];
-	http:operation "edit";
+	http:operation "delete";
 	http:type "text/html";
-	obj:groovy "return findEditProfile().constructAsHTML('edit', null, this);".
+	obj:groovy "return findDeleteProfile().constructAsHTML('delete', null, this);".
 
-calli:profile-pre-edit rdfs:subClassOf obj:Message;
+calli:profile-pre-delete rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom calli:Editable];
+		owl:allValuesFrom calli:Deletable];
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
 		owl:allValuesFrom <java:java.io.InputStream>];
-	http:operation "pre-edit";
+	http:operation "pre-delete";
 	http:type "text/html";
-	obj:groovy "return findEditProfile().constructAsHTML('pre-edit', null, this);".
+	obj:groovy "return findDeleteProfile().constructAsHTML('pre-delete', null, this);".
 
-calli:profile-post-edit rdfs:subClassOf obj:Message;
+calli:profile-post-delete rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom calli:Editable];
-	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
-		owl:allValuesFrom <java:java.io.InputStream>];
+		owl:allValuesFrom calli:Deletable];
+	rdfs:subClassOf [owl:onProperty obj:objectResponse;
+		owl:allValuesFrom owl:Nothing];
 	http:method "POST";
-	http:operation "edit";
-	obj:groovy "return editDescription('edit', msg.in)".
+	http:operation "delete";
+	obj:groovy "deleteDescription('delete', msg.in)".
 
-calli:profile-post-pre-edit rdfs:subClassOf obj:Message;
+calli:profile-post-pre-delete rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom calli:Editable];
-	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
-		owl:allValuesFrom <java:java.io.InputStream>];
+		owl:allValuesFrom calli:Deletable];
+	rdfs:subClassOf [owl:onProperty obj:objectResponse;
+		owl:allValuesFrom owl:Nothing];
 	http:method "POST";
-	http:operation "pre-edit";
-	obj:groovy "return editDescription('pre-edit', msg.in)".
+	http:operation "pre-delete";
+	obj:groovy "deleteDescription('pre-delete', msg.in)".
 
-calli:profile-post-edit-in a owl:ObjectProperty; a owl:FunctionalProperty;
-	rdfs:domain [owl:unionOf (calli:profile-post-edit calli:profile-post-pre-edit)];
+calli:profile-post-delete-in a owl:ObjectProperty; a owl:FunctionalProperty;
+	rdfs:domain [owl:unionOf (calli:profile-post-delete calli:profile-post-pre-delete)];
 	rdfs:range <java:java.io.InputStream>;
-	http:type "multipart/related;type=\"application/rdf+xml\"";
+	http:type "application/rdf+xml";
 	obj:name "in".
 
-calli:find-edit-profile rdfs:subClassOf obj:Message;
+calli:find-delete-profile rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom calli:Editable];
+		owl:allValuesFrom calli:Deletable];
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
 		owl:allValuesFrom <urn:mimetype:application/xml>];
-	obj:name "findEditProfile";
-	obj:sparql "SELECT REDUCED ?profile WHERE { $this a [calli:edit ?profile] }".
+	obj:name "findDeleteProfile";
+	obj:sparql "SELECT REDUCED ?profile WHERE { $this a [calli:delete ?profile] }".

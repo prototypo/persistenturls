@@ -12,29 +12,14 @@ if (document.addEventListener) {
 function initForms() {
 	$("form").each(function(i, node) {
 		var form = $(node)
-		var etag = getEntityTag()
-		var stored = readRDF(form)
 		form.submit(function(){
 			if (window.showRequest) {
 				showRequest()
 			}
 			try {
-				var revised = readRDF(form)
-				var removed = stored.except(revised)
-				var added = revised.except(stored)
-				removed.triples().each(function(){
-					addBoundedDescription(this, stored, removed, added)
-				})
-				added.triples().each(function(){
-					addBoundedDescription(this, revised, added, removed)
-				})
-				var boundary = "jeseditor-boundary"
-				var type = "multipart/related;boundary=" + boundary + ";type=\"application/rdf+xml\""
-				var data = "--" + boundary + "\r\n" + "Content-Type: application/rdf+xml\r\n\r\n"
-						+ removed.dump({format:"application/rdf+xml",serialize:true})
-						+ "\r\n--" + boundary + "\r\n" + "Content-Type: application/rdf+xml\r\n\r\n"
-						+ added.dump({format:"application/rdf+xml",serialize:true})
-						+ "\r\n--" + boundary + "--"
+				var added = readRDF(form)
+				var type = "application/rdf+xml"
+				var data = added.dump({format:"application/rdf+xml",serialize:true})
 				postData(location.href, type, data, function(data, textStatus, xhr) {
 					var uri = location.href
 					if (uri.indexOf('?') > 0) {
@@ -66,6 +51,15 @@ function readRDF(form) {
 	if (!target) {
 		target = document.location.href
 	}
+	if (form.baseURIObject && form.baseURIObject.resolve) {
+		target = form.baseURIObject.resolve(target)
+	} else {
+		var a = document.createElement("a")
+		a.setAttribute("href", target)
+		if (a.href) {
+			target = a.href
+		}
+	}
 	var store = form.rdf().databank
 	store.triples().each(function(){
 		if (this.subject.type == 'uri' && this.subject.value.toString() != target) {
@@ -83,41 +77,9 @@ function readRDF(form) {
 	return store
 }
 
-function addBoundedDescription(triple, store, dest, copy) {
-	if (triple.subject.type == "bnode") {
-		var bnode = triple.subject
-		$.rdf({databank: store}).where("?s ?p " + bnode).each(function (i, bindings, triples) {
-			if (addTriple(triples[0], dest)) {
-				copy.add(triples[0])
-				addBoundedDescription(triples[0], store, dest, copy)
-			}
-		})
-	}
-	if (triple.object.type == "bnode") {
-		var bnode = triple.object
-		$.rdf({databank: store}).where(bnode + ' ?p ?o').each(function (i, bindings, triples) {
-			if (addTriple(triples[0], dest)) {
-				copy.add(triples[0])
-				addBoundedDescription(triples[0], store, dest, copy)
-			}
-		})
-	}
-}
-
-function addTriple(triple, store) {
-	var size = store.size()
-	store.add(triple)
-	return store.size() > size
-}
-
 function postData(url, type, data, callback) {
 	var xhr = null
-	xhr = $.ajax({ type: "POST", url: url, contentType: type, data: data, beforeSend: function(xhr){
-		var etag = getEntityTag()
-		if (etag) {
-			xhr.setRequestHeader("If-Match", etag)
-		}
-	}, success: function(data, textStatus) {
+	xhr = $.ajax({ type: "POST", url: url, contentType: type, data: data, success: function(data, textStatus) {
 		if (window.showSuccess) {
 			showSuccess()
 		}
@@ -127,14 +89,4 @@ function postData(url, type, data, callback) {
 			showError(xhr.statusText ? xhr.statusText : errorThrown ? errorThrown : textStatus)
 		}
 	}})
-}
-
-function getEntityTag() {
-	var etag = null
-	$("head>meta").each(function(){
-		if (this.attributes['http-equiv'].value == 'etag') {
-			etag = this.attributes['content'].value
-		}
-	})
-	return etag
 }
