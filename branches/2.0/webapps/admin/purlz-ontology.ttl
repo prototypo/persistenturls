@@ -210,7 +210,7 @@
 	rdfs:range xsd:dateTime.
 
 <#last-validated> a owl:DatatypeProperty, owl:FunctionalProperty;
-	rdfs:comment "Date header that was used when this graph was last validated.";
+	rdfs:comment "Date and time when this graph was last validated.";
 	rdfs:domain <#RemoteGraph>;
 	rdfs:range xsd:dateTime.
 

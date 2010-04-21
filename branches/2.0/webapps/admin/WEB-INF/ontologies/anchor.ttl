@@ -9,6 +9,7 @@
 <#setUp-graphs> owl:equivalentClass calli:started;
 	obj:imports purl:RemoteGraph;
 	obj:groovy """
+		msg.proceed()
 		def graphs = objectConnection.getObjects(RemoteGraph).asList()
 		for (def graph : graphs) {
 			graph.stayFresh()
@@ -22,11 +23,13 @@
 		for (def graph : graphs) {
 			graph.goStale()
 		}
+		msg.proceed()
 	""".
 
 <#setUp-domains> owl:equivalentClass calli:started;
 	obj:imports purl:Domain;
 	obj:groovy """
+		msg.proceed()
 		def domains = objectConnection.getObjects(Domain).asList()
 		for (def domain : domains) {
 			domain.startResolving()
@@ -40,4 +43,5 @@
 		for (def domain : domains) {
 			domain.stopResolving()
 		}
+		msg.proceed()
 	""".

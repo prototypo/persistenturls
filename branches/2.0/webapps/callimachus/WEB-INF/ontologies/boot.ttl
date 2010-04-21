@@ -29,7 +29,7 @@
 	http:method "POST";
 	http:operation "starting";
 	http:realm :boot-realm;
-	obj:java "".
+	obj:java "msg.proceed();".
 
 :started rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
@@ -39,7 +39,7 @@
 	http:method "POST";
 	http:operation "started";
 	http:realm :boot-realm;
-	obj:java "".
+	obj:java "msg.proceed();".
 
 :reloading rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
@@ -49,7 +49,7 @@
 	http:method "POST";
 	http:operation "reloading";
 	http:realm :boot-realm;
-	obj:java "".
+	obj:java "msg.proceed();".
 
 :reloaded rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
@@ -59,7 +59,7 @@
 	http:method "POST";
 	http:operation "reloaded";
 	http:realm :boot-realm;
-	obj:java "".
+	obj:java "msg.proceed();".
 
 :stopping rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
@@ -69,4 +69,4 @@
 	http:method "POST";
 	http:operation "stopping";
 	http:realm :boot-realm;
-	obj:java "".
+	obj:java "msg.proceed();".

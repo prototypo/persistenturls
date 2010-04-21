@@ -17,10 +17,10 @@ import org.openrdf.repository.object.annotations.iri;
 public interface RemoteGraph {
 	/** Only this resource and resources that start with the given origin can be loaded from this remote graph. */
 	@iri("http://persistent.name/rdf/2010/purl#allowedOrigin")
-	Set<Origin> getPurlAllowedOrigins();
+	Set<Object> getPurlAllowedOrigins();
 	/** Only this resource and resources that start with the given origin can be loaded from this remote graph. */
 	@iri("http://persistent.name/rdf/2010/purl#allowedOrigin")
-	void setPurlAllowedOrigins(Set<? extends Origin> purlAllowedOrigins);
+	void setPurlAllowedOrigins(Set<?> purlAllowedOrigins);
 
 	/** Cache-Control HTTP header that was used when this graph was loaded. */
 	@iri("http://persistent.name/rdf/2010/purl#cache-control")

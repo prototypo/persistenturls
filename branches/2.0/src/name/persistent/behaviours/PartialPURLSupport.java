@@ -31,6 +31,7 @@ import name.persistent.concepts.Resolvable;
 
 import org.apache.http.HttpResponse;
 import org.openrdf.http.object.exceptions.BadGateway;
+import org.openrdf.http.object.exceptions.GatewayTimeout;
 import org.openrdf.http.object.exceptions.InternalServerError;
 import org.openrdf.http.object.exceptions.NotFound;
 import org.openrdf.http.object.util.SharedExecutors;
@@ -150,22 +151,41 @@ public abstract class PartialPURLSupport implements RDFObject, Resolvable {
 		String originURI = new ParsedURI(scheme, auth, "/", null, null).toString();
 		ObjectConnection con = getObjectConnection();
 		ObjectFactory of = con.getObjectFactory();
+		Exception gateway = null;
 		for (InetSocketAddress addr : getOriginServices(true)) {
 			String host = addr.getHostName();
 			if ("http".equalsIgnoreCase(scheme) && addr.getPort() != 80) {
 				host += ":" + addr.getPort();
-			} else if ("https".equalsIgnoreCase(scheme) && addr.getPort() != 443) {
+			} else if ("https".equalsIgnoreCase(scheme)
+					&& addr.getPort() != 443) {
 				host += ":" + addr.getPort();
 			}
-			String uri = new ParsedURI(scheme, host, "/", null, null).toString();
-			RemoteGraph origins = of.createObject(uri, RemoteGraph.class);
-			if (!origins.load(originURI))
-				continue;
-			RemoteResource origin = of.createObject(originURI, RemoteResource.class);
-			if (origin.load())
-				return;
+			String uri = new ParsedURI(scheme, host, "/", null, null)
+					.toString();
+			try {
+				RemoteGraph origins = of.createObject(uri, RemoteGraph.class);
+				if (!origins.load(originURI))
+					continue;
+				RemoteResource origin = of.createObject(originURI,
+						RemoteResource.class);
+				if (origin.load())
+					return;
+			} catch (GatewayTimeout timeout) {
+				gateway = timeout;
+				blackList(addr, timeout);
+			} catch (BadGateway bad) {
+				gateway = bad;
+				blackList(addr, bad);
+			}
 		}
-		throw new NotFound("Unknown PURL");
+		if (gateway != null)
+			throw gateway;
+		throw new GatewayTimeout("No PURL Server Available");
+	}
+
+	private void blackList(InetSocketAddress server, Exception reason) {
+		logger.warn(reason.toString());
+		blackList.put(server, Boolean.TRUE);
 	}
 
 	private Collection<List<SRVRecord>> getServiceRecords()

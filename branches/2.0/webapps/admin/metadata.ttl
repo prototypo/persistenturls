@@ -7,7 +7,7 @@
 @prefix calli:<http://callimachusproject.org/rdf/2009/framework#>.
 @prefix purl:<http://persistent.name/rdf/2010/purl#>.
 
-<user/new> a purl:UserTemplate, purl:RequestedUser.
+<user/template> a purl:UserTemplate, purl:RequestedUser.
 
 purl:UserTemplate rdfs:subClassOf calli:Copyable;
 	calli:newPrefix </data/user/>;

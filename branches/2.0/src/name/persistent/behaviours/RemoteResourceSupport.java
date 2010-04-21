@@ -79,8 +79,10 @@ public abstract class RemoteResourceSupport implements RDFObject, RemoteResource
 		}
 		if (loaded)
 			return true;
-		if (list != null) {
-			blackList.keySet().removeAll(list);
+		if (bl && (list != null || !blackList.isEmpty())) {
+			if (list != null) {
+				blackList.keySet().removeAll(list);
+			}
 			return load(false);
 		}
 		if (gateway != null)

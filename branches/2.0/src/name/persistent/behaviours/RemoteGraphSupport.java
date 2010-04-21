@@ -66,6 +66,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 		ProxyObject {
+	private static final String REL = "http://persistent.name/rdf/2010/purl#rel";
 
 	public static void canacelAllValidation() throws InterruptedException {
 		List<Refresher> list;
@@ -111,6 +112,7 @@ public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 				pre.cancel(false);
 			}
 			cancelled = false;
+			logger.info("Mirror {}", subj);
 			schedule = executor.schedule(this, freshness + 1, TimeUnit.SECONDS);
 		}
 
@@ -124,6 +126,7 @@ public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 			cancelled = true;
 			if (schedule == null)
 				return false;
+			logger.info("Stale {}", subj);
 			return schedule.cancel(mayInterruptIfRunning);
 		}
 
@@ -151,7 +154,7 @@ public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 					con.close();
 				}
 			} catch (Exception e) {
-				logger.error(e.toString(), e);
+				logger.error(e.toString());
 				synchronized (alwaysFresh) {
 					if (alwaysFresh.get(key) == this) {
 						schedule = executor.schedule(this, 4 * 60 * 60,
@@ -191,8 +194,8 @@ public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 						break;
 					}
 				}
-				if (!found)
-					throw new BadGateway("Confusing Response about "
+				if (!found && !REL.equals(st.getPredicate().stringValue()))
+					throw new BadGateway("Origin Not Allowed: "
 							+ subj.stringValue());
 			}
 			URI pred = st.getPredicate();
@@ -202,6 +205,7 @@ public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 			super.handleStatement(st);
 		}
 	}
+	private Logger logger = LoggerFactory.getLogger(RemoteGraphSupport.class);
 
 	@Override
 	public boolean load(String origin) throws Exception {
@@ -246,8 +250,7 @@ public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 		int code = resp.getStatusLine().getStatusCode();
 		if (code == 304) {
 			DatatypeFactory df = DatatypeFactory.newInstance();
-			GregorianCalendar gc = new GregorianCalendar(1970, 0, 1);
-			gc.setTime(getDateHeader(resp, "Date"));
+			GregorianCalendar gc = new GregorianCalendar();
 			setPurlLastValidated(df.newXMLGregorianCalendar(gc));
 			setPurlCacheControl(getHeader(resp, "Cache-Control"));
 		}
@@ -356,7 +359,8 @@ public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 		HttpEntity entity = resp.getEntity();
 		try {
 			int code = resp.getStatusLine().getStatusCode();
-			if (code == 404) {
+			if (code == 404 || code == 504) {
+				logger.info("Unresolvable {}", getResource());
 				con.addDesignation(this, Unresolvable.class);
 				return false;
 			}
@@ -377,7 +381,7 @@ public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 				String type = getHeader(resp, "Content-Type");
 				con.removeDesignation(this, Unresolvable.class);
 				con.clear(ctx);
-				if ((!parse(origin, type, in)))
+				if (!parse(origin, type, in))
 					return false;
 				store(origin, type, resp);
 				return true;
@@ -405,8 +409,7 @@ public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 		setPurlEtag(getHeader(resp, "ETag"));
 		setPurlCacheControl(getHeader(resp, "Cache-Control"));
 		DatatypeFactory df = DatatypeFactory.newInstance();
-		GregorianCalendar gc = new GregorianCalendar(1970, 0, 1);
-		gc.setTime(getDateHeader(resp, "Date"));
+		GregorianCalendar gc = new GregorianCalendar();
 		setPurlLastValidated(df.newXMLGregorianCalendar(gc));
 		gc.setTime(getDateHeader(resp, "Last-Modified"));
 		setPurlLastModified(df.newXMLGregorianCalendar(gc));
@@ -416,6 +419,7 @@ public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 			getPurlAllowedOrigins().add(o);
 		}
 		con.commit();
+		logger.info("Updated {}", getResource());
 		stayFresh();
 	}
 
@@ -436,6 +440,7 @@ public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 			con.removeDesignation(this, RemoteGraph.class);
 			con.removeDesignation(this, Unresolvable.class);
 			con.commit();
+			logger.info("Removed {}", getResource());
 			goStale();
 		} finally {
 			if (autoCommit && !con.isAutoCommit()) {

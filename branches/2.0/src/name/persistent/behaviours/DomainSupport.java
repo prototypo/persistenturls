@@ -401,8 +401,8 @@ public abstract class DomainSupport implements Domain, RDFObject {
 		for (List<Service> services : records) {
 			InetSocketAddress addr = pickService(services);
 			if (addr != null) {
-				HttpResponse resp = resolveRemotePURL(addr, source, accept,
-						language, qs, max);
+				HttpResponse resp = resolveRemotePURL(addr, source, qs, accept,
+						language, max);
 				if (resp == null)
 					continue;
 				StatusLine status = resp.getStatusLine();
@@ -424,8 +424,16 @@ public abstract class DomainSupport implements Domain, RDFObject {
 				}
 			}
 		}
-		if (blacklisted != null && !records.isEmpty()) {
-			blackList.keySet().removeAll(blacklisted);
+		if (useBlackList && (blacklisted != null || !blackList.isEmpty()) && !records.isEmpty()) {
+			if (bad != null) {
+				HttpEntity entity = bad.getEntity();
+				if (entity != null) {
+					entity.consumeContent();
+				}
+			}
+			if (blacklisted != null) {
+				blackList.keySet().removeAll(blacklisted);
+			}
 			return resolveRemotePURL(source, qs, accept, language, max, false);
 		}
 		if (bad != null)
@@ -448,6 +456,10 @@ public abstract class DomainSupport implements Domain, RDFObject {
 		req.setHeader("Max-Forward", String.valueOf(max));
 		try {
 			HttpResponse resp = client.service(addr, req);
+			if (!resp.containsHeader("Via")) {
+				String original = "1.1 " + addr.getHostName() + ":" + addr.getPort();
+				resp.addHeader("Via", original);
+			}
 			StatusLine status = resp.getStatusLine();
 			if (status.getStatusCode() >= 500) {
 				ProtocolVersion ver = status.getProtocolVersion();
