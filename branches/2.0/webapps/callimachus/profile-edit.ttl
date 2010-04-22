@@ -31,7 +31,13 @@ calli:profile-edit rdfs:subClassOf obj:Message;
 		owl:allValuesFrom <java:java.io.InputStream>];
 	http:operation "edit";
 	http:type "text/html";
-	obj:groovy "return findEditProfile().constructAsHTML('edit', null, this);".
+	obj:imports <java:org.openrdf.http.object.exceptions.InternalServerError>;
+	obj:groovy """
+		def profile = findEditProfile()
+		if (profile == null)
+			throw new InternalServerError("Missing Edit Profile")
+		return profile.constructAsHTML('edit', null, this)
+	""".
 
 calli:profile-pre-edit rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
@@ -40,7 +46,13 @@ calli:profile-pre-edit rdfs:subClassOf obj:Message;
 		owl:allValuesFrom <java:java.io.InputStream>];
 	http:operation "pre-edit";
 	http:type "text/html";
-	obj:groovy "return findEditProfile().constructAsHTML('pre-edit', null, this);".
+	obj:imports <java:org.openrdf.http.object.exceptions.InternalServerError>;
+	obj:groovy """
+		def profile = findEditProfile()
+		if (profile == null)
+			throw new InternalServerError("Missing Edit Profile")
+		return profile.constructAsHTML('pre-edit', null, this)
+	""".
 
 calli:profile-post-edit rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
@@ -72,4 +84,4 @@ calli:find-edit-profile rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
 		owl:allValuesFrom <urn:mimetype:application/xml>];
 	obj:name "findEditProfile";
-	obj:sparql "SELECT REDUCED ?profile WHERE { $this a [calli:edit ?profile] }".
+	obj:sparql "SELECT REDUCED ?profile WHERE { $this a [calli:edit ?profile] . ?profile a <urn:mimetype:application/xml> }".

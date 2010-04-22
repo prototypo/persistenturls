@@ -31,7 +31,13 @@ calli:profile-delete rdfs:subClassOf obj:Message;
 		owl:allValuesFrom <java:java.io.InputStream>];
 	http:operation "delete";
 	http:type "text/html";
-	obj:groovy "return findDeleteProfile().constructAsHTML('delete', null, this);".
+	obj:imports <java:org.openrdf.http.object.exceptions.InternalServerError>;
+	obj:groovy """
+		def profile = findDeleteProfile()
+		if (profile == null)
+			throw new InternalServerError("Missing Delete Profile")
+		return profile.constructAsHTML('delete', null, this)
+	""".
 
 calli:profile-pre-delete rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
@@ -40,7 +46,13 @@ calli:profile-pre-delete rdfs:subClassOf obj:Message;
 		owl:allValuesFrom <java:java.io.InputStream>];
 	http:operation "pre-delete";
 	http:type "text/html";
-	obj:groovy "return findDeleteProfile().constructAsHTML('pre-delete', null, this);".
+	obj:imports <java:org.openrdf.http.object.exceptions.InternalServerError>;
+	obj:groovy """
+		def profile = findDeleteProfile()
+		if (profile == null)
+			throw new InternalServerError("Missing Delete Profile")
+		return profile.constructAsHTML('pre-delete', null, this)
+	""".
 
 calli:profile-post-delete rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
@@ -72,4 +84,4 @@ calli:find-delete-profile rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
 		owl:allValuesFrom <urn:mimetype:application/xml>];
 	obj:name "findDeleteProfile";
-	obj:sparql "SELECT REDUCED ?profile WHERE { $this a [calli:delete ?profile] }".
+	obj:sparql "SELECT REDUCED ?profile WHERE { $this a [calli:delete ?profile] . ?profile a <urn:mimetype:application/xml> }".

@@ -32,7 +32,13 @@ calli:profile-view rdfs:subClassOf obj:Message;
 	http:rel "alternate";
 	http:operation "view";
 	http:type "text/html";
-	obj:groovy "return findViewProfile().constructAsHTML('view', null, this);".
+	obj:imports <java:org.openrdf.http.object.exceptions.InternalServerError>;
+	obj:groovy """
+		def profile = findViewProfile()
+		if (profile == null)
+			throw new InternalServerError("Missing View Profile")
+		return profile.constructAsHTML('view', null, this)
+	""".
 
 calli:profile-pre-view rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
@@ -41,7 +47,13 @@ calli:profile-pre-view rdfs:subClassOf obj:Message;
 		owl:allValuesFrom <java:java.io.InputStream>];
 	http:operation "pre-view";
 	http:type "text/html";
-	obj:groovy "return findViewProfile().constructAsHTML('pre-view', null, this);".
+	obj:imports <java:org.openrdf.http.object.exceptions.InternalServerError>;
+	obj:groovy """
+		def profile = findViewProfile()
+		if (profile == null)
+			throw new InternalServerError("Missing View Profile")
+		return profile.constructAsHTML('pre-view', null, this)
+	""".
 
 calli:find-view-profile rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
@@ -49,4 +61,4 @@ calli:find-view-profile rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
 		owl:allValuesFrom <urn:mimetype:application/xml>];
 	obj:name "findViewProfile";
-	obj:sparql "SELECT REDUCED ?profile WHERE { $this a [calli:view ?profile] }".
+	obj:sparql "SELECT REDUCED ?profile WHERE { $this a [calli:view ?profile] . ?profile a <urn:mimetype:application/xml> }".

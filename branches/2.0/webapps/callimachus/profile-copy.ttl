@@ -31,7 +31,13 @@ calli:profile-copy rdfs:subClassOf obj:Message;
 		owl:allValuesFrom <java:java.io.InputStream>];
 	http:operation "copy";
 	http:type "text/html";
-	obj:groovy "return findCopyProfile().constructAsHTML('copy', null, this);".
+	obj:imports <java:org.openrdf.http.object.exceptions.InternalServerError>;
+	obj:groovy """
+		def profile = findCopyProfile()
+		if (profile == null)
+			throw new InternalServerError("Missing Copy Profile")
+		return profile.constructAsHTML('copy', null, this)
+	""".
 
 calli:profile-pre-copy rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
@@ -40,29 +46,35 @@ calli:profile-pre-copy rdfs:subClassOf obj:Message;
 		owl:allValuesFrom <java:java.io.InputStream>];
 	http:operation "pre-copy";
 	http:type "text/html";
-	obj:groovy "return findCopyProfile().constructAsHTML('pre-copy', null, this);".
+	obj:imports <java:org.openrdf.http.object.exceptions.InternalServerError>;
+	obj:groovy """
+		def profile = findCopyProfile()
+		if (profile == null)
+			throw new InternalServerError("Missing Copy Profile")
+		return profile.constructAsHTML('pre-copy', null, this)
+	""".
 
 calli:profile-post-copy rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom calli:Copyable];
-	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
-		owl:allValuesFrom rdfs:Resource];
+	rdfs:subClassOf [owl:onProperty obj:objectResponse;
+		owl:maxCardinality "1"^^xsd:nonNegativeInteger];
 	http:method "POST";
 	http:operation "copy";
 	http:expect "201-created";
-	obj:groovy "return copyDescription('copy', msg.in, findCopyPrefix().toString())".
+	obj:groovy "return copyDescription('copy', msg.in, findCopyPrefix())".
 
 calli:profile-post-pre-copy rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom calli:Copyable];
-	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
-		owl:allValuesFrom rdfs:Resource];
+	rdfs:subClassOf [owl:onProperty obj:objectResponse;
+		owl:maxCardinality "1"^^xsd:nonNegativeInteger];
 	http:method "POST";
 	http:operation "pre-copy";
 	http:expect "201-created";
-	obj:groovy "return copyDescription('pre-copy', msg.in, findCopyPrefix().toString())".
+	obj:groovy "return copyDescription('pre-copy', msg.in, findCopyPrefix())".
 
-calli:profile-post-copy-in a owl:ObjectProperty; a owl:FunctionalProperty;
+calli:profile-post-copy-in a owl:ObjectProperty, owl:FunctionalProperty;
 	rdfs:domain [owl:unionOf (calli:profile-post-copy calli:profile-post-pre-copy)];
 	rdfs:range <java:java.io.InputStream>;
 	http:type "application/rdf+xml";
@@ -74,7 +86,7 @@ calli:find-copy-profile rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
 		owl:allValuesFrom <urn:mimetype:application/xml>];
 	obj:name "findCopyProfile";
-	obj:sparql "SELECT REDUCED ?profile WHERE { $this a [calli:copy ?profile] }".
+	obj:sparql "SELECT REDUCED ?profile WHERE { $this a [calli:copy ?profile] . ?profile a <urn:mimetype:application/xml> }".
 
 calli:find-copy-prefix rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;

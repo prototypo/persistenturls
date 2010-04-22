@@ -551,6 +551,8 @@ public abstract class DomainSupport implements Domain, RDFObject {
 	}
 
 	private int random(int total) {
+		if (total <= 0)
+			return total;
 		return random.get().nextInt(total);
 	}
 
