@@ -12,18 +12,25 @@ import java.util.Set;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.http.HttpResponse;
+import org.callimachusproject.framework.Copyable;
 import org.openrdf.OpenRDFException;
 import org.openrdf.repository.object.annotations.iri;
 
 /** A prefix to a set of PURLs (endings with '/') that are administrated together. */
 @iri("http://persistent.name/rdf/2010/purl#Domain")
-public interface Domain extends RequestedDomain, DomainOrOrigin, DomainOrGroupOrOriginOrPURL {
-	/** Someone who may create a new PURL in this box under any of the associated domains. */
-	@iri("http://persistent.name/rdf/2010/purl#curator")
-	Set<Party> getPurlCurators();
-	/** Someone who may create a new PURL in this box under any of the associated domains. */
-	@iri("http://persistent.name/rdf/2010/purl#curator")
-	void setPurlCurators(Set<? extends Party> purlCurators);
+public interface Domain extends DomainOrOrigin, Copyable {
+
+	/** Number of days between validating resolution of explicit PURL targets. */
+	@iri("http://persistent.name/rdf/2010/purl#max-unresolved-days")
+	Integer getPurlMaxUnresolvedDays();
+	/** Number of days between validating resolution of explicit PURL targets. */
+	@iri("http://persistent.name/rdf/2010/purl#max-unresolved-days")
+	void setPurlMaxUnresolvedDays(Integer purlMaxUnresolvedDays);
+
+	@iri("http://persistent.name/rdf/2010/purl#service")
+	Set<Service> getPurlServices();
+	@iri("http://persistent.name/rdf/2010/purl#service")
+	void setPurlServices(Set<? extends Service> purlServices);
 
 	/** Number of explicit PURL targets in this Domain. */
 	@iri("http://persistent.name/rdf/2010/purl#target-count")

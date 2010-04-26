@@ -3,7 +3,6 @@
 @prefix owl:<http://www.w3.org/2002/07/owl#>.
 @prefix obj:<http://www.openrdf.org/rdf/2009/object#>.
 @prefix http:<http://www.openrdf.org/rdf/2009/httpobject#>.
-@prefix calli:<http://callimachusproject.org/rdf/2009/framework#>.
 @prefix purl:<http://persistent.name/rdf/2010/purl#>.
 
 @base <http://persistent.name/rdf/2010/purl>.
@@ -46,12 +45,8 @@
 <#Origin> a owl:Class;
 	rdfs:comment "A common scheme and authority of a set of PURLs. This IRI should have a path of '/'.".
 
-<#RequestedDomain> a owl:Class;
-	rdfs:comment "A possible prefix to URLs. This URI must end with '/'.".
-
 <#Domain> a owl:Class;
-	rdfs:comment "A prefix to a set of PURLs (endings with '/').";
-	rdfs:subClassOf <#RequestedDomain>.
+	rdfs:comment "A prefix to a set of PURLs (endings with '/').".
 
 <#Service> a owl:Class;
 	rdfs:comment "The priority and weight of a server capable of resolving PURLs.".
@@ -64,21 +59,6 @@
 
 <#RemoteGraph> a owl:Class;
 	rdfs:comment "Indicates that theses triples were loaded externally and need to be refreshed regularly.".
-
-<#Party> a owl:Class;
-	rdfs:comment "An individual or group.".
-
-<#RequestedUser> a owl:Class;
-	rdfs:comment "Possible credential for administrating PURLs.";
-	rdfs:subClassOf <#Party>.
-
-<#User> a owl:Class;
-	rdfs:comment "Approved credential for administrating PURLs.";
-	rdfs:subClassOf <#RequestedUser>.
-
-<#Group> a owl:Class;
-	rdfs:comment "A collection of users that share administrating privileges.";
-	rdfs:subClassOf <#Party>.
 
 ################################
 # Annotation
@@ -149,13 +129,9 @@
 	rdfs:domain <#Origin>;
 	rdfs:range <#Domain>.
 
-<#label> a owl:DatatypeProperty, owl:FunctionalProperty;
-	rdfs:domain <#RequestedDomain>;
-	rdfs:range xsd:string.
-
 <#max-unresolved-days> a owl:DatatypeProperty, owl:FunctionalProperty;
 	rdfs:comment "Number of days between validating resolution of explicit PURL targets.";
-	rdfs:domain <#RequestedDomain>;
+	rdfs:domain <Domain>;
 	rdfs:range xsd:int.
 
 <#target-count> a owl:DatatypeProperty, owl:FunctionalProperty;
@@ -164,7 +140,7 @@
 	rdfs:range xsd:int.
 
 <#service> a owl:ObjectProperty;
-	rdfs:domain <#RequestedDomain>;
+	rdfs:domain <Domain>;
 	rdfs:range <#Service>.
 
 <#server> a owl:ObjectProperty, owl:FunctionalProperty;
@@ -217,50 +193,5 @@
 <#cache-control> a owl:DatatypeProperty, owl:FunctionalProperty;
 	rdfs:comment "Cache-Control HTTP header that was used when this graph was loaded.";
 	rdfs:domain <#RemoteGraph>;
-	rdfs:range xsd:string.
-
-<#curator> a owl:ObjectProperty;
-	rdfs:comment "Someone who may create a new PURL in this box under any of the associated domains.";
-	rdfs:domain <#Domain>;
-	rdfs:range <#Party>.
-
-<#maintainer> a owl:ObjectProperty;
-	rdfs:comment "Someone who may modify this resource.";
-	rdfs:domain [owl:unionOf (<#Origin> <#Domain> <#PURL> <#Group>)];
-	rdfs:range <#Party>.
-
-<#name> a owl:DatatypeProperty, owl:FunctionalProperty;
-	rdfs:domain <#Party>;
-	rdfs:range xsd:string.
-
-<#note> a owl:DatatypeProperty, owl:FunctionalProperty;
-	rdfs:domain <#Group>;
-	rdfs:range xsd:string.
-
-<#member> a owl:ObjectProperty;
-	rdfs:domain <#Group>;
-	rdfs:range <#User>.
-
-<#algorithm> a owl:ObjectProperty, owl:FunctionalProperty;
-	rdfs:domain <#RequestedUser>;
-	rdfs:range xsd:string.
-
-<#encoded> a owl:ObjectProperty, owl:FunctionalProperty;
-	rdfs:domain <#RequestedUser>;
-	rdfs:range xsd:hexBinary.
-
-<#hint> a owl:DatatypeProperty, owl:FunctionalProperty;
-	rdfs:domain <#RequestedUser>;
-	rdfs:range xsd:string.
-
-<#mbox> a owl:ObjectProperty, owl:FunctionalProperty;
-	rdfs:domain <#RequestedUser>.
-
-<#affiliation> a owl:DatatypeProperty, owl:FunctionalProperty;
-	rdfs:domain <#RequestedUser>;
-	rdfs:range xsd:string.
-
-<#justification> a owl:DatatypeProperty, owl:FunctionalProperty;
-	rdfs:domain <#RequestedUser>;
 	rdfs:range xsd:string.
 

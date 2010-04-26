@@ -30,9 +30,9 @@ import org.apache.http.HttpResponse;
 import org.apache.http.ProtocolVersion;
 import org.apache.http.message.BasicHttpResponse;
 import org.openrdf.OpenRDFException;
-import org.openrdf.http.object.annotations.method;
 import org.openrdf.http.object.annotations.operation;
 import org.openrdf.http.object.annotations.parameter;
+import org.openrdf.http.object.annotations.rel;
 import org.openrdf.http.object.annotations.type;
 import org.openrdf.http.object.concepts.Transaction;
 import org.openrdf.http.object.exceptions.BadRequest;
@@ -140,7 +140,9 @@ public abstract class ServerSupport implements RDFObject, Server {
 	/**
 	 * List of origins on this domain service.
 	 */
-	@method("GET")
+	@rel("alternative")
+	@operation("listOrigins")
+	@type("application/rdf+xml")
 	public GraphQueryResult listRemoteOrigins() throws OpenRDFException {
 		ObjectConnection con = getObjectConnection();
 		ValueFactory vf = con.getValueFactory();
@@ -166,7 +168,7 @@ public abstract class ServerSupport implements RDFObject, Server {
 		RemoteResult r = new RemoteResult(listDomains(origin), vf, part,
 				desc);
 		if (origin instanceof MirroredResource
-				|| !origin.getPurlMaintainers().isEmpty()) {
+				|| !origin.getCalliMaintainers().isEmpty()) {
 			URI content = vf.createURI(PURL, "mirroredBy");
 			String domains = getResource().stringValue() + "?domainsOf&origin=";
 			r.add(target, content, vf.createURI(domains + enc(target)));
@@ -191,7 +193,7 @@ public abstract class ServerSupport implements RDFObject, Server {
 		RemoteResult r = new RemoteResult(listServices(domain), vf, part,
 				desc);
 		if (domain instanceof MirroredResource
-				|| !domain.getPurlMaintainers().isEmpty()) {
+				|| !domain.getCalliMaintainers().isEmpty()) {
 			URI content = vf.createURI(PURL, "mirroredBy");
 			String purls = getResource().stringValue() + "?purlsOf&domain=";
 			r.add(target, content, vf.createURI(purls + enc(target)));
@@ -209,7 +211,7 @@ public abstract class ServerSupport implements RDFObject, Server {
 		if (origin == null)
 			throw new BadRequest("Missing origin");
 		if (origin instanceof MirroredResource
-				|| !origin.getPurlMaintainers().isEmpty())
+				|| !origin.getCalliMaintainers().isEmpty())
 			return mirrorOf((RDFObject) origin, describeAllDomains(origin));
 		throw new NotFound("Mirror Not Available");
 	}
@@ -224,7 +226,7 @@ public abstract class ServerSupport implements RDFObject, Server {
 		if (domain == null)
 			throw new BadRequest("Missing domain");
 		if (domain instanceof MirroredResource
-				|| !domain.getPurlMaintainers().isEmpty())
+				|| !domain.getCalliMaintainers().isEmpty())
 			return mirrorOf((RDFObject) domain, describePURLs(domain));
 		throw new NotFound("Mirror Not Available");
 	}

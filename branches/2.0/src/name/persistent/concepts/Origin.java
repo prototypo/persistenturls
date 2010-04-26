@@ -12,7 +12,7 @@ import org.openrdf.repository.object.annotations.iri;
 
 /** A common scheme and authority of a set of PURLs. This IRI should have a path of '/'. */
 @iri("http://persistent.name/rdf/2010/purl#Origin")
-public interface Origin extends DomainOrOrigin, DomainOrGroupOrOriginOrPURL {
+public interface Origin extends DomainOrOrigin {
 	@iri("http://persistent.name/rdf/2010/purl#part")
 	Set<Domain> getPurlParts();
 	@iri("http://persistent.name/rdf/2010/purl#part")

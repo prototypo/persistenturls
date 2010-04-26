@@ -24,7 +24,7 @@
 @prefix http:<http://www.openrdf.org/rdf/2009/httpobject#>.
 @prefix calli:<http://callimachusproject.org/rdf/2009/framework#>.
 
-calli:profile-view rdfs:subClassOf obj:Message;
+calli:view rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom calli:Viewable];
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
@@ -40,7 +40,7 @@ calli:profile-view rdfs:subClassOf obj:Message;
 		return profile.constructAsHTML('view', null, this)
 	""".
 
-calli:profile-pre-view rdfs:subClassOf obj:Message;
+calli:pre-view rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom calli:Viewable];
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;

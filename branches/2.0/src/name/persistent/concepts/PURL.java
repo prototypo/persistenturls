@@ -11,7 +11,7 @@ import java.util.Set;
 import org.openrdf.repository.object.annotations.iri;
 
 @iri("http://persistent.name/rdf/2010/purl#PURL")
-public interface PURL extends DomainOrGroupOrOriginOrPURL, Resolvable {
+public interface PURL extends Resolvable {
 
 	/** Simple redirection (302) */
 	@iri("http://persistent.name/rdf/2010/purl#alternative")

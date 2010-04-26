@@ -129,7 +129,7 @@ public abstract class PartialPURLSupport implements RDFObject, Resolvable {
 					}
 				}
 				if (domain instanceof MirroredResource
-						|| !domain.getPurlMaintainers().isEmpty())
+						|| !domain.getCalliMaintainers().isEmpty())
 					throw new NotFound("Unknown Persistent URL");
 				return domain.resolveRemotePURL(source, qs, accept, language, max - 1);
 			} else if (purl instanceof RemoteResource) {
@@ -272,8 +272,8 @@ public abstract class PartialPURLSupport implements RDFObject, Resolvable {
 		sb.append("SELECT REDUCED ?purl");
 		sb.append("\nWHERE {");
 		sb.append("\n\t{ ?purl a purl:PartialPURL }");
-		sb.append("\n\tUNION {?purl ?a purl:ZonedPURL FILTER(?a = rdf:type)}");
-		sb.append("\n\tUNION {?purl a purl:Domain }");
+		sb.append("\n\tUNION {?purl ?zoned purl:ZonedPURL FILTER(?zoned = rdf:type)}");
+		sb.append("\n\tUNION {?origin purl:part ?purl }");
 		sb.append("\n\tUNION {?purl a purl:RemoteResource }");
 		sb.append("\nFILTER (?purl = <").append(source).append(">");
 		ParsedURI uri = new ParsedURI(source);
@@ -298,7 +298,7 @@ public abstract class PartialPURLSupport implements RDFObject, Resolvable {
 				sb.append("\n\t|| ?purl = <").append(match).append(">");
 			}
 		}
-		sb.append(")\n}\nORDER BY ?a desc(?purl)");
+		sb.append(")\n}\nORDER BY ?zoned desc(?purl)");
 		return sb.toString();
 	}
 

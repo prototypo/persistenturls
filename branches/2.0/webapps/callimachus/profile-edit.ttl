@@ -24,7 +24,7 @@
 @prefix http:<http://www.openrdf.org/rdf/2009/httpobject#>.
 @prefix calli:<http://callimachusproject.org/rdf/2009/framework#>.
 
-calli:profile-edit rdfs:subClassOf obj:Message;
+calli:edit rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom calli:Editable];
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
@@ -39,7 +39,7 @@ calli:profile-edit rdfs:subClassOf obj:Message;
 		return profile.constructAsHTML('edit', null, this)
 	""".
 
-calli:profile-pre-edit rdfs:subClassOf obj:Message;
+calli:pre-edit rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom calli:Editable];
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
@@ -54,7 +54,7 @@ calli:profile-pre-edit rdfs:subClassOf obj:Message;
 		return profile.constructAsHTML('pre-edit', null, this)
 	""".
 
-calli:profile-post-edit rdfs:subClassOf obj:Message;
+calli:post-edit rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom calli:Editable];
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
@@ -63,7 +63,7 @@ calli:profile-post-edit rdfs:subClassOf obj:Message;
 	http:operation "edit";
 	obj:groovy "return editDescription('edit', msg.in)".
 
-calli:profile-post-pre-edit rdfs:subClassOf obj:Message;
+calli:post-pre-edit rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom calli:Editable];
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
@@ -72,8 +72,8 @@ calli:profile-post-pre-edit rdfs:subClassOf obj:Message;
 	http:operation "pre-edit";
 	obj:groovy "return editDescription('pre-edit', msg.in)".
 
-calli:profile-post-edit-in a owl:ObjectProperty; a owl:FunctionalProperty;
-	rdfs:domain [owl:unionOf (calli:profile-post-edit calli:profile-post-pre-edit)];
+calli:post-edit-in a owl:ObjectProperty; a owl:FunctionalProperty;
+	rdfs:domain [owl:unionOf (calli:post-edit calli:post-pre-edit)];
 	rdfs:range <java:java.io.InputStream>;
 	http:type "multipart/related;type=\"application/rdf+xml\"";
 	obj:name "in".

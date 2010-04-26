@@ -6,12 +6,10 @@
 @prefix calli:<http://callimachusproject.org/rdf/2009/framework#>.
 @prefix purl:<http://persistent.name/rdf/2010/purl#>.
 
-</> a purl:Server .
-
 <#resolve> rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom [owl:complementOf
-			[obj:matches </>, "/docs/*", "/admin/*", "/data*", "/callimachus/*"]]
+			[obj:matches </*>]]
 		];
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
 		owl:allValuesFrom <java:org.apache.http.HttpResponse>];
@@ -20,7 +18,7 @@
 	http:cache-control "max-age=3600";
 	obj:groovy """
 		def max = msg.max == null ? 21 : msg.max
-		return msg.target.resolvePURL(toString(), msg.qs, msg.accept, msg.language, max)
+		return resolvePURL(toString(), msg.qs, msg.accept, msg.language, max)
 	""".
 
 <#resolve-qs> a owl:DatatypeProperty; a owl:FunctionalProperty;
