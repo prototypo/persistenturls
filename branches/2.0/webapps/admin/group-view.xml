@@ -8,12 +8,14 @@
 	</head>
 	<body>
 		<h2 property="purl:name" />
-		<p property="purl:mbox" />
-		<p property="purl:affiliation" />
-		<p property="purl:justification" />
-        <h3>Groups</h3>
+		<div property="purl:note" />
+        <h3>Maintainers</h3>
         <ul>
-            <li resource="?group" rev="purl:member"><a property="purl:name" href="?group"></a></li>
+            <li resource="?maintainer" rel="purl:maintainer"><a property="purl:name" href="?maintainer"></a></li>
+        </ul>
+        <h3>Members</h3>
+        <ul>
+            <li resource="?member" rel="purl:member"><a property="purl:name" href="?member"></a></li>
         </ul>
 	</body>
 </html>
