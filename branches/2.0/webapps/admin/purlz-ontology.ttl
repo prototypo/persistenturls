@@ -131,7 +131,7 @@
 
 <#max-unresolved-days> a owl:DatatypeProperty, owl:FunctionalProperty;
 	rdfs:comment "Number of days between validating resolution of explicit PURL targets.";
-	rdfs:domain <Domain>;
+	rdfs:domain <#Domain>;
 	rdfs:range xsd:int.
 
 <#target-count> a owl:DatatypeProperty, owl:FunctionalProperty;
@@ -140,7 +140,7 @@
 	rdfs:range xsd:int.
 
 <#service> a owl:ObjectProperty;
-	rdfs:domain <Domain>;
+	rdfs:domain <#Domain>;
 	rdfs:range <#Service>.
 
 <#server> a owl:ObjectProperty, owl:FunctionalProperty;
