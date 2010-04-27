@@ -79,7 +79,7 @@ purl:Origin
 	calli:edit <origin-edit.xml>;
 	calli:delete <origin-delete.xml>.
 
-purl:Origin rdfs:subClassOf calli:Copyable;
+purl:Domain rdfs:subClassOf calli:Copyable;
 	calli:copy <domain-create.xml>.
 
 purl:find-domain-prefix owl:equivalentClass calli:find-copy-prefix;
@@ -94,7 +94,7 @@ purl:Domain
 	calli:edit <domain-edit.xml>;
 	calli:delete <domain-delete.xml>.
 
-purl:Domain rdfs:subClassOf calli:Copyable;
+purl:PURL rdfs:subClassOf calli:Copyable;
 	calli:copy <purl-create.xml>.
 
 purl:find-purl-prefix owl:equivalentClass calli:find-copy-prefix;
