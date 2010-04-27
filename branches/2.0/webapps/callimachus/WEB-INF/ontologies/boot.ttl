@@ -1,5 +1,5 @@
 # 
-#    Copyright 2010 Zepheira LLC
+#    Copyright (c) 2010 Zepheira LLC, Some rights reserved
 # 
 #    Licensed under the Apache License, Version 2.0 (the "License");
 #    you may not use this file except in compliance with the License.
@@ -19,54 +19,54 @@
 @prefix owl:<http://www.w3.org/2002/07/owl#>.
 @prefix obj:<http://www.openrdf.org/rdf/2009/object#>.
 @prefix http:<http://www.openrdf.org/rdf/2009/httpobject#>.
-@prefix :<http://callimachusproject.org/rdf/2009/framework#>.
+@prefix calli:<http://callimachusproject.org/rdf/2009/framework#>.
 
-:starting rdfs:subClassOf obj:Message;
+calli:starting rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom [owl:oneOf (:boot)]];
+		owl:allValuesFrom [owl:oneOf (calli:boot)]];
 	rdfs:subClassOf [owl:onProperty obj:objectResponse;
 		owl:allValuesFrom owl:Nothing];
 	http:method "POST";
 	http:operation "starting";
-	http:realm :boot-realm;
+	http:realm calli:boot-realm;
 	obj:java "msg.proceed();".
 
-:started rdfs:subClassOf obj:Message;
+calli:started rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom [owl:oneOf (:boot)]];
+		owl:allValuesFrom [owl:oneOf (calli:boot)]];
 	rdfs:subClassOf [owl:onProperty obj:objectResponse;
 		owl:allValuesFrom owl:Nothing];
 	http:method "POST";
 	http:operation "started";
-	http:realm :boot-realm;
+	http:realm calli:boot-realm;
 	obj:java "msg.proceed();".
 
-:reloading rdfs:subClassOf obj:Message;
+calli:reloading rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom [owl:oneOf (:boot)]];
+		owl:allValuesFrom [owl:oneOf (calli:boot)]];
 	rdfs:subClassOf [owl:onProperty obj:objectResponse;
 		owl:allValuesFrom owl:Nothing];
 	http:method "POST";
 	http:operation "reloading";
-	http:realm :boot-realm;
+	http:realm calli:boot-realm;
 	obj:java "msg.proceed();".
 
-:reloaded rdfs:subClassOf obj:Message;
+calli:reloaded rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom [owl:oneOf (:boot)]];
+		owl:allValuesFrom [owl:oneOf (calli:boot)]];
 	rdfs:subClassOf [owl:onProperty obj:objectResponse;
 		owl:allValuesFrom owl:Nothing];
 	http:method "POST";
 	http:operation "reloaded";
-	http:realm :boot-realm;
+	http:realm calli:boot-realm;
 	obj:java "msg.proceed();".
 
-:stopping rdfs:subClassOf obj:Message;
+calli:stopping rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom [owl:oneOf (:boot)]];
+		owl:allValuesFrom [owl:oneOf (calli:boot)]];
 	rdfs:subClassOf [owl:onProperty obj:objectResponse;
 		owl:allValuesFrom owl:Nothing];
 	http:method "POST";
 	http:operation "stopping";
-	http:realm :boot-realm;
+	http:realm calli:boot-realm;
 	obj:java "msg.proceed();".

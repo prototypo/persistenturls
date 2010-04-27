@@ -1,0 +1,130 @@
+@prefix xsd:<http://www.w3.org/2001/XMLSchema#>.
+@prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs:<http://www.w3.org/2000/01/rdf-schema#>.
+@prefix owl:<http://www.w3.org/2002/07/owl#>.
+@prefix obj:<http://www.openrdf.org/rdf/2009/object#>.
+@prefix http:<http://www.openrdf.org/rdf/2009/httpobject#>.
+@prefix calli:<http://callimachusproject.org/rdf/2009/framework#>.
+@prefix purl:<http://persistent.name/rdf/2010/purl#>.
+
+################################
+# Authorisation
+################################
+
+calli:describe http:realm <authority>.
+calli:copy http:realm <authority>.
+calli:pre-copy http:realm <authority>.
+calli:post-copy http:realm <authority>.
+calli:post-pre-copy http:realm <authority>.
+calli:edit http:realm <authority>.
+calli:pre-edit http:realm <authority>.
+calli:post-edit http:realm <authority>.
+calli:post-pre-edit http:realm <authority>.
+calli:delete http:realm <authority>.
+calli:pre-delete http:realm <authority>.
+calli:post-delete http:realm <authority>.
+calli:post-pre-delete http:realm <authority>.
+
+<authority> a calli:AuthorizationRealm;
+	calli:maintainer </data/group/admin>.
+
+calli:AuthorizationRealm rdfs:subClassOf calli:Editable;
+	calli:edit <realm-edit.xml>.
+
+################################
+# Server
+################################
+
+</> a purl:Server;
+	calli:maintainer </data/group/admin>.
+
+purl:Server rdfs:subClassOf calli:Viewable, calli:Editable;
+	calli:view <server-view.xml>;
+	calli:edit <server-edit.xml>.
+
+################################
+# User
+################################
+
+<user/template> a purl:UserTemplate;
+	calli:maintainer </data/group/admin>.
+
+purl:UserTemplate rdfs:subClassOf calli:Copyable;
+	calli:withNamespace </data/user/>;
+	calli:copy <user-create.xml>.
+
+purl:User rdfs:subClassOf calli:Viewable, calli:Editable, calli:Deletable;
+	calli:view <user-view.xml>;
+	calli:edit <user-edit.xml>;
+	calli:delete <user-delete.xml>.
+
+################################
+# Group
+################################
+
+<group/template> a purl:GroupTemplate;
+	calli:curator </data/group/public>;
+	calli:maintainer </data/group/admin>.
+
+purl:GroupTemplate rdfs:subClassOf calli:Copyable;
+	calli:withNamespace </data/group/>;
+	calli:copy <group-create.xml>.
+
+purl:Group rdfs:subClassOf calli:Viewable, calli:Editable, calli:Deletable;
+	calli:view <group-view.xml>;
+	calli:edit <group-edit.xml>;
+	calli:delete <group-delete.xml>.
+
+################################
+# Origin
+################################
+
+<origin/template> a purl:OriginTemplate;
+	calli:curator </data/group/admin>;
+	calli:maintainer </data/group/admin>.
+
+purl:OriginTemplate rdfs:subClassOf calli:Copyable;
+	calli:copy <origin-create.xml>.
+
+purl:Origin rdfs:subClassOf calli:Viewable, calli:Editable, calli:Deletable;
+	calli:view <origin-view.xml>;
+	calli:edit <origin-edit.xml>;
+	calli:delete <origin-delete.xml>.
+
+################################
+# Domain
+################################
+
+purl:Origin rdfs:subClassOf calli:Copyable;
+	calli:copy <domain-create.xml>.
+
+purl:find-domain-prefix owl:equivalentClass calli:find-copy-prefix;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:Origin];
+	rdfs:comment "On domain create, the result must start with this origin";
+	obj:precedes calli:find-copy-prefix;
+	obj:java "return java.util.Collections.singleton(this);".
+
+purl:Domain rdfs:subClassOf calli:Viewable, calli:Editable, calli:Deletable;
+	calli:view <domain-view.xml>;
+	calli:edit <domain-edit.xml>;
+	calli:delete <domain-delete.xml>.
+
+################################
+# PURL
+################################
+
+purl:Domain rdfs:subClassOf calli:Copyable;
+	calli:copy <purl-create.xml>.
+
+purl:find-purl-prefix owl:equivalentClass calli:find-copy-prefix;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:Domain];
+	rdfs:comment "On purl create, the result must start with this domain";
+	obj:precedes calli:find-copy-prefix;
+	obj:java "return java.util.Collections.singleton(this);".
+
+purl:PURL rdfs:subClassOf calli:Viewable, calli:Editable, calli:Deletable;
+	calli:view <purl-view.xml>;
+	calli:edit <purl-edit.xml>;
+	calli:delete <purl-delete.xml>.

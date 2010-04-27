@@ -1,0 +1,71 @@
+@prefix xsd:<http://www.w3.org/2001/XMLSchema#>.
+@prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs:<http://www.w3.org/2000/01/rdf-schema#>.
+@prefix owl:<http://www.w3.org/2002/07/owl#>.
+@prefix obj:<http://www.openrdf.org/rdf/2009/object#>.
+@prefix http:<http://www.openrdf.org/rdf/2009/httpobject#>.
+@prefix calli:<http://callimachusproject.org/rdf/2009/framework#>.
+@prefix purl:<http://persistent.name/rdf/2010/purl#>.
+
+<authority> a http:DigestRealm;
+	http:origin </>;
+	http:realmAuth "PURL".
+
+http:credential a owl:ObjectProperty;
+	rdfs:domain http:DigestRealm;
+	rdfs:range http:Credential.
+
+calli:maintainer a owl:ObjectProperty;
+	rdfs:range http:Credential.
+
+purl:User rdfs:subClassOf http:Credential.
+
+</data/group/admin> a purl:Group;
+	calli:maintainer </data/group/admin>.
+
+</data/group/public> a purl:Group;
+	calli:maintainer </data/group/admin>.
+
+calli:member a owl:ObjectProperty;
+	rdfs:domain purl:Group.
+
+purl:approve-user rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom http:DigestRealm];
+	rdfs:subClassOf [owl:onProperty obj:objectResponse;
+		owl:allValuesFrom owl:Nothing];
+	http:method "POST";
+	http:operation "approve";
+	http:realm <authority>;
+	obj:imports </data/group/public>;
+	obj:imports </data/group/admin>;
+	obj:groovy """
+		httpCredentials.add(msg.user)
+		_public.calliMembers.add(msg.user)
+		msg.user.calliMaintainers.add(admin)
+	""".
+
+purl:approve-user-arg a owl:ObjectProperty, owl:FunctionalProperty;
+	rdfs:domain purl:approve-user;
+	rdfs:range purl:User;
+	http:type "text/uri-list";
+	obj:name "user".
+
+purl:approve-domain rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:Origin];
+	rdfs:subClassOf [owl:onProperty obj:objectResponse;
+		owl:allValuesFrom owl:Nothing];
+	http:method "POST";
+	http:operation "approve";
+	http:realm <authority>;
+	obj:groovy """
+		purlParts.add(msg.domain)
+		msg.domain.calliMaintainers.addAll(calliMaintainers)
+	""".
+
+purl:approve-domain-arg a owl:ObjectProperty, owl:FunctionalProperty;
+	rdfs:domain purl:approve-domain;
+	rdfs:range purl:Domain;
+	http:type "text/uri-list";
+	obj:name "domain".

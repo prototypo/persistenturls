@@ -62,13 +62,13 @@ function initForms() {
 }
 
 function readRDF(form) {
-	var target = $("base").attr("href")
-	if (!target) {
-		target = document.location.href
+	var subj = $.uri.base()
+	if ($(form).attr("about")) {
+		subj = subj.resolve($(form).attr("about"))
 	}
 	var store = form.rdf().databank
 	store.triples().each(function(){
-		if (this.subject.type == 'uri' && this.subject.value.toString() != target) {
+		if (this.subject.type == 'uri' && this.subject.value.toString() != subj.toString()) {
 			store.remove(this)
 		} else if (this.subject.type == "bnode") {
 			var orphan = true

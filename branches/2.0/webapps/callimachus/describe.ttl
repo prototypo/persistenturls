@@ -1,5 +1,5 @@
 # 
-#    Copyright 2010 Zepheira LLC
+#    Copyright (c) 2010 Zepheira LLC, Some rights reserved
 # 
 #    Licensed under the Apache License, Version 2.0 (the "License");
 #    you may not use this file except in compliance with the License.
@@ -19,9 +19,9 @@
 @prefix owl:<http://www.w3.org/2002/07/owl#>.
 @prefix obj:<http://www.openrdf.org/rdf/2009/object#>.
 @prefix http:<http://www.openrdf.org/rdf/2009/httpobject#>.
-@prefix :<http://callimachusproject.org/rdf/2009/framework#>.
+@prefix calli:<http://callimachusproject.org/rdf/2009/framework#>.
 
-:describe rdfs:subClassOf obj:Message;
+calli:describe rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
 		owl:allValuesFrom rdfs:Resource];
 	http:title "RDF Describe";
