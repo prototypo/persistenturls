@@ -29,6 +29,25 @@ purl:User rdfs:subClassOf http:Credential.
 calli:member a owl:ObjectProperty;
 	rdfs:domain purl:Group.
 
+purl:unapproved-users rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom http:DigestRealm];
+	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
+		owl:allValuesFrom obj:TupleResult];
+	http:operation "unapproved";
+	http:realm <authority>;
+	http:type "application/sparql-results+xml";
+	http:cache-control "must-reevaluate";
+	obj:sparql """
+		SELECT ?uri ?label
+		WHERE {
+			?uri a purl:User
+			OPTIONAL { ?uri rdfs:label ?label }
+			OPTIONAL { ?realm http:credential ?uri }
+			FILTER (!bound(?realm))
+		}
+	""".
+
 purl:approve-user rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom http:DigestRealm];
@@ -51,6 +70,25 @@ purl:approve-user-arg a owl:ObjectProperty, owl:FunctionalProperty;
 	http:type "text/uri-list";
 	obj:name "user".
 
+purl:unapproved-domain rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:Origin];
+	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
+		owl:allValuesFrom obj:TupleResult];
+	http:operation "unapproved";
+	http:realm <authority>;
+	http:type "application/sparql-results+xml";
+	http:cache-control "must-reevaluate";
+	obj:sparql """
+		SELECT ?uri ?label
+		WHERE {
+			?uri a purl:Domain
+			OPTIONAL { ?uri rdfs:label ?label }
+			OPTIONAL { ?origin purl:part ?uri }
+			FILTER (!bound(?origin) && regex(?uri, str($this)))
+		}
+	""".
+
 purl:approve-domain rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom purl:Origin];
@@ -59,7 +97,10 @@ purl:approve-domain rdfs:subClassOf obj:Message;
 	http:method "POST";
 	http:operation "approve";
 	http:realm <authority>;
+	obj:imports <java:org.openrdf.http.object.exceptions.BadRequest>;
 	obj:groovy """
+		if (!msg.domain.resource.stringValue().startsWith(resource.stringValue()))
+			throw new BadRequest("Invalid Domain for this Origin")
 		purlParts.add(msg.domain)
 		msg.domain.calliMaintainers.addAll(calliMaintainers)
 	""".
