@@ -33,7 +33,7 @@ function divertLink(link) {
 }
 
 function diverted(url, node) {
-	var prefix = location.protocol + '//' + location.host + '/callimachus/diverted;'
+	var prefix = location.protocol + '//' + location.host + '/diverted;'
 	if (url.indexOf(':') < 0) {
 		if (node.baseURIObject && node.baseURIObject.resolve) {
 			url = node.baseURIObject.resolve(url)

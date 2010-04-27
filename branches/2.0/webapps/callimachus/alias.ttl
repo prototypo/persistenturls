@@ -27,7 +27,7 @@ calli:redirectsTo a owl:ObjectProperty, owl:FunctionalProperty;
 
 calli:alias-get rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom :Alias];
+		owl:allValuesFrom calli:Alias];
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
 		owl:allValuesFrom <java:org.apache.http.HttpResponse>];
 	obj:imports <java:org.apache.http.ProtocolVersion>;
