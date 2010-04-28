@@ -8,14 +8,15 @@
 	<head>
 		<title property="rdfs:label"/>
 	</head>
-	<body class="user">
+	<body>
 		<h2 property="rdfs:label" />
-		<p property="purl:mbox" />
-		<p property="purl:affiliation" />
-		<p property="purl:justification" />
-        <h3>Groups</h3>
+        <h3>Serves</h3>
         <ul>
-            <li resource="?group" rev="calli:member"><a property="rdfs:label" href="?group"></a></li>
+            <li resource="?origin" rel="purl:serves"><a property="rdfs:label" href="?origin"></a></li>
+        </ul>
+        <h3>Maintainers</h3>
+        <ul>
+            <li resource="?maintainer" rel="calli:maintainer"><a property="rdfs:label" href="?maintainer"></a></li>
         </ul>
 	</body>
 </html>

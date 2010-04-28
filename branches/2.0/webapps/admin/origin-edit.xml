@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="template.xsl"?>
+<!-- Copyright (c) 2010 Zepheira LLC, Some Rights Reserved. -->
+<html xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:calli="http://callimachusproject.org/rdf/2009/framework#"
+	xmlns:purl="http://persistent.name/rdf/2010/purl#">
+	<head>
+		<title property="rdfs:label"/>
+	</head>
+	<body class="domain">
+		<form action="">
+			<fieldset>
+				<legend>Modify an origin</legend>
+				<p class="instructions">Modify any of the following origin information.</p>
+				<table class="actiontable">
+					<tbody>
+						<tr>
+							<td class="property">
+								<label for="m_name">Name:</label>
+							</td>
+							<td class="value" data-cardinality="1">
+								<input id="m_name" property="rdfs:label" type="text" />
+							</td>
+						</tr>
+						<tr>
+							<td class="property">
+								<label for="m_maintainer">Maintainers:</label>
+							</td>
+							<td rel="calli:maintainer" class="value" data-suggest="about:blank">
+								<span about="?maintainer" typeof="purl:Group">
+									<span property="rdfs:label"/>
+								</span>
+							</td>
+						</tr>
+						<tr>
+							<td class="property">
+								<label>Domains:</label>
+							</td>
+							<td rel="purl:part" class="value" data-suggest="about:blank">
+								<span about="?part" typeof="purl:Domain">
+									<span property="rdfs:label"/>
+								</span>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<input value="Save" type="submit" />
+				<br />
+			</fieldset>
+		</form>
+	</body>
+</html>

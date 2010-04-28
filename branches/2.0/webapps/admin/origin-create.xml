@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="template.xsl"?>
+<!-- Copyright (c) 2010 Zepheira LLC, Some Rights Reserved. -->
+<html xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:calli="http://callimachusproject.org/rdf/2009/framework#"
+	xmlns:purl="http://persistent.name/rdf/2010/purl#">
+	<head>
+		<title>Create a New Origin</title>
+	</head>
+	<body class="domain">
+		<form action="" about="" typeof="purl:Origin">
+			<fieldset>
+				<legend>Create a New Origin</legend>
+				<p class="instructions">Fill in the following origin information.</p>
+				<table class="actiontable">
+					<tbody>
+						<tr>
+							<td class="property">
+								<label for="m_label">Name:</label>
+							</td>
+							<td class="value" data-cardinality="1">
+								<input id="m_label" property="rdfs:label" type="text" />
+							</td>
+						</tr>
+						<tr>
+							<td class="property">
+								<label for="m_origin">Origin:</label>
+							</td>
+							<td class="value">
+								<input id="m_origin" type="text"
+									onchange="$(form).attr('about', value)" />
+							</td>
+						</tr>
+						<tr>
+							<td class="property">
+								<label for="m_maintainer">Maintainers:</label>
+							</td>
+							<td rel="calli:maintainer" class="value" data-suggest="about:blank">
+								<span about="?maintainer" typeof="purl:Group">
+									<span property="rdfs:label"/>
+								</span>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<input value="Create" type="submit" />
+				<br />
+			</fieldset>
+		</form>
+	</body>
+</html>

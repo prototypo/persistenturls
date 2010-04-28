@@ -8,14 +8,15 @@
 	<head>
 		<title property="rdfs:label"/>
 	</head>
-	<body class="user">
-		<h2 property="rdfs:label" />
-		<p property="purl:mbox" />
-		<p property="purl:affiliation" />
-		<p property="purl:justification" />
-        <h3>Groups</h3>
-        <ul>
-            <li resource="?group" rev="calli:member"><a property="rdfs:label" href="?group"></a></li>
-        </ul>
+	<body class="domain">
+		<form action="" about="" typeof="purl:Domain">
+			<h2 property="rdfs:label" />
+			<p resource="?origin" rev="purl:part"><span property="rdfs:label"/></p>
+			<h3>PURLs</h3>
+			<ul>
+				<li resource="?purl" rev="purl:partOf"><a property="rdfs:label" href="?purl"></a></li>
+			</ul>
+			<input value="Delete" type="submit" />
+		</form>
 	</body>
 </html>
