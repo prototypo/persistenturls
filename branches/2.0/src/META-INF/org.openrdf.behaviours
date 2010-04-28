@@ -1,6 +1,7 @@
 name.persistent.behaviours.DisabledPURLSupport
 name.persistent.behaviours.ServerSupport
 name.persistent.behaviours.DomainSupport
+name.persistent.behaviours.HeadSupport
 name.persistent.behaviours.PartialPURLSupport
 name.persistent.behaviours.PURLSupport
 name.persistent.behaviours.RemoteGraphSupport

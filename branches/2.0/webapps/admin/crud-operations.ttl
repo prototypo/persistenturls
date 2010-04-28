@@ -11,7 +11,6 @@
 # Authorisation
 ################################
 
-calli:describe http:realm <authority>.
 calli:copy http:realm <authority>.
 calli:pre-copy http:realm <authority>.
 calli:post-copy http:realm <authority>.
@@ -54,6 +53,7 @@ purl:UserTemplate rdfs:subClassOf calli:Copyable;
 	calli:copy <user-create.xml>.
 
 purl:User rdfs:subClassOf calli:Viewable, calli:Editable, calli:Deletable;
+	http:realm <authority>;
 	calli:view <user-view.xml>;
 	calli:edit <user-edit.xml>;
 	calli:delete <user-delete.xml>.
