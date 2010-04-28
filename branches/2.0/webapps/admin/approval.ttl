@@ -38,14 +38,16 @@ purl:unapproved-users rdfs:subClassOf obj:Message;
 	http:realm <authority>;
 	http:type "application/sparql-results+xml";
 	http:cache-control "must-reevaluate";
+	http:transform <search.xsl>;
 	obj:sparql """
-		SELECT ?uri ?label
+		SELECT DISTINCT ?uri ?label
 		WHERE {
 			?uri a purl:User
 			OPTIONAL { ?uri rdfs:label ?label }
 			OPTIONAL { ?realm http:credential ?uri }
 			FILTER (!bound(?realm))
 		}
+		ORDER BY ?label ?uri
 	""".
 
 purl:approve-user rdfs:subClassOf obj:Message;
@@ -79,14 +81,16 @@ purl:unapproved-domain rdfs:subClassOf obj:Message;
 	http:realm <authority>;
 	http:type "application/sparql-results+xml";
 	http:cache-control "must-reevaluate";
+	http:transform <search.xsl>;
 	obj:sparql """
-		SELECT ?uri ?label
+		SELECT DISTINCT ?uri ?label
 		WHERE {
 			?uri a purl:Domain
 			OPTIONAL { ?uri rdfs:label ?label }
 			OPTIONAL { ?origin purl:part ?uri }
 			FILTER (!bound(?origin) && regex(?uri, str($this)))
 		}
+		ORDER BY ?label ?uri
 	""".
 
 purl:approve-domain rdfs:subClassOf obj:Message;
