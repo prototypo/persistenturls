@@ -3,6 +3,7 @@
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:param name="mode" />
+	<xsl:variable name="section" select="/html/body/@class" />
 	<xsl:template match="*">
 		<xsl:copy>
 			<xsl:apply-templates select="@*|*|comment()|text()" />
@@ -34,6 +35,10 @@
 			</script>
 			<xsl:if test="contains($mode, 'copy')">
 				<script type="text/javascript" src="/callimachus/profile-copy.js">
+				</script>
+			</xsl:if>
+			<xsl:if test="(contains($mode, 'copy') or contains($mode, 'edit')) and $section='user'">
+				<script type="text/javascript" src="/callimachus/md5.js">
 				</script>
 			</xsl:if>
 			<xsl:if test="contains($mode, 'edit')">
@@ -70,6 +75,7 @@
 	<xsl:template match="body">
 		<xsl:copy>
 			<xsl:apply-templates select="@*" />
+			<xsl:if test="not(starts-with($mode, 'pre-'))">
 			<div id="loginstatus">
 				<p>Login status not determined. Do you have Javascript and cookies
 					enabled?</p>
@@ -78,19 +84,84 @@
 				<h1>PURL User Administration</h1>
 				<ul id="tabmenu">
 					<li>
-						<a class="inactive" href="/docs/index.html">Home</a>
+						<a>
+							<xsl:attribute name="class">
+								<xsl:choose>
+									<xsl:when test="$section='home'">
+										active
+									</xsl:when>
+									<xsl:otherwise>
+										inactive
+									</xsl:otherwise>
+								</xsl:choose>
+							</xsl:attribute>
+							<xsl:attribute name="href">/docs/index.html</xsl:attribute>
+							<xsl:text>Home</xsl:text>
+						</a>
 					</li>
 					<li>
-						<a class="inactive" href="/docs/purl.html">PURLs</a>
+						<a>
+							<xsl:attribute name="class">
+								<xsl:choose>
+									<xsl:when test="$section='purl'">
+										active
+									</xsl:when>
+									<xsl:otherwise>
+										inactive
+									</xsl:otherwise>
+								</xsl:choose>
+							</xsl:attribute>
+							<xsl:attribute name="href">/docs/purls.html</xsl:attribute>
+							<xsl:text>PURLs</xsl:text>
+						</a>
 					</li>
 					<li>
-						<a class="active" href="/docs/user.html">Users</a>
+						<a>
+							<xsl:attribute name="class">
+								<xsl:choose>
+									<xsl:when test="$section='user'">
+										active
+									</xsl:when>
+									<xsl:otherwise>
+										inactive
+									</xsl:otherwise>
+								</xsl:choose>
+							</xsl:attribute>
+							<xsl:attribute name="href">/docs/user.html</xsl:attribute>
+							<xsl:text>Users</xsl:text>
+						</a>
 					</li>
 					<li>
-						<a class="inactive" href="/docs/group.html">Groups</a>
+						<a>
+							<xsl:attribute name="class">
+								<xsl:choose>
+									<xsl:when test="$section='group'">
+										active
+									</xsl:when>
+									<xsl:otherwise>
+										inactive
+									</xsl:otherwise>
+								</xsl:choose>
+							</xsl:attribute>
+							<xsl:attribute name="href">/docs/group.html</xsl:attribute>
+							<xsl:text>Groups</xsl:text>
+						</a>
 					</li>
 					<li>
-						<a class="inactive" href="/docs/domain.html">Domains</a>
+						<a>
+							<xsl:attribute name="class">
+								<xsl:choose>
+									<xsl:when test="$section='domain'">
+										active
+									</xsl:when>
+									<xsl:otherwise>
+										inactive
+									</xsl:otherwise>
+								</xsl:choose>
+							</xsl:attribute>
+							<xsl:attribute name="href">/docs/domain.html</xsl:attribute>
+							<xsl:text>Domains</xsl:text>
+						</a>
 					</li>
 					<li>
 						<a class="inactive" href="/docs/pending/index.html">Admin</a>
@@ -100,7 +171,7 @@
 					</li>
 				</ul>
 			</div>
-
+			</xsl:if>
 			<div id="content">
 				<div id="">
 					<a id="message" />
@@ -108,6 +179,7 @@
 				<xsl:apply-templates select="*|comment()|text()" />
 			</div>
 
+			<xsl:if test="not(starts-with($mode, 'pre-'))">
 			<div id="footer">
 				<table width="100%" summary="supporters">
 					<tr>
@@ -124,6 +196,7 @@
 					</tr>
 				</table>
 			</div>
+			</xsl:if>
 		</xsl:copy>
 	</xsl:template>
 </xsl:stylesheet>
