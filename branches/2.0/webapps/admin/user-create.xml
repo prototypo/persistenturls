@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="template.xsl"?>
-	<!-- Copyright (c) 2010 Zepheira LLC, Some Rights Reserved. -->
+<!-- Copyright (c) 2010 Zepheira LLC, Some Rights Reserved. -->
 <html xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:http="http://www.openrdf.org/rdf/2009/httpobject#"
 	xmlns:purl="http://persistent.name/rdf/2010/purl#">
 	<head>
 		<title>Request a New User</title>
 	</head>
-	<body>
-		<form action="" about="" typeof="purl:RequestedUser">
+	<body class="user">
+		<form action="" about="" typeof="purl:User">
 			<fieldset>
 				<legend>Request a New User</legend>
 				<p class="instructions">Fill in the following user information.</p>
@@ -17,9 +19,9 @@
 							<td class="property">
 								<label for="m_username">ID:</label>
 							</td>
-							<td class="value">
+							<td class="value" data-cardinality="1">
 								<input id="m_username" type="text"
-									onchange="$('base').attr('href', '/data/user/' + value)" />
+									onchange="$(form).attr('about', '/data/user/' + value)" property="http:name" />
 							</td>
 						</tr>
 						<tr>
@@ -27,7 +29,7 @@
 								<label for="m_name">Full name:</label>
 							</td>
 							<td class="value" data-cardinality="1">
-								<input id="m_name" property="purl:name" type="text" />
+								<input id="m_name" property="rdfs:label" type="text" />
 							</td>
 						</tr>
 						<tr>
@@ -53,9 +55,7 @@
 							</td>
 							<td class="value">
 								<input id="m_passwd" type="password"
-									onchange="document.getElementById('m_algorithm').value='UTF-8';document.getElementById('m_encoded').value=value" />
-								<input id="m_algorithm" property="purl:algorithm" type="hidden" />
-								<input id="m_encoded" property="purl:encoded" type="hidden" />
+									onchange="document.getElementById('m_algorithm').value='MD5';document.getElementById('m_encoded').value=hex_md5(document.getElementById('m_username').value+':PURL:'+value);" />
 							</td>
 						</tr>
 						<tr>
@@ -82,6 +82,18 @@
 								<textarea rows="5" cols="40" id="m_justification"
 									property="purl:justification">
 								</textarea>
+							</td>
+						</tr>
+						<tr class="hidden">
+							<td class="property"/>
+							<td class="value" data-cardinality="1">
+								<input id="m_algorithm" property="purl:algorithm" type="hidden" />
+							</td>
+						</tr>
+						<tr class="hidden">
+							<td class="property"/>
+							<td class="value" data-cardinality="1">
+								<input id="m_encoded" property="purl:encoded" type="hidden" />
 							</td>
 						</tr>
 					</tbody>

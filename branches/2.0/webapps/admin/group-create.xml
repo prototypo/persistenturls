@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="template.xsl"?>
-	<!-- Copyright (c) 2010 Zepheira LLC, Some Rights Reserved. -->
+<!-- Copyright (c) 2010 Zepheira LLC, Some Rights Reserved. -->
 <html xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:calli="http://callimachusproject.org/rdf/2009/framework#"
 	xmlns:purl="http://persistent.name/rdf/2010/purl#">
 	<head>
 		<title>Create a New Group</title>
 	</head>
-	<body>
+	<body class="group">
 		<form action="" about="" typeof="purl:Group">
 			<fieldset>
 				<legend>Create a New Group</legend>
@@ -18,7 +20,7 @@
 								<label for="m_label">Name:</label>
 							</td>
 							<td class="value" data-cardinality="1">
-								<input id="m_label" property="purl:name" type="text" />
+								<input id="m_label" property="rdfs:label" type="text" />
 							</td>
 						</tr>
 						<tr>
@@ -27,31 +29,35 @@
 							</td>
 							<td class="value">
 								<input id="m_id" type="text"
-									onchange="$('base').attr('href', '/admin/group/' + value)" />
+									onchange="$(form).attr('about', '/data/group/' + value)" />
 							</td>
 						</tr>
 						<tr>
 							<td class="property">
 								<label for="m_maintainer">Maintainers:</label>
 							</td>
-							<td class="value">
-								<input id="m_maintainers" rel="purl:maintainer"	type="text" />
+							<td rel="calli:maintainer" class="value" data-suggest="about:blank">
+								<span about="?maintainer" typeof="purl:User">
+									<span property="rdfs:label"/>
+								</span>
 							</td>
 						</tr>
 						<tr>
 							<td class="property">
 								<label for="m_member">Members:</label>
 							</td>
-							<td class="value">
-								<input id="m_member" rel="purl:member" type="text" />
-							</td>
+                            <td rel="calli:member" class="value" data-suggest="about:blank">
+                                <span about="?member" typeof="purl:User">
+                                    <span property="rdfs:label"/>
+                                </span>
+                            </td>
 						</tr>
 						<tr>
 							<td class="property">
 								<label for="m_note">Public comments:</label>
 							</td>
 							<td class="value">
-								<textarea id="m_note" propery="purl:note"></textarea>
+								<textarea rows="5" cols="4" id="m_note" propery="purl:note"></textarea>
 							</td>
 						</tr>
 					</tbody>

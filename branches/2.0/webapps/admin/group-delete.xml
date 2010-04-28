@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="template.xsl"?>
-	<!-- Copyright (c) 2010 Zepheira LLC, Some Rights Reserved. -->
+<!-- Copyright (c) 2010 Zepheira LLC, Some Rights Reserved. -->
 <html xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
 	xmlns:purl="http://persistent.name/rdf/2010/purl#">
 	<head>
-		<title property="purl:name"/>
+		<title property="rdfs:label"/>
 	</head>
-	<body>
+	<body class="group">
 		<form action="" about="" typeof="purl:Group">
-			<h2 property="purl:name" />
+			<h2 property="rdfs:label" />
 			<p property="purl:note" />
 			<input value="Delete" type="submit" />
 		</form>
