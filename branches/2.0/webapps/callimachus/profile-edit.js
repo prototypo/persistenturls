@@ -40,12 +40,7 @@ function initForms() {
 					if (uri.indexOf('?') > 0) {
 						uri = uri.substring(0, uri.indexOf('?'))
 					}
-					var redirect = xhr.getResponseHeader("Location")
-					if (redirect && window.diverted && form.hasClass("diverted")) {
-						location.replace(diverted(redirect, node))
-					} else if (redirect) {
-						location.replace(redirect)
-					} else if (location.href.indexOf("?pre-") > 0) {
+					if (location.href.indexOf("?pre-") > 0) {
 						location.replace(uri + "?pre-view")
 					} else {
 						location.replace(uri + "?view")

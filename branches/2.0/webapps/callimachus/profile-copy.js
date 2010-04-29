@@ -27,9 +27,9 @@ function initForms() {
 					}
 					var redirect = xhr.getResponseHeader("Location")
 					if (redirect && window.diverted && form.hasClass("diverted")) {
-						location.replace(diverted(redirect, node))
+						location.replace(diverted(redirect + "?view", node))
 					} else if (redirect) {
-						location.replace(redirect)
+						location.replace(redirect + "?view")
 					} else if (location.href.indexOf("?pre-") > 0) {
 						location.replace(uri + "?pre-view")
 					} else {

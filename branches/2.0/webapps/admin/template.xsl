@@ -2,6 +2,7 @@
 	<!-- Copyright (c) 2010 Zepheira LLC, Some Rights Reserved. -->
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+	<xsl:param name="this" />
 	<xsl:param name="mode" />
 	<xsl:variable name="section" select="/html/body/@class" />
 	<xsl:template match="*">
@@ -20,33 +21,35 @@
 	<xsl:template match="head">
 		<xsl:copy>
 			<xsl:apply-templates select="@*|*|text()|comment()" />
-			<style type="text/css">@import url("/docs/style.css")</style>
-			<script type="text/javascript" src="/callimachus/jquery-1.3.2.js">
+			<style type="text/css">@import url("<xsl:value-of select="$this"/>/../../docs/style.css")</style>
+			<script type="text/javascript" src="{$this}/../../callimachus/jquery-1.3.2.js">
 			</script>
-			<script type="text/javascript" src="/callimachus/jquery-ui-1.7.2.js">
+			<script type="text/javascript" src="{$this}/../../callimachus/jquery-ui-1.7.2.js">
 			</script>
-			<script type="text/javascript" src="/callimachus/jquery.qtip-1.0.0-rc3.js">
+			<script type="text/javascript" src="{$this}/../../callimachus/jquery.qtip-1.0.0-rc3.js">
 			</script>
-			<script type="text/javascript" src="/callimachus/jquery.rdfquery.rdfa-1.0.js">
+			<script type="text/javascript" src="{$this}/../../callimachus/jquery.rdfquery.rdfa-1.0.js">
 			</script>
-			<script type="text/javascript" src="/callimachus/profile-message.js">
+			<script type="text/javascript" src="{$this}/../../callimachus/profile-message.js">
 			</script>
-			<script type="text/javascript" src="/callimachus/profile-elements.js">
+			<script type="text/javascript" src="{$this}/../../callimachus/profile-elements.js">
+			</script>
+			<script type="text/javascript" src="{$this}/../../callimachus/diverted.js">
 			</script>
 			<xsl:if test="contains($mode, 'copy')">
-				<script type="text/javascript" src="/callimachus/profile-copy.js">
+				<script type="text/javascript" src="{$this}/../../callimachus/profile-copy.js">
 				</script>
 			</xsl:if>
 			<xsl:if test="(contains($mode, 'copy') or contains($mode, 'edit')) and $section='user'">
-				<script type="text/javascript" src="/callimachus/md5.js">
+				<script type="text/javascript" src="{$this}/../../callimachus/md5.js">
 				</script>
 			</xsl:if>
 			<xsl:if test="contains($mode, 'edit')">
-				<script type="text/javascript" src="/callimachus/profile-edit.js">
+				<script type="text/javascript" src="{$this}/../../callimachus/profile-edit.js">
 				</script>
 			</xsl:if>
 			<xsl:if test="contains($mode, 'delete')">
-				<script type="text/javascript" src="/callimachus/profile-delete.js">
+				<script type="text/javascript" src="{$this}/../../callimachus/profile-delete.js">
 				</script>
 			</xsl:if>
 			<xsl:if test="starts-with($mode, 'pre-')">
@@ -185,12 +188,12 @@
 					<tr>
 						<td>
 							<a href="http://www.oclc.org/">
-								<img align="left" src="/docs/images/oclclogo.png" alt="oclc" />
+								<img align="left" src="{$this}/../../docs/images/oclclogo.png" alt="oclc" />
 							</a>
 						</td>
 						<td>
 							<a href="http://zepheira.com/">
-								<img align="right" src="/docs/images/zepheiralogo.png" alt="zepheira" />
+								<img align="right" src="{$this}/../../docs/images/zepheiralogo.png" alt="zepheira" />
 							</a>
 						</td>
 					</tr>

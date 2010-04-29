@@ -88,7 +88,7 @@ purl:unapproved-domain rdfs:subClassOf obj:Message;
 			?uri a purl:Domain
 			OPTIONAL { ?uri rdfs:label ?label }
 			OPTIONAL { ?origin purl:part ?uri }
-			FILTER (!bound(?origin) && regex(?uri, str($this)))
+			FILTER (!bound(?origin) && regex(str(?uri), str($this)))
 		}
 		ORDER BY ?label ?uri
 	""".
