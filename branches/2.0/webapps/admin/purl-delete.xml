@@ -8,7 +8,7 @@
 	<head>
 		<title property="rdfs:label"/>
 	</head>
-	<body class="group">
+	<body class="purl">
 		<form action="" about="" typeof="purl:PURL">
 			<h2 property="rdfs:label" />
 			<a property="purl:alternative" href="?alternative" />

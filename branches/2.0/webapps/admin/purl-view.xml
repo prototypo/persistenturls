@@ -8,7 +8,7 @@
 	<head>
 		<title property="rdfs:label"/>
 	</head>
-	<body class="group">
+	<body class="purl">
 		<h2 property="rdfs:label" />
 		<a property="purl:alternative" href="?alternative" />
         <h3>Maintainers</h3>
