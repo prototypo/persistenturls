@@ -130,7 +130,7 @@ purl:post-edit-purl-touch owl:intersectionOf (calli:post-edit
 		[owl:onProperty obj:target; owl:allValuesFrom purl:PURL]);
 	obj:precedes calli:post-edit;
 	obj:groovy """
-		purlPartOf.touchRevision()
+		msg.proceed()
 		return msg.functionalObjectResponse
 	""".
 
@@ -138,6 +138,31 @@ purl:post-pre-edit-purl-touch owl:intersectionOf (calli:post-pre-edit
 		[owl:onProperty obj:target; owl:allValuesFrom purl:PURL]);
 	obj:precedes calli:post-pre-edit;
 	obj:groovy """
-		purlPartOf.touchRevision()
+		msg.proceed()
+		if (purlPartOf) {
+			purlPartOf.touchRevision()
+		}
 		return msg.functionalObjectResponse
+	""".
+
+purl:init-purl-create owl:intersectionOf (calli:post-copy
+		[owl:onProperty obj:target; owl:allValuesFrom purl:Domain]);
+	obj:precedes calli:post-copy;
+	obj:groovy """
+		def purl = msg.functionalObjectResponse
+		purl.purlPartOf = msg.target
+		purl.calliMaintainers.addAll(calliMaintainers)
+		touchRevision()
+		return purl
+	""".
+
+purl:init-purl-pre-create owl:intersectionOf (calli:post-pre-copy
+		[owl:onProperty obj:target; owl:allValuesFrom purl:Domain]);
+	obj:precedes calli:post-pre-copy;
+	obj:groovy """
+		def purl = msg.functionalObjectResponse
+		purl.purlPartOf = msg.target
+		purl.calliMaintainers.addAll(calliMaintainers)
+		touchRevision()
+		return purl
 	""".

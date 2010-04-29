@@ -15,15 +15,16 @@ http:credential a owl:ObjectProperty;
 	rdfs:domain http:DigestRealm;
 	rdfs:range http:Credential.
 
-calli:maintainer a owl:ObjectProperty;
-	rdfs:range http:Credential.
+calli:maintainer a owl:ObjectProperty.
 
 purl:User rdfs:subClassOf http:Credential.
 
 </data/group/admin> a purl:Group;
+	rdfs:label "admin";
 	calli:maintainer </data/group/admin>.
 
 </data/group/public> a purl:Group;
+	rdfs:label "public";
 	calli:maintainer </data/group/admin>.
 
 calli:member a owl:ObjectProperty;

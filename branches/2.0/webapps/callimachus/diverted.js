@@ -50,5 +50,5 @@ function diverted(url, node) {
 		var qs = url.substring(url.indexOf('?'))
 		return prefix + encodeURIComponent(uri) + qs
 	}
-	return prefix + encodeURIComponent(url)
+	return prefix + encodeURIComponent(url) + "?view"
 }
