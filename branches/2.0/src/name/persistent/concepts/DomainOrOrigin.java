@@ -14,4 +14,8 @@ public interface DomainOrOrigin {
 	@iri("http://callimachusproject.org/rdf/2009/framework#maintainer")
 	Set<Object> getCalliMaintainers();
 
+	/** Someone who may modify this resource. */
+	@iri("http://callimachusproject.org/rdf/2009/framework#maintainer")
+	void setCalliMaintainers(Set<?> maintainers);
+
 }

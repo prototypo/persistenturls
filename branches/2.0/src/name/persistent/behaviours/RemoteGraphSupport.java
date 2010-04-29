@@ -222,9 +222,14 @@ public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 
 	@Override
 	public boolean validate(String origin) throws Exception {
-		if (isAlwaysFresh() || getFreshness() >= 0)
+		if (isAlwaysFresh() || isFresh())
 			return true;
 		return reload(origin);
+	}
+
+	@Override
+	public boolean isFresh() {
+		return getFreshness() >= 0;
 	}
 
 	@Override
@@ -417,6 +422,12 @@ public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 			ObjectFactory of = con.getObjectFactory();
 			Origin o = of.createObject(origin, Origin.class);
 			getPurlAllowedOrigins().add(o);
+		}
+		for (Header hd : resp.getHeaders("Warning")) {
+			if (hd.getValue().contains("111")) {
+				// 111 "Revalidation failed"
+				con.addDesignation(this, Unresolvable.class);
+			}
 		}
 		con.commit();
 		logger.info("Updated {}", getResource());

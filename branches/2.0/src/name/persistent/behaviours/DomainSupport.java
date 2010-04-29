@@ -9,7 +9,9 @@ package name.persistent.behaviours;
 import info.aduna.net.ParsedURI;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -19,6 +21,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.Map.Entry;
@@ -49,6 +52,7 @@ import org.openrdf.OpenRDFException;
 import org.openrdf.http.object.client.HTTPObjectClient;
 import org.openrdf.http.object.exceptions.BadGateway;
 import org.openrdf.http.object.exceptions.GatewayTimeout;
+import org.openrdf.http.object.exceptions.InternalServerError;
 import org.openrdf.http.object.util.NamedThreadFactory;
 import org.openrdf.http.object.util.SharedExecutors;
 import org.openrdf.model.Literal;
@@ -73,6 +77,7 @@ import org.slf4j.LoggerFactory;
  * @author James Leigh
  */
 public abstract class DomainSupport implements Domain, RDFObject {
+	private static final String PROTOCOL = "1.1";
 	private static final String NS = "http://persistent.name/rdf/2010/purl#";
 	private static final String PREFIX = "PREFIX purl:<http://persistent.name/rdf/2010/purl#>\n";
 	private static final String TARGET_BY_DATE = PREFIX
@@ -94,6 +99,16 @@ public abstract class DomainSupport implements Domain, RDFObject {
 			+ "?pred purl:rel ?rel .\n"
 			+ "OPTIONAL { ?purl purl:pattern ?pattern } FILTER (!bound(?pattern))\n"
 			+ "?target purl:last-resolved ?last\n" + "FILTER (?last < $date) }";
+	private static final String VIA;
+	static {
+		String host = "localhost";
+		try {
+			host = InetAddress.getLocalHost().getCanonicalHostName();
+		} catch (UnknownHostException e) {
+			// ignore
+		}
+		VIA = PROTOCOL + " " + host;
+	}
 	private static Map<InetSocketAddress, Boolean> blackList = new ConcurrentHashMap<InetSocketAddress, Boolean>();
 	static {
 		SharedExecutors.getTimeoutThreadPool().scheduleWithFixedDelay(
@@ -250,9 +265,9 @@ public abstract class DomainSupport implements Domain, RDFObject {
 
 	@Override
 	public HttpResponse resolveRemotePURL(String source, String qs,
-			String accept, String language, int max) throws IOException,
-			InterruptedException {
-		return resolveRemotePURL(source, qs, accept, language, max, true);
+			String accept, String language, Set<String> via)
+			throws IOException, InterruptedException {
+		return resolveRemotePURL(source, qs, accept, language, via, true, null);
 	}
 
 	@Override
@@ -393,16 +408,15 @@ public abstract class DomainSupport implements Domain, RDFObject {
 	}
 
 	private HttpResponse resolveRemotePURL(String source, String qs,
-			String accept, String language, int max, boolean useBlackList)
-			throws IOException, InterruptedException {
-		HttpResponse bad = null;
+			String accept, String language, Set<String> via,
+			boolean useBlackList, HttpResponse bad) throws IOException, InterruptedException {
 		List<InetSocketAddress> blacklisted = getBlackListing(useBlackList);
 		Collection<List<Service>> records = getAllPURLServices();
 		for (List<Service> services : records) {
 			InetSocketAddress addr = pickService(services);
 			if (addr != null) {
 				HttpResponse resp = resolveRemotePURL(addr, source, qs, accept,
-						language, max);
+						language, via);
 				if (resp == null)
 					continue;
 				StatusLine status = resp.getStatusLine();
@@ -424,17 +438,12 @@ public abstract class DomainSupport implements Domain, RDFObject {
 				}
 			}
 		}
-		if (useBlackList && (blacklisted != null || !blackList.isEmpty()) && !records.isEmpty()) {
-			if (bad != null) {
-				HttpEntity entity = bad.getEntity();
-				if (entity != null) {
-					entity.consumeContent();
-				}
-			}
+		if (useBlackList && (blacklisted != null || !blackList.isEmpty())
+				&& !records.isEmpty()) {
 			if (blacklisted != null) {
 				blackList.keySet().removeAll(blacklisted);
 			}
-			return resolveRemotePURL(source, qs, accept, language, max, false);
+			return resolveRemotePURL(source, qs, accept, language, via, false, bad);
 		}
 		if (bad != null)
 			return bad;
@@ -442,8 +451,8 @@ public abstract class DomainSupport implements Domain, RDFObject {
 	}
 
 	private HttpResponse resolveRemotePURL(InetSocketAddress addr,
-			String source, String qs, String accept, String language, int max)
-			throws IOException, InterruptedException {
+			String source, String qs, String accept, String language,
+			Set<String> via) throws IOException, InterruptedException {
 		HTTPObjectClient client = HTTPObjectClient.getInstance();
 		String url = qs == null ? source : source + "?" + qs;
 		BasicHttpRequest req = new BasicHttpRequest("GET", url);
@@ -453,11 +462,23 @@ public abstract class DomainSupport implements Domain, RDFObject {
 		if (language != null) {
 			req.setHeader("Accept-Language", language);
 		}
-		req.setHeader("Max-Forward", String.valueOf(max));
+		StringBuilder sb = new StringBuilder();
+		for (String v : via) {
+			if (v.contains(VIA) && (v.endsWith(VIA) || v.contains(VIA + ",")))
+				throw new InternalServerError("Request Loop Detected\n" + via
+						+ "\n" + VIA);
+			if (sb.length() > 0) {
+				sb.append(",");
+			}
+			sb.append(v);
+		}
+		sb.append(VIA);
+		req.setHeader("Via", sb.toString());
 		try {
 			HttpResponse resp = client.service(addr, req);
 			if (!resp.containsHeader("Via")) {
-				String original = "1.1 " + addr.getHostName() + ":" + addr.getPort();
+				String original = "1.1 " + addr.getHostName() + ":"
+						+ addr.getPort();
 				resp.addHeader("Via", original);
 			}
 			StatusLine status = resp.getStatusLine();

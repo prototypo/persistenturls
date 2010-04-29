@@ -8,7 +8,7 @@ package name.persistent.concepts;
 
 import org.openrdf.repository.object.annotations.iri;
 
-/** A URL that unexpectly does not resolve to anything meaningful. */
+/** A URL that unexpectly does not resolve to anything meaningful or cannot be validated. */
 @iri("http://persistent.name/rdf/2010/purl#Unresolvable")
 public interface Unresolvable {
 }

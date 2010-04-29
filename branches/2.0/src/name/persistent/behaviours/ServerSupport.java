@@ -9,21 +9,12 @@ package name.persistent.behaviours;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.channels.ReadableByteChannel;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayDeque;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 import java.util.Queue;
-import java.util.TimeZone;
-
-import javax.xml.datatype.XMLGregorianCalendar;
 
 import name.persistent.concepts.Domain;
 import name.persistent.concepts.MirroredResource;
 import name.persistent.concepts.Origin;
-import name.persistent.concepts.RemoteGraph;
 import name.persistent.concepts.Server;
 
 import org.apache.http.HttpResponse;
@@ -34,11 +25,9 @@ import org.openrdf.http.object.annotations.operation;
 import org.openrdf.http.object.annotations.parameter;
 import org.openrdf.http.object.annotations.rel;
 import org.openrdf.http.object.annotations.type;
-import org.openrdf.http.object.concepts.Transaction;
 import org.openrdf.http.object.exceptions.BadRequest;
 import org.openrdf.http.object.exceptions.NotFound;
 import org.openrdf.http.object.model.ReadableHttpEntityChannel;
-import org.openrdf.http.object.traits.VersionedObject;
 import org.openrdf.http.object.writers.AggregateWriter;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
@@ -61,21 +50,12 @@ import org.openrdf.repository.object.annotations.sparql;
  * 
  * @author James Leigh
  */
-public abstract class ServerSupport implements RDFObject, Server {
+public abstract class ServerSupport extends MirrorSupport implements RDFObject, Server {
 	private static final String PURL = "http://persistent.name/rdf/2010/purl#";
 	private static final String PREFIX = "PREFIX purl:<http://persistent.name/rdf/2010/purl#>\n";
 	private static final ProtocolVersion HTTP11 = new ProtocolVersion("HTTP",
 			1, 1);
 	private static final AggregateWriter writer = AggregateWriter.getInstance();
-	/** Date format pattern used to generate the header in RFC 1123 format. */
-	public static final String PATTERN_RFC1123 = "EEE, dd MMM yyyy HH:mm:ss zzz";
-	/** The time zone to use in the date header. */
-	public static final TimeZone GMT = TimeZone.getTimeZone("GMT");
-	private static final DateFormat dateformat;
-	static {
-		dateformat = new SimpleDateFormat(PATTERN_RFC1123, Locale.US);
-		dateformat.setTimeZone(GMT);
-	}
 
 	private static class QueuedResult extends GraphQueryResultImpl {
 		private Queue<Statement> queue = new ArrayDeque<Statement>();
@@ -140,7 +120,7 @@ public abstract class ServerSupport implements RDFObject, Server {
 	/**
 	 * List of origins on this domain service.
 	 */
-	@rel("alternative")
+	@rel("alternate")
 	@operation("listOrigins")
 	@type("application/rdf+xml")
 	public GraphQueryResult listRemoteOrigins() throws OpenRDFException {
@@ -275,39 +255,15 @@ public abstract class ServerSupport implements RDFObject, Server {
 	protected abstract GraphQueryResult describePURLs(
 			@name("domain") Domain domain);
 
-	@sparql(PREFIX
-			+ "SELECT ?graph\n"
-			+ "WHERE { GRAPH ?graph { $target a ?type } ?graph a purl:RemoteGraph }")
-	protected abstract List<RemoteGraph> getRemoteGraphsOf(
-			@name("target") Object target);
-
 	private HttpResponse mirrorOf(Object target, GraphQueryResult result)
 			throws Exception {
-		ObjectConnection con = getObjectConnection();
-		ObjectFactory of = con.getObjectFactory();
-		List<RemoteGraph> graphs = getRemoteGraphsOf(target);
 		HttpResponse resp = new BasicHttpResponse(HTTP11, 200, "OK");
+		mirrorEntityHeaders(target, resp);
 		String type = "application/rdf+xml";
 		Class<GraphQueryResult> t = GraphQueryResult.class;
+		ObjectConnection con = getObjectConnection();
+		ObjectFactory of = con.getObjectFactory();
 		String b = getResource().stringValue();
-		if (!graphs.isEmpty()) {
-			RemoteGraph graph = graphs.get(0);
-			setHeader(resp, "Cache-Control", graph.getPurlCacheControl());
-			setHeader(resp, "ETag", graph.getPurlEtag());
-			setHeader(resp, "Last-Modified", graph.getPurlLastModified());
-			setHeader(resp, "Date", graph.getPurlLastValidated());
-			String ct = graph.getPurlContentType();
-			if (ct != null && writer.isWriteable(ct, t, t, of)) {
-				type = ct;
-			}
-		} else if (target instanceof VersionedObject) {
-			VersionedObject ver = (VersionedObject) target;
-			setHeader(resp, "ETag", ver.revisionTag(0));
-			Transaction revision = ver.getRevision();
-			if (revision != null) {
-				setHeader(resp, "Last-Modified", revision.getCommittedOn());
-			}
-		}
 		ReadableByteChannel in = writer.write(type, t, t, of, result, b, null);
 		resp.setEntity(new ReadableHttpEntityChannel(type, -1, in));
 		return resp;
@@ -315,19 +271,5 @@ public abstract class ServerSupport implements RDFObject, Server {
 
 	private String enc(Resource target) throws UnsupportedEncodingException {
 		return URLEncoder.encode(target.stringValue(), "UTF-8");
-	}
-
-	private void setHeader(HttpResponse resp, String name, String value) {
-		if (value != null && !resp.containsHeader(name)) {
-			resp.setHeader(name, value);
-		}
-	}
-
-	private void setHeader(HttpResponse resp, String name,
-			XMLGregorianCalendar value) {
-		if (value != null && !resp.containsHeader(name)) {
-			Date time = value.toGregorianCalendar().getTime();
-			resp.setHeader(name, dateformat.format(time));
-		}
 	}
 }

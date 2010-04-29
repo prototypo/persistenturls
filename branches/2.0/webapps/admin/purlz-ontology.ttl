@@ -37,7 +37,7 @@
 	rdfs:subClassOf <#PURL>.
 
 <#Unresolvable> a owl:Class;
-	rdfs:comment "A URL that unexpectly does not resolve to anything meaningful.".
+	rdfs:comment "A URL that unexpectly does not resolve to anything meaningful or cannot be validated.".
 
 <#Server> a owl:Class;
 	rdfs:comment "The protocol, hostname, and port of a server with PURL domains and list of services can resolve PURLs. This IRI should have a path of '/'.".
@@ -71,6 +71,11 @@
 # Property
 ################################
 
+<#copyOf> a owl:ObjectProperty, owl:FunctionalProperty;
+	rdfs:comment "Copy of (203)";
+	rdfs:domain <#PURL>;
+	purl:rel <#copyOf>.
+
 <#renamedTo> a owl:ObjectProperty, owl:FunctionalProperty;
 	rdfs:comment "Moved permanently (301)";
 	rdfs:domain <#PURL>;
@@ -79,7 +84,7 @@
 <#alternative> a owl:ObjectProperty;
 	rdfs:comment "Simple redirection (302)";
 	rdfs:domain <#PURL>;
-	purl:rel "alternative".
+	purl:rel "alternate".
 
 <#describedBy> a owl:ObjectProperty;
 	rdfs:comment "See other (303)";
@@ -89,7 +94,7 @@
 <#redirectsTo> a owl:ObjectProperty, owl:FunctionalProperty;
 	rdfs:comment "Temporary redirection (307)";
 	rdfs:domain <#PURL>;
-	purl:rel "located".
+	purl:rel <#redirectsTo>.
 
 <#pattern> a owl:DatatypeProperty, owl:FunctionalProperty;
 	rdfs:comment "Regular Expression of source URI, used to populate target URI";

@@ -6,6 +6,8 @@
  */
 package name.persistent.behaviours;
 
+import java.util.Set;
+
 import name.persistent.concepts.TombstonedPURL;
 
 import org.apache.http.HttpResponse;
@@ -25,7 +27,8 @@ public abstract class TombstonedPURLSupport extends PURLSupport implements
 			1, 1);
 
 	@Override
-	public HttpResponse resolvePURL(String source, String qs, String accept, String language, int max) {
+	public HttpResponse resolvePURL(String source, String qs, String accept,
+			String language, Set<String> via) {
 		return new BasicHttpResponse(HTTP11, 410, "Permanently Gone");
 	}
 

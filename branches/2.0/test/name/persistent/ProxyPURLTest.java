@@ -7,6 +7,7 @@ import java.net.InetSocketAddress;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.TreeSet;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
@@ -14,7 +15,6 @@ import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 import junit.framework.TestCase;
-
 import name.persistent.behaviours.PartialPURLSupport;
 import name.persistent.behaviours.RemoteGraphSupport;
 import name.persistent.concepts.Domain;
@@ -80,9 +80,9 @@ public class ProxyPURLTest extends TestCase {
 		@cacheControl("max-age=60")
 		public HttpResponse get(@parameter("*") String qs,
 				@header("Accept") String accept,
-				@header("Max-Forward") Integer max) throws Exception {
+				@header("Via") Set<String> via) throws Exception {
 			return resolvePURL(getResource().stringValue(), qs, accept,
-					"*", max == null ? 20 : max);
+					"*", via);
 		}
 	}
 
@@ -136,7 +136,7 @@ public class ProxyPURLTest extends TestCase {
 		ValueFactory vf = con.getValueFactory();
 		URI rel = vf.createURI(NS, "rel");
 		con.add(vf.createURI(NS, "renamedTo"), rel, vf.createLiteral("canonical"));
-		con.add(vf.createURI(NS, "alternative"), rel, vf.createLiteral("alternative"));
+		con.add(vf.createURI(NS, "alternative"), rel, vf.createLiteral("alternate"));
 		con.add(vf.createURI(NS, "describedBy"), rel, vf.createLiteral("describedby"));
 		con.add(vf.createURI(NS, "redirectsTo"), rel, vf.createLiteral("located"));
 		String uri = "http://localhost:" + server.getPort() + "/";
@@ -161,6 +161,23 @@ public class ProxyPURLTest extends TestCase {
 		repo.initialize();
 		ObjectRepositoryFactory factory = new ObjectRepositoryFactory();
 		return factory.createRepository(config, repo);
+	}
+
+	public void testLoopDetection() throws Exception {
+		Service service = con.addDesignation(of.createObject(), Service.class);
+		service.setPurlServer(root);
+		Domain domain = con.addDesignation(con.getObject(DOMAIN), Domain.class);
+		domain.getPurlServices().add(service);
+		Origin origin = con.addDesignation(con.getObject(ORIGIN), Origin.class);
+		origin.getPurlParts().add(domain);
+		root.getPurlServes().add(origin);
+		HttpResponse resp = resolvePURL(PURL0);
+		HttpEntity entity = resp.getEntity();
+		if (entity != null) {
+			entity.consumeContent();
+		}
+		assertEquals(502, resp.getStatusLine().getStatusCode());
+		assertEquals(0, resp.getHeaders("Location").length);
 	}
 
 	public void testProxy() throws Exception {
@@ -269,7 +286,8 @@ public class ProxyPURLTest extends TestCase {
 
 	private HttpResponse resolvePURL(String uri) throws Exception {
 		Resolvable target = (Resolvable) proxy.getObject(uri);
-		return target.resolvePURL(uri, null, null, "*", 20);
+		Set<String> via = Collections.emptySet();
+		return target.resolvePURL(uri, null, null, "*", via);
 	}
 
 }

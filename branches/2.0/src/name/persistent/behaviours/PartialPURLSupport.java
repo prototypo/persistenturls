@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledExecutorService;
@@ -32,7 +33,6 @@ import name.persistent.concepts.Resolvable;
 import org.apache.http.HttpResponse;
 import org.openrdf.http.object.exceptions.BadGateway;
 import org.openrdf.http.object.exceptions.GatewayTimeout;
-import org.openrdf.http.object.exceptions.InternalServerError;
 import org.openrdf.http.object.exceptions.NotFound;
 import org.openrdf.http.object.util.SharedExecutors;
 import org.openrdf.repository.object.ObjectConnection;
@@ -54,10 +54,12 @@ import org.xbill.DNS.Type;
  * 
  * @author James Leigh
  */
-public abstract class PartialPURLSupport implements RDFObject, Resolvable {
+public abstract class PartialPURLSupport extends MirrorSupport implements
+		RDFObject, Resolvable {
 	private static final String PREFIX = "PREFIX purl:<http://persistent.name/rdf/2010/purl#>\n"
 			+ "PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n";
-	private static final ScheduledExecutorService executor = SharedExecutors.getTimeoutThreadPool();
+	private static final ScheduledExecutorService executor = SharedExecutors
+			.getTimeoutThreadPool();
 	private static final Map<InetSocketAddress, Boolean> blackList = new ConcurrentHashMap<InetSocketAddress, Boolean>();
 	private static ThreadLocal<Random> random = new ThreadLocal<Random>() {
 		protected Random initialValue() {
@@ -73,12 +75,13 @@ public abstract class PartialPURLSupport implements RDFObject, Resolvable {
 	}
 	private Logger logger = LoggerFactory.getLogger(PartialPURLSupport.class);
 
-	public HttpResponse resolvePURL(String source, String qs, String accept, String language, int max)
-			throws Exception {
-		return resolvePURL(source, qs, accept, language, max, 4);
+	public HttpResponse resolvePURL(String source, String qs, String accept,
+			String language, Set<String> via) throws Exception {
+		return resolvePURL(source, qs, accept, language, via, 4);
 	}
 
-	protected List<InetSocketAddress> getOriginServices(boolean useBlackList) throws Exception {
+	protected List<InetSocketAddress> getOriginServices(boolean useBlackList)
+			throws Exception {
 		List<InetSocketAddress> blacklisted = getBlackListing(useBlackList);
 		Collection<List<SRVRecord>> records = getServiceRecords();
 		List<InetSocketAddress> result = new ArrayList<InetSocketAddress>();
@@ -103,10 +106,8 @@ public abstract class PartialPURLSupport implements RDFObject, Resolvable {
 		return null;
 	}
 
-	private HttpResponse resolvePURL(String source, String qs, String accept, String language,
-			int max, int maxload) throws Exception {
-		if (max < 0)
-			throw new InternalServerError("Too Many Redirects");
+	private HttpResponse resolvePURL(String source, String qs, String accept,
+			String language, Set<String> via, int maxload) throws Exception {
 		if (maxload < 0)
 			throw new BadGateway("Unknown PURL");
 		ObjectConnection con = getObjectConnection();
@@ -115,28 +116,32 @@ public abstract class PartialPURLSupport implements RDFObject, Resolvable {
 		List<?> result = query.evaluate().asList();
 		if (result.isEmpty()) {
 			loadOrigin();
-			return resolvePURL(source, qs, accept, language, max, maxload - 1);
+			return resolvePURL(source, qs, accept, language, via, maxload - 1);
 		} else {
 			Object purl = result.get(0);
 			if (purl instanceof PURL) {
-				return ((PURL) purl).resolvePURL(source, qs, accept, language, max);
+				return ((PURL) purl).resolvePURL(source, qs, accept, language,
+						via);
 			} else if (purl instanceof Domain) {
 				Domain domain = (Domain) purl;
 				if (domain instanceof RemoteResource) {
-					if (!((RemoteResource) purl).reload()) {
+					if (!((RemoteResource) domain).reload()) {
 						loadOrigin();
-						return resolvePURL(source, qs, accept, language, max, maxload - 1);
+						return resolvePURL(source, qs, accept, language, via,
+								maxload - 1);
 					}
 				}
 				if (domain instanceof MirroredResource
 						|| !domain.getCalliMaintainers().isEmpty())
 					throw new NotFound("Unknown Persistent URL");
-				return domain.resolveRemotePURL(source, qs, accept, language, max - 1);
+				return domain.resolveRemotePURL(source, qs, accept, language,
+						via);
 			} else if (purl instanceof RemoteResource) {
 				if (!((RemoteResource) purl).load()) {
 					loadOrigin();
 				}
-				return resolvePURL(source, qs, accept, language, max, maxload - 1);
+				return resolvePURL(source, qs, accept, language, via,
+						maxload - 1);
 			} else {
 				throw new AssertionError("Invalid resource type: " + purl);
 			}
@@ -148,7 +153,8 @@ public abstract class PartialPURLSupport implements RDFObject, Resolvable {
 		String scheme = parsed.getScheme();
 		String auth = parsed.getAuthority();
 		assert auth != null;
-		String originURI = new ParsedURI(scheme, auth, "/", null, null).toString();
+		String originURI = new ParsedURI(scheme, auth, "/", null, null)
+				.toString();
 		ObjectConnection con = getObjectConnection();
 		ObjectFactory of = con.getObjectFactory();
 		Exception gateway = null;
@@ -180,7 +186,7 @@ public abstract class PartialPURLSupport implements RDFObject, Resolvable {
 		}
 		if (gateway != null)
 			throw gateway;
-		throw new GatewayTimeout("No PURL Server Available");
+		throw new NotFound("No PURL Server Available");
 	}
 
 	private void blackList(InetSocketAddress server, Exception reason) {
@@ -201,7 +207,8 @@ public abstract class PartialPURLSupport implements RDFObject, Resolvable {
 		String service = "_purl._http." + hostname;
 		Record[] records = new Lookup(service, Type.SRV).run();
 		if (records == null && hostname.contains(".")) {
-			service = "_purl._http." + hostname.substring(hostname.indexOf('.') + 1);
+			service = "_purl._http."
+					+ hostname.substring(hostname.indexOf('.') + 1);
 			records = new Lookup(service, Type.SRV).run();
 		}
 		if (records == null) {
@@ -272,7 +279,8 @@ public abstract class PartialPURLSupport implements RDFObject, Resolvable {
 		sb.append("SELECT REDUCED ?purl");
 		sb.append("\nWHERE {");
 		sb.append("\n\t{ ?purl a purl:PartialPURL }");
-		sb.append("\n\tUNION {?purl ?zoned purl:ZonedPURL FILTER(?zoned = rdf:type)}");
+		sb
+				.append("\n\tUNION {?purl ?zoned purl:ZonedPURL FILTER(?zoned = rdf:type)}");
 		sb.append("\n\tUNION {?origin purl:part ?purl }");
 		sb.append("\n\tUNION {?purl a purl:RemoteResource }");
 		sb.append("\nFILTER (?purl = <").append(source).append(">");

@@ -69,4 +69,6 @@ public interface RemoteGraph {
 
 	int getFreshness();
 
+	boolean isFresh();
+
 }

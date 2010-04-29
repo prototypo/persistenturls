@@ -21,6 +21,14 @@ public interface PURL extends Resolvable {
 	@iri("http://persistent.name/rdf/2010/purl#alternative")
 	void setPurlAlternatives(Set<?> purlAlternatives);
 
+	/** Copy of (203) */
+	@iri("http://persistent.name/rdf/2010/purl#copyOf")
+	Object getPurlCopyOf();
+
+	/** Copy of (203) */
+	@iri("http://persistent.name/rdf/2010/purl#copyOf")
+	void setPurlCopyOf(Object purlCopyOf);
+
 	/** See other (303) */
 	@iri("http://persistent.name/rdf/2010/purl#describedBy")
 	Set<Object> getPurlDescribedBy();

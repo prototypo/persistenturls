@@ -98,9 +98,8 @@ purl:Origin rdfs:subClassOf calli:Viewable, calli:Editable, calli:Deletable;
 purl:Origin rdfs:subClassOf calli:Copyable;
 	calli:copy <domain-create.xml>.
 
-purl:find-domain-prefix owl:equivalentClass calli:find-copy-prefix;
-	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom purl:Origin];
+purl:find-domain-prefix owl:intersectionOf ( calli:find-copy-prefix
+		[owl:onProperty obj:target; owl:allValuesFrom purl:Origin]);
 	rdfs:comment "On domain create, the result must start with this origin";
 	obj:precedes calli:find-copy-prefix;
 	obj:java "return java.util.Collections.singleton(this);".
@@ -117,14 +116,28 @@ purl:Domain rdfs:subClassOf calli:Viewable, calli:Editable, calli:Deletable;
 purl:Domain rdfs:subClassOf calli:Copyable;
 	calli:copy <purl-create.xml>.
 
-purl:find-purl-prefix owl:equivalentClass calli:find-copy-prefix;
-	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom purl:Domain];
+purl:find-purl-prefix owl:intersectionOf ( calli:find-copy-prefix
+		[owl:onProperty obj:target; owl:allValuesFrom purl:Domain]);
 	rdfs:comment "On purl create, the result must start with this domain";
 	obj:precedes calli:find-copy-prefix;
 	obj:java "return java.util.Collections.singleton(this);".
 
-purl:PURL rdfs:subClassOf calli:Viewable, calli:Editable, calli:Deletable;
+purl:PURL rdfs:subClassOf calli:Viewable, calli:Editable;
 	calli:view <purl-view.xml>;
-	calli:edit <purl-edit.xml>;
-	calli:delete <purl-delete.xml>.
+	calli:edit <purl-edit.xml>.
+
+purl:post-edit-purl-touch owl:intersectionOf (calli:post-edit
+		[owl:onProperty obj:target; owl:allValuesFrom purl:PURL]);
+	obj:precedes calli:post-edit;
+	obj:groovy """
+		purlPartOf.touchRevision()
+		return msg.functionalObjectResponse
+	""".
+
+purl:post-pre-edit-purl-touch owl:intersectionOf (calli:post-pre-edit
+		[owl:onProperty obj:target; owl:allValuesFrom purl:PURL]);
+	obj:precedes calli:post-pre-edit;
+	obj:groovy """
+		purlPartOf.touchRevision()
+		return msg.functionalObjectResponse
+	""".

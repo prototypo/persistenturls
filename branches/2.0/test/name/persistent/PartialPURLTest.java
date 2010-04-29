@@ -1,7 +1,9 @@
 package name.persistent;
 
-import junit.framework.TestCase;
+import java.util.Collections;
+import java.util.Set;
 
+import junit.framework.TestCase;
 import name.persistent.concepts.PURL;
 import name.persistent.concepts.PartialPURL;
 import name.persistent.concepts.Resolvable;
@@ -33,7 +35,7 @@ public class PartialPURLTest extends TestCase {
 		con = repo.getConnection();
 		ValueFactory vf = con.getValueFactory();
 		URI rel = vf.createURI(NS, "rel");
-		con.add(vf.createURI(NS, "alternative"), rel, vf.createLiteral("alternative"));
+		con.add(vf.createURI(NS, "alternative"), rel, vf.createLiteral("alternate"));
 	}
 
 	public void tearDown() throws Exception {
@@ -104,6 +106,7 @@ public class PartialPURLTest extends TestCase {
 
 	private HttpResponse resolvePURL(String uri) throws Exception {
 		Resolvable target = (Resolvable) con.getObject(uri);
-		return target.resolvePURL(uri, null, null, "*", 20);
+		Set<String> via = Collections.emptySet();
+		return target.resolvePURL(uri, null, null, "*", via);
 	}
 }

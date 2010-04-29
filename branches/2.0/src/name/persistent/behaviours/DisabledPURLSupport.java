@@ -6,6 +6,8 @@
  */
 package name.persistent.behaviours;
 
+import java.util.Set;
+
 import name.persistent.concepts.DisabledPURL;
 
 import org.apache.http.HttpResponse;
@@ -24,7 +26,7 @@ public abstract class DisabledPURLSupport extends PURLSupport implements
 
 	@Override
 	public HttpResponse resolvePURL(String source, String qs, String accept,
-			String language, int max) {
+			String language, Set<String> via) {
 		return new BasicHttpResponse(HTTP11, 404, "Temporarily Gone");
 	}
 

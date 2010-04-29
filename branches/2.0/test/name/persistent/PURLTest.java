@@ -1,6 +1,7 @@
 package name.persistent;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,6 +13,7 @@ import name.persistent.concepts.TombstonedPURL;
 import name.persistent.concepts.Unresolvable;
 
 import org.apache.http.Header;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.openrdf.model.URI;
 import org.openrdf.model.ValueFactory;
@@ -27,6 +29,7 @@ public class PURLTest extends TestCase {
 	private static final String PURL0 = "http://test.persistent.name/test/test0";
 	private static final String PURL1 = "http://test.persistent.name/test/test1";
 	private static final String PURL2 = "http://test.persistent.name/test/test2";
+	private Set<String> via = Collections.emptySet();
 	private ObjectRepository repo;
 	private ObjectConnection con;
 
@@ -38,10 +41,11 @@ public class PURLTest extends TestCase {
 		con = repo.getConnection();
 		ValueFactory vf = con.getValueFactory();
 		URI rel = vf.createURI(NS, "rel");
+		con.add(vf.createURI(NS, "copyOf"), rel, vf.createURI(NS, "copyOf"));
 		con.add(vf.createURI(NS, "renamedTo"), rel, vf.createLiteral("canonical"));
-		con.add(vf.createURI(NS, "alternative"), rel, vf.createLiteral("alternative"));
+		con.add(vf.createURI(NS, "alternative"), rel, vf.createLiteral("alternate"));
 		con.add(vf.createURI(NS, "describedBy"), rel, vf.createLiteral("describedby"));
-		con.add(vf.createURI(NS, "redirectsTo"), rel, vf.createLiteral("located"));
+		con.add(vf.createURI(NS, "redirectsTo"), rel, vf.createURI(NS, "redirectsTo"));
 	}
 
 	public void tearDown() throws Exception {
@@ -49,10 +53,23 @@ public class PURLTest extends TestCase {
 		repo.shutDown();
 	}
 
+	public void test203() throws Exception {
+		PURL purl = con.addDesignation(con.getObject(PURL0), PURL.class);
+		purl.setPurlCopyOf(con.getObject("http://example.com/"));
+		HttpResponse resp = purl.resolvePURL(purl.toString(), null, "*/*", "*", via);
+		HttpEntity entity = resp.getEntity();
+		assertNotNull(entity);
+		entity.consumeContent();
+		assertEquals(203, resp.getStatusLine().getStatusCode());
+		assertEquals(0, resp.getHeaders("Location").length);
+		assertEquals(1, resp.getHeaders("Content-Location").length);
+		assertEquals("http://example.com/", resp.getFirstHeader("Content-Location").getValue());
+	}
+
 	public void test301() throws Exception {
 		PURL purl = con.addDesignation(con.getObject(PURL0), PURL.class);
 		purl.setPurlRenamedTo(con.getObject(PURL1));
-		HttpResponse resp = purl.resolvePURL(purl.toString(), null, "*/*", "*", 20);
+		HttpResponse resp = purl.resolvePURL(purl.toString(), null, "*/*", "*", via);
 		assertEquals(301, resp.getStatusLine().getStatusCode());
 		assertEquals(1, resp.getHeaders("Location").length);
 		assertEquals(PURL1, resp.getFirstHeader("Location").getValue());
@@ -61,7 +78,7 @@ public class PURLTest extends TestCase {
 	public void test302() throws Exception {
 		PURL purl = con.addDesignation(con.getObject(PURL0), PURL.class);
 		purl.getPurlAlternatives().add(con.getObject(PURL1));
-		HttpResponse resp = purl.resolvePURL(purl.toString(), null, "*/*", "*", 20);
+		HttpResponse resp = purl.resolvePURL(purl.toString(), null, "*/*", "*", via);
 		assertEquals(302, resp.getStatusLine().getStatusCode());
 		assertEquals(1, resp.getHeaders("Location").length);
 		assertEquals(PURL1, resp.getFirstHeader("Location").getValue());
@@ -71,7 +88,7 @@ public class PURLTest extends TestCase {
 		PURL purl = con.addDesignation(con.getObject(PURL0), PURL.class);
 		purl.getPurlDescribedBy().add(con.getObject(PURL1));
 		purl.getPurlDescribedBy().add(con.getObject(PURL2));
-		HttpResponse resp = purl.resolvePURL(purl.toString(), null, "*/*", "*", 20);
+		HttpResponse resp = purl.resolvePURL(purl.toString(), null, "*/*", "*", via);
 		assertEquals(303, resp.getStatusLine().getStatusCode());
 		assertEquals(2, resp.getHeaders("Location").length);
 		Set<String> values = new HashSet<String>();
@@ -84,7 +101,7 @@ public class PURLTest extends TestCase {
 	public void test307() throws Exception {
 		PURL purl = con.addDesignation(con.getObject(PURL0), PURL.class);
 		purl.setPurlRedirectsTo(con.getObject(PURL1));
-		HttpResponse resp = purl.resolvePURL(purl.toString(), null, "*/*", "*", 20);
+		HttpResponse resp = purl.resolvePURL(purl.toString(), null, "*/*", "*", via);
 		assertEquals(307, resp.getStatusLine().getStatusCode());
 		assertEquals(1, resp.getHeaders("Location").length);
 		assertEquals(PURL1, resp.getFirstHeader("Location").getValue());
@@ -94,7 +111,7 @@ public class PURLTest extends TestCase {
 		PURL purl = con.addDesignation(con.getObject(PURL0), PURL.class);
 		purl.getPurlAlternatives().add(con.getObject(PURL1));
 		purl = con.addDesignation(con.getObject(PURL0), DisabledPURL.class);
-		HttpResponse resp = purl.resolvePURL(purl.toString(), null, "*/*", "*", 20);
+		HttpResponse resp = purl.resolvePURL(purl.toString(), null, "*/*", "*", via);
 		assertEquals(404, resp.getStatusLine().getStatusCode());
 		assertEquals(0, resp.getHeaders("Location").length);
 	}
@@ -103,7 +120,7 @@ public class PURLTest extends TestCase {
 		PURL purl = con.addDesignation(con.getObject(PURL0), PURL.class);
 		purl.getPurlAlternatives().add(con.getObject(PURL1));
 		purl = con.addDesignation(con.getObject(PURL0), TombstonedPURL.class);
-		HttpResponse resp = purl.resolvePURL(purl.toString(), null, "*/*", "*", 20);
+		HttpResponse resp = purl.resolvePURL(purl.toString(), null, "*/*", "*", via);
 		assertEquals(410, resp.getStatusLine().getStatusCode());
 		assertEquals(0, resp.getHeaders("Location").length);
 	}
@@ -113,7 +130,7 @@ public class PURLTest extends TestCase {
 		purl0.getPurlAlternatives().add(con.getObject(PURL1));
 		PURL purl1 = con.addDesignation(con.getObject(PURL1), PURL.class);
 		purl1.getPurlAlternatives().add(con.getObject(PURL2));
-		HttpResponse resp = purl0.resolvePURL(purl0.toString(), null, "*/*", "*", 20);
+		HttpResponse resp = purl0.resolvePURL(purl0.toString(), null, "*/*", "*", via);
 		assertEquals(302, resp.getStatusLine().getStatusCode());
 		assertEquals(1, resp.getHeaders("Location").length);
 		assertEquals(PURL2, resp.getFirstHeader("Location").getValue());
@@ -124,7 +141,7 @@ public class PURLTest extends TestCase {
 		purl0.getPurlAlternatives().add(con.getObject(PURL1));
 		PURL purl1 = con.addDesignation(con.getObject(PURL1), PURL.class);
 		purl1.getPurlDescribedBy().add(con.getObject(PURL2));
-		HttpResponse resp = purl0.resolvePURL(purl0.toString(), null, "*/*", "*", 20);
+		HttpResponse resp = purl0.resolvePURL(purl0.toString(), null, "*/*", "*", via);
 		assertEquals(302, resp.getStatusLine().getStatusCode());
 		assertEquals(1, resp.getHeaders("Location").length);
 		assertEquals(PURL1, resp.getFirstHeader("Location").getValue());
@@ -134,7 +151,7 @@ public class PURLTest extends TestCase {
 		PURL purl = con.addDesignation(con.getObject(PURL0), PURL.class);
 		purl.getPurlAlternatives().add(con.getObject(PURL1));
 		purl.getPurlDescribedBy().add(con.getObject(PURL2));
-		HttpResponse resp = purl.resolvePURL(purl.toString(), null, "*/*", "*", 20);
+		HttpResponse resp = purl.resolvePURL(purl.toString(), null, "*/*", "*", via);
 		assertEquals(302, resp.getStatusLine().getStatusCode());
 		assertEquals(1, resp.getHeaders("Location").length);
 		assertEquals(PURL1, resp.getFirstHeader("Location").getValue());
@@ -147,7 +164,7 @@ public class PURLTest extends TestCase {
 		ValueFactory vf = con.getValueFactory();
 		con.add(vf.createURI(PURL1), vf.createURI(NS, "type"), vf.createLiteral("text/html"));
 		con.add(vf.createURI(PURL2), vf.createURI(NS, "type"), vf.createLiteral("application/rdf+xml"));
-		HttpResponse resp = purl.resolvePURL(purl.toString(), null, "application/rdf+xml", "*", 20);
+		HttpResponse resp = purl.resolvePURL(purl.toString(), null, "application/rdf+xml", "*", via);
 		assertEquals(303, resp.getStatusLine().getStatusCode());
 		assertEquals(1, resp.getHeaders("Location").length);
 		assertEquals(PURL2, resp.getFirstHeader("Location").getValue());
@@ -158,7 +175,7 @@ public class PURLTest extends TestCase {
 		PURL purl = con.addDesignation(con.getObject(PURL0), PURL.class);
 		purl.getPurlAlternatives().add(con.getObject(PURL1));
 		purl.getPurlAlternatives().add(con.getObject(PURL2));
-		HttpResponse resp = purl.resolvePURL(purl.toString(), null, "*/*", "*", 20);
+		HttpResponse resp = purl.resolvePURL(purl.toString(), null, "*/*", "*", via);
 		assertEquals(302, resp.getStatusLine().getStatusCode());
 		assertEquals(2, resp.getHeaders("Location").length);
 		assertEquals(PURL2, resp.getFirstHeader("Location").getValue());
@@ -171,7 +188,7 @@ public class PURLTest extends TestCase {
 		ValueFactory vf = con.getValueFactory();
 		con.add(vf.createURI(PURL1), vf.createURI(NS, "lang"), vf.createLiteral("en-US"));
 		con.add(vf.createURI(PURL2), vf.createURI(NS, "lang"), vf.createLiteral("en-CA"));
-		HttpResponse resp = purl.resolvePURL(purl.toString(), null, "*/*", "en-CA", 20);
+		HttpResponse resp = purl.resolvePURL(purl.toString(), null, "*/*", "en-CA", via);
 		assertEquals(302, resp.getStatusLine().getStatusCode());
 		assertEquals(1, resp.getHeaders("Location").length);
 		assertEquals(PURL2, resp.getFirstHeader("Location").getValue());
@@ -184,7 +201,7 @@ public class PURLTest extends TestCase {
 		ValueFactory vf = con.getValueFactory();
 		con.add(vf.createURI(PURL1), vf.createURI(NS, "lang"), vf.createLiteral("fr"));
 		con.add(vf.createURI(PURL2), vf.createURI(NS, "lang"), vf.createLiteral("en"));
-		HttpResponse resp = purl.resolvePURL(purl.toString(), null, "*/*", "en-CA", 20);
+		HttpResponse resp = purl.resolvePURL(purl.toString(), null, "*/*", "en-CA", via);
 		assertEquals(302, resp.getStatusLine().getStatusCode());
 		assertEquals(1, resp.getHeaders("Location").length);
 		assertEquals(PURL2, resp.getFirstHeader("Location").getValue());
@@ -197,7 +214,7 @@ public class PURLTest extends TestCase {
 		ValueFactory vf = con.getValueFactory();
 		con.add(vf.createURI(PURL1), vf.createURI(NS, "lang"), vf.createLiteral("fr"));
 		con.add(vf.createURI(PURL2), vf.createURI(NS, "lang"), vf.createLiteral("fr-CA"));
-		HttpResponse resp = purl.resolvePURL(purl.toString(), null, "*/*", "fr-CA", 20);
+		HttpResponse resp = purl.resolvePURL(purl.toString(), null, "*/*", "fr-CA", via);
 		assertEquals(302, resp.getStatusLine().getStatusCode());
 		assertEquals(1, resp.getHeaders("Location").length);
 		assertEquals(PURL2, resp.getFirstHeader("Location").getValue());

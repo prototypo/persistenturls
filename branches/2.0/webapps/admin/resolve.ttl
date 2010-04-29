@@ -17,30 +17,29 @@
 	http:type "message/x-response";
 	http:cache-control "max-age=3600";
 	obj:groovy """
-		def max = msg.max == null ? 21 : msg.max
-		return resolvePURL(toString(), msg.qs, msg.accept, msg.language, max)
+		return resolvePURL(toString(), msg.qs, msg.accept, msg.lang, msg.via)
 	""".
 
-<#resolve-qs> a owl:DatatypeProperty; a owl:FunctionalProperty;
+<#resolve-qs> a owl:DatatypeProperty, owl:FunctionalProperty;
 	rdfs:domain <#resolve>;
 	rdfs:range xsd:string;
 	http:parameter "*";
 	obj:name "qs".
 
-<#resolve-accept> a owl:DatatypeProperty; a owl:FunctionalProperty;
+<#resolve-accept> a owl:DatatypeProperty, owl:FunctionalProperty;
 	rdfs:domain <#resolve>;
 	rdfs:range xsd:string;
 	http:header "Accept";
 	obj:name "accept".
 
-<#resolve-language> a owl:DatatypeProperty; a owl:FunctionalProperty;
+<#resolve-language> a owl:DatatypeProperty, owl:FunctionalProperty;
 	rdfs:domain <#resolve>;
 	rdfs:range xsd:string;
 	http:header "Accept-Language";
-	obj:name "language".
+	obj:name "lang".
 
-<#resolve-max> a owl:DatatypeProperty; a owl:FunctionalProperty;
+<#resolve-via> a owl:DatatypeProperty;
 	rdfs:domain <#resolve>;
-	rdfs:range xsd:int;
-	http:header "Max-Forward";
-	obj:name "max".
+	rdfs:range xsd:string;
+	http:header "Via";
+	obj:name "via".

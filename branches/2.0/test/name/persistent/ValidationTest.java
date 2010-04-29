@@ -67,7 +67,7 @@ public class ValidationTest extends TestCase {
 		lastResolved = vf.createURI(NS, "last-resolved");
 		URI rel = vf.createURI(NS, "rel");
 		con.add(vf.createURI(NS, "renamedTo"), rel, vf.createLiteral("canonical"));
-		con.add(vf.createURI(NS, "alternative"), rel, vf.createLiteral("alternative"));
+		con.add(vf.createURI(NS, "alternative"), rel, vf.createLiteral("alternate"));
 		con.add(vf.createURI(NS, "describedBy"), rel, vf.createLiteral("describedby"));
 		con.add(vf.createURI(NS, "redirectsTo"), rel, vf.createLiteral("located"));
 		String uri = "http://localhost:3128/";
