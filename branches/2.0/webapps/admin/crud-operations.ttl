@@ -34,7 +34,8 @@ calli:AuthorizationRealm rdfs:subClassOf calli:Editable;
 # Server
 ################################
 
-</> a purl:Server;
+</> a purl:Server, calli:Alias;
+	calli:redirectsTo </?view>;
 	calli:maintainer </data/group/admin>.
 
 purl:Server rdfs:subClassOf calli:Viewable, calli:Editable;
