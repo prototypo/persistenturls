@@ -20,7 +20,6 @@ purl:search-arg a owl:DatatypeProperty, owl:FunctionalProperty;
 	obj:name "q".
 
 <search.xsl> rdfs:subClassOf obj:Message;
-	rdfs:subClassOf [owl:onProperty obj:target; owl:allValuesFrom purl:Server];
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse; owl:allValuesFrom <java:java.io.InputStream>];
 	http:type "application/xml";
 	http:transform <template.xsl>;
@@ -31,7 +30,6 @@ purl:search-arg a owl:DatatypeProperty, owl:FunctionalProperty;
 	rdfs:range <java:java.io.InputStream>.
 
 <template.xsl> rdfs:subClassOf obj:Message;
-	rdfs:subClassOf [owl:onProperty obj:target; owl:allValuesFrom purl:Server];
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse; owl:allValuesFrom <java:java.io.InputStream>];
 	http:type "text/html";
 	obj:xslt <template.xsl>.
@@ -101,13 +99,14 @@ purl:purl-search rdfs:subClassOf purl:search;
 	http:cache-control "must-reevaluate";
 	http:transform <search.xsl>;
 	obj:sparql """
-		SELECT DISTINCT ?uri
+		SELECT DISTINCT ?uri ?label
 		WHERE {
 			{ ?uri a purl:PURL }
 			UNION { ?uri a purl:PartialPURL }
 			UNION { ?uri a purl:ZonedPURL }
 			UNION { ?uri a purl:DisabledPURL }
 			UNION { ?uri a purl:TombstonedPURL }
+			OPTIONAL { ?uri rdfs:label ?label }
 			{ ?uri calli:maintainer [http:name $q] }
 			UNION { ?uri calli:maintainer [calli:member [http:name $q]] }
 		}
@@ -124,7 +123,7 @@ purl:target-search rdfs:subClassOf obj:Message;
 	http:cache-control "must-reevaluate";
 	http:transform <search.xsl>;
 	obj:sparql """
-		SELECT DISTINCT ?uri
+		SELECT DISTINCT ?uri ?label
 		WHERE {
 			?uri ?rel $q
 			{ ?uri a purl:PURL }
@@ -132,6 +131,7 @@ purl:target-search rdfs:subClassOf obj:Message;
 			UNION { ?uri a purl:ZonedPURL }
 			UNION { ?uri a purl:DisabledPURL }
 			UNION { ?uri a purl:TombstonedPURL }
+			OPTIONAL { ?uri rdfs:label ?label }
 		}
 		ORDER BY ?uri
 	""".
