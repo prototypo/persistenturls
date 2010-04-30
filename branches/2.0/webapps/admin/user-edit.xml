@@ -46,7 +46,7 @@
 							</td>
 							<td class="value">
 								<input id="m_passwd" type="password"
-									onchange="document.getElementById('m_algorithm').value='MD5';document.getElementById('m_encoded').value=hex_md5(document.getElementById('m_username').value+':PURL:'+value);" />
+									onkeypress="$('#m_algorithm').val('MD5');$('#m_encoded').val(hex_md5($('#m_username').val()+':'+$('#m_realm').val()+':'+value));$('#m_algorithm').trigger('change');$('#m_encoded').trigger('change');" />
 								<input id="m_algorithm" property="purl:algorithm" type="hidden" />
 								<input id="m_encoded" property="purl:encoded" type="hidden" />
 							</td>
@@ -93,6 +93,12 @@
 							<td class="property"/>
 							<td class="value" data-cardinality="1">
 								<input id="m_encoded" property="purl:encoded" type="hidden" />
+							</td>
+						</tr>
+						<tr class="hidden">
+							<td class="property"/>
+							<td class="value">
+								<input id="m_realm" value="PURL" type="hidden" />
 							</td>
 						</tr>
 					</tbody>
