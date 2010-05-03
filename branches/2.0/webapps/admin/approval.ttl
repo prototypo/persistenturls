@@ -7,17 +7,17 @@
 @prefix calli:<http://callimachusproject.org/rdf/2009/framework#>.
 @prefix purl:<http://persistent.name/rdf/2010/purl#>.
 
-<authority> a http:DigestRealm;
-	http:origin </>;
-	http:realmAuth "PURL".
+<authority> a calli:DigestRealm;
+	calli:origin </>;
+	calli:realmAuth "PURL".
 
-http:credential a owl:ObjectProperty;
-	rdfs:domain http:DigestRealm;
-	rdfs:range http:Credential.
+calli:credential a owl:ObjectProperty;
+	rdfs:domain calli:DigestRealm;
+	rdfs:range calli:Credential.
 
 calli:maintainer a owl:ObjectProperty.
 
-purl:User rdfs:subClassOf http:Credential.
+purl:User rdfs:subClassOf calli:Credential.
 
 </data/group/admin> a purl:Group;
 	rdfs:label "admin";
@@ -32,7 +32,7 @@ calli:member a owl:ObjectProperty;
 
 purl:unapproved-users rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom http:DigestRealm];
+		owl:allValuesFrom calli:DigestRealm];
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
 		owl:allValuesFrom obj:TupleResult];
 	http:operation "unapproved";
@@ -45,7 +45,7 @@ purl:unapproved-users rdfs:subClassOf obj:Message;
 		WHERE {
 			?uri a purl:User
 			OPTIONAL { ?uri rdfs:label ?label }
-			OPTIONAL { ?realm http:credential ?uri }
+			OPTIONAL { ?realm calli:credential ?uri }
 			FILTER (!bound(?realm))
 		}
 		ORDER BY ?label ?uri
@@ -53,7 +53,7 @@ purl:unapproved-users rdfs:subClassOf obj:Message;
 
 purl:approve-user rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom http:DigestRealm];
+		owl:allValuesFrom calli:DigestRealm];
 	rdfs:subClassOf [owl:onProperty obj:objectResponse;
 		owl:allValuesFrom owl:Nothing];
 	http:method "POST";
@@ -62,7 +62,7 @@ purl:approve-user rdfs:subClassOf obj:Message;
 	obj:imports </data/group/public>;
 	obj:imports </data/group/admin>;
 	obj:groovy """
-		httpCredentials.add(msg.user)
+		calliCredentials.add(msg.user)
 		_public.calliMembers.add(msg.user)
 		msg.user.calliMaintainers.add(admin)
 	""".

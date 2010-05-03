@@ -6,11 +6,15 @@
  */
 package name.persistent.behaviours;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayDeque;
 import java.util.Queue;
+
+import javax.tools.FileObject;
 
 import name.persistent.concepts.Domain;
 import name.persistent.concepts.MirroredResource;
@@ -21,6 +25,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.ProtocolVersion;
 import org.apache.http.message.BasicHttpResponse;
 import org.openrdf.OpenRDFException;
+import org.openrdf.http.object.annotations.method;
 import org.openrdf.http.object.annotations.operation;
 import org.openrdf.http.object.annotations.parameter;
 import org.openrdf.http.object.annotations.rel;
@@ -50,7 +55,7 @@ import org.openrdf.repository.object.annotations.sparql;
  * 
  * @author James Leigh
  */
-public abstract class ServerSupport extends MirrorSupport implements RDFObject, Server {
+public abstract class ServerSupport extends MirrorSupport implements RDFObject, FileObject, Server {
 	private static final String PURL = "http://persistent.name/rdf/2010/purl#";
 	private static final String PREFIX = "PREFIX purl:<http://persistent.name/rdf/2010/purl#>\n";
 	private static final ProtocolVersion HTTP11 = new ProtocolVersion("HTTP",

@@ -48,7 +48,7 @@ purl:user-search rdfs:subClassOf purl:search;
 		WHERE {
 			?uri a purl:User
 			OPTIONAL { ?uri rdfs:label ?label }
-			{ ?uri http:name $q }
+			{ ?uri calli:name $q }
 			UNION { ?uri rdfs:label $q }
 			UNION { ?uri purl:affiliation $q }
 			UNION { ?uri purl:email $q }
@@ -67,9 +67,9 @@ purl:group-search rdfs:subClassOf purl:search;
 			?uri a purl:Group
 			OPTIONAL { ?uri rdfs:label ?label }
 			{ ?uri rdfs:label $q }
-			UNION { ?uri purl:member [http:name $q] }
-			UNION { ?uri calli:maintainer [http:name $q] }
-			UNION { ?uri calli:maintainer [calli:member [http:name $q]] }
+			UNION { ?uri purl:member [calli:name $q] }
+			UNION { ?uri calli:maintainer [calli:name $q] }
+			UNION { ?uri calli:maintainer [calli:member [calli:name $q]] }
 		}
 		ORDER BY ?label ?uri
 	""".
@@ -85,10 +85,10 @@ purl:domain-search rdfs:subClassOf purl:search;
 			?uri a purl:Domain
 			OPTIONAL { ?uri rdfs:label ?label }
 			{ ?uri rdfs:label $q }
-			UNION { ?uri calli:maintainer [http:name $q] }
-			UNION { ?uri calli:maintainer [calli:member [http:name $q]] }
-			UNION { ?uri calli:curator [http:name $q] }
-			UNION { ?uri calli:curator [calli:member [http:name $q]] }
+			UNION { ?uri calli:maintainer [calli:name $q] }
+			UNION { ?uri calli:maintainer [calli:member [calli:name $q]] }
+			UNION { ?uri calli:curator [calli:name $q] }
+			UNION { ?uri calli:curator [calli:member [calli:name $q]] }
 		}
 		ORDER BY ?label ?uri
 	""".
@@ -107,8 +107,8 @@ purl:purl-search rdfs:subClassOf purl:search;
 			UNION { ?uri a purl:DisabledPURL }
 			UNION { ?uri a purl:TombstonedPURL }
 			OPTIONAL { ?uri rdfs:label ?label }
-			{ ?uri calli:maintainer [http:name $q] }
-			UNION { ?uri calli:maintainer [calli:member [http:name $q]] }
+			{ ?uri calli:maintainer [calli:name $q] }
+			UNION { ?uri calli:maintainer [calli:member [calli:name $q]] }
 		}
 		ORDER BY ?uri
 	""".
