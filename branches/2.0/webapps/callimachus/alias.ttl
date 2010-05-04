@@ -21,10 +21,6 @@
 @prefix http:<http://www.openrdf.org/rdf/2009/httpobject#>.
 @prefix calli:<http://callimachusproject.org/rdf/2009/framework#>.
 
-calli:redirectsTo a owl:ObjectProperty, owl:FunctionalProperty;
-	rdfs:domain calli:Alias;
-	obj:name "redirectsTo".
-
 calli:alias-get rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom calli:Alias];
@@ -37,7 +33,7 @@ calli:alias-get rdfs:subClassOf obj:Message;
 	obj:groovy """
 		def ver = new ProtocolVersion("HTTP", 1, 1)
 		def resp = new BasicHttpResponse(ver, 307, "Temporary Redirect");
-		resp.setHeader("Location", getRedirectsTo().toString())
+		resp.setHeader("Location", getCalliRedirectsTo().toString())
 		return resp
 	""".
 

@@ -24,7 +24,7 @@
 @prefix http:<http://www.openrdf.org/rdf/2009/httpobject#>.
 @prefix calli:<http://callimachusproject.org/rdf/2009/framework#>.
 
-calli:view rdfs:subClassOf obj:Message;
+calli:get-view rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom calli:Viewable];
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;

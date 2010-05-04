@@ -11,15 +11,15 @@
 # Authorisation
 ################################
 
-calli:copy http:realm <authority>.
+calli:get-copy http:realm <authority>.
 calli:pre-copy http:realm <authority>.
 calli:post-copy http:realm <authority>.
 calli:post-pre-copy http:realm <authority>.
-calli:edit http:realm <authority>.
+calli:get-edit http:realm <authority>.
 calli:pre-edit http:realm <authority>.
 calli:post-edit http:realm <authority>.
 calli:post-pre-edit http:realm <authority>.
-calli:delete http:realm <authority>.
+calli:get-delete http:realm <authority>.
 calli:pre-delete http:realm <authority>.
 calli:post-delete http:realm <authority>.
 calli:post-pre-delete http:realm <authority>.

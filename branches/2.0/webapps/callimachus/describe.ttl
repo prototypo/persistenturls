@@ -22,8 +22,8 @@
 @prefix calli:<http://callimachusproject.org/rdf/2009/framework#>.
 
 calli:describe rdfs:subClassOf obj:Message;
-	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
-		owl:allValuesFrom rdfs:Resource];
+	rdfs:subClassOf [owl:onProperty obj:objectResponse;
+		owl:maxCardinality "1"^^xsd:nonNegativeInteger];
 	http:title "RDF Describe";
 	http:rel "describedby";
 	http:operation "describe";
