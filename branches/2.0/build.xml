@@ -5,14 +5,16 @@
 	<property name="dist" location="dist" />
 	<property name="lib" location="lib" />
 	<property name="bin" location="bin" />
+	<property name="tmp" location="tmp" />
 	<property name="callimachus.url" value="callimachusproject.zip" />
 	<property name="main" value="org.callimachusproject.Server" />
-	<property name="jvmargs" value="-ea -server -mx512m -Djava.library.path=${bin}" />
+	<property name="jvmargs" value="-ea -server -mx512m -Djava.library.path=${bin} -Djava.io.tmpdir=${tmp}" />
 
 	<target name="init">
 		<!-- Create the time stamp and build directory -->
 		<tstamp />
 		<mkdir dir="${build}" />
+		<mkdir dir="${tmp}" />
 		<available file="lib" property="lib.present" />
 		<property file="build.properties" />
 	</target>
@@ -40,6 +42,7 @@
 		<!-- Delete the directory trees -->
 		<delete dir="${build}" />
 		<delete dir="${dist}" />
+		<delete dir="${tmp}" />
 	</target>
 
 	<target name="compile" depends="init,dependencies" description="compile the source ">
