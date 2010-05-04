@@ -37,6 +37,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.message.BasicHttpRequest;
 import org.openrdf.http.object.client.HTTPObjectClient;
 import org.openrdf.http.object.exceptions.BadGateway;
+import org.openrdf.http.object.exceptions.GatewayTimeout;
 import org.openrdf.http.object.traits.ProxyObject;
 import org.openrdf.http.object.util.NamedThreadFactory;
 import org.openrdf.model.Resource;
@@ -341,29 +342,41 @@ public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 	}
 
 	private HttpResponse requestRDF(HttpRequest req, int max) throws Exception {
-		HTTPObjectClient client = HTTPObjectClient.getInstance();
-		HttpResponse resp = client.service(req);
-		HttpEntity entity = resp.getEntity();
-		int code = resp.getStatusLine().getStatusCode();
-		if (code >= 300 && code < 400 && max > 0) {
-			Header location = resp.getFirstHeader("Location");
-			if (location != null) {
-				if (entity != null) {
-					entity.consumeContent();
+		try {
+			HTTPObjectClient client = HTTPObjectClient.getInstance();
+			HttpResponse resp = client.service(req);
+			HttpEntity entity = resp.getEntity();
+			int code = resp.getStatusLine().getStatusCode();
+			if (code >= 300 && code < 400 && max > 0) {
+				Header location = resp.getFirstHeader("Location");
+				if (location != null) {
+					if (entity != null) {
+						entity.consumeContent();
+					}
+					String href = location.getValue();
+					HttpRequest req1 = new BasicHttpRequest("GET", href);
+					return requestRDF(req1, max - 1);
 				}
-				HttpRequest req1 = new BasicHttpRequest("GET", location
-						.getValue());
-				return requestRDF(req1, (max - 1));
 			}
+			if (code == 200 || code == 304 || code == 404 || code == 410)
+				return resp;
+			if (entity != null) {
+				entity.consumeContent();
+			}
+			if (code >= 300 && code < 400)
+				throw new BadGateway("Too many redirects");
+			throw new BadGateway(resp.getStatusLine().getReasonPhrase());
+		} catch (BadGateway e) {
+			logger.info("Unresolvable {}", getResource());
+			ObjectConnection con = getObjectConnection();
+			con.addDesignation(this, Unresolvable.class);
+			throw e;
+		} catch (GatewayTimeout e) {
+			logger.info("Unresolvable {}", getResource());
+			ObjectConnection con = getObjectConnection();
+			con.addDesignation(this, Unresolvable.class);
+			throw e;
 		}
-		if (code == 200 || code == 304 || code == 404 || code == 410)
-			return resp;
-		if (entity != null) {
-			entity.consumeContent();
-		}
-		if (code >= 300 && code < 400)
-			throw new BadGateway("Too many redirects");
-		throw new BadGateway(resp.getStatusLine().getReasonPhrase());
 	}
 
 	private boolean importResponse(HttpResponse resp, String origin)
