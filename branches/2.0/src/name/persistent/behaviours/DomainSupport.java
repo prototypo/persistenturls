@@ -477,8 +477,10 @@ public abstract class DomainSupport implements Domain, RDFObject {
 		try {
 			HttpResponse resp = client.service(addr, req);
 			if (!resp.containsHeader("Via")) {
-				String original = "1.1 " + addr.getHostName() + ":"
-						+ addr.getPort();
+				String original = "1.1 " + addr.getHostName();
+				if (addr.getPort() != 80 && addr.getPort() != 443) {
+					original += ":" + addr.getPort();
+				}
 				resp.addHeader("Via", original);
 			}
 			StatusLine status = resp.getStatusLine();

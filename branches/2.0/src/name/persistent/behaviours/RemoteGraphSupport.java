@@ -45,6 +45,7 @@ import org.openrdf.model.URI;
 import org.openrdf.model.Value;
 import org.openrdf.model.ValueFactory;
 import org.openrdf.model.impl.ContextStatementImpl;
+import org.openrdf.model.vocabulary.RDF;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.object.ObjectConnection;
 import org.openrdf.repository.object.ObjectFactory;
@@ -66,7 +67,10 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 		ProxyObject {
-	private static final String REL = "http://persistent.name/rdf/2010/purl#rel";
+	private static final String NS = "http://persistent.name/rdf/2010/purl#";
+	private static final String REL = NS + "rel";
+	private static final String REMOTE_RESOURCE = NS + "RemoteResource";
+	private static final String DEFINED_BY = NS + "definedBy";
 
 	public static void canacelAllValidation() throws InterruptedException {
 		List<Refresher> list;
@@ -186,6 +190,8 @@ public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 
 		public void handleStatement(Statement st) throws RDFHandlerException {
 			Resource subj = st.getSubject();
+			URI pred = st.getPredicate();
+			Value obj = st.getObject();
 			if (!subj.equals(ctx) && subj instanceof URI) {
 				boolean found = false;
 				for (String origin : origins) {
@@ -194,12 +200,15 @@ public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 						break;
 					}
 				}
-				if (!found && !REL.equals(st.getPredicate().stringValue()))
+				if (!found && !REL.equals(pred.stringValue())) {
+					if (DEFINED_BY.equals(pred.stringValue()))
+						return;
+					if (RDF.TYPE.equals(pred) && REMOTE_RESOURCE.equals(obj.stringValue()))
+						return;
 					throw new BadGateway("Origin Not Allowed: "
-							+ subj.stringValue());
+							+ subj.stringValue() + " from " + ctx.stringValue());
+				}
 			}
-			URI pred = st.getPredicate();
-			Value obj = st.getObject();
 			st = new ContextStatementImpl(subj, pred, obj, ctx);
 			nil = false;
 			super.handleStatement(st);
