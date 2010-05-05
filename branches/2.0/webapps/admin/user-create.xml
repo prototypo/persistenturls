@@ -3,7 +3,7 @@
 <!-- Copyright (c) 2010 Zepheira LLC, Some Rights Reserved. -->
 <html xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-	xmlns:http="http://www.openrdf.org/rdf/2009/httpobject#"
+	xmlns:calli="http://callimachusproject.org/rdf/2009/framework#"
 	xmlns:purl="http://persistent.name/rdf/2010/purl#">
 	<head>
 		<title>Request a New User</title>
@@ -21,7 +21,7 @@
 							</td>
 							<td class="value" data-cardinality="1">
 								<input id="m_username" type="text"
-									onchange="$(form).attr('about', '/data/user/' + value)" property="http:name" />
+									onchange="$(form).attr('about', '/data/user/' + value)" property="calli:name" />
 							</td>
 						</tr>
 						<tr>
@@ -55,7 +55,7 @@
 							</td>
 							<td class="value">
 								<input id="m_passwd" type="password"
-									onkeypress="$('#m_algorithm').val(,'MD5');$('#m_encoded').val(hex_md5($('#m_username').val()+':'+$('#m_realm').val()+':'+value);$('#m_algorithm').change();$('#m_encoded').change();" />
+									onchange="$('#m_algorithm').val(,'MD5');$('#m_encoded').val(hex_md5($('#m_username').val()+':'+$('#m_realm').val()+':'+value);$('#m_algorithm').change();$('#m_encoded').change();" />
 							</td>
 						</tr>
 						<tr>
@@ -87,13 +87,13 @@
 						<tr class="hidden">
 							<td class="property"/>
 							<td class="value" data-cardinality="1">
-								<input id="m_algorithm" property="purl:algorithm" type="hidden" />
+								<input id="m_algorithm" property="calli:algorithm" type="hidden" />
 							</td>
 						</tr>
 						<tr class="hidden">
 							<td class="property"/>
 							<td class="value" data-cardinality="1">
-								<input id="m_encoded" property="purl:encoded" type="hidden" />
+								<input id="m_encoded" property="calli:encoded" type="hidden" />
 							</td>
 						</tr>
 						<tr class="hidden">

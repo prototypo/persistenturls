@@ -13,9 +13,6 @@
 			<div property="purl:mbox" />
 			<div property="purl:affiliation" />
 			<p property="purl:justification" />
-			<div property="purl:hint" />
-			<div property="purl:algorithm" />
-			<div property="purl:encoded" />
 			<input value="Delete" type="submit" />
 		</form>
 	</body>
