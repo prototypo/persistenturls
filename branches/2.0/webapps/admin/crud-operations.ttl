@@ -8,29 +8,6 @@
 @prefix purl:<http://persistent.name/rdf/2010/purl#>.
 
 ################################
-# Authorisation
-################################
-
-calli:get-copy http:realm <authority>.
-calli:pre-copy http:realm <authority>.
-calli:post-copy http:realm <authority>.
-calli:post-pre-copy http:realm <authority>.
-calli:get-edit http:realm <authority>.
-calli:pre-edit http:realm <authority>.
-calli:post-edit http:realm <authority>.
-calli:post-pre-edit http:realm <authority>.
-calli:get-delete http:realm <authority>.
-calli:pre-delete http:realm <authority>.
-calli:post-delete http:realm <authority>.
-calli:post-pre-delete http:realm <authority>.
-
-<authority> a calli:AuthorizationRealm;
-	calli:maintainer </data/group/admin>.
-
-calli:AuthorizationRealm rdfs:subClassOf calli:Editable;
-	calli:edit <realm-edit.xml>.
-
-################################
 # Server
 ################################
 
@@ -76,6 +53,29 @@ purl:Group rdfs:subClassOf calli:Viewable, calli:Editable, calli:Deletable;
 	calli:delete <group-delete.xml>.
 
 ################################
+# RemoteGraph
+################################
+
+<mirror/template> a purl:MirrorTemplate;
+	calli:maintainer </data/group/admin>.
+
+purl:MirrorTemplate rdfs:subClassOf calli:Copyable;
+	calli:copy <mirror-create.xml>.
+
+purl:RemoteGraph rdfs:subClassOf calli:Viewable, calli:Editable, calli:Deletable;
+	calli:view <mirror-view.xml>;
+	calli:edit <mirror-edit.xml>;
+	calli:delete <mirror-delete.xml>.
+
+purl:post-delete-graph owl:intersectionOf (calli:post-delete
+		[owl:onProperty obj:target; owl:allValuesFrom purl:RemoteGraph]);
+	obj:precedes calli:post-delete;
+	obj:groovy """
+		msg.proceed()
+		removeRemoteGraph()
+	""".
+
+################################
 # Origin
 ################################
 
@@ -109,6 +109,15 @@ purl:Domain rdfs:subClassOf calli:Viewable, calli:Editable, calli:Deletable;
 	calli:edit <domain-edit.xml>;
 	calli:delete <domain-delete.xml>.
 
+purl:init-domain-create owl:intersectionOf (calli:post-copy
+		[owl:onProperty obj:target; owl:allValuesFrom purl:Origin]);
+	obj:precedes calli:post-copy;
+	obj:groovy """
+		def domain = msg.functionalObjectResponse
+		purlParts.add(domain)
+		return domain
+	""".
+
 ################################
 # PURL
 ################################
@@ -126,43 +135,23 @@ purl:PURL rdfs:subClassOf calli:Viewable, calli:Editable;
 	calli:view <purl-view.xml>;
 	calli:edit <purl-edit.xml>.
 
-purl:post-edit-purl-touch owl:intersectionOf (calli:post-edit
-		[owl:onProperty obj:target; owl:allValuesFrom purl:PURL]);
-	obj:precedes calli:post-edit;
-	obj:groovy """
-		msg.proceed()
-		return msg.functionalObjectResponse
-	""".
-
-purl:post-pre-edit-purl-touch owl:intersectionOf (calli:post-pre-edit
-		[owl:onProperty obj:target; owl:allValuesFrom purl:PURL]);
-	obj:precedes calli:post-pre-edit;
-	obj:groovy """
-		msg.proceed()
-		if (purlPartOf) {
-			purlPartOf.touchRevision()
-		}
-		return msg.functionalObjectResponse
-	""".
-
 purl:init-purl-create owl:intersectionOf (calli:post-copy
 		[owl:onProperty obj:target; owl:allValuesFrom purl:Domain]);
 	obj:precedes calli:post-copy;
 	obj:groovy """
 		def purl = msg.functionalObjectResponse
 		purl.purlPartOf = msg.target
-		purl.calliMaintainers.addAll(calliMaintainers)
 		touchRevision()
 		return purl
 	""".
 
-purl:init-purl-pre-create owl:intersectionOf (calli:post-pre-copy
-		[owl:onProperty obj:target; owl:allValuesFrom purl:Domain]);
-	obj:precedes calli:post-pre-copy;
+purl:post-edit-purl-touch owl:intersectionOf (calli:post-edit
+		[owl:onProperty obj:target; owl:allValuesFrom purl:PURL]);
+	obj:precedes calli:post-edit;
 	obj:groovy """
-		def purl = msg.functionalObjectResponse
-		purl.purlPartOf = msg.target
-		purl.calliMaintainers.addAll(calliMaintainers)
-		touchRevision()
-		return purl
+		msg.proceed()
+		if (purlPartOf) {
+			purlPartOf.touchRevision()
+		}
+		return msg.functionalObjectResponse
 	""".

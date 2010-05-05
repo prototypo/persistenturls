@@ -45,9 +45,9 @@ function diverted(url, node) {
 			}
 		}
 	}
-	if (url.indexOf('?') > 0) {
-		var uri = url.substring(0, url.indexOf('?'))
-		var qs = url.substring(url.indexOf('?'))
+	if (url.lastIndexOf('?') > 0) {
+		var uri = url.substring(0, url.lastIndexOf('?'))
+		var qs = url.substring(url.lastIndexOf('?'))
 		return prefix + encodeURIComponent(uri) + qs
 	}
 	return prefix + encodeURIComponent(url) + "?view"

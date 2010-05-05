@@ -334,6 +334,33 @@ public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 		return lifeTime - age;
 	}
 
+	public void removeRemoteGraph() throws Exception {
+		ObjectConnection con = getObjectConnection();
+		boolean autoCommit = con.isAutoCommit();
+		try {
+			goStale();
+			if (autoCommit) {
+				con.setAutoCommit(false); // begin
+			}
+			con.clear(getResource());
+			setPurlCacheControl(null);
+			setPurlEtag(null);
+			setPurlLastModified(null);
+			setPurlLastValidated(null);
+			setPurlContentType(null);
+			con.removeDesignation(this, RemoteGraph.class);
+			con.removeDesignation(this, Unresolvable.class);
+			con.commit();
+			logger.info("Removed {}", getResource());
+			goStale();
+		} finally {
+			if (autoCommit && !con.isAutoCommit()) {
+				con.rollback();
+				con.setAutoCommit(true);
+			}
+		}
+	}
+
 	private boolean isAlwaysFresh() {
 		Refresher refresher = new Refresher(this);
 		synchronized (alwaysFresh) {
@@ -454,33 +481,6 @@ public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 		con.commit();
 		logger.info("Updated {}", getResource());
 		stayFresh();
-	}
-
-	private void removeRemoteGraph() throws Exception {
-		ObjectConnection con = getObjectConnection();
-		boolean autoCommit = con.isAutoCommit();
-		try {
-			goStale();
-			if (autoCommit) {
-				con.setAutoCommit(false); // begin
-			}
-			con.clear(getResource());
-			setPurlCacheControl(null);
-			setPurlEtag(null);
-			setPurlLastModified(null);
-			setPurlLastValidated(null);
-			setPurlContentType(null);
-			con.removeDesignation(this, RemoteGraph.class);
-			con.removeDesignation(this, Unresolvable.class);
-			con.commit();
-			logger.info("Removed {}", getResource());
-			goStale();
-		} finally {
-			if (autoCommit && !con.isAutoCommit()) {
-				con.rollback();
-				con.setAutoCommit(true);
-			}
-		}
 	}
 
 	private boolean parse(String origin, String type, InputStream in)

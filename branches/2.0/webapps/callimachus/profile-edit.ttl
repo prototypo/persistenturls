@@ -60,20 +60,11 @@ calli:post-edit rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
 		owl:allValuesFrom <java:java.io.InputStream>];
 	http:method "POST";
-	http:operation "edit";
+	http:operation "edit", "pre-edit";
 	obj:groovy "return editDescription('edit', msg.in)".
 
-calli:post-pre-edit rdfs:subClassOf obj:Message;
-	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom calli:Editable];
-	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
-		owl:allValuesFrom <java:java.io.InputStream>];
-	http:method "POST";
-	http:operation "pre-edit";
-	obj:groovy "return editDescription('pre-edit', msg.in)".
-
 calli:post-edit-in a owl:ObjectProperty; a owl:FunctionalProperty;
-	rdfs:domain [owl:unionOf (calli:post-edit calli:post-pre-edit)];
+	rdfs:domain calli:post-edit;
 	rdfs:range <java:java.io.InputStream>;
 	http:type "multipart/related;type=\"application/rdf+xml\"";
 	obj:name "in".

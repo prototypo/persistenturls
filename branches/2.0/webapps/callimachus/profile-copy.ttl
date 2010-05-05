@@ -60,32 +60,16 @@ calli:post-copy rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:objectResponse;
 		owl:maxCardinality "1"^^xsd:nonNegativeInteger];
 	http:method "POST";
-	http:operation "copy";
+	http:operation "copy", "pre-copy";
 	http:expect "201-created";
 	obj:groovy """
 		def copy = copyDescription('copy', msg.in, findCopyNamespaces())
-		copy.calliMaintainers.addAll(calliCurators)
-		copy.calliMaintainers.addAll(calliMaintainers)
-		return copy
-	""".
-
-calli:post-pre-copy rdfs:subClassOf obj:Message;
-	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom calli:Copyable];
-	rdfs:subClassOf [owl:onProperty obj:objectResponse;
-		owl:maxCardinality "1"^^xsd:nonNegativeInteger];
-	http:method "POST";
-	http:operation "pre-copy";
-	http:expect "201-created";
-	obj:groovy """
-		def copy = copyDescription('pre-copy', msg.in, findCopyNamespaces())
-		copy.calliMaintainers.addAll(calliCurators)
 		copy.calliMaintainers.addAll(calliMaintainers)
 		return copy
 	""".
 
 calli:post-copy-in a owl:ObjectProperty, owl:FunctionalProperty;
-	rdfs:domain [owl:unionOf (calli:post-copy calli:post-pre-copy)];
+	rdfs:domain calli:post-copy;
 	rdfs:range <java:java.io.InputStream>;
 	http:type "application/rdf+xml";
 	obj:name "in".

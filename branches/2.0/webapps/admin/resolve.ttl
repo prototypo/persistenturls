@@ -14,6 +14,7 @@
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
 		owl:allValuesFrom <java:org.apache.http.HttpResponse>];
 	http:method "GET";
+	http:operation "";
 	http:type "message/x-response";
 	http:cache-control "max-age=3600";
 	obj:groovy """

@@ -32,3 +32,30 @@ purl:unresolvable-purls rdfs:subClassOf obj:Message;
 		}
 		ORDER BY ?uri
 	""".
+
+purl:list-mirrors rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:Origin];
+	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
+		owl:allValuesFrom obj:TupleResult];
+	http:operation "mirrors";
+	http:realm <authority>;
+	http:type "application/sparql-results+xml";
+	http:cache-control "must-reevaluate";
+	http:transform <search.xsl>;
+	obj:sparql """
+		SELECT DISTINCT ?uri ?label ?type
+		WHERE {
+			?uri a purl:RemoteGraph; purl:allowedOrigin $this .
+			?label purl:mirroredBy ?uri .
+			GRAPH ?uri {
+				{ ?label a ?type FILTER (?type = purl:Origin) }
+				UNION {
+					?label a ?type
+					OPTIONAL { ?label ?origin purl:Origin }
+					FILTER (!bound(?origin) && ?type = purl:Domain )
+				}
+			}
+		}
+		ORDER BY ?label desc(?type) ?uri
+	""".

@@ -60,20 +60,11 @@ calli:post-delete rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:objectResponse;
 		owl:allValuesFrom owl:Nothing];
 	http:method "POST";
-	http:operation "delete";
+	http:operation "delete", "pre-delete";
 	obj:groovy "deleteDescription('delete', msg.in)".
 
-calli:post-pre-delete rdfs:subClassOf obj:Message;
-	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom calli:Deletable];
-	rdfs:subClassOf [owl:onProperty obj:objectResponse;
-		owl:allValuesFrom owl:Nothing];
-	http:method "POST";
-	http:operation "pre-delete";
-	obj:groovy "deleteDescription('pre-delete', msg.in)".
-
 calli:post-delete-in a owl:ObjectProperty; a owl:FunctionalProperty;
-	rdfs:domain [owl:unionOf (calli:post-delete calli:post-pre-delete)];
+	rdfs:domain calli:post-delete;
 	rdfs:range <java:java.io.InputStream>;
 	http:type "application/rdf+xml";
 	obj:name "in".
