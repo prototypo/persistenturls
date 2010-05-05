@@ -6,16 +6,39 @@
 	xmlns:calli="http://callimachusproject.org/rdf/2009/framework#"
 	xmlns:purl="http://persistent.name/rdf/2010/purl#">
 	<head>
-		<title>Create a Simple PURL</title>
+		<title>Create a PURL</title>
 	</head>
 	<body class="purl">
-		<form action="" about="" typeof="purl:PURL">
+		<form action="" about="" typeof="purl:PURL" id="purl-form">
+			<input type="hidden" class="type simple renamed copy described redirect" value="purl:PURL"/>
+			<input type="hidden" class="type partial" value="purl:PartialPURL"/>
+			<input type="hidden" class="type zoned" value="purl:ZonedPURL"/>
+			<input type="hidden" class="type disabled" value="purl:DisabledPURL"/>
+			<input type="hidden" class="type tombstoned" value="purl:TombstonedPURL"/>
 			<fieldset>
 				<legend>Create a New PURL</legend>
 				<p class="instructions">Fill in the following PURL information.</p>
 				<table class="actiontable">
 					<tbody>
-						<tr>
+						<tr class="all">
+							<td class="property">
+								<label for="purl-type">PURL type:</label>
+							</td>
+							<td class="value">
+								<select id="purl-type" onchange="modifyForm(this.value)">
+									<option value="simple">Simple (302)</option>
+									<option value="renamed">Renamed (310)</option>
+									<option value="described">Describe (303)</option>
+									<option value="redirect">Redirect (307)</option>
+									<option value="copy">Copy (203)</option>
+									<option value="partial">Partial</option>
+									<option value="zoned">Zoned</option>
+									<option value="disabled">Disabled</option>
+									<option value="tombstoned">Tombstoned</option>
+								</select>
+							</td>
+						</tr>
+						<tr class="all">
 							<td class="property">
 								<label for="m_label">Name:</label>
 							</td>
@@ -23,7 +46,7 @@
 								<input id="m_label" property="rdfs:label" type="text" />
 							</td>
 						</tr>
-						<tr>
+						<tr class="all">
 							<td class="property">
 								<label for="m_purl">PURL:</label>
 							</td>
@@ -32,15 +55,92 @@
 									onchange="$(form).attr('about', $('#m_domain').attr('href') + value)" />
 							</td>
 						</tr>
-						<tr>
+						<tr class="renamed">
 							<td class="property">
-								<label for="m_alternative">Target:</label>
+								<label for="m_renamedTo">Target:</label>
 							</td>
-							<td class="value" data-cardinality="1">
-								<input id="m_alternative" type="text" property="purl:alternative" />
+							<td class="value" data-cardinality="1" rel="purl:renamedTo">
+								<input id="m_renamedTo" type="text" onchange="$(this).attr('about', $(this).val())"/>
+								<span typeof="rdf:Resource" href="?target"/>
 							</td>
 						</tr>
-						<tr>
+						<tr class="redirect">
+							<td class="property">
+								<label for="m_redirectsTo">Target:</label>
+							</td>
+							<td class="value" data-cardinality="1" rel="purl:redirectsTo">
+								<input id="m_redirectsTo" type="text" onchange="$(this).attr('about', $(this).val())"/>
+								<span typeof="rdf:Resource" href="?target"/>
+							</td>
+						</tr>
+						<tr class="simple">
+							<td class="property">
+								<label for="m_alternate">Target:</label>
+							</td>
+							<td class="value" data-cardinality="1" rel="purl:alternate">
+								<input id="m_alternate" type="text" onchange="$(this).attr('about', $(this).val())"/>
+								<span typeof="rdf:Resource" href="?target"/>
+							</td>
+						</tr>
+						<tr class="copy">
+							<td class="property">
+								<label for="m_copyOf">Target:</label>
+							</td>
+							<td class="value" data-cardinality="1" rel="purl:copyOf">
+								<input id="m_copyOf" type="text" onchange="$(this).attr('about', $(this).val())"/>
+								<span typeof="rdf:Resource" href="?target"/>
+							</td>
+						</tr>
+						<tr class="described">
+							<td class="property">
+								<label for="m_describedBy">Target:</label>
+							</td>
+							<td class="value" data-cardinality="1" rel="purl:describedBy">
+								<input id="m_describedBy" type="text" onchange="$(this).attr('about', $(this).val())"/>
+								<span typeof="rdf:Resource" href="?target"/>
+							</td>
+						</tr>
+						<tr class="partial">
+							<td class="property">
+								<label for="m_pattern">Pattern:</label>
+							</td>
+							<td class="value" data-cardinality="1">
+								<input id="m_pattern" type="text" property="purl:pattern" />
+							</td>
+						</tr>
+						<tr class="simple renamed described redirect copy">
+							<td class="property">
+								<label for="m_title">Link Title:</label>
+							</td>
+							<td class="value" data-cardinality="1">
+								<input id="m_title" type="text" property="purl:title" />
+							</td>
+						</tr>
+						<tr class="simple renamed described redirect copy">
+							<td class="property">
+								<label for="m_type">Link Type:</label>
+							</td>
+							<td class="value" data-cardinality="1">
+								<input id="m_type" type="text" property="purl:type" />
+							</td>
+						</tr>
+						<tr class="simple renamed described redirect copy">
+							<td class="property">
+								<label for="m_media">Link Media:</label>
+							</td>
+							<td class="value" data-cardinality="1">
+								<input id="m_media" type="text" property="purl:media" />
+							</td>
+						</tr>
+						<tr class="simple renamed described redirect copy">
+							<td class="property">
+								<label for="m_lang">Link Language:</label>
+							</td>
+							<td class="value" data-cardinality="1">
+								<input id="m_lang" type="text" property="purl:lang" />
+							</td>
+						</tr>
+						<tr class="all">
 							<td class="property">
 								<label for="m_maintainer">Maintainers:</label>
 							</td>
