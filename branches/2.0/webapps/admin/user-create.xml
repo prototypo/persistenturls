@@ -55,7 +55,7 @@
 							</td>
 							<td class="value">
 								<input id="m_passwd" type="password"
-									onchange="$('#m_algorithm').val(,'MD5');$('#m_encoded').val(hex_md5($('#m_username').val()+':'+$('#m_realm').val()+':'+value);$('#m_algorithm').change();$('#m_encoded').change();" />
+									onchange="$('#m_algorithm').val('MD5');$('#m_encoded').val(hex_md5($('#m_username').val()+':'+$('#m_realm').val()+':'+value));$('#m_algorithm').change();$('#m_encoded').change();" />
 							</td>
 						</tr>
 						<tr>
