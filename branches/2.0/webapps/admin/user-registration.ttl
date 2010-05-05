@@ -48,7 +48,13 @@ purl:post-register rdfs:subClassOf obj:Message;
 	http:method "POST";
 	http:operation "register";
 	http:expect "201-created";
-	obj:groovy "return copyDescription('copy', msg.in, findCopyNamespaces())".
+	obj:imports </data/group/public>;
+	obj:groovy """
+		def user = copyDescription('copy', msg.in, findCopyNamespaces())
+		copy.calliMaintainers.addAll(calliMaintainers)
+		_public.calliMembers.add(user)
+		return user
+	""".
 
 purl:post-register-in a owl:ObjectProperty, owl:FunctionalProperty;
 	rdfs:domain purl:post-register;
