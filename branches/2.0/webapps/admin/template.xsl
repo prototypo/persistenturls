@@ -20,7 +20,7 @@
 	<xsl:template match="head">
 		<xsl:copy>
 			<xsl:apply-templates select="@*|*|text()|comment()" />
-			<style type="text/css">@import url("<xsl:value-of select="$xslt"/>/../../docs/style.css")</style>
+			<style type="text/css">@import url("<xsl:value-of select="$xslt"/>/../../docs/style.css");</style>
 			<script type="text/javascript" src="{$xslt}/../../callimachus/jquery-1.3.2.js">
 			</script>
 			<script type="text/javascript" src="{$xslt}/../../callimachus/jquery-ui-1.7.2.js">
