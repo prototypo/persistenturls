@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-	<!-- Copyright (c) 2010 Zepheira LLC, Some Rights Reserved. -->
 	<xsl:param name="xslt" />
 	<xsl:param name="mode" />
 	<xsl:variable name="section" select="/html/body/@class" />
@@ -44,6 +43,10 @@
 				<script type="text/javascript" src="{$xslt}/../../callimachus/md5.js">
 				</script>
 			</xsl:if>
+			<xsl:if test="(contains($mode, 'copy') or contains($mode, 'edit')) and $section='purl'">
+				<script type="text/javascript" src="{$xslt}/../purl-form.js">
+				</script>
+			</xsl:if>
 			<xsl:if test="contains($mode, 'edit')">
 				<script type="text/javascript" src="{$xslt}/../../callimachus/profile-edit.js">
 				</script>
@@ -79,29 +82,11 @@
 		<xsl:copy>
 			<xsl:apply-templates select="@*" />
 			<xsl:if test="not(starts-with($mode, 'pre-'))">
-			<div id="loginstatus">
-				<p>Login status not determined. Do you have Javascript and cookies
-					enabled?</p>
-			</div>
-			<div id="header">
-				<h1>PURL User Administration</h1>
-				<ul id="tabmenu">
-					<li>
-						<a>
-							<xsl:attribute name="class">
-								<xsl:choose>
-									<xsl:when test="$section='home'">
-										active
-									</xsl:when>
-									<xsl:otherwise>
-										inactive
-									</xsl:otherwise>
-								</xsl:choose>
-							</xsl:attribute>
-							<xsl:attribute name="href">/docs/index.html</xsl:attribute>
-							<xsl:text>Home</xsl:text>
-						</a>
-					</li>
+				<div id="loginstatus">
+					<p>Login status not determined. Do you have Javascript and cookies
+						enabled?</p>
+				</div>
+				<ul id="menu">
 					<li>
 						<a>
 							<xsl:attribute name="class">
@@ -173,32 +158,65 @@
 						<a class="inactive" href="/docs/help.html">Help</a>
 					</li>
 				</ul>
-			</div>
 			</xsl:if>
+
 			<div id="content">
-				<div id="">
+				<div id="message-container">
 					<a id="message" />
+				</div>
+				<div id="header">
+					<ul id="breadcrumbs">
+						<li class="home"><a href="/">Home</a></li>
+						<li><a href="/">dummy breadcrumb</a></li>
+						<!-- will need a way to generate this -->
+					</ul>
+					<ul id="actions">
+						<li>
+							<xsl:choose>
+								<xsl:when test="contains($mode, 'view')">
+									<span class="current">View</span>
+								</xsl:when>
+								<xsl:otherwise>
+									<a href="?view">View</a>
+								</xsl:otherwise>
+							</xsl:choose>
+						</li>
+						<li>
+							<xsl:choose>
+								<xsl:when test="contains($mode, 'edit')">
+									<span class="current">Edit</span>
+								</xsl:when>
+								<xsl:otherwise>
+									<a href="?edit">Edit</a>
+								</xsl:otherwise>
+							</xsl:choose>
+						</li>
+						<li>
+							<xsl:choose>
+								<xsl:when test="contains($mode, 'delete')">
+									<span class="current">Delete</span>
+								</xsl:when>
+								<xsl:otherwise>
+									<a href="?delete">Delete</a>
+								</xsl:otherwise>
+							</xsl:choose>
+						</li>
+						<!-- 'new' action(s) based on body class? -->
+					</ul>
+					<div class="clear">&#160;</div>
 				</div>
 				<xsl:apply-templates select="*|comment()|text()" />
 			</div>
 
 			<xsl:if test="not(starts-with($mode, 'pre-'))">
-			<div id="footer">
-				<table width="100%" summary="supporters">
-					<tr>
-						<td>
-							<a href="http://www.oclc.org/">
-								<img align="left" src="{$xslt}/../../docs/images/oclclogo.png" alt="oclc" />
-							</a>
-						</td>
-						<td>
-							<a href="http://zepheira.com/">
-								<img align="right" src="{$xslt}/../../docs/images/zepheiralogo.png" alt="zepheira" />
-							</a>
-						</td>
-					</tr>
-				</table>
-			</div>
+				<div id="footer">
+					<a href="http://www.oclc.org/" title="OCLC">
+						<img src="{$xslt}/../../docs/images/oclclogo.png" alt="OCLC logo" />
+					</a>
+					<a href="http://zepheira.com/" title="Zepheira">
+						<img src="{$xslt}/../../docs/images/zepheiralogo.png" alt="Zepheira logo" />
+					</a>
+				</div>
 			</xsl:if>
 		</xsl:copy>
 	</xsl:template>
