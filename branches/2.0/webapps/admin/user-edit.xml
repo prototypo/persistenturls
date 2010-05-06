@@ -4,6 +4,7 @@
 <html xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
 	xmlns:calli="http://callimachusproject.org/rdf/2009/framework#"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
 	xmlns:purl="http://persistent.name/rdf/2010/purl#">
 	<head>
 		<title property="rdfs:label"/>
@@ -90,7 +91,7 @@
 						<tr class="hidden">
 							<td class="property"/>
 							<td class="value" data-cardinality="1">
-								<input id="m_encoded" property="calli:encoded" type="hidden" />
+								<input id="m_encoded" property="calli:encoded" datatype="xsd:hexBinary" type="hidden" />
 							</td>
 						</tr>
 						<tr class="hidden">
