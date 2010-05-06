@@ -51,7 +51,7 @@ purl:post-register rdfs:subClassOf obj:Message;
 	obj:imports </data/group/public>;
 	obj:groovy """
 		def user = copyDescription('copy', msg.in, findCopyNamespaces())
-		copy.calliMaintainers.addAll(calliMaintainers)
+		user.calliMaintainers.addAll(calliMaintainers)
 		_public.calliMembers.add(user)
 		return user
 	""".
