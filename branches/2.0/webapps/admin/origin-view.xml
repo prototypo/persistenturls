@@ -16,7 +16,7 @@
         </ul>
         <h3>Domains</h3>
         <ul>
-            <li resource="?part" rel="purl:part"><a property="rdfs:label" href="?part"></a></li>
+            <li resource="?part" rel="purl:part"><a class="diverted" property="rdfs:label" href="?part"></a></li>
         </ul>
 	</body>
 </html>

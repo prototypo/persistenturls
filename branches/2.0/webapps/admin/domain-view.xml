@@ -17,7 +17,7 @@
 		</ul>
 		<h3>PURLs</h3>
 		<ul>
-			<li resource="?purl" rev="purl:partOf"><a property="rdfs:label" href="?purl"></a></li>
+			<li resource="?purl" rev="purl:partOf"><a class="diverted" property="rdfs:label" href="?purl"></a></li>
 		</ul>
 	</body>
 </html>

@@ -11,7 +11,7 @@
 	<body class="purl">
 		<form action="" about="" typeof="purl:PURL">
 			<h2 property="rdfs:label" />
-			<a property="purl:alternative" href="?alternative" />
+			<a rel="purl:alternative" href="?alternative">Target</a>
 			<input value="Delete" type="submit" />
 		</form>
 	</body>

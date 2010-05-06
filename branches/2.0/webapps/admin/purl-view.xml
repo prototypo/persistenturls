@@ -10,7 +10,7 @@
 	</head>
 	<body class="purl">
 		<h2 property="rdfs:label" />
-		<a property="purl:alternative" href="?alternative" />
+        <a rel="purl:redirectsTo" href="?redirectsTo">Target</a>
         <h3>Maintainers</h3>
         <ul>
             <li resource="?maintainer" rel="calli:maintainer"><a property="rdfs:label" href="?maintainer"></a></li>
