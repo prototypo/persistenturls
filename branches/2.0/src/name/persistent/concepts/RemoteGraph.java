@@ -57,6 +57,13 @@ public interface RemoteGraph {
 	@iri("http://persistent.name/rdf/2010/purl#last-validated")
 	void setPurlLastValidated(XMLGregorianCalendar purlLastValidated);
 
+	/** Via HTTP header that was used when this graph was loaded. */
+	@iri("http://persistent.name/rdf/2010/purl#via")
+	String getPurlVia();
+	/** Via HTTP header that was used when this graph was loaded. */
+	@iri("http://persistent.name/rdf/2010/purl#via")
+	void setPurlVia(String purlVia);
+
 	boolean load(String origin) throws Exception;
 
 	boolean validate(String origin) throws Exception;

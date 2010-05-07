@@ -20,6 +20,7 @@ import org.openrdf.repository.object.annotations.name;
 import org.openrdf.repository.object.annotations.sparql;
 
 public abstract class MirrorSupport {
+	private static final String PROTOCOL = "1.1";
 	private static final String PREFIX = "PREFIX purl:<http://persistent.name/rdf/2010/purl#>\n";
 	/** Date format pattern used to generate the header in RFC 1123 format. */
 	public static final String PATTERN_RFC1123 = "EEE, dd MMM yyyy HH:mm:ss zzz";
@@ -34,6 +35,7 @@ public abstract class MirrorSupport {
 			hostname = "AliBaba";
 		}
 	}
+	private static final String VIA = PROTOCOL + " " + hostname;
 	private static String WARN_110 = "110 " + hostname
 			+ " \"Response is stale\"";
 	private static String WARN_111 = "111 " + hostname
@@ -59,7 +61,10 @@ public abstract class MirrorSupport {
 			long now = System.currentTimeMillis();
 			long date = validated.toGregorianCalendar().getTimeInMillis();
 			int age = (int) ((now - date) / 1000);
+			String via = graph.getPurlVia();
+			setHeader(resp, "Via", via == null ? VIA : via + "," + VIA);
 			resp.setHeader("Age", Integer.toString(age));
+			setHeader(resp, "Date", validated);
 			setHeader(resp, "Cache-Control", graph.getPurlCacheControl());
 			setHeader(resp, "ETag", graph.getPurlEtag());
 			setHeader(resp, "Last-Modified", graph.getPurlLastModified());

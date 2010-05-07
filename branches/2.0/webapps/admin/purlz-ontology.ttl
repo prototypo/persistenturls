@@ -195,6 +195,11 @@
 	rdfs:domain <#RemoteGraph>;
 	rdfs:range xsd:dateTime.
 
+<#via> a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:comment "Via HTTP header that was used when this graph was loaded.";
+	rdfs:domain <#RemoteGraph>;
+	rdfs:range xsd:string.
+
 <#cache-control> a owl:DatatypeProperty, owl:FunctionalProperty;
 	rdfs:comment "Cache-Control HTTP header that was used when this graph was loaded.";
 	rdfs:domain <#RemoteGraph>;

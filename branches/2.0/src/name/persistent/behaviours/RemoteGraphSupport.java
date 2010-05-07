@@ -6,6 +6,8 @@
  */
 package name.persistent.behaviours;
 
+import info.aduna.net.ParsedURI;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -68,6 +70,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 		ProxyObject {
+	private static final String PROTOCOL = "1.1";
 	private static final String NS = "http://persistent.name/rdf/2010/purl#";
 	private static final String REL = NS + "rel";
 	private static final String REMOTE_RESOURCE = NS + "RemoteResource";
@@ -343,6 +346,7 @@ public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 				con.setAutoCommit(false); // begin
 			}
 			con.clear(getResource());
+			setPurlVia(null);
 			setPurlCacheControl(null);
 			setPurlEtag(null);
 			setPurlLastModified(null);
@@ -459,6 +463,14 @@ public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 			throws Exception {
 		ObjectConnection con = getObjectConnection();
 		con.addDesignation(this, RemoteGraph.class);
+		String via = getHeader(resp, "Via");
+		if (via == null) {
+			String url = getResource().stringValue();
+			String authority = new ParsedURI(url).getAuthority();
+			setPurlVia(PROTOCOL + " " + authority);
+		} else {
+			setPurlVia(via);
+		}
 		setPurlContentType(type);
 		setPurlEtag(getHeader(resp, "ETag"));
 		setPurlCacheControl(getHeader(resp, "Cache-Control"));
@@ -520,10 +532,16 @@ public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 	}
 
 	private String getHeader(HttpResponse resp, String name) {
-		Header hd = resp.getFirstHeader(name);
-		if (hd == null)
+		Header[] hd = resp.getHeaders(name);
+		if (hd == null || hd.length == 0)
 			return null;
-		return hd.getValue();
+		if (hd.length == 1)
+			return hd[0].getValue();
+		StringBuilder sb = new StringBuilder();
+		for (Header h : hd) {
+			sb.append(h.getValue()).append(",");
+		}
+		return sb.substring(0, sb.length() - 1);
 	}
 
 	private Exception cause(Exception e) throws Exception {
