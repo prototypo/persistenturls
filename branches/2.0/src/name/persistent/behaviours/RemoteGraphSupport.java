@@ -10,6 +10,8 @@ import info.aduna.net.ParsedURI;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -75,6 +77,15 @@ public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 	private static final String REL = NS + "rel";
 	private static final String REMOTE_RESOURCE = NS + "RemoteResource";
 	private static final String DEFINED_BY = NS + "definedBy";
+	private static String hostname;
+	static {
+		try {
+			hostname = InetAddress.getLocalHost().getHostName();
+		} catch (UnknownHostException e) {
+			hostname = "localhost";
+		}
+	}
+	private static final String VIA = PROTOCOL + " " + hostname;
 
 	public static void canacelAllValidation() throws InterruptedException {
 		List<Refresher> list;
@@ -373,6 +384,7 @@ public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 	}
 
 	private HttpResponse requestRDF(HttpRequest req, int max) throws Exception {
+		req.setHeader("Via", VIA);
 		try {
 			HTTPObjectClient client = HTTPObjectClient.getInstance();
 			HttpResponse resp = client.service(req);
@@ -492,7 +504,9 @@ public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 		}
 		con.commit();
 		logger.info("Updated {}", getResource());
-		stayFresh();
+		if (!isAlwaysFresh()) {
+			stayFresh();
+		}
 	}
 
 	private boolean parse(String origin, String type, InputStream in)

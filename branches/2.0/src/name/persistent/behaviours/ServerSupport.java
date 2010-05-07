@@ -6,13 +6,14 @@
  */
 package name.persistent.behaviours;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.InetAddress;
 import java.net.URLEncoder;
+import java.net.UnknownHostException;
 import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayDeque;
 import java.util.Queue;
+import java.util.Set;
 
 import javax.tools.FileObject;
 
@@ -25,7 +26,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.ProtocolVersion;
 import org.apache.http.message.BasicHttpResponse;
 import org.openrdf.OpenRDFException;
-import org.openrdf.http.object.annotations.method;
+import org.openrdf.http.object.annotations.header;
 import org.openrdf.http.object.annotations.operation;
 import org.openrdf.http.object.annotations.parameter;
 import org.openrdf.http.object.annotations.rel;
@@ -55,12 +56,23 @@ import org.openrdf.repository.object.annotations.sparql;
  * 
  * @author James Leigh
  */
-public abstract class ServerSupport extends MirrorSupport implements RDFObject, FileObject, Server {
+public abstract class ServerSupport extends MirrorSupport implements RDFObject,
+		FileObject, Server {
+	private static final String PROTOCOL = "1.1";
 	private static final String PURL = "http://persistent.name/rdf/2010/purl#";
 	private static final String PREFIX = "PREFIX purl:<http://persistent.name/rdf/2010/purl#>\n";
 	private static final ProtocolVersion HTTP11 = new ProtocolVersion("HTTP",
 			1, 1);
 	private static final AggregateWriter writer = AggregateWriter.getInstance();
+	private static String hostname;
+	static {
+		try {
+			hostname = InetAddress.getLocalHost().getHostName();
+		} catch (UnknownHostException e) {
+			hostname = "localhost";
+		}
+	}
+	private static final String VIA = PROTOCOL + " " + hostname;
 
 	private static class QueuedResult extends GraphQueryResultImpl {
 		private Queue<Statement> queue = new ArrayDeque<Statement>();
@@ -128,7 +140,10 @@ public abstract class ServerSupport extends MirrorSupport implements RDFObject, 
 	@rel("alternate")
 	@operation("listOrigins")
 	@type("application/rdf+xml")
-	public GraphQueryResult listRemoteOrigins() throws OpenRDFException {
+	public GraphQueryResult listRemoteOrigins(@header("Via") Set<String> via)
+			throws OpenRDFException {
+		if (via != null && via.toString().contains(VIA))
+			throw new BadRequest("Request Loop Detected");
 		ObjectConnection con = getObjectConnection();
 		ValueFactory vf = con.getValueFactory();
 		URI serves = vf.createURI(PURL, "serves");
@@ -141,8 +156,10 @@ public abstract class ServerSupport extends MirrorSupport implements RDFObject, 
 	 */
 	@operation("listDomains")
 	@type("message/x-response")
-	public HttpResponse listRemoteDomains(@parameter("origin") Origin origin)
-			throws Exception {
+	public HttpResponse listRemoteDomains(@parameter("origin") Origin origin,
+			@header("Via") Set<String> via) throws Exception {
+		if (via != null && via.toString().contains(VIA))
+			throw new BadRequest("Request Loop Detected");
 		if (origin == null)
 			throw new BadRequest("Missing origin");
 		ObjectConnection con = getObjectConnection();
@@ -150,8 +167,7 @@ public abstract class ServerSupport extends MirrorSupport implements RDFObject, 
 		ValueFactory vf = con.getValueFactory();
 		URI part = vf.createURI(PURL, "part");
 		String desc = getResource().stringValue() + "?listServices&domain=";
-		RemoteResult r = new RemoteResult(listDomains(origin), vf, part,
-				desc);
+		RemoteResult r = new RemoteResult(listDomains(origin), vf, part, desc);
 		if (origin instanceof MirroredResource
 				|| !origin.getCalliMaintainers().isEmpty()) {
 			URI content = vf.createURI(PURL, "mirroredBy");
@@ -166,8 +182,10 @@ public abstract class ServerSupport extends MirrorSupport implements RDFObject, 
 	 */
 	@operation("listServices")
 	@type("message/x-response")
-	public HttpResponse listRemoteServices(@parameter("domain") Domain domain)
-			throws Exception {
+	public HttpResponse listRemoteServices(@parameter("domain") Domain domain,
+			@header("Via") Set<String> via) throws Exception {
+		if (via != null && via.toString().contains(VIA))
+			throw new BadRequest("Request Loop Detected");
 		if (domain == null)
 			throw new BadRequest("Missing domain");
 		ObjectConnection con = getObjectConnection();
@@ -175,8 +193,7 @@ public abstract class ServerSupport extends MirrorSupport implements RDFObject, 
 		ValueFactory vf = con.getValueFactory();
 		URI part = vf.createURI(PURL, "part");
 		String desc = getResource().stringValue() + "?listServices&domain=";
-		RemoteResult r = new RemoteResult(listServices(domain), vf, part,
-				desc);
+		RemoteResult r = new RemoteResult(listServices(domain), vf, part, desc);
 		if (domain instanceof MirroredResource
 				|| !domain.getCalliMaintainers().isEmpty()) {
 			URI content = vf.createURI(PURL, "mirroredBy");
@@ -191,8 +208,10 @@ public abstract class ServerSupport extends MirrorSupport implements RDFObject, 
 	 */
 	@operation("domainsOf")
 	@type("message/x-response")
-	public HttpResponse domainsOf(@parameter("origin") Origin origin)
-			throws Exception {
+	public HttpResponse domainsOf(@parameter("origin") Origin origin,
+			@header("Via") Set<String> via) throws Exception {
+		if (via != null && via.toString().contains(VIA))
+			throw new BadRequest("Request Loop Detected");
 		if (origin == null)
 			throw new BadRequest("Missing origin");
 		if (origin instanceof MirroredResource
@@ -206,8 +225,10 @@ public abstract class ServerSupport extends MirrorSupport implements RDFObject, 
 	 */
 	@operation("purlsOf")
 	@type("message/x-response")
-	public HttpResponse purlsOf(@parameter("domain") Domain domain)
-			throws Exception {
+	public HttpResponse purlsOf(@parameter("domain") Domain domain,
+			@header("Via") Set<String> via) throws Exception {
+		if (via != null && via.toString().contains(VIA))
+			throw new BadRequest("Request Loop Detected");
 		if (domain == null)
 			throw new BadRequest("Missing domain");
 		if (domain instanceof MirroredResource
@@ -220,8 +241,7 @@ public abstract class ServerSupport extends MirrorSupport implements RDFObject, 
 			+ "WHERE { $this a purl:Server; purl:serves ?origin }")
 	protected abstract GraphQueryResult listOrigins();
 
-	@sparql(PREFIX
-			+ "CONSTRUCT { $origin a purl:Origin; purl:part ?domain }\n"
+	@sparql(PREFIX + "CONSTRUCT { $origin a purl:Origin; purl:part ?domain }\n"
 			+ "WHERE { $origin a purl:Origin; purl:part ?domain }")
 	protected abstract GraphQueryResult listDomains(
 			@name("origin") Origin origin);

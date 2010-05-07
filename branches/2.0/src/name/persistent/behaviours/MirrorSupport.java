@@ -5,6 +5,7 @@ import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -32,7 +33,7 @@ public abstract class MirrorSupport {
 		try {
 			hostname = InetAddress.getLocalHost().getHostName();
 		} catch (UnknownHostException e) {
-			hostname = "AliBaba";
+			hostname = "localhost";
 		}
 	}
 	private static final String VIA = PROTOCOL + " " + hostname;
@@ -50,13 +51,14 @@ public abstract class MirrorSupport {
 	@sparql(PREFIX + "SELECT ?graph\n"
 			+ "WHERE { GRAPH ?graph { $target a ?type FILTER (?type != purl:RemoteResource) }\n"
 			+ "?graph a purl:RemoteGraph; purl:last-validated ?last }\n"
-			+ "ORDER BY desc(?last) LIMIT 1")
-	protected abstract RemoteGraph getRemoteGraphsOf(
+			+ "ORDER BY desc(?last)")
+	protected abstract List<RemoteGraph> getRemoteGraphsOf(
 			@name("target") Object target);
 
 	protected void mirrorEntityHeaders(Object target, HttpResponse resp) {
-		RemoteGraph graph = getRemoteGraphsOf(target);
-		if (graph != null) {
+		List<RemoteGraph> graphs = getRemoteGraphsOf(target);
+		if (!graphs.isEmpty()) {
+			RemoteGraph graph = graphs.get(0);
 			XMLGregorianCalendar validated = graph.getPurlLastValidated();
 			long now = System.currentTimeMillis();
 			long date = validated.toGregorianCalendar().getTimeInMillis();
