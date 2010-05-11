@@ -75,7 +75,7 @@ a:visited {
     clear: both;
     margin: 0 0 0 15%;
 	opacity: 0.90;
-	padding: 10px 1% 10px 2%;
+	padding: 0 1% 10px 2%;
     position: absolute;
 	text-align: left;
     width: 82%;
@@ -130,22 +130,21 @@ a:visited {
 }
 
 #breadcrumbs {
+    clear: both;
     margin: 0;
-    padding: 0;
+    padding: 5px 0 0;
     width: 100%;
 }
 
 #breadcrumbs li {
-    background: #eee;
     float: left;
     list-style: none;
-    margin: 0 5px;
-    -moz-border-radius: 6px;
+    margin: 0 10px 0 0;
 }
 
 #breadcrumbs li.home {
-    background: #eee url(images/home.png) 5% 7px no-repeat;
-    padding-left: 20px;
+    background: transparent url(images/home.png) 5% 10px no-repeat;
+    padding-left: 15px;
 }
 
 #breadcrumbs li a {
@@ -157,20 +156,34 @@ a:visited {
 #actions {
     clear: both;
     list-style: none;
+    margin: 2px 0 0;
 }
 
 #actions li {
     display: block;
     float: left;
+    margin: 0 0 0 20px;
     text-align: center;
     width: 75px;
 }
 
+#actions li.view {
+    border-left: 1px solid #eee;
+    margin: 0;
+}
+
 #actions li a,
 #actions li span {
+    border-right: 1px solid #eee;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
     display: block;
-    padding: 10px;
+    padding: 3px 10px;
     width: 100%;
+}
+
+#actions .current {
+    border-bottom: 0;
 }
 
 .clear:after {
@@ -345,4 +358,13 @@ img {
 
 #footer a {
     padding-right: 5px;
+}
+
+body.search #actions {
+    display: none;
+}
+
+body.server #actions .delete,
+body.purl #actions .delete {
+    display: none;
 }
