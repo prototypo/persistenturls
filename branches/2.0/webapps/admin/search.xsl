@@ -7,8 +7,11 @@
 			<head>
 				<title>Search Results</title>
 			</head>
-			<body>
-				<ul>
+			<body class="search">
+				<h1>Search Results</h1>
+				<label for="q">Search again:</label>
+				<input type="text" id="q" value="" />
+				<ul class="results">
 					<xsl:apply-templates />
 				</ul>
 			</body>
