@@ -10,7 +10,7 @@
 	</head>
 	<body class="domain">
 		<form action="" about="" typeof="purl:Domain">
-			<h2 property="rdfs:label" />
+			<h1 property="rdfs:label" />
 			<p resource="?origin" rev="purl:part"><span property="rdfs:label"/></p>
 			<h3>PURLs</h3>
 			<ul>

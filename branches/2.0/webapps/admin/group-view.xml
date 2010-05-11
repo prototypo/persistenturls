@@ -9,7 +9,7 @@
 		<title property="rdfs:label"/>
 	</head>
 	<body class="group">
-		<h2 property="rdfs:label" />
+		<h1 property="rdfs:label" />
 		<div property="purl:note" />
         <h3>Maintainers</h3>
         <ul>

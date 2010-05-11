@@ -9,7 +9,7 @@
 	</head>
 	<body class="group">
 		<form action="" about="" typeof="purl:Group">
-			<h2 property="rdfs:label" />
+			<h1 property="rdfs:label" />
 			<p property="purl:note" />
 			<input value="Delete" type="submit" />
 		</form>

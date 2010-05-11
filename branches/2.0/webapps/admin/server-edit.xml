@@ -8,7 +8,7 @@
 	<head>
 		<title property="rdfs:label"/>
 	</head>
-	<body>
+	<body class="server">
 		<form action="">
 			<fieldset>
 				<legend>Modify this server</legend>

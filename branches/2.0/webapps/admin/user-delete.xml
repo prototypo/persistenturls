@@ -9,7 +9,7 @@
 	</head>
 	<body class="user">
 		<form action="" about="" typeof="purl:User">
-			<h2 property="rdfs:label" />
+			<h1 property="rdfs:label" />
 			<div property="purl:mbox" />
 			<div property="purl:affiliation" />
 			<p property="purl:justification" />

@@ -8,8 +8,8 @@
 	<head>
 		<title property="rdfs:label"/>
 	</head>
-	<body>
-		<h2 property="rdfs:label" />
+	<body class="server">
+		<h1 property="rdfs:label" />
         <h3>Serves</h3>
         <ul>
             <li resource="?origin" rel="purl:serves"><a class="diverted" property="rdfs:label" href="?origin"></a></li>
