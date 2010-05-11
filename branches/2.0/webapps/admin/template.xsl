@@ -165,43 +165,48 @@
 					<a id="message" />
 				</div>
 				<div id="header">
-					<ul id="breadcrumbs">
-						<li class="home"><a href="/">Home</a></li>
-						<li><a href="/">dummy breadcrumb</a></li>
-						<!-- will need a way to generate this -->
-					</ul>
 					<ul id="actions">
-						<li>
+						<li class="view">
 							<xsl:choose>
 								<xsl:when test="contains($mode, 'view')">
 									<span class="current">View</span>
 								</xsl:when>
 								<xsl:otherwise>
-									<a href="?view">View</a>
+									<a class="diverted" href="?view">View</a>
 								</xsl:otherwise>
 							</xsl:choose>
 						</li>
-						<li>
+						<li class="edit">
 							<xsl:choose>
 								<xsl:when test="contains($mode, 'edit')">
 									<span class="current">Edit</span>
 								</xsl:when>
 								<xsl:otherwise>
-									<a href="?edit">Edit</a>
+									<a class="diverted" href="?edit">Edit</a>
 								</xsl:otherwise>
 							</xsl:choose>
 						</li>
-						<li>
+						<li class="delete">
 							<xsl:choose>
 								<xsl:when test="contains($mode, 'delete')">
 									<span class="current">Delete</span>
 								</xsl:when>
 								<xsl:otherwise>
-									<a href="?delete">Delete</a>
+									<a class="diverted" href="?delete">Delete</a>
 								</xsl:otherwise>
 							</xsl:choose>
 						</li>
-						<!-- 'new' action(s) based on body class? -->
+					</ul>
+					<ul id="breadcrumbs">
+						<li class="home"><a href="/">Home</a></li>
+						<xsl:choose>
+							<xsl:when test="$section='user'">
+								<li><a href="/">Users</a></li>
+							</xsl:when>
+							<xsl:when test="$section='group'">
+								<li><a href="/">Groups</a></li>
+							</xsl:when>
+						</xsl:choose>
 					</ul>
 					<div class="clear">&#160;</div>
 				</div>
