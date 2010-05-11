@@ -9,7 +9,7 @@
 		<title property="rdfs:label"/>
 	</head>
 	<body class="purl">
-		<form action="" typeof="rdf:type" id="purl-form">
+		<form action="" typeof="" id="purl-form">
 			<input type="hidden" class="type simple renamed copy described redirect" value="purl:PURL"/>
 			<input type="hidden" class="type partial" value="purl:PartialPURL"/>
 			<input type="hidden" class="type zoned" value="purl:ZonedPURL"/>
@@ -27,7 +27,7 @@
 							<td class="value">
 								<select id="purl-type" onchange="modifyForm(this.value)">
 									<option value="simple">Simple (302)</option>
-									<option value="renamed">Renamed (310)</option>
+									<option value="renamed">Renamed (301)</option>
 									<option value="described">Describe (303)</option>
 									<option value="redirect">Redirect (307)</option>
 									<option value="copy">Copy (203)</option>
@@ -59,9 +59,8 @@
 							<td class="property">
 								<label for="m_redirectsTo">Target:</label>
 							</td>
-							<td class="value" data-cardinality="1" rel="purl:redirectsTo">
+							<td class="value" data-cardinality="1">
 								<input id="m_redirectsTo" type="text" onchange="$(this).attr('about', $(this).val())"/>
-								<span typeof="rdf:Resource" href="?target"/>
 							</td>
 						</tr>
 						<tr class="simple">
@@ -70,7 +69,6 @@
 							</td>
 							<td class="value" data-cardinality="1" rel="purl:alternate">
 								<input id="m_alternate" type="text" onchange="$(this).attr('about', $(this).val())"/>
-								<span typeof="rdf:Resource" href="?target"/>
 							</td>
 						</tr>
 						<tr class="copy">
