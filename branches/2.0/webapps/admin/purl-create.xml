@@ -27,7 +27,7 @@
 							<td class="value">
 								<select id="purl-type" onchange="modifyForm(this.value)">
 									<option value="simple">Simple (302)</option>
-									<option value="renamed">Renamed (310)</option>
+									<option value="renamed">Renamed (301)</option>
 									<option value="described">Describe (303)</option>
 									<option value="redirect">Redirect (307)</option>
 									<option value="copy">Copy (203)</option>
