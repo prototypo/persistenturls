@@ -9,11 +9,22 @@
 		<title property="rdfs:label"/>
 	</head>
 	<body class="purl">
-		<h2 property="rdfs:label" />
-        <a rel="purl:redirectsTo" href="?redirectsTo">Target</a>
-        <h3>Maintainers</h3>
-        <ul>
-            <li resource="?maintainer" rel="calli:maintainer"><a property="rdfs:label" href="?maintainer"></a></li>
-        </ul>
+		<h1 property="rdfs:label" />
+		<span rel="rdf:type" resource="?type"><div property="rdfs:comment"/></span>
+		<a rel="purl:copyOf" href="?copyOf">Target (Copy - HTTP 203)</a>
+		<a rel="purl:renamedTo" href="?renamedTo">Target (Renamed - HTTP 301)</a>
+		<a rel="purl:alternative" href="?alternative">Target (Simple - HTTP 302)</a>
+		<a rel="purl:describedBy" href="?describedBy">Target (Described - HTTP 303)</a>
+		<a rel="purl:redirectsTo" href="?redirectsTo">Target (Redirect - HTTP 307)</a>
+		<div property="purl:pattern" />
+		<h3>Link Metadata</h3>
+		<div property="purl:title" />
+		<div property="purl:type" />
+		<div property="purl:media" />
+		<div property="purl:lang" />
+		<h3>Maintainers</h3>
+		<ul>
+			<li resource="?maintainer" rel="calli:maintainer"><a property="rdfs:label" href="?maintainer"></a></li>
+		</ul>
 	</body>
 </html>
