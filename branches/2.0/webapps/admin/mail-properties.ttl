@@ -27,11 +27,12 @@
 # Comments begin with a '#'
 # The format is mail.<property> = <value>
 #
-# A minimumal file might contain the following:
+# A typical file might contain the following:
 # mail.transport.protocol = smtp
 # mail.from = system@example.com
 # mail.smtp.host = example.com
 # mail.smtp.port = 25
+# mail.smtp.auth = true
 # mail.user = system
 # mail.password = secret
 #
