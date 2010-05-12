@@ -2,7 +2,7 @@
 <?xml-stylesheet type="text/xsl" href="admin/template.xsl"?>
 <html>
 <head><title>PURL Server</title></head>
-<body>
+<body class="home">
 <p>hi</p>
 </body>
 </html>
