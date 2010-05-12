@@ -37,6 +37,12 @@ th, td {
     padding: 2px;
 }
 
+input:focus,
+textarea:focus,
+button:focus {
+    outline: 0;
+}
+
 body {
 	background: #fff;
 	font-family: sans-serif;
@@ -45,7 +51,6 @@ body {
     margin: 0;
 	min-width: 800px;
     padding: 0;
-	text-align: justify;
 }
 
 pre {
@@ -74,7 +79,6 @@ a:visited {
 #content {
     clear: both;
     margin: 0 0 0 15%;
-	opacity: 0.90;
 	padding: 0 1% 10px 2%;
     position: absolute;
 	text-align: left;
@@ -89,8 +93,11 @@ a:visited {
 }
 
 #loginstatus {
+    color: #333;
     float: right;
-    padding: 0 10px 0 0;
+    font-size: 0.9em;
+    padding: 10px 10px 0 0;
+    text-align: left;
     width: 20%;
 }
 
@@ -132,29 +139,30 @@ a:visited {
 #breadcrumbs {
     clear: both;
     margin: 0;
-    padding: 5px 0 0;
+    padding: 5px 0;
     width: 100%;
 }
 
 #breadcrumbs li {
     float: left;
     list-style: none;
-    margin: 0 10px 0 0;
+    margin: 0 10px 1em 0;
 }
 
 #breadcrumbs li.home {
-    background: transparent url(images/home.png) 5% 10px no-repeat;
-    padding-left: 15px;
 }
 
 #breadcrumbs li a {
     display: block;
-    padding: 10px;
+    padding: 10px 0;
     width: 100%;
 }
 
 #actions {
+    border-left: 1px solid #eee;
     clear: both;
+    float: left;
+    font-size: 0.9em;
     list-style: none;
     margin: 2px 0 0;
 }
@@ -162,14 +170,9 @@ a:visited {
 #actions li {
     display: block;
     float: left;
-    margin: 0 0 0 20px;
+    margin: 0 20px 0 0;
     text-align: center;
-    width: 75px;
-}
-
-#actions li.view {
-    border-left: 1px solid #eee;
-    margin: 0;
+    width: 65px;
 }
 
 #actions li a,
@@ -183,7 +186,9 @@ a:visited {
 }
 
 #actions .current {
+    background: #efefef;
     border-bottom: 0;
+    font-weight: bold;
 }
 
 .clear:after {
@@ -221,7 +226,6 @@ a.tooltip:hover span { /*the span will display just on :hover state*/
     border: 1px solid #0cf;
     background-color: #CAE8EA;
     color:#000;
-	font-family: "Trebuchet MS", sans-serif;
 	text-align: justify;
 	line-height: 1.4em;
 	font-size: 0.85em;
@@ -328,6 +332,7 @@ table.docstable {
 }
 
 td.property {
+    vertical-align: top;
 }
 
 td.error {
@@ -341,7 +346,6 @@ th.rowalt {
 	border-left: 1px solid #C1DAD7;
 	border-top: 0;
 	background: #f5fafa url(./images/bullet2.gif) no-repeat;
-	font: bold 10px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
 	color: #797268;
 }
 
@@ -350,8 +354,11 @@ img {
 }
 
 #footer {
+    bottom: 0;
     clear: both;
+    margin: 3em 0 0;
     padding: 10px 1%;
+    position: absolute;
     text-align: right;
     width: 98%;
 }
@@ -360,11 +367,17 @@ img {
     padding-right: 5px;
 }
 
+/* Inapplicable actions or breadcrumbs */
 body.search #actions {
     display: none;
 }
 
 body.server #actions .delete,
-body.purl #actions .delete {
+body.purl #actions .delete,
+#actions.copy,
+body.home #breadcrumbs,
+body.home #actions,
+body.realm #actions .delete,
+body.realm #actions .view {
     display: none;
 }
