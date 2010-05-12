@@ -64,7 +64,11 @@ calli:post-copy rdfs:subClassOf obj:Message;
 	http:expect "201-created";
 	obj:groovy """
 		def copy = copyDescription('copy', msg.in, findCopyNamespaces())
-		copy.calliMaintainers.addAll(calliMaintainers)
+		if (calliCurators) {
+			copy.calliMaintainers.addAll(calliCurators)
+		} else {
+			copy.calliMaintainers.addAll(findScribe(copy))
+		}
 		return copy
 	""".
 
@@ -80,10 +84,35 @@ calli:find-copy-profile rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
 		owl:allValuesFrom <urn:mimetype:application/xml>];
 	obj:name "findCopyProfile";
-	obj:sparql "SELECT REDUCED ?profile WHERE { $this a [calli:copy ?profile] . ?profile a <urn:mimetype:application/xml> }".
+	obj:sparql """
+		SELECT REDUCED ?profile
+		WHERE {
+			$this a [calli:copy ?profile] .
+			?profile a <urn:mimetype:application/xml>
+		}
+	""".
 
 calli:find-copy-namespace rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom calli:Copyable];
 	obj:name "findCopyNamespaces";
-	obj:sparql "SELECT REDUCED ?namespace WHERE { $this a [calli:withNamespace ?namespace] }".
+	obj:sparql """
+		SELECT REDUCED ?namespace
+		WHERE { $this a [calli:withNamespace ?namespace] }
+	""".
+
+calli:find-scribe rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom calli:Copyable];
+	obj:name "findScribe";
+	obj:sparql """
+		SELECT REDUCED ?scribe
+		WHERE {
+			GRAPH ?graph { $of a ?type }
+			?graph http:authorized ?scribe
+		}
+	""".
+
+calli:find-scribe-of a owl:ObjectProperty, owl:FunctionalProperty;
+	rdfs:domain calli:find-scribe;
+	obj:name "of".

@@ -10,7 +10,7 @@
 	</head>
 	<body class="user">
 		<h1 property="rdfs:label" />
-		<p property="purl:mbox" />
+		<p property="purl:email" />
 		<p property="purl:affiliation" />
 		<p property="purl:justification" />
         <h3>Groups</h3>

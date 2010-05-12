@@ -25,6 +25,10 @@
 @prefix calli:<http://callimachusproject.org/rdf/2009/framework#>.
 @prefix purl:<http://persistent.name/rdf/2010/purl#>.
 
+purl:email a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:domain purl:User;
+	rdfs:range xsd:string.
+
 purl:register rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom purl:UserTemplate];
@@ -43,17 +47,32 @@ purl:register rdfs:subClassOf obj:Message;
 purl:post-register rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom purl:UserTemplate];
-	rdfs:subClassOf [owl:onProperty obj:objectResponse;
-		owl:maxCardinality "1"^^xsd:nonNegativeInteger];
+	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
+		owl:allValuesFrom <java:org.apache.http.HttpResponse>];
 	http:method "POST";
 	http:operation "register";
-	http:expect "201-created";
+	http:type "message/x-response";
 	obj:imports </data/group/public>;
+	obj:imports <user-password.xml>;
+	obj:imports <java:org.apache.commons.codec.digest.DigestUtils>;
+	obj:imports <java:org.openrdf.http.object.exceptions.BadRequest>;
+	obj:imports <java:org.apache.http.ProtocolVersion>;
+	obj:imports <java:org.apache.http.message.BasicHttpResponse>;
 	obj:groovy """
 		def user = copyDescription('copy', msg.in, findCopyNamespaces())
-		user.calliMaintainers.addAll(calliMaintainers)
+		if (!user.purlEmail)
+			throw new BadRequest("Missing Email Address")
+		if (calliCurators) {
+			user.calliMaintainers.addAll(calliCurators)
+		} else {
+			user.calliMaintainers.addAll(findScribe(copy))
+		}
 		_public.calliMembers.add(user)
-		return user
+		user.purlResetPassword()
+		def ver = new ProtocolVersion("HTTP", 1, 1)
+		def resp = new BasicHttpResponse(ver, 201, "Created");
+		resp.setHeader("Location", userPasswordXml.toString() + "?construct&mode=view&about=" + user)
+		return resp
 	""".
 
 purl:post-register-in a owl:ObjectProperty, owl:FunctionalProperty;
@@ -61,3 +80,52 @@ purl:post-register-in a owl:ObjectProperty, owl:FunctionalProperty;
 	rdfs:range <java:java.io.InputStream>;
 	http:type "application/rdf+xml";
 	obj:name "in".
+
+purl:post-reset-password rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:User];
+	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
+		owl:allValuesFrom <java:java.io.InputStream>];
+	http:method "POST";
+	http:operation "reset-password";
+	http:type "text/html";
+	obj:imports <user-password.xml>;
+	obj:groovy """
+		purlResetPassword()
+		return userPasswordXml.constructAsHTML('view', null, this)
+	""".
+
+purl:reset-password rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:User];
+	rdfs:subClassOf [owl:onProperty obj:objectResponse;
+		owl:allValuesFrom owl:Nothing];
+	obj:imports <mail.properties>;
+	obj:groovy """
+		String password = purlGeneratePassword()
+		objectConnection.commit()
+		mailProperties.purlSendMail(purlEmail, "Welcome",
+			"Your password is " + password + " now go to " + toUri())
+	""".
+
+purl:generate-password rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:User];
+	rdfs:subClassOf [owl:onProperty obj:functionalLiteralResponse;
+		owl:allValuesFrom xsd:string];
+	obj:imports <authority>;
+	obj:imports <java:org.apache.commons.codec.digest.DigestUtils>;
+	obj:groovy """
+		String charset = "!0123456789abcdefghijklmnopqrstuvwxyz"
+		Random rand = new Random(System.nanoTime());
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < 8; i++) {
+            int pos = rand.nextInt(charset.length());
+            sb.append(charset.charAt(pos));
+        }
+        String password = sb.toString();
+		String token = calliName + ":" + authority.calliRealmAuth + ":" + password
+		calliAlgorithm = "MD5"
+		calliEncoded = DigestUtils.md5(token.getBytes("UTF-8"))
+		return password
+	""".

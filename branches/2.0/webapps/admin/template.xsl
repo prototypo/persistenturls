@@ -39,10 +39,6 @@
 				<script type="text/javascript" src="{$xslt}/../../callimachus/profile-copy.js">
 				</script>
 			</xsl:if>
-			<xsl:if test="(contains($mode, 'copy') or contains($mode, 'edit')) and $section='user'">
-				<script type="text/javascript" src="{$xslt}/../../callimachus/md5.js">
-				</script>
-			</xsl:if>
 			<xsl:if test="(contains($mode, 'copy') or contains($mode, 'edit')) and $section='purl'">
 				<script type="text/javascript" src="{$xslt}/../purl-form.js">
 				</script>

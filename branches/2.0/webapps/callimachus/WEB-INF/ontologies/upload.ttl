@@ -53,9 +53,43 @@ calli:put-file-type a owl:DatatypeProperty; a owl:FunctionalProperty;
 calli:put-file-body a owl:ObjectProperty; a owl:FunctionalProperty;
 	rdfs:domain calli:put-file;
 	rdfs:range <java:java.io.InputStream>;
-	http:type "text/html", "text/css", "text/javascript", "text/xsl",
-		"image/png", "image/jpeg", "image/gif", "image/vnd.microsoft.icon",
+	http:type "image/png", "image/jpeg", "image/gif", "image/vnd.microsoft.icon",
 		"application/xml";
+	obj:name "body".
+
+calli:put-text-file rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:objectResponse;
+		owl:allValuesFrom owl:Nothing];
+	http:method "PUT";
+	http:realm calli:upload-realm;
+	obj:groovy """
+		def type = "urn:mimetype:" + msg.contentType;
+		if (type.contains(";")) {
+			type = type.substring(0, type.indexOf(';'));
+		}
+		objectConnection.addDesignations(msg.target, type);
+		int read;
+		char[] buf = new char[1024];
+		Writer out = new OutputStreamWriter(openOutputStream(), "UTF-8")
+		try {
+			while ((read = msg.body.read(buf)) >= 0) {
+				out.write(buf, 0, read);
+			}
+		} finally {
+			out.close();
+		}
+	""".
+
+calli:put-text-file-type a owl:DatatypeProperty; a owl:FunctionalProperty;
+	rdfs:domain calli:put-text-file;
+	rdfs:range xsd:string;
+	http:header "Content-Type";
+	obj:name "contentType".
+
+calli:put-text-file-body a owl:ObjectProperty; a owl:FunctionalProperty;
+	rdfs:domain calli:put-text-file;
+	rdfs:range <java:java.io.Reader>;
+	http:type "text/html", "text/css", "text/javascript", "text/xsl";
 	obj:name "body".
 
 calli:delete-file rdfs:subClassOf obj:Message;
@@ -63,13 +97,21 @@ calli:delete-file rdfs:subClassOf obj:Message;
 		owl:allValuesFrom [owl:unionOf (<urn:mimetype:text/html> <urn:mimetype:text/css>
 		<urn:mimetype:text/javascript> <urn:mimetype:text/xsl>
 		<urn:mimetype:image/png> <urn:mimetype:image/jpeg>
-		<urn:mimetype:image/gif> <image/vnd.microsoft.icon>
+		<urn:mimetype:image/gif> <rn:mimetype:image/vnd.microsoft.icon>
 		<urn:mimetype:application/xml>)]];
 	rdfs:subClassOf [owl:onProperty obj:objectResponse;
 		owl:allValuesFrom owl:Nothing];
 	http:method "DELETE";
 	http:realm calli:upload-realm;
-	obj:groovy "delete()".
+	obj:groovy """
+		delete()
+		objectConnection.removeDesignations(msg.target,
+			"urn:mimetype:text/html", "urn:mimetype:text/cs",
+			"urn:mimetype:text/javascript", "urn:mimetype:text/xsl",
+			"urn:mimetype:image/png", "urn:mimetype:image/jpeg",
+			"urn:mimetype:image/gif", "urn:mimetype:image/vnd.microsoft.icon",
+			"urn:mimetype:application/xml")
+	""".
 
 calli:get-html rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
@@ -77,7 +119,7 @@ calli:get-html rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
 		owl:allValuesFrom <java:java.io.InputStream>];
 	http:method "GET";
-	http:type "text/html";
+	http:type "text/html;charset=UTF-8";
 	obj:groovy "return openInputStream()".
 
 calli:get-css rdfs:subClassOf obj:Message;
@@ -86,7 +128,7 @@ calli:get-css rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
 		owl:allValuesFrom <java:java.io.InputStream>];
 	http:method "GET";
-	http:type "text/css";
+	http:type "text/css;charset=UTF-8";
 	obj:groovy "return openInputStream()".
 
 calli:get-javascript rdfs:subClassOf obj:Message;
@@ -95,7 +137,7 @@ calli:get-javascript rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
 		owl:allValuesFrom <java:java.io.InputStream>];
 	http:method "GET";
-	http:type "text/javascript";
+	http:type "text/javascript;charset=UTF-8";
 	obj:groovy "return openInputStream()".
 
 calli:get-xsl rdfs:subClassOf obj:Message;
@@ -104,7 +146,7 @@ calli:get-xsl rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
 		owl:allValuesFrom <java:java.io.InputStream>];
 	http:method "GET";
-	http:type "text/xsl";
+	http:type "text/xsl;charset=UTF-8";
 	obj:groovy "return openInputStream()".
 
 calli:get-xml rdfs:subClassOf obj:Message;

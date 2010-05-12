@@ -10,7 +10,7 @@ if (document.addEventListener) {
 }
 
 function initForms() {
-	$("form").each(function(i, node) {
+	$("form[about]").each(function(i, node) {
 		var form = $(node)
 		var etag = getEntityTag()
 		var stored = readRDF(form)

@@ -93,6 +93,9 @@ calli:authorize-maintainer owl:equivalentClass calli:authorize-user;
 				$subject calli:reviewer $credential
 				FILTER ($qs = "view" || $qs = "pre-view" || !bound($qs))
 			} UNION {
+				$subject calli:scribe $credential
+				FILTER ($qs = "copy" || $qs = "pre-copy")
+			} UNION {
 				$subject calli:curator $credential
 				FILTER ($qs = "copy" || $qs = "pre-copy")
 			} UNION {
@@ -104,10 +107,13 @@ calli:authorize-maintainer owl:equivalentClass calli:authorize-user;
 calli:authorize-member owl:equivalentClass calli:authorize-user;
 	obj:sparql """
 		ASK {
-			?group calli:member $credential .
+			?group calli:member $credential
 			{
 				$subject calli:reviewer ?group
 				FILTER ($qs = "view" || $qs = "pre-view" || !bound($qs))
+			} UNION {
+				$subject calli:scribe ?group
+				FILTER ($qs = "copy" || $qs = "pre-copy")
 			} UNION {
 				$subject calli:curator ?group
 				FILTER ($qs = "copy" || $qs = "pre-copy")

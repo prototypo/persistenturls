@@ -35,44 +35,19 @@
 						</tr>
 						<tr>
 							<td class="property">
+								<label for="m_email">E-mail address:</label>
+							</td>
+							<td class="value" data-cardinality="1">
+								<input id="m_email" property="purl:email" type="text" />
+							</td>
+						</tr>
+						<tr>
+							<td class="property">
 								<label for="m_affiliation">Affiliation:</label>
 							</td>
 							<td class="value">
 								<input id="m_affiliation" property="purl:affiliation"
 									type="text" />
-							</td>
-						</tr>
-						<tr>
-							<td class="property">
-								<label for="m_email">E-mail address:</label>
-							</td>
-							<td class="value">
-								<input id="m_email" property="purl:mbox" type="text" />
-							</td>
-						</tr>
-						<tr>
-							<td class="property">
-								<label for="m_passwd">Password:</label>
-							</td>
-							<td class="value">
-								<input id="m_passwd" type="password"
-									onchange="$('#m_algorithm').val('MD5');$('#m_encoded').val(hex_md5($('#m_username').val()+':'+$('#m_realm').val()+':'+value));$('#m_algorithm').change();$('#m_encoded').change();" />
-							</td>
-						</tr>
-						<tr>
-							<td class="property">
-								<label for="m_passwd2">Re-enter password:</label>
-							</td>
-							<td class="value">
-								<input id="m_passwd2" type="password" />
-							</td>
-						</tr>
-						<tr>
-							<td class="property">
-								<label for="m_hint">Password hint:</label>
-							</td>
-							<td class="value" data-cardinality="1">
-								<input id="m_hint" property="purl:hint" type="text" />
 							</td>
 						</tr>
 						<tr>
@@ -85,27 +60,9 @@
 								</textarea>
 							</td>
 						</tr>
-						<tr class="hidden">
-							<td class="property"/>
-							<td class="value" data-cardinality="1">
-								<input id="m_algorithm" property="calli:algorithm" type="hidden" />
-							</td>
-						</tr>
-						<tr class="hidden">
-							<td class="property"/>
-							<td class="value" data-cardinality="1">
-								<input id="m_encoded" property="calli:encoded" datatype="xsd:hexBinary" type="hidden" />
-							</td>
-						</tr>
-						<tr class="hidden">
-							<td class="property"/>
-							<td class="value">
-								<input id="m_realm" value="PURL" type="hidden" />
-							</td>
-						</tr>
 					</tbody>
 				</table>
-				<input value="Create" type="submit" />
+				<input value="Register" type="submit" />
 				<br />
 			</fieldset>
 		</form>

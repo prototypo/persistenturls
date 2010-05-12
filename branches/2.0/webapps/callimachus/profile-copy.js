@@ -10,7 +10,7 @@ if (document.addEventListener) {
 }
 
 function initForms() {
-	$("form").each(function(i, node) {
+	$("form[typeof]").each(function(i, node) {
 		var form = $(node)
 		form.submit(function(){
 			if (window.showRequest) {
@@ -28,6 +28,10 @@ function initForms() {
 					var redirect = xhr.getResponseHeader("Location")
 					if (redirect && window.diverted && form.hasClass("diverted")) {
 						location.replace(diverted(redirect + "?view", node))
+					} else if (redirect && redirect.indexOf("?") >= 0) {
+						location.replace(redirect)
+					} else if (redirect && location.href.indexOf("?pre-") > 0) {
+						location.replace(redirect + "?pre-view")
 					} else if (redirect) {
 						location.replace(redirect + "?view")
 					} else if (location.href.indexOf("?pre-") > 0) {

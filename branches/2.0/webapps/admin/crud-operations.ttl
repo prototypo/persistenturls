@@ -23,6 +23,7 @@ purl:Server rdfs:subClassOf calli:Viewable, calli:Editable;
 ################################
 
 <user/template> a purl:UserTemplate;
+	calli:curator </data/group/admin>;
 	calli:maintainer </data/group/admin>.
 
 purl:UserTemplate rdfs:subClassOf calli:Copyable;
@@ -40,7 +41,7 @@ purl:User rdfs:subClassOf calli:Viewable, calli:Editable, calli:Deletable;
 ################################
 
 <group/template> a purl:GroupTemplate;
-	calli:curator </data/group/public>;
+	calli:curator </data/group/admin>;
 	calli:maintainer </data/group/admin>.
 
 purl:GroupTemplate rdfs:subClassOf calli:Copyable;
@@ -57,6 +58,7 @@ purl:Group rdfs:subClassOf calli:Viewable, calli:Editable, calli:Deletable;
 ################################
 
 <mirror/template> a purl:MirrorTemplate;
+	calli:curator </data/group/admin>;
 	calli:maintainer </data/group/admin>.
 
 purl:MirrorTemplate rdfs:subClassOf calli:Copyable;

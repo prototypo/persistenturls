@@ -116,8 +116,13 @@ calli:realmAuth a owl:DatatypeProperty, owl:FunctionalProperty;
 	rdfs:domain calli:DigestRealm;
 	rdfs:range xsd:string.
 
-calli:curator a owl:ObjectProperty;
+calli:scribe a owl:ObjectProperty;
 	rdfs:comment "Credential or group of credentials that can copy this resource remotely.";
+	rdfs:domain calli:Copyable;
+	rdfs:range calli:Party.
+
+calli:curator a owl:ObjectProperty;
+	rdfs:comment "Credential or group of credentials that will maintain any copied resources.";
 	rdfs:domain calli:Copyable;
 	rdfs:range calli:Party.
 

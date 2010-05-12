@@ -7,6 +7,10 @@
 @prefix calli:<http://callimachusproject.org/rdf/2009/framework#>.
 @prefix purl:<http://persistent.name/rdf/2010/purl#>.
 
+<local> a calli:LocalRealm.
+
+calli:describe http:realm <local>.
+
 <authority> a calli:DigestRealm, calli:AuthorizationRealm;
 	calli:origin </>;
 	calli:realmAuth "PURL";
@@ -37,3 +41,4 @@ calli:post-edit http:realm <authority>.
 calli:get-delete http:realm <authority>.
 calli:pre-delete http:realm <authority>.
 calli:post-delete http:realm <authority>.
+
