@@ -37,7 +37,7 @@
 								<label for="m_maintainer">Maintainers:</label>
 							</td>
 							<td rel="calli:maintainer" class="value" data-suggest="about:blank">
-								<span about="?maintainer" typeof="purl:User">
+								<span about="?maintainer" typeof="purl:Group">
 									<span property="rdfs:label"/>
 								</span>
 							</td>
@@ -57,7 +57,7 @@
 								<label for="m_note">Public comments:</label>
 							</td>
 							<td class="value">
-								<textarea rows="5" cols="4" id="m_note" propery="purl:note"></textarea>
+								<textarea rows="4" cols="30" id="m_note" propery="purl:note"></textarea>
 							</td>
 						</tr>
 					</tbody>
