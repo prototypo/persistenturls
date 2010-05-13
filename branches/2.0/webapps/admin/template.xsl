@@ -35,12 +35,10 @@
 			</script>
 			<script type="text/javascript" src="{$xslt}/../../callimachus/diverted.js">
 			</script>
+			<script type="text/javascript" src="{$xslt}/../purl-ui.js">
+			</script>
 			<xsl:if test="contains($mode, 'copy')">
 				<script type="text/javascript" src="{$xslt}/../../callimachus/profile-copy.js">
-				</script>
-			</xsl:if>
-			<xsl:if test="(contains($mode, 'copy') or contains($mode, 'edit')) and $section='purl'">
-				<script type="text/javascript" src="{$xslt}/../purl-form.js">
 				</script>
 			</xsl:if>
 			<xsl:if test="contains($mode, 'edit')">
@@ -49,6 +47,10 @@
 			</xsl:if>
 			<xsl:if test="contains($mode, 'delete')">
 				<script type="text/javascript" src="{$xslt}/../../callimachus/profile-delete.js">
+				</script>
+			</xsl:if>
+			<xsl:if test="(contains($mode, 'copy') or contains($mode, 'edit')) and $section='purl'">
+				<script type="text/javascript" src="{$xslt}/../purl-form.js">
 				</script>
 			</xsl:if>
 			<xsl:if test="starts-with($mode, 'pre-')">
@@ -78,80 +80,86 @@
 		<xsl:copy>
 			<xsl:apply-templates select="@*" />
 			<xsl:if test="not(starts-with($mode, 'pre-'))">
-				<div id="loginstatus">
-					<p>Login status not determined. Do you have Javascript and cookies
-						enabled?</p>
-				</div>
 				<ul id="menu">
 					<li>
-						<a>
-							<xsl:attribute name="class">
-								<xsl:choose>
-									<xsl:when test="$section='purl'">
-										active
-									</xsl:when>
-									<xsl:otherwise>
-										inactive
-									</xsl:otherwise>
-								</xsl:choose>
-							</xsl:attribute>
-							<xsl:attribute name="href">/docs/purls.html</xsl:attribute>
-							<xsl:text>PURLs</xsl:text>
-						</a>
+						<xsl:attribute name="class">
+							<xsl:choose>
+								<xsl:when test="$section='purl'">
+									active
+								</xsl:when>
+								<xsl:otherwise>
+									inactive
+								</xsl:otherwise>
+							</xsl:choose>
+						</xsl:attribute>
+						<a href="/docs/purls.html">PURLs</a>
+						<form action="/?purl" method="get" title="Search PURL maintainers and curators" class="search">
+							<label></label> <input name="q" type="text" value="" />
+						</form>
 					</li>
 					<li>
-						<a>
-							<xsl:attribute name="class">
-								<xsl:choose>
-									<xsl:when test="$section='user'">
-										active
-									</xsl:when>
-									<xsl:otherwise>
-										inactive
-									</xsl:otherwise>
-								</xsl:choose>
-							</xsl:attribute>
-							<xsl:attribute name="href">/docs/user.html</xsl:attribute>
-							<xsl:text>Users</xsl:text>
-						</a>
+						<xsl:attribute name="class">
+							<xsl:choose>
+								<xsl:when test="$section='user'">
+									active
+								</xsl:when>
+								<xsl:otherwise>
+									inactive
+								</xsl:otherwise>
+							</xsl:choose>
+						</xsl:attribute>
+						<a href="/docs/user.html">Users</a>
+						<form action="/?user" method="get" title="Search usernames" class="search">
+							<label></label> <input name="q" type="text" />
+						</form>
+						<xsl:if test="$section='user'">
+							<ul>
+								<li><a class="diverted" href="/admin/user/template?copy">Create New User</a></li>
+							</ul>
+						</xsl:if>
 					</li>
 					<li>
-						<a>
-							<xsl:attribute name="class">
-								<xsl:choose>
-									<xsl:when test="$section='group'">
-										active
-									</xsl:when>
-									<xsl:otherwise>
-										inactive
-									</xsl:otherwise>
-								</xsl:choose>
-							</xsl:attribute>
-							<xsl:attribute name="href">/docs/group.html</xsl:attribute>
-							<xsl:text>Groups</xsl:text>
-						</a>
+						<xsl:attribute name="class">
+							<xsl:choose>
+								<xsl:when test="$section='group'">
+									active
+								</xsl:when>
+								<xsl:otherwise>
+									inactive
+								</xsl:otherwise>
+							</xsl:choose>
+						</xsl:attribute>
+						<a href="/docs/group.html">Groups</a>
+						<form action="/?group" method="get" title="Search group names" class="search">
+							<label></label> <input name="q" type="text" />
+						</form>
+						<xsl:if test="$section='group'">
+							<ul>
+								<li><a class="diverted" href="/admin/group/template?copy">Create New Group</a></li>
+							</ul>
+						</xsl:if>
 					</li>
 					<li>
-						<a>
-							<xsl:attribute name="class">
-								<xsl:choose>
-									<xsl:when test="$section='domain'">
-										active
-									</xsl:when>
-									<xsl:otherwise>
-										inactive
-									</xsl:otherwise>
-								</xsl:choose>
-							</xsl:attribute>
-							<xsl:attribute name="href">/docs/domain.html</xsl:attribute>
-							<xsl:text>Domains</xsl:text>
-						</a>
+						<xsl:attribute name="class">
+							<xsl:choose>
+								<xsl:when test="$section='domain'">
+									active
+								</xsl:when>
+								<xsl:otherwise>
+									inactive
+								</xsl:otherwise>
+							</xsl:choose>
+						</xsl:attribute>
+						<a href="/docs/domain.html">Domains</a>
+						<form action="/?domain" method="get" title="Search maintainers and curators" class="search">
+							<label></label> <input name="q" type="text" />	
+						</form>
 					</li>
-					<li>
-						<a class="inactive" href="/docs/pending/index.html">Admin</a>
+					<li class="inactive">
+						<a href="/docs/pending/index.html">Admin</a>
 					</li>
-					<li>
-						<a class="inactive" href="/docs/help.html">Help</a>
+					<li class="inactive">
+						<a href="/docs/help.html">Help</a>
 					</li>
 				</ul>
 			</xsl:if>
@@ -161,7 +169,7 @@
 					<a id="message" />
 				</div>
 				<div id="header">
-					<ul id="actions">
+					<ul id="actions" class="{$mode}">
 						<li class="view">
 							<xsl:choose>
 								<xsl:when test="contains($mode, 'view')">
@@ -207,6 +215,7 @@
 					<div class="clear">&#160;</div>
 				</div>
 				<xsl:apply-templates select="*|comment()|text()" />
+				<div class="clear">&#160;</div>
 			</div>
 
 			<xsl:if test="not(starts-with($mode, 'pre-'))">

@@ -9,8 +9,10 @@
 			</head>
 			<body class="search">
 				<h1>Search Results</h1>
-				<label for="q">Search again:</label>
-				<input type="text" id="q" value="" />
+				<form action="" method="get" class="search">
+					<label for="q">Search again:</label>
+					<input type="text" id="q" name="q" value="" />
+				</form>
 				<ul id="results" class="">
 					<xsl:apply-templates />
 					<xsl:if test="count(/sparql:sparql/sparql:results/sparql:result)=0">
