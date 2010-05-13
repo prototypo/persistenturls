@@ -11,8 +11,11 @@
 				<h1>Search Results</h1>
 				<label for="q">Search again:</label>
 				<input type="text" id="q" value="" />
-				<ul class="results">
+				<ul id="results" class="">
 					<xsl:apply-templates />
+					<xsl:if test="count(/sparql:sparql/sparql:results/sparql:result)=0">
+						<p>No results found.</p>
+					</xsl:if>
 				</ul>
 			</body>
 		</html>
