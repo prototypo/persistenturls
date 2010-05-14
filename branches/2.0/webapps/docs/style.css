@@ -86,37 +86,26 @@ a:visited {
 }
 
 #content {
-    clear: both;
-    margin: 0 0 0 15%;
-	padding: 0 1% 10px 2%;
-    position: absolute;
+    clear: right;
+    float: left;
+	padding: 2em 1% 10px 6%;
 	text-align: left;
-    width: 82%;
+    width: 75%;
     z-index: 0;
 }
 
-#content a {
-}
-
-#content a:hover { 
-}
-
-#loginstatus {
-    color: #333;
-    float: right;
-    font-size: 0.9em;
-    padding: 10px 10px 0 0;
-    text-align: left;
-    width: 20%;
-}
-
 #header {
+    border-bottom: 1px solid #ccc;
+    margin: 0 0 0 2%;
+    padding: 0 0 0 16%;
 }
 
 #menu {
     background: #efefef url(images/menu-bg.png) top right repeat-y;
+    border-bottom: 1px solid #ccc;
+    border-left: 1px solid #ccc;
     float: left;
-    margin: 0;
+    margin: 0 0 0 2%;
     padding: 0;
     position: relative;
     width: 15%;
@@ -136,9 +125,21 @@ a:visited {
     width: 100%;
 }
 
+#menu li.active {
+    background: #fff;
+    padding: 0 0 0.5em 0;
+}
+
 #menu li.active > a {
     background: transparent url(images/menu-item-bg.png) top right no-repeat;
     font-weight: bold;
+}
+
+#menu a.new {
+    display: inline;
+    background: transparent url(images/add.png) center left no-repeat;
+    margin: 0 0 0 8%;
+    padding: 7px 0 7px 30px;
 }
 
 #menu li form {
@@ -166,14 +167,16 @@ a:visited {
 
 #menu ul {
     font-size: 0.9em;
-    margin: 0 0 0 8%;
+    margin: 0;
+}
+
+#menu ul li {
+    padding: 7px 0;
 }
 
 #menu ul li a {
-    display: inline;
     height: auto;
     line-height: 1;
-    padding: 0;
 }
 
 #breadcrumbs {
@@ -199,12 +202,12 @@ a:visited {
 }
 
 #actions {
-    border-left: 1px solid #ddd;
+    border-left: 1px solid #ccc;
     clear: both;
     float: left;
     font-size: 0.9em;
     list-style: none;
-    margin: 2px 0 0;
+    margin: 1em 0 0;
 }
 
 #actions li {
@@ -217,11 +220,11 @@ a:visited {
 
 #actions li a,
 #actions li span {
-    background: #efefef;
-    border-right: 1px solid #ddd;
-    border-top: 1px solid #ddd;
-    border-bottom: 1px solid #ddd;
+    background: #efefef url(images/menu-region.png) bottom left repeat-x;
+    border-right: 1px solid #ccc;
+    border-top: 1px solid #ccc;
     display: block;
+    margin-bottom: -1px;
     padding: 3px 10px;
     width: 100%;
 }
@@ -399,17 +402,15 @@ img {
 }
 
 #footer {
-    bottom: 0;
     clear: both;
-    margin: 3em 0 0;
-    padding: 10px 1%;
-    position: absolute;
+    margin: 0 0 0 17%;
+    padding: 3em 1% 10px 1%;
     text-align: right;
-    width: 98%;
+    width: 81%;
 }
 
 #footer a {
-    padding-right: 5px;
+    padding-right: 25px;
 }
 
 /* Inapplicable actions or breadcrumbs */

@@ -80,6 +80,42 @@
 		<xsl:copy>
 			<xsl:apply-templates select="@*" />
 			<xsl:if test="not(starts-with($mode, 'pre-'))">
+				<div id="header">
+					<ul id="actions" class="{$mode}">
+						<li class="view">
+							<xsl:choose>
+								<xsl:when test="contains($mode, 'view')">
+									<span class="current">View</span>
+								</xsl:when>
+								<xsl:otherwise>
+									<a class="diverted" href="?view">View</a>
+								</xsl:otherwise>
+							</xsl:choose>
+						</li>
+						<li class="edit">
+							<xsl:choose>
+								<xsl:when test="contains($mode, 'edit')">
+									<span class="current">Edit</span>
+								</xsl:when>
+								<xsl:otherwise>
+									<a class="diverted" href="?edit">Edit</a>
+								</xsl:otherwise>
+							</xsl:choose>
+						</li>
+						<li class="delete">
+							<xsl:choose>
+								<xsl:when test="contains($mode, 'delete')">
+									<span class="current">Delete</span>
+								</xsl:when>
+								<xsl:otherwise>
+									<a class="diverted" href="?delete">Delete</a>
+								</xsl:otherwise>
+							</xsl:choose>
+						</li>
+					</ul>
+					<div class="clear">&#160;</div>
+				</div>
+
 				<ul id="menu">
 					<li>
 						<xsl:attribute name="class">
@@ -114,7 +150,7 @@
 						</form>
 						<xsl:if test="$section='user'">
 							<ul>
-								<li><a class="diverted" href="/admin/user/template?copy">Create New User</a></li>
+								<li><a class="diverted new" href="/admin/user/template?copy">Create New User</a></li>
 							</ul>
 						</xsl:if>
 					</li>
@@ -135,7 +171,7 @@
 						</form>
 						<xsl:if test="$section='group'">
 							<ul>
-								<li><a class="diverted" href="/admin/group/template?copy">Create New Group</a></li>
+								<li><a class="diverted new" href="/admin/group/template?copy">Create New Group</a></li>
 							</ul>
 						</xsl:if>
 					</li>
@@ -165,60 +201,27 @@
 			</xsl:if>
 
 			<div id="content">
+				<ul id="breadcrumbs">
+					<li class="home"><a href="/">Home</a></li>
+					<xsl:choose>
+						<xsl:when test="$section='user'">
+							<li><a href="/">Users</a></li>
+						</xsl:when>
+						<xsl:when test="$section='group'">
+							<li><a href="/">Groups</a></li>
+						</xsl:when>
+					</xsl:choose>
+				</ul>
+				<div class="clear">&#160;</div>
 				<div id="message-container">
 					<a id="message" />
-				</div>
-				<div id="header">
-					<ul id="actions" class="{$mode}">
-						<li class="view">
-							<xsl:choose>
-								<xsl:when test="contains($mode, 'view')">
-									<span class="current">View</span>
-								</xsl:when>
-								<xsl:otherwise>
-									<a class="diverted" href="?view">View</a>
-								</xsl:otherwise>
-							</xsl:choose>
-						</li>
-						<li class="edit">
-							<xsl:choose>
-								<xsl:when test="contains($mode, 'edit')">
-									<span class="current">Edit</span>
-								</xsl:when>
-								<xsl:otherwise>
-									<a class="diverted" href="?edit">Edit</a>
-								</xsl:otherwise>
-							</xsl:choose>
-						</li>
-						<li class="delete">
-							<xsl:choose>
-								<xsl:when test="contains($mode, 'delete')">
-									<span class="current">Delete</span>
-								</xsl:when>
-								<xsl:otherwise>
-									<a class="diverted" href="?delete">Delete</a>
-								</xsl:otherwise>
-							</xsl:choose>
-						</li>
-					</ul>
-					<ul id="breadcrumbs">
-						<li class="home"><a href="/">Home</a></li>
-						<xsl:choose>
-							<xsl:when test="$section='user'">
-								<li><a href="/">Users</a></li>
-							</xsl:when>
-							<xsl:when test="$section='group'">
-								<li><a href="/">Groups</a></li>
-							</xsl:when>
-						</xsl:choose>
-					</ul>
-					<div class="clear">&#160;</div>
 				</div>
 				<xsl:apply-templates select="*|comment()|text()" />
 				<div class="clear">&#160;</div>
 			</div>
 
 			<xsl:if test="not(starts-with($mode, 'pre-'))">
+				<div class="clear">&#160;</div>
 				<div id="footer">
 					<a href="http://www.oclc.org/" title="OCLC">
 						<img src="{$xslt}/../../docs/images/oclclogo.png" alt="OCLC logo" />
