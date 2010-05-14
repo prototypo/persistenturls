@@ -28,7 +28,7 @@ calli:get-delete rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom calli:Deletable];
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
-		owl:allValuesFrom <java:java.io.InputStream>];
+		owl:allValuesFrom <java:java.io.Reader>];
 	http:operation "delete";
 	http:type "text/html";
 	obj:imports <java:org.openrdf.http.object.exceptions.InternalServerError>;
@@ -43,7 +43,7 @@ calli:pre-delete rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom calli:Deletable];
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
-		owl:allValuesFrom <java:java.io.InputStream>];
+		owl:allValuesFrom <java:java.io.Reader>];
 	http:operation "pre-delete";
 	http:type "text/html";
 	obj:imports <java:org.openrdf.http.object.exceptions.InternalServerError>;
@@ -75,4 +75,11 @@ calli:find-delete-profile rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
 		owl:allValuesFrom <urn:mimetype:application/xml>];
 	obj:name "findDeleteProfile";
-	obj:sparql "SELECT REDUCED ?profile WHERE { $this a [calli:delete ?profile] . ?profile a <urn:mimetype:application/xml> }".
+	obj:sparql """
+		SELECT REDUCED ?profile
+		WHERE {
+			$this a [calli:delete ?profile] .
+			?profile a <urn:mimetype:application/xml>
+		}
+	""".
+

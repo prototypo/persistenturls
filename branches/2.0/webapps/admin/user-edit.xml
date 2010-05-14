@@ -10,11 +10,6 @@
 		<title property="rdfs:label"/>
 	</head>
 	<body class="user">
-		<div style="float:right">
-			<form method="POST" action="?reset-password">
-				<button type="submit">Reset Password</button>
-			</form>
-		</div>
 		<form action="" about="">
 			<fieldset>
 				<legend>Modify a user</legend>

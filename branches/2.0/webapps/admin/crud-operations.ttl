@@ -155,5 +155,4 @@ purl:post-edit-purl-touch owl:intersectionOf (calli:post-edit
 		if (purlPartOf) {
 			purlPartOf.touchRevision()
 		}
-		return msg.functionalObjectResponse
 	""".

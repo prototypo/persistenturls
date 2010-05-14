@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="template.xsl"?>
+<html>
+	<head>
+		<title>Unauthorized</title>
+	</head>
+	<body class="user">
+		<h2>Forgot Your Password?</h2>
+		<form method="POST" action="/admin/authority?request-password">
+			<input type="text" name="email" />
+			<button type="submit">Request Password</button>
+		</form>
+		<p>Click <a href="/admin/user/template?register">here to create a new account</a>.</p>
+	</body>
+</html>

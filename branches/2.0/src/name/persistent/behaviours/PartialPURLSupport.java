@@ -43,7 +43,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xbill.DNS.Address;
 import org.xbill.DNS.Lookup;
-import org.xbill.DNS.Name;
 import org.xbill.DNS.Record;
 import org.xbill.DNS.SRVRecord;
 import org.xbill.DNS.TextParseException;
@@ -234,8 +233,7 @@ public abstract class PartialPURLSupport extends MirrorSupport implements
 			addresses.add(null);
 			SRVRecord srv = servers.get(i);
 			int port = srv.getPort();
-			Name target = srv.getTarget();
-			String name = target.toString();
+			String name = srv.getTarget().toString();
 			if (name.endsWith(".")) {
 				name = name.substring(0, name.length() - 1);
 			}

@@ -28,7 +28,7 @@ calli:get-copy rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom calli:Copyable];
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
-		owl:allValuesFrom <java:java.io.InputStream>];
+		owl:allValuesFrom <java:java.io.Reader>];
 	http:operation "copy";
 	http:type "text/html";
 	obj:imports <java:org.openrdf.http.object.exceptions.InternalServerError>;
@@ -43,7 +43,7 @@ calli:pre-copy rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom calli:Copyable];
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
-		owl:allValuesFrom <java:java.io.InputStream>];
+		owl:allValuesFrom <java:java.io.Reader>];
 	http:operation "pre-copy";
 	http:type "text/html";
 	obj:imports <java:org.openrdf.http.object.exceptions.InternalServerError>;
@@ -116,3 +116,4 @@ calli:find-scribe rdfs:subClassOf obj:Message;
 calli:find-scribe-of a owl:ObjectProperty, owl:FunctionalProperty;
 	rdfs:domain calli:find-scribe;
 	obj:name "of".
+

@@ -26,7 +26,7 @@
 
 calli:profile-apply rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target; owl:allValuesFrom <urn:mimetype:application/xml>];
-	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse; owl:allValuesFrom <java:java.io.InputStream>];
+	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse; owl:allValuesFrom <java:java.io.Reader>];
 	obj:name "applyProfile";
 	obj:xslt </callimachus/profile-apply.xsl>.
 

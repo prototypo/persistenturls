@@ -28,7 +28,7 @@ calli:get-edit rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom calli:Editable];
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
-		owl:allValuesFrom <java:java.io.InputStream>];
+		owl:allValuesFrom <java:java.io.Reader>];
 	http:operation "edit";
 	http:type "text/html";
 	obj:imports <java:org.openrdf.http.object.exceptions.InternalServerError>;
@@ -43,7 +43,7 @@ calli:pre-edit rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom calli:Editable];
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
-		owl:allValuesFrom <java:java.io.InputStream>];
+		owl:allValuesFrom <java:java.io.Reader>];
 	http:operation "pre-edit";
 	http:type "text/html";
 	obj:imports <java:org.openrdf.http.object.exceptions.InternalServerError>;
@@ -57,11 +57,11 @@ calli:pre-edit rdfs:subClassOf obj:Message;
 calli:post-edit rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom calli:Editable];
-	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
-		owl:allValuesFrom <java:java.io.InputStream>];
+	rdfs:subClassOf [owl:onProperty obj:objectResponse;
+		owl:allValuesFrom owl:Nothing];
 	http:method "POST";
 	http:operation "edit", "pre-edit";
-	obj:groovy "return editDescription('edit', msg.in)".
+	obj:groovy "editDescription('edit', msg.in)".
 
 calli:post-edit-in a owl:ObjectProperty; a owl:FunctionalProperty;
 	rdfs:domain calli:post-edit;
@@ -75,4 +75,11 @@ calli:find-edit-profile rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
 		owl:allValuesFrom <urn:mimetype:application/xml>];
 	obj:name "findEditProfile";
-	obj:sparql "SELECT REDUCED ?profile WHERE { $this a [calli:edit ?profile] . ?profile a <urn:mimetype:application/xml> }".
+	obj:sparql """
+		SELECT REDUCED ?profile
+		WHERE {
+			$this a [calli:edit ?profile] .
+			?profile a <urn:mimetype:application/xml>
+		}
+	""".
+

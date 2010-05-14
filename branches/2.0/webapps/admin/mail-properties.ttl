@@ -39,7 +39,8 @@
 # See http://java.sun.com/javaee/5/docs/api/javax/mail/package-summary.html
 # See http://java.sun.com/products/javamail/javadocs/com/sun/mail/smtp/package-summary.html
 #
-<mail.properties> a purl:MailProperties.
+<mail.properties> a purl:MailProperties;
+	calli:maintainer </data/group/admin>.
 
 purl:MailProperties rdfs:subClassOf <urn:mimetype:application/x-properties>.
 
@@ -70,7 +71,7 @@ purl:post-mail-properties rdfs:subClassOf obj:Message;
 		}
 	""".
 
-purl:post-mail-properties-body a owl:ObjectProperty; a owl:FunctionalProperty;
+purl:post-mail-properties-form a owl:ObjectProperty; a owl:FunctionalProperty;
 	rdfs:domain purl:post-mail-properties;
 	rdfs:range <java:java.util.Map>;
 	http:type "application/x-www-form-urlencoded";
@@ -82,12 +83,19 @@ purl:send-mail rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:objectResponse;
 		owl:allValuesFrom owl:Nothing];
 	http:method "POST";
+	http:operation "send-mail";
 	http:realm <local>;
 	obj:imports <java:org.openrdf.http.object.exceptions.NotImplemented>;
 	obj:imports <java:javax.mail.Session>;
 	obj:imports <java:javax.mail.internet.MimeMessage>;
 	obj:imports <java:javax.mail.Message.RecipientType>;
+	obj:imports <java:javax.mail.internet.MimeBodyPart>;
+	obj:imports <java:javax.mail.internet.MimeMultipart>;
+	obj:imports <java:javax.activation.DataHandler>;
+	obj:imports <java:javax.mail.util.ByteArrayDataSource>;
 	obj:imports <java:javax.mail.Transport>;
+	obj:imports <java:org.xbill.DNS.Lookup>;
+	obj:imports <java:org.xbill.DNS.Type>;
 	obj:groovy """
 		Properties properties = new Properties()
 		InputStream stream = openInputStream()
@@ -98,13 +106,31 @@ purl:send-mail rdfs:subClassOf obj:Message;
 				stream.close()
 			}
 		}
-		Session session = Session.getDefaultInstance(properties)
+		Session session = Session.getInstance(properties)
 		MimeMessage message = new MimeMessage(session)
 		message.setFrom()
-        message.setSentDate(new Date())
+		message.setSentDate(new Date())
 		message.addRecipients(RecipientType.TO, msg.to)
-		message.subject = msg.subject
-		message.setContent(msg.body, "text/html")
+		message.subject = (msg.html =~ /<title>\\s*([^<]*)\\s*<.title>/)[0][1]
+		if (msg.png) {
+			MimeMultipart multipart = new MimeMultipart()
+
+			// html body
+			MimeBodyPart part1 = new MimeBodyPart()
+			part1.setText(msg.html, "UTF-8", "html")
+			multipart.addBodyPart(part1)
+
+			// png attachment
+			MimeBodyPart part2 = new MimeBodyPart()
+			ByteArrayDataSource source = new ByteArrayDataSource(msg.png, "image/png")
+			part2.setDataHandler(new DataHandler(source))
+			part2.disposition = "inline; filename=image.png"
+			multipart.addBodyPart(part2)
+
+			message.setContent(multipart)
+		} else {
+			message.setText(msg.html, "UTF-8", "html")
+		}
 		message.saveChanges()
 		if (stream) {
 			String user = session.getProperty("mail.user")
@@ -117,7 +143,19 @@ purl:send-mail rdfs:subClassOf obj:Message;
 				tr.close()
 			}
 		} else {
-			message.writeTo(System.out)
+			properties.setProperty("mail.transport.protocol", "smtp")
+			String domain = msg.to.substring(msg.to.indexOf('@') + 1)
+			for (def mx : new Lookup(domain, Type.MX).run()) {
+				String host = mx.target.toString().replaceAll('[.]$', '')
+				Transport tr = session.getTransport()
+				try {
+					tr.connect(host, 25, null, null)
+					tr.sendMessage(message, message.allRecipients)
+					return;
+				} finally {
+					tr.close()
+				}
+			}
 			throw new NotImplemented("No Mail Server Configured")
 		}
 	""".
@@ -131,12 +169,11 @@ purl:send-mail-arg1 a owl:DatatypeProperty, owl:FunctionalProperty;
 purl:send-mail-arg2 a owl:DatatypeProperty, owl:FunctionalProperty;
 	rdfs:domain purl:send-mail;
 	rdfs:range xsd:string;
-	http:parameter "subject";
-	obj:name "subject".
+	http:parameter "body";
+	obj:name "html".
 
-purl:send-mail-arg3 a owl:DatatypeProperty, owl:FunctionalProperty;
+purl:send-mail-arg3 a owl:ObjectProperty, owl:FunctionalProperty;
 	rdfs:domain purl:send-mail;
-	rdfs:range xsd:string;
-	http:type "text/html";
-	obj:name "body".
+	rdfs:range <java:java.io.InputStream>;
+	obj:name "png".
 

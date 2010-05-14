@@ -28,7 +28,7 @@ calli:get-view rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom calli:Viewable];
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
-		owl:allValuesFrom <java:java.io.InputStream>];
+		owl:allValuesFrom <java:java.io.Reader>];
 	http:rel "alternate";
 	http:operation "view";
 	http:type "text/html";
@@ -44,7 +44,7 @@ calli:pre-view rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom calli:Viewable];
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
-		owl:allValuesFrom <java:java.io.InputStream>];
+		owl:allValuesFrom <java:java.io.Reader>];
 	http:operation "pre-view";
 	http:type "text/html";
 	obj:imports <java:org.openrdf.http.object.exceptions.InternalServerError>;
@@ -61,4 +61,11 @@ calli:find-view-profile rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
 		owl:allValuesFrom <urn:mimetype:application/xml>];
 	obj:name "findViewProfile";
-	obj:sparql "SELECT REDUCED ?profile WHERE { $this a [calli:view ?profile] . ?profile a <urn:mimetype:application/xml> }".
+	obj:sparql """
+		SELECT REDUCED ?profile
+		WHERE {
+			$this a [calli:view ?profile] .
+			?profile a <urn:mimetype:application/xml>
+		}
+	""".
+
