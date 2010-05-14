@@ -87,8 +87,8 @@ calli:put-text-file rdfs:subClassOf obj:Message;
 		char[] cbuf = new char[1024];
 		Writer out = openWriter();
 		try {
-			while ((read = msg.body.read(buf)) >= 0) {
-				out.write(buf, 0, read);
+			while ((read = msg.body.read(cbuf)) >= 0) {
+				out.write(cbuf, 0, read);
 			}
 		} finally {
 			out.close();
