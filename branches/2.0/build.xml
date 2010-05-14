@@ -8,7 +8,7 @@
 	<property name="tmp" location="tmp" />
 	<property name="callimachus.url" value="callimachusproject.zip" />
 	<property name="main" value="org.callimachusproject.Server" />
-	<property name="jvmargs" value="-ea -server -mx512m -Djava.library.path=${bin} -Djava.io.tmpdir=${tmp}" />
+	<property name="jvmargs" value="-ea -server -mx512m -Dfile.encoding=UTF-8 -Djava.library.path=${bin} -Djava.io.tmpdir=${tmp}" />
 
 	<target name="init">
 		<!-- Create the time stamp and build directory -->
