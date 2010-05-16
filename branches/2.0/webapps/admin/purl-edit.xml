@@ -51,8 +51,7 @@
 								<label for="m_renamedTo">Target:</label>
 							</td>
 							<td class="value" rel="purl:renamedTo">
-<span about="?target" typeof="rdf:Resource" />
-<!--								<input id="m_renamedTo" type="text" onchange="$(this).parent().attr('resource', $(this).val())" />-->
+								<input id="m_renamedTo" type="text" onchange="$(this).parent().attr('resource', $(this).val())" about="?target" />
 							</td>
 						</tr>
 						<tr class="redirect">
@@ -60,7 +59,7 @@
 								<label for="m_redirectsTo">Target:</label>
 							</td>
 							<td class="value" data-cardinality="1">
-								<input id="m_redirectsTo" type="text" onchange="$(this).attr('about', $(this).val())"/>
+								<input id="m_redirectsTo" type="text" onchange="$(this).attr('about', $(this).val())" about="?target"/>
 							</td>
 						</tr>
 						<tr class="simple">
@@ -68,7 +67,7 @@
 								<label for="m_alternate">Target:</label>
 							</td>
 							<td class="value" data-cardinality="1" rel="purl:alternate">
-								<input id="m_alternate" type="text" onchange="$(this).attr('about', $(this).val())"/>
+								<input id="m_alternate" type="text" onchange="$(this).attr('about', $(this).val())" about="?target" />
 							</td>
 						</tr>
 						<tr class="copy">
@@ -76,8 +75,7 @@
 								<label for="m_copyOf">Target:</label>
 							</td>
 							<td class="value" data-cardinality="1" rel="purl:copyOf">
-								<input id="m_copyOf" type="text" onchange="$(this).attr('about', $(this).val())"/>
-								<span typeof="rdf:Resource" href="?target"/>
+								<input id="m_copyOf" type="text" onchange="$(this).attr('about', $(this).val())" about="?target"/>
 							</td>
 						</tr>
 						<tr class="described">
@@ -85,8 +83,7 @@
 								<label for="m_describedBy">Target:</label>
 							</td>
 							<td class="value" data-cardinality="1" rel="purl:describedBy">
-								<input id="m_describedBy" type="text" onchange="$(this).attr('about', $(this).val())"/>
-								<span typeof="rdf:Resource" href="?target"/>
+								<input id="m_describedBy" type="text" onchange="$(this).attr('about', $(this).val())" about="?target"/>
 							</td>
 						</tr>
 						<tr class="partial">
