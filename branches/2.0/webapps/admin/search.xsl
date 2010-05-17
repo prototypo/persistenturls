@@ -8,17 +8,7 @@
 				<title>Search Results</title>
 			</head>
 			<body class="search">
-				<h1>Search Results</h1>
-				<form action="" method="get" class="search">
-					<label for="q">Search again:</label>
-					<input type="text" id="q" name="q" value="" />
-				</form>
-				<ul id="results" class="">
-					<xsl:apply-templates />
-					<xsl:if test="count(/sparql:sparql/sparql:results/sparql:result)=0">
-						<p>No results found.</p>
-					</xsl:if>
-				</ul>
+				<xsl:apply-templates />
 			</body>
 		</html>
 	</xsl:template>
