@@ -24,96 +24,68 @@
 @prefix http:<http://www.openrdf.org/rdf/2009/httpobject#>.
 @prefix calli:<http://callimachusproject.org/rdf/2009/framework#>.
 
-calli:get-copy rdfs:subClassOf obj:Message;
+calli:get-edit rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom calli:Copyable];
+		owl:allValuesFrom calli:Editable];
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
 		owl:allValuesFrom <java:java.io.Reader>];
-	http:operation "copy";
+	http:operation "edit";
 	http:type "text/html";
 	obj:imports <java:org.openrdf.http.object.exceptions.InternalServerError>;
 	obj:groovy """
-		def profile = findCopyProfile()
+		def profile = findEditProfile()
 		if (profile == null)
-			throw new InternalServerError("Missing Copy Profile")
-		return profile.constructAsHTML('copy', null, this)
+			throw new InternalServerError("Missing Edit Profile")
+		return profile.calliConstruct('edit', this)
 	""".
 
-calli:pre-copy rdfs:subClassOf obj:Message;
+calli:pre-edit rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom calli:Copyable];
+		owl:allValuesFrom calli:Editable];
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
 		owl:allValuesFrom <java:java.io.Reader>];
-	http:operation "pre-copy";
+	http:operation "pre-edit";
 	http:type "text/html";
 	obj:imports <java:org.openrdf.http.object.exceptions.InternalServerError>;
 	obj:groovy """
-		def profile = findCopyProfile()
+		def profile = findEditProfile()
 		if (profile == null)
-			throw new InternalServerError("Missing Copy Profile")
-		return profile.constructAsHTML('pre-copy', null, this)
+			throw new InternalServerError("Missing Edit Profile")
+		return profile.calliConstruct('pre-edit', this)
 	""".
 
-calli:post-copy rdfs:subClassOf obj:Message;
+calli:post-edit rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom calli:Copyable];
+		owl:allValuesFrom calli:Editable];
 	rdfs:subClassOf [owl:onProperty obj:objectResponse;
-		owl:maxCardinality "1"^^xsd:nonNegativeInteger];
+		owl:allValuesFrom owl:Nothing];
 	http:method "POST";
-	http:operation "copy", "pre-copy";
-	http:expect "201-created";
+	http:operation "edit", "pre-edit";
+	obj:imports <java:org.openrdf.http.object.exceptions.InternalServerError>;
 	obj:groovy """
-		def copy = copyDescription('copy', msg.in, findCopyNamespaces())
-		if (calliCurators) {
-			copy.calliMaintainers.addAll(calliCurators)
-		} else {
-			copy.calliMaintainers.addAll(findScribe(copy))
-		}
-		return copy
+		def profile = findEditProfile()
+		if (profile == null)
+			throw new InternalServerError("Missing Edit Profile")
+		profile.calliEditResource(this, msg.in)
 	""".
 
-calli:post-copy-in a owl:ObjectProperty, owl:FunctionalProperty;
-	rdfs:domain calli:post-copy;
+calli:post-edit-in a owl:ObjectProperty; a owl:FunctionalProperty;
+	rdfs:domain calli:post-edit;
 	rdfs:range <java:java.io.InputStream>;
-	http:type "application/rdf+xml";
+	http:type "multipart/related;type=\"application/rdf+xml\"";
 	obj:name "in".
 
-calli:find-copy-profile rdfs:subClassOf obj:Message;
+calli:find-edit-profile rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom calli:Copyable];
+		owl:allValuesFrom calli:Editable];
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
 		owl:allValuesFrom <urn:mimetype:application/xml>];
-	obj:name "findCopyProfile";
+	obj:name "findEditProfile";
 	obj:sparql """
 		SELECT REDUCED ?profile
 		WHERE {
-			$this a [calli:copy ?profile] .
+			$this a [calli:edit ?profile] .
 			?profile a <urn:mimetype:application/xml>
 		}
 	""".
-
-calli:find-copy-namespace rdfs:subClassOf obj:Message;
-	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom calli:Copyable];
-	obj:name "findCopyNamespaces";
-	obj:sparql """
-		SELECT REDUCED ?namespace
-		WHERE { $this a [calli:withNamespace ?namespace] }
-	""".
-
-calli:find-scribe rdfs:subClassOf obj:Message;
-	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom calli:Copyable];
-	obj:name "findScribe";
-	obj:sparql """
-		SELECT REDUCED ?scribe
-		WHERE {
-			GRAPH ?graph { $of a ?type }
-			?graph http:authorized ?scribe
-		}
-	""".
-
-calli:find-scribe-of a owl:ObjectProperty, owl:FunctionalProperty;
-	rdfs:domain calli:find-scribe;
-	obj:name "of".
 

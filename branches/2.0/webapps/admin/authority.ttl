@@ -16,16 +16,13 @@ calli:get-graph http:realm <local>.
 
 <authority> a calli:DigestRealm, calli:AuthorizationRealm;
 	calli:origin </>;
-	calli:realmAuth "PURL";
+	calli:realmAuth "PURL"; # TODO replace with </>
 	calli:credential </data/group/public>;
 	calli:credential </data/group/admin>;
 	calli:maintainer </data/group/admin>.
 
-calli:DigestRealm rdfs:subClassOf calli:Editable;
-	calli:edit <realm-edit.xml>.
-
-purl:User rdfs:subClassOf calli:Credential.
-purl:Group rdfs:subClassOf calli:Group.
+purl:User rdfs:subClassOf calli:Credential. # TODO replace purl:User with calli:
+purl:Group rdfs:subClassOf calli:Group. # TODO replace purl:Group with calli:
 
 </data/group/admin> a purl:Group;
 	rdfs:label "admin";
@@ -61,7 +58,7 @@ purl:unauthorized rdfs:subClassOf obj:Message;
 	obj:imports <unauthorized.xml>;
 	obj:imports <java:org.apache.http.entity.StringEntity>;
 	obj:groovy """
-		Reader reader = unauthorizedXml.constructAsHTML('view', this)
+		Reader reader = unauthorizedXml.calliConstruct('view', this)
 		try {
 			CharArrayWriter writer = new CharArrayWriter()
 			int read
@@ -98,7 +95,7 @@ purl:post-request-password rdfs:subClassOf obj:Message;
 		for (User user : purlFindUsersByEmail(msg.form.get("email")[0])) {
 			user.purlRequestPassword()
 		}
-		return requestPasswordSentXml.constructAsHTML('view', null, null)
+		return requestPasswordSentXml.calliConstruct('view', null)
 	""".
 
 purl:post-request-password-email a owl:DatatypeProperty, owl:FunctionalProperty;
@@ -142,7 +139,7 @@ purl:request-password rdfs:subClassOf obj:Message;
 		String ha2 = DigestUtils.md5Hex(toUri().toString())
 		String token = DigestUtils.md5Hex("${ha1}:${nonce}:${ha2}")
 		String qs = "?reset-password&amp;nonce=${nonce}&amp;token=${token}"
-		Reader reader = userMailRequestPasswordXml.constructAsHTML('pre-view', this)
+		Reader reader = userMailRequestPasswordXml.calliConstruct('pre-view', this)
 		try {
 			CharArrayWriter writer = new CharArrayWriter()
 			int read
@@ -172,7 +169,7 @@ purl:get-reset-password rdfs:subClassOf obj:Message;
 	obj:imports <java:org.openrdf.http.object.exceptions.BadRequest>;
 	obj:imports <user-reset-password.xml>;
 	obj:groovy """
-		return userResetPasswordXml.constructAsHTML('view', null, this)
+		return userResetPasswordXml.calliConstruct('view', this)
 	""".
 
 purl:post-reset-password rdfs:subClassOf obj:Message;
@@ -198,7 +195,7 @@ purl:post-reset-password rdfs:subClassOf obj:Message;
 		if (token != msg.form.get("token")[0])
 			throw new BadRequest("Request is No Longer Valid")
 		purlResetPassword()
-		return passwordSentXml.constructAsHTML('view', null, null)
+		return passwordSentXml.calliConstruct('view', null)
 	""".
 
 purl:post-reset-password-form a owl:ObjectProperty, owl:FunctionalProperty;
@@ -227,7 +224,7 @@ purl:reset-password rdfs:subClassOf obj:Message;
 		ByteArrayOutputStream image = new ByteArrayOutputStream()
 		ImageIO.write(captcha.image, "png", image)
 		ByteArrayInputStream png = new ByteArrayInputStream(image.toByteArray())
-		Reader reader = userMailPasswordXml.constructAsHTML('pre-view', this)
+		Reader reader = userMailPasswordXml.calliConstruct('pre-view', this)
 		try {
 			CharArrayWriter writer = new CharArrayWriter()
 			int read

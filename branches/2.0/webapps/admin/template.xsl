@@ -29,24 +29,24 @@
 			</script>
 			<script type="text/javascript" src="{$xslt}/../../callimachus/jquery.rdfquery.rdfa-1.0.js">
 			</script>
-			<script type="text/javascript" src="{$xslt}/../../callimachus/profile-message.js">
+			<script type="text/javascript" src="{$xslt}/../../callimachus/resource-log.js">
 			</script>
-			<script type="text/javascript" src="{$xslt}/../../callimachus/profile-elements.js">
+			<script type="text/javascript" src="{$xslt}/../../callimachus/resource-elements.js">
 			</script>
 			<script type="text/javascript" src="{$xslt}/../../callimachus/diverted.js">
 			</script>
 			<script type="text/javascript" src="{$xslt}/../purl-ui.js">
 			</script>
 			<xsl:if test="contains($mode, 'copy')">
-				<script type="text/javascript" src="{$xslt}/../../callimachus/profile-copy.js">
+				<script type="text/javascript" src="{$xslt}/../../callimachus/resource-copy.js">
 				</script>
 			</xsl:if>
 			<xsl:if test="contains($mode, 'edit')">
-				<script type="text/javascript" src="{$xslt}/../../callimachus/profile-edit.js">
+				<script type="text/javascript" src="{$xslt}/../../callimachus/resource-edit.js">
 				</script>
 			</xsl:if>
 			<xsl:if test="contains($mode, 'delete')">
-				<script type="text/javascript" src="{$xslt}/../../callimachus/profile-delete.js">
+				<script type="text/javascript" src="{$xslt}/../../callimachus/resource-delete.js">
 				</script>
 			</xsl:if>
 			<xsl:if test="(contains($mode, 'copy') or contains($mode, 'edit')) and $section='purl'">

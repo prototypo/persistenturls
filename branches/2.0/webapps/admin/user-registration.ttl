@@ -37,7 +37,7 @@ purl:register rdfs:subClassOf obj:Message;
 		def profile = findCopyProfile()
 		if (profile == null)
 			throw new InternalServerError("Missing Copy Profile")
-		return profile.constructAsHTML('copy', null, this)
+		return profile.calliConstruct('copy', this)
 	""".
 
 purl:post-register rdfs:subClassOf obj:Message;
@@ -54,8 +54,12 @@ purl:post-register rdfs:subClassOf obj:Message;
 	obj:imports <java:org.openrdf.http.object.exceptions.BadRequest>;
 	obj:imports <java:org.apache.http.ProtocolVersion>;
 	obj:imports <java:org.apache.http.message.BasicHttpResponse>;
+	obj:imports <java:org.openrdf.http.object.exceptions.InternalServerError>;
 	obj:groovy """
-		def user = copyDescription('copy', msg.in, findCopyNamespaces())
+		def profile = findCopyProfile()
+		if (profile == null)
+			throw new InternalServerError("Missing Copy Profile")
+		def user = profile.calliCopyResource(this, msg.in, findCopyNamespaces())
 		if (!user.purlEmail)
 			throw new BadRequest("Missing Email Address")
 		if (calliCurators) {

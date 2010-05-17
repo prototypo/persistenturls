@@ -24,23 +24,28 @@
 @prefix http:<http://www.openrdf.org/rdf/2009/httpobject#>.
 @prefix calli:<http://callimachusproject.org/rdf/2009/framework#>.
 
-calli:profile-apply rdfs:subClassOf obj:Message;
-	rdfs:subClassOf [owl:onProperty obj:target; owl:allValuesFrom <urn:mimetype:application/xml>];
-	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse; owl:allValuesFrom <java:java.io.Reader>];
-	obj:name "applyProfile";
-	obj:xslt </callimachus/profile-apply.xsl>.
+calli:construct-template rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom <urn:mimetype:application/xml>];
+	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
+		owl:allValuesFrom <java:java.io.Reader>];
+	http:type "text/html";
+	obj:xslt <construct.xsl>.
 
-calli:profile-apply-arg1 a owl:DatatypeProperty; a owl:FunctionalProperty;
-	rdfs:domain calli:profile-apply;
+calli:construct-template-arg1 a owl:DatatypeProperty; a owl:FunctionalProperty;
+	rdfs:domain calli:construct-template;
 	rdfs:range xsd:string;
-	obj:name "profile".
+	http:parameter "mode";
+	obj:name "mode".
 
-calli:profile-apply-arg2 a owl:ObjectProperty; a owl:FunctionalProperty;
-	rdfs:domain calli:profile-apply;
-	rdfs:range <java:javax.xml.stream.XMLEventReader>.
-
-calli:profile-apply-arg3 a owl:DatatypeProperty; a owl:FunctionalProperty;
-	rdfs:domain calli:profile-apply;
+calli:construct-template-arg2 a owl:DatatypeProperty; a owl:FunctionalProperty;
+	rdfs:domain calli:construct-template;
 	rdfs:range xsd:string;
-	obj:name "etag".
+	http:parameter "element";
+	obj:name "element".
+
+calli:construct-template-arg3 a owl:ObjectProperty; a owl:FunctionalProperty;
+	rdfs:domain calli:construct-template;
+	rdfs:range <java:javax.xml.stream.XMLEventReader>;
+	http:type "application/rdf+xml".
 

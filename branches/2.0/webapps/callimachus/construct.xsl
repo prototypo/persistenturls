@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
-   Copyright 2009 Zepheira LLC
+   Copyright (c) 2009-2010 Zepheira LLC, Some rights reserved
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -16,48 +16,20 @@
 -->
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-	<xsl:param name="profile" />
-	<xsl:param name="etag" select="false()" />
+	<xsl:param name="this" />
+	<xsl:param name="mode" select="''" />
+	<xsl:param name="element" select="'/1'" />
 	<xsl:output method="html" omit-xml-declaration="yes"
 		standalone="no" media-type="text/html" />
+	<xsl:variable name="profile" select="concat($this, '?xslt&amp;mode=', $mode, '&amp;element=', $element)" />
 	<xsl:variable name="data" select="/" />
+	<xsl:variable name="etag" select="false()" /><!-- TODO -->
 	<xsl:variable name="variables"
 		select="'http://callimachusproject.org/rdf/2009/framework/variables/?'" />
 	<xsl:variable name="target"
 		select="$data/rdf:RDF/rdf:Description[1]/@rdf:about" />
-	<xsl:variable name="element">
-		<xsl:choose>
-			<xsl:when
-				test="contains($profile, '&amp;element=') and contains(substring-after($profile, '&amp;element='), '&amp;')">
-				<xsl:value-of
-					select="substring-before(substring-after($profile, '&amp;element='), '&amp;')" />
-			</xsl:when>
-			<xsl:when test="contains($profile, '&amp;element=')">
-				<xsl:value-of select="substring-after($profile, '&amp;element=')" />
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:text>/1</xsl:text>
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:variable>
 	<xsl:variable name="profile-uri">
 		<xsl:value-of select="substring-before($profile, '?')" />
-	</xsl:variable>
-	<xsl:variable name="args">
-		<xsl:choose>
-			<xsl:when
-				test="contains(substring-before($profile, '&amp;element='), '&amp;')">
-				<xsl:value-of
-					select="concat('&amp;', substring-after(substring-before($profile, '&amp;element='), '&amp;'))" />
-			</xsl:when>
-			<xsl:when
-				test="not(contains($profile, '&amp;element=')) and contains($profile, '&amp;')">
-				<xsl:value-of select="concat('&amp;', substring-after($profile, '&amp;'))" />
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:text></xsl:text>
-			</xsl:otherwise>
-		</xsl:choose>
 	</xsl:variable>
 	<xsl:template match="/">
 		<xsl:variable name="html" select="document($profile)/*" />
@@ -136,7 +108,7 @@
 				<xsl:with-param name="scope" select="$scope" />
 			</xsl:apply-templates>
 		</xsl:variable>
-		<xsl:variable name="mode">
+		<xsl:variable name="tmode">
 			<xsl:choose>
 				<xsl:when test="local-name(..)='option'">
 					<xsl:value-of select="'value'" />
@@ -151,7 +123,7 @@
 			<xsl:with-param name="nodeID" select="$nodeID" />
 			<xsl:with-param name="curie" select="@property" />
 			<xsl:with-param name="scope" select="$newscope" />
-			<xsl:with-param name="mode" select="$mode" />
+			<xsl:with-param name="tmode" select="$tmode" />
 		</xsl:apply-templates>
 	</xsl:template>
 	<!--
@@ -185,7 +157,7 @@
 			<xsl:with-param name="nodeID" select="$nodeID" />
 			<xsl:with-param name="curie" select="$variable" />
 			<xsl:with-param name="scope" select="$newscope" />
-			<xsl:with-param name="mode" select="'resource'" />
+			<xsl:with-param name="tmode" select="'resource'" />
 		</xsl:apply-templates>
 	</xsl:template>
 	<!--
@@ -212,16 +184,16 @@
 						select="@rel" /></xsl:attribute>
 					<xsl:attribute name="data-search">
 						<xsl:value-of select="$profile-uri" />
-						<xsl:text>?search</xsl:text>
-						<xsl:value-of select="$args" />
+						<xsl:text>?search&amp;mode=</xsl:text>
+						<xsl:value-of select="$mode" />
 						<xsl:text>&amp;element=</xsl:text>
 						<xsl:apply-templates mode="xptr-element" select="." />
 						<xsl:text>&amp;q={searchTerms}</xsl:text>
 					</xsl:attribute>
 					<xsl:attribute name="data-add">
 						<xsl:value-of select="$profile-uri" />
-						<xsl:text>?construct</xsl:text>
-						<xsl:value-of select="$args"/>
+						<xsl:text>?construct&amp;mode=</xsl:text>
+						<xsl:value-of select="$mode" />
 						<xsl:text>&amp;element=</xsl:text>
 						<xsl:apply-templates mode="xptr-element" select="*[@about or @src or @href]" />
 						<xsl:text>&amp;about={about}</xsl:text>
@@ -230,8 +202,8 @@
 				<xsl:if test="not(*[@about or @src or @href]) and 1=count(*)">
 					<xsl:attribute name="data-more">
 						<xsl:value-of select="$profile-uri" />
-						<xsl:text>?template</xsl:text>
-						<xsl:value-of select="$args" />
+						<xsl:text>?template&amp;mode=</xsl:text>
+						<xsl:value-of select="$mode" />
 						<xsl:text>&amp;element=</xsl:text>
 						<xsl:apply-templates mode="xptr-element" select="*" />
 					</xsl:attribute>
@@ -250,7 +222,7 @@
 							<xsl:with-param name="nodeID" select="$nodeID" />
 							<xsl:with-param name="curie" select="@about" />
 							<xsl:with-param name="scope" select="$newscope" />
-							<xsl:with-param name="mode" select="'hanging'" />
+							<xsl:with-param name="tmode" select="'hanging'" />
 						</xsl:apply-templates>
 					</xsl:when>
 					<xsl:when test="not(@about) and starts-with(@src, '?')">
@@ -259,7 +231,7 @@
 							<xsl:with-param name="nodeID" select="$nodeID" />
 							<xsl:with-param name="curie" select="@src" />
 							<xsl:with-param name="scope" select="$newscope" />
-							<xsl:with-param name="mode" select="'hanging'" />
+							<xsl:with-param name="tmode" select="'hanging'" />
 						</xsl:apply-templates>
 					</xsl:when>
 					<xsl:when test="not(@about) and not(@src) and starts-with(@href, '?')">
@@ -268,7 +240,7 @@
 							<xsl:with-param name="nodeID" select="$nodeID" />
 							<xsl:with-param name="curie" select="@href" />
 							<xsl:with-param name="scope" select="$newscope" />
-							<xsl:with-param name="mode" select="'hanging'" />
+							<xsl:with-param name="tmode" select="'hanging'" />
 						</xsl:apply-templates>
 					</xsl:when>
 					<xsl:when test=".//@rel or .//@rev or .//@property or .//@typeof">
@@ -277,7 +249,7 @@
 							<xsl:with-param name="nodeID" select="$nodeID" />
 							<xsl:with-param name="curie" select="$rel" />
 							<xsl:with-param name="scope" select="$newscope" />
-							<xsl:with-param name="mode" select="'hanging'" />
+							<xsl:with-param name="tmode" select="'hanging'" />
 						</xsl:apply-templates>
 					</xsl:when>
 					<xsl:otherwise>
@@ -306,7 +278,7 @@
 					<xsl:with-param name="about" select="$target" />
 					<xsl:with-param name="curie" select="@about" />
 					<xsl:with-param name="scope" select="$newscope" />
-					<xsl:with-param name="mode" select="'hanging'" />
+					<xsl:with-param name="tmode" select="'hanging'" />
 				</xsl:apply-templates>
 			</xsl:when>
 			<xsl:when test="($about=$target or not($about)) and starts-with(@src, '?') and not(@rel or @rev) and not(contains($scope, concat(@src, '=')))">
@@ -315,7 +287,7 @@
 					<xsl:with-param name="about" select="$target" />
 					<xsl:with-param name="curie" select="@src" />
 					<xsl:with-param name="scope" select="$newscope" />
-					<xsl:with-param name="mode" select="'hanging'" />
+					<xsl:with-param name="tmode" select="'hanging'" />
 				</xsl:apply-templates>
 			</xsl:when>
 			<xsl:when test="$about=$target or not($about)">
@@ -326,8 +298,8 @@
 						</xsl:attribute>
 						<xsl:attribute name="data-more">
 							<xsl:value-of select="$profile-uri" />
-							<xsl:text>?template</xsl:text>
-							<xsl:value-of select="$args" />
+							<xsl:text>?template&amp;mode=</xsl:text>
+							<xsl:value-of select="$mode" />
 							<xsl:text>&amp;element=</xsl:text>
 							<xsl:apply-templates mode="xptr-element" select="*[@property]" />
 						</xsl:attribute>
@@ -336,15 +308,15 @@
 						<xsl:attribute name="data-rel"><xsl:value-of select="*/@rel or */@rev"/></xsl:attribute>
 						<xsl:attribute name="data-options">
 							<xsl:value-of select="$profile-uri" />
-							<xsl:text>?options</xsl:text>
-							<xsl:value-of select="$args"/>
+							<xsl:text>?options&amp;mode=</xsl:text>
+							<xsl:value-of select="$mode" />
 							<xsl:text>&amp;element=</xsl:text>
 							<xsl:apply-templates mode="xptr-element" select="." />
 						</xsl:attribute>
 						<xsl:attribute name="data-construct">
 							<xsl:value-of select="$profile-uri" />
-							<xsl:text>?construct</xsl:text>
-							<xsl:value-of select="$args" />
+							<xsl:text>?construct&amp;mode=</xsl:text>
+							<xsl:value-of select="$mode" />
 							<xsl:text>&amp;element=</xsl:text>
 							<xsl:apply-templates mode="xptr-element" select="*[@rel or @rev]" />
 							<xsl:text>&amp;about={about}</xsl:text>
@@ -458,7 +430,7 @@
 		<xsl:param name="nodeID" />
 		<xsl:param name="curie" />
 		<xsl:param name="scope" />
-		<xsl:param name="mode" />
+		<xsl:param name="tmode" />
 		<xsl:variable name="localname">
 			<xsl:choose>
 				<xsl:when test="starts-with($curie, '?')">
@@ -494,7 +466,7 @@
 					<xsl:with-param name="tag" select="$tag" />
 					<xsl:with-param name="curie" select="$curie" />
 					<xsl:with-param name="scope" select="$scope" />
-					<xsl:with-param name="mode" select="$mode" />
+					<xsl:with-param name="tmode" select="$tmode" />
 				</xsl:apply-templates>
 			</xsl:for-each>
 		</xsl:for-each>
@@ -504,12 +476,12 @@
 		<!-- <xsl:comment>rdf</xsl:comment> -->
 		<xsl:param name="tag" />
 		<xsl:param name="scope" />
-		<xsl:param name="mode" />
+		<xsl:param name="tmode" />
 		<xsl:choose>
-			<xsl:when test="$mode='value'">
+			<xsl:when test="$tmode='value'">
 				<xsl:value-of select="*|text()|comment()" />
 			</xsl:when>
-			<xsl:when test="$mode='property'">
+			<xsl:when test="$tmode='property'">
 				<xsl:element name="{local-name($tag)}" namespace="{namespace-uri($tag)}">
 					<xsl:apply-templates select="$tag/@*">
 						<xsl:with-param name="about" select="../@rdf:about" />
@@ -573,16 +545,16 @@
 		<xsl:param name="tag" />
 		<xsl:param name="curie" />
 		<xsl:param name="scope" />
-		<xsl:param name="mode" />
+		<xsl:param name="tmode" />
 		<xsl:choose>
-			<xsl:when test="$mode='hanging'">
+			<xsl:when test="$tmode='hanging'">
 				<xsl:apply-templates select="$tag">
 					<xsl:with-param name="about" select="@rdf:resource" />
 					<xsl:with-param name="nodeID" select="@rdf:nodeID" />
 					<xsl:with-param name="scope" select="$scope" />
 				</xsl:apply-templates>
 			</xsl:when>
-			<xsl:when test="$mode='resource'">
+			<xsl:when test="$tmode='resource'">
 				<xsl:element name="{local-name($tag)}" namespace="{namespace-uri($tag)}">
 					<xsl:variable name="newscope">
 						<xsl:apply-templates mode="scope-resource" select="$tag">
@@ -612,8 +584,8 @@
 					<xsl:if test="1=count($tag/*[@rel='rdf:first']/*)">
 						<xsl:attribute name="data-member">
 							<xsl:value-of select="$profile-uri" />
-							<xsl:text>?construct</xsl:text>
-							<xsl:value-of select="$args"/>
+							<xsl:text>?construct&amp;mode=</xsl:text>
+							<xsl:value-of select="$mode" />
 							<xsl:text>&amp;element=</xsl:text>
 							<xsl:apply-templates mode="xptr-element" select="$tag/*[@rel='rdf:first']/*" />
 							<xsl:text>&amp;about={about}</xsl:text>

@@ -37,7 +37,7 @@ calli:get-view rdfs:subClassOf obj:Message;
 		def profile = findViewProfile()
 		if (profile == null)
 			throw new InternalServerError("Missing View Profile")
-		return profile.constructAsHTML('view', null, this)
+		return profile.calliConstruct('view', this)
 	""".
 
 calli:pre-view rdfs:subClassOf obj:Message;
@@ -52,7 +52,7 @@ calli:pre-view rdfs:subClassOf obj:Message;
 		def profile = findViewProfile()
 		if (profile == null)
 			throw new InternalServerError("Missing View Profile")
-		return profile.constructAsHTML('pre-view', null, this)
+		return profile.calliConstruct('pre-view', this)
 	""".
 
 calli:find-view-profile rdfs:subClassOf obj:Message;

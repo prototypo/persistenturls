@@ -36,7 +36,7 @@ calli:get-delete rdfs:subClassOf obj:Message;
 		def profile = findDeleteProfile()
 		if (profile == null)
 			throw new InternalServerError("Missing Delete Profile")
-		return profile.constructAsHTML('delete', null, this)
+		return profile.calliConstruct('delete', this)
 	""".
 
 calli:pre-delete rdfs:subClassOf obj:Message;
@@ -51,7 +51,7 @@ calli:pre-delete rdfs:subClassOf obj:Message;
 		def profile = findDeleteProfile()
 		if (profile == null)
 			throw new InternalServerError("Missing Delete Profile")
-		return profile.constructAsHTML('pre-delete', null, this)
+		return profile.calliConstruct('pre-delete', this)
 	""".
 
 calli:post-delete rdfs:subClassOf obj:Message;
@@ -61,7 +61,13 @@ calli:post-delete rdfs:subClassOf obj:Message;
 		owl:allValuesFrom owl:Nothing];
 	http:method "POST";
 	http:operation "delete", "pre-delete";
-	obj:groovy "deleteDescription('delete', msg.in)".
+	obj:imports <java:org.openrdf.http.object.exceptions.InternalServerError>;
+	obj:groovy """
+		def profile = findDeleteProfile()
+		if (profile == null)
+			throw new InternalServerError("Missing Delete Profile")
+		profile.calliDeleteResource(this, msg.in)
+	""".
 
 calli:post-delete-in a owl:ObjectProperty; a owl:FunctionalProperty;
 	rdfs:domain calli:post-delete;

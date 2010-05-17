@@ -104,11 +104,18 @@ purl:find-domain-prefix owl:intersectionOf ( calli:find-copy-prefix
 		[owl:onProperty obj:target; owl:allValuesFrom purl:Origin]);
 	rdfs:comment "On domain create, the result must start with this origin";
 	obj:precedes calli:find-copy-prefix;
-	obj:java "return java.util.Collections.singleton(this);".
+	obj:java "return Collections.singleton(this)".
 
-purl:Domain rdfs:subClassOf calli:Viewable, calli:Editable, calli:Deletable;
+purl:find-subdomain-prefix owl:intersectionOf ( calli:find-copy-prefix
+		[owl:onProperty obj:target; owl:allValuesFrom purl:Domain]);
+	rdfs:comment "On domain copy, the result must start with this domain";
+	obj:precedes calli:find-copy-prefix;
+	obj:java "return Collections.singleton(this)".
+
+purl:Domain rdfs:subClassOf calli:Viewable, calli:Editable, calli:Copyable, calli:Deletable;
 	calli:view <domain-view.xml>;
 	calli:edit <domain-edit.xml>;
+	calli:copy <domain-copy.xml>;
 	calli:delete <domain-delete.xml>.
 
 purl:init-domain-create owl:intersectionOf (calli:post-copy
@@ -120,32 +127,94 @@ purl:init-domain-create owl:intersectionOf (calli:post-copy
 		return domain
 	""".
 
+purl:init-subdomain-create owl:intersectionOf (calli:post-copy
+		[owl:onProperty obj:target; owl:allValuesFrom purl:Domain]);
+	obj:precedes calli:post-copy;
+	obj:groovy """
+		def subdomain = msg.functionalObjectResponse
+		purlFindOrigin().purlParts.add(subdomain)
+		return subdomain
+	""".
+
+purl:find-origin rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:Domain];
+	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
+		owl:allValuesFrom purl:Origin];
+	obj:sparql """
+		SELECT REDUCED ?origin
+		WHERE { ?origin purl:part $this }
+	""".
+
 ################################
 # PURL
 ################################
 
-purl:Domain rdfs:subClassOf calli:Copyable;
-	calli:copy <purl-create.xml>.
-
-purl:find-purl-prefix owl:intersectionOf ( calli:find-copy-prefix
-		[owl:onProperty obj:target; owl:allValuesFrom purl:Domain]);
-	rdfs:comment "On purl create, the result must start with this domain";
-	obj:precedes calli:find-copy-prefix;
-	obj:java "return java.util.Collections.singleton(this);".
-
-purl:PURL rdfs:subClassOf calli:Viewable, calli:Editable;
-	calli:view <purl-view.xml>;
-	calli:edit <purl-edit.xml>.
-
-purl:init-purl-create owl:intersectionOf (calli:post-copy
-		[owl:onProperty obj:target; owl:allValuesFrom purl:Domain]);
-	obj:precedes calli:post-copy;
+purl:get-create-purl rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:Domain];
+	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
+		owl:allValuesFrom <java:java.io.Reader>];
+	http:operation "purl";
+	http:type "text/html";
+	obj:imports <purl-create.xml>;
 	obj:groovy """
-		def purl = msg.functionalObjectResponse
+		return purlCreateXml.calliConstruct('copy', this)
+	""".
+
+purl:pre-create-purl rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:Domain];
+	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
+		owl:allValuesFrom <java:java.io.Reader>];
+	http:operation "pre-purl";
+	http:type "text/html";
+	obj:imports <purl-create.xml>;
+	obj:groovy """
+		return purlCreateXml.calliConstruct('pre-copy', this)
+	""".
+
+purl:post-create-purl rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:Domain];
+	rdfs:subClassOf [owl:onProperty obj:objectResponse;
+		owl:maxCardinality "1"^^xsd:nonNegativeInteger];
+	http:method "POST";
+	http:operation "purl", "pre-purl";
+	http:expect "201-created";
+	obj:imports <purl-create.xml>;
+	obj:groovy """
+		def purl = purlCreateXml.calliCopyResource(this, msg.in, Collections.singleton(this))
+		if (calliCurators) {
+			purl.calliMaintainers.addAll(calliCurators)
+		} else {
+			purl.calliMaintainers.addAll(findScribe(purl))
+		}
 		purl.purlPartOf = msg.target
 		touchRevision()
 		return purl
 	""".
+
+purl:post-copy-purl owl:intersectionOf (calli:post-copy
+		[owl:onProperty obj:target; owl:allValuesFrom purl:PURL]);
+	obj:precedes calli:post-copy;
+	obj:imports <purl-copy.xml>;
+	obj:groovy """
+		def purl = purlCopyXml.calliCopyResource(this, msg.in, Collections.singleton(purlPartOf))
+		if (purlPartOf.calliCurators) {
+			purl.calliMaintainers.addAll(purlPartOf.calliCurators)
+		} else {
+			purl.calliMaintainers.addAll(findScribe(purl))
+		}
+		purl.purlPartOf = purlPartOf
+		purlPartOf.touchRevision()
+		return purl
+	""".
+
+purl:PURL rdfs:subClassOf calli:Viewable, calli:Editable, calli:Copyable;
+	calli:view <purl-view.xml>;
+	calli:edit <purl-edit.xml>;
+	calli:copy <purl-copy.xml>.
 
 purl:post-edit-purl-touch owl:intersectionOf (calli:post-edit
 		[owl:onProperty obj:target; owl:allValuesFrom purl:PURL]);
