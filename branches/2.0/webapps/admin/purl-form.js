@@ -1,10 +1,9 @@
 var valids = ['simple', 'renamed', 'redirect', 'described', 'copy'];
 
 var initializeForm = function() {
-    var frag = document.location.hash.substr(1);
+    var frag = $("input[rel]").attr("rel");
     if (frag.length === 0) frag = "simple";
     $('#purl-form td.value').each(function() {
-        $('input', this).val($(this).attr('about'));
 
         // get form typeof, set frag accordingly
 
@@ -21,8 +20,7 @@ var initializeForm = function() {
 };
 
 var modifyForm = function(type) {
-    $('#purl-form tr[class!=all]').hide();
-    $('#purl-form tr.'+type).show();
+    $("input[rel]").attr("rel", type);
     if ($('#purl-form input.type').length > 0)
         $('#purl-form').attr('typeof', $('#purl-form input.type.'+type).val());
 };

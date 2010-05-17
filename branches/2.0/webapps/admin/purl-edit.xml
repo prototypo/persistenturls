@@ -9,7 +9,7 @@
 		<title property="rdfs:label"/>
 	</head>
 	<body class="purl">
-		<form action="" typeof="" id="purl-form">
+		<form action="" typeof="" id="purl-form" about="">
 			<input type="hidden" class="type simple renamed copy described redirect" value="purl:PURL"/>
 			<input type="hidden" class="type partial" value="purl:PartialPURL"/>
 			<input type="hidden" class="type zoned" value="purl:ZonedPURL"/>
@@ -26,11 +26,11 @@
 							</td>
 							<td class="value">
 								<select id="purl-type" onchange="modifyForm(this.value)">
-									<option value="simple">Simple (302)</option>
-									<option value="renamed">Renamed (301)</option>
-									<option value="described">Describe (303)</option>
-									<option value="redirect">Redirect (307)</option>
-									<option value="copy">Copy (203)</option>
+									<option value="purl:alternative">Simple (302)</option>
+									<option value="purl:renamedTo">Renamed (301)</option>
+									<option value="purl:describedBy">Describe (303)</option>
+									<option value="purl:redirectsTo">Redirect (307)</option>
+									<option value="purl:copyOf">Copy (203)</option>
 									<option value="partial">Partial</option>
 									<option value="zoned">Zoned</option>
 									<option value="disabled">Disabled</option>
@@ -46,46 +46,6 @@
 								<input id="m_label" property="rdfs:label" type="text" />
 							</td>
 						</tr>
-						<tr class="renamed">
-							<td class="property">
-								<label for="m_renamedTo">Target:</label>
-							</td>
-							<td class="value" rel="purl:renamedTo">
-								<input id="m_renamedTo" type="text" onchange="$(this).parent().attr('resource', $(this).val())" about="?target" />
-							</td>
-						</tr>
-						<tr class="redirect">
-							<td class="property">
-								<label for="m_redirectsTo">Target:</label>
-							</td>
-							<td class="value" data-cardinality="1">
-								<input id="m_redirectsTo" type="text" onchange="$(this).attr('about', $(this).val())" about="?target"/>
-							</td>
-						</tr>
-						<tr class="simple">
-							<td class="property">
-								<label for="m_alternate">Target:</label>
-							</td>
-							<td class="value" data-cardinality="1" rel="purl:alternate">
-								<input id="m_alternate" type="text" onchange="$(this).attr('about', $(this).val())" about="?target" />
-							</td>
-						</tr>
-						<tr class="copy">
-							<td class="property">
-								<label for="m_copyOf">Target:</label>
-							</td>
-							<td class="value" data-cardinality="1" rel="purl:copyOf">
-								<input id="m_copyOf" type="text" onchange="$(this).attr('about', $(this).val())" about="?target"/>
-							</td>
-						</tr>
-						<tr class="described">
-							<td class="property">
-								<label for="m_describedBy">Target:</label>
-							</td>
-							<td class="value" data-cardinality="1" rel="purl:describedBy">
-								<input id="m_describedBy" type="text" onchange="$(this).attr('about', $(this).val())" about="?target"/>
-							</td>
-						</tr>
 						<tr class="partial">
 							<td class="property">
 								<label for="m_pattern">Pattern:</label>
@@ -96,34 +56,14 @@
 						</tr>
 						<tr class="simple renamed described redirect copy">
 							<td class="property">
-								<label for="m_title">Link Title:</label>
+								<label for="m_target">Target:</label>
 							</td>
-							<td class="value" data-cardinality="1">
-								<input id="m_title" type="text" property="purl:title" />
-							</td>
-						</tr>
-						<tr class="simple renamed described redirect copy">
-							<td class="property">
-								<label for="m_type">Link Type:</label>
-							</td>
-							<td class="value" data-cardinality="1">
-								<input id="m_type" type="text" property="purl:type" />
-							</td>
-						</tr>
-						<tr class="simple renamed described redirect copy">
-							<td class="property">
-								<label for="m_media">Link Media:</label>
-							</td>
-							<td class="value" data-cardinality="1">
-								<input id="m_media" type="text" property="purl:media" />
-							</td>
-						</tr>
-						<tr class="simple renamed described redirect copy">
-							<td class="property">
-								<label for="m_lang">Link Language:</label>
-							</td>
-							<td class="value" data-cardinality="1">
-								<input id="m_lang" type="text" property="purl:lang" />
+							<td class="value">
+								<input id="m_target" type="text" onchange="$(this).attr('resource', $(this).val())" rel="purl:renamedTo" resource="?renamedTo" value="?renamedTo" />
+								<input id="m_target" type="text" onchange="$(this).attr('resource', $(this).val())" rel="purl:redirectsTo" resource="?redirectsTo" value="?redirectsTo"/>
+								<input id="m_target" type="text" onchange="$(this).attr('resource', $(this).val())" rel="purl:alternative" resource="?alternative" value="?alternative" />
+								<input id="m_target" type="text" onchange="$(this).attr('resource', $(this).val())" rel="purl:copyOf" resource="?copyOf" value="?copyOf"/>
+								<input id="m_target" type="text" onchange="$(this).attr('resource', $(this).val())" rel="purl:describedBy" resource="?describedBy" value="?describedBy"/>
 							</td>
 						</tr>
 						<tr class="all">
