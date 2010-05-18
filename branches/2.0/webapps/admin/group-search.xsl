@@ -8,13 +8,13 @@
 			<head>
 				<title>Group Search Results</title>
 			</head>
-			<body class="search">
+			<body class="search group">
 				<h1>Group Search Results</h1>
 				<form action="" method="get" class="search">
 					<label for="q">Search again:</label>
 					<input type="text" id="q" name="q" value="" />
 				</form>
-				<ul id="results" class="">
+				<ul id="results">
 					<xsl:apply-templates />
 					<xsl:if test="count(/sparql:sparql/sparql:results/sparql:result)=0">
 						<p>No results found.</p>
