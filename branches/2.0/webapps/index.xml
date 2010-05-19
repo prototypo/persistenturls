@@ -6,6 +6,6 @@
 </head>
 <body class="home">
 <p><a href="?view">Origin</a></p>
-<p><a href="/admin/user/template?copy">Register</a></p>
+<p><a href="/admin/user/template?register">Register</a></p>
 </body>
 </html>
