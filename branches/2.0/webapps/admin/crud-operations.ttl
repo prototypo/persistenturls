@@ -195,6 +195,12 @@ purl:post-create-purl rdfs:subClassOf obj:Message;
 		return purl
 	""".
 
+purl:post-create-purl-in a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:domain purl:post-create-purl;
+	rdfs:range <java:java.io.InputStream>;
+	http:type "application/rdf+xml";
+	obj:name "in".
+
 purl:post-copy-purl owl:intersectionOf (calli:post-copy
 		[owl:onProperty obj:target; owl:allValuesFrom purl:PURL]);
 	obj:precedes calli:post-copy;

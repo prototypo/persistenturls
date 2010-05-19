@@ -9,7 +9,7 @@
 		<title>Create a PURL</title>
 	</head>
 	<body class="purl">
-		<form action="" about="" typeof="purl:PURL" id="purl-form">
+		<form action="" about="" typeof="purl:PURL" id="purl-form" class="diverted">
 			<fieldset>
 				<legend>Create a New PURL</legend>
 				<p class="instructions">Fill in the following PURL information.</p>
