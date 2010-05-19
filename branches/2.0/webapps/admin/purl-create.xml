@@ -10,11 +10,6 @@
 	</head>
 	<body class="purl">
 		<form action="" about="" typeof="purl:PURL" id="purl-form">
-			<input type="hidden" class="type simple renamed copy described redirect" value="purl:PURL"/>
-			<input type="hidden" class="type partial" value="purl:PartialPURL"/>
-			<input type="hidden" class="type zoned" value="purl:ZonedPURL"/>
-			<input type="hidden" class="type disabled" value="purl:DisabledPURL"/>
-			<input type="hidden" class="type tombstoned" value="purl:TombstonedPURL"/>
 			<fieldset>
 				<legend>Create a New PURL</legend>
 				<p class="instructions">Fill in the following PURL information.</p>
@@ -22,20 +17,26 @@
 					<tbody>
 						<tr class="all">
 							<td class="property">
-								<label for="purl-type">PURL type:</label>
+								<label for="purl-rel-type">Redirect Type:</label>
 							</td>
 							<td class="value">
-								<select id="purl-type" onchange="modifyForm(this.value)">
+								<select id="purl-rel-type">
 									<option value="simple">Simple (302)</option>
 									<option value="renamed">Renamed (301)</option>
 									<option value="described">Describe (303)</option>
 									<option value="redirect">Redirect (307)</option>
 									<option value="copy">Copy (203)</option>
-									<option value="partial">Partial</option>
-									<option value="zoned">Zoned</option>
-									<option value="disabled">Disabled</option>
-									<option value="tombstoned">Tombstoned</option>
 								</select>
+							</td>
+						</tr>
+						<tr class="all">
+							<td class="property">
+								PURL Type:
+							</td>
+							<td class="value">
+								<input type="radio" value="purl:PURL" id="m_basic" checked="checked" name="m_purl_type" /><label for="m_basic">Basic</label>
+								<input type="radio" value="purl:PartialPURL" id="m_partial" class="partial" name="m_purl_type" /><label for="m_partial">Partial</label>
+								<input type="radio" value="purl:PURL purl:ZonedPURL" id="m_zoned" name="m_purl_type" /><label for="m_zoned">Zoned</label>
 							</td>
 						</tr>
 						<tr class="all">
@@ -55,7 +56,7 @@
 									onchange="$(form).attr('about', $('#m_domain').attr('href') + value)" />
 							</td>
 						</tr>
-						<tr class="renamed">
+						<tr class="rel renamed">
 							<td class="property">
 								<label for="m_renamedTo">Target:</label>
 							</td>
@@ -64,7 +65,7 @@
 								<span typeof="rdf:Resource" href="?target"/>
 							</td>
 						</tr>
-						<tr class="redirect">
+						<tr class="rel redirect">
 							<td class="property">
 								<label for="m_redirectsTo">Target:</label>
 							</td>
@@ -73,7 +74,7 @@
 								<span typeof="rdf:Resource" href="?target"/>
 							</td>
 						</tr>
-						<tr class="simple">
+						<tr class="rel simple">
 							<td class="property">
 								<label for="m_alternate">Target:</label>
 							</td>
@@ -82,7 +83,7 @@
 								<span typeof="rdf:Resource" href="?target"/>
 							</td>
 						</tr>
-						<tr class="copy">
+						<tr class="rel copy">
 							<td class="property">
 								<label for="m_copyOf">Target:</label>
 							</td>
@@ -91,7 +92,7 @@
 								<span typeof="rdf:Resource" href="?target"/>
 							</td>
 						</tr>
-						<tr class="described">
+						<tr class="rel described">
 							<td class="property">
 								<label for="m_describedBy">Target:</label>
 							</td>
@@ -108,36 +109,14 @@
 								<input id="m_pattern" type="text" property="purl:pattern" />
 							</td>
 						</tr>
-						<tr class="simple renamed described redirect copy">
+						<tr class="all">
 							<td class="property">
-								<label for="m_title">Link Title:</label>
+								<label for="m_curators">Curators:</label>
 							</td>
-							<td class="value" data-cardinality="1">
-								<input id="m_title" type="text" property="purl:title" />
-							</td>
-						</tr>
-						<tr class="simple renamed described redirect copy">
-							<td class="property">
-								<label for="m_type">Link Type:</label>
-							</td>
-							<td class="value" data-cardinality="1">
-								<input id="m_type" type="text" property="purl:type" />
-							</td>
-						</tr>
-						<tr class="simple renamed described redirect copy">
-							<td class="property">
-								<label for="m_media">Link Media:</label>
-							</td>
-							<td class="value" data-cardinality="1">
-								<input id="m_media" type="text" property="purl:media" />
-							</td>
-						</tr>
-						<tr class="simple renamed described redirect copy">
-							<td class="property">
-								<label for="m_lang">Link Language:</label>
-							</td>
-							<td class="value" data-cardinality="1">
-								<input id="m_lang" type="text" property="purl:lang" />
+							<td rel="calli:curator" class="value" data-suggest="about:blank">
+								<span about="?curator" typeof="purl:Group">
+									<span property="rdfs:label"/>
+								</span>
 							</td>
 						</tr>
 						<tr class="all">
