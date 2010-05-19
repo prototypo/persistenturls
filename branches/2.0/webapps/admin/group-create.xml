@@ -34,16 +34,6 @@
 						</tr>
 						<tr>
 							<td class="property">
-								<label for="m_maintainer">Maintainers:</label>
-							</td>
-							<td rel="calli:maintainer" class="value" data-suggest="about:blank">
-								<span about="?maintainer" typeof="purl:Group">
-									<span property="rdfs:label"/>
-								</span>
-							</td>
-						</tr>
-						<tr>
-							<td class="property">
 								<label for="m_member">Members:</label>
 							</td>
                             <td rel="calli:member" class="value" data-suggest="about:blank">
@@ -54,10 +44,12 @@
 						</tr>
 						<tr>
 							<td class="property">
-								<label for="m_note">Public comments:</label>
+								<label for="m_maintainer">Maintainers:</label>
 							</td>
-							<td class="value">
-								<textarea rows="4" cols="30" id="m_note" propery="purl:note"></textarea>
+							<td rel="calli:maintainer" class="value" data-suggest="about:blank">
+								<span about="?maintainer" typeof="purl:Group">
+									<span property="rdfs:label"/>
+								</span>
 							</td>
 						</tr>
 					</tbody>

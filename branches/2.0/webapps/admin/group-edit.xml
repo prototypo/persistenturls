@@ -9,7 +9,7 @@
 		<title property="rdfs:label"/>
 	</head>
 	<body class="group">
-		<form action="">
+		<form action="" about="">
 			<fieldset>
 				<legend>Modify a group</legend>
 				<p class="instructions">Modify any of the following group information.</p>
@@ -25,16 +25,6 @@
 						</tr>
 						<tr>
 							<td class="property">
-								<label for="m_maintainer">Maintainer:</label>
-							</td>
-							<td rel="calli:maintainer" class="value" data-suggest="about:blank">
-                                <span about="?maintainer" typeof="purl:User">
-                                    <span property="rdfs:label"/>
-                                </span>
-							</td>
-						</tr>
-						<tr>
-							<td class="property">
 								<label for="m_member">Members:</label>
 							</td>
 							<td rel="calli:member" class="value" data-suggest="about:blank">
@@ -45,10 +35,12 @@
 						</tr>
 						<tr>
 							<td class="property">
-								<label for="m_note">Note:</label>
+								<label for="m_maintainer">Maintainer:</label>
 							</td>
-							<td class="value" data-cardinality="1">
-								<textarea rows="5" cols="40" id="m_note" property="purl:note"></textarea>
+							<td rel="calli:maintainer" class="value" data-suggest="about:blank">
+                                <span about="?maintainer" typeof="purl:User">
+                                    <span property="rdfs:label"/>
+                                </span>
 							</td>
 						</tr>
 					</tbody>

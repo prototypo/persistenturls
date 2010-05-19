@@ -11,13 +11,13 @@
 	<body class="group">
 		<h1 property="rdfs:label" />
 		<div property="purl:note" />
-        <h3>Maintainers</h3>
-        <ul>
-            <li resource="?maintainer" rel="calli:maintainer"><a property="rdfs:label" href="?maintainer"></a></li>
-        </ul>
         <h3>Members</h3>
         <ul>
             <li resource="?member" rel="calli:member"><a property="rdfs:label" href="?member"></a></li>
+        </ul>
+        <h3>Maintainers</h3>
+        <ul>
+            <li resource="?maintainer" rel="calli:maintainer"><a property="rdfs:label" href="?maintainer"></a></li>
         </ul>
 	</body>
 </html>
