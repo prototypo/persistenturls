@@ -53,6 +53,10 @@
 				<script type="text/javascript" src="{$xslt}/../purl-form.js">
 				</script>
 			</xsl:if>
+			<xsl:if test="contains($mode, 'view') and $section='purl'">
+				<script type="text/javascript" src="{$xslt}/../purl-validate.js">
+				</script>
+			</xsl:if>
 			<xsl:if test="starts-with($mode, 'pre-')">
 				<script>
 					// <![CDATA[
@@ -136,7 +140,7 @@
 					<li>
 						<xsl:attribute name="class">
 							<xsl:choose>
-								<xsl:when test="$section='user'">
+								<xsl:when test="contains($section, 'user')">
 									active
 								</xsl:when>
 								<xsl:otherwise>
@@ -148,16 +152,14 @@
 						<form action="/?user" method="get" title="Search usernames" class="search">
 							<label></label> <input name="q" type="text" />
 						</form>
-						<xsl:if test="$section='user'">
-							<ul>
-								<li><a class="diverted new" href="/admin/user/template?copy">Create New User</a></li>
-							</ul>
-						</xsl:if>
+						<ul>
+							<li><a class="diverted new" href="/admin/user/template?copy">Create New User</a></li>
+						</ul>
 					</li>
 					<li>
 						<xsl:attribute name="class">
 							<xsl:choose>
-								<xsl:when test="$section='group'">
+								<xsl:when test="contains($section, 'group')">
 									active
 								</xsl:when>
 								<xsl:otherwise>
@@ -169,16 +171,14 @@
 						<form action="/?group" method="get" title="Search group names" class="search">
 							<label></label> <input name="q" type="text" />
 						</form>
-						<xsl:if test="$section='group'">
-							<ul>
-								<li><a class="diverted new" href="/admin/group/template?copy">Create New Group</a></li>
-							</ul>
-						</xsl:if>
+						<ul>
+							<li><a class="diverted new" href="/admin/group/template?copy">Create New Group</a></li>
+						</ul>
 					</li>
 					<li>
 						<xsl:attribute name="class">
 							<xsl:choose>
-								<xsl:when test="$section='domain'">
+								<xsl:when test="contains($section, 'domain')">
 									active
 								</xsl:when>
 								<xsl:otherwise>
@@ -204,17 +204,17 @@
 				<ul id="breadcrumbs">
 					<li class="home"><a href="/">Home</a></li>
 					<xsl:choose>
-						<xsl:when test="$section='user'">
+						<xsl:when test="contains($section, 'user')">
 							<li><a href="/">Users</a></li>
 						</xsl:when>
-						<xsl:when test="$section='group'">
+						<xsl:when test="contains($section, 'group')">
 							<li><a href="/">Groups</a></li>
 						</xsl:when>
 					</xsl:choose>
 				</ul>
 				<div class="clear">&#160;</div>
 				<div id="message-container">
-					<a id="message" />
+					<p id="message" />
 				</div>
 				<xsl:apply-templates select="*|comment()|text()" />
 				<div class="clear">&#160;</div>

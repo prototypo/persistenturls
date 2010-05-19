@@ -28,8 +28,22 @@ Purl.UI.init = function() {
             Purl.UI.queryArgs['type'] = args[i];
         }
     }
-    $('.search form.search input').val(Purl.UI.queryArgs['q']);
+    $('.search #content form.search input').val(Purl.UI.queryArgs['q']);
     $('.search form.search').attr('action', '/?' + Purl.UI.queryArgs['type']);
+
+    $('#menu > li').live('click', function(e) {
+            e.preventDefault();
+            if ($(this).hasClass('inactive')) {
+                $('#menu li.active').removeClass('active').addClass('inactive');
+                $(this).removeClass('inactive').addClass('active');
+                if ($('input', this).length > 0)
+                    $('input', this).get(0).focus();
+            } else {
+                if ($('input', this).length > 0)
+                    $('input', this).get(0).focus();
+            }
+            return false;
+    });
 };
 
 $(document).ready(function() {

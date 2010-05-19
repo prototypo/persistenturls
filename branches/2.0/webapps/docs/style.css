@@ -53,7 +53,7 @@ li {
 }
 
 body {
-	background: #fff;
+	background: #eee;
 	font-family: sans-serif;
 	font-size: 0.85em;
 	line-height: 1.4em;
@@ -86,11 +86,14 @@ a:visited {
 }
 
 #content {
+    background: #fff;
+    border-bottom: 1px solid #ddd;
     clear: right;
     float: left;
-	padding: 2em 1% 10px 6%;
+    min-height: 348px;
+	padding: 20px 1% 10px 6%;
 	text-align: left;
-    width: 75%;
+    width: 75.9%;
     z-index: 0;
 }
 
@@ -126,7 +129,7 @@ a:visited {
 }
 
 #menu li.active {
-    background: #fff;
+    background: #fff url(images/menu-bg.png) top right repeat-y;
     padding: 0 0 0.5em 0;
 }
 
@@ -148,7 +151,8 @@ a:visited {
     opacity: 0.3;
 }
 
-#menu li.inactive form {
+#menu li.inactive form,
+#menu li.inactive ul {
     display: none;
 }
 
@@ -379,7 +383,8 @@ table.docstable {
 	width: 100%;
 }
 
-td.property {
+td.property,
+td.value {
     vertical-align: top;
 }
 
@@ -424,6 +429,7 @@ body.purl #actions .delete,
 body.home #breadcrumbs,
 body.home #actions,
 body.realm #actions .delete,
-body.realm #actions .view {
+body.realm #actions .view,
+body.search #actions {
     display: none;
 }
