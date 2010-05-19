@@ -1,8 +1,11 @@
 <?xml version="1.0"?>
 <?xml-stylesheet type="text/xsl" href="admin/template.xsl"?>
 <html>
-<head><title>PURL Server</title></head>
+<head>
+<title>PURL Server</title>
+</head>
 <body class="home">
-<p>hi</p>
+<p><a href="?view">Origin</a></p>
+<p><a href="/admin/user/template?copy">Register</a></p>
 </body>
 </html>
