@@ -46,6 +46,21 @@ purl:email a owl:DatatypeProperty, owl:FunctionalProperty;
 	rdfs:domain purl:User;
 	rdfs:range xsd:string.
 
+purl:credential rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom calli:DigestRealm];
+	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
+		owl:allValuesFrom calli:Credential];
+	http:operation "credential";
+	http:realm <authority>;
+	obj:groovy "return findCredential(msg.authorization)".
+
+purl:credential-authorization a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:domain purl:credential;
+	rdfs:range xsd:string;
+	http:header "Authorization";
+	obj:name "authorization".
+
 purl:unauthorized rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom calli:DigestRealm];
@@ -213,11 +228,12 @@ purl:reset-password rdfs:subClassOf obj:Message;
 	obj:imports <authority>;
 	obj:imports <java:org.apache.commons.codec.digest.DigestUtils>;
 	obj:imports <java:nl.captcha.Captcha>;
+	obj:imports <java:nl.captcha.text.producer.DefaultTextProducer>;
 	obj:imports <java:javax.imageio.ImageIO>;
 	obj:imports <user-mail-password.xml>;
 	obj:groovy """
 		Captcha captcha = new Captcha.Builder(200, 50)
-			.addText().addNoise().gimp().build()
+			.addText(new DefaultTextProducer(8)).addNoise().gimp().build()
 		String token = "${calliName}:${authority.calliRealmAuth}:${captcha.answer}"
 		calliAlgorithm = "MD5"
 		calliEncoded = DigestUtils.md5(token.getBytes("UTF-8"))
