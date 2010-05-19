@@ -78,7 +78,7 @@
 							<td class="property">
 								<label for="m_alternate">Target:</label>
 							</td>
-							<td class="value" data-cardinality="1" rel="purl:alternate">
+							<td class="value" data-cardinality="1" rel="purl:alternative">
 								<input id="m_alternate" type="text" onchange="$(this).attr('about', $(this).val())"/>
 								<span typeof="rdf:Resource" href="?target"/>
 							</td>
