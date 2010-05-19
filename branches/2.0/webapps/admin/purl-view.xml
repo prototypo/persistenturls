@@ -16,6 +16,7 @@
 		<a rel="purl:alternative" href="?alternative">Target (Simple - HTTP 302)</a>
 		<a rel="purl:describedBy" href="?describedBy">Target (Described - HTTP 303)</a>
 		<a rel="purl:redirectsTo" href="?redirectsTo">Target (Redirect - HTTP 307)</a>
+        <p><button id="validate" type="button">Validate this PURL</button></p>
 		<div property="purl:pattern" />
 		<h3>Link Metadata</h3>
 		<div property="purl:title" />
