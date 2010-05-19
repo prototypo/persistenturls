@@ -21,7 +21,7 @@
 							</td>
 							<td class="value">
 								<select id="purl-rel-type">
-									<option value="simple">Simple (302)</option>
+									<option value="alternate">Simple (302)</option>
 									<option value="renamed">Renamed (301)</option>
 									<option value="described">Describe (303)</option>
 									<option value="redirect">Redirect (307)</option>
@@ -74,7 +74,7 @@
 								<span typeof="rdf:Resource" href="?target"/>
 							</td>
 						</tr>
-						<tr class="rel simple">
+						<tr class="rel alternate">
 							<td class="property">
 								<label for="m_alternate">Target:</label>
 							</td>
