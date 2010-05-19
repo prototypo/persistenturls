@@ -35,7 +35,7 @@
 			</script>
 			<script type="text/javascript" src="{$xslt}/../../callimachus/diverted.js">
 			</script>
-			<script type="text/javascript" src="{$xslt}/../purl-ui.js">
+			<script type="text/javascript" src="{$xslt}/../../admin/purl-ui.js">
 			</script>
 			<xsl:if test="contains($mode, 'copy')">
 				<script type="text/javascript" src="{$xslt}/../../callimachus/resource-copy.js">
@@ -49,12 +49,16 @@
 				<script type="text/javascript" src="{$xslt}/../../callimachus/resource-delete.js">
 				</script>
 			</xsl:if>
-			<xsl:if test="(contains($mode, 'copy') or contains($mode, 'edit')) and $section='purl'">
-				<script type="text/javascript" src="{$xslt}/../purl-form.js">
+			<xsl:if test="contains($mode, 'view') and $section='server'">
+				<script type="text/javascript" src="{$xslt}/../../admin/server-redirect.js">
+				</script>
+			</xsl:if>
+			<xsl:if test="(contains($mode, 'copy') or contains($mode, 'edit') or contains($mode, 'copy')) and $section='purl'">
+				<script type="text/javascript" src="{$xslt}/../../admin/purl-form.js">
 				</script>
 			</xsl:if>
 			<xsl:if test="contains($mode, 'view') and $section='purl'">
-				<script type="text/javascript" src="{$xslt}/../purl-validate.js">
+				<script type="text/javascript" src="{$xslt}/../../admin/purl-validate.js">
 				</script>
 			</xsl:if>
 			<xsl:if test="starts-with($mode, 'pre-')">
@@ -124,7 +128,7 @@
 					<li>
 						<xsl:attribute name="class">
 							<xsl:choose>
-								<xsl:when test="$section='purl'">
+								<xsl:when test="contains($section, 'purl')">
 									active
 								</xsl:when>
 								<xsl:otherwise>
