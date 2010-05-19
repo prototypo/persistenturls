@@ -1,54 +1,38 @@
 // diverted.js
 
-if (window.attachEvent) {
-	window.attachEvent("onload", divertLinks)
-} else {
-	window.addEventListener("DOMContentLoaded", divertLinks, false)
-}
+var diverted = function(url, node) {
+    var prefix = document.location.protocol + '//' + document.location.host + '/diverted;';
+    if (url.indexOf(':') < 0) {
+        if (node.baseURIObject && node.baseURIObject.resolve) {
+            url = node.baseURIObject.resolve(url);
+        } else {
+            var a = document.createElement('a');
+            a.setAttribute('href', url);
+            if (a.href) {
+                url = a.href;
+            }
+        }
+    }
+    if (url.lastIndexOf('?') > 0) {
+        var uri = url.substring(0, url.lastIndexOf('?'));
+        var qs = url.substring(url.lastIndexOf('?'));
+        return prefix + encodeURIComponent(uri) + qs;
+    }
+    return prefix + encodeURIComponent(url) + '?view';
+};
 
-function divertLinks() {
-	var links = document.getElementsByTagName("a")
-	for (var i=0; i<links.length; i++) {
-		var link = links.item(i)
-		var css = link.className
-		if (css && css.match(/\bdiverted\b/)) {
-			if (link.attachEvent) {
-				link.attachEvent("onclick", divertLink(link))
-			} else {
-				link.addEventListener("click", divertLink(link), false)
-			}
-		}
-	}
-}
+var divertLink = function(el) {
+    document.location.href = diverted($(el).attr('href'), el);
+};
 
-function divertLink(link) {
-	return function(e) {
-		if (link.href) {
-			setTimeout(function() { location = diverted(link.href, link) }, 0)
-			return false;
-		} else {
-			return true
-		}
-	}
-}
+var divertLinks = function() {
+    $('a.diverted[href]').live('click', function(e) {
+        e.preventDefault();
+        divertLink(this);
+        return false;
+    });
+};
 
-function diverted(url, node) {
-	var prefix = location.protocol + '//' + location.host + '/diverted;'
-	if (url.indexOf(':') < 0) {
-		if (node.baseURIObject && node.baseURIObject.resolve) {
-			url = node.baseURIObject.resolve(url)
-		} else {
-			var a = document.createElement("a")
-			a.setAttribute("href", url)
-			if (a.href) {
-				url = a.href
-			}
-		}
-	}
-	if (url.lastIndexOf('?') > 0) {
-		var uri = url.substring(0, url.lastIndexOf('?'))
-		var qs = url.substring(url.lastIndexOf('?'))
-		return prefix + encodeURIComponent(uri) + qs
-	}
-	return prefix + encodeURIComponent(url) + "?view"
-}
+$(document).ready(function() {
+    divertLinks();
+});
