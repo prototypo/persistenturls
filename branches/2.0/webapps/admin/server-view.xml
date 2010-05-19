@@ -11,12 +11,8 @@
 	<body class="server">
 		<h1 property="rdfs:label" />
         <h3>Serves</h3>
-        <ul>
+        <ul id="origins">
             <li resource="?origin" rel="purl:serves"><a class="diverted" property="rdfs:label" href="?origin"></a></li>
-        </ul>
-        <h3>Maintainers</h3>
-        <ul>
-            <li resource="?maintainer" rel="calli:maintainer"><a property="rdfs:label" href="?maintainer"></a></li>
         </ul>
 	</body>
 </html>

@@ -11,12 +11,9 @@
 	<body class="domain">
 		<h1 property="rdfs:label" />
         <h3>Domains</h3>
+        <p><a href="?copy" class="diverted">Create New Domain</a></p>
         <ul>
             <li resource="?part" rel="purl:part"><a class="diverted" property="rdfs:label" href="?part"></a></li>
-        </ul>
-        <h3>Maintainers</h3>
-        <ul>
-            <li resource="?maintainer" rel="calli:maintainer"><a property="rdfs:label" href="?maintainer"></a></li>
         </ul>
 	</body>
 </html>

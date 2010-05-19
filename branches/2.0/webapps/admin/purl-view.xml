@@ -10,6 +10,7 @@
 	</head>
 	<body class="purl">
 		<h1 property="rdfs:label" />
+        <p><a href="?copy" class="diverted">Clone this PURL</a></p>
 		<span rel="rdf:type" resource="?type"><div property="rdfs:comment"/></span>
 		<a rel="purl:copyOf" href="?copyOf">Target (Copy - HTTP 203)</a>
 		<a rel="purl:renamedTo" href="?renamedTo">Target (Renamed - HTTP 301)</a>
@@ -23,6 +24,10 @@
 		<div property="purl:type" />
 		<div property="purl:media" />
 		<div property="purl:lang" />
+		<h3>Curators</h3>
+		<ul>
+			<li resource="?curator" rel="calli:curator"><a property="rdfs:label" href="?curator"></a></li>
+		</ul>
 		<h3>Maintainers</h3>
 		<ul>
 			<li resource="?maintainer" rel="calli:maintainer"><a property="rdfs:label" href="?maintainer"></a></li>
