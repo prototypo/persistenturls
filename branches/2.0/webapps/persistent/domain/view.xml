@@ -10,7 +10,10 @@
 	</head>
 	<body class="domain">
 		<h1 property="rdfs:label" />
-		<p resource="?origin" rev="purl:part"><span property="rdfs:label"/></p>
+		<p>
+			<span resource="?origin" rev="purl:part"><a href="?origin" property="rdfs:label" class="diverted"/></span>
+			<span property="rdfs:label" />
+		</p>
         <p><a href="?copy" class="diverted">Create Sub-Domain</a></p>
 		<h3>PURLs</h3>
         <p><a href="?purl" class="diverted">Create New PURL</a></p>

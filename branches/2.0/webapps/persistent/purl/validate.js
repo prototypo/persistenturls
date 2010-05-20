@@ -1,5 +1,5 @@
 var validatePURL = function() {
-    var url = document.location.href.replace(document.location.search, '') + '?head';
+    var url = diverted($('#target').attr('href') + '?head');
     $.ajax({
         type: "GET",
         url: url,
@@ -7,7 +7,11 @@ var validatePURL = function() {
             showError("Error:" + textStatus);
         },
         success: function(data, textStatus, xhr) {
-            showError("Successfully validated.");
+        	if (data.indexOf("200") > 0) {
+            	showError("Successfully validated.");
+            } else {
+            	showError("Failed to validated.");
+            }
         }
     });
 };

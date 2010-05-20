@@ -7,9 +7,14 @@
 	xmlns:purl="http://persistent.name/rdf/2010/purl#">
 	<head>
 		<title>Create a New Domain</title>
+		<script>
+			$(document).ready(function() {
+			    $('#origin-span').text($('#m_origin').attr('href'))
+			});
+		</script>
 	</head>
 	<body class="domain">
-		<form action="" about="" typeof="purl:Domain">
+		<form action="" about="" typeof="purl:Domain" class="diverted">
 			<fieldset>
 				<legend>Create a New Domain</legend>
 				<p class="instructions">Fill in the following domain information.</p>
@@ -20,15 +25,8 @@
 								<label for="m_label">Name:</label>
 							</td>
 							<td class="value" data-cardinality="1">
-								<input id="m_label" property="rdfs:label" type="text" />
-							</td>
-						</tr>
-						<tr>
-							<td class="property">
-								<label for="m_domain">Domain:</label>
-							</td>
-							<td class="value">
-								<input id="m_domain" type="text"
+								<span id="origin-span"/>
+								<input id="m_label" property="rdfs:label" type="text"
 									onchange="$(form).attr('about', $('#m_origin').attr('href') + value)" />
 							</td>
 						</tr>

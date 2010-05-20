@@ -47,14 +47,6 @@
 								<input type="radio" value="purl:PURL purl:ZonedPURL" id="m_zoned" name="m_purl_type" /><label for="m_zoned">Zoned</label>
 							</td>
 						</tr>
-						<tr class="all">
-							<td class="property">
-								<label for="m_label">Name:</label>
-							</td>
-							<td class="value" data-cardinality="1">
-								<input id="m_label" property="rdfs:label" type="text" />
-							</td>
-						</tr>
 						<tr class="rel alternate">
 							<td class="property">
 								<label for="m_alternate_target">Target:</label>

@@ -11,7 +11,7 @@
 		</script>
 	</head>
 	<body class="purl">
-		<form action="" about="" typeof="purl:PURL" id="purl-form">
+		<form action="" about="" typeof="purl:PURL" id="purl-form" class="diverted">
 			<fieldset>
 				<legend>Copy a PURL</legend>
 				<p class="instructions">Fill in the following PURL information.</p>
@@ -46,15 +46,8 @@
 								<label for="m_label">Name:</label>
 							</td>
 							<td class="value" data-cardinality="1">
-								<input id="m_label" property="rdfs:label" type="text" />
-							</td>
-						</tr>
-						<tr class="all">
-							<td class="property">
-								<label for="m_purl">PURL:</label>
-							</td>
-							<td class="value">
-								<input id="m_purl" type="text"
+								<span id="domain-span"/>
+								<input id="m_label" property="rdfs:label" type="text"
 									onchange="$(form).attr('about', $('#m_domain').attr('href') + value)" />
 							</td>
 						</tr>
@@ -113,16 +106,6 @@
 						</tr>
 						<tr class="all">
 							<td class="property">
-								<label for="m_curators">Curators:</label>
-							</td>
-							<td rel="calli:curator" class="value" data-suggest="about:blank">
-								<span about="?curator" typeof="calli:Group">
-									<span property="rdfs:label"/>
-								</span>
-							</td>
-						</tr>
-						<tr class="all">
-							<td class="property">
 								<label for="m_maintainer">Maintainers:</label>
 							</td>
 							<td rel="calli:maintainer" class="value" data-suggest="about:blank">
@@ -134,7 +117,7 @@
 						<tr class="hidden">
 							<td class="property"></td>
 							<td class="value">
-								<a id="m_domain" href="" />
+								<a id="m_domain" rel="purl:partOf" href="?domain" />
 							</td>
 						</tr>
 					</tbody>

@@ -12,13 +12,22 @@
 	</head>
 	<body class="purl">
 		<h1 property="rdfs:label" />
+		<p>
+			<span rel="purl:partOf" resource="?domain">
+				<span resource="?origin" rev="purl:part">
+					<a href="?origin" property="rdfs:label" class="diverted"/>
+				</span>
+				<a href="?domain" property="rdfs:label" class="diverted" />
+			</span>
+			<span property="rdfs:label" />
+		</p>
         <p><a href="?copy" class="diverted">Clone this PURL</a></p>
 		<span rel="rdf:type" resource="?type"><div property="rdfs:comment"/></span>
-		<a rel="purl:copyOf" href="?copyOf">Target (Copy - HTTP 203)</a>
-		<a rel="purl:renamedTo" href="?renamedTo">Target (Renamed - HTTP 301)</a>
-		<a rel="purl:alternative" href="?alternative">Target (Simple - HTTP 302)</a>
-		<a rel="purl:describedBy" href="?describedBy">Target (Described - HTTP 303)</a>
-		<a rel="purl:redirectsTo" href="?redirectsTo">Target (Redirect - HTTP 307)</a>
+		<a id="target" rel="purl:copyOf" href="?copyOf">Target (Copy - HTTP 203)</a>
+		<a id="target" rel="purl:renamedTo" href="?renamedTo">Target (Renamed - HTTP 301)</a>
+		<a id="target" rel="purl:alternative" href="?alternative">Target (Simple - HTTP 302)</a>
+		<a id="target" rel="purl:describedBy" href="?describedBy">Target (Described - HTTP 303)</a>
+		<a id="target" rel="purl:redirectsTo" href="?redirectsTo">Target (Redirect - HTTP 307)</a>
         <p><button id="validate" type="button">Validate this PURL</button></p>
 		<div property="purl:pattern" />
 		<h3>Link Metadata</h3>

@@ -37,7 +37,7 @@
 							<td class="property">
 								<label>Domains:</label>
 							</td>
-							<td rel="purl:part" class="value" data-suggest="?pre-copy">
+							<td rel="purl:part" class="value diverted" data-suggest="?pre-copy">
 								<span about="?part" typeof="purl:Domain">
 									<span property="rdfs:label"/>
 								</span>

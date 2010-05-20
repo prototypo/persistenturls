@@ -92,6 +92,7 @@ var initializeForm = function() {
             $(this).removeAttr('about').removeAttr('resource').remove('content').val('');
         });
     });
+    $('#domain-span').text($('#m_domain').attr('href'))
 };
 
 $(document).ready(function() {
