@@ -176,6 +176,6 @@ calli:delete-file rdfs:subClassOf obj:Message;
 		objectConnection.removeDesignations(msg.target,
 			"urn:mimetype:application/xml",
 			"urn:mimetype:image/png", "urn:mimetype:image/jpeg",
-			"urn:mimetype:image/gif", "image/vnd.microsoft.icon");
+			"urn:mimetype:image/gif", "urn:mimetype:image/vnd.microsoft.icon");
 	""".
 

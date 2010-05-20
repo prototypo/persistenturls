@@ -3,10 +3,6 @@ Purl.UI = {};
 Purl.UI.queryArgs = {};
 
 Purl.UI.init = function() {
-    $('form.search').live('submit', function(e) {
-        e.preventDefault();
-        document.location.href = document.location.protocol + "//" + document.location.host + $(this).attr('action') + "&" + $('input', this).attr('name') + "=" + $('input', this).val();
-    });
     $('#menu form.search label').live('click', function(e) {
         $(this).parent().find('input').get(0).focus();
     });
@@ -31,7 +27,7 @@ Purl.UI.init = function() {
     $('.search #content form.search input').val(Purl.UI.queryArgs['q']);
     $('.search #content form.search').attr('action', '/?' + Purl.UI.queryArgs['type']);
 
-    $('#menu > li').live('click', function(e) {
+    $('#menu > li:has(form)').live('click', function(e) {
         e.preventDefault();
         if ($(this).hasClass('inactive')) {
             $('#menu li.active').removeClass('active').addClass('inactive');

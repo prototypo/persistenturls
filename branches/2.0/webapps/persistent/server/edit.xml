@@ -9,7 +9,7 @@
 		<title property="rdfs:label"/>
 	</head>
 	<body class="server">
-		<form action="">
+		<form action="" about="">
 			<fieldset>
 				<legend>Modify this server</legend>
 				<p class="instructions">Modify any of the following server information.</p>
@@ -27,7 +27,7 @@
 							<td class="property">
 								<label>Maintainer:</label>
 							</td>
-							<td rel="calli:maintainer" class="value" data-suggest="about:blank">
+							<td rel="calli:maintainer" class="value" data-suggest="/persistent/group/template?pre-copy">
                                 <span about="?maintainer" typeof="calli:Group">
                                     <span property="rdfs:label"/>
                                 </span>
@@ -37,7 +37,7 @@
 							<td class="property">
 								<label>Origin:</label>
 							</td>
-							<td rel="purl:serves" class="value" data-suggest="/persistent/origin/template?copy">
+							<td rel="purl:serves" class="value" data-suggest="/persistent/origin/template?pre-copy">
                                 <span about="?origin" typeof="purl:Origin">
                                     <span property="rdfs:label"/>
                                 </span>

@@ -27,9 +27,9 @@ import org.apache.http.ProtocolVersion;
 import org.apache.http.message.BasicHttpResponse;
 import org.openrdf.OpenRDFException;
 import org.openrdf.http.object.annotations.header;
+import org.openrdf.http.object.annotations.method;
 import org.openrdf.http.object.annotations.operation;
 import org.openrdf.http.object.annotations.parameter;
-import org.openrdf.http.object.annotations.rel;
 import org.openrdf.http.object.annotations.type;
 import org.openrdf.http.object.exceptions.BadRequest;
 import org.openrdf.http.object.exceptions.NotFound;
@@ -134,10 +134,23 @@ public abstract class ServerSupport extends MirrorSupport implements RDFObject,
 		}
 	}
 
+	@operation("")
+	@method("GET")
+	@type("message/x-response")
+	public HttpResponse get(@header("Accept") String accept) {
+		ProtocolVersion ver = new ProtocolVersion("HTTP", 1, 1);
+		HttpResponse resp = new BasicHttpResponse(ver, 307, "Temporary Redirect");
+		if (accept.contains("application/rdf+xml")) {
+			resp.setHeader("Location", getResource().stringValue() + "?listOrigins");
+		} else {
+			resp.setHeader("Location", getResource().stringValue() + "?view");
+		}
+		return resp;
+	}
+
 	/**
 	 * List of origins on this domain service.
 	 */
-	@rel("alternate")
 	@operation("listOrigins")
 	@type("application/rdf+xml")
 	public GraphQueryResult listRemoteOrigins(@header("Via") Set<String> via)

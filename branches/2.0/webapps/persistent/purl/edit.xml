@@ -7,6 +7,8 @@
 	xmlns:purl="http://persistent.name/rdf/2010/purl#">
 	<head>
 		<title property="rdfs:label"/>
+		<script type="text/javascript" src="/persistent/purl/form.js">
+		</script>
 	</head>
 	<body class="purl">
 		<form action="" about="" typeof="" id="purl-form">
@@ -103,19 +105,9 @@
 						</tr>
 						<tr class="all">
 							<td class="property">
-								<label for="m_curator">Curators:</label>
-							</td>
-							<td rel="calli:curator" class="value" data-suggest="about:blank">
-								<span about="?curator" typeof="calli:Group">
-									<span property="rdfs:label"/>
-								</span>
-							</td>
-						</tr>
-						<tr class="all">
-							<td class="property">
 								<label for="m_maintainer">Maintainers:</label>
 							</td>
-							<td rel="calli:maintainer" class="value" data-suggest="about:blank">
+							<td rel="calli:maintainer" class="value" data-suggest="/persistent/group/template?pre-copy">
 								<span about="?maintainer" typeof="calli:Group">
 									<span property="rdfs:label"/>
 								</span>

@@ -11,6 +11,7 @@
 
 <local> a calli:LocalRealm.
 
+calli:SPARQLService http:realm <local>.
 calli:describe http:realm <local>.
 calli:get-graph http:realm <local>.
 

@@ -159,7 +159,7 @@ purl:get-create-purl rdfs:subClassOf obj:Message;
 	http:type "text/html";
 	obj:imports <purl/create.xml>;
 	obj:groovy """
-		return purlCreateXml.calliConstruct('copy', this)
+		return createXml.calliConstruct('copy', this)
 	""".
 
 purl:pre-create-purl rdfs:subClassOf obj:Message;
@@ -171,7 +171,7 @@ purl:pre-create-purl rdfs:subClassOf obj:Message;
 	http:type "text/html";
 	obj:imports <purl/create.xml>;
 	obj:groovy """
-		return purlCreateXml.calliConstruct('pre-copy', this)
+		return createXml.calliConstruct('pre-copy', this)
 	""".
 
 purl:post-create-purl rdfs:subClassOf obj:Message;
@@ -184,7 +184,7 @@ purl:post-create-purl rdfs:subClassOf obj:Message;
 	http:expect "201-created";
 	obj:imports <purl/create.xml>;
 	obj:groovy """
-		def purl = purlCreateXml.calliCopyResource(this, msg.in, Collections.singleton(this))
+		def purl = createXml.calliCopyResource(this, msg.in, Collections.singleton(this))
 		if (calliCurators) {
 			purl.calliMaintainers.addAll(calliCurators)
 		} else {
@@ -206,7 +206,7 @@ purl:post-copy-purl owl:intersectionOf (calli:post-copy
 	obj:precedes calli:post-copy;
 	obj:imports <purl/copy.xml>;
 	obj:groovy """
-		def purl = purlCopyXml.calliCopyResource(this, msg.in, Collections.singleton(purlPartOf))
+		def purl = copyXml.calliCopyResource(this, msg.in, Collections.singleton(purlPartOf))
 		if (purlPartOf.calliCurators) {
 			purl.calliMaintainers.addAll(purlPartOf.calliCurators)
 		} else {

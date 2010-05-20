@@ -37,7 +37,7 @@
 							<td class="property">
 								<label for="m_maintainer">Maintainer:</label>
 							</td>
-							<td rel="calli:maintainer" class="value" data-suggest="about:blank">
+							<td rel="calli:maintainer" class="value" data-suggest="/persistent/group/template?pre-copy">
                                 <span about="?maintainer" typeof="purl:User">
                                     <span property="rdfs:label"/>
                                 </span>

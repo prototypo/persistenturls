@@ -162,8 +162,9 @@ a:visited {
     margin-left: 5%;
 }
 
-#menu li form label {
+#menu li form button {
     background: transparent url(images/search.png) center left no-repeat;
+	border: 0;
     color: #333;
     margin: 0 0 0 8%;
     padding: 3px 0 3px 20px;
