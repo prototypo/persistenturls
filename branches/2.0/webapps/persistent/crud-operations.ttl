@@ -1,0 +1,233 @@
+@prefix xsd:<http://www.w3.org/2001/XMLSchema#>.
+@prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs:<http://www.w3.org/2000/01/rdf-schema#>.
+@prefix owl:<http://www.w3.org/2002/07/owl#>.
+@prefix obj:<http://www.openrdf.org/rdf/2009/object#>.
+@prefix http:<http://www.openrdf.org/rdf/2009/httpobject#>.
+@prefix calli:<http://callimachusproject.org/rdf/2009/framework#>.
+@prefix purl:<http://persistent.name/rdf/2010/purl#>.
+
+################################
+# Server
+################################
+
+</> a purl:Server;
+	calli:maintainer </data/group/admin>.
+
+purl:Server rdfs:subClassOf calli:Viewable, calli:Editable;
+	calli:view <server/view.xml>;
+	calli:edit <server/edit.xml>.
+
+################################
+# User
+################################
+
+<user/template> a purl:UserTemplate;
+	calli:curator </data/group/admin>;
+	calli:maintainer </data/group/admin>.
+
+purl:UserTemplate rdfs:subClassOf calli:Copyable;
+	calli:withNamespace </data/user/>;
+	calli:copy <user/create.xml>.
+
+purl:User rdfs:subClassOf calli:Viewable, calli:Editable, calli:Deletable;
+	http:realm <authority>;
+	calli:view <user/view.xml>;
+	calli:edit <user/edit.xml>;
+	calli:delete <user/delete.xml>.
+
+################################
+# Group
+################################
+
+<group/template> a purl:GroupTemplate;
+	calli:curator </data/group/admin>;
+	calli:maintainer </data/group/admin>.
+
+purl:GroupTemplate rdfs:subClassOf calli:Copyable;
+	calli:withNamespace </data/group/>;
+	calli:copy <group/create.xml>.
+
+calli:Group rdfs:subClassOf calli:Viewable, calli:Editable, calli:Deletable;
+	calli:view <group/view.xml>;
+	calli:edit <group/edit.xml>;
+	calli:delete <group/delete.xml>.
+
+################################
+# RemoteGraph
+################################
+
+<mirror/template> a purl:MirrorTemplate;
+	calli:curator </data/group/admin>;
+	calli:maintainer </data/group/admin>.
+
+purl:MirrorTemplate rdfs:subClassOf calli:Copyable;
+	calli:copy <mirror/create.xml>.
+
+purl:RemoteGraph rdfs:subClassOf calli:Viewable, calli:Editable, calli:Deletable;
+	calli:view <mirror/view.xml>;
+	calli:edit <mirror/edit.xml>;
+	calli:delete <mirror/delete.xml>.
+
+purl:post-delete-graph owl:intersectionOf (calli:post-delete
+		[owl:onProperty obj:target; owl:allValuesFrom purl:RemoteGraph]);
+	obj:precedes calli:post-delete;
+	obj:groovy """
+		msg.proceed()
+		removeRemoteGraph()
+	""".
+
+################################
+# Origin
+################################
+
+<origin/template> a purl:OriginTemplate;
+	calli:curator </data/group/admin>;
+	calli:maintainer </data/group/admin>.
+
+purl:OriginTemplate rdfs:subClassOf calli:Copyable;
+	calli:copy <origin/create.xml>.
+
+purl:Origin rdfs:subClassOf calli:Viewable, calli:Editable, calli:Deletable;
+	calli:view <origin/view.xml>;
+	calli:edit <origin/edit.xml>;
+	calli:delete <origin/delete.xml>.
+
+################################
+# Domain
+################################
+
+purl:Origin rdfs:subClassOf calli:Copyable;
+	calli:copy <domain/create.xml>.
+
+purl:find-domain-prefix owl:intersectionOf ( calli:find-copy-prefix
+		[owl:onProperty obj:target; owl:allValuesFrom purl:Origin]);
+	rdfs:comment "On domain create, the result must start with this origin";
+	obj:precedes calli:find-copy-prefix;
+	obj:java "return Collections.singleton(this)".
+
+purl:find-subdomain-prefix owl:intersectionOf ( calli:find-copy-prefix
+		[owl:onProperty obj:target; owl:allValuesFrom purl:Domain]);
+	rdfs:comment "On domain copy, the result must start with this domain";
+	obj:precedes calli:find-copy-prefix;
+	obj:java "return Collections.singleton(this)".
+
+purl:Domain rdfs:subClassOf calli:Viewable, calli:Editable, calli:Copyable, calli:Deletable;
+	calli:view <domain/view.xml>;
+	calli:edit <domain/edit.xml>;
+	calli:copy <domain/copy.xml>;
+	calli:delete <domain/delete.xml>.
+
+purl:init-domain-create owl:intersectionOf (calli:post-copy
+		[owl:onProperty obj:target; owl:allValuesFrom purl:Origin]);
+	obj:precedes calli:post-copy;
+	obj:groovy """
+		def domain = msg.functionalObjectResponse
+		purlParts.add(domain)
+		return domain
+	""".
+
+purl:init-subdomain-create owl:intersectionOf (calli:post-copy
+		[owl:onProperty obj:target; owl:allValuesFrom purl:Domain]);
+	obj:precedes calli:post-copy;
+	obj:groovy """
+		def subdomain = msg.functionalObjectResponse
+		purlFindOrigin().purlParts.add(subdomain)
+		return subdomain
+	""".
+
+purl:find-origin rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:Domain];
+	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
+		owl:allValuesFrom purl:Origin];
+	obj:sparql """
+		SELECT REDUCED ?origin
+		WHERE { ?origin purl:part $this }
+	""".
+
+################################
+# PURL
+################################
+
+purl:get-create-purl rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:Domain];
+	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
+		owl:allValuesFrom <java:java.io.Reader>];
+	http:operation "purl";
+	http:type "text/html";
+	obj:imports <purl/create.xml>;
+	obj:groovy """
+		return purlCreateXml.calliConstruct('copy', this)
+	""".
+
+purl:pre-create-purl rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:Domain];
+	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
+		owl:allValuesFrom <java:java.io.Reader>];
+	http:operation "pre-purl";
+	http:type "text/html";
+	obj:imports <purl/create.xml>;
+	obj:groovy """
+		return purlCreateXml.calliConstruct('pre-copy', this)
+	""".
+
+purl:post-create-purl rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:Domain];
+	rdfs:subClassOf [owl:onProperty obj:objectResponse;
+		owl:maxCardinality "1"^^xsd:nonNegativeInteger];
+	http:method "POST";
+	http:operation "purl", "pre-purl";
+	http:expect "201-created";
+	obj:imports <purl/create.xml>;
+	obj:groovy """
+		def purl = purlCreateXml.calliCopyResource(this, msg.in, Collections.singleton(this))
+		if (calliCurators) {
+			purl.calliMaintainers.addAll(calliCurators)
+		} else {
+			purl.calliMaintainers.addAll(findScribe(purl))
+		}
+		purl.purlPartOf = msg.target
+		touchRevision()
+		return purl
+	""".
+
+purl:post-create-purl-in a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:domain purl:post-create-purl;
+	rdfs:range <java:java.io.InputStream>;
+	http:type "application/rdf+xml";
+	obj:name "in".
+
+purl:post-copy-purl owl:intersectionOf (calli:post-copy
+		[owl:onProperty obj:target; owl:allValuesFrom purl:PURL]);
+	obj:precedes calli:post-copy;
+	obj:imports <purl/copy.xml>;
+	obj:groovy """
+		def purl = purlCopyXml.calliCopyResource(this, msg.in, Collections.singleton(purlPartOf))
+		if (purlPartOf.calliCurators) {
+			purl.calliMaintainers.addAll(purlPartOf.calliCurators)
+		} else {
+			purl.calliMaintainers.addAll(findScribe(purl))
+		}
+		purl.purlPartOf = purlPartOf
+		purlPartOf.touchRevision()
+		return purl
+	""".
+
+purl:PURL rdfs:subClassOf calli:Viewable, calli:Editable, calli:Copyable;
+	calli:view <purl/view.xml>;
+	calli:edit <purl/edit.xml>;
+	calli:copy <purl/copy.xml>.
+
+purl:post-edit-purl-touch owl:intersectionOf (calli:post-edit
+		[owl:onProperty obj:target; owl:allValuesFrom purl:PURL]);
+	obj:precedes calli:post-edit;
+	obj:groovy """
+		msg.proceed()
+		if (purlPartOf) {
+			purlPartOf.touchRevision()
+		}
+	""".

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="template.xsl"?>
+<html>
+	<head>
+		<title>Unauthorized</title>
+	</head>
+	<body>
+		<h2>Forget Your Password?</h2>
+		<p>You can request a new password by providing the e-mail address associated with your account.</p>
+		<form method="POST" action="/persistent/authority?request-password">
+			<label for="email">Account e-mail address:</label>
+			<input type="text" name="email" id="email" />
+			<button type="submit">Request Password</button>
+		</form>
+		<p>Click <a href="/persistent/user/template?register">here to create a new account</a>.</p>
+	</body>
+</html>

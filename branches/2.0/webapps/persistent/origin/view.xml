@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../template.xsl"?>
+<!-- Copyright (c) 2010 Zepheira LLC, Some Rights Reserved. -->
+<html xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:calli="http://callimachusproject.org/rdf/2009/framework#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:purl="http://persistent.name/rdf/2010/purl#">
+	<head>
+		<title property="rdfs:label"/>
+	</head>
+	<body class="domain">
+		<h1 property="rdfs:label" />
+        <h3>Domains</h3>
+        <p><a href="?copy" class="diverted">Create New Domain</a></p>
+        <ul>
+            <li resource="?part" rel="purl:part"><a class="diverted" property="rdfs:label" href="?part"></a></li>
+        </ul>
+	</body>
+</html>
