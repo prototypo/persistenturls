@@ -32,11 +32,11 @@ Purl.UI.init = function() {
         if ($(this).hasClass('inactive')) {
             $('#menu li.active').removeClass('active').addClass('inactive');
             $(this).removeClass('inactive').addClass('active');
-            if ($('input', this).length > 0)
-                $('input', this).get(0).focus();
+            if ($('input[name="q"]', this).length > 0)
+                $('input[name="q"]', this).get(0).focus();
         } else {
-            if ($('input', this).length > 0)
-                $('input', this).get(0).focus();
+            if ($('input[name="q"]', this).length > 0)
+                $('input[name="q"]', this).get(0).focus();
         }
         return false;
     });
