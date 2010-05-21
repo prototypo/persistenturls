@@ -11,8 +11,10 @@
 			<body class="search group">
 				<h1>Group Search Results</h1>
 				<form action="" method="get" class="search">
+					<input name="group" type="hidden" />
 					<label for="q">Search again:</label>
 					<input type="text" id="q" name="q" value="" />
+					<button type="image" src="/persistent/images/search.png"></button>
 				</form>
 				<ul id="results">
 					<xsl:apply-templates />

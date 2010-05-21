@@ -21,8 +21,9 @@
       <tr valign="top">
         <td>
           <ul>
-            <li><a href="persistent/user/template?register">Register</a> as a user</li>
-            <li resource="?origin" rel="purl:serves">Browse <a class="diverted" property="rdfs:label" href="?origin"></a> PURLs</li>
+            <li><a href="/persistent/user/template?register">Register</a> as a user.</li>
+            <li>Maintain <a href="/persistent/authority?credential">your resources</a>.</li>
+            <li resource="?origin" rel="purl:serves">Browse <a class="diverted" property="rdfs:label" href="?origin"></a> Domains and PURLs.</li>
           </ul>
         </td>
         <td width="50%">

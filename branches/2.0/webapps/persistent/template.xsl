@@ -3,12 +3,12 @@
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:param name="xslt" select="'/persistent/template.xsl'" />
 	<xsl:param name="mode" />
-	<xsl:variable name="origin" select="concat($xslt, '/../..')" />
-	<xsl:variable name="callimachus" select="concat($xslt, '/../../callimachus')" />
-	<xsl:variable name="persistent" select="concat($xslt, '/..')" />
-	<xsl:variable name="server" select="concat($xslt, '/../server')" />
-	<xsl:variable name="user" select="concat($xslt, '/../user')" />
-	<xsl:variable name="images" select="concat($xslt, '/../images')" />
+	<xsl:variable name="origin" select="substring-before($xslt, '/persistent')" />
+	<xsl:variable name="callimachus" select="concat($origin, '/callimachus')" />
+	<xsl:variable name="persistent" select="concat($origin, '/persistent')" />
+	<xsl:variable name="server" select="concat($origin, '/persistent/server')" />
+	<xsl:variable name="user" select="concat($origin, '/persistent/user')" />
+	<xsl:variable name="images" select="concat($origin, '/persistent/images')" />
 	<xsl:variable name="section" select="/html/body/@class" />
 	<xsl:template match="*">
 		<xsl:copy>
