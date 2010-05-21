@@ -43,9 +43,9 @@
 			</script>
 			<script type="text/javascript" src="{$callimachus}/jquery.rdfquery.rdfa-1.0.js">
 			</script>
-			<script type="text/javascript" src="{$callimachus}/resource-log.js">
+			<script type="text/javascript" src="{$callimachus}/status.js">
 			</script>
-			<script type="text/javascript" src="{$callimachus}/resource-elements.js">
+			<script type="text/javascript" src="{$callimachus}/elements.js">
 			</script>
 			<script type="text/javascript" src="{$callimachus}/diverted.js">
 			</script>
