@@ -31,7 +31,6 @@ purl:UserTemplate rdfs:subClassOf calli:Copyable;
 	calli:copy <user/create.xml>.
 
 purl:User rdfs:subClassOf calli:Viewable, calli:Editable, calli:Deletable;
-	http:realm <authority>;
 	calli:view <user/view.xml>;
 	calli:edit <user/edit.xml>;
 	calli:delete <user/delete.xml>.

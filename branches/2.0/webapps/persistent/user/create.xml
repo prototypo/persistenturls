@@ -60,6 +60,16 @@
 								</textarea>
 							</td>
 						</tr>
+						<tr>
+							<td class="property">
+								<label for="m_reviewer">Reviewers:</label>
+							</td>
+							<td rel="calli:reviewer" class="value" data-suggest="/persistent/group/template?pre-copy">
+								<span about="?reviewer" typeof="calli:Group">
+									<span property="rdfs:label"/>
+								</span>
+							</td>
+						</tr>
 					</tbody>
 				</table>
 				<input value="Register" type="submit" />

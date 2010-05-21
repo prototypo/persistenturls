@@ -22,7 +22,8 @@ calli:get-graph http:realm <local>.
 	calli:credential </data/group/admin>;
 	calli:maintainer </data/group/admin>.
 
-purl:User rdfs:subClassOf calli:Credential.
+purl:User rdfs:subClassOf calli:Credential;
+	http:realm <authority>.
 
 purl:email a owl:DatatypeProperty, owl:FunctionalProperty;
 	rdfs:domain purl:User;

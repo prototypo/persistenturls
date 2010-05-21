@@ -85,6 +85,10 @@ a:visited {
     color: #059;
 }
 
+a.broken {
+    color: red;
+}
+
 #content {
     background: #fff;
     border-bottom: 1px solid #ddd;

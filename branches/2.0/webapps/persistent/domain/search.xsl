@@ -10,7 +10,7 @@
 			</head>
 			<body class="search domain">
 				<h1>Domain Search Results</h1>
-				<form action="" method="get" class="search">
+				<form action="/?domain" method="get" class="search">
 					<input name="domain" type="hidden" />
 					<label for="q">Search again:</label>
 					<input type="text" id="q" name="q" value="" />

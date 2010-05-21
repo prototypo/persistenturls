@@ -19,5 +19,7 @@
         <ul>
             <li resource="?maintainer" rel="calli:maintainer"><a property="rdfs:label" href="?maintainer"></a></li>
         </ul>
+        <div><a href="?domains">View PURL Domains</a></div>
+        <div><a href="?purls">View PURLs</a></div>
 	</body>
 </html>

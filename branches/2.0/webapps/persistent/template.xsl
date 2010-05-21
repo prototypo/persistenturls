@@ -19,8 +19,7 @@
 		<xsl:attribute name="{name()}">
 			<xsl:choose>
 				<xsl:when test="starts-with(., '/')">
-					<xsl:value-of select="$xslt"/>
-					<xsl:text>/../..</xsl:text>
+					<xsl:value-of select="$origin"/>
 					<xsl:value-of select="." />
 				</xsl:when>
 				<xsl:otherwise>

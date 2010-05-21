@@ -10,7 +10,7 @@
 			</head>
 			<body class="search purl">
 				<h1>PURL Search Results</h1>
-				<form action="" method="get" class="search">
+				<form action="/?purl" method="get" class="search">
 					<input name="purl" type="hidden" />
 					<label for="q">Search again:</label>
 					<input type="text" id="q" name="q" value="" />

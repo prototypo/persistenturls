@@ -17,5 +17,7 @@
         <ul>
             <li resource="?group" rev="calli:member"><a property="rdfs:label" href="?group"></a></li>
         </ul>
+        <div><a href="?domains">View PURL Domains</a></div>
+        <div><a href="?purls">View PURLs</a></div>
 	</body>
 </html>
