@@ -5,13 +5,13 @@
 		<title>Unauthorized</title>
 	</head>
 	<body>
-		<h2>Forget Your Password?</h2>
+		<h1>Forget Your Password?</h1>
 		<p>You can request a new password by providing the e-mail address associated with your account.</p>
 		<form method="POST" action="/persistent/authority?request-password">
 			<label for="email">Account e-mail address:</label>
 			<input type="text" name="email" id="email" />
 			<button type="submit">Request Password</button>
 		</form>
-		<p>Click <a href="/persistent/user/template?register">here to create a new account</a>.</p>
+		<p>Or <a href="/persistent/user/template?register">create</a> a new account.</p>
 	</body>
 </html>
