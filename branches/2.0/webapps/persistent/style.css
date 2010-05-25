@@ -95,6 +95,10 @@ input[type="text"] {
     padding: 0.25em;
 }
 
+strong {
+    font-weight: bold;
+}
+
 #account {
     clear: right;
     float: right;
@@ -449,11 +453,9 @@ img {
 }
 
 /* Inapplicable actions or breadcrumbs */
-body.search #actions {
-    display: none;
-}
-
+body.search #actions,
 body.server #actions .delete,
+body.server #breadcrumbs,
 body.purl #actions .delete,
 #actions.copy,
 body.home #breadcrumbs,
