@@ -169,7 +169,16 @@
 		<xsl:param name="about" />
 		<xsl:param name="nodeID" />
 		<xsl:param name="scope" />
-		<xsl:variable name="rel" select="@rel or @rev" />
+		<xsl:variable name="rel">
+			<xsl:choose>
+				<xsl:when test="@rel">
+					<xsl:value-of  select="@rel" />
+				</xsl:when>
+				<xsl:otherwise>
+				<xsl:value-of  select="@rev" />
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
 		<xsl:variable name="newscope">
 			<xsl:apply-templates mode="scope-about" select=".">
 				<xsl:with-param name="about" select="$about" />
