@@ -6,13 +6,16 @@
 var rdfnil = "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"
 
 if (document.addEventListener) {
-	document.addEventListener("DOMContentLoaded", initElements, false);
+	document.addEventListener("DOMContentLoaded", initRDFaForms, false);
 }  else if (window.attachEvent) {
-    window.attachEvent("onload", initElements);
+    window.attachEvent("onload", initRDFaForms);
 }
 
-function initElements() {
-	var form = $("form")
+function initRDFaForms() {
+	initElements($("form[about]"))
+}
+
+function initElements(form) {
 	initInputPropertyElements(form)
 	initSetElements(form)
 	initListElements(form)

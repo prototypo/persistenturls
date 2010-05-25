@@ -24,4 +24,14 @@
 			</body>
 		</html>
 	</xsl:template>
+	<xsl:template match="sparql:result">
+		<li>
+			<a href="{sparql:binding[@name='uri']/sparql:uri}?view">
+				<xsl:apply-templates select="sparql:binding[@name='label']/*" />
+			</a>
+			<xsl:text> [</xsl:text>
+			<a href="{sparql:binding[@name='uri']/sparql:uri}?edit">edit</a>
+			<xsl:text>] </xsl:text>
+		</li>
+	</xsl:template>
 </xsl:stylesheet>

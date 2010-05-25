@@ -35,10 +35,14 @@
 							<td class="property">
 								<label>Service:</label>
 							</td>
-							<td rel="purl:service" class="value" data-cardinality="1">
+							<td rel="purl:service" class="value">
 								<span typeof="purl:Service">
-									<input property="purl:priority" datatype="xsd:byte" type="text" value="" />
-									<input property="purl:weight" datatype="xsd:byte" type="text" value="" />
+									<span data-cardinality="1">
+										<input property="purl:priority" datatype="xsd:byte" type="text" value="" />
+									</span>
+									<span data-cardinality="1">
+										<input property="purl:weight" datatype="xsd:byte" type="text" value="" />
+									</span>
 								</span>
 							</td>
 						</tr>

@@ -16,36 +16,16 @@
 		<xsl:apply-templates select="sparql:results" />
 	</xsl:template>
 	<xsl:template match="sparql:results">
-		<xsl:apply-templates select="sparql:result" />
+		<ul>
+			<xsl:apply-templates select="sparql:result" />
+		</ul>
 	</xsl:template>
 	<xsl:template match="sparql:result">
 		<li>
-			<a href="{sparql:binding[@name='uri']/sparql:uri}?view">
-				<xsl:attribute name="class">
-					<xsl:text>diverted</xsl:text>
-					<xsl:if test="sparql:binding[@name='unresolvable']">
-						<xsl:text> broken</xsl:text>
-					</xsl:if>
-				</xsl:attribute>
-				<xsl:choose>
-					<xsl:when test="sparql:binding[@name='label']">
-						<xsl:apply-templates select="sparql:binding[@name='label']" />
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:apply-templates select="sparql:binding[@name='uri']" />
-					</xsl:otherwise>
-				</xsl:choose>
-			</a>
-			<xsl:text> [</xsl:text>
-			<a href="{sparql:binding[@name='uri']/sparql:uri}?edit" class="diverted">edit</a>
-			<xsl:text>] </xsl:text>
 			<dl>
 				<xsl:apply-templates select="sparql:binding[@name!='uri' and @name!='label' and @name!='unresolvable']" />
 			</dl>
 		</li>
-	</xsl:template>
-	<xsl:template match="sparql:binding[@name='uri' or @name='label']">
-		<xsl:apply-templates select="*" />
 	</xsl:template>
 	<xsl:template match="sparql:binding">
 		<dt>
