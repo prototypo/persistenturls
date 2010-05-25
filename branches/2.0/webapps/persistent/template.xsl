@@ -124,6 +124,9 @@
 							</xsl:choose>
 						</li>
 					</ul>
+					<div id="account">
+						<a href="/admin/authority?credential">Account</a>
+					</div>
 					<div class="clear">&#160;</div>
 				</div>
 
@@ -140,10 +143,10 @@
 							</xsl:choose>
 						</xsl:attribute>
 						<a href="{$origin}/?purl">PURLs</a>
-						<form action="{$origin}/?purl" method="get" title="Search PURL maintainers and curators" class="search">
-							<button type="image" src="{$persistent}/images/search.png"></button>
-							<input name="purl" type="hidden" />
-							<input name="q" type="text" value="" />
+						<form action="{$origin}/" method="get" title="Search PURL maintainers and curators" class="search">
+							<input name="purl" type="hidden" class="profile" />
+							<input id="purl_menu_q" name="q" type="text" value="" />
+							<img class="submit" src="{$origin}/persistent/images/search-button.png" alt="Search" title="Click to search" />
 						</form>
 					</li>
 					<li>
@@ -158,10 +161,10 @@
 							</xsl:choose>
 						</xsl:attribute>
 						<a href="{$origin}/?user">Users</a>
-						<form action="{$origin}/?user" method="get" title="Search usernames" class="search">
-							<button type="image" src="{$persistent}/images/search.png"></button>
-							<input name="user" type="hidden" />
-							<input name="q" type="text" />
+						<form action="{$origin}/" method="get" title="Search usernames" class="search">
+							<input name="user" type="hidden" class="profile" />
+							<input id="user_menu_q" name="q" type="text" />
+							<img class="submit" src="{$origin}/persistent/images/search-button.png" alt="Search" title="Click to search" />
 						</form>
 					</li>
 					<li>
@@ -176,10 +179,10 @@
 							</xsl:choose>
 						</xsl:attribute>
 						<a href="{$origin}/?group">Groups</a>
-						<form action="{$origin}/?group" method="get" title="Search group names" class="search">
-							<button type="image" src="{$persistent}/images/search.png"></button>
-							<input name="group" type="hidden" />
-							<input name="q" type="text" />
+						<form action="{$origin}/" method="get" title="Search group names" class="search">
+							<input name="group" type="hidden" class="profile" />
+							<input id="group_menu_q" name="q" type="text" />
+							<img class="submit" src="{$origin}/persistent/images/search-button.png" alt="Search" title="Click to search" />
 						</form>
 					</li>
 					<li>
@@ -194,10 +197,10 @@
 							</xsl:choose>
 						</xsl:attribute>
 						<a href="{$origin}/?domain">Domains</a>
-						<form action="{$origin}/?domain" method="get" title="Search maintainers and curators" class="search">
-							<button type="image" src="{$persistent}/images/search.png"></button>
-							<input name="domain" type="hidden" />
-							<input name="q" type="text" />	
+						<form action="{$origin}/" method="get" title="Search maintainers and curators" class="search">
+							<input name="domain" type="hidden" class="profile" />
+							<input id="domain_form_q" name="q" type="text" />
+							<img class="submit" src="{$origin}/persistent/images/search-button.png" alt="Search" title="Click to search" />
 						</form>
 					</li>
 					<li class="inactive">

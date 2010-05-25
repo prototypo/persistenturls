@@ -10,11 +10,10 @@
 			</head>
 			<body class="search domain">
 				<h1>Domain Search Results</h1>
-				<form action="/?domain" method="get" class="search">
-					<input name="domain" type="hidden" />
-					<label for="q">Search again:</label>
+				<form action="/" method="get" class="search">
+					<input type="hidden" class="profile" name="domain" />
 					<input type="text" id="q" name="q" value="" />
-					<button type="image" src="/persistent/images/search.png"></button>
+					<img class="submit" src="/persistent/images/search-button.png" alt="Search" title="Click to search" />
 				</form>
 				<ul id="results">
 					<xsl:apply-templates />

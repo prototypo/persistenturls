@@ -10,11 +10,10 @@
 			</head>
 			<body class="search purl">
 				<h1>PURL Search Results</h1>
-				<form action="/?purl" method="get" class="search">
-					<input name="purl" type="hidden" />
-					<label for="q">Search again:</label>
+				<form action="/" method="get" class="search">
+					<input type="hidden" class="profile" name="purl" />
 					<input type="text" id="q" name="q" value="" />
-					<button type="image" src="/persistent/images/search.png"></button>
+					<img class="submit" src="/persistent/images/search-button.png" alt="Search" title="Click to search" />
 				</form>
 				<ul id="results">
 					<xsl:apply-templates />

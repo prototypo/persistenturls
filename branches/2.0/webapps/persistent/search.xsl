@@ -37,9 +37,7 @@
 				</xsl:choose>
 			</a>
 			<xsl:text> [</xsl:text>
-			<a href="{sparql:binding[@name='uri']/sparql:uri}?edit" class="diverted">
-				edit
-			</a>
+			<a href="{sparql:binding[@name='uri']/sparql:uri}?edit" class="diverted">edit</a>
 			<xsl:text>] </xsl:text>
 			<dl>
 				<xsl:apply-templates select="sparql:binding[@name!='uri' and @name!='label' and @name!='unresolvable']" />

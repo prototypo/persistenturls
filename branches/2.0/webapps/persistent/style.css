@@ -89,8 +89,20 @@ a.broken {
     color: red;
 }
 
+input[type="text"] {
+    background: #fefefe url(images/input-bg.png) top left repeat-x;
+    border: 1px solid #ddd;
+    padding: 0.25em;
+}
+
+#account {
+    clear: right;
+    float: right;
+    padding: 0.5em 2em 0 0;
+}
+
 #content {
-    background: #fff;
+    background: #fff url(images/content-bg.png) top left repeat-y;
     border-bottom: 1px solid #ddd;
     clear: right;
     float: left;
@@ -104,6 +116,7 @@ a.broken {
 #header {
     border-bottom: 1px solid #ccc;
     margin: 0 0 0 2%;
+    min-height: 2em;
     padding: 0 0 0 16%;
 }
 
@@ -161,18 +174,29 @@ a.broken {
     display: none;
 }
 
-#menu li form input {
-    width: 50%;
+#menu li form label {
     margin-left: 5%;
 }
 
-#menu li form button {
-    background: transparent url(images/search.png) center left no-repeat;
-	border: 0;
-    color: #333;
-    margin: 0 0 0 8%;
-    padding: 3px 0 3px 20px;
-    height: 20px;
+#menu li form input {
+    background: transparent url(images/search-bg.png) top left no-repeat;
+    margin-left: 2%;
+    padding: 3px 3px 3px 16px;
+    width: 50%;
+}
+
+.search #content form.search input {
+    background: transparent url(images/search-bg.png) top left no-repeat;
+    padding: 3px 3px 3px 16px;
+}
+
+form img.submit {
+     margin: 0 5px;
+    vertical-align: middle;
+}
+
+form img.submit:hover {
+    cursor: pointer;
 }
 
 #menu ul {
@@ -213,7 +237,7 @@ a.broken {
 
 #actions {
     border-left: 1px solid #ccc;
-    clear: both;
+    clear: left;
     float: left;
     font-size: 0.9em;
     list-style: none;
