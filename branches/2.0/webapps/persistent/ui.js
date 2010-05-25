@@ -54,6 +54,14 @@ Purl.UI.init = function() {
         }
         return false;
     });
+
+    // content empty :header hiding
+    $('#content ul').filter(function(index) {
+        return $('li', this).length === 0;
+    }).remove();
+    $('#content h3').filter(function(index) {
+        return $(this).next(':not(:header, div.clear)').length === 0;
+    }).hide();
 };
 
 $(document).ready(function() {

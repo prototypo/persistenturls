@@ -150,7 +150,7 @@ strong {
 }
 
 #menu li.active {
-    background: #fff url(images/menu-bg.png) top right repeat-y;
+    background: #f9f9f9 url(images/menu-bg.png) top right repeat-y;
     padding: 0;
 }
 
