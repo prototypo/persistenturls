@@ -3,14 +3,16 @@ var validatePURL = function() {
     $.ajax({
         type: "GET",
         url: url,
+        dataTpe: "text",
         error: function(xhr, textStatus, thrown) {
             showError("Error:" + textStatus);
         },
         success: function(data, textStatus, xhr) {
-        	if (data.indexOf("200") > 0) {
+            var pattern = /^HTTP\/([0-9\.]+) [23]0[0-9]/;
+        	if (pattern.test(data)) {
             	showError("Successfully validated.");
             } else {
-            	showError("Failed to validated.");
+            	showError("Failed to validate.");
             }
         }
     });
