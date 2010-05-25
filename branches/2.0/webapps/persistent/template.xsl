@@ -125,7 +125,7 @@
 						</li>
 					</ul>
 					<div id="account">
-						<a href="/admin/authority?credential">Account</a>
+						<a href="{$origin}/admin/authority?credential">Account</a>
 					</div>
 					<div class="clear">&#160;</div>
 				</div>
