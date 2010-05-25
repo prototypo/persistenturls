@@ -1,4 +1,3 @@
-var Purl = {};
 Purl.UI = {};
 Purl.UI.queryArgs = {};
 

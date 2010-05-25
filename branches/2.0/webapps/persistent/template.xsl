@@ -49,6 +49,8 @@
 			</script>
 			<script type="text/javascript" src="{$callimachus}/diverted.js">
 			</script>
+			<script type="text/javascript" src="{$persistent}/base.js">
+			</script>
 			<script type="text/javascript" src="{$persistent}/ui.js">
 			</script>
 			<xsl:if test="contains($mode, 'copy')">
