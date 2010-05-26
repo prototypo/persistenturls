@@ -14,6 +14,7 @@
 #    limitations under the License.
 #
 @prefix xsd:<http://www.w3.org/2001/XMLSchema#>.
+@prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix rdfs:<http://www.w3.org/2000/01/rdf-schema#>.
 @prefix owl:<http://www.w3.org/2002/07/owl#>.
 @prefix obj:<http://www.openrdf.org/rdf/2009/object#>.
@@ -111,10 +112,9 @@ calli:origin a owl:ObjectProperty;
 	rdfs:comment "Origin of scripts that can be seamlessly authenticated with this realm.";
 	rdfs:domain calli:DigestRealm.
 
-calli:realmAuth a owl:DatatypeProperty, owl:FunctionalProperty;
+calli:realmAuth a rdf:Property, owl:FunctionalProperty;
 	rdfs:comment "The realm name used in the encoding of its credentials.";
-	rdfs:domain calli:DigestRealm;
-	rdfs:range xsd:string.
+	rdfs:domain calli:DigestRealm.
 
 calli:scribe a owl:ObjectProperty;
 	rdfs:comment "Credential or group of credentials that can copy this resource remotely.";
