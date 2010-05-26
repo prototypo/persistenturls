@@ -172,24 +172,6 @@
 					<li>
 						<xsl:attribute name="class">
 							<xsl:choose>
-								<xsl:when test="contains($section, 'group')">
-									<xsl:text>active</xsl:text>
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:text>inactive</xsl:text>
-								</xsl:otherwise>
-							</xsl:choose>
-						</xsl:attribute>
-						<a href="{$origin}/?group">Groups</a>
-						<form action="{$origin}/" method="get" title="Search group names" class="search">
-							<input name="group" type="hidden" class="profile" />
-							<input id="group_menu_q" name="q" type="text" />
-							<img class="submit" src="{$origin}/persistent/images/search-button.png" alt="Search" title="Click to search" />
-						</form>
-					</li>
-					<li>
-						<xsl:attribute name="class">
-							<xsl:choose>
 								<xsl:when test="contains($section, 'domain')">
 									<xsl:text>active</xsl:text>
 								</xsl:when>
@@ -218,9 +200,6 @@
 						<xsl:when test="contains($section, 'user')">
 							<li><span>Users</span></li>
 						</xsl:when>
-						<xsl:when test="contains($section, 'group')">
-							<li><span>Groups</span></li>
-						</xsl:when>
 						<xsl:when test="contains($section, 'domain') and not(contains($section, 'search'))">
 							<li><a rev="purl:part" href="?origin" class="diverted">Origin (<span property="rdfs:label"/>)</a></li>
 							<li><span>Domains</span></li>
@@ -245,9 +224,6 @@
 			<xsl:if test="not(starts-with($mode, 'pre-'))">
 				<div class="clear">&#160;</div>
 				<div id="footer">
-					<a href="http://www.oclc.org/" title="OCLC">
-						<img src="{$images}/oclclogo.png" alt="OCLC logo" />
-					</a>
 					<a href="http://zepheira.com/" title="Zepheira">
 						<img src="{$images}/zepheiralogo.png" alt="Zepheira logo" />
 					</a>
