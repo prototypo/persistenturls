@@ -115,6 +115,16 @@
 								</xsl:otherwise>
 							</xsl:choose>
 						</li>
+						<li class="history">
+							<xsl:choose>
+								<xsl:when test="contains($mode, 'history')">
+									<span class="current">History</span>
+								</xsl:when>
+								<xsl:otherwise>
+									<a class="diverted" title="See this item's history" href="?history">History</a>
+								</xsl:otherwise>
+							</xsl:choose>
+						</li>
 						<li class="delete">
 							<xsl:choose>
 								<xsl:when test="contains($mode, 'delete')">
