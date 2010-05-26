@@ -101,7 +101,7 @@
 									<span class="current">View</span>
 								</xsl:when>
 								<xsl:otherwise>
-									<a class="diverted" href="?view">View</a>
+									<a class="diverted" title="View this item" href="?view">View</a>
 								</xsl:otherwise>
 							</xsl:choose>
 						</li>
@@ -111,7 +111,7 @@
 									<span class="current">Edit</span>
 								</xsl:when>
 								<xsl:otherwise>
-									<a class="diverted" href="?edit">Edit</a>
+									<a class="diverted" title="Edit this item" href="?edit">Edit</a>
 								</xsl:otherwise>
 							</xsl:choose>
 						</li>
@@ -121,7 +121,7 @@
 									<span class="current">Delete</span>
 								</xsl:when>
 								<xsl:otherwise>
-									<a class="diverted" href="?delete">Delete</a>
+									<a class="diverted" title="Delete this item" href="?delete">Delete</a>
 								</xsl:otherwise>
 							</xsl:choose>
 						</li>
@@ -216,14 +216,17 @@
 					<li class="home"><a href="{$origin}/">Home</a></li>
 					<xsl:choose>
 						<xsl:when test="contains($section, 'user')">
-							<li><a href="about:blank">Users</a></li>
+							<li><a href="{$origin}/?user">Users</a></li>
 						</xsl:when>
 						<xsl:when test="contains($section, 'group')">
-							<li><a href="about:blank">Groups</a></li>
+							<li><a href="{$origin}/?group">Groups</a></li>
+						</xsl:when>
+						<xsl:when test="contains($section, 'domain')">
+							<li><a rev="purl:part" href="?origin" class="diverted">Origin (<span property="rdfs:label"/>)</a></li>
+							<li><a href="{$origin}/?domain">Domains</a></li>
 						</xsl:when>
 					</xsl:choose>
 				</ul>
-				<div class="clear">&#160;</div>
 				<div id="message-container">
 					<p id="message" />
 				</div>

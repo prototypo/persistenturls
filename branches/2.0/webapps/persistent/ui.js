@@ -37,7 +37,7 @@ Purl.UI.init = function() {
         $(this).parent().css('opacity', 1);
     });
     $('#menu form.search input[name="q"]').bind('blur', function(e) {
-        $(this).parent().css('opacity', 0.3);
+        $(this).parent().css('opacity', 0.7);
     });
 
     // menu expand / collapse function
