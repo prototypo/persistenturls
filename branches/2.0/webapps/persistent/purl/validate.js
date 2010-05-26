@@ -8,9 +8,12 @@ var validatePURL = function() {
             showError("Error:" + textStatus);
         },
         success: function(data, textStatus, xhr) {
-            var pattern = /^HTTP\/([0-9\.]+) [23]0[0-9]/;
-        	if (pattern.test(data)) {
-            	showError("Successfully validated.");
+            var resolvePattern = /^HTTP\/[0-9\.]+ 20[023456]/;
+            var redirectPattern = /^HTTP\/[0-9\.]+ 30[0123457]/;
+        	if (resolvePattern.test(data)) {
+            	showError("Target resolves.");
+            } else if (redirectPattern.test(data)) {
+            	showError("Target redirects.");
             } else {
             	showError("Failed to validate.");
             }
