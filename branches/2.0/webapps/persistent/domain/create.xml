@@ -37,12 +37,13 @@
 							</td>
 							<td rel="purl:service" class="value">
 								<span typeof="purl:Service">
-									<span data-cardinality="1">
-										<input property="purl:priority" datatype="xsd:byte" type="text" value="" />
-									</span>
-									<span data-cardinality="1">
-										<input property="purl:weight" datatype="xsd:byte" type="text" value="" />
-									</span>
+									<p data-cardinality="1">
+										<label for="m_priority">Priority:</label> <input property="purl:priority" datatype="xsd:byte" type="text" id="m_priority" value="" />
+									</p>
+									<p data-cardinality="1">
+										<label for="m_weight">Weight:</label> <input property="purl:weight" datatype="xsd:byte" type="text" id="m_weight" value="" />
+									</p>
+									<input rel="purl:server" type="hidden" content="/" />
 								</span>
 							</td>
 						</tr>

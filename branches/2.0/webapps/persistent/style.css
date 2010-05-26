@@ -222,10 +222,10 @@ form img.submit:hover {
     clear: both;
     float: left;
     font-size: 0.85em;
-    margin: 0 0 1em -6%;
+    margin: 0 0 1em -5.5%;
     opacity: 0.7;
     padding: 0;
-    width: 106%;
+    width: 105.5%;
 }
 
 #breadcrumbs:hover {
@@ -245,7 +245,8 @@ form img.submit:hover {
     padding: 0 0 0 0;
 }
 
-#breadcrumbs li a {
+#breadcrumbs li a,
+#breadcrumbs li > span {
     display: block;
     padding: 10px 0;
     width: 100%;

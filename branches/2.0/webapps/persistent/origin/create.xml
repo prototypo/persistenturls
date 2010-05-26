@@ -8,7 +8,7 @@
 	<head>
 		<title>Create a New Origin</title>
 	</head>
-	<body class="domain">
+	<body class="origin">
 		<form action="" about="" typeof="purl:Origin">
 			<fieldset>
 				<legend>Create a New Origin</legend>

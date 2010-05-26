@@ -206,7 +206,7 @@
 						</form>
 					</li>
 					<li class="inactive">
-						<a href="/docs/help.html">Help</a>
+						<a href="{$origin}/docs/help.html">Help</a>
 					</li>
 				</ul>
 			</xsl:if>
@@ -216,14 +216,22 @@
 					<li class="home"><a href="{$origin}/">Home</a></li>
 					<xsl:choose>
 						<xsl:when test="contains($section, 'user')">
-							<li><a href="{$origin}/?user">Users</a></li>
+							<li><span>Users</span></li>
 						</xsl:when>
 						<xsl:when test="contains($section, 'group')">
-							<li><a href="{$origin}/?group">Groups</a></li>
+							<li><span>Groups</span></li>
 						</xsl:when>
-						<xsl:when test="contains($section, 'domain')">
+						<xsl:when test="contains($section, 'domain') and not(contains($section, 'search'))">
 							<li><a rev="purl:part" href="?origin" class="diverted">Origin (<span property="rdfs:label"/>)</a></li>
-							<li><a href="{$origin}/?domain">Domains</a></li>
+							<li><span>Domains</span></li>
+						</xsl:when>
+						<xsl:when test="contains($section, 'purl') and not(contains($section, 'search'))">
+							<li><span rev="purl:partOf" resource="?domain"><a rev="purl:part" href="?origin" class="diverted">Origin (<span property="rdfs:label"/>)</a></span></li>
+							<li><a rev="purl:partOf" href="?domain" class="diverted">Domain (<span property="rdfs:label"/>)</a></li>
+							<li><span>PURLs</span></li>
+						</xsl:when>
+						<xsl:when test="contains($section, 'search')">
+							<li><span>Search</span></li>
 						</xsl:when>
 					</xsl:choose>
 				</ul>

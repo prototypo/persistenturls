@@ -8,7 +8,7 @@
 	<head>
 		<title property="rdfs:label"/>
 	</head>
-	<body class="domain">
+	<body class="origin">
 		<form action="">
 			<fieldset>
 				<legend>Modify an origin</legend>
