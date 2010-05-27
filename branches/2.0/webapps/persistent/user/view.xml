@@ -13,10 +13,6 @@
 		<p property="purl:email" />
 		<p property="purl:affiliation" />
 		<p property="purl:justification" />
-        <h3>Groups</h3>
-        <ul>
-            <li resource="?group" rev="calli:member"><a property="rdfs:label" href="?group"></a></li>
-        </ul>
         <div><a href="?domains">View PURL Domains</a></div>
         <div><a href="?purls">View PURLs</a></div>
 	</body>
