@@ -42,9 +42,8 @@
 								PURL Type:
 							</td>
 							<td class="value">
-								<input type="radio" value="purl:PURL" id="m_basic" name="m_purl_type" /><label for="m_basic">Basic</label>
-								<input type="radio" value="purl:PartialPURL" id="m_partial" class="partial" name="m_purl_type" /><label for="m_partial">Partial</label>
-								<input type="radio" value="purl:PURL purl:ZonedPURL" id="m_zoned" name="m_purl_type" /><label for="m_zoned">Zoned</label>
+								<input type="checkbox" value="purl:PartialPURL" id="m_partial" class="purl_type partial" name="m_partial" /><label for="m_partial">Partial</label>
+								<input type="checkbox" value="purl:ZonedPURL" id="m_zoned" class="purl_type" name="m_zoned" /><label for="m_zoned">Zoned</label>
 							</td>
 						</tr>
 						<tr class="rel alternate">

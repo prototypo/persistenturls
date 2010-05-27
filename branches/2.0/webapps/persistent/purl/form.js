@@ -1,4 +1,19 @@
-var modifyForm = function(relType) {
+Purl.PURLForm = {};
+Purl.PURLForm.getTypes = function(partial, zoned) {
+    var types = [];
+    if (partial) {
+        types.push("purl:PartialPURL");
+    } else {
+        types.push("purl:PURL");
+    }
+    if (zoned) {
+        types.push("purl:ZonedPURL");
+    }
+    console.log(types.join(" "));
+    return types.join(" ");
+};
+
+Purl.PURLForm.modifyForm = function(relType) {
     $('#purl-form tr.rel').hide();
     $('#purl-form tr.rel.'+relType).show();
     if ($('#purl-form tr.rel:visible input').length === 0) {
@@ -10,11 +25,11 @@ var modifyForm = function(relType) {
     }
 };
 
-var modifyType = function(type) {
+Purl.PURLForm.modifyType = function(type) {
     $('#purl-form').attr('typeof', type);
 };
 
-var initializeForm = function() {
+Purl.PURLForm.initializeForm = function() {
     var frag = document.location.hash.substr(1);
     var qs = document.location.search.substr(1);
     if (frag.length === 0 && qs !== "edit") {
@@ -55,18 +70,19 @@ var initializeForm = function() {
         }
     }
     $('#purl-rel-type').bind('change', function() {
-        modifyForm($(this).val());
+        Purl.PURLForm.modifyForm($(this).val());
     });
     $('#purl-rel-type').val(frag).trigger('change');
-    $('#purl-form input[name=m_purl_type]').bind('change', function() {
-        modifyType($(this).val());
-        if ($(this).hasClass('partial')) {
+    $('#purl-form input.purl_type').bind('change', function() {
+        var typeofs = Purl.PURLForm.getTypes($('#m_partial').attr('checked'), $('#m_zoned').attr('checked'));
+        Purl.PURLForm.modifyType(typeofs);
+        if (typeofs.indexOf("PartialPURL") > 0) {
             $('#purl-form tr.partial').show();
         } else {
             $('#purl-form tr.partial').hide();
         }
     });
-    $('input[name=m_purl_type]:checked').trigger('change');
+    $('#purl-form input.purl_type').trigger('change');
     if ($('#m_disabled').length > 0) {
         $('#m_disabled').bind('change', function() {
             var types = $('#purl-form').attr('typeof');
@@ -96,5 +112,5 @@ var initializeForm = function() {
 };
 
 $(document).ready(function() {
-    initializeForm();
+    Purl.PURLForm.initializeForm();
 });
