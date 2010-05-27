@@ -8,7 +8,7 @@
 	<head>
 		<title property="rdfs:label"/>
 	</head>
-  <body class="server">
+  <body class="home server">
     <h1>Welcome to your PURL administrator interface.</h1>
     <p>PURLs (<strong>P</strong>ersistent <strong>U</strong>niform <strong>R</strong>esource <strong>L</strong>ocators) are Web addresses that act as permanent identifiers in the face of a dynamic and changing Web infrastructure. Instead of resolving directly to Web resources, PURLs provide a level of indirection that allows the underlying Web addresses of resources to change over time without negatively affecting systems that depend on them. This capability provides continuity of references to network resources that may migrate from machine to machine for business, social or technical reasons.</p>
     <table class="display" summary="purl information" width="70%" align="center">

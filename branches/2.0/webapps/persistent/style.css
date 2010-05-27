@@ -62,14 +62,8 @@ body {
     padding: 0;
 }
 
-pre {
-	text-indent: 30px;
-}
-
-pre.code {
-	text-indent: 20px;
-	border: 1px dashed #000;
-	background: #FFF;
+strong {
+    font-weight: bold;
 }
 
 a {
@@ -93,10 +87,6 @@ input[type="text"] {
     background: #fefefe url(images/input-bg.png) top left repeat-x;
     border: 1px solid #ddd;
     padding: 0.25em;
-}
-
-strong {
-    font-weight: bold;
 }
 
 #account {
@@ -245,11 +235,15 @@ form img.submit:hover {
     padding: 0 0 0 0;
 }
 
-#breadcrumbs li a,
+#breadcrumbs li > a,
 #breadcrumbs li > span {
     display: block;
     padding: 10px 0;
     width: 100%;
+}
+
+body.home h1 {
+    margin-top: 2em;
 }
 
 #actions {
@@ -299,66 +293,9 @@ form img.submit:hover {
     display: none;
 }
 
-a.tooltip {
-    position: relative; /*this is the key*/
-    z-index: 24;
-    background-color: #fff;
-    color: #000;
-    text-decoration: none;
-}
-
-a.tooltip:hover {
-    z-index: 25;
-    background-color: #fff;
-}
-
-a.tooltip span {
-    display: none;
-}
-
-a.tooltip:hover span { /*the span will display just on :hover state*/
-    display: block;
-    position: absolute;
-    top: 2em;
-    left: 2em;
-    width: 15em;
-    border: 1px solid #0cf;
-    background-color: #CAE8EA;
-    color:#000;
-	text-align: justify;
-	line-height: 1.4em;
-	font-size: 0.85em;
-	font-weight: bold;
-    text-align: center;
-}
-
-div.noresults {
-}
-
-div.withresults {
-	color: #708090;
-	background: #FFFAFA;
-	border: 1px solid #5F9EA0; 
-	/* border-style: outset;  */
-	padding: 2px 5px 0px 5px;
-	margin: 0;
-	text-decoration: none;
-}
-
 h3.error {
 	font-weight: bold;
 	color: red;
-}
-
-p.actiontext {
-	font-size: 1.1em;
-	font-weight: bold;
-}
-
-p.response {
-	font-size: 1.1em;
-	font-weight: bold;
-	margin-left: 2.5em;
 }
 
 p.error {
@@ -368,34 +305,19 @@ p.error {
 	margin-left: 2.5em;
 }
 
-p.approved {
-	font-size: 1.1em;
-	font-weight: bold;
-	margin-left: 2.5em;
-}
-
-p.rejected {
-	font-size: 1.1em;
-	font-weight: bold;
-	color: red;
-	margin-left: 2.5em;
-}
-
-p.warning {
-	font-size: 1.1em;
-	font-weight: bold;
-	color: red;
-}
-
 form .instructions {
     padding: 0.5em 0;
 }
 
 fieldset {
     border: 0;
+    clear: both;
+    display: block;
 }
 
 legend {
+    clear: both;
+    display: block;
 }
 
 table {
@@ -466,15 +388,10 @@ img {
 }
 
 /* Inapplicable actions or breadcrumbs */
-body.search #actions,
-body.server #actions .delete,
-body.server #breadcrumbs,
-body.purl #actions .delete,
 #actions.copy,
-body.home #breadcrumbs,
-body.home #actions,
-body.realm #actions .delete,
-body.realm #actions .view,
+body.server #actions .delete,
+body.home #breadcrumbs .home,
+body.purl #actions .delete,
 body.search #actions {
     display: none;
 }
