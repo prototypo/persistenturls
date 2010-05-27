@@ -33,11 +33,10 @@
 						</tr>
 						<tr class="all">
 							<td class="property">
-								PURL Type:
+								<label for="m_zoned">Zoned:</label>
 							</td>
 							<td class="value">
-								<input type="checkbox" value="purl:PartialPURL" id="m_partial" class="purl_type partial" name="m_partial" /><label for="m_partial">Partial</label>
-								<input type="checkbox" value="purl:ZonedPURL" id="m_zoned" class="purl_type" name="m_zoned" /><label for="m_zoned">Zoned</label>
+								<input type="checkbox" value="purl:ZonedPURL" id="m_zoned" class="purl_type" name="m_zoned" />
 							</td>
 						</tr>
 						<tr class="all">
@@ -93,14 +92,6 @@
 							<td class="value" data-cardinality="1" rel="purl:describedBy">
 								<input id="m_describedBy" type="text" onchange="$(this).attr('about', $(this).val())"/>
 								<span typeof="rdf:Resource" href="?target"/>
-							</td>
-						</tr>
-						<tr class="partial">
-							<td class="property">
-								<label for="m_pattern">Pattern:</label>
-							</td>
-							<td class="value" data-cardinality="1">
-								<input id="m_pattern" type="text" property="purl:pattern" />
 							</td>
 						</tr>
 						<tr class="all">

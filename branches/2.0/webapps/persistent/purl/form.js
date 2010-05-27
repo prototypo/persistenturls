@@ -1,15 +1,10 @@
 Purl.PURLForm = {};
-Purl.PURLForm.getTypes = function(partial, zoned) {
+Purl.PURLForm.getTypes = function(zoned) {
     var types = [];
-    if (partial) {
-        types.push("purl:PartialPURL");
-    } else {
-        types.push("purl:PURL");
-    }
+    types.push("purl:PURL");
     if (zoned) {
         types.push("purl:ZonedPURL");
     }
-    console.log(types.join(" "));
     return types.join(" ");
 };
 
@@ -74,13 +69,8 @@ Purl.PURLForm.initializeForm = function() {
     });
     $('#purl-rel-type').val(frag).trigger('change');
     $('#purl-form input.purl_type').bind('change', function() {
-        var typeofs = Purl.PURLForm.getTypes($('#m_partial').attr('checked'), $('#m_zoned').attr('checked'));
+        var typeofs = Purl.PURLForm.getTypes($(this).attr('checked'));
         Purl.PURLForm.modifyType(typeofs);
-        if (typeofs.indexOf("PartialPURL") > 0) {
-            $('#purl-form tr.partial').show();
-        } else {
-            $('#purl-form tr.partial').hide();
-        }
     });
     $('#purl-form input.purl_type').trigger('change');
     if ($('#m_disabled').length > 0) {
