@@ -25,6 +25,7 @@ import java.util.Set;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
@@ -50,7 +51,7 @@ import org.openrdf.repository.object.annotations.sparql;
  * 
  * @author James Leigh
  */
-public abstract class PURLSupport extends PartialPURLSupport implements PURL {
+public abstract class PURLSupport extends PartialSupport implements PURL {
 	private static final String PROTOCOL = "1.1";
 	private static final ProtocolVersion HTTP11 = new ProtocolVersion("HTTP",
 			1, 1);
@@ -263,7 +264,7 @@ public abstract class PURLSupport extends PartialPURLSupport implements PURL {
 			+ "OPTIONAL { ?target purl:media ?media }\n"
 			+ "OPTIONAL { ?target purl:lang ?lang }\n"
 			+ "OPTIONAL { ?target a ?unresolvable FILTER (?unresolvable = purl:Unresolvable) }\n"
-			+ "OPTIONAL { ?target a ?chain FILTER (?chain = purl:PURL || ?chain = purl:PartialPURL || ?chain = purl:ZonedPURL) }}\n"
+			+ "OPTIONAL { ?target a ?chain FILTER (?chain = purl:PURL) }}\n"
 			+ "ORDER BY ?unresolvable ?chain\n")
 	public abstract TupleQueryResult findTargetURL();
 
@@ -370,7 +371,11 @@ public abstract class PURLSupport extends PartialPURLSupport implements PURL {
 			regex = patterns.get(pattern.stringValue());
 		}
 		if (regex == null) {
-			regex = Pattern.compile(pattern.stringValue());
+			try {
+				regex = Pattern.compile(pattern.stringValue());
+			} catch (PatternSyntaxException e) {
+				throw new InternalServerError(e);
+			}
 			synchronized (patterns) {
 				patterns.put(pattern.stringValue(), regex);
 			}
@@ -400,7 +405,11 @@ public abstract class PURLSupport extends PartialPURLSupport implements PURL {
 				case '$':
 					if (i + 1 < n) {
 						int idx = template.charAt(++i) - '0';
-						sb.append(m.group(idx));
+						try {
+							sb.append(m.group(idx));
+						} catch (IndexOutOfBoundsException e) {
+							sb.append("$").append(idx);
+						}
 						break;
 					}
 				case '\\':

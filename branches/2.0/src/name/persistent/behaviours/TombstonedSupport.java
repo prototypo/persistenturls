@@ -8,26 +8,27 @@ package name.persistent.behaviours;
 
 import java.util.Set;
 
-import name.persistent.concepts.DisabledPURL;
+import name.persistent.concepts.Tombstoned;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.ProtocolVersion;
 import org.apache.http.message.BasicHttpResponse;
+import org.openrdf.repository.object.annotations.precedes;
 
 /**
- * Issues a 404 response for disabled PURLs.
+ * Issues a 410 response for tombstoned PURLs.
  * 
  * @author James Leigh
  */
-public abstract class DisabledPURLSupport extends PURLSupport implements
-		DisabledPURL {
+@precedes(DisabledSupport.class)
+public abstract class TombstonedSupport implements Tombstoned {
 	private static final ProtocolVersion HTTP11 = new ProtocolVersion("HTTP",
 			1, 1);
 
 	@Override
 	public HttpResponse resolvePURL(String source, String qs, String accept,
 			String language, Set<String> via) {
-		return new BasicHttpResponse(HTTP11, 404, "Temporarily Gone");
+		return new BasicHttpResponse(HTTP11, 410, "Permanently Gone");
 	}
 
 }

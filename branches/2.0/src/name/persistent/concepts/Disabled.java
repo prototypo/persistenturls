@@ -9,7 +9,7 @@ package name.persistent.concepts;
 import org.openrdf.repository.object.annotations.iri;
 
 /** Temporarily gone (404) */
-@iri("http://persistent.name/rdf/2010/purl#DisabledPURL")
-public interface DisabledPURL extends PURL {
+@iri("http://persistent.name/rdf/2010/purl#Disabled")
+public interface Disabled extends Resolvable {
 
 }

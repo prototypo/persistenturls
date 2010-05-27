@@ -20,7 +20,7 @@ import org.openrdf.http.object.traits.VersionedObject;
 import org.openrdf.repository.object.annotations.name;
 import org.openrdf.repository.object.annotations.sparql;
 
-public abstract class MirrorSupport {
+public abstract class MirrorSupport implements VersionedObject {
 	private static final String PROTOCOL = "1.1";
 	private static final String PREFIX = "PREFIX purl:<http://persistent.name/rdf/2010/purl#>\n";
 	/** Date format pattern used to generate the header in RFC 1123 format. */
@@ -56,6 +56,9 @@ public abstract class MirrorSupport {
 			@name("target") Object target);
 
 	protected void mirrorEntityHeaders(Object target, HttpResponse resp) {
+		if (target == null) {
+			target = this;
+		}
 		List<RemoteGraph> graphs = getRemoteGraphsOf(target);
 		if (!graphs.isEmpty()) {
 			RemoteGraph graph = graphs.get(0);

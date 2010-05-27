@@ -83,21 +83,27 @@ public abstract class DomainSupport implements Domain, RDFObject {
 	private static final String PREFIX = "PREFIX purl:<http://persistent.name/rdf/2010/purl#>\n";
 	private static final String TARGET_BY_DATE = PREFIX
 			+ "SELECT REDUCED ?target\n"
-			+ "WHERE { ?purl purl:partOf $this; ?pred ?target .\n"
-			+ "?pred purl:rel ?rel .\n"
+			+ "WHERE { { ?purl purl:partOf $this }\n"
+			+ "UNION { ?purl a purl:Domain FILTER (?purl = $this) }\n"
+			+ "UNION { ?purl a purl:Origin FILTER (?purl= $this) }"
+			+ "?purl ?pred ?target . ?pred purl:rel ?rel .\n"
 			+ "OPTIONAL { ?purl purl:pattern ?pattern } FILTER (!bound(?pattern))\n"
 			+ "?target purl:last-resolved $date }";
 	private static final String TARGET_WITHOUT_DATE = PREFIX
 			+ "SELECT REDUCED ?target\n"
-			+ "WHERE { ?purl purl:partOf $this; ?pred ?target .\n"
-			+ "?pred purl:rel ?rel .\n"
+			+ "WHERE { { ?purl purl:partOf $this }\n"
+			+ "UNION { ?purl a purl:Domain FILTER (?purl = $this) }\n"
+			+ "UNION { ?purl a purl:Origin FILTER (?purl= $this) }"
+			+ "?purl ?pred ?target . ?pred purl:rel ?rel .\n"
 			+ "OPTIONAL { ?purl purl:pattern ?pattern } FILTER (!bound(?pattern))\n"
 			+ "OPTIONAL { ?target purl:last-resolved ?last }\n"
 			+ "FILTER (!bound(?last))}";
 	private static final String TARGET_BEFORE_DATE = PREFIX
 			+ "SELECT REDUCED ?target\n"
-			+ "WHERE { ?purl purl:partOf $this; ?pred ?target .\n"
-			+ "?pred purl:rel ?rel .\n"
+			+ "WHERE { { ?purl purl:partOf $this }\n"
+			+ "UNION { ?purl a purl:Domain FILTER (?purl = $this) }\n"
+			+ "UNION { ?purl a purl:Origin FILTER (?purl= $this) }"
+			+ "?purl ?pred ?target . ?pred purl:rel ?rel .\n"
 			+ "OPTIONAL { ?purl purl:pattern ?pattern } FILTER (!bound(?pattern))\n"
 			+ "?target purl:last-resolved ?last\n" + "FILTER (?last < $date) }";
 	private static final String VIA;

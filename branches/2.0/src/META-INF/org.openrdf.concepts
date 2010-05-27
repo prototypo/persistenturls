@@ -1,8 +1,6 @@
-name.persistent.concepts.DisabledPURL
+name.persistent.concepts.Disabled
 name.persistent.concepts.Domain
-name.persistent.concepts.MirroredResource
 name.persistent.concepts.Origin
-name.persistent.concepts.PartialPURL
 name.persistent.concepts.PURL
 name.persistent.concepts.Redirection
 name.persistent.concepts.RemoteGraph
@@ -10,6 +8,6 @@ name.persistent.concepts.RemoteResource
 name.persistent.concepts.Resolvable
 name.persistent.concepts.Server
 name.persistent.concepts.Service
-name.persistent.concepts.TombstonedPURL
+name.persistent.concepts.Tombstoned
 name.persistent.concepts.Unresolvable
-name.persistent.concepts.ZonedPURL
+name.persistent.concepts.Zoned

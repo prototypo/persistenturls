@@ -20,42 +20,34 @@
 <#PURL> a owl:Class;
 	rdfs:comment "A Persistent URL.".
 
-<#PartialPURL> a owl:Class;
-	rdfs:comment "A PURL that also matches subpaths, if this path ends in a '/'.";
+<#Domain> a owl:Class;
+	rdfs:comment "PURL with its own access control list and path endings with '/'.";
 	rdfs:subClassOf <#PURL>.
-
-<#ZonedPURL> a owl:Class;
-	rdfs:comment "A PURL that matches authorities with a DNS domain of this PURL's DNS host name.";
-	rdfs:subClassOf <#PURL>.
-
-<#DisabledPURL> a owl:Class;
-	rdfs:comment "Temporarily gone (404)";
-	rdfs:subClassOf <#PURL>.
-
-<#TombstonedPURL> a owl:Class;
-	rdfs:comment "Permanently gone (410)";
-	rdfs:subClassOf <#PURL>.
-
-<#Redirection> a owl:Class;
-	rdfs:comment "A URL that does not resolve directly and may not resolve at all.".
-
-<#Unresolvable> a owl:Class;
-	rdfs:comment "A URL that unexpectly does not resolve to anything meaningful or cannot be validated.".
-
-<#Server> a owl:Class;
-	rdfs:comment "The protocol, hostname, and port of a server with PURL domains and list of services can resolve PURLs. This IRI should have a path of '/'.".
 
 <#Origin> a owl:Class;
-	rdfs:comment "A common scheme and authority of a set of PURLs. This IRI should have a path of '/'.".
+	rdfs:comment "PURL with a path of '/'.";
+	rdfs:subClassOf <#Domain>.
 
-<#Domain> a owl:Class;
-	rdfs:comment "A prefix to a set of PURLs (endings with '/').".
+<#Zoned> a owl:Class;
+	rdfs:comment "URI optionally missing the bottom DNS domain level or node.".
+
+<#Disabled> a owl:Class;
+	rdfs:comment "Resource is temporarily gone (404)".
+
+<#Tombstoned> a owl:Class;
+	rdfs:comment "Resource is permanently gone (410)".
+
+<#Redirection> a owl:Class;
+	rdfs:comment "Resource does not resolve directly and may not resolve at all.".
+
+<#Unresolvable> a owl:Class;
+	rdfs:comment "Resource unexpectly does not resolve to anything meaningful or cannot be validated.".
 
 <#Service> a owl:Class;
 	rdfs:comment "The priority and weight of a server capable of resolving PURLs.".
 
-<#MirroredResource> a owl:Class;
-	rdfs:comment "Indicates that this origin or domain has been completely loaded.".
+<#Server> a owl:Class;
+	rdfs:comment "The protocol, hostname, and port of a server with PURL domains and list of services can resolve PURLs. This IRI should have a path of '/'.".
 
 <#RemoteResource> a owl:Class;
 	rdfs:comment "Indicates that this resource can be loaded using its definedBy target.".
@@ -100,14 +92,49 @@
 	purl:rel <#redirectsTo>.
 
 <#pattern> a owl:DatatypeProperty, owl:FunctionalProperty;
-	rdfs:comment "Regular Expression of source URI, used to populate target URI";
-	rdfs:domain <#PartialPURL>;
+	rdfs:comment "Regular Expression of a source URI, used to populate URI target templates";
+	rdfs:domain <#PURL>;
 	rdfs:range xsd:string.
 
 <#partOf> a owl:ObjectProperty, owl:FunctionalProperty;
-	rdfs:comment "Associates a PURL with a prefix domain.";
+	rdfs:comment "Assigns an access control list to this PURL.";
 	rdfs:domain <#PURL>;
 	rdfs:range <#Domain>.
+
+<#part> a owl:ObjectProperty;
+	rdfs:comment "Domains that must be mirrored with this origin.";
+	rdfs:domain <#Origin>;
+	rdfs:range <#Domain>.
+
+<#max-unresolved-days> a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:comment "Number of days between validating resolution of explicit PURL targets.";
+	rdfs:domain <#Domain>;
+	rdfs:range xsd:int.
+
+<#target-count> a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:comment "Number of explicit PURL targets in this Domain.";
+	rdfs:domain <#Domain>;
+	rdfs:range xsd:int.
+
+<#service> a owl:ObjectProperty;
+	rdfs:domain <#Domain>;
+	rdfs:range <#Service>.
+
+<#priority> a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:domain <#Service>;
+	rdfs:range xsd:byte.
+
+<#weight> a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:domain <#Service>;
+	rdfs:range xsd:byte.
+
+<#server> a owl:ObjectProperty, owl:FunctionalProperty;
+	rdfs:domain <#Service>;
+	rdfs:range <#Server>.
+
+<#serves> a owl:ObjectProperty;
+	rdfs:domain <#Server>;
+	rdfs:range <#Origin>.
 
 <#title> a owl:DatatypeProperty, owl:FunctionalProperty;
 	rdfs:comment "Placed on PURL targets for used with the Link header.";
@@ -129,43 +156,9 @@
 	rdfs:comment "The most recent day this URL was attempted to be resolved.";
 	rdfs:range xsd:date.
 
-<#serves> a owl:ObjectProperty;
-	rdfs:domain <#Server>;
-	rdfs:range <#Origin>.
-
-<#part> a owl:ObjectProperty;
-	rdfs:domain <#Origin>;
-	rdfs:range <#Domain>.
-
-<#max-unresolved-days> a owl:DatatypeProperty, owl:FunctionalProperty;
-	rdfs:comment "Number of days between validating resolution of explicit PURL targets.";
-	rdfs:domain <#Domain>;
-	rdfs:range xsd:int.
-
-<#target-count> a owl:DatatypeProperty, owl:FunctionalProperty;
-	rdfs:comment "Number of explicit PURL targets in this Domain.";
-	rdfs:domain <#Domain>;
-	rdfs:range xsd:int.
-
-<#service> a owl:ObjectProperty;
-	rdfs:domain <#Domain>;
-	rdfs:range <#Service>.
-
-<#server> a owl:ObjectProperty, owl:FunctionalProperty;
-	rdfs:domain <#Service>;
-	rdfs:range <#Server>.
-
-<#priority> a owl:DatatypeProperty, owl:FunctionalProperty;
-	rdfs:domain <#Service>;
-	rdfs:range xsd:byte.
-
-<#weight> a owl:DatatypeProperty, owl:FunctionalProperty;
-	rdfs:domain <#Service>;
-	rdfs:range xsd:byte.
-
 <#mirroredBy> a owl:ObjectProperty;
-	rdfs:comment "A URL that will resolve to an RDF description all the domains or purls associated with this resource.";
-	rdfs:domain [owl:unionOf (<#Origin> <#Domain>)];
+	rdfs:comment "A URL that will resolve to an RDF description of all domains and purls associated with this resource.";
+	rdfs:domain <#Domain>;
 	rdfs:range <#RemoteGraph>.
 
 <#definedBy> a owl:ObjectProperty;

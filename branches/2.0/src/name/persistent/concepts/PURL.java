@@ -12,6 +12,12 @@ import org.openrdf.repository.object.annotations.iri;
 
 @iri("http://persistent.name/rdf/2010/purl#PURL")
 public interface PURL extends Resolvable {
+	/** Regular Expression of source URI, used to populate target URI */
+	@iri("http://persistent.name/rdf/2010/purl#pattern")
+	String getPurlPattern();
+	/** Regular Expression of source URI, used to populate target URI */
+	@iri("http://persistent.name/rdf/2010/purl#pattern")
+	void setPurlPattern(String purlPattern);
 
 	/** Simple redirection (302) */
 	@iri("http://persistent.name/rdf/2010/purl#alternative")

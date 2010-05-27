@@ -18,7 +18,6 @@ import java.util.Set;
 import javax.tools.FileObject;
 
 import name.persistent.concepts.Domain;
-import name.persistent.concepts.MirroredResource;
 import name.persistent.concepts.Origin;
 import name.persistent.concepts.Server;
 
@@ -32,7 +31,6 @@ import org.openrdf.http.object.annotations.operation;
 import org.openrdf.http.object.annotations.parameter;
 import org.openrdf.http.object.annotations.type;
 import org.openrdf.http.object.exceptions.BadRequest;
-import org.openrdf.http.object.exceptions.NotFound;
 import org.openrdf.http.object.model.ReadableHttpEntityChannel;
 import org.openrdf.http.object.writers.AggregateWriter;
 import org.openrdf.model.Resource;
@@ -105,32 +103,42 @@ public abstract class ServerSupport extends MirrorSupport implements RDFObject,
 		private URI definedBy;
 		private String definedByGraph;
 
+		private RemoteResult(GraphQueryResult result, ValueFactory vf) {
+			this(result, vf, null, null);
+		}
+
 		private RemoteResult(GraphQueryResult result, ValueFactory vf, URI rel,
 				String definedByGraph) {
 			super(result);
+			assert vf != null;
 			this.vf = vf;
 			this.rel = rel;
+			this.definedByGraph = definedByGraph;
 			this.RemoteResource = vf.createURI(PURL, "RemoteResource");
 			this.definedBy = vf.createURI(PURL, "definedBy");
-			this.definedByGraph = definedByGraph;
 		}
 
 		public Statement next() throws QueryEvaluationException {
 			Statement st = super.next();
 			Value obj = st.getObject();
-			if (st.getPredicate().equals(rel) && obj instanceof URI) {
-				URI sobj = (URI) obj;
-				add(sobj, RDF.TYPE, RemoteResource);
-				try {
-					String uri = obj.stringValue();
-					String suffix = URLEncoder.encode(uri, "UTF-8");
-					URI graph = vf.createURI(definedByGraph + suffix);
-					add(sobj, definedBy, graph);
-				} catch (UnsupportedEncodingException e) {
-					throw new AssertionError(e);
-				}
+			if (st.getPredicate().equals(rel) && obj instanceof Resource) {
+				addRemoteResource((Resource) obj);
 			}
 			return st;
+		}
+
+		public void addRemoteResource(Resource subj) {
+			add(subj, RDF.TYPE, RemoteResource);
+			try {
+				if (definedByGraph != null && vf != null) {
+					String uri = subj.stringValue();
+					String suffix = URLEncoder.encode(uri, "UTF-8");
+					URI graph = vf.createURI(definedByGraph + suffix);
+					add(subj, definedBy, graph);
+				}
+			} catch (UnsupportedEncodingException e) {
+				throw new AssertionError(e);
+			}
 		}
 	}
 
@@ -139,9 +147,11 @@ public abstract class ServerSupport extends MirrorSupport implements RDFObject,
 	@type("message/x-response")
 	public HttpResponse get(@header("Accept") String accept) {
 		ProtocolVersion ver = new ProtocolVersion("HTTP", 1, 1);
-		HttpResponse resp = new BasicHttpResponse(ver, 307, "Temporary Redirect");
+		HttpResponse resp = new BasicHttpResponse(ver, 307,
+				"Temporary Redirect");
 		if (accept.contains("application/rdf+xml")) {
-			resp.setHeader("Location", getResource().stringValue() + "?listOrigins");
+			resp.setHeader("Location", getResource().stringValue()
+					+ "?listOrigins");
 		} else {
 			resp.setHeader("Location", getResource().stringValue() + "?view");
 		}
@@ -181,12 +191,10 @@ public abstract class ServerSupport extends MirrorSupport implements RDFObject,
 		URI part = vf.createURI(PURL, "part");
 		String desc = getResource().stringValue() + "?listServices&domain=";
 		RemoteResult r = new RemoteResult(listDomains(origin), vf, part, desc);
-		if (origin instanceof MirroredResource
-				|| !origin.getCalliMaintainers().isEmpty()) {
-			URI content = vf.createURI(PURL, "mirroredBy");
-			String domains = getResource().stringValue() + "?domainsOf&origin=";
-			r.add(target, content, vf.createURI(domains + enc(target)));
-		}
+		r.addRemoteResource(target); // origin is also a domain
+		URI mirroredBy = vf.createURI(PURL, "mirroredBy");
+		String domains = getResource().stringValue() + "?domainsOf&origin=";
+		r.add(target, mirroredBy, vf.createURI(domains + enc(target)));
 		return mirrorOf((RDFObject) origin, r);
 	}
 
@@ -204,15 +212,10 @@ public abstract class ServerSupport extends MirrorSupport implements RDFObject,
 		ObjectConnection con = getObjectConnection();
 		Resource target = ((RDFObject) domain).getResource();
 		ValueFactory vf = con.getValueFactory();
-		URI part = vf.createURI(PURL, "part");
-		String desc = getResource().stringValue() + "?listServices&domain=";
-		RemoteResult r = new RemoteResult(listServices(domain), vf, part, desc);
-		if (domain instanceof MirroredResource
-				|| !domain.getCalliMaintainers().isEmpty()) {
-			URI content = vf.createURI(PURL, "mirroredBy");
-			String purls = getResource().stringValue() + "?purlsOf&domain=";
-			r.add(target, content, vf.createURI(purls + enc(target)));
-		}
+		RemoteResult r = new RemoteResult(listServices(domain), vf);
+		URI mirroredBy = vf.createURI(PURL, "mirroredBy");
+		String purls = getResource().stringValue() + "?purlsOf&domain=";
+		r.add(target, mirroredBy, vf.createURI(purls + enc(target)));
 		return mirrorOf((RDFObject) domain, r);
 	}
 
@@ -227,10 +230,7 @@ public abstract class ServerSupport extends MirrorSupport implements RDFObject,
 			throw new BadRequest("Request Loop Detected");
 		if (origin == null)
 			throw new BadRequest("Missing origin");
-		if (origin instanceof MirroredResource
-				|| !origin.getCalliMaintainers().isEmpty())
-			return mirrorOf((RDFObject) origin, describeAllDomains(origin));
-		throw new NotFound("Mirror Not Available");
+		return mirrorOf((RDFObject) origin, describeAllDomains(origin));
 	}
 
 	/**
@@ -244,50 +244,52 @@ public abstract class ServerSupport extends MirrorSupport implements RDFObject,
 			throw new BadRequest("Request Loop Detected");
 		if (domain == null)
 			throw new BadRequest("Missing domain");
-		if (domain instanceof MirroredResource
-				|| !domain.getCalliMaintainers().isEmpty())
-			return mirrorOf((RDFObject) domain, describePURLs(domain));
-		throw new NotFound("Mirror Not Available");
+		return mirrorOf((RDFObject) domain, describePURLs(domain));
 	}
 
 	@sparql(PREFIX + "CONSTRUCT { $this a purl:Server; purl:serves ?origin }\n"
-			+ "WHERE { $this a purl:Server; purl:serves ?origin }")
+			+ "WHERE { $this purl:serves ?origin }")
 	protected abstract GraphQueryResult listOrigins();
 
 	@sparql(PREFIX + "CONSTRUCT { $origin a purl:Origin; purl:part ?domain }\n"
-			+ "WHERE { $origin a purl:Origin; purl:part ?domain }")
+			+ "WHERE { $origin purl:part ?domain }")
 	protected abstract GraphQueryResult listDomains(
 			@name("origin") Origin origin);
 
 	@sparql(PREFIX
-			+ "CONSTRUCT { $domain a purl:Domain; purl:service ?service .\n"
-			+ "?service a purl:Service; purl:server ?server .\n"
-			+ "?service purl:priority ?priority; purl:weight ?weight }\n"
-			+ "WHERE { $domain a purl:Domain; purl:service ?service .\n"
-			+ "?service a purl:Service; purl:server ?server\n"
-			+ "OPTIONAL { ?service purl:priority ?priority\n"
-			+ "OPTIONAL { ?service purl:weight ?weight }}}")
+			+ "CONSTRUCT { $domain a ?type; purl:service ?service .\n"
+			+ "?service a purl:Service; purl:server ?server; purl:priority ?priority; purl:weight ?weight }\n"
+			+ "WHERE { $domain a ?type; purl:service ?service .\n"
+			+ "?service purl:server ?server\n"
+			+ "FILTER (?type = purl:Domain || ?type = purl:Origin)\n"
+			+ "OPTIONAL { ?service purl:priority ?priority}\n"
+			+ "OPTIONAL { ?service purl:weight ?weight }}")
 	protected abstract GraphQueryResult listServices(
 			@name("domain") Domain domain);
 
 	@sparql(PREFIX
-			+ "CONSTRUCT { $origin a purl:Origin, purl:MirroredResource; purl:part ?domain .\n"
-			+ "?domain a purl:Domain; purl:service ?service .\n"
-			+ "?service a purl:Service; purl:server ?server .\n"
-			+ "?service purl:priority ?priority; purl:weight ?weight }\n"
-			+ "WHERE { $origin a purl:Origin; purl:part ?domain .\n"
-			+ "OPTIONAL { ?domain a purl:Domain; purl:service ?service .\n"
-			+ "?service a purl:Service; purl:server ?server\n"
-			+ "OPTIONAL { ?service purl:priority ?priority\n"
-			+ "OPTIONAL { ?service purl:weight ?weight }}}}")
+			+ "CONSTRUCT {\n"
+			+ "$origin a purl:Origin; purl:service ?osrv; purl:part ?domain .\n"
+			+ "?domain a purl:Domain; purl:service ?srv .\n"
+			+ "?osrv a purl:Service; purl:server ?oserver; purl:priority ?op; purl:weight ?ow .\n"
+			+ "?srv a purl:Service; purl:server ?server; purl:priority ?p; purl:weight ?w }\n"
+			+ "WHERE { $origin purl:service ?osrv .\n"
+			+ "?osrv purl:server ?oserver\n"
+			+ "OPTIONAL { ?osrv purl:priority ?op}\n"
+			+ "OPTIONAL { ?osrv purl:weight ?ow }\n"
+			+ "OPTIONAL { $origin purl:part ?domain .\n"
+			+ "?domain purl:service ?srv .\n" + "?srv purl:server ?server\n"
+			+ "OPTIONAL { ?srv purl:priority ?p}\n"
+			+ "OPTIONAL { ?srv purl:weight ?w }}}")
 	protected abstract GraphQueryResult describeAllDomains(
 			@name("origin") Origin origin);
 
 	@sparql(PREFIX
-			+ "CONSTRUCT { $domain a purl:Domain, purl:MirroredResource .\n"
+			+ "CONSTRUCT { $domain a ?dtype; purl:pattern ?dpattern; ?dpred ?dhref .\n"
 			+ "?purl purl:partOf $domain; a ?type; purl:pattern ?pattern; ?pred ?href .\n"
-			+ "?pred purl:rel ?rel}\n"
-			+ "WHERE { ?purl purl:partOf $domain; a ?type\n"
+			+ "?dpred purl:rel ?drel . ?pred purl:rel ?rel}\n"
+			+ "WHERE { $domain a ?dtype .\n"
+			+ "?purl purl:partOf $domain; a ?type\n"
 			+ "OPTIONAL { ?purl purl:pattern ?pattern }\n"
 			+ "OPTIONAL { ?purl ?pred ?href . ?pred purl:rel ?rel }}")
 	protected abstract GraphQueryResult describePURLs(

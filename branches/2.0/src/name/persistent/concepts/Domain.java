@@ -17,7 +17,7 @@ import org.openrdf.repository.object.annotations.iri;
 
 /** A prefix to a set of PURLs (endings with '/') that are administrated together. */
 @iri("http://persistent.name/rdf/2010/purl#Domain")
-public interface Domain extends DomainOrOrigin {
+public interface Domain extends PURL {
 
 	/** Number of days between validating resolution of explicit PURL targets. */
 	@iri("http://persistent.name/rdf/2010/purl#max-unresolved-days")

@@ -5,11 +5,11 @@ import java.util.Set;
 
 import junit.framework.TestCase;
 import name.persistent.concepts.PURL;
-import name.persistent.concepts.PartialPURL;
 import name.persistent.concepts.Resolvable;
-import name.persistent.concepts.ZonedPURL;
+import name.persistent.concepts.Zoned;
 
 import org.apache.http.HttpResponse;
+import org.openrdf.http.object.exceptions.InternalServerError;
 import org.openrdf.http.object.exceptions.NotFound;
 import org.openrdf.model.URI;
 import org.openrdf.model.ValueFactory;
@@ -44,8 +44,7 @@ public class PartialPURLTest extends TestCase {
 	}
 
 	public void testRegex() throws Exception {
-		PartialPURL purl = con.addDesignation(con.getObject(PURL0),
-				PartialPURL.class);
+		PURL purl = con.addDesignation(con.getObject(PURL0), PURL.class);
 		purl.getPurlAlternatives().add(con.getObject("http://docs.$1/pages/$2.html"));
 		purl.setPurlPattern("http://test.([^/]*)/(.*)");
 		HttpResponse resp = resolvePURL("http://test.persistent.name/test/test0/item");
@@ -55,8 +54,41 @@ public class PartialPURLTest extends TestCase {
 				resp.getFirstHeader("Location").getValue());
 	}
 
+	public void testRegexWithBadTemplate() throws Exception {
+		PURL purl = con.addDesignation(con.getObject(PURL0), PURL.class);
+		purl.getPurlAlternatives().add(con.getObject("http://docs.$1/pages/$2/$3.html"));
+		purl.setPurlPattern("http://test.([^/]*)/(.*)");
+		HttpResponse resp = resolvePURL("http://test.persistent.name/test/test0/item");
+		assertEquals(302, resp.getStatusLine().getStatusCode());
+		assertEquals(1, resp.getHeaders("Location").length);
+		assertEquals("http://docs.persistent.name/pages/test/test0/item/$3.html",
+				resp.getFirstHeader("Location").getValue());
+	}
+
+	public void testInvalidRegex() throws Exception {
+		PURL purl = con.addDesignation(con.getObject(PURL0), PURL.class);
+		purl.getPurlAlternatives().add(con.getObject("http://docs.$1/pages/$2.html"));
+		purl.setPurlPattern("http://test.([^/]*/(.*)");
+		try {
+			resolvePURL("http://test.persistent.name/test/test0/item");
+			fail();
+		} catch (InternalServerError e) {
+			// invalid regex
+		}
+	}
+
+	public void testBadRegex() throws Exception {
+		PURL purl = con.addDesignation(con.getObject(PURL0), PURL.class);
+		purl.getPurlAlternatives().add(con.getObject("http://docs.$1/pages/$2.html"));
+		purl.setPurlPattern("ftp://test.([^/]*)/(.*)");
+		HttpResponse resp = resolvePURL("http://test.persistent.name/test/test0/item");
+		assertEquals(302, resp.getStatusLine().getStatusCode());
+		assertEquals(1, resp.getHeaders("Location").length);
+		assertEquals("http://docs.$1/pages/$2.html", resp.getFirstHeader("Location").getValue());
+	}
+
 	public void testPathFragment() throws Exception {
-		PURL purl = con.addDesignation(con.getObject(PURL0), PartialPURL.class);
+		PURL purl = con.addDesignation(con.getObject(PURL0), PURL.class);
 		purl.getPurlAlternatives().add(con.getObject(PURL1));
 		HttpResponse resp = resolvePURL("http://test.persistent.name/test/test0/item");
 		assertEquals(302, resp.getStatusLine().getStatusCode());
@@ -65,7 +97,8 @@ public class PartialPURLTest extends TestCase {
 	}
 
 	public void testZonedPURL() throws Exception {
-		PURL purl = con.addDesignation(con.getObject(PURL0), ZonedPURL.class);
+		PURL purl = con.addDesignation(con.getObject(PURL0), PURL.class);
+		purl = (PURL) con.addDesignation(con.getObject(PURL0), Zoned.class);
 		purl.getPurlAlternatives().add(con.getObject(PURL1));
 		HttpResponse resp = resolvePURL("http://my.test.persistent.name/test/test0/");
 		assertEquals(302, resp.getStatusLine().getStatusCode());
@@ -74,8 +107,9 @@ public class PartialPURLTest extends TestCase {
 	}
 
 	public void testZonedPartialPURL() throws Exception {
-		PURL purl = con.addDesignation(con.getObject(PURL0), ZonedPURL.class);
-		purl = con.addDesignation(purl, PartialPURL.class);
+		PURL purl = con.addDesignation(con.getObject(PURL0), PURL.class);
+		purl = (PURL) con.addDesignation(con.getObject(PURL0), Zoned.class);
+		purl = con.addDesignation(purl, PURL.class);
 		purl.getPurlAlternatives().add(con.getObject(PURL1));
 		HttpResponse resp = resolvePURL("http://my.test.persistent.name/test/test0/item");
 		assertEquals(302, resp.getStatusLine().getStatusCode());
@@ -84,8 +118,8 @@ public class PartialPURLTest extends TestCase {
 	}
 
 	public void testZonedPartialPatternPURL() throws Exception {
-		PartialPURL purl = con.addDesignation(con.getObject(PURL0), PartialPURL.class);
-		purl = (PartialPURL) con.addDesignation(purl, ZonedPURL.class);
+		PURL purl = con.addDesignation(con.getObject(PURL0), PURL.class);
+		purl = (PURL) con.addDesignation(con.getObject(PURL0), Zoned.class);
 		purl.getPurlAlternatives().add(con.getObject("http://docs.$2/pages/$1/$3.html"));
 		purl.setPurlPattern("http://([^.]*)\\.test\\.([^/]*)/.*/([^/]*)");
 		HttpResponse resp = resolvePURL("http://my.test.persistent.name/test/test0/item");

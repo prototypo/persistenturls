@@ -85,7 +85,7 @@ public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 			hostname = "localhost";
 		}
 	}
-	private static final String VIA = PROTOCOL + " " + hostname;
+	public static String VIA = PROTOCOL + " " + hostname;
 
 	public static void canacelAllValidation() throws InterruptedException {
 		List<Refresher> list;

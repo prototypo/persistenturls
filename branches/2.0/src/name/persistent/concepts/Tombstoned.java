@@ -8,7 +8,7 @@ package name.persistent.concepts;
 
 import org.openrdf.repository.object.annotations.iri;
 
-/** A PURL that matches authorities with a DNS domain of this PURL's DNS host name. */
-@iri("http://persistent.name/rdf/2010/purl#ZonedPURL")
-public interface ZonedPURL extends PURL {
+/** Permanently gone (410) */
+@iri("http://persistent.name/rdf/2010/purl#Tombstoned")
+public interface Tombstoned extends Resolvable {
 }

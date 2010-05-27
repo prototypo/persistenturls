@@ -11,7 +11,8 @@ import java.util.List;
 import java.util.Set;
 
 import junit.framework.TestCase;
-import name.persistent.behaviours.PartialPURLSupport;
+import name.persistent.behaviours.RemoteGraphSupport;
+import name.persistent.behaviours.ServiceRecordSupport;
 import name.persistent.concepts.Domain;
 import name.persistent.concepts.Origin;
 import name.persistent.concepts.PURL;
@@ -65,12 +66,12 @@ public class MirrorPURLTest extends TestCase {
 		}
 	}
 
-	public static abstract class SRVRecordTester extends PartialPURLSupport
+	public static abstract class SRVRecordTester extends ServiceRecordSupport
 			implements Resolvable {
 		public static int port = 8080;
 
 		@Override
-		protected List<InetSocketAddress> getOriginServices(boolean useBlackList)
+		public List<InetSocketAddress> getOriginServices(boolean useBlackList)
 				throws Exception {
 			return Collections.singletonList(new InetSocketAddress("localhost",
 					port));
@@ -133,6 +134,7 @@ public class MirrorPURLTest extends TestCase {
 
 	@Override
 	public void setUp() throws Exception {
+		RemoteGraphSupport.VIA = "1.1 test";
 		HTTPObjectClient.getInstance().resetCache();
 		config.addConcept(PURLServer.class);
 		config.addBehaviour(SRVRecordTester.class);
@@ -162,7 +164,6 @@ public class MirrorPURLTest extends TestCase {
 		Origin origin = con.addDesignation(con.getObject(ORIGIN), Origin.class);
 		root.getPurlServes().add(origin);
 		Domain domain = con.addDesignation(con.getObject(DOMAIN), Domain.class);
-		domain.getCalliMaintainers().add(con.getObject("urn:test:user"));
 		Service service = con.addDesignation(of.createObject(), Service.class);
 		PURL purl = con.addDesignation(con.getObject(PURL0), PURL.class);
 		purl.setPurlRenamedTo(con.getObject(PURL1));
@@ -263,6 +264,22 @@ public class MirrorPURLTest extends TestCase {
 		while (origins.hasNext()) {
 			Statement st = origins.next();
 			if (st.getSubject().stringValue().equals(ORIGIN)
+					&& st.getPredicate().equals(RDF.TYPE)
+					&& st.getObject().stringValue().endsWith("Origin")) {
+				set.add(st);
+			} else if (st.getSubject().stringValue().equals(ORIGIN)
+					&& st.getPredicate().equals(RDF.TYPE)
+					&& st.getObject().stringValue().endsWith("RemoteResource")) {
+				remote = true;
+				set.add(st);
+			} else if (st.getSubject().stringValue().equals(ORIGIN)
+					&& st.getPredicate().getLocalName().equals("definedBy")) {
+				defined = true;
+				set.add(st);
+			} else if (st.getSubject().stringValue().equals(ORIGIN)
+					&& st.getPredicate().getLocalName().equals("mirroredBy")) {
+				set.add(st);
+			} else if (st.getSubject().stringValue().equals(ORIGIN)
 					&& st.getPredicate().getLocalName().equals("part")
 					&& st.getObject().stringValue().equals(DOMAIN)) {
 				found = true;
@@ -276,10 +293,6 @@ public class MirrorPURLTest extends TestCase {
 					&& st.getPredicate().getLocalName().equals("definedBy")) {
 				defined = true;
 				set.add(st);
-			} else if (st.getSubject().stringValue().equals(ORIGIN)
-					&& st.getPredicate().equals(RDF.TYPE)
-					&& st.getObject().stringValue().endsWith("Origin")) {
-				set.add(st);
 			} else {
 				assertEquals(null, st);
 			}
@@ -288,7 +301,7 @@ public class MirrorPURLTest extends TestCase {
 		assertTrue(found);
 		assertTrue(remote);
 		assertTrue(defined);
-		assertEquals(4, set.size());
+		assertEquals(7, set.size());
 	}
 
 }

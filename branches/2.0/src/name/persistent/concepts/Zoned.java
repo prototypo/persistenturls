@@ -8,7 +8,7 @@ package name.persistent.concepts;
 
 import org.openrdf.repository.object.annotations.iri;
 
-/** Permanently gone (410) */
-@iri("http://persistent.name/rdf/2010/purl#TombstonedPURL")
-public interface TombstonedPURL extends PURL {
+/** URI optionally missing the bottom DNS domain level or node. */
+@iri("http://persistent.name/rdf/2010/purl#Zoned")
+public interface Zoned extends Resolvable {
 }

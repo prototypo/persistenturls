@@ -15,8 +15,8 @@ import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 import junit.framework.TestCase;
-import name.persistent.behaviours.PartialPURLSupport;
 import name.persistent.behaviours.RemoteGraphSupport;
+import name.persistent.behaviours.ServiceRecordSupport;
 import name.persistent.concepts.Domain;
 import name.persistent.concepts.Origin;
 import name.persistent.concepts.PURL;
@@ -33,6 +33,7 @@ import org.openrdf.http.object.annotations.method;
 import org.openrdf.http.object.annotations.parameter;
 import org.openrdf.http.object.annotations.type;
 import org.openrdf.http.object.client.HTTPObjectClient;
+import org.openrdf.http.object.exceptions.BadGateway;
 import org.openrdf.http.object.exceptions.NotFound;
 import org.openrdf.model.URI;
 import org.openrdf.model.ValueFactory;
@@ -86,12 +87,12 @@ public class ProxyPURLTest extends TestCase {
 		}
 	}
 
-	public static abstract class SRVRecordTester extends PartialPURLSupport
+	public static abstract class SRVRecordTester extends ServiceRecordSupport
 			implements Resolvable {
 		public static int port = 8080;
 
 		@Override
-		protected List<InetSocketAddress> getOriginServices(boolean useBlackList)
+		public List<InetSocketAddress> getOriginServices(boolean useBlackList)
 				throws Exception {
 			return Collections.singletonList(new InetSocketAddress("localhost",
 					port));
@@ -116,6 +117,7 @@ public class ProxyPURLTest extends TestCase {
 
 	@Override
 	public void setUp() throws Exception {
+		RemoteGraphSupport.VIA = "1.1 test";
 		HTTPObjectClient.getInstance().resetCache();
 		config.addConcept(PURLServer.class);
 		repository1 = createRepository();
@@ -171,13 +173,17 @@ public class ProxyPURLTest extends TestCase {
 		Origin origin = con.addDesignation(con.getObject(ORIGIN), Origin.class);
 		origin.getPurlParts().add(domain);
 		root.getPurlServes().add(origin);
-		HttpResponse resp = resolvePURL(PURL0);
-		HttpEntity entity = resp.getEntity();
-		if (entity != null) {
-			entity.consumeContent();
+		try {
+			HttpResponse resp = resolvePURL(PURL0);
+			HttpEntity entity = resp.getEntity();
+			if (entity != null) {
+				entity.consumeContent();
+			}
+			assertEquals(502, resp.getStatusLine().getStatusCode());
+			assertEquals(0, resp.getHeaders("Location").length);
+		} catch (BadGateway e) {
+			// exception is okay too
 		}
-		assertEquals(502, resp.getStatusLine().getStatusCode());
-		assertEquals(0, resp.getHeaders("Location").length);
 	}
 
 	public void testProxy() throws Exception {

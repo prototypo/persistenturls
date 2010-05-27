@@ -6,10 +6,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import junit.framework.TestCase;
-
-import name.persistent.concepts.DisabledPURL;
+import name.persistent.concepts.Disabled;
 import name.persistent.concepts.PURL;
-import name.persistent.concepts.TombstonedPURL;
+import name.persistent.concepts.Tombstoned;
 import name.persistent.concepts.Unresolvable;
 
 import org.apache.http.Header;
@@ -110,7 +109,7 @@ public class PURLTest extends TestCase {
 	public void testDisabled() throws Exception {
 		PURL purl = con.addDesignation(con.getObject(PURL0), PURL.class);
 		purl.getPurlAlternatives().add(con.getObject(PURL1));
-		purl = con.addDesignation(con.getObject(PURL0), DisabledPURL.class);
+		purl = (PURL) con.addDesignation(con.getObject(PURL0), Disabled.class);
 		HttpResponse resp = purl.resolvePURL(purl.toString(), null, "*/*", "*", via);
 		assertEquals(404, resp.getStatusLine().getStatusCode());
 		assertEquals(0, resp.getHeaders("Location").length);
@@ -119,7 +118,7 @@ public class PURLTest extends TestCase {
 	public void testTombstoned() throws Exception {
 		PURL purl = con.addDesignation(con.getObject(PURL0), PURL.class);
 		purl.getPurlAlternatives().add(con.getObject(PURL1));
-		purl = con.addDesignation(con.getObject(PURL0), TombstonedPURL.class);
+		purl = (PURL) con.addDesignation(con.getObject(PURL0), Tombstoned.class);
 		HttpResponse resp = purl.resolvePURL(purl.toString(), null, "*/*", "*", via);
 		assertEquals(410, resp.getStatusLine().getStatusCode());
 		assertEquals(0, resp.getHeaders("Location").length);
