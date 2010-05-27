@@ -115,13 +115,14 @@ purl:purl-search rdfs:subClassOf purl:search;
 	http:cache-control "must-reevaluate";
 	http:transform <purl-search-xsl>;
 	obj:sparql """
-		SELECT DISTINCT ?uri ?label ?unresolvable
+		SELECT DISTINCT ?uri ?label ?redirection ?unresolvable
 		WHERE {
 			{ ?uri a purl:PURL }
 			UNION { ?uri a purl:PartialPURL }
 			UNION { ?uri a purl:ZonedPURL }
 			UNION { ?uri a purl:DisabledPURL }
 			UNION { ?uri a purl:TombstonedPURL }
+			OPTIONAL { ?uri ?redirection [a purl:Redirection] }
 			OPTIONAL { ?uri ?unresolvable [a purl:Unresolvable] }
 			?uri rdfs:label ?label; calli:soundex $soundex
 			FILTER (regex(?label, $regex, "i"))
@@ -135,13 +136,14 @@ purl:target-search rdfs:subClassOf purl:search;
 	http:cache-control "must-reevaluate";
 	http:transform <purl-search-xsl>;
 	obj:sparql """
-		SELECT DISTINCT ?uri ?label ?unresolvable
+		SELECT DISTINCT ?uri ?label ?redirection ?unresolvable
 		WHERE {
 			{ ?uri a purl:PURL }
 			UNION { ?uri a purl:PartialPURL }
 			UNION { ?uri a purl:ZonedPURL }
 			UNION { ?uri a purl:DisabledPURL }
 			UNION { ?uri a purl:TombstonedPURL }
+			OPTIONAL { ?uri ?redirection [a purl:Redirection] }
 			OPTIONAL { ?uri ?unresolvable [a purl:Unresolvable] }
 			?uri ?rel $target
 			OPTIONAL { ?uri rdfs:label ?label }

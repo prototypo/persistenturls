@@ -79,7 +79,11 @@ a:visited {
     color: #059;
 }
 
-a.broken {
+a.redirection {
+    color: purple;
+}
+
+a.unresolvable {
     color: red;
 }
 

@@ -53,7 +53,7 @@ calli:put-graph-type a owl:DatatypeProperty; a owl:FunctionalProperty;
 calli:put-graph-body a owl:ObjectProperty; a owl:FunctionalProperty;
 	rdfs:domain calli:put-graph;
 	rdfs:range <java:java.io.InputStream>;
-	http:type "application/rdf+xml", "application/x-turtle";
+	http:type "application/rdf+xml", "text/turtle", "application/x-turtle";
 	obj:name "body".
 
 calli:delete-graph rdfs:subClassOf obj:Message;

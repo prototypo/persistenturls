@@ -4,6 +4,7 @@ name.persistent.concepts.MirroredResource
 name.persistent.concepts.Origin
 name.persistent.concepts.PartialPURL
 name.persistent.concepts.PURL
+name.persistent.concepts.Redirection
 name.persistent.concepts.RemoteGraph
 name.persistent.concepts.RemoteResource
 name.persistent.concepts.Resolvable

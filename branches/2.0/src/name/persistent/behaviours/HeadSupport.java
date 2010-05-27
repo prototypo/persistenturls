@@ -9,6 +9,7 @@ import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import name.persistent.concepts.Redirection;
 import name.persistent.concepts.Resolvable;
 import name.persistent.concepts.Unresolvable;
 
@@ -28,10 +29,12 @@ import org.openrdf.model.ValueFactory;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.object.ObjectConnection;
 import org.openrdf.repository.object.ObjectFactory;
+import org.openrdf.repository.object.ObjectRepository;
 import org.openrdf.repository.object.RDFObject;
 
 public abstract class HeadSupport implements RDFObject, Resolvable {
-	private static final ProtocolVersion HTTP11 = new ProtocolVersion("HTTP", 1, 1);
+	private static final ProtocolVersion HTTP11 = new ProtocolVersion("HTTP",
+			1, 1);
 	private static final String NS = "http://persistent.name/rdf/2010/purl#";
 
 	@operation("head")
@@ -42,20 +45,7 @@ public abstract class HeadSupport implements RDFObject, Resolvable {
 		Resource subj = getResource();
 		XMLGregorianCalendar today = today();
 		HttpResponse resp = resolve(subj);
-		ObjectConnection con = getObjectConnection();
-		boolean autoCommit = con.isAutoCommit();
-		con.setAutoCommit(false); // begin
-		try {
-			markResolved(con, subj, resp.getStatusLine().getStatusCode(), today);
-			if (autoCommit) {
-				con.setAutoCommit(true); // commit
-			}
-		} finally {
-			if (autoCommit && !con.isAutoCommit()) {
-				con.rollback();
-				con.setAutoCommit(false);
-			}
-		}
+		markResolved(subj, resp.getStatusLine().getStatusCode(), today);
 		return resp;
 	}
 
@@ -82,19 +72,34 @@ public abstract class HeadSupport implements RDFObject, Resolvable {
 		}
 	}
 
-	private void markResolved(ObjectConnection con, Resource subj, int code,
+	private void markResolved(Resource subj, int code,
 			XMLGregorianCalendar today) throws RepositoryException {
-		ObjectFactory of = con.getObjectFactory();
-		ValueFactory vf = con.getValueFactory();
-		URI lastResolved = vf.createURI(NS, "last-resolved");
-		Literal now = vf.createLiteral(today);
-		con.remove(subj, lastResolved, null);
-		if (code < 400) {
-			con.removeDesignation(of.createObject(subj), Unresolvable.class);
-		}
-		con.add(subj, lastResolved, now);
-		if (code >= 400) {
-			con.addDesignation(of.createObject(subj), Unresolvable.class);
+		ObjectRepository repository = getObjectConnection().getRepository();
+		ObjectConnection con = repository.getConnection();
+		try {
+			con.setAutoCommit(false); // begin
+			ObjectFactory of = con.getObjectFactory();
+			RDFObject target = of.createObject(subj);
+			ValueFactory vf = con.getValueFactory();
+			URI lastResolved = vf.createURI(NS, "last-resolved");
+			Literal now = vf.createLiteral(today);
+			con.remove(subj, lastResolved, null);
+			if (code < 400) {
+				con.removeDesignation(target, Unresolvable.class);
+			}
+			if (code < 300) {
+				con.removeDesignation(target, Redirection.class);
+			}
+			if (code >= 400) {
+				con.addDesignation(target, Unresolvable.class);
+			} else if (code >= 300) {
+				con.addDesignation(target, Redirection.class);
+			}
+			con.add(subj, lastResolved, now);
+			con.setAutoCommit(true); // commit
+		} finally {
+			con.rollback();
+			con.close();
 		}
 	}
 }

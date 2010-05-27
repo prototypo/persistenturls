@@ -27,8 +27,8 @@ calli:describe rdfs:subClassOf obj:Message;
 	http:title "RDF Describe";
 	http:rel "describedby";
 	http:operation "describe";
-	http:type "application/rdf+xml", "application/x-turtle", "text/rdf+n3",
-			"application/trix", "application/x-trig";
+	http:type "application/rdf+xml", "text/turtle", "application/x-turtle",
+			"text/rdf+n3", "application/trix", "application/x-trig";
 	obj:java """
 		if (getObjectConnection().hasStatement(getResource(), null, null))
 			return this;

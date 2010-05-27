@@ -36,6 +36,9 @@
 	rdfs:comment "Permanently gone (410)";
 	rdfs:subClassOf <#PURL>.
 
+<#Redirection> a owl:Class;
+	rdfs:comment "A URL that does not resolve directly and may not resolve at all.".
+
 <#Unresolvable> a owl:Class;
 	rdfs:comment "A URL that unexpectly does not resolve to anything meaningful or cannot be validated.".
 

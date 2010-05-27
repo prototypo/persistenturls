@@ -29,8 +29,11 @@
 			<a href="{sparql:binding[@name='uri']/sparql:uri}?view">
 				<xsl:attribute name="class">
 					<xsl:text>diverted</xsl:text>
+					<xsl:if test="sparql:binding[@name='redirection']">
+						<xsl:text> redirection</xsl:text>
+					</xsl:if>
 					<xsl:if test="sparql:binding[@name='unresolvable']">
-						<xsl:text> broken</xsl:text>
+						<xsl:text> unresolvable</xsl:text>
 					</xsl:if>
 				</xsl:attribute>
 				<xsl:apply-templates select="sparql:binding[@name='label']/*" />

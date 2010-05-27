@@ -38,6 +38,7 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import name.persistent.concepts.Domain;
+import name.persistent.concepts.Redirection;
 import name.persistent.concepts.Service;
 import name.persistent.concepts.Unresolvable;
 
@@ -388,12 +389,19 @@ public abstract class DomainSupport implements Domain, RDFObject {
 					con.removeDesignation(of.createObject(e.getKey()),
 							Unresolvable.class);
 				}
+				if (e.getValue() < 300) {
+					con.removeDesignation(of.createObject(e.getKey()),
+							Redirection.class);
+				}
 			}
 			for (Entry<URI, Integer> e : codes.entrySet()) {
 				con.add(e.getKey(), lastResolved, now);
 				if (e.getValue() >= 400) {
 					con.addDesignation(of.createObject(e.getKey()),
 							Unresolvable.class);
+				} else if (e.getValue() >= 300) {
+					con.addDesignation(of.createObject(e.getKey()),
+							Redirection.class);
 				}
 			}
 			if (autoCommit) {
