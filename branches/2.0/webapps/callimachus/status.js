@@ -11,13 +11,22 @@ function showSuccess() {
 	$("#message").empty()
 }
 
-function showError(text) {
+function showError(text, detail) {
 	var msg = $("#message")
 	if (msg.size()) {
 		msg.empty()
 		msg.text(text)
 		msg.addClass("error")
 		msg.focus()
+		if (detail) {
+			var pre = $("<pre/>")
+			pre.text(detail)
+			pre.hide()
+			msg.append(pre)
+			msg.click(function() {
+				pre.toggle()
+			})
+		}
 	} else {
 		alert(text);
 	}

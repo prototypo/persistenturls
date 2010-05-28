@@ -119,7 +119,7 @@ function postData(url, type, data, callback) {
 		callback(data, textStatus, xhr)
 	}, error: function(xhr, textStatus, errorThrown) {
 		if (window.showError) {
-			showError(xhr.statusText ? xhr.statusText : errorThrown ? errorThrown : textStatus)
+			showError(xhr.statusText ? xhr.statusText : errorThrown ? errorThrown : textStatus, xhr.responseText)
 		}
 	}})
 }

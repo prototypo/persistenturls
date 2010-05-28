@@ -35,7 +35,7 @@ function get(url, callback) {
 		}
 	}, error: function(xhr, textStatus, errorThrown) {
 		if (window.showError) {
-			showError(xhr.statusText ? xhr.statusText : errorThrown ? errorThrown : textStatus)
+			showError(xhr.statusText ? xhr.statusText : errorThrown ? errorThrown : textStatus, xhr.responseText)
 		}
 	}})
 }
