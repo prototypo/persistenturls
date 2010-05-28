@@ -40,7 +40,7 @@
 # See http://java.sun.com/products/javamail/javadocs/com/sun/mail/smtp/package-summary.html
 #
 <mail.properties> a purl:MailProperties;
-	calli:maintainer </data/group/admin>.
+	calli:maintainer </data/user/admin>.
 
 purl:MailProperties rdfs:subClassOf <urn:mimetype:application/x-properties>.
 

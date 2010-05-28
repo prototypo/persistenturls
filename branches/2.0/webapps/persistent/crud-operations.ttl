@@ -12,7 +12,7 @@
 ################################
 
 </> a purl:Server;
-	calli:maintainer </data/group/admin>.
+	calli:maintainer </data/user/admin>.
 
 purl:Server rdfs:subClassOf calli:Viewable, calli:Editable;
 	calli:view <server/view.xml>;
@@ -23,8 +23,7 @@ purl:Server rdfs:subClassOf calli:Viewable, calli:Editable;
 ################################
 
 <user/template> a purl:UserTemplate;
-	calli:curator </data/group/admin>;
-	calli:maintainer </data/group/admin>.
+	calli:curator </data/user/admin>.
 
 purl:UserTemplate rdfs:subClassOf calli:Copyable;
 	calli:withNamespace </data/user/>;
@@ -36,29 +35,11 @@ purl:User rdfs:subClassOf calli:Viewable, calli:Editable, calli:Deletable;
 	calli:delete <user/delete.xml>.
 
 ################################
-# Group
-################################
-
-<group/template> a purl:GroupTemplate;
-	calli:curator </data/group/admin>;
-	calli:maintainer </data/group/admin>.
-
-purl:GroupTemplate rdfs:subClassOf calli:Copyable;
-	calli:withNamespace </data/group/>;
-	calli:copy <group/create.xml>.
-
-calli:Group rdfs:subClassOf calli:Viewable, calli:Editable, calli:Deletable;
-	calli:view <group/view.xml>;
-	calli:edit <group/edit.xml>;
-	calli:delete <group/delete.xml>.
-
-################################
 # RemoteGraph
 ################################
 
 <mirror/template> a purl:MirrorTemplate;
-	calli:curator </data/group/admin>;
-	calli:maintainer </data/group/admin>.
+	calli:curator </data/user/admin>.
 
 purl:MirrorTemplate rdfs:subClassOf calli:Copyable;
 	calli:copy <mirror/create.xml>.
@@ -81,8 +62,7 @@ purl:post-delete-graph owl:intersectionOf (calli:post-delete
 ################################
 
 <origin/template> a purl:OriginTemplate;
-	calli:curator </data/group/admin>;
-	calli:maintainer </data/group/admin>.
+	calli:curator </data/user/admin>.
 
 purl:OriginTemplate rdfs:subClassOf calli:Copyable;
 	calli:copy <origin/create.xml>.

@@ -48,7 +48,7 @@ purl:post-register rdfs:subClassOf obj:Message;
 	http:method "POST";
 	http:operation "register";
 	http:type "message/x-response";
-	obj:imports </data/group/public>;
+	obj:imports </persistent/authority>;
 	obj:imports <user/password-sent.xml>;
 	obj:imports <java:org.apache.commons.codec.digest.DigestUtils>;
 	obj:imports <java:org.openrdf.http.object.exceptions.BadRequest>;
@@ -65,9 +65,9 @@ purl:post-register rdfs:subClassOf obj:Message;
 		if (calliCurators) {
 			user.calliMaintainers.addAll(calliCurators)
 		} else {
-			user.calliMaintainers.addAll(findScribe(copy))
+			user.calliMaintainers.addAll(findScribe(user))
 		}
-		_public.calliMembers.add(user)
+		authority.calliCredentials.add(user)
 		def ver = new ProtocolVersion("HTTP", 1, 1)
 		def resp = new BasicHttpResponse(ver, 202, "Accepted")
 		resp.setHeader("Location", passwordSentXml.toString() + "?construct")

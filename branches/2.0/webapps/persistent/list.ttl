@@ -86,31 +86,6 @@ purl:list-purls-for-user rdfs:subClassOf obj:Message;
 		ORDER BY ?label ?uri
 	""".
 
-purl:list-purls-for-group rdfs:subClassOf obj:Message;
-	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom calli:Group];
-	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
-		owl:allValuesFrom obj:TupleResult];
-	http:operation "purls";
-	http:realm <authority>;
-	http:type "application/sparql-results+xml";
-	http:cache-control "must-reevaluate";
-	http:transform <purl-search-xsl>;
-	obj:sparql """
-		SELECT DISTINCT ?uri ?label ?unresolvable
-		WHERE {
-			{ ?uri a purl:PURL }
-			UNION { ?uri a purl:PartialPURL }
-			UNION { ?uri a purl:ZonedPURL }
-			UNION { ?uri a purl:DisabledPURL }
-			UNION { ?uri a purl:TombstonedPURL }
-			OPTIONAL { ?uri ?unresolvable [a purl:Unresolvable] }
-			OPTIONAL { ?uri rdfs:label ?label }
-			?uri calli:maintainer $this
-		}
-		ORDER BY ?label ?uri
-	""".
-
 purl:list-domains-for-user rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom purl:User];
@@ -132,28 +107,6 @@ purl:list-domains-for-user rdfs:subClassOf obj:Message;
 			UNION { ?uri calli:curator [calli:member $this] }
 			UNION { ?uri calli:scribe $this }
 			UNION { ?uri calli:scribe [calli:member $this] }
-		}
-		ORDER BY ?label ?uri
-	""".
-
-purl:list-domains-for-group rdfs:subClassOf obj:Message;
-	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom calli:Group];
-	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
-		owl:allValuesFrom obj:TupleResult];
-	http:operation "domains";
-	http:realm <authority>;
-	http:type "application/sparql-results+xml";
-	http:cache-control "must-reevaluate";
-	http:transform <domain-search-xsl>;
-	obj:sparql """
-		SELECT DISTINCT ?uri ?label
-		WHERE {
-			?origin purl:part ?uri
-			OPTIONAL { ?uri rdfs:label ?label }
-			{ ?uri calli:maintainer $this }
-			UNION { ?uri calli:curator $this }
-			UNION { ?uri calli:scribe $this }
 		}
 		ORDER BY ?label ?uri
 	""".

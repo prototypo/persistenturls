@@ -66,25 +66,6 @@ purl:user-search rdfs:subClassOf purl:search;
 		ORDER BY ?label ?uri
 	""".
 
-<group-search-xsl> rdfs:subClassOf <search-xsl>;
-	http:type "application/xml";
-	http:transform <template-xsl>;
-	obj:xslt <group/search.xsl>.
-
-purl:group-search rdfs:subClassOf purl:search;
-	http:operation "group";
-	http:type "application/sparql-results+xml";
-	http:cache-control "must-reevaluate";
-	http:transform <group-search-xsl>;
-	obj:sparql """
-		SELECT DISTINCT ?uri ?label
-		WHERE {
-			?uri a calli:Group; rdfs:label ?label; calli:soundex $soundex
-			FILTER (regex(?label, $regex, "i"))
-		}
-		ORDER BY ?label ?uri
-	""".
-
 <domain-search-xsl> rdfs:subClassOf <search-xsl>;
 	http:type "application/xml";
 	http:transform <template-xsl>;

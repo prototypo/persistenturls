@@ -37,7 +37,7 @@
 								<label for="m_maintainer">Maintainers:</label>
 							</td>
 							<td rel="calli:maintainer" class="value" data-suggest="about:blank">
-								<span about="?maintainer" typeof="calli:Group">
+								<span about="?maintainer" typeof="purl:User">
 									<span property="rdfs:label"/>
 								</span>
 							</td>

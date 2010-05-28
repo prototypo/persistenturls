@@ -55,8 +55,8 @@
 							<td class="property">
 								<label for="m_reviewer">Reviewers:</label>
 							</td>
-							<td rel="calli:reviewer" class="value" data-suggest="/persistent/group/template?pre-copy">
-								<span about="?reviewer" typeof="calli:Group">
+							<td rel="calli:reviewer" class="value" data-suggest="/persistent/user/template?pre-copy">
+								<span about="?reviewer" typeof="purl:User">
 									<span property="rdfs:label"/>
 								</span>
 							</td>

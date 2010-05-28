@@ -17,10 +17,7 @@ calli:get-graph http:realm <local>.
 
 <authority> a calli:DigestRealm, calli:AuthorizationRealm;
 	calli:origin </>;
-	calli:realmAuth </>;
-	calli:credential </data/group/public>;
-	calli:credential </data/group/admin>;
-	calli:maintainer </data/group/admin>.
+	calli:realmAuth </>.
 
 purl:User rdfs:subClassOf calli:Credential;
 	http:realm <authority>.
@@ -28,14 +25,6 @@ purl:User rdfs:subClassOf calli:Credential;
 purl:email a owl:DatatypeProperty, owl:FunctionalProperty;
 	rdfs:domain purl:User;
 	rdfs:range xsd:string.
-
-</data/group/admin> a calli:Group;
-	rdfs:label "admin";
-	calli:maintainer </data/group/admin>.
-
-</data/group/public> a calli:Group;
-	rdfs:label "public";
-	calli:maintainer </data/group/admin>.
 
 calli:get-copy http:realm <authority>.
 calli:pre-copy http:realm <authority>.
