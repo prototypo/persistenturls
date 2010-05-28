@@ -29,6 +29,20 @@ purl:UserTemplate rdfs:subClassOf calli:Copyable;
 	calli:withNamespace </data/user/>;
 	calli:copy <user/create.xml>.
 
+purl:post-user-copy owl:intersectionOf (calli:post-copy
+		[owl:onProperty obj:target; owl:allValuesFrom purl:UserTemplate]);
+	obj:precedes calli:post-copy;
+	obj:imports </persistent/authority>;
+	obj:imports <java:org.openrdf.http.object.exceptions.BadRequest>;
+	obj:groovy """
+		def copy = msg.functionalObjectResponse
+		if (!copy.purlEmail)
+			throw new BadRequest("Missing Email Address")
+		authority.calliCredentials.add(copy)
+		copy.purlResetPassword()
+		return copy
+	""".
+
 purl:User rdfs:subClassOf calli:Viewable, calli:Editable, calli:Deletable;
 	calli:view <user/view.xml>;
 	calli:edit <user/edit.xml>;
@@ -160,11 +174,6 @@ purl:post-purl-create rdfs:subClassOf obj:Message;
 	obj:imports <purl/create.xml>;
 	obj:groovy """
 		def copy = createXml.calliCopyResource(this, msg.in, Collections.singleton(this))
-		if (calliCurators) {
-			copy.calliMaintainers.addAll(calliCurators)
-		} else {
-			copy.calliMaintainers.addAll(findScribe(copy))
-		}
 		copy.purlPartOf = msg.target
 		touchRevision()
 		return copy

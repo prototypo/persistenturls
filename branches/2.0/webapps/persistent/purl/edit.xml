@@ -87,16 +87,6 @@
 						</tr>
 						<tr class="all">
 							<td class="property">
-								<label for="m_maintainer">Maintainers:</label>
-							</td>
-							<td rel="calli:maintainer" class="value" data-suggest="/persistent/user/template?pre-copy">
-								<span about="?maintainer" typeof="purl:User">
-									<span property="rdfs:label"/>
-								</span>
-							</td>
-						</tr>
-						<tr class="all">
-							<td class="property">
 								<label for="m_disabled">Disable:</label>
 							</td>
 							<td class="value">

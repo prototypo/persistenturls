@@ -10,7 +10,11 @@
 		<title>Create a New Domain</title>
 		<script>
 			$(document).ready(function() {
-			    $('#origin-span').text($('#m_origin').attr('href'))
+				var origin = $('base').attr('href')
+				if (origin.lastIndexOf('/') != origin.length - 1) {
+			    	origin = 'http://'
+			    }
+			    $('#origin-span').text(origin)
 			});
 		</script>
 	</head>
@@ -28,7 +32,7 @@
 							<td class="value" data-cardinality="1">
 								<span id="origin-span"/>
 								<input id="m_label" property="rdfs:label" type="text"
-									onchange="$(form).attr('about', $('#m_origin').attr('href') + value)" />
+									onchange="$(form).attr('about', $('#origin-span').text() + value)" />
 							</td>
 						</tr>
 						<tr>
@@ -49,11 +53,21 @@
 								</span>
 							</td>
 						</tr>
-						<tr>
+						<tr class="all">
 							<td class="property">
-								<label>Curators:</label>
+								<label for="m_curator">Scribes:</label>
 							</td>
-							<td rel="calli:curator" class="value" data-suggest="about:blank">
+							<td rel="calli:scribe" class="value" data-suggest="/persistent/user/template?pre-copy">
+								<span about="?scribe" typeof="purl:User">
+									<span property="rdfs:label"/>
+								</span>
+							</td>
+						</tr>
+						<tr class="all">
+							<td class="property">
+								<label for="m_curator">Curators:</label>
+							</td>
+							<td rel="calli:curator" class="value" data-suggest="/persistent/user/template?pre-copy">
 								<span about="?curator" typeof="purl:User">
 									<span property="rdfs:label"/>
 								</span>
@@ -61,18 +75,12 @@
 						</tr>
 						<tr>
 							<td class="property">
-								<label>Maintainers:</label>
+								<label for="m_maintainer">Maintainers:</label>
 							</td>
-							<td rel="calli:maintainer" class="value" data-suggest="about:blank">
+							<td rel="calli:maintainer" class="value" data-suggest="/persistent/user/template?pre-copy">
 								<span about="?maintainer" typeof="purl:User">
 									<span property="rdfs:label"/>
 								</span>
-							</td>
-						</tr>
-						<tr class="hidden">
-							<td class="property"></td>
-							<td class="value">
-								<a id="m_origin" href="" />
 							</td>
 						</tr>
 					</tbody>

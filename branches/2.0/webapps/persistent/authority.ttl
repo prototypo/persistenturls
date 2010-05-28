@@ -36,6 +36,11 @@ calli:get-delete http:realm <authority>.
 calli:pre-delete http:realm <authority>.
 calli:post-delete http:realm <authority>.
 
+purl:purl-authorize owl:equivalentClass calli:authorize-user;
+	obj:sparql """
+		ASK { $subject a purl:PURL; purl:partOf [calli:curator $credential] }
+	""".
+
 purl:credential rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom calli:DigestRealm];

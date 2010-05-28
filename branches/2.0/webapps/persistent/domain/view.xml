@@ -14,7 +14,8 @@
 			<span resource="?origin" rel="purl:domainOf"><a href="?origin" property="rdfs:label" class="diverted"/></span>
 			<span property="rdfs:label" />
 		</p>
-		<p><a href="?copy" class="diverted">Create Sub-Domain</a></p>
+		<p><a href="?copy" class="diverted">Copy Domain</a></p>
+		<p><a href="?domain-create" class="diverted">Create Sub-Domain</a></p>
 		<h3>Services</h3>
 		<ul>
 			<li rel="purl:service" resource="?service">
@@ -24,9 +25,13 @@
 			</li>
 		</ul>
 		<h3>PURLs</h3>
-        <p><a href="?purl" class="diverted">Create New PURL</a></p>
+        <p><a href="?purl-create" class="diverted">Create New PURL</a></p>
 		<ul>
-			<li resource="?purl" rev="purl:partOf"><a class="diverted" property="rdfs:label" href="?purl-create"></a></li>
+			<li resource="?purl" rev="purl:partOf"><a class="diverted" property="rdfs:label" href="?purl"></a></li>
+		</ul>
+		<h3>Scribes</h3>
+		<ul>
+			<li resource="?scribe" rel="calli:scribe"><a property="rdfs:label" href="?scribe"></a></li>
 		</ul>
 		<h3>Curators</h3>
 		<ul>

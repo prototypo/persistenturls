@@ -35,13 +35,5 @@
 		<div property="purl:type" />
 		<div property="purl:media" />
 		<div property="purl:lang" />
-		<h3>Curators</h3>
-		<ul>
-			<li resource="?curator" rel="calli:curator"><a property="rdfs:label" href="?curator"></a></li>
-		</ul>
-		<h3>Maintainers</h3>
-		<ul>
-			<li resource="?maintainer" rel="calli:maintainer"><a property="rdfs:label" href="?maintainer"></a></li>
-		</ul>
 	</body>
 </html>

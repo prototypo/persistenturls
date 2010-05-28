@@ -26,18 +26,21 @@ function initForms() {
 						uri = uri.substring(0, uri.indexOf('?'))
 					}
 					var redirect = xhr.getResponseHeader("Location")
-					if (redirect && window.diverted && form.hasClass("diverted")) {
-						location.replace(diverted(redirect + "?view", node))
-					} else if (redirect && redirect.indexOf("?") >= 0) {
-						location.replace(redirect)
+					if (redirect && redirect.indexOf("?") >= 0) {
+						redirect = redirect
 					} else if (redirect && location.href.indexOf("?pre-") > 0) {
-						location.replace(redirect + "?pre-view")
+						redirect = redirect + "?pre-view"
 					} else if (redirect) {
-						location.replace(redirect + "?view")
+						redirect = redirect + "?view"
 					} else if (location.href.indexOf("?pre-") > 0) {
-						location.replace(uri + "?pre-view")
+						redirect = uri + "?pre-view"
 					} else {
-						location.replace(uri + "?view")
+						redirect = uri + "?view"
+					}
+					if (window.diverted && form.hasClass("diverted")) {
+						location.replace(diverted(redirect, node))
+					} else {
+						location.replace(redirect)
 					}
 				})
 			} catch(e) {
