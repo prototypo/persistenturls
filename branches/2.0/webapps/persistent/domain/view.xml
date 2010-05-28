@@ -11,7 +11,7 @@
 	<body class="domain">
 		<h1 property="rdfs:label" />
 		<p>
-			<span resource="?origin" rev="purl:part"><a href="?origin" property="rdfs:label" class="diverted"/></span>
+			<span resource="?origin" rel="purl:domainOf"><a href="?origin" property="rdfs:label" class="diverted"/></span>
 			<span property="rdfs:label" />
 		</p>
 		<p><a href="?copy" class="diverted">Create Sub-Domain</a></p>
@@ -26,7 +26,7 @@
 		<h3>PURLs</h3>
         <p><a href="?purl" class="diverted">Create New PURL</a></p>
 		<ul>
-			<li resource="?purl" rev="purl:partOf"><a class="diverted" property="rdfs:label" href="?purl"></a></li>
+			<li resource="?purl" rev="purl:partOf"><a class="diverted" property="rdfs:label" href="?purl-create"></a></li>
 		</ul>
 		<h3>Curators</h3>
 		<ul>

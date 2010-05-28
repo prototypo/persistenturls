@@ -11,7 +11,7 @@
 	<body class="domain">
 		<form action="" about="" typeof="purl:Domain">
 			<h1 property="rdfs:label" />
-			<p resource="?origin" rev="purl:part"><span property="rdfs:label"/></p>
+			<p resource="?origin" rel="purl:domainOf"><span property="rdfs:label"/></p>
 			<h3>PURLs</h3>
 			<ul>
 				<li resource="?purl" rev="purl:partOf"><a property="rdfs:label" href="?purl"></a></li>

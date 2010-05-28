@@ -18,7 +18,6 @@ import junit.framework.TestCase;
 import name.persistent.behaviours.RemoteGraphSupport;
 import name.persistent.behaviours.ServiceRecordSupport;
 import name.persistent.concepts.Domain;
-import name.persistent.concepts.Origin;
 import name.persistent.concepts.PURL;
 import name.persistent.concepts.Resolvable;
 import name.persistent.concepts.Server;
@@ -170,8 +169,8 @@ public class ProxyPURLTest extends TestCase {
 		service.setPurlServer(root);
 		Domain domain = con.addDesignation(con.getObject(DOMAIN), Domain.class);
 		domain.getPurlServices().add(service);
-		Origin origin = con.addDesignation(con.getObject(ORIGIN), Origin.class);
-		origin.getPurlParts().add(domain);
+		Domain origin = con.addDesignation(con.getObject(ORIGIN), Domain.class);
+		domain.setPurlDomainOf(origin);
 		root.getPurlServes().add(origin);
 		try {
 			HttpResponse resp = resolvePURL(PURL0);
@@ -194,8 +193,8 @@ public class ProxyPURLTest extends TestCase {
 		Domain domain = con.addDesignation(con.getObject(DOMAIN), Domain.class);
 		purl.setPurlPartOf(domain);
 		domain.getPurlServices().add(service);
-		Origin origin = con.addDesignation(con.getObject(ORIGIN), Origin.class);
-		origin.getPurlParts().add(domain);
+		Domain origin = con.addDesignation(con.getObject(ORIGIN), Domain.class);
+		domain.setPurlDomainOf(origin);
 		root.getPurlServes().add(origin);
 		HttpResponse resp = resolvePURL(purl.toString());
 		HttpEntity entity = resp.getEntity();
@@ -222,7 +221,7 @@ public class ProxyPURLTest extends TestCase {
 	}
 
 	public void testProxyHTTPCache() throws Exception {
-		Origin origin = con.addDesignation(con.getObject(ORIGIN), Origin.class);
+		Domain origin = con.addDesignation(con.getObject(ORIGIN), Domain.class);
 		root.getPurlServes().add(origin);
 		Domain domain = con.addDesignation(con.getObject(DOMAIN), Domain.class);
 		Service service = con.addDesignation(of.createObject(), Service.class);
@@ -231,7 +230,7 @@ public class ProxyPURLTest extends TestCase {
 		purl.setPurlPartOf(domain);
 		domain.getPurlServices().add(service);
 		service.setPurlServer(root);
-		origin.getPurlParts().add(domain);
+		domain.setPurlDomainOf(origin);
 		con.close(); // new revision
 		HttpResponse resp = resolvePURL(purl.toString());
 		HttpEntity entity = resp.getEntity();
@@ -258,7 +257,7 @@ public class ProxyPURLTest extends TestCase {
 	}
 
 	public void testProxyDomainCache() throws Exception {
-		Origin origin = con.addDesignation(con.getObject(ORIGIN), Origin.class);
+		Domain origin = con.addDesignation(con.getObject(ORIGIN), Domain.class);
 		root.getPurlServes().add(origin);
 		Domain domain = con.addDesignation(con.getObject(DOMAIN), Domain.class);
 		Service service = con.addDesignation(of.createObject(), Service.class);
@@ -270,7 +269,7 @@ public class ProxyPURLTest extends TestCase {
 		purl2.setPurlPartOf(domain);
 		domain.getPurlServices().add(service);
 		service.setPurlServer(root);
-		origin.getPurlParts().add(domain);
+		domain.setPurlDomainOf(origin);
 		HttpResponse resp = resolvePURL(purl1.toString());
 		HttpEntity entity = resp.getEntity();
 		if (entity != null) {

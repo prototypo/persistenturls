@@ -18,7 +18,6 @@ import java.util.Set;
 import javax.tools.FileObject;
 
 import name.persistent.concepts.Domain;
-import name.persistent.concepts.Origin;
 import name.persistent.concepts.Server;
 
 import org.apache.http.HttpResponse;
@@ -99,20 +98,22 @@ public abstract class ServerSupport extends MirrorSupport implements RDFObject,
 	private static class RemoteResult extends QueuedResult {
 		private ValueFactory vf;
 		private URI rel;
+		private boolean rev;
 		private URI RemoteResource;
 		private URI definedBy;
 		private String definedByGraph;
 
 		private RemoteResult(GraphQueryResult result, ValueFactory vf) {
-			this(result, vf, null, null);
+			this(result, vf, null, false, null);
 		}
 
-		private RemoteResult(GraphQueryResult result, ValueFactory vf, URI rel,
+		private RemoteResult(GraphQueryResult result, ValueFactory vf, URI rel, boolean rev,
 				String definedByGraph) {
 			super(result);
 			assert vf != null;
 			this.vf = vf;
 			this.rel = rel;
+			this.rev = rev;
 			this.definedByGraph = definedByGraph;
 			this.RemoteResource = vf.createURI(PURL, "RemoteResource");
 			this.definedBy = vf.createURI(PURL, "definedBy");
@@ -121,7 +122,9 @@ public abstract class ServerSupport extends MirrorSupport implements RDFObject,
 		public Statement next() throws QueryEvaluationException {
 			Statement st = super.next();
 			Value obj = st.getObject();
-			if (st.getPredicate().equals(rel) && obj instanceof Resource) {
+			if (st.getPredicate().equals(rel) && rev) {
+				addRemoteResource(st.getSubject());
+			} else if (st.getPredicate().equals(rel) && obj instanceof Resource) {
 				addRemoteResource((Resource) obj);
 			}
 			return st;
@@ -151,7 +154,7 @@ public abstract class ServerSupport extends MirrorSupport implements RDFObject,
 				"Temporary Redirect");
 		if (accept.contains("application/rdf+xml")) {
 			resp.setHeader("Location", getResource().stringValue()
-					+ "?listOrigins");
+					+ "?serves");
 		} else {
 			resp.setHeader("Location", getResource().stringValue() + "?view");
 		}
@@ -161,49 +164,25 @@ public abstract class ServerSupport extends MirrorSupport implements RDFObject,
 	/**
 	 * List of origins on this domain service.
 	 */
-	@operation("listOrigins")
+	@operation("serves")
 	@type("application/rdf+xml")
-	public GraphQueryResult listRemoteOrigins(@header("Via") Set<String> via)
+	public GraphQueryResult serves(@header("Via") Set<String> via)
 			throws OpenRDFException {
 		if (via != null && via.toString().contains(VIA))
 			throw new BadRequest("Request Loop Detected");
 		ObjectConnection con = getObjectConnection();
 		ValueFactory vf = con.getValueFactory();
 		URI serves = vf.createURI(PURL, "serves");
-		String desc = getResource().stringValue() + "?listDomains&origin=";
-		return new RemoteResult(listOrigins(), vf, serves, desc);
+		String desc = getResource().stringValue() + "?domainsOf&domain=";
+		return new RemoteResult(serves(), vf, serves,false, desc);
 	}
 
 	/**
 	 * List of domains for the given origin.
 	 */
-	@operation("listDomains")
+	@operation("domainsOf")
 	@type("message/x-response")
-	public HttpResponse listRemoteDomains(@parameter("origin") Origin origin,
-			@header("Via") Set<String> via) throws Exception {
-		if (via != null && via.toString().contains(VIA))
-			throw new BadRequest("Request Loop Detected");
-		if (origin == null)
-			throw new BadRequest("Missing origin");
-		ObjectConnection con = getObjectConnection();
-		Resource target = ((RDFObject) origin).getResource();
-		ValueFactory vf = con.getValueFactory();
-		URI part = vf.createURI(PURL, "part");
-		String desc = getResource().stringValue() + "?listServices&domain=";
-		RemoteResult r = new RemoteResult(listDomains(origin), vf, part, desc);
-		r.addRemoteResource(target); // origin is also a domain
-		URI mirroredBy = vf.createURI(PURL, "mirroredBy");
-		String domains = getResource().stringValue() + "?domainsOf&origin=";
-		r.add(target, mirroredBy, vf.createURI(domains + enc(target)));
-		return mirrorOf((RDFObject) origin, r);
-	}
-
-	/**
-	 * List of services for the given domain.
-	 */
-	@operation("listServices")
-	@type("message/x-response")
-	public HttpResponse listRemoteServices(@parameter("domain") Domain domain,
+	public HttpResponse domainsOf(@parameter("domain") Domain domain,
 			@header("Via") Set<String> via) throws Exception {
 		if (via != null && via.toString().contains(VIA))
 			throw new BadRequest("Request Loop Detected");
@@ -212,9 +191,33 @@ public abstract class ServerSupport extends MirrorSupport implements RDFObject,
 		ObjectConnection con = getObjectConnection();
 		Resource target = ((RDFObject) domain).getResource();
 		ValueFactory vf = con.getValueFactory();
-		RemoteResult r = new RemoteResult(listServices(domain), vf);
-		URI mirroredBy = vf.createURI(PURL, "mirroredBy");
-		String purls = getResource().stringValue() + "?purlsOf&domain=";
+		URI domainOf = vf.createURI(PURL, "domainOf");
+		String desc = getResource().stringValue() + "?servicesOf&domain=";
+		RemoteResult r = new RemoteResult(domainsOf(domain), vf, domainOf, true, desc);
+		r.addRemoteResource(target); // origin is also a domain
+		URI mirroredBy = vf.createURI(PURL, "domains");
+		String domains = getResource().stringValue() + "?domainsIn&domain=";
+		r.add(target, mirroredBy, vf.createURI(domains + enc(target)));
+		return mirrorOf((RDFObject) domain, r);
+	}
+
+	/**
+	 * List of services for the given domain.
+	 */
+	@operation("servicesOf")
+	@type("message/x-response")
+	public HttpResponse servicesOf(@parameter("domain") Domain domain,
+			@header("Via") Set<String> via) throws Exception {
+		if (via != null && via.toString().contains(VIA))
+			throw new BadRequest("Request Loop Detected");
+		if (domain == null)
+			throw new BadRequest("Missing domain");
+		ObjectConnection con = getObjectConnection();
+		Resource target = ((RDFObject) domain).getResource();
+		ValueFactory vf = con.getValueFactory();
+		RemoteResult r = new RemoteResult(servicesOf(domain), vf);
+		URI mirroredBy = vf.createURI(PURL, "purls");
+		String purls = getResource().stringValue() + "?purlsIn&domain=";
 		r.add(target, mirroredBy, vf.createURI(purls + enc(target)));
 		return mirrorOf((RDFObject) domain, r);
 	}
@@ -222,67 +225,66 @@ public abstract class ServerSupport extends MirrorSupport implements RDFObject,
 	/**
 	 * Description of all domains in the given origin.
 	 */
-	@operation("domainsOf")
+	@operation("domainsIn")
 	@type("message/x-response")
-	public HttpResponse domainsOf(@parameter("origin") Origin origin,
+	public HttpResponse domainsIn(@parameter("domain") Domain domain,
 			@header("Via") Set<String> via) throws Exception {
 		if (via != null && via.toString().contains(VIA))
 			throw new BadRequest("Request Loop Detected");
-		if (origin == null)
+		if (domain == null)
 			throw new BadRequest("Missing origin");
-		return mirrorOf((RDFObject) origin, describeAllDomains(origin));
+		return mirrorOf((RDFObject) domain, domainsIn(domain));
 	}
 
 	/**
 	 * Description of all PURLs in the given domain.
 	 */
-	@operation("purlsOf")
+	@operation("purlsIn")
 	@type("message/x-response")
-	public HttpResponse purlsOf(@parameter("domain") Domain domain,
+	public HttpResponse purlsIn(@parameter("domain") Domain domain,
 			@header("Via") Set<String> via) throws Exception {
 		if (via != null && via.toString().contains(VIA))
 			throw new BadRequest("Request Loop Detected");
 		if (domain == null)
 			throw new BadRequest("Missing domain");
-		return mirrorOf((RDFObject) domain, describePURLs(domain));
+		return mirrorOf((RDFObject) domain, purlsIn(domain));
 	}
 
 	@sparql(PREFIX + "CONSTRUCT { $this a purl:Server; purl:serves ?origin }\n"
 			+ "WHERE { $this purl:serves ?origin }")
-	protected abstract GraphQueryResult listOrigins();
+	protected abstract GraphQueryResult serves();
 
-	@sparql(PREFIX + "CONSTRUCT { $origin a purl:Origin; purl:part ?domain }\n"
-			+ "WHERE { $origin purl:part ?domain }")
-	protected abstract GraphQueryResult listDomains(
-			@name("origin") Origin origin);
+	@sparql(PREFIX + "CONSTRUCT { $top a purl:Domain. ?domain purl:domainOf $top }\n"
+			+ "WHERE { ?domain purl:domainOf $top }")
+	protected abstract GraphQueryResult domainsOf(
+			@name("top") Domain domain);
 
 	@sparql(PREFIX
-			+ "CONSTRUCT { $domain a ?type; purl:service ?service .\n"
+			+ "CONSTRUCT { $domain a purl:Domain; purl:service ?service .\n"
 			+ "?service a purl:Service; purl:server ?server; purl:priority ?priority; purl:weight ?weight }\n"
-			+ "WHERE { $domain a ?type; purl:service ?service .\n"
+			+ "WHERE { $domain purl:service ?service .\n"
 			+ "?service purl:server ?server\n"
-			+ "FILTER (?type = purl:Domain || ?type = purl:Origin)\n"
 			+ "OPTIONAL { ?service purl:priority ?priority}\n"
 			+ "OPTIONAL { ?service purl:weight ?weight }}")
-	protected abstract GraphQueryResult listServices(
+	protected abstract GraphQueryResult servicesOf(
 			@name("domain") Domain domain);
 
 	@sparql(PREFIX
 			+ "CONSTRUCT {\n"
-			+ "$origin a purl:Origin; purl:service ?osrv; purl:part ?domain .\n"
-			+ "?domain a purl:Domain; purl:service ?srv .\n"
-			+ "?osrv a purl:Service; purl:server ?oserver; purl:priority ?op; purl:weight ?ow .\n"
+			+ "$top a purl:Domain; purl:service ?tsrv .\n"
+			+ "?domain a purl:Domain; purl:domainOf $top; purl:service ?srv .\n"
+			+ "?tsrv a purl:Service; purl:server ?tserver; purl:priority ?tp; purl:weight ?tw .\n"
 			+ "?srv a purl:Service; purl:server ?server; purl:priority ?p; purl:weight ?w }\n"
-			+ "WHERE { $origin purl:service ?osrv .\n"
-			+ "?osrv purl:server ?oserver\n"
-			+ "OPTIONAL { ?osrv purl:priority ?op}\n"
-			+ "OPTIONAL { ?osrv purl:weight ?ow }\n"
-			+ "OPTIONAL { $origin purl:part ?domain .\n"
-			+ "?domain purl:service ?srv .\n" + "?srv purl:server ?server\n"
+			+ "WHERE { $top purl:service ?tsrv .\n"
+			+ "?tsrv purl:server ?tserver\n"
+			+ "OPTIONAL { ?tsrv purl:priority ?tp}\n"
+			+ "OPTIONAL { ?tsrv purl:weight ?tw }\n"
+			+ "OPTIONAL { ?domain purl:domainOf $top; purl:service ?srv .\n"
+			+ "?srv purl:server ?server\n"
 			+ "OPTIONAL { ?srv purl:priority ?p}\n"
 			+ "OPTIONAL { ?srv purl:weight ?w }}}")
-	protected abstract GraphQueryResult describeAllDomains(
-			@name("origin") Origin origin);
+	protected abstract GraphQueryResult domainsIn(
+			@name("top") Domain domain);
 
 	@sparql(PREFIX
 			+ "CONSTRUCT { $domain a ?dtype; purl:pattern ?dpattern; ?dpred ?dhref .\n"
@@ -292,7 +294,7 @@ public abstract class ServerSupport extends MirrorSupport implements RDFObject,
 			+ "?purl purl:partOf $domain; a ?type\n"
 			+ "OPTIONAL { ?purl purl:pattern ?pattern }\n"
 			+ "OPTIONAL { ?purl ?pred ?href . ?pred purl:rel ?rel }}")
-	protected abstract GraphQueryResult describePURLs(
+	protected abstract GraphQueryResult purlsIn(
 			@name("domain") Domain domain);
 
 	private HttpResponse mirrorOf(Object target, GraphQueryResult result)

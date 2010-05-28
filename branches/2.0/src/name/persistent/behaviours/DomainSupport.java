@@ -85,7 +85,6 @@ public abstract class DomainSupport implements Domain, RDFObject {
 			+ "SELECT REDUCED ?target\n"
 			+ "WHERE { { ?purl purl:partOf $this }\n"
 			+ "UNION { ?purl a purl:Domain FILTER (?purl = $this) }\n"
-			+ "UNION { ?purl a purl:Origin FILTER (?purl= $this) }"
 			+ "?purl ?pred ?target . ?pred purl:rel ?rel .\n"
 			+ "OPTIONAL { ?purl purl:pattern ?pattern } FILTER (!bound(?pattern))\n"
 			+ "?target purl:last-resolved $date }";
@@ -93,7 +92,6 @@ public abstract class DomainSupport implements Domain, RDFObject {
 			+ "SELECT REDUCED ?target\n"
 			+ "WHERE { { ?purl purl:partOf $this }\n"
 			+ "UNION { ?purl a purl:Domain FILTER (?purl = $this) }\n"
-			+ "UNION { ?purl a purl:Origin FILTER (?purl= $this) }"
 			+ "?purl ?pred ?target . ?pred purl:rel ?rel .\n"
 			+ "OPTIONAL { ?purl purl:pattern ?pattern } FILTER (!bound(?pattern))\n"
 			+ "OPTIONAL { ?target purl:last-resolved ?last }\n"
@@ -102,7 +100,6 @@ public abstract class DomainSupport implements Domain, RDFObject {
 			+ "SELECT REDUCED ?target\n"
 			+ "WHERE { { ?purl purl:partOf $this }\n"
 			+ "UNION { ?purl a purl:Domain FILTER (?purl = $this) }\n"
-			+ "UNION { ?purl a purl:Origin FILTER (?purl= $this) }"
 			+ "?purl ?pred ?target . ?pred purl:rel ?rel .\n"
 			+ "OPTIONAL { ?purl purl:pattern ?pattern } FILTER (!bound(?pattern))\n"
 			+ "?target purl:last-resolved ?last\n" + "FILTER (?last < $date) }";

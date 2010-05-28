@@ -72,7 +72,7 @@
 						<tr class="hidden">
 							<td class="property"></td>
 							<td class="value">
-								<a id="m_origin" rev="purl:part" href="?origin" />
+								<a id="m_origin" rel="purl:domainOf" href="?origin" />
 							</td>
 						</tr>
 					</tbody>

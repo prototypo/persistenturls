@@ -98,11 +98,7 @@ purl:purl-search rdfs:subClassOf purl:search;
 	obj:sparql """
 		SELECT DISTINCT ?uri ?label ?redirection ?unresolvable
 		WHERE {
-			{ ?uri a purl:PURL }
-			UNION { ?uri a purl:PartialPURL }
-			UNION { ?uri a purl:ZonedPURL }
-			UNION { ?uri a purl:DisabledPURL }
-			UNION { ?uri a purl:TombstonedPURL }
+			?uri a purl:PURL
 			OPTIONAL { ?uri ?redirection [a purl:Redirection] }
 			OPTIONAL { ?uri ?unresolvable [a purl:Unresolvable] }
 			?uri rdfs:label ?label; calli:soundex $soundex
@@ -120,10 +116,7 @@ purl:target-search rdfs:subClassOf purl:search;
 		SELECT DISTINCT ?uri ?label ?redirection ?unresolvable
 		WHERE {
 			{ ?uri a purl:PURL }
-			UNION { ?uri a purl:PartialPURL }
-			UNION { ?uri a purl:ZonedPURL }
-			UNION { ?uri a purl:DisabledPURL }
-			UNION { ?uri a purl:TombstonedPURL }
+			UNION { ?uri a purl:Domain }
 			OPTIONAL { ?uri ?redirection [a purl:Redirection] }
 			OPTIONAL { ?uri ?unresolvable [a purl:Unresolvable] }
 			?uri ?rel $target

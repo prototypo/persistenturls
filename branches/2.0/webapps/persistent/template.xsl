@@ -211,11 +211,11 @@
 							<li><span>Users</span></li>
 						</xsl:when>
 						<xsl:when test="contains($section, 'domain') and not(contains($section, 'search'))">
-							<li><a rev="purl:part" href="?origin" class="diverted"><span property="rdfs:label"/> (Origin)</a></li>
+							<li><a rel="purl:domainOf" href="?origin" class="diverted"><span property="rdfs:label"/> (Origin)</a></li>
 							<li><span>Domains</span></li>
 						</xsl:when>
 						<xsl:when test="contains($section, 'purl') and not(contains($section, 'search'))">
-							<li><span rev="purl:partOf" resource="?domain"><a rev="purl:part" href="?origin" class="diverted"><span property="rdfs:label"/> (Origin)</a></span></li>
+							<li><span rev="purl:partOf" resource="?domain"><a rel="purl:domainOf" href="?origin" class="diverted"><span property="rdfs:label"/> (Origin)</a></span></li>
 							<li><a rev="purl:partOf" href="?domain" class="diverted"><span property="rdfs:label"/> (Domain)</a></li>
 							<li><span>PURLs</span></li>
 						</xsl:when>

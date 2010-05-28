@@ -9,7 +9,7 @@
 
 purl:unresolvable-purls rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom purl:Origin];
+		owl:allValuesFrom purl:Domain];
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
 		owl:allValuesFrom obj:TupleResult];
 	http:operation "unresolvable";
@@ -20,13 +20,13 @@ purl:unresolvable-purls rdfs:subClassOf obj:Message;
 	obj:sparql """
 		SELECT DISTINCT ?uri ?label
 		WHERE {
-			$this purl:part ?domain .
+			?domain purl:domainOf $this .
 			?uri purl:partOf ?domain; ?pred [a purl:Unresolvable] .
 			?pred purl:rel ?rel .
 			OPTIONAL { ?uri rdfs:label ?label }
 			OPTIONAL {
 				?uri a ?disabled
-				FILTER (?disabled = purl:DisabledPURL || ?disabled = purl:TombstonedPURL)
+				FILTER (?disabled = purl:Disabled || ?disabled = purl:Tombstoned)
 			}
 			FILTER (!bound(?disabled))
 		}
@@ -35,7 +35,7 @@ purl:unresolvable-purls rdfs:subClassOf obj:Message;
 
 purl:list-mirrors rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom purl:Origin];
+		owl:allValuesFrom purl:Domain];
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
 		owl:allValuesFrom obj:TupleResult];
 	http:operation "mirrors";
@@ -47,15 +47,11 @@ purl:list-mirrors rdfs:subClassOf obj:Message;
 		SELECT DISTINCT ?uri ?label ?type
 		WHERE {
 			?uri a purl:RemoteGraph; purl:allowedOrigin $this .
-			?label purl:mirroredBy ?uri .
+			?label ?type ?uri .
 			GRAPH ?uri {
-				{ ?label a ?type FILTER (?type = purl:Origin) }
-				UNION {
-					?label a ?type
-					OPTIONAL { ?label ?origin purl:Origin }
-					FILTER (!bound(?origin) && ?type = purl:Domain )
-				}
+				?label a purl:Domain
 			}
+			FILTER (?type = purl:domains || ?type = purl:purls)
 		}
 		ORDER BY ?label desc(?type) ?uri
 	""".
@@ -73,11 +69,7 @@ purl:list-purls-for-user rdfs:subClassOf obj:Message;
 	obj:sparql """
 		SELECT DISTINCT ?uri ?label ?unresolvable
 		WHERE {
-			{ ?uri a purl:PURL }
-			UNION { ?uri a purl:PartialPURL }
-			UNION { ?uri a purl:ZonedPURL }
-			UNION { ?uri a purl:DisabledPURL }
-			UNION { ?uri a purl:TombstonedPURL }
+			?uri a purl:PURL
 			OPTIONAL { ?uri ?unresolvable [a purl:Unresolvable] }
 			OPTIONAL { ?uri rdfs:label ?label }
 			{ ?uri calli:maintainer $this }
@@ -99,7 +91,7 @@ purl:list-domains-for-user rdfs:subClassOf obj:Message;
 	obj:sparql """
 		SELECT DISTINCT ?uri ?label
 		WHERE {
-			?origin purl:part ?uri
+			?uri purl:domainOf ?origin
 			OPTIONAL { ?uri rdfs:label ?label }
 			{ ?uri calli:maintainer $this }
 			UNION { ?uri calli:maintainer [calli:member $this] }

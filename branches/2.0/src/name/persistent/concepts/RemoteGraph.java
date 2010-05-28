@@ -64,7 +64,7 @@ public interface RemoteGraph {
 	@iri("http://persistent.name/rdf/2010/purl#via")
 	void setPurlVia(String purlVia);
 
-	boolean load(String origin) throws Exception;
+	boolean load(String... origin) throws Exception;
 
 	boolean validate(String origin) throws Exception;
 

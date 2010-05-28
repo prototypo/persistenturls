@@ -58,38 +58,55 @@ purl:post-delete-graph owl:intersectionOf (calli:post-delete
 	""".
 
 ################################
-# Origin
-################################
-
-<origin/template> a purl:OriginTemplate;
-	calli:curator </data/user/admin>.
-
-purl:OriginTemplate rdfs:subClassOf calli:Copyable;
-	calli:copy <origin/create.xml>.
-
-purl:Origin rdfs:subClassOf calli:Viewable, calli:Editable, calli:Deletable;
-	calli:view <origin/view.xml>;
-	calli:edit <origin/edit.xml>;
-	calli:delete <origin/delete.xml>.
-
-################################
 # Domain
 ################################
 
-purl:Origin rdfs:subClassOf calli:Copyable;
+<domain/template> a purl:DomainTemplate;
+	calli:withNamespace "http://";
+	calli:curator </data/user/admin>.
+
+purl:DomainTemplate rdfs:subClassOf calli:Copyable;
 	calli:copy <domain/create.xml>.
 
-purl:find-domain-prefix owl:intersectionOf ( calli:find-copy-prefix
-		[owl:onProperty obj:target; owl:allValuesFrom purl:Origin]);
-	rdfs:comment "On domain create, the result must start with this origin";
-	obj:precedes calli:find-copy-prefix;
-	obj:java "return Collections.singleton(this)".
+purl:get-domain-create rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:Domain];
+	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
+		owl:allValuesFrom <java:java.io.Reader>];
+	http:operation "domain-create";
+	http:type "text/html";
+	obj:imports <domain/create.xml>;
+	obj:groovy """
+		return createXml.calliConstruct('copy', this)
+	""".
 
-purl:find-subdomain-prefix owl:intersectionOf ( calli:find-copy-prefix
-		[owl:onProperty obj:target; owl:allValuesFrom purl:Domain]);
-	rdfs:comment "On domain copy, the result must start with this domain";
-	obj:precedes calli:find-copy-prefix;
-	obj:java "return Collections.singleton(this)".
+purl:post-domain-create rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:Domain];
+	rdfs:subClassOf [owl:onProperty obj:objectResponse;
+		owl:maxCardinality "1"^^xsd:nonNegativeInteger];
+	http:method "POST";
+	http:operation "domain-create";
+	http:expect "201-created";
+	obj:imports <domain/create.xml>;
+	obj:groovy """
+		def copy = createXml.calliCopyResource(this, msg.in, Collections.singleton(this))
+		if (calliCurators) {
+			copy.calliMaintainers.addAll(calliCurators)
+		} else {
+			copy.calliMaintainers.addAll(findScribe(copy))
+		}
+		copy.purlDomainOf = purlDomainOf ? purlDomainOf : msg.target
+		copy.purlPartOf = msg.target
+		touchRevision()
+		return copy
+	""".
+
+purl:post-domain-create-in a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:domain purl:post-domain-create;
+	rdfs:range <java:java.io.InputStream>;
+	http:type "application/rdf+xml";
+	obj:name "in".
 
 purl:Domain rdfs:subClassOf calli:Viewable, calli:Editable, calli:Copyable, calli:Deletable;
 	calli:view <domain/view.xml>;
@@ -97,111 +114,89 @@ purl:Domain rdfs:subClassOf calli:Viewable, calli:Editable, calli:Copyable, call
 	calli:copy <domain/copy.xml>;
 	calli:delete <domain/delete.xml>.
 
-purl:init-domain-create owl:intersectionOf (calli:post-copy
-		[owl:onProperty obj:target; owl:allValuesFrom purl:Origin]);
-	obj:precedes calli:post-copy;
-	obj:groovy """
-		def domain = msg.functionalObjectResponse
-		purlParts.add(domain)
-		return domain
-	""".
-
-purl:init-subdomain-create owl:intersectionOf (calli:post-copy
+purl:post-domain-copy owl:intersectionOf (calli:post-copy
 		[owl:onProperty obj:target; owl:allValuesFrom purl:Domain]);
 	obj:precedes calli:post-copy;
 	obj:groovy """
-		def subdomain = msg.functionalObjectResponse
-		purlFindOrigin().purlParts.add(subdomain)
-		return subdomain
+		def copy = msg.functionalObjectResponse
+		copy.purlDomainOf = purlDomainOf ? purlDomainOf : msg.target
+		return copy
 	""".
 
-purl:find-origin rdfs:subClassOf obj:Message;
-	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom purl:Domain];
-	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
-		owl:allValuesFrom purl:Origin];
-	obj:sparql """
-		SELECT REDUCED ?origin
-		WHERE { ?origin purl:part $this }
+purl:post-domain-edit owl:intersectionOf (calli:post-edit
+		[owl:onProperty obj:target; owl:allValuesFrom purl:Domain]);
+	obj:precedes calli:post-edit;
+	obj:groovy """
+		msg.proceed()
+		if (purlDomainOf) {
+			purlDomainOf.touchRevision()
+		}
 	""".
 
 ################################
 # PURL
 ################################
 
-purl:get-create-purl rdfs:subClassOf obj:Message;
+purl:get-purl-create rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom purl:Domain];
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
 		owl:allValuesFrom <java:java.io.Reader>];
-	http:operation "purl";
+	http:operation "purl-create";
 	http:type "text/html";
 	obj:imports <purl/create.xml>;
 	obj:groovy """
 		return createXml.calliConstruct('copy', this)
 	""".
 
-purl:pre-create-purl rdfs:subClassOf obj:Message;
-	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom purl:Domain];
-	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
-		owl:allValuesFrom <java:java.io.Reader>];
-	http:operation "pre-purl";
-	http:type "text/html";
-	obj:imports <purl/create.xml>;
-	obj:groovy """
-		return createXml.calliConstruct('pre-copy', this)
-	""".
-
-purl:post-create-purl rdfs:subClassOf obj:Message;
+purl:post-purl-create rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom purl:Domain];
 	rdfs:subClassOf [owl:onProperty obj:objectResponse;
 		owl:maxCardinality "1"^^xsd:nonNegativeInteger];
 	http:method "POST";
-	http:operation "purl", "pre-purl";
+	http:operation "purl-create";
 	http:expect "201-created";
 	obj:imports <purl/create.xml>;
 	obj:groovy """
-		def purl = createXml.calliCopyResource(this, msg.in, Collections.singleton(this))
+		def copy = createXml.calliCopyResource(this, msg.in, Collections.singleton(this))
 		if (calliCurators) {
-			purl.calliMaintainers.addAll(calliCurators)
+			copy.calliMaintainers.addAll(calliCurators)
 		} else {
-			purl.calliMaintainers.addAll(findScribe(purl))
+			copy.calliMaintainers.addAll(findScribe(copy))
 		}
-		purl.purlPartOf = msg.target
+		copy.purlPartOf = msg.target
 		touchRevision()
-		return purl
+		return copy
 	""".
 
-purl:post-create-purl-in a owl:DatatypeProperty, owl:FunctionalProperty;
-	rdfs:domain purl:post-create-purl;
+purl:post-purl-create-in a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:domain purl:post-purl-create;
 	rdfs:range <java:java.io.InputStream>;
 	http:type "application/rdf+xml";
 	obj:name "in".
-
-purl:post-copy-purl owl:intersectionOf (calli:post-copy
-		[owl:onProperty obj:target; owl:allValuesFrom purl:PURL]);
-	obj:precedes calli:post-copy;
-	obj:imports <purl/copy.xml>;
-	obj:groovy """
-		def purl = copyXml.calliCopyResource(this, msg.in, Collections.singleton(purlPartOf))
-		if (purlPartOf.calliCurators) {
-			purl.calliMaintainers.addAll(purlPartOf.calliCurators)
-		} else {
-			purl.calliMaintainers.addAll(findScribe(purl))
-		}
-		purl.purlPartOf = purlPartOf
-		purlPartOf.touchRevision()
-		return purl
-	""".
 
 purl:PURL rdfs:subClassOf calli:Viewable, calli:Editable, calli:Copyable;
 	calli:view <purl/view.xml>;
 	calli:edit <purl/edit.xml>;
 	calli:copy <purl/copy.xml>.
 
-purl:post-edit-purl-touch owl:intersectionOf (calli:post-edit
+purl:find-purl-prefix owl:intersectionOf ( calli:find-copy-prefix
+		[owl:onProperty obj:target; owl:allValuesFrom purl:PURL]);
+	rdfs:comment "On purl copy, the result must start with the same domain";
+	obj:precedes calli:find-copy-prefix;
+	obj:java "return Collections.singleton(purlPartOf)".
+
+purl:post-purl-copy owl:intersectionOf (calli:post-copy
+		[owl:onProperty obj:target; owl:allValuesFrom purl:PURL]);
+	obj:precedes calli:post-copy;
+	obj:groovy """
+		def copy = msg.functionalObjectResponse
+		copy.purlPartOf = purlPartOf
+		return copy
+	""".
+
+purl:post-purl-edit owl:intersectionOf (calli:post-edit
 		[owl:onProperty obj:target; owl:allValuesFrom purl:PURL]);
 	obj:precedes calli:post-edit;
 	obj:groovy """

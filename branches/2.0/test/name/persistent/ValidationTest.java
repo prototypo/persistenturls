@@ -10,9 +10,7 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import junit.framework.TestCase;
-
 import name.persistent.concepts.Domain;
-import name.persistent.concepts.Origin;
 import name.persistent.concepts.PURL;
 import name.persistent.concepts.Server;
 import name.persistent.concepts.Service;
@@ -72,10 +70,10 @@ public class ValidationTest extends TestCase {
 		con.add(vf.createURI(NS, "redirectsTo"), rel, vf.createLiteral("located"));
 		String uri = "http://localhost:3128/";
 		Server root = con.addDesignation(con.getObject(uri), Server.class);
-		Origin origin = con.addDesignation(con.getObject(ORIGIN), Origin.class);
+		Domain origin = con.addDesignation(con.getObject(ORIGIN), Domain.class);
 		root.getPurlServes().add(origin);
 		domain = con.addDesignation(con.getObject(DOMAIN), Domain.class);
-		origin.getPurlParts().add(domain);
+		domain.setPurlDomainOf(origin);
 		Service service = con.addDesignation(of.createObject(), Service.class);
 		service.setPurlServer(root);
 		domain.getPurlServices().add(service);

@@ -14,7 +14,7 @@
 		<h1 property="rdfs:label" />
 		<p>
 			<span rel="purl:partOf" resource="?domain">
-				<span resource="?origin" rev="purl:part">
+				<span resource="?origin" rel="purl:domainOf">
 					<a href="?origin" property="rdfs:label" class="diverted"/>
 				</span>
 				<a href="?domain" property="rdfs:label" class="diverted" />

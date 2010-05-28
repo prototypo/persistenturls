@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import name.persistent.concepts.Origin;
+import name.persistent.concepts.Domain;
 import name.persistent.concepts.RemoteGraph;
 import name.persistent.concepts.Unresolvable;
 
@@ -232,7 +232,7 @@ public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 	private Logger logger = LoggerFactory.getLogger(RemoteGraphSupport.class);
 
 	@Override
-	public boolean load(String origin) throws Exception {
+	public boolean load(String... origin) throws Exception {
 		String url = getResource().stringValue();
 		BasicHttpRequest req = new BasicHttpRequest("GET", url);
 		String type = "application/rdf+xml";
@@ -422,7 +422,7 @@ public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 		}
 	}
 
-	private boolean importResponse(HttpResponse resp, String origin)
+	private boolean importResponse(HttpResponse resp, String... origin)
 			throws Exception {
 		ObjectConnection con = getObjectConnection();
 		boolean autoCommit = con.isAutoCommit();
@@ -451,9 +451,9 @@ public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 				String type = getHeader(resp, "Content-Type");
 				con.removeDesignation(this, Unresolvable.class);
 				con.clear(ctx);
-				if (!parse(origin, type, in))
+				if (!parse(type, in, origin))
 					return false;
-				store(origin, type, resp);
+				store(type, resp, origin);
 				return true;
 			} catch (RDFHandlerException e) {
 				throw cause(e);
@@ -471,7 +471,7 @@ public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 		}
 	}
 
-	private void store(String origin, String type, HttpResponse resp)
+	private void store(String type, HttpResponse resp, String... origins)
 			throws Exception {
 		ObjectConnection con = getObjectConnection();
 		con.addDesignation(this, RemoteGraph.class);
@@ -491,10 +491,14 @@ public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 		setPurlLastValidated(df.newXMLGregorianCalendar(gc));
 		gc.setTime(getDateHeader(resp, "Last-Modified"));
 		setPurlLastModified(df.newXMLGregorianCalendar(gc));
-		if (origin != null) {
+		if (origins != null) {
 			ObjectFactory of = con.getObjectFactory();
-			Origin o = of.createObject(origin, Origin.class);
-			getPurlAllowedOrigins().add(o);
+			for (String origin : origins) {
+				if (origin != null) {
+					Domain o = of.createObject(origin, Domain.class);
+					getPurlAllowedOrigins().add(o);
+				}
+			}
 		}
 		for (Header hd : resp.getHeaders("Warning")) {
 			if (hd.getValue().contains("111")) {
@@ -509,7 +513,7 @@ public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 		}
 	}
 
-	private boolean parse(String origin, String type, InputStream in)
+	private boolean parse(String type, InputStream in, String... origin)
 			throws IOException, RDFParseException, RDFHandlerException {
 		Resource ctx = getResource();
 		String resource = ctx.stringValue();
@@ -518,7 +522,11 @@ public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 		RemoteResourceInserter handler;
 		List<String> origins = new ArrayList<String>();
 		if (origin != null) {
-			origins.add(origin);
+			for (String o : origin) {
+				if (o != null) {
+					origins.add(o);
+				}
+			}
 		}
 		for (Object o : getPurlAllowedOrigins()) {
 			origins.add(((RDFObject) o).getResource().stringValue());

@@ -100,13 +100,13 @@ public abstract class PartialSupport extends MirrorSupport implements
 		return source.toString().startsWith(purl.toString()) || purl instanceof Zoned;
 	}
 
-	private void loadOrigin() throws Exception { // FIXME zoned?
+	private void loadOrigin() throws Exception {
 		ParsedURI parsed = new ParsedURI(getResource().stringValue());
 		String scheme = parsed.getScheme();
 		String auth = parsed.getAuthority();
 		assert auth != null;
-		String originURI = new ParsedURI(scheme, auth, "/", null, null)
-				.toString();
+		String originURI = new ParsedURI(scheme, auth, "/", null, null).toString();
+		String zo = getZonedOrigin(scheme, auth);
 		ObjectConnection con = getObjectConnection();
 		ObjectFactory of = con.getObjectFactory();
 		Exception gateway = null;
@@ -122,12 +122,16 @@ public abstract class PartialSupport extends MirrorSupport implements
 					.toString();
 			try {
 				RemoteGraph server = of.createObject(uri, RemoteGraph.class);
-				if (!server.load(originURI))
-					continue;
-				RemoteResource origin = of.createObject(originURI,
-						RemoteResource.class);
-				if (origin.load())
-					return;
+				if (server.load(originURI, zo)) {
+					RemoteResource origin = of.createObject(originURI
+							.toString(), RemoteResource.class);
+					if (origin.load())
+						return;
+					origin = of.createObject(zo.toString(),
+							RemoteResource.class);
+					if (origin.load())
+						return;
+				}
 			} catch (GatewayTimeout timeout) {
 				gateway = timeout;
 				blackList(addr, timeout);
@@ -139,6 +143,24 @@ public abstract class PartialSupport extends MirrorSupport implements
 		if (gateway != null)
 			throw gateway;
 		throw new NotFound("No PURL Server Available");
+	}
+
+	private String getZonedOrigin(String scheme, String auth) {
+		int start = auth.indexOf('@');
+		int end = auth.lastIndexOf(':');
+		if (end < 0) {
+			end = auth.length();
+		}
+		String hostname = auth.substring(start + 1, end);
+		int idx = hostname.indexOf('.');
+		if (idx > 0) {
+			String zauth = auth.substring(0, start + 1)
+					+ hostname.substring(idx + 1) + auth.substring(end);
+			ParsedURI zo;
+			zo = new ParsedURI(scheme, zauth, "/", null, null);
+			return zo.toString();
+		}
+		return null;
 	}
 
 	private void consumeContent(HttpResponse resp) throws IOException {
@@ -154,7 +176,7 @@ public abstract class PartialSupport extends MirrorSupport implements
 		sb.append("SELECT REDUCED ?purl");
 		sb.append("\nWHERE {");
 		sb.append("\n\t{ ?purl a purl:PURL }");
-		sb.append("\n\tUNION {?origin purl:part ?purl }");
+		sb.append("\n\tUNION {?purl purl:domainOf ?origin }");
 		sb.append("\n\tUNION {?purl a purl:RemoteResource }");
 		sb.append("\n\tOPTIONAL {?purl ?z purl:Zoned FILTER(?z = rdf:type)}");
 		sb.append("\nFILTER (?purl = <").append(source).append(">");

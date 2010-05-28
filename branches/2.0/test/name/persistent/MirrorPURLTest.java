@@ -14,7 +14,6 @@ import junit.framework.TestCase;
 import name.persistent.behaviours.RemoteGraphSupport;
 import name.persistent.behaviours.ServiceRecordSupport;
 import name.persistent.concepts.Domain;
-import name.persistent.concepts.Origin;
 import name.persistent.concepts.PURL;
 import name.persistent.concepts.RemoteGraph;
 import name.persistent.concepts.Resolvable;
@@ -85,35 +84,35 @@ public class MirrorPURLTest extends TestCase {
 		/**
 		 * List of origins on this domain service.
 		 */
-		@operation("listOrigins")
+		@operation("serves")
 		@type("application/rdf+xml")
 		public GraphQueryResult myRemoteOrigins() throws OpenRDFException;
 
 		/**
 		 * List of domains for the given origin.
 		 */
-		@operation("listDomains")
+		@operation("domainsOf")
 		public GraphQueryResult myRemoteDomains(
-				@parameter("origin") Object origin) throws Exception;
+				@parameter("domain") Object origin) throws Exception;
 
 		/**
 		 * List of services for the given domain.
 		 */
-		@operation("listServices")
+		@operation("servicesOf")
 		public GraphQueryResult myRemoteServices(
 				@parameter("domain") Object domain) throws Exception;
 
 		/**
 		 * Description of all domains in the given origin.
 		 */
-		@operation("domainsOf")
-		public GraphQueryResult myDomainsOf(@parameter("origin") Object origin)
+		@operation("domainsIn")
+		public GraphQueryResult myDomainsOf(@parameter("domain") Object origin)
 				throws Exception;
 
 		/**
 		 * Description of all PURLs in the given domain.
 		 */
-		@operation("purlsOf")
+		@operation("purlsIn")
 		public GraphQueryResult myPurlsOf(@parameter("domain") Object domain)
 				throws Exception;
 	}
@@ -161,7 +160,7 @@ public class MirrorPURLTest extends TestCase {
 		con.add(vf.createURI(NS, "redirectsTo"), rel, vf.createLiteral("located"));
 		String uri = "http://localhost:3128/";
 		root = con.addDesignation(con.getObject(uri), Server.class);
-		Origin origin = con.addDesignation(con.getObject(ORIGIN), Origin.class);
+		Domain origin = con.addDesignation(con.getObject(ORIGIN), Domain.class);
 		root.getPurlServes().add(origin);
 		Domain domain = con.addDesignation(con.getObject(DOMAIN), Domain.class);
 		Service service = con.addDesignation(of.createObject(), Service.class);
@@ -170,7 +169,7 @@ public class MirrorPURLTest extends TestCase {
 		purl.setPurlPartOf(domain);
 		domain.getPurlServices().add(service);
 		service.setPurlServer(root);
-		origin.getPurlParts().add(domain);
+		domain.setPurlDomainOf(origin);
 	}
 
 	@Override
@@ -193,7 +192,7 @@ public class MirrorPURLTest extends TestCase {
 	}
 
 	public void testETag() throws Exception {
-		String url = root.toString() + "?purlsOf&domain=" + DOMAIN;
+		String url = root.toString() + "?purlsIn&domain=" + DOMAIN;
 		RemoteGraph graph = mirror.addDesignation(mirror.getObject(url), RemoteGraph.class);
 		assertTrue(graph.load(ORIGIN));
 		HTTPObjectClient client = HTTPObjectClient.getInstance();
@@ -260,28 +259,30 @@ public class MirrorPURLTest extends TestCase {
 		boolean found = false;
 		boolean remote = false;
 		boolean defined = false;
+		boolean oremote = false;
+		boolean odefined = false;
 		Set<Statement> set = new HashSet<Statement>();
 		while (origins.hasNext()) {
 			Statement st = origins.next();
 			if (st.getSubject().stringValue().equals(ORIGIN)
 					&& st.getPredicate().equals(RDF.TYPE)
-					&& st.getObject().stringValue().endsWith("Origin")) {
+					&& st.getObject().stringValue().endsWith("Domain")) {
 				set.add(st);
 			} else if (st.getSubject().stringValue().equals(ORIGIN)
 					&& st.getPredicate().equals(RDF.TYPE)
 					&& st.getObject().stringValue().endsWith("RemoteResource")) {
-				remote = true;
+				oremote = true;
 				set.add(st);
 			} else if (st.getSubject().stringValue().equals(ORIGIN)
 					&& st.getPredicate().getLocalName().equals("definedBy")) {
-				defined = true;
+				odefined = true;
 				set.add(st);
 			} else if (st.getSubject().stringValue().equals(ORIGIN)
-					&& st.getPredicate().getLocalName().equals("mirroredBy")) {
+					&& st.getPredicate().getLocalName().equals("domains")) {
 				set.add(st);
-			} else if (st.getSubject().stringValue().equals(ORIGIN)
-					&& st.getPredicate().getLocalName().equals("part")
-					&& st.getObject().stringValue().equals(DOMAIN)) {
+			} else if (st.getSubject().stringValue().equals(DOMAIN)
+					&& st.getPredicate().getLocalName().equals("domainOf")
+					&& st.getObject().stringValue().equals(ORIGIN)) {
 				found = true;
 				set.add(st);
 			} else if (st.getSubject().stringValue().equals(DOMAIN)
@@ -301,6 +302,8 @@ public class MirrorPURLTest extends TestCase {
 		assertTrue(found);
 		assertTrue(remote);
 		assertTrue(defined);
+		assertTrue(oremote);
+		assertTrue(odefined);
 		assertEquals(7, set.size());
 	}
 
