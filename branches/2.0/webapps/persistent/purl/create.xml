@@ -19,6 +19,16 @@
 					<tbody>
 						<tr class="all">
 							<td class="property">
+								<label for="m_label">Name:</label>
+							</td>
+							<td class="value" data-cardinality="1">
+								<span id="domain-span"/>
+								<input id="m_label" property="rdfs:label" type="text"
+									onchange="$(form).attr('about', $('#m_domain').attr('href') + value)" />
+							</td>
+						</tr>
+						<tr class="all">
+							<td class="property">
 								<label for="purl-rel-type">Redirect Type:</label>
 							</td>
 							<td class="value">
@@ -37,16 +47,6 @@
 							</td>
 							<td class="value">
 								<input type="checkbox" value="purl:ZonedPURL" id="m_zoned" class="purl_type" name="m_zoned" />
-							</td>
-						</tr>
-						<tr class="all">
-							<td class="property">
-								<label for="m_label">Name:</label>
-							</td>
-							<td class="value" data-cardinality="1">
-								<span id="domain-span"/>
-								<input id="m_label" property="rdfs:label" type="text"
-									onchange="$(form).attr('about', $('#m_domain').attr('href') + value)" />
 							</td>
 						</tr>
 						<tr class="rel renamed">
