@@ -31,6 +31,24 @@
 									onchange="$(form).attr('about', $('#m_origin').attr('href') + value)" />
 							</td>
 						</tr>
+						<tr>
+							<td class="property">
+								<label>Service:</label>
+							</td>
+							<td rel="purl:service" class="value">
+								<span typeof="purl:Service">
+									<p data-cardinality="1">
+										<label for="m_server">Server:</label> <input id="m_server" rel="purl:server" type="text" onchange="$(this).attr('resource', $(this).val())"/>
+									</p>
+									<p data-cardinality="1">
+										<label for="m_priority">Priority:</label> <input property="purl:priority" datatype="xsd:byte" type="text" id="m_priority" value="" />
+									</p>
+									<p data-cardinality="1">
+										<label for="m_weight">Weight:</label> <input property="purl:weight" datatype="xsd:byte" type="text" id="m_weight" value="" />
+									</p>
+								</span>
+							</td>
+						</tr>
 						<tr class="all">
 							<td class="property">
 								<label for="m_curator">Curators:</label>
