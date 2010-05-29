@@ -21,9 +21,11 @@ function initForms() {
 				var type = "application/rdf+xml"
 				var data = added.dump({format:"application/rdf+xml",serialize:true})
 				postData(location.href, type, data, function(data, textStatus, xhr) {
-					form.remove()
+					form.trigger('deleteSuccess.calli');
+					form.remove();
 				})
 			} catch(e) {
+				form.trigger('deleteFailure.calli');
 				if (window.showError) {
 					showError(e.description)
 				}

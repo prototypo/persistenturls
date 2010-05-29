@@ -4,11 +4,13 @@
 */
 
 function showRequest() {
-	$("#message").empty()
+	$("#message").empty();
+	$('#message').trigger('status.calli', []);
 }
 
 function showSuccess() {
-	$("#message").empty()
+	$("#message").empty();
+	$('#message').trigger('status.calli', []);
 }
 
 function showError(text, detail) {
@@ -27,6 +29,7 @@ function showError(text, detail) {
 				pre.toggle()
 			})
 		}
+        msg.trigger('status.calli', [text, detail]);
 	} else {
 		alert(text);
 	}
