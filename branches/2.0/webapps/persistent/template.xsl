@@ -64,6 +64,8 @@
 			<xsl:if test="contains($mode, 'delete')">
 				<script type="text/javascript" src="{$callimachus}/delete.js">
 				</script>
+				<script type="text/javascript" src="{$persistent}/delete.js">
+				</script>
 			</xsl:if>
 			<xsl:if test="starts-with($mode, 'pre-')">
 				<script>
