@@ -10,6 +10,7 @@
 <anybody> a calli:AnybodyRealm.
 
 <local> a calli:LocalRealm.
+<local> calli:origin </>.
 
 calli:SPARQLService http:realm <local>.
 calli:describe http:realm <local>.

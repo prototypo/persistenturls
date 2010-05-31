@@ -79,7 +79,7 @@
 				<xsl:with-param name="nodeID" select="$nodeID" />
 				<xsl:with-param name="scope" select="$newscope" />
 			</xsl:apply-templates>
-			<xsl:if test="$target">
+			<xsl:if test="$target and not(./*[local-name()='base'])">
 				<xsl:element name="base">
 					<xsl:attribute name="href"><xsl:value-of
 						select="$target" /></xsl:attribute>
@@ -273,20 +273,13 @@
 		<xsl:param name="about" />
 		<xsl:param name="nodeID" />
 		<xsl:param name="scope" />
-		<xsl:variable name="newscope">
-			<xsl:apply-templates mode="scope-about" select=".">
-				<xsl:with-param name="about" select="$about" />
-				<xsl:with-param name="nodeID" select="$nodeID" />
-				<xsl:with-param name="scope" select="$scope" />
-			</xsl:apply-templates>
-		</xsl:variable>
 		<xsl:choose>
 			<xsl:when test="($about=$target or not($about)) and starts-with(@about, '?') and not(contains($scope, concat(@about, '=')))">
 				<!-- <xsl:comment>($about=$target or not($about)) and starts-with(@about, '?') and not(contains($scope, concat(@about, '=')))</xsl:comment> -->
 				<xsl:apply-templates mode="properties" select=".">
 					<xsl:with-param name="about" select="$target" />
 					<xsl:with-param name="curie" select="@about" />
-					<xsl:with-param name="scope" select="$newscope" />
+					<xsl:with-param name="scope" select="$scope" />
 					<xsl:with-param name="tmode" select="'hanging'" />
 				</xsl:apply-templates>
 			</xsl:when>
@@ -295,7 +288,7 @@
 				<xsl:apply-templates mode="properties" select=".">
 					<xsl:with-param name="about" select="$target" />
 					<xsl:with-param name="curie" select="@src" />
-					<xsl:with-param name="scope" select="$newscope" />
+					<xsl:with-param name="scope" select="$scope" />
 					<xsl:with-param name="tmode" select="'hanging'" />
 				</xsl:apply-templates>
 			</xsl:when>
@@ -334,7 +327,7 @@
 					<xsl:apply-templates select="@*|*|comment()|text()">
 						<xsl:with-param name="about" select="$about" />
 						<xsl:with-param name="nodeID" select="$nodeID" />
-						<xsl:with-param name="scope" select="$newscope" />
+						<xsl:with-param name="scope" select="$scope" />
 					</xsl:apply-templates>
 				</xsl:copy>
 			</xsl:when>
@@ -343,7 +336,7 @@
 					<xsl:apply-templates select="@*|*|comment()|text()">
 						<xsl:with-param name="about" select="$about" />
 						<xsl:with-param name="nodeID" select="$nodeID" />
-						<xsl:with-param name="scope" select="$newscope" />
+						<xsl:with-param name="scope" select="$scope" />
 					</xsl:apply-templates>
 				</xsl:copy>
 			</xsl:otherwise>
@@ -557,10 +550,17 @@
 		<xsl:param name="tmode" />
 		<xsl:choose>
 			<xsl:when test="$tmode='hanging'">
+				<xsl:variable name="newscope">
+					<xsl:apply-templates mode="scope-about" select="$tag">
+						<xsl:with-param name="about" select="@rdf:resource" />
+						<xsl:with-param name="nodeID" select="@rdf:nodeID" />
+						<xsl:with-param name="scope" select="$scope" />
+					</xsl:apply-templates>
+				</xsl:variable>
 				<xsl:apply-templates select="$tag">
 					<xsl:with-param name="about" select="@rdf:resource" />
 					<xsl:with-param name="nodeID" select="@rdf:nodeID" />
-					<xsl:with-param name="scope" select="$scope" />
+					<xsl:with-param name="scope" select="$newscope" />
 				</xsl:apply-templates>
 			</xsl:when>
 			<xsl:when test="$tmode='resource'">
