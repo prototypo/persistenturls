@@ -97,7 +97,7 @@ purl:post-request-password rdfs:subClassOf obj:Message;
 	http:operation "request-password";
 	http:type "text/html";
 	obj:imports <java:org.openrdf.http.object.exceptions.BadRequest>;
-	obj:imports <request-password-sent.xml>;
+	obj:imports <user/request-password-sent.xml>;
 	obj:imports purl:User;
 	obj:groovy """
 		if (!msg.form || !msg.form.get("email") || !msg.form.get("email")[0])
@@ -141,7 +141,7 @@ purl:request-password rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:objectResponse;
 		owl:allValuesFrom owl:Nothing];
 	obj:imports <java:org.apache.commons.codec.digest.DigestUtils>;
-	obj:imports <user-mail-request-password.xml>;
+	obj:imports <user/mail-request-password.xml>;
 	obj:imports <mail.properties>;
 	obj:groovy """
 		String ha1 = DigestUtils.md5Hex(calliEncoded)
@@ -149,7 +149,7 @@ purl:request-password rdfs:subClassOf obj:Message;
 		String ha2 = DigestUtils.md5Hex(toUri().toString())
 		String token = DigestUtils.md5Hex("${ha1}:${nonce}:${ha2}")
 		String qs = "?reset-password&amp;nonce=${nonce}&amp;token=${token}"
-		Reader reader = userMailRequestPasswordXml.calliConstruct('pre-view', this)
+		Reader reader = mailRequestPasswordXml.calliConstruct('pre-view', this)
 		try {
 			CharArrayWriter writer = new CharArrayWriter()
 			int read
