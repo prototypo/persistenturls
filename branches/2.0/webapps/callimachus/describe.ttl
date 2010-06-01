@@ -27,10 +27,19 @@ calli:describe rdfs:subClassOf obj:Message;
 	http:title "RDF Describe";
 	http:rel "describedby";
 	http:operation "describe";
-	http:type "application/rdf+xml", "text/turtle", "application/x-turtle",
-			"text/rdf+n3", "application/trix", "application/x-trig";
+	http:type "application/rdf+xml;q=0.5", "text/turtle;q=0.5", "application/x-turtle;q=0.5",
+			"text/rdf+n3;q=0.5", "application/trix;q=0.5", "application/x-trig;q=0.5";
 	obj:java """
 		if (getObjectConnection().hasStatement(getResource(), null, null))
 			return this;
 		return null;
 	""".
+
+calli:about rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:functionalLiteralResponse;
+		owl:allValuesFrom xsd:string];
+	http:title "IRI";
+	http:rel "describedby";
+	http:operation "about";
+	http:type "text/uri-list;q=0.2";
+	obj:java "return getResource().toString();".

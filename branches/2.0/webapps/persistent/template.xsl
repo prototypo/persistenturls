@@ -139,7 +139,7 @@
 						</li>
 					</ul>
 					<div id="account">
-						<a href="{$origin}/persistent/authority?credential"><img src="{$origin}/persistent/images/account.png" alt="Account" /></a>
+						<a href="{$origin}/persistent/authority?credential"></a>
 					</div>
 					<div class="clear">&#160;</div>
 				</div>

@@ -62,6 +62,11 @@ Purl.UI.init = function() {
     $('#content h3').filter(function(index) {
         return $(this).next(':not(:header, div.clear)').length === 0;
     }).hide();
+
+	// user name
+	$.get($("#account").children("a").attr("href"), null, function(label) {
+		$("#account").children("a").append(document.createTextNode(label))
+	}, "text");
 };
 
 $(document).ready(function() {

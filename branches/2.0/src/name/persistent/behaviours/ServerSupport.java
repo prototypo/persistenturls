@@ -25,9 +25,9 @@ import org.apache.http.ProtocolVersion;
 import org.apache.http.message.BasicHttpResponse;
 import org.openrdf.OpenRDFException;
 import org.openrdf.http.object.annotations.header;
-import org.openrdf.http.object.annotations.method;
 import org.openrdf.http.object.annotations.operation;
 import org.openrdf.http.object.annotations.parameter;
+import org.openrdf.http.object.annotations.rel;
 import org.openrdf.http.object.annotations.type;
 import org.openrdf.http.object.exceptions.BadRequest;
 import org.openrdf.http.object.model.ReadableHttpEntityChannel;
@@ -145,27 +145,12 @@ public abstract class ServerSupport extends MirrorSupport implements RDFObject,
 		}
 	}
 
-	@operation("")
-	@method("GET")
-	@type("message/x-response")
-	public HttpResponse get(@header("Accept") String accept) {
-		ProtocolVersion ver = new ProtocolVersion("HTTP", 1, 1);
-		HttpResponse resp = new BasicHttpResponse(ver, 307,
-				"Temporary Redirect");
-		if (accept.contains("application/rdf+xml")) {
-			resp.setHeader("Location", getResource().stringValue()
-					+ "?serves");
-		} else {
-			resp.setHeader("Location", getResource().stringValue() + "?view");
-		}
-		return resp;
-	}
-
 	/**
 	 * List of origins on this domain service.
 	 */
 	@operation("serves")
-	@type("application/rdf+xml")
+	@rel("describedby")
+	@type("application/rdf+xml;q=0.9")
 	public GraphQueryResult serves(@header("Via") Set<String> via)
 			throws OpenRDFException {
 		if (via != null && via.toString().contains(VIA))
@@ -301,11 +286,11 @@ public abstract class ServerSupport extends MirrorSupport implements RDFObject,
 			throws Exception {
 		HttpResponse resp = new BasicHttpResponse(HTTP11, 200, "OK");
 		mirrorEntityHeaders(target, resp);
-		String type = "application/rdf+xml";
 		Class<GraphQueryResult> t = GraphQueryResult.class;
 		ObjectConnection con = getObjectConnection();
 		ObjectFactory of = con.getObjectFactory();
 		String b = getResource().stringValue();
+		String type = writer.getContentType("application/rdf+xml", t, t, of, null);
 		ReadableByteChannel in = writer.write(type, t, t, of, result, b, null);
 		resp.setEntity(new ReadableHttpEntityChannel(type, -1, in));
 		return resp;

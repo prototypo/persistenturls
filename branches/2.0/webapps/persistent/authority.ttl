@@ -28,6 +28,12 @@ purl:email a owl:DatatypeProperty, owl:FunctionalProperty;
 	rdfs:domain purl:User;
 	rdfs:range xsd:string.
 
+rdfs:label a owl:DatatypeProperty;
+	rdfs:range xsd:string;
+	http:operation "label";
+	http:type "text/plain";
+	http:rel "alternate".
+
 calli:get-copy http:realm <authority>.
 calli:pre-copy http:realm <authority>.
 calli:post-copy http:realm <authority>.
@@ -43,12 +49,12 @@ purl:purl-authorize owl:equivalentClass calli:authorize-user;
 		ASK { $subject a purl:PURL; purl:partOf [calli:curator $credential] }
 	""".
 
-purl:login rdfs:subClassOf obj:Message;
+purl:logout rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom calli:DigestRealm];
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
 		owl:allValuesFrom <java:org.apache.http.HttpResponse>];
-	http:operation "login";
+	http:operation "logout";
 	http:cache-control "private";
 	http:type "message/x-response";
 	obj:imports <authority>;
@@ -59,18 +65,40 @@ purl:login rdfs:subClassOf obj:Message;
 		def resp = new BasicHttpResponse(ver, 303, "See Other")
 		def credential = findCredential(msg.authorization)
 		if (credential == null) {
-			resp.setHeader("Location", authority.toString() + "?credential")
+			resp.setHeader("Location", authority.toString() + "?login")
 			return resp
 		}
 		if (msg.user != null && msg.user == credential)
 			return authority.unauthorized()
 		if (msg.user == null) {
-			resp.setHeader("Location", authority.toString() + "?login&logout=" + credential.toString())
+			resp.setHeader("Location", authority.toString() + "?logout&from=" + credential.toString())
 		} else {
 			resp.setHeader("Location", credential.toString())
 		}
 		return resp
 	""".
+
+purl:logout-authorization a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:domain purl:logout;
+	rdfs:range xsd:string;
+	http:header "Authorization";
+	obj:name "authorization".
+
+purl:logout-user a owl:ObjectProperty, owl:FunctionalProperty;
+	rdfs:domain purl:logout;
+	rdfs:range calli:Credential;
+	http:parameter "from";
+	http:type "text/uri-list";
+	obj:name "user".
+
+purl:login rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom calli:DigestRealm];
+	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
+		owl:allValuesFrom calli:Credential];
+	http:operation "login";
+	http:realm <authority>;
+	obj:groovy "return findCredential(msg.authorization)".
 
 purl:login-authorization a owl:DatatypeProperty, owl:FunctionalProperty;
 	rdfs:domain purl:login;
@@ -78,20 +106,13 @@ purl:login-authorization a owl:DatatypeProperty, owl:FunctionalProperty;
 	http:header "Authorization";
 	obj:name "authorization".
 
-purl:login-user a owl:ObjectProperty, owl:FunctionalProperty;
-	rdfs:domain purl:login;
-	rdfs:range calli:Credential;
-	http:parameter "logout";
-	http:type "text/uri-list";
-	obj:name "user".
-
 purl:credential rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom calli:DigestRealm];
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
 		owl:allValuesFrom calli:Credential];
 	http:operation "credential";
-	http:realm <authority>;
+	http:cache-control "private";
 	obj:groovy "return findCredential(msg.authorization)".
 
 purl:credential-authorization a owl:DatatypeProperty, owl:FunctionalProperty;
