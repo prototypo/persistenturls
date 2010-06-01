@@ -40,6 +40,7 @@ import org.apache.http.message.BasicHttpRequest;
 import org.apache.http.message.BasicHttpResponse;
 import org.openrdf.http.object.client.HTTPObjectClient;
 import org.openrdf.http.object.exceptions.InternalServerError;
+import org.openrdf.http.object.exceptions.NotFound;
 import org.openrdf.http.object.util.Accepter;
 import org.openrdf.model.Value;
 import org.openrdf.query.BindingSet;
@@ -186,8 +187,8 @@ public abstract class PURLSupport extends PartialSupport implements PURL {
 			while (result.hasNext()) {
 				BindingSet set = result.next();
 				Value pattern = set.getValue("pattern");
-				Matcher regex = compile(pattern, source, qs);
-				String location = readValue(set, "target", qs, regex);
+				Matcher regex = compile(pattern, source);
+				String location = readValue(set, "target", regex);
 				String rel = readValue(set, "rel", regex);
 				String type = readValue(set, "type", regex);
 				String lang = readValue(set, "lang", regex);
@@ -363,7 +364,7 @@ public abstract class PURLSupport extends PartialSupport implements PURL {
 		return bd;
 	}
 
-	private Matcher compile(Value pattern, String source, String qs) {
+	private Matcher compile(Value pattern, String source) {
 		if (pattern == null)
 			return null;
 		Pattern regex;
@@ -380,53 +381,44 @@ public abstract class PURLSupport extends PartialSupport implements PURL {
 				patterns.put(pattern.stringValue(), regex);
 			}
 		}
-		if (qs == null)
-			return regex.matcher(source);
-		return regex.matcher(source + "?" + qs);
+		return regex.matcher(source);
 	}
 
-	private String readValue(BindingSet set, String name, String qs, Matcher regex) {
+	private String readValue(BindingSet set, String name, Matcher regex) {
 		if (set.hasBinding(name)) {
-			return apply(regex, set.getValue(name).stringValue(), qs);
+			return apply(regex, set.getValue(name).stringValue());
 		}
 		return null;
 	}
 
-	private String readValue(BindingSet set, String name, Matcher regex) {
-		return readValue(set, name, null, regex);
-	}
-
-	private String apply(Matcher m, String template, String qs) {
-		if (m != null && template.indexOf('$') >= 0 && m.matches()) {
-			StringBuilder sb = new StringBuilder(255);
-			for (int i = 0, n = template.length(); i < n; i++) {
-				char chr = template.charAt(i);
-				switch (chr) {
-				case '$':
-					if (i + 1 < n) {
-						int idx = template.charAt(++i) - '0';
-						try {
-							sb.append(m.group(idx));
-						} catch (IndexOutOfBoundsException e) {
-							sb.append("$").append(idx);
-						}
-						break;
-					}
-				case '\\':
-					if (i + 1 < n && chr == '\\') {
-						chr = template.charAt(++i);
-					}
-				default:
-					sb.append(chr);
-				}
-			}
-			return sb.toString();
-		}
-		if (qs == null)
+	private String apply(Matcher m, String template) {
+		if (m != null && !m.matches())
+			throw new NotFound("No Matching PURL");
+		if (m == null || template.indexOf('$') < 0)
 			return template;
-		if (template.indexOf('?') > 0)
-			return template + "&" + qs;
-		return template + "?" + qs;
+		StringBuilder sb = new StringBuilder(255);
+		for (int i = 0, n = template.length(); i < n; i++) {
+			char chr = template.charAt(i);
+			switch (chr) {
+			case '$':
+				if (i + 1 < n) {
+					int idx = template.charAt(++i) - '0';
+					try {
+						sb.append(m.group(idx));
+					} catch (IndexOutOfBoundsException e) {
+						sb.append("$").append(idx);
+					}
+					break;
+				}
+			case '\\':
+				if (i + 1 < n && chr == '\\') {
+					chr = template.charAt(++i);
+				}
+			default:
+				sb.append(chr);
+			}
+		}
+		return sb.toString();
 	}
 
 	private HttpResponse response(String rel) {

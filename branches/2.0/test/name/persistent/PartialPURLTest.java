@@ -79,12 +79,13 @@ public class PartialPURLTest extends TestCase {
 
 	public void testBadRegex() throws Exception {
 		PURL purl = con.addDesignation(con.getObject(PURL0), PURL.class);
-		purl.getPurlAlternatives().add(con.getObject("http://docs.$1/pages/$2.html"));
-		purl.setPurlPattern("ftp://test.([^/]*)/(.*)");
-		HttpResponse resp = resolvePURL("http://test.persistent.name/test/test0/item");
-		assertEquals(302, resp.getStatusLine().getStatusCode());
-		assertEquals(1, resp.getHeaders("Location").length);
-		assertEquals("http://docs.$1/pages/$2.html", resp.getFirstHeader("Location").getValue());
+		purl.getPurlAlternatives().add(con.getObject("http://docs.persistent.name/pages/test/test0/$1.html"));
+		purl.setPurlPattern("(.*)\\.rdf");
+		try {
+			resolvePURL("http://test.persistent.name/test/test0/item");
+			fail();
+		} catch (NotFound e) {
+		}
 	}
 
 	public void testPathFragment() throws Exception {

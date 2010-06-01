@@ -103,7 +103,7 @@ public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 
 	private static final ScheduledExecutorService executor = Executors
 			.newSingleThreadScheduledExecutor(new NamedThreadFactory(
-					"RemoteGraph"));
+					"RemoteGraph", true));
 	private static final Map<Object, Refresher> alwaysFresh = new HashMap<Object, Refresher>();
 
 	private final static class Refresher implements Runnable {

@@ -131,7 +131,7 @@ public abstract class DomainSupport implements Domain, RDFObject {
 
 	private static final ScheduledExecutorService executor = Executors
 			.newSingleThreadScheduledExecutor(new NamedThreadFactory(
-					"URL Resolver"));
+					"URL Resolver", true));
 	private static final Map<Object, Resolver> resolvers = new HashMap<Object, Resolver>();
 
 	private final static class Resolver implements Runnable {
