@@ -112,7 +112,7 @@ calli:origin a owl:ObjectProperty;
 	rdfs:comment "Origin of scripts that can be seamlessly authenticated with this realm.";
 	rdfs:domain calli:DigestRealm.
 
-calli:realmAuth a rdf:Property, owl:FunctionalProperty;
+calli:authName a rdf:Property, owl:FunctionalProperty;
 	rdfs:comment "The realm name used in the encoding of its credentials.";
 	rdfs:domain calli:DigestRealm.
 

@@ -18,7 +18,8 @@ calli:get-graph http:realm <local>.
 
 <authority> a calli:DigestRealm, calli:AuthorizationRealm;
 	calli:origin </>;
-	calli:realmAuth </>.
+	calli:authName </>;
+	calli:domain </>.
 
 purl:User rdfs:subClassOf calli:Credential;
 	http:realm <authority>.
