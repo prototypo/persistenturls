@@ -42,6 +42,48 @@ purl:purl-authorize owl:equivalentClass calli:authorize-user;
 		ASK { $subject a purl:PURL; purl:partOf [calli:curator $credential] }
 	""".
 
+purl:login rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom calli:DigestRealm];
+	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
+		owl:allValuesFrom <java:org.apache.http.HttpResponse>];
+	http:operation "login";
+	http:cache-control "private";
+	http:type "message/x-response";
+	obj:imports <authority>;
+	obj:imports <java:org.apache.http.ProtocolVersion>;
+	obj:imports <java:org.apache.http.message.BasicHttpResponse>;
+	obj:groovy """
+		def ver = new ProtocolVersion("HTTP", 1, 1)
+		def resp = new BasicHttpResponse(ver, 303, "See Other")
+		def credential = findCredential(msg.authorization)
+		if (credential == null) {
+			resp.setHeader("Location", authority.toString() + "?credential")
+			return resp
+		}
+		if (msg.user != null && msg.user == credential)
+			return authority.unauthorized()
+		if (msg.user == null) {
+			resp.setHeader("Location", authority.toString() + "?login&logout=" + credential.toString())
+		} else {
+			resp.setHeader("Location", credential.toString())
+		}
+		return resp
+	""".
+
+purl:login-authorization a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:domain purl:login;
+	rdfs:range xsd:string;
+	http:header "Authorization";
+	obj:name "authorization".
+
+purl:login-user a owl:ObjectProperty, owl:FunctionalProperty;
+	rdfs:domain purl:login;
+	rdfs:range calli:Credential;
+	http:parameter "logout";
+	http:type "text/uri-list";
+	obj:name "user".
+
 purl:credential rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom calli:DigestRealm];
