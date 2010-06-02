@@ -300,7 +300,7 @@ purl:reset-password rdfs:subClassOf obj:Message;
 	obj:groovy """
 		Captcha captcha = new Captcha.Builder(200, 50)
 			.addText(new DefaultTextProducer(8)).addNoise().gimp().build()
-		String token = "${calliName}:${authority.calliRealmAuth}:${captcha.answer}"
+		String token = "${calliName}:${authority.calliAuthName}:${captcha.answer}"
 		calliAlgorithm = "MD5"
 		calliEncoded = DigestUtils.md5(token.getBytes("UTF-8"))
 		ByteArrayOutputStream image = new ByteArrayOutputStream()

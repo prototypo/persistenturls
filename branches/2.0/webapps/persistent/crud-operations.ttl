@@ -91,6 +91,7 @@ purl:get-domain-create rdfs:subClassOf obj:Message;
 		owl:allValuesFrom <java:java.io.Reader>];
 	http:operation "domain-create";
 	http:type "text/html";
+	http:realm <authority>;
 	obj:imports <domain/create.xml>;
 	obj:groovy """
 		return createXml.calliConstruct('copy', this)
@@ -103,6 +104,7 @@ purl:post-domain-create rdfs:subClassOf obj:Message;
 		owl:maxCardinality "1"^^xsd:nonNegativeInteger];
 	http:method "POST";
 	http:operation "domain-create";
+	http:realm <authority>;
 	http:expect "201-created";
 	obj:imports <domain/create.xml>;
 	obj:groovy """
@@ -160,6 +162,7 @@ purl:get-purl-create rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
 		owl:allValuesFrom <java:java.io.Reader>];
 	http:operation "purl-create";
+	http:realm <authority>;
 	http:type "text/html";
 	obj:imports <purl/create.xml>;
 	obj:groovy """
@@ -173,6 +176,7 @@ purl:post-purl-create rdfs:subClassOf obj:Message;
 		owl:maxCardinality "1"^^xsd:nonNegativeInteger];
 	http:method "POST";
 	http:operation "purl-create";
+	http:realm <authority>;
 	http:expect "201-created";
 	obj:imports <purl/create.xml>;
 	obj:groovy """
