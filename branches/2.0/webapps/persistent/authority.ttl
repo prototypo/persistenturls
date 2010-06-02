@@ -45,7 +45,14 @@ calli:post-delete http:realm <authority>.
 
 purl:purl-authorize owl:equivalentClass calli:authorize-user;
 	obj:sparql """
-		ASK { $subject a purl:PURL; purl:partOf [calli:curator $credential] }
+		ASK {
+			$subject a purl:PURL; purl:partOf ?domain
+			{
+				?domain calli:curator $credential
+			} UNION {
+				?domain calli:maintainer $credential
+			}
+		}
 	""".
 
 purl:logout rdfs:subClassOf obj:Message;
