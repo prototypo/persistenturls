@@ -14,8 +14,9 @@
 </> a purl:Server;
 	calli:maintainer </data/user/admin>.
 
-purl:Server rdfs:subClassOf calli:Viewable, calli:Editable;
+purl:Server rdfs:subClassOf calli:Viewable, calli:Reviewable, calli:Editable;
 	calli:view <server/view.xml>;
+	calli:review <server/review.xml>;
 	calli:edit <server/edit.xml>.
 
 ################################
@@ -43,8 +44,9 @@ purl:post-user-copy owl:intersectionOf (calli:post-copy
 		return copy
 	""".
 
-purl:User rdfs:subClassOf calli:Viewable, calli:Editable, calli:Deletable;
+purl:User rdfs:subClassOf calli:Viewable, calli:Reviewable, calli:Editable, calli:Deletable;
 	calli:view <user/view.xml>;
+	calli:review <user/review.xml>;
 	calli:edit <user/edit.xml>;
 	calli:delete <user/delete.xml>.
 
@@ -122,8 +124,9 @@ purl:post-domain-create-in a owl:DatatypeProperty, owl:FunctionalProperty;
 	http:type "application/rdf+xml";
 	obj:name "in".
 
-purl:Domain rdfs:subClassOf calli:Viewable, calli:Editable, calli:Copyable, calli:Deletable;
+purl:Domain rdfs:subClassOf calli:Viewable, calli:Reviewable, calli:Editable, calli:Copyable, calli:Deletable;
 	calli:view <domain/view.xml>;
+	calli:review <domain/review.xml>;
 	calli:edit <domain/edit.xml>;
 	calli:copy <domain/copy.xml>;
 	calli:delete <domain/delete.xml>.
@@ -185,8 +188,9 @@ purl:post-purl-create-in a owl:DatatypeProperty, owl:FunctionalProperty;
 	http:type "application/rdf+xml";
 	obj:name "in".
 
-purl:PURL rdfs:subClassOf calli:Viewable, calli:Editable, calli:Copyable;
+purl:PURL rdfs:subClassOf calli:Viewable, calli:Reviewable, calli:Editable, calli:Copyable;
 	calli:view <purl/view.xml>;
+	calli:review <purl/review.xml>;
 	calli:edit <purl/edit.xml>;
 	calli:copy <purl/copy.xml>.
 
