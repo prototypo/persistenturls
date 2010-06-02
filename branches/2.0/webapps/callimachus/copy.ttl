@@ -33,10 +33,10 @@ calli:get-copy rdfs:subClassOf obj:Message;
 	http:type "text/html";
 	obj:imports <java:org.openrdf.http.object.exceptions.InternalServerError>;
 	obj:groovy """
-		def profile = findCopyProfile()
-		if (profile == null)
-			throw new InternalServerError("Missing Copy Profile")
-		return profile.calliConstruct('copy', this)
+		def template = findCopyTemplate()
+		if (template == null)
+			throw new InternalServerError("Missing Copy Template")
+		return template.calliConstruct('copy', this)
 	""".
 
 calli:pre-copy rdfs:subClassOf obj:Message;
@@ -48,10 +48,10 @@ calli:pre-copy rdfs:subClassOf obj:Message;
 	http:type "text/html";
 	obj:imports <java:org.openrdf.http.object.exceptions.InternalServerError>;
 	obj:groovy """
-		def profile = findCopyProfile()
-		if (profile == null)
-			throw new InternalServerError("Missing Copy Profile")
-		return profile.calliConstruct('pre-copy', this)
+		def template = findCopyTemplate()
+		if (template == null)
+			throw new InternalServerError("Missing Copy Template")
+		return template.calliConstruct('pre-copy', this)
 	""".
 
 calli:post-copy rdfs:subClassOf obj:Message;
@@ -64,10 +64,10 @@ calli:post-copy rdfs:subClassOf obj:Message;
 	http:expect "201-created";
 	obj:imports <java:org.openrdf.http.object.exceptions.InternalServerError>;
 	obj:groovy """
-		def profile = findCopyProfile()
-		if (profile == null)
-			throw new InternalServerError("Missing Copy Profile")
-		def copy = profile.calliCopyResource(this, msg.in, findCopyNamespaces())
+		def template = findCopyTemplate()
+		if (template == null)
+			throw new InternalServerError("Missing Copy Template")
+		def copy = template.calliCopyResource(this, msg.in, findCopyNamespaces())
 		if (calliCurators) {
 			copy.calliMaintainers.addAll(calliCurators)
 		} else {
@@ -82,17 +82,17 @@ calli:post-copy-in a owl:ObjectProperty, owl:FunctionalProperty;
 	http:type "application/rdf+xml";
 	obj:name "in".
 
-calli:find-copy-profile rdfs:subClassOf obj:Message;
+calli:find-copy-template rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom calli:Copyable];
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
 		owl:allValuesFrom <urn:mimetype:application/xml>];
-	obj:name "findCopyProfile";
+	obj:name "findCopyTemplate";
 	obj:sparql """
-		SELECT REDUCED ?profile
+		SELECT REDUCED ?template
 		WHERE {
-			$this a [calli:copy ?profile] .
-			?profile a <urn:mimetype:application/xml>
+			$this a [calli:copy ?template] .
+			?template a <urn:mimetype:application/xml>
 		}
 	""".
 

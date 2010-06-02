@@ -33,10 +33,10 @@ calli:get-edit rdfs:subClassOf obj:Message;
 	http:type "text/html";
 	obj:imports <java:org.openrdf.http.object.exceptions.InternalServerError>;
 	obj:groovy """
-		def profile = findEditProfile()
-		if (profile == null)
-			throw new InternalServerError("Missing Edit Profile")
-		return profile.calliConstruct('edit', this)
+		def template = findEditTemplate()
+		if (template == null)
+			throw new InternalServerError("Missing Edit Template")
+		return template.calliConstruct('edit', this)
 	""".
 
 calli:pre-edit rdfs:subClassOf obj:Message;
@@ -48,10 +48,10 @@ calli:pre-edit rdfs:subClassOf obj:Message;
 	http:type "text/html";
 	obj:imports <java:org.openrdf.http.object.exceptions.InternalServerError>;
 	obj:groovy """
-		def profile = findEditProfile()
-		if (profile == null)
-			throw new InternalServerError("Missing Edit Profile")
-		return profile.calliConstruct('pre-edit', this)
+		def template = findEditTemplate()
+		if (template == null)
+			throw new InternalServerError("Missing Edit Template")
+		return template.calliConstruct('pre-edit', this)
 	""".
 
 calli:post-edit rdfs:subClassOf obj:Message;
@@ -63,10 +63,10 @@ calli:post-edit rdfs:subClassOf obj:Message;
 	http:operation "edit", "pre-edit";
 	obj:imports <java:org.openrdf.http.object.exceptions.InternalServerError>;
 	obj:groovy """
-		def profile = findEditProfile()
-		if (profile == null)
-			throw new InternalServerError("Missing Edit Profile")
-		profile.calliEditResource(this, msg.in)
+		def template = findEditTemplate()
+		if (template == null)
+			throw new InternalServerError("Missing Edit Template")
+		template.calliEditResource(this, msg.in)
 	""".
 
 calli:post-edit-in a owl:ObjectProperty; a owl:FunctionalProperty;
@@ -75,17 +75,17 @@ calli:post-edit-in a owl:ObjectProperty; a owl:FunctionalProperty;
 	http:type "multipart/related;type=\"application/rdf+xml\"";
 	obj:name "in".
 
-calli:find-edit-profile rdfs:subClassOf obj:Message;
+calli:find-edit-template rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom calli:Editable];
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
 		owl:allValuesFrom <urn:mimetype:application/xml>];
-	obj:name "findEditProfile";
+	obj:name "findEditTemplate";
 	obj:sparql """
-		SELECT REDUCED ?profile
+		SELECT REDUCED ?template
 		WHERE {
-			$this a [calli:edit ?profile] .
-			?profile a <urn:mimetype:application/xml>
+			$this a [calli:edit ?template] .
+			?template a <urn:mimetype:application/xml>
 		}
 	""".
 

@@ -28,9 +28,6 @@
 		select="'http://callimachusproject.org/rdf/2009/framework/variables/?'" />
 	<xsl:variable name="target"
 		select="$data/rdf:RDF/rdf:Description[1]/@rdf:about" />
-	<xsl:variable name="profile-uri">
-		<xsl:value-of select="substring-before($profile, '?')" />
-	</xsl:variable>
 	<xsl:template match="/">
 		<xsl:variable name="html" select="document($profile)/*" />
 		<xsl:variable name="about" select="$target" />
@@ -192,7 +189,7 @@
 					<xsl:attribute name="data-rel"><xsl:value-of
 						select="@rel" /></xsl:attribute>
 					<xsl:attribute name="data-search">
-						<xsl:value-of select="$profile-uri" />
+						<xsl:value-of select="$this" />
 						<xsl:text>?search&amp;mode=</xsl:text>
 						<xsl:value-of select="$mode" />
 						<xsl:text>&amp;element=</xsl:text>
@@ -200,7 +197,7 @@
 						<xsl:text>&amp;q={searchTerms}</xsl:text>
 					</xsl:attribute>
 					<xsl:attribute name="data-add">
-						<xsl:value-of select="$profile-uri" />
+						<xsl:value-of select="$this" />
 						<xsl:text>?construct&amp;mode=</xsl:text>
 						<xsl:value-of select="$mode" />
 						<xsl:text>&amp;element=</xsl:text>
@@ -210,7 +207,7 @@
 				</xsl:if>
 				<xsl:if test="not(*[@about or @src or @href]) and 1=count(*)">
 					<xsl:attribute name="data-more">
-						<xsl:value-of select="$profile-uri" />
+						<xsl:value-of select="$this" />
 						<xsl:text>?template&amp;mode=</xsl:text>
 						<xsl:value-of select="$mode" />
 						<xsl:text>&amp;element=</xsl:text>
@@ -299,7 +296,7 @@
 							<xsl:value-of select="*/@property" />
 						</xsl:attribute>
 						<xsl:attribute name="data-more">
-							<xsl:value-of select="$profile-uri" />
+							<xsl:value-of select="$this" />
 							<xsl:text>?template&amp;mode=</xsl:text>
 							<xsl:value-of select="$mode" />
 							<xsl:text>&amp;element=</xsl:text>
@@ -309,14 +306,14 @@
 					<xsl:if test="1=count(*[@rel or @rev]) and *[(@rel or @rev) and (starts-with(@resource,'?') or starts-with(@href,'?'))]">
 						<xsl:attribute name="data-rel"><xsl:value-of select="*/@rel or */@rev"/></xsl:attribute>
 						<xsl:attribute name="data-options">
-							<xsl:value-of select="$profile-uri" />
+							<xsl:value-of select="$this" />
 							<xsl:text>?options&amp;mode=</xsl:text>
 							<xsl:value-of select="$mode" />
 							<xsl:text>&amp;element=</xsl:text>
 							<xsl:apply-templates mode="xptr-element" select="." />
 						</xsl:attribute>
 						<xsl:attribute name="data-construct">
-							<xsl:value-of select="$profile-uri" />
+							<xsl:value-of select="$this" />
 							<xsl:text>?construct&amp;mode=</xsl:text>
 							<xsl:value-of select="$mode" />
 							<xsl:text>&amp;element=</xsl:text>
@@ -592,7 +589,7 @@
 					</xsl:if>
 					<xsl:if test="1=count($tag/*[@rel='rdf:first']/*)">
 						<xsl:attribute name="data-member">
-							<xsl:value-of select="$profile-uri" />
+							<xsl:value-of select="$this" />
 							<xsl:text>?construct&amp;mode=</xsl:text>
 							<xsl:value-of select="$mode" />
 							<xsl:text>&amp;element=</xsl:text>
