@@ -63,10 +63,22 @@ Purl.UI.init = function() {
         return $(this).next(':not(:header, div.clear)').length === 0;
     }).hide();
 
-	// user name
-	$.get($("#account").children("a").attr("href"), null, function(label) {
-		$("#account").children("a").append(document.createTextNode(label))
-	}, "text");
+    // user name
+    // it would be preferable to come up with the user URL and then
+    // get ?label on redirect instead of ?view - but impossible to do with just HTTP and jQuery
+    $.ajax({
+        url: $('#username').attr('href'),
+        type: "GET",
+        dataType: "html",
+        success: function(data, status) {
+            $('#username').text($('h1', data).text());
+            $('.logout').show();
+        },
+        error: function(xhr, status, err) {
+            $('#username').hide();
+            $('#login').show();
+        }
+    });
 };
 
 $(document).ready(function() {

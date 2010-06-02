@@ -96,7 +96,12 @@ input[type="text"] {
 #account {
     clear: right;
     float: right;
-    padding: 0.25em 0.25em 0 0;
+    font-size: 0.9em;
+    padding: 0.5em 2em 0 0;
+}
+
+#login, .logout {
+    display: none;
 }
 
 #content {

@@ -139,7 +139,10 @@
 						</li>
 					</ul>
 					<div id="account">
-						<a href="{$origin}/persistent/authority?credential"></a>
+						<strong><a id="username" href="{$origin}/persistent/authority?credential"></a></strong>
+						<a id="login" href="{$origin}/persistent/authority?login">Login</a>
+						<span class="logout">&#160;&#183;&#160;</span>
+						<a class="logout" href="{$origin}/persistent/authority?logout">Logout</a>
 					</div>
 					<div class="clear">&#160;</div>
 				</div>
