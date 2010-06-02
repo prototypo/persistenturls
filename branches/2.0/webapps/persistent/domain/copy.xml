@@ -33,6 +33,14 @@
 						</tr>
 						<tr>
 							<td class="property">
+								<label for="m_days">Max Unresolved Days:</label>
+							</td>
+							<td class="value" data-cardinality="1">
+								<input id="m_days" property="purl:max-unresolved-days" datatype="xsd:int" type="text" />
+							</td>
+						</tr>
+						<tr>
+							<td class="property">
 								<label>Service:</label>
 							</td>
 							<td rel="purl:service" class="value">

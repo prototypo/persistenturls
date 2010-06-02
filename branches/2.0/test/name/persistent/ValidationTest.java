@@ -109,7 +109,6 @@ public class ValidationTest extends TestCase {
 
 	public void testWith() throws Exception {
 		con.add(vf.createURI(PURL1), lastResolved, vf.createLiteral(xgc));
-		domain.setPurlTargetCount(1);
 		domain.setPurlMaxUnresolvedDays(1);
 		domain.validatePURLs(xgc, 1, 1, xgc);
 		assertTrue(con.getObject(PURL1) instanceof Unresolvable);
@@ -120,7 +119,6 @@ public class ValidationTest extends TestCase {
 	}
 
 	public void testWithout() throws Exception {
-		domain.setPurlTargetCount(1);
 		domain.setPurlMaxUnresolvedDays(1);
 		domain.validatePURLs(xgc, 1, 1, xgc);
 		assertTrue(con.getObject(PURL1) instanceof Unresolvable);
@@ -140,7 +138,6 @@ public class ValidationTest extends TestCase {
 		yesterday.setTime(n, n, n, n);
 		yesterday.add(f.newDurationDayTime("-P1D"));
 		con.add(vf.createURI(PURL1), lastResolved, vf.createLiteral(yesterday));
-		domain.setPurlTargetCount(1);
 		domain.setPurlMaxUnresolvedDays(1);
 		domain.validatePURLs(xgc, 1, 1, xgc);
 		assertTrue(con.getObject(PURL1) instanceof Unresolvable);

@@ -13,6 +13,9 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.http.HttpResponse;
 import org.openrdf.OpenRDFException;
+import org.openrdf.http.object.annotations.operation;
+import org.openrdf.http.object.annotations.type;
+import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.repository.object.annotations.iri;
 
 /** A prefix to a set of PURLs (endings with '/') that are administrated together. */
@@ -35,17 +38,14 @@ public interface Domain extends PURL {
 	@iri("http://persistent.name/rdf/2010/purl#service")
 	void setPurlServices(Set<? extends Service> purlServices);
 
-	/** Number of explicit PURL targets in this Domain. */
-	@iri("http://persistent.name/rdf/2010/purl#target-count")
-	Integer getPurlTargetCount();
-	/** Numberer of explicit PURL targets in this Domain. */
-	@iri("http://persistent.name/rdf/2010/purl#target-count")
-	void setPurlTargetCount(Integer purlTargetCount);
+	@type("text/plain")
+	@operation("count-targets")
+	int countTargets() throws QueryEvaluationException;
 
 	HttpResponse resolveRemotePURL(String source, String qs, String accept,
 			String language, Set<String> via) throws Exception;
 
-	boolean startResolving();
+	boolean startResolving() throws QueryEvaluationException;
 
 	boolean isResolving();
 

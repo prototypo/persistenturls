@@ -69,6 +69,8 @@ import org.openrdf.repository.object.ObjectConnection;
 import org.openrdf.repository.object.ObjectFactory;
 import org.openrdf.repository.object.ObjectRepository;
 import org.openrdf.repository.object.RDFObject;
+import org.openrdf.repository.object.annotations.sparql;
+import org.openrdf.repository.object.annotations.triggeredBy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -162,9 +164,12 @@ public abstract class DomainSupport implements Domain, RDFObject {
 			}
 			cancelled = false;
 			interval = (int) unit.toSeconds(period);
-			int delay = random.get().nextInt(interval);
-			schedule = executor.scheduleAtFixedRate(this, delay, interval,
-					TimeUnit.SECONDS);
+			int delay = random.get().nextInt(interval) + 60;
+			TimeUnit sec = TimeUnit.SECONDS;
+			schedule = executor.scheduleAtFixedRate(this, delay, interval, sec);
+			logger.info("Validating {} in {} hours and every {} hours",
+					new Object[] { subj, sec.toHours(delay),
+							sec.toHours(interval) });
 		}
 
 		public synchronized void await() throws InterruptedException {
@@ -174,6 +179,7 @@ public abstract class DomainSupport implements Domain, RDFObject {
 		}
 
 		public boolean cancel(boolean mayInterruptIfRunning) {
+			logger.info("Stopped validating {}", subj);
 			cancelled = true;
 			if (schedule == null)
 				return false;
@@ -189,9 +195,11 @@ public abstract class DomainSupport implements Domain, RDFObject {
 				ObjectConnection con = repository.getConnection();
 				try {
 					Domain domain = con.getObject(Domain.class, subj);
-					Integer count = domain.getPurlTargetCount();
+					int count;
 					Integer days = domain.getPurlMaxUnresolvedDays();
-					if (count == null || days == null || days < 1 || count < 1) {
+					if (days == null || days < 1) {
+						cancel(false);
+					} else if ((count = domain.countTargets()) < 1) {
 						cancel(false);
 					} else {
 						GregorianCalendar cal;
@@ -225,25 +233,19 @@ public abstract class DomainSupport implements Domain, RDFObject {
 
 	private Logger logger = LoggerFactory.getLogger(DomainSupport.class);
 
-	@Override
-	public boolean startResolving() {
-		Integer count = getPurlTargetCount();
-		Integer days = getPurlMaxUnresolvedDays();
-		if (count == null || days == null || days < 1 || count < 1)
-			return false;
-		Resolver resolver = new Resolver(this);
-		synchronized (resolvers) {
-			if (resolvers.containsKey(resolver.key)) {
-				resolver = resolvers.get(resolver.key);
-			} else {
-				resolvers.put(resolver.key, resolver);
+	@triggeredBy("http://persistent.name/rdf/2010/purl#max-unresolved-days")
+	public void changePurlMaxUnresolvedDays(Integer days)
+			throws QueryEvaluationException {
+		if (days != null && days > 0) {
+			if (!isResolving()) {
+				startResolving(days);
 			}
 		}
-		int periods = (count + 99) / 100; // check 100 targets at a time
-		long maxHours = TimeUnit.DAYS.toHours(days);
-		int interval = Math.max(1, (int) maxHours / periods);
-		resolver.schedule(interval, TimeUnit.HOURS);
-		return true;
+	}
+
+	@Override
+	public boolean startResolving() throws QueryEvaluationException {
+		return startResolving(getPurlMaxUnresolvedDays());
 	}
 
 	@Override
@@ -268,6 +270,20 @@ public abstract class DomainSupport implements Domain, RDFObject {
 	}
 
 	@Override
+	public int countTargets() throws QueryEvaluationException {
+		TupleQueryResult result = findTargets();
+		try {
+			int count;
+			for (count = 0; result.hasNext(); count++) {
+				result.next();
+			}
+			return count;
+		} finally {
+			result.close();
+		}
+	}
+
+	@Override
 	public HttpResponse resolveRemotePURL(String source, String qs,
 			String accept, String language, Set<String> via)
 			throws IOException, InterruptedException {
@@ -279,6 +295,33 @@ public abstract class DomainSupport implements Domain, RDFObject {
 			XMLGregorianCalendar today) throws OpenRDFException, IOException {
 		List<Value> targets = findTargetResolvedBefore(xgc, min, max);
 		markResolvability(resolveTargets(targets), today);
+	}
+
+	@sparql(PREFIX
+			+ "SELECT REDUCED ?target\n"
+			+ "WHERE { ?purl purl:partOf $this; ?pred ?target . ?pred purl:rel ?rel }")
+	protected abstract TupleQueryResult findTargets();
+
+	private boolean startResolving(Integer days)
+			throws QueryEvaluationException {
+		if (days == null || days < 1)
+			return false;
+		int count = countTargets();
+		if (count < 1)
+			return false;
+		Resolver resolver = new Resolver(this);
+		synchronized (resolvers) {
+			if (resolvers.containsKey(resolver.key)) {
+				resolver = resolvers.get(resolver.key);
+			} else {
+				resolvers.put(resolver.key, resolver);
+			}
+		}
+		int periods = (count + 99) / 100; // check 100 targets at a time
+		long maxHours = TimeUnit.DAYS.toHours(days);
+		int interval = Math.max(1, (int) maxHours / periods);
+		resolver.schedule(interval, TimeUnit.HOURS);
+		return true;
 	}
 
 	private List<Value> findTargetResolvedBefore(XMLGregorianCalendar xgc,

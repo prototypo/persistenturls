@@ -107,11 +107,6 @@
 	rdfs:domain <#Domain>;
 	rdfs:range xsd:int.
 
-<#target-count> a owl:DatatypeProperty, owl:FunctionalProperty;
-	rdfs:comment "Number of explicit PURL targets in this Domain.";
-	rdfs:domain <#Domain>;
-	rdfs:range xsd:int.
-
 <#service> a owl:ObjectProperty;
 	rdfs:domain <#Domain>;
 	rdfs:range <#Service>.
