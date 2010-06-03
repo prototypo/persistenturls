@@ -21,77 +21,43 @@
 @prefix http:<http://www.openrdf.org/rdf/2009/httpobject#>.
 @prefix calli:<http://callimachusproject.org/rdf/2009/framework#>.
 
-calli:authorize-request rdfs:subClassOf obj:Message;
+calli:authorize-credential rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom calli:AuthorizationRealm];
-	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
-		owl:maxCardinality "1"^^xsd:nonNegativeInteger];
-	http:type "text/uri-list";
-	http:operation "authorize-request";
-	obj:name "authorizeRequest";
-	obj:grooy """
-		def user = msg.functionalLiteralResponse
-		if (user == null)
-			return null
-		String qs = null
-		Map<String, String> map = msg.request
-		String target = map.get("request-target")[0]
-		int idx = target.indexOf('?')
-		if (idx > 0) {
-			qs = target.substring(idx + 1)
-		}
-		if (authorizeUser(user, msg.getSubject(), qs))
-			return user
-		return null
-	""".
-
-calli:authorize-request-arg1 a owl:DatatypeProperty, owl:FunctionalProperty;
-	rdfs:domain calli:authorize-request;
-	rdfs:range xsd:string;
-	http:parameter "method".
-
-calli:authorize-request-arg2 a owl:ObjectProperty, owl:FunctionalProperty;
-	rdfs:domain calli:authorize-request;
-	http:type "text/uri-list";
-	http:parameter "resource";
-	obj:name "subject".
-
-calli:authorize-request-arg3 a owl:DatatypeProperty, owl:FunctionalProperty;
-	rdfs:domain calli:authorize-request;
-	rdfs:range <java:java.util.Map>;
-	obj:name "request".
-
-calli:authorize-user rdfs:subClassOf obj:Message;
-	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom calli:AuthorizationRealm];
+		owl:allValuesFrom calli:DigestRealm];
 	rdfs:subClassOf [owl:onProperty obj:functionalLiteralResponse;
 		owl:cardinality "1"^^xsd:nonNegativeInteger];
 	rdfs:subClassOf [owl:onProperty obj:functionalLiteralResponse;
 		owl:allValuesFrom xsd:boolean];
-	obj:name "authorizeUser".
+	obj:name "authorizeCredential".
 
-calli:authorize-user-arg1 a owl:ObjectProperty, owl:FunctionalProperty;
-	rdfs:domain calli:authorize-user;
+calli:authorize-credential-arg1 a owl:ObjectProperty, owl:FunctionalProperty;
+	rdfs:domain calli:authorize-credential;
 	obj:name "credential".
 
-calli:authorize-user-arg2 a owl:ObjectProperty, owl:FunctionalProperty;
-	rdfs:domain calli:authorize-user;
+calli:authorize-credential-arg2 a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:domain calli:authorize-credential;
+	rdfs:range xsd:string;
+	obj:name "method".
+
+calli:authorize-credential-arg3 a owl:ObjectProperty, owl:FunctionalProperty;
+	rdfs:domain calli:authorize-credential;
 	obj:name "subject".
 
-calli:authorize-user-arg3 a owl:DatatypeProperty, owl:FunctionalProperty;
-	rdfs:domain calli:authorize-user;
+calli:authorize-credential-arg4 a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:domain calli:authorize-credential;
 	rdfs:range xsd:string;
 	obj:name "qs".
 
-calli:authorize-self owl:equivalentClass calli:authorize-user;
-	obj:groovy "return msg.subject == msg.credential".
+calli:authorize-self owl:equivalentClass calli:authorize-credential;
+	obj:groovy "return msg.subject == msg.credential || msg.functionalLiteralResponse".
 
-calli:authorize-maintainer owl:equivalentClass calli:authorize-user;
+calli:authorize-maintainer owl:equivalentClass calli:authorize-credential;
 	obj:sparql """
 		ASK {
 			{
 				$subject calli:reviewer $credential
-				FILTER ($qs = "view" || $qs = "pre-view" || !bound($qs))
+				FILTER ($method = "GET" || $method = "HEAD")
+				FILTER ($qs = "view" || $qs = "pre-view" || $qs = "review" || $qs = "pre-review" || !bound($qs))
 			} UNION {
 				$subject calli:scribe $credential
 				FILTER ($qs = "copy" || $qs = "pre-copy")
@@ -110,7 +76,8 @@ calli:authorize-member owl:equivalentClass calli:authorize-user;
 			?group calli:member $credential
 			{
 				$subject calli:reviewer ?group
-				FILTER ($qs = "view" || $qs = "pre-view" || !bound($qs))
+				FILTER ($method = "GET" || $method = "HEAD")
+				FILTER ($qs = "view" || $qs = "pre-view" || $qs = "review" || $qs = "pre-review" || !bound($qs))
 			} UNION {
 				$subject calli:scribe ?group
 				FILTER ($qs = "copy" || $qs = "pre-copy")
