@@ -63,7 +63,6 @@ purl:logout rdfs:subClassOf obj:Message;
 	http:operation "logout";
 	http:cache-control "private";
 	http:type "message/x-response";
-	obj:imports <authority>;
 	obj:imports <java:org.apache.http.ProtocolVersion>;
 	obj:imports <java:org.apache.http.message.BasicHttpResponse>;
 	obj:groovy """
@@ -71,13 +70,13 @@ purl:logout rdfs:subClassOf obj:Message;
 		def resp = new BasicHttpResponse(ver, 303, "See Other")
 		def credential = findCredential(msg.authorization)
 		if (credential == null) {
-			resp.setHeader("Location", authority.toString() + "?login")
+			resp.setHeader("Location", toString() + "?login")
 			return resp
 		}
 		if (msg.user != null && msg.user == credential)
-			return authority.unauthorized()
+			return unauthorized()
 		if (msg.user == null) {
-			resp.setHeader("Location", authority.toString() + "?logout&from=" + credential.toString())
+			resp.setHeader("Location", toString() + "?logout&from=" + credential.toString())
 		} else {
 			resp.setHeader("Location", credential.toString())
 		}
@@ -213,7 +212,7 @@ purl:request-password rdfs:subClassOf obj:Message;
 		owl:allValuesFrom owl:Nothing];
 	obj:imports <java:org.apache.commons.codec.digest.DigestUtils>;
 	obj:imports <user/mail-request-password.xml>;
-	obj:imports <mail.properties>;
+	obj:imports </mail.properties>;
 	obj:groovy """
 		String ha1 = DigestUtils.md5Hex(calliEncoded)
 		String nonce = Integer.toHexString(new Random(System.nanoTime()).nextInt())
@@ -290,7 +289,7 @@ purl:reset-password rdfs:subClassOf obj:Message;
 		owl:allValuesFrom purl:User];
 	rdfs:subClassOf [owl:onProperty obj:objectResponse;
 		owl:allValuesFrom owl:Nothing];
-	obj:imports <mail.properties>;
+	obj:imports </mail.properties>;
 	obj:imports <authority>;
 	obj:imports <java:org.apache.commons.codec.digest.DigestUtils>;
 	obj:imports <java:nl.captcha.Captcha>;
