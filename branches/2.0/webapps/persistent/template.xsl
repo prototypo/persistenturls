@@ -95,6 +95,11 @@
 		<xsl:copy>
 			<xsl:apply-templates select="@*" />
 			<xsl:if test="not(starts-with($mode, 'pre-'))">
+				<div id="home">
+					<a href="{$origin}/">
+						<img src="{$images}/web-color-sm.png" alt="PURLz logo"/>
+					</a>
+				</div>
 				<div id="header">
 					<ul id="actions" class="{$mode}">
 						<li class="view">

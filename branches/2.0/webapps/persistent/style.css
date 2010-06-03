@@ -116,9 +116,13 @@ input[type="text"] {
     z-index: 0;
 }
 
+#home {
+    padding: 1em 0 0 7%;
+}
+
 #header {
     border-bottom: 1px solid #ccc;
-    margin: 0 0 0 2%;
+    margin: -2em 0 0 2%;
     min-height: 2em;
     padding: 0 0 0 17%;
 }
