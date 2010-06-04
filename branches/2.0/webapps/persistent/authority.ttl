@@ -55,6 +55,15 @@ purl:purl-authorize owl:equivalentClass calli:authorize-credential;
 		}
 	""".
 
+purl:login-authorize owl:equivalentClass calli:authorize-credential;
+	obj:sparql """
+		ASK {
+			$subject calli:credential $credential
+			FILTER ($method = "GET" || $method = "HEAD")
+			FILTER ($qs = "login")
+		}
+	""".
+
 purl:logout rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom calli:DigestRealm];

@@ -69,9 +69,13 @@ Purl.UI.init = function() {
     $.ajax({
         url: $('#username').attr('href'),
         type: "GET",
-        dataType: "html",
+        dataType: "text",
         success: function(data, status) {
-            $('#username').text($('h1', data).text());
+        	var label = data;
+        	if (data.match(/^</)) {
+        		label = /<title[^>]*>([^<]*)<\/title>/i.exec(data)[1]
+        	}
+            $('#username').text(label);
             $('.logout').show();
         },
         error: function(xhr, status, err) {
