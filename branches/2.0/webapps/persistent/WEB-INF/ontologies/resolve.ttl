@@ -14,53 +14,70 @@ purl:update-resolver rdfs:subClassOf obj:Message;
 	obj:triggeredBy purl:serves;
 	obj:groovy """
 		msg.proceed()
-		def result = purlUpdateResolverAdd()
-		try {
-			while (result.hasNext()) {
-				def st = result.next()
-				objectConnection.add(st.subject, st.predicate, st.object)
-			}
-		} finally {
-			result.close()
-		}
-		result = purlUpdateResolverRemove()
-		try {
-			while (result.hasNext()) {
-				def st = result.next()
-				objectConnection.remove(st.subject, st.predicate, st.object)
-			}
-		} finally {
-			result.close()
-		}
+		Set before = new HashSet()
+		Set after = new HashSet()
 		def vf = objectConnection.valueFactory
-		def resolve = vf.createURI("http://persistent.name/rdf/2010/purl#", "resolve")
-		def subClassOf = vf.createURI("http://www.w3.org/2000/01/rdf-schema#", "subClassOf")
-		def onProperty = vf.createURI("http://www.w3.org/2002/07/owl#", "onProperty")
-		def allValuesFrom = vf.createURI("http://www.w3.org/2002/07/owl#", "allValuesFrom")
-		def target = vf.createURI("http://www.openrdf.org/rdf/2009/object#", "target")
-		def functionalObjectResponse = vf.createURI("http://www.openrdf.org/rdf/2009/object#", "functionalObjectResponse")
 		def matches = vf.createURI("http://www.openrdf.org/rdf/2009/object#", "matches")
-		def HttpResponse = vf.createURI("java:", "org.apache.http.HttpResponse")
-
-		def _target = vf.createBNode()
-		def _purls = vf.createBNode()
-		def _response = vf.createBNode()
-
-		objectConnection.add(resolve, subClassOf, _response)
-		objectConnection.add(_response, onProperty, functionalObjectResponse)
-		objectConnection.add(_response, allValuesFrom, HttpResponse)
-		objectConnection.add(resolve, subClassOf, _target)
-		objectConnection.add(_target, onProperty, target)
-		objectConnection.add(_target, allValuesFrom, _purls)
+		def result = purlUpdateResolverRemove()
+		try {
+			while (result.hasNext()) {
+				def st = result.next()
+				if (matches == st.predicate) {
+					before.add(st.object.stringValue())
+				}
+			}
+		} finally {
+			result.close()
+		}
 		result = purlUpdateResolverMatches()
 		try {
 			while (result.hasNext()) {
 				def bindings = result.next()
-				String pre = bindings.getValue("domain").stringValue() + "*"
-				objectConnection.add(_purls, matches, vf.createLiteral(pre))
+				after.add(bindings.getValue("domain").stringValue() + "*");
 			}
 		} finally {
 			result.close()
+		}
+		if (before != after) {
+			result = purlUpdateResolverAdd()
+			try {
+				while (result.hasNext()) {
+					def st = result.next()
+					objectConnection.add(st.subject, st.predicate, st.object)
+				}
+			} finally {
+				result.close()
+			}
+			result = purlUpdateResolverRemove()
+			try {
+				while (result.hasNext()) {
+					def st = result.next()
+					objectConnection.remove(st.subject, st.predicate, st.object)
+				}
+			} finally {
+				result.close()
+			}
+			def resolve = vf.createURI("http://persistent.name/rdf/2010/purl#", "resolve")
+			def subClassOf = vf.createURI("http://www.w3.org/2000/01/rdf-schema#", "subClassOf")
+			def onProperty = vf.createURI("http://www.w3.org/2002/07/owl#", "onProperty")
+			def allValuesFrom = vf.createURI("http://www.w3.org/2002/07/owl#", "allValuesFrom")
+			def target = vf.createURI("http://www.openrdf.org/rdf/2009/object#", "target")
+			def functionalObjectResponse = vf.createURI("http://www.openrdf.org/rdf/2009/object#", "functionalObjectResponse")
+			def HttpResponse = vf.createURI("java:", "org.apache.http.HttpResponse")
+
+			def _target = vf.createBNode()
+			def _purls = vf.createBNode()
+			def _response = vf.createBNode()
+
+			objectConnection.add(resolve, subClassOf, _response)
+			objectConnection.add(_response, onProperty, functionalObjectResponse)
+			objectConnection.add(_response, allValuesFrom, HttpResponse)
+			objectConnection.add(resolve, subClassOf, _target)
+			objectConnection.add(_target, onProperty, target)
+			objectConnection.add(_target, allValuesFrom, _purls)
+			for (String pre : after) {
+				objectConnection.add(_purls, matches, vf.createLiteral(pre))
+			}
 		}
 	""".
 
@@ -144,8 +161,8 @@ purl:update-resolver-add  rdfs:subClassOf obj:Message;
 			$this a purl:Server
 			OPTIONAL {
 				purl:resolve rdfs:subClassOf ?message
-				FILTER (!bound(?message))
 			}
+			FILTER (!bound(?message))
 		}
 	""".
 
