@@ -8,17 +8,12 @@ package name.persistent.concepts;
 
 import java.util.Set;
 
+import org.apache.http.HttpResponse;
 import org.openrdf.repository.object.annotations.iri;
 
+/** A Persistent URL. */
 @iri("http://persistent.name/rdf/2010/purl#PURL")
 public interface PURL extends Resolvable {
-	/** Regular Expression of source URI, used to populate target URI */
-	@iri("http://persistent.name/rdf/2010/purl#pattern")
-	String getPurlPattern();
-	/** Regular Expression of source URI, used to populate target URI */
-	@iri("http://persistent.name/rdf/2010/purl#pattern")
-	void setPurlPattern(String purlPattern);
-
 	/** Simple redirection (302) */
 	@iri("http://persistent.name/rdf/2010/purl#alternative")
 	Set<Object> getPurlAlternatives();
@@ -43,12 +38,12 @@ public interface PURL extends Resolvable {
 	@iri("http://persistent.name/rdf/2010/purl#describedBy")
 	void setPurlDescribedBy(Set<?> purlDescribedBy);
 
-	/** Associates a PURL with a prefix domain. */
+	/** Parent partial or domain. */
 	@iri("http://persistent.name/rdf/2010/purl#partOf")
-	Domain getPurlPartOf();
-	/** Associates a PURL with a prefix domain. */
+	Partial getPurlPartOf();
+	/** Parent partial or domain. */
 	@iri("http://persistent.name/rdf/2010/purl#partOf")
-	void setPurlPartOf(Domain purlPartOf);
+	void setPurlPartOf(Partial purlPartOf);
 
 	/** Temporary redirection (307) */
 	@iri("http://persistent.name/rdf/2010/purl#redirectsTo")
@@ -65,5 +60,7 @@ public interface PURL extends Resolvable {
 	/** Moved permanently (301) */
 	@iri("http://persistent.name/rdf/2010/purl#renamedTo")
 	void setPurlRenamedTo(Object purlRenamedTo);
+
+	void purlSetEntityHeaders(HttpResponse resp);
 
 }

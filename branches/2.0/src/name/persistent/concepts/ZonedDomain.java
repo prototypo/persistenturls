@@ -9,6 +9,6 @@ package name.persistent.concepts;
 import org.openrdf.repository.object.annotations.iri;
 
 /** URI optionally missing the bottom DNS domain level or node. */
-@iri("http://persistent.name/rdf/2010/purl#Zoned")
-public interface Zoned extends Resolvable {
+@iri("http://persistent.name/rdf/2010/purl#ZonedDomain")
+public interface ZonedDomain extends Resolvable {
 }

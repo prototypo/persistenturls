@@ -8,7 +8,7 @@ package name.persistent.concepts;
 
 import org.openrdf.repository.object.annotations.iri;
 
-/** A server capable of resolving PURLs. */
+/** The priority and weight of a server capable of resolving PURLs. */
 @iri("http://persistent.name/rdf/2010/purl#Service")
 public interface Service {
 

@@ -13,17 +13,11 @@ import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -43,7 +37,6 @@ import org.openrdf.http.object.client.HTTPObjectClient;
 import org.openrdf.http.object.exceptions.BadGateway;
 import org.openrdf.http.object.exceptions.GatewayTimeout;
 import org.openrdf.http.object.traits.ProxyObject;
-import org.openrdf.http.object.util.NamedThreadFactory;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
@@ -54,7 +47,6 @@ import org.openrdf.model.vocabulary.RDF;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.object.ObjectConnection;
 import org.openrdf.repository.object.ObjectFactory;
-import org.openrdf.repository.object.ObjectRepository;
 import org.openrdf.repository.object.RDFObject;
 import org.openrdf.repository.util.RDFInserter;
 import org.openrdf.rio.RDFFormat;
@@ -86,106 +78,6 @@ public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 		}
 	}
 	public static String VIA = PROTOCOL + " " + hostname;
-
-	public static void canacelAllValidation() throws InterruptedException {
-		List<Refresher> list;
-		synchronized (alwaysFresh) {
-			list = new ArrayList<Refresher>(alwaysFresh.values());
-			alwaysFresh.clear();
-		}
-		for (Refresher refresher : list) {
-			refresher.cancel(false);
-		}
-		for (Refresher refresher : list) {
-			refresher.await();
-		}
-	}
-
-	private static final ScheduledExecutorService executor = Executors
-			.newSingleThreadScheduledExecutor(new NamedThreadFactory(
-					"RemoteGraph", true));
-	private static final Map<Object, Refresher> alwaysFresh = new HashMap<Object, Refresher>();
-
-	private final static class Refresher implements Runnable {
-		private Logger logger = LoggerFactory.getLogger(Refresher.class);
-		private final ObjectRepository repository;
-		private final Resource subj;
-		private ScheduledFuture<?> schedule;
-		private volatile boolean running;
-		private volatile boolean cancelled;
-		private Object key;
-
-		private Refresher(RDFObject object) {
-			this.repository = object.getObjectConnection().getRepository();
-			this.subj = object.getResource();
-			key = Arrays.asList(new Object[] { repository, subj });
-		}
-
-		public void schedule(int freshness) {
-			Refresher pre;
-			synchronized (alwaysFresh) {
-				pre = alwaysFresh.remove(key);
-				alwaysFresh.put(key, this);
-			}
-			if (pre != null) {
-				pre.cancel(false);
-			}
-			cancelled = false;
-			logger.info("Mirror {}", subj);
-			schedule = executor.schedule(this, freshness + 1, TimeUnit.SECONDS);
-		}
-
-		public synchronized void await() throws InterruptedException {
-			while (running) {
-				wait();
-			}
-		}
-
-		public boolean cancel(boolean mayInterruptIfRunning) {
-			cancelled = true;
-			if (schedule == null)
-				return false;
-			logger.info("Stale {}", subj);
-			return schedule.cancel(mayInterruptIfRunning);
-		}
-
-		public synchronized void run() {
-			if (cancelled)
-				return;
-			running = true;
-			try {
-				ObjectConnection con = repository.getConnection();
-				try {
-					RemoteGraph graph = con.getObject(RemoteGraph.class, subj);
-					int freshness;
-					if (graph.reload(null)) {
-						freshness = Math.max(graph.getFreshness(), 0);
-					} else {
-						freshness = Math.max(graph.getFreshness(), 4 * 60 * 60);
-					}
-					synchronized (alwaysFresh) {
-						if (alwaysFresh.get(key) == this) {
-							schedule = executor.schedule(this, freshness + 1,
-									TimeUnit.SECONDS);
-						}
-					}
-				} finally {
-					con.close();
-				}
-			} catch (Exception e) {
-				logger.error(e.toString());
-				synchronized (alwaysFresh) {
-					if (alwaysFresh.get(key) == this) {
-						schedule = executor.schedule(this, 4 * 60 * 60,
-								TimeUnit.SECONDS);
-					}
-				}
-			} finally {
-				running = false;
-				notifyAll();
-			}
-		}
-	}
 
 	private final static class RemoteResourceInserter extends RDFInserter {
 		private final List<String> origins;
@@ -246,7 +138,7 @@ public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 
 	@Override
 	public boolean validate(String origin) throws Exception {
-		if (isAlwaysFresh() || isFresh())
+		if (isFresh())
 			return true;
 		return reload(origin);
 	}
@@ -293,30 +185,6 @@ public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 		return importResponse(resp, origin);
 	}
 
-	@Override
-	public void stayFresh() throws Exception {
-		Refresher refresher = new Refresher(this);
-		int freshness = Math.max(getFreshness(), 0);
-		synchronized (alwaysFresh) {
-			if (alwaysFresh.containsKey(refresher.key)) {
-				refresher = alwaysFresh.get(refresher.key);
-			}
-		}
-		refresher.schedule(freshness);
-	}
-
-	@Override
-	public void goStale() throws Exception {
-		Refresher refresher = new Refresher(this);
-		synchronized (alwaysFresh) {
-			refresher = alwaysFresh.remove(refresher.key);
-		}
-		if (refresher != null) {
-			refresher.cancel(false);
-			refresher.await();
-		}
-	}
-
 	public int getFreshness() {
 		XMLGregorianCalendar modified = getPurlLastModified();
 		XMLGregorianCalendar validated = getPurlLastValidated();
@@ -350,37 +218,15 @@ public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 
 	public void removeRemoteGraph() throws Exception {
 		ObjectConnection con = getObjectConnection();
-		boolean autoCommit = con.isAutoCommit();
-		try {
-			goStale();
-			if (autoCommit) {
-				con.setAutoCommit(false); // begin
-			}
-			con.clear(getResource());
-			setPurlVia(null);
-			setPurlCacheControl(null);
-			setPurlEtag(null);
-			setPurlLastModified(null);
-			setPurlLastValidated(null);
-			setPurlContentType(null);
-			con.removeDesignation(this, RemoteGraph.class);
-			con.removeDesignation(this, Unresolvable.class);
-			con.commit();
-			logger.info("Removed {}", getResource());
-			goStale();
-		} finally {
-			if (autoCommit && !con.isAutoCommit()) {
-				con.rollback();
-				con.setAutoCommit(true);
-			}
-		}
-	}
-
-	private boolean isAlwaysFresh() {
-		Refresher refresher = new Refresher(this);
-		synchronized (alwaysFresh) {
-			return alwaysFresh.containsKey(refresher.key);
-		}
+		con.clear(getResource());
+		setPurlVia(null);
+		setPurlCacheControl(null);
+		setPurlEtag(null);
+		setPurlLastModified(null);
+		setPurlLastValidated(null);
+		setPurlContentType(null);
+		con.removeDesignation(this, Unresolvable.class);
+		logger.info("Removing {}", getResource());
 	}
 
 	private HttpResponse requestRDF(HttpRequest req, int max) throws Exception {
@@ -439,12 +285,13 @@ public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 			String resource = getResource().stringValue();
 			ValueFactory vf = con.getValueFactory();
 			URI ctx = vf.createURI(resource);
-			if (code == 410) {
-				removeRemoteGraph();
-				return false;
-			}
 			if (autoCommit) {
 				con.setAutoCommit(false); // begin
+			}
+			if (code == 410) {
+				removeRemoteGraph();
+				con.commit();
+				return false;
 			}
 			InputStream in = entity.getContent();
 			try {
@@ -454,6 +301,7 @@ public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 				if (!parse(type, in, origin))
 					return false;
 				store(type, resp, origin);
+				con.commit();
 				return true;
 			} catch (RDFHandlerException e) {
 				throw cause(e);
@@ -506,11 +354,7 @@ public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 				con.addDesignation(this, Unresolvable.class);
 			}
 		}
-		con.commit();
-		logger.info("Updated {}", getResource());
-		if (!isAlwaysFresh()) {
-			stayFresh();
-		}
+		logger.info("Updating {}", getResource());
 	}
 
 	private boolean parse(String type, InputStream in, String... origin)

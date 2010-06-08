@@ -20,7 +20,7 @@ import org.openrdf.repository.object.annotations.precedes;
  * 
  * @author James Leigh
  */
-@precedes( { PURLSupport.class, PartialSupport.class })
+@precedes( { PURLSupport.class, ResolvableSupport.class })
 public abstract class DisabledSupport implements Disabled {
 	private static final ProtocolVersion HTTP11 = new ProtocolVersion("HTTP",
 			1, 1);

@@ -8,7 +8,7 @@ package name.persistent.concepts;
 
 import org.openrdf.repository.object.annotations.iri;
 
-/** Permanently gone (410) */
+/** Resource is permanently gone (410) */
 @iri("http://persistent.name/rdf/2010/purl#Tombstoned")
 public interface Tombstoned extends Resolvable {
 }

@@ -33,7 +33,8 @@ purl:update-resolver rdfs:subClassOf obj:Message;
 		try {
 			while (result.hasNext()) {
 				def bindings = result.next()
-				after.add(bindings.getValue("domain").stringValue() + "*");
+				// TODO need to check for zoned domains
+				after.add(bindings.getValue("domain").stringValue() + "*")
 			}
 		} finally {
 			result.close()

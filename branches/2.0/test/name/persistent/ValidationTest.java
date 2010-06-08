@@ -73,7 +73,7 @@ public class ValidationTest extends TestCase {
 		Domain origin = con.addDesignation(con.getObject(ORIGIN), Domain.class);
 		root.getPurlServes().add(origin);
 		domain = con.addDesignation(con.getObject(DOMAIN), Domain.class);
-		domain.setPurlDomainOf(origin);
+		domain.getPurlDomainOf().add(origin);
 		Service service = con.addDesignation(of.createObject(), Service.class);
 		service.setPurlServer(root);
 		domain.getPurlServices().add(service);

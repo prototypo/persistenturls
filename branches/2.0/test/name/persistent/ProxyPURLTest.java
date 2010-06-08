@@ -3,10 +3,9 @@ package name.persistent;
 import info.aduna.io.FileUtil;
 
 import java.io.File;
-import java.net.InetSocketAddress;
+import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.logging.ConsoleHandler;
@@ -15,10 +14,11 @@ import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 import junit.framework.TestCase;
+import name.persistent.behaviours.MirroredDomainSupport;
 import name.persistent.behaviours.RemoteGraphSupport;
-import name.persistent.behaviours.ServiceRecordSupport;
 import name.persistent.concepts.Domain;
 import name.persistent.concepts.PURL;
+import name.persistent.concepts.RemoteDomain;
 import name.persistent.concepts.Resolvable;
 import name.persistent.concepts.Server;
 import name.persistent.concepts.Service;
@@ -44,6 +44,7 @@ import org.openrdf.repository.object.RDFObject;
 import org.openrdf.repository.object.annotations.matches;
 import org.openrdf.repository.object.config.ObjectRepositoryConfig;
 import org.openrdf.repository.object.config.ObjectRepositoryFactory;
+import org.openrdf.rio.RDFFormat;
 import org.openrdf.sail.Sail;
 import org.openrdf.sail.auditing.AuditingSail;
 import org.openrdf.sail.memory.MemoryStore;
@@ -74,7 +75,7 @@ public class ProxyPURLTest extends TestCase {
 	}
 
 	@matches("http://test.persistent.name/*")
-	public static abstract class PURLServer implements RDFObject, Resolvable {
+	public static abstract class PURLResolver implements RDFObject, Resolvable {
 		@method("GET")
 		@type("message/x-response")
 		@cacheControl("max-age=60")
@@ -84,19 +85,6 @@ public class ProxyPURLTest extends TestCase {
 			return resolvePURL(getResource().stringValue(), qs, accept,
 					"*", via);
 		}
-	}
-
-	public static abstract class SRVRecordTester extends ServiceRecordSupport
-			implements Resolvable {
-		public static int port = 8080;
-
-		@Override
-		public List<InetSocketAddress> getOriginServices(boolean useBlackList)
-				throws Exception {
-			return Collections.singletonList(new InetSocketAddress("localhost",
-					port));
-		}
-
 	}
 
 	private static final String ORIGIN = "http://test.persistent.name/";
@@ -118,17 +106,17 @@ public class ProxyPURLTest extends TestCase {
 	public void setUp() throws Exception {
 		RemoteGraphSupport.VIA = "1.1 test";
 		HTTPObjectClient.getInstance().resetCache();
-		config.addConcept(PURLServer.class);
+		config.addConcept(PURLResolver.class);
 		repository1 = createRepository();
-		config.addBehaviour(SRVRecordTester.class);
 		repository2 = createRepository();
 		dataDir = FileUtil.createTempDir("metadata");
 		server = new HTTPObjectServer(repository1, new File(dataDir, "www"),
 				new File(dataDir, "cache"), null);
 		server.setPort(3128);
 		server.setEnvelopeType("message/x-response");
+		String uri = "http://localhost:" + server.getPort() + "/";
+		server.setIdentityPrefix(uri + "diverted;");
 		HTTPObjectClient.getInstance().setEnvelopeType("message/x-response");
-		SRVRecordTester.port = server.getPort();
 		server.start();
 		HTTPObjectClient.getInstance().stop();
 		con = repository1.getConnection();
@@ -140,13 +128,12 @@ public class ProxyPURLTest extends TestCase {
 		con.add(vf.createURI(NS, "alternative"), rel, vf.createLiteral("alternate"));
 		con.add(vf.createURI(NS, "describedBy"), rel, vf.createLiteral("describedby"));
 		con.add(vf.createURI(NS, "redirectsTo"), rel, vf.createLiteral("located"));
-		String uri = "http://localhost:" + server.getPort() + "/";
 		root = con.addDesignation(con.getObject(uri), Server.class);
 	}
 
 	@Override
 	public void tearDown() throws Exception {
-		RemoteGraphSupport.canacelAllValidation();
+		MirroredDomainSupport.canacelAllValidation();
 		con.close();
 		proxy.close();
 		server.stop();
@@ -167,10 +154,10 @@ public class ProxyPURLTest extends TestCase {
 	public void testLoopDetection() throws Exception {
 		Service service = con.addDesignation(of.createObject(), Service.class);
 		service.setPurlServer(root);
-		Domain domain = con.addDesignation(con.getObject(DOMAIN), Domain.class);
+		Domain domain = con.addDesignation(con.getObject(DOMAIN), RemoteDomain.class);
 		domain.getPurlServices().add(service);
 		Domain origin = con.addDesignation(con.getObject(ORIGIN), Domain.class);
-		domain.setPurlDomainOf(origin);
+		domain.getPurlDomainOf().add(origin);
 		root.getPurlServes().add(origin);
 		try {
 			HttpResponse resp = resolvePURL(PURL0);
@@ -194,7 +181,7 @@ public class ProxyPURLTest extends TestCase {
 		purl.setPurlPartOf(domain);
 		domain.getPurlServices().add(service);
 		Domain origin = con.addDesignation(con.getObject(ORIGIN), Domain.class);
-		domain.setPurlDomainOf(origin);
+		domain.getPurlDomainOf().add(origin);
 		root.getPurlServes().add(origin);
 		HttpResponse resp = resolvePURL(purl.toString());
 		HttpEntity entity = resp.getEntity();
@@ -215,6 +202,8 @@ public class ProxyPURLTest extends TestCase {
 			}
 			assertEquals(404, resp.getStatusLine().getStatusCode());
 			assertEquals(0, resp.getHeaders("Location").length);
+		} catch (FileNotFoundException e) {
+			// this is also okay
 		} catch (NotFound e) {
 			// this is also okay
 		}
@@ -230,7 +219,7 @@ public class ProxyPURLTest extends TestCase {
 		purl.setPurlPartOf(domain);
 		domain.getPurlServices().add(service);
 		service.setPurlServer(root);
-		domain.setPurlDomainOf(origin);
+		domain.getPurlDomainOf().add(origin);
 		con.close(); // new revision
 		HttpResponse resp = resolvePURL(purl.toString());
 		HttpEntity entity = resp.getEntity();
@@ -269,7 +258,7 @@ public class ProxyPURLTest extends TestCase {
 		purl2.setPurlPartOf(domain);
 		domain.getPurlServices().add(service);
 		service.setPurlServer(root);
-		domain.setPurlDomainOf(origin);
+		domain.getPurlDomainOf().add(origin);
 		HttpResponse resp = resolvePURL(purl1.toString());
 		HttpEntity entity = resp.getEntity();
 		if (entity != null) {
@@ -290,6 +279,10 @@ public class ProxyPURLTest extends TestCase {
 	}
 
 	private HttpResponse resolvePURL(String uri) throws Exception {
+		String url = root.toString() + "diverted;" + DOMAIN + "?remote-domains";
+		proxy.add(new java.net.URL(url), DOMAIN, RDFFormat.RDFXML);
+		url = root.toString() + "diverted;" + DOMAIN + "?services";
+		proxy.add(new java.net.URL(url), DOMAIN, RDFFormat.RDFXML);
 		Resolvable target = (Resolvable) proxy.getObject(uri);
 		Set<String> via = Collections.emptySet();
 		return target.resolvePURL(uri, null, null, "*", via);

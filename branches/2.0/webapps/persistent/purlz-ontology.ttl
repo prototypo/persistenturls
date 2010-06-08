@@ -20,12 +20,25 @@
 <#PURL> a owl:Class;
 	rdfs:comment "A Persistent URL.".
 
-<#Domain> a owl:Class;
-	rdfs:comment "PURL with its own access control list and path endings with '/'.";
+<#Partial> a owl:Class;
+	rdfs:comment "A partial PURL with a path endings with '/'.";
 	rdfs:subClassOf <#PURL>.
 
-<#Zoned> a owl:Class;
-	rdfs:comment "URI optionally missing the bottom DNS domain level or node.".
+<#Domain> a owl:Class;
+	rdfs:comment "A partial PURL with its own access control list.";
+	rdfs:subClassOf <#Partial>.
+
+<#MirroredDomain> a owl:Class;
+	rdfs:comment "Domain that should be updated regularly from an authority.";
+	rdfs:subClassOf <#Domain>.
+
+<#RemoteDomain> a owl:Class;
+	rdfs:comment "Domain that should use the configured services to resolve PURLs and update those services regularly from an authority.";
+	rdfs:subClassOf <#MirroredDomain>.
+
+<#ZonedDomain> a owl:Class;
+	rdfs:comment "Domain optionally missing the bottom DNS node.";
+	rdfs:subClassOf <#Domain>.
 
 <#Disabled> a owl:Class;
 	rdfs:comment "Resource is temporarily gone (404)".
@@ -37,16 +50,13 @@
 	rdfs:comment "Resource does not resolve directly and may not resolve at all.".
 
 <#Unresolvable> a owl:Class;
-	rdfs:comment "Resource unexpectly does not resolve to anything meaningful or cannot be validated.".
+	rdfs:comment "Resource unexpectedly does not resolve to anything meaningful or cannot be validated.".
 
 <#Service> a owl:Class;
 	rdfs:comment "The priority and weight of a server capable of resolving PURLs.".
 
 <#Server> a owl:Class;
 	rdfs:comment "The protocol, hostname, and port of a server with PURL domains and list of services can resolve PURLs. This IRI should have a path of '/'.".
-
-<#RemoteResource> a owl:Class;
-	rdfs:comment "Indicates that this resource can be loaded using its definedBy target.".
 
 <#RemoteGraph> a owl:Class;
 	rdfs:comment "Indicates that theses triples were loaded externally and need to be refreshed regularly.".
@@ -87,18 +97,23 @@
 	rdfs:domain <#PURL>;
 	purl:rel <#redirectsTo>.
 
+<#partOf> a owl:ObjectProperty, owl:FunctionalProperty;
+	rdfs:comment "Parent partial or domain.";
+	rdfs:domain <#PURL>;
+	rdfs:range <#Partial>.
+
 <#pattern> a owl:DatatypeProperty, owl:FunctionalProperty;
 	rdfs:comment "Regular Expression of a source URI, used to populate URI target templates";
-	rdfs:domain <#PURL>;
+	rdfs:domain <#Partial>;
 	rdfs:range xsd:string.
 
-<#partOf> a owl:ObjectProperty, owl:FunctionalProperty;
-	rdfs:comment "Assigns an access control list to this PURL.";
-	rdfs:domain <#PURL>;
+<#belongsTo> a owl:ObjectProperty, owl:FunctionalProperty;
+	rdfs:comment "Parent domain to this partial.";
+	rdfs:domain <#Partial>;
 	rdfs:range <#Domain>.
 
-<#domainOf> a owl:ObjectProperty, owl:FunctionalProperty;
-	rdfs:comment "Top level Domain in this hierarchy.";
+<#domainOf> a owl:ObjectProperty;
+	rdfs:comment "Domains further up in this hierarchy.";
 	rdfs:domain <#Domain>;
 	rdfs:range <#Domain>.
 
@@ -106,6 +121,21 @@
 	rdfs:comment "Number of days between validating resolution of explicit PURL targets.";
 	rdfs:domain <#Domain>;
 	rdfs:range xsd:int.
+
+<#definedBy> a owl:ObjectProperty, owl:FunctionalProperty;
+	rdfs:comment "Graph of all domains of this domain (including itself).";
+	rdfs:domain <#Domain>;
+	rdfs:range <#RemoteGraph>.
+
+<#mirroredBy> a owl:ObjectProperty, owl:FunctionalProperty;
+	rdfs:comment "Graph of all the purls that are part of or belong to this domain (including itself).";
+	rdfs:domain <#Domain>;
+	rdfs:range <#RemoteGraph>.
+
+<#servicedBy> a owl:ObjectProperty, owl:FunctionalProperty;
+	rdfs:comment "Graph of all services for all domains of this domain (including itself).";
+	rdfs:domain <#Domain>;
+	rdfs:range <#RemoteGraph>.
 
 <#service> a owl:ObjectProperty;
 	rdfs:domain <#Domain>;
@@ -146,21 +176,6 @@
 <#last-resolved> a owl:DatatypeProperty, owl:FunctionalProperty;
 	rdfs:comment "The most recent day this URL was attempted to be resolved.";
 	rdfs:range xsd:date.
-
-<#domains> a owl:ObjectProperty;
-	rdfs:comment "A URL that will resolve to an RDF description of all domains in this top level domain.";
-	rdfs:domain <#Domain>;
-	rdfs:range <#RemoteGraph>.
-
-<#purls> a owl:ObjectProperty;
-	rdfs:comment "A URL that will resolve to an RDF description of all purls part of this domain.";
-	rdfs:domain <#Domain>;
-	rdfs:range <#RemoteGraph>.
-
-<#definedBy> a owl:ObjectProperty;
-	rdfs:comment "A URL that will resolve to an RDF description of this resource.";
-	rdfs:domain <#RemoteResource>;
-	rdfs:range <#RemoteGraph>.
 
 <#allowedOrigin> a owl:ObjectProperty;
 	rdfs:comment "Only this resource and resources that start with the given URI can be loaded from this remote graph.";

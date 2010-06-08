@@ -6,631 +6,210 @@
  */
 package name.persistent.behaviours;
 
-import info.aduna.net.ParsedURI;
-
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.channels.ReadableByteChannel;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
-import java.util.Random;
-import java.util.Set;
 import java.util.TimeZone;
-import java.util.TreeMap;
-import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 
-import javax.xml.datatype.DatatypeConstants;
-import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import name.persistent.concepts.Domain;
-import name.persistent.concepts.Redirection;
-import name.persistent.concepts.Service;
-import name.persistent.concepts.Unresolvable;
+import name.persistent.concepts.RemoteGraph;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.ProtocolVersion;
-import org.apache.http.StatusLine;
-import org.apache.http.message.BasicHttpRequest;
-import org.apache.http.message.BasicStatusLine;
-import org.openrdf.OpenRDFException;
-import org.openrdf.http.object.client.HTTPObjectClient;
-import org.openrdf.http.object.exceptions.BadGateway;
-import org.openrdf.http.object.exceptions.GatewayTimeout;
-import org.openrdf.http.object.exceptions.InternalServerError;
-import org.openrdf.http.object.util.NamedThreadFactory;
-import org.openrdf.http.object.util.SharedExecutors;
-import org.openrdf.model.Literal;
+import org.apache.http.message.BasicHttpResponse;
+import org.openrdf.http.object.annotations.operation;
+import org.openrdf.http.object.annotations.transform;
+import org.openrdf.http.object.annotations.type;
+import org.openrdf.http.object.concepts.Transaction;
+import org.openrdf.http.object.model.ReadableHttpEntityChannel;
+import org.openrdf.http.object.traits.VersionedObject;
 import org.openrdf.model.Resource;
+import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
 import org.openrdf.model.ValueFactory;
+import org.openrdf.model.impl.StatementImpl;
+import org.openrdf.query.GraphQueryResult;
 import org.openrdf.query.QueryEvaluationException;
-import org.openrdf.query.TupleQuery;
-import org.openrdf.query.TupleQueryResult;
-import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.object.ObjectConnection;
-import org.openrdf.repository.object.ObjectFactory;
-import org.openrdf.repository.object.ObjectRepository;
 import org.openrdf.repository.object.RDFObject;
+import org.openrdf.repository.object.annotations.iri;
 import org.openrdf.repository.object.annotations.sparql;
 import org.openrdf.repository.object.annotations.triggeredBy;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-/**
- * Validates local PURLs and resolves remote PURLs.
- * 
- * @author James Leigh
- */
-public abstract class DomainSupport implements Domain, RDFObject {
-	private static final String PROTOCOL = "1.1";
+public abstract class DomainSupport extends PartialSupport implements Domain,
+		RDFObject, VersionedObject {
 	private static final String NS = "http://persistent.name/rdf/2010/purl#";
+	private static final String DEFINED_BY = NS + "definedBy";
+	private static final String SERVICED_BY = NS + "servicedBy";
+	private static final String MIRRORED_BY = NS + "mirroredBy";
 	private static final String PREFIX = "PREFIX purl:<http://persistent.name/rdf/2010/purl#>\n";
-	private static final String TARGET_BY_DATE = PREFIX
-			+ "SELECT REDUCED ?target\n"
-			+ "WHERE { { ?purl purl:partOf $this }\n"
-			+ "UNION { ?purl a purl:Domain FILTER (?purl = $this) }\n"
-			+ "?purl ?pred ?target . ?pred purl:rel ?rel .\n"
-			+ "OPTIONAL { ?purl purl:pattern ?pattern } FILTER (!bound(?pattern))\n"
-			+ "?target purl:last-resolved $date }";
-	private static final String TARGET_WITHOUT_DATE = PREFIX
-			+ "SELECT REDUCED ?target\n"
-			+ "WHERE { { ?purl purl:partOf $this }\n"
-			+ "UNION { ?purl a purl:Domain FILTER (?purl = $this) }\n"
-			+ "?purl ?pred ?target . ?pred purl:rel ?rel .\n"
-			+ "OPTIONAL { ?purl purl:pattern ?pattern } FILTER (!bound(?pattern))\n"
-			+ "OPTIONAL { ?target purl:last-resolved ?last }\n"
-			+ "FILTER (!bound(?last))}";
-	private static final String TARGET_BEFORE_DATE = PREFIX
-			+ "SELECT REDUCED ?target\n"
-			+ "WHERE { { ?purl purl:partOf $this }\n"
-			+ "UNION { ?purl a purl:Domain FILTER (?purl = $this) }\n"
-			+ "?purl ?pred ?target . ?pred purl:rel ?rel .\n"
-			+ "OPTIONAL { ?purl purl:pattern ?pattern } FILTER (!bound(?pattern))\n"
-			+ "?target purl:last-resolved ?last\n" + "FILTER (?last < $date) }";
-	private static final String VIA;
+	private static final ProtocolVersion HTTP11 = new ProtocolVersion("HTTP",
+			1, 1);
+	/** Date format pattern used to generate the header in RFC 1123 format. */
+	public static final String PATTERN_RFC1123 = "EEE, dd MMM yyyy HH:mm:ss zzz";
+	/** The time zone to use in the date header. */
+	public static final TimeZone GMT = TimeZone.getTimeZone("GMT");
+	private static final DateFormat dateformat;
 	static {
-		String host = "localhost";
-		try {
-			host = InetAddress.getLocalHost().getCanonicalHostName();
-		} catch (UnknownHostException e) {
-			// ignore
-		}
-		VIA = PROTOCOL + " " + host;
-	}
-	private static Map<InetSocketAddress, Boolean> blackList = new ConcurrentHashMap<InetSocketAddress, Boolean>();
-	static {
-		SharedExecutors.getTimeoutThreadPool().scheduleWithFixedDelay(
-				new Runnable() {
-					public void run() {
-						blackList.clear();
-					}
-				}, 1, 4, TimeUnit.HOURS);
+		dateformat = new SimpleDateFormat(PATTERN_RFC1123, Locale.US);
+		dateformat.setTimeZone(GMT);
 	}
 
-	private static ThreadLocal<Random> random = new ThreadLocal<Random>() {
-		protected Random initialValue() {
-			return new Random(System.nanoTime());
-		}
-	};
-
-	private static final ScheduledExecutorService executor = Executors
-			.newSingleThreadScheduledExecutor(new NamedThreadFactory(
-					"URL Resolver", true));
-	private static final Map<Object, Resolver> resolvers = new HashMap<Object, Resolver>();
-
-	private final static class Resolver implements Runnable {
-		private Logger logger = LoggerFactory.getLogger(Resolver.class);
-		private final ObjectRepository repository;
-		private final Resource subj;
-		private ScheduledFuture<?> schedule;
-		private volatile boolean running;
-		private volatile boolean cancelled;
-		private Object key;
-		private int interval;
-
-		private Resolver(RDFObject object) {
-			this.repository = object.getObjectConnection().getRepository();
-			this.subj = object.getResource();
-			key = Arrays.asList(new Object[] { repository, subj });
-		}
-
-		public void schedule(int period, TimeUnit unit) {
-			assert period > 0;
-			Resolver pre;
-			synchronized (resolvers) {
-				pre = resolvers.remove(key);
-				resolvers.put(key, this);
-			}
-			if (pre != null) {
-				pre.cancel(false);
-			}
-			cancelled = false;
-			interval = (int) unit.toSeconds(period);
-			int delay = random.get().nextInt(interval) + 60;
-			TimeUnit sec = TimeUnit.SECONDS;
-			schedule = executor.scheduleAtFixedRate(this, delay, interval, sec);
-			logger.info("Validating {} in {} hours and every {} hours",
-					new Object[] { subj, sec.toHours(delay),
-							sec.toHours(interval) });
-		}
-
-		public synchronized void await() throws InterruptedException {
-			while (running) {
-				wait();
-			}
-		}
-
-		public boolean cancel(boolean mayInterruptIfRunning) {
-			logger.info("Stopped validating {}", subj);
-			cancelled = true;
-			if (schedule == null)
-				return false;
-			return schedule.cancel(mayInterruptIfRunning);
-		}
-
-		@Override
-		public synchronized void run() {
-			if (cancelled)
-				return;
-			running = true;
-			try {
-				ObjectConnection con = repository.getConnection();
-				try {
-					Domain domain = con.getObject(Domain.class, subj);
-					int count;
-					Integer days = domain.getPurlMaxUnresolvedDays();
-					if (days == null || days < 1) {
-						cancel(false);
-					} else if ((count = domain.countTargets()) < 1) {
-						cancel(false);
-					} else {
-						GregorianCalendar cal;
-						XMLGregorianCalendar xgc, now;
-						int n = DatatypeConstants.FIELD_UNDEFINED;
-						DatatypeFactory f = DatatypeFactory.newInstance();
-						cal = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
-						now = f.newXMLGregorianCalendar(cal);
-						now.setTime(n, n, n, n);
-						xgc = f.newXMLGregorianCalendar(cal);
-						xgc.setTime(n, n, n, n);
-						xgc.add(f.newDurationDayTime(false, days, 0, 0, 0));
-						int periods = Math.max(1, (int) TimeUnit.DAYS
-								.toSeconds(days)
-								/ interval);
-						int min = Math.max(1, count / periods);
-						int max = (count + periods - 1) / periods;
-						domain.validatePURLs(xgc, min, max, now);
-					}
-				} finally {
-					con.close();
-				}
-			} catch (Exception e) {
-				logger.error(e.toString(), e);
-			} finally {
-				running = false;
-				notifyAll();
-			}
-		}
-	}
-
-	private Logger logger = LoggerFactory.getLogger(DomainSupport.class);
-
-	@triggeredBy("http://persistent.name/rdf/2010/purl#max-unresolved-days")
-	public void changePurlMaxUnresolvedDays(Integer days)
-			throws QueryEvaluationException {
-		if (days != null && days > 0) {
-			if (!isResolving()) {
-				startResolving(days);
-			}
-		}
-	}
-
-	@Override
-	public boolean startResolving() throws QueryEvaluationException {
-		return startResolving(getPurlMaxUnresolvedDays());
-	}
-
-	@Override
-	public boolean isResolving() {
-		Resolver resolver = new Resolver(this);
-		synchronized (resolvers) {
-			return resolvers.containsKey(resolver.key);
-		}
-	}
-
-	@Override
-	public boolean stopResolving() throws InterruptedException {
-		Resolver resolver = new Resolver(this);
-		synchronized (resolvers) {
-			resolver = resolvers.remove(resolver.key);
-		}
-		if (resolver == null)
-			return false;
-		resolver.cancel(false);
-		resolver.await();
-		return true;
-	}
-
-	@Override
-	public int countTargets() throws QueryEvaluationException {
-		TupleQueryResult result = findTargets();
-		try {
-			int count;
-			for (count = 0; result.hasNext(); count++) {
-				result.next();
-			}
-			return count;
-		} finally {
-			result.close();
-		}
-	}
-
-	@Override
-	public HttpResponse resolveRemotePURL(String source, String qs,
-			String accept, String language, Set<String> via)
-			throws IOException, InterruptedException {
-		return resolveRemotePURL(source, qs, accept, language, via, true, null);
-	}
-
-	@Override
-	public void validatePURLs(XMLGregorianCalendar xgc, int min, int max,
-			XMLGregorianCalendar today) throws OpenRDFException, IOException {
-		List<Value> targets = findTargetResolvedBefore(xgc, min, max);
-		markResolvability(resolveTargets(targets), today);
-	}
-
+	@operation("mirror")
+	@type("application/rdf+xml")
+	@transform("http://persistent.name/rdf/2010/purl#entity-graph")
 	@sparql(PREFIX
-			+ "SELECT REDUCED ?target\n"
-			+ "WHERE { ?purl purl:partOf $this; ?pred ?target . ?pred purl:rel ?rel }")
-	protected abstract TupleQueryResult findTargets();
+			+ "CONSTRUCT {\n"
+			+ "?partial purl:belongsTo ?domain; a ?ptype; purl:partOf ?parent;\n"
+			+ "purl:pattern ?pattern; ?dpred ?dhref.\n"
+			+ "?purl purl:partOf ?partial; a ?type; ?pred ?href .\n"
+			+ "} WHERE { { ?partial a ?dtype FILTER (?partial = $this) }\n"
+			+ "UNION { ?partial a ?ptype; purl:belongsTo ?domain FILTER (?domain = $this) }\n"
+			+ "OPTIONAL { ?partial purl:partOf ?parent }\n"
+			+ "OPTIONAL { ?partial purl:pattern ?pattern }\n"
+			+ "OPTIONAL { ?purl purl:partOf ?partial; a purl:PURL, ?type\n"
+			+ "\t OPTIONAL { ?purl ?pred ?href . ?pred purl:rel ?rel }\n"
+			+ "\t OPTIONAL { ?partial ?dpred ?dhref . ?dpred purl:rel ?drel }}}")
+	public abstract GraphQueryResult mirror();
 
-	private boolean startResolving(Integer days)
-			throws QueryEvaluationException {
-		if (days == null || days < 1)
-			return false;
-		int count = countTargets();
-		if (count < 1)
-			return false;
-		Resolver resolver = new Resolver(this);
-		synchronized (resolvers) {
-			if (resolvers.containsKey(resolver.key)) {
-				resolver = resolvers.get(resolver.key);
-			} else {
-				resolvers.put(resolver.key, resolver);
-			}
-		}
-		int periods = (count + 99) / 100; // check 100 targets at a time
-		long maxHours = TimeUnit.DAYS.toHours(days);
-		int interval = Math.max(1, (int) maxHours / periods);
-		resolver.schedule(interval, TimeUnit.HOURS);
-		return true;
-	}
+	@operation("services")
+	@type("application/rdf+xml")
+	@transform("http://persistent.name/rdf/2010/purl#entity-graph")
+	@sparql(PREFIX
+			+ "CONSTRUCT { $this purl:service ?srv .\n"
+			+ "?srv a purl:Service; purl:server ?server; purl:priority ?p; purl:weight ?w\n"
+			+ "} WHERE { $this purl:service ?srv . ?srv purl:server ?server\n"
+			+ "OPTIONAL { ?srv purl:priority ?p}\n"
+			+ "OPTIONAL { ?srv purl:weight ?w }}")
+	public abstract GraphQueryResult services();
 
-	private List<Value> findTargetResolvedBefore(XMLGregorianCalendar xgc,
-			int min, int max) throws OpenRDFException {
-		assert max >= min;
-		List<Value> targets = new ArrayList<Value>(max);
-		addTo(findTargetByLastResolved(xgc, max), targets);
-		if (targets.size() < min) {
-			addTo(findUnresolvedTarget(max - targets.size()), targets);
-			if (targets.size() < min) {
-				addTo(findResolvedTargetBefore(xgc, max - targets.size()),
-						targets);
-			}
-		}
-		return targets;
-	}
+	@operation("remote-domains")
+	@type("application/rdf+xml")
+	@transform("http://persistent.name/rdf/2010/purl#add-operations")
+	@sparql(PREFIX
+			+ "CONSTRUCT {\n"
+			+ "?domain a purl:RemoteDomain, ?zoned; purl:servicedBy ?server; purl:domainOf ?top .\n"
+			+ "} WHERE { { ?domain a ?type FILTER(?domain = $this) }\n"
+			+ "UNION { ?domain purl:domainOf $this }\n"
+			+ "{ ?server a purl:Server; purl:serves $this }\n"
+			+ "UNION { ?server a purl:Server; purl:serves ?top . $this purl:domainOf ?top }\n"
+			+ "OPTIONAL { ?domain a ?zoned FILTER (?zoned = purl:ZonedDomain) }\n"
+			+ "OPTIONAL { ?domain purl:domainOf ?top }}")
+	public abstract GraphQueryResult remoteDomains();
 
-	private TupleQueryResult findTargetByLastResolved(XMLGregorianCalendar xgc,
-			int limit) throws OpenRDFException {
-		String qry = TARGET_BY_DATE + "\nLIMIT " + limit;
-		ObjectConnection con = getObjectConnection();
-		ValueFactory vf = con.getValueFactory();
-		TupleQuery query = con.prepareTupleQuery(qry);
-		query.setBinding("this", getResource());
-		query.setBinding("date", vf.createLiteral(xgc));
-		return query.evaluate();
-	}
+	@operation("mirror-domains")
+	@type("application/rdf+xml")
+	@transform("http://persistent.name/rdf/2010/purl#add-operations")
+	@sparql(PREFIX
+			+ "CONSTRUCT {\n"
+			+ "?domain a purl:MirroredDomain, ?zoned; purl:mirroredBy ?server; purl:domainOf ?top .\n"
+			+ "} WHERE { { ?domain a ?type FILTER(?domain = $this) }\n"
+			+ "UNION { ?domain purl:domainOf $this }\n"
+			+ "{ ?server a purl:Server; purl:serves $this }\n"
+			+ "UNION { ?server a purl:Server; purl:serves ?top . $this purl:domainOf ?top }\n"
+			+ "OPTIONAL { ?domain a ?zoned FILTER (?zoned = purl:ZonedDomain) }\n"
+			+ "OPTIONAL { ?domain purl:domainOf ?top }}")
+	public abstract GraphQueryResult mirrorDomains();
 
-	private TupleQueryResult findUnresolvedTarget(int limit)
-			throws OpenRDFException {
-		String qry = TARGET_WITHOUT_DATE + "\nLIMIT " + limit;
-		ObjectConnection con = getObjectConnection();
-		TupleQuery query = con.prepareTupleQuery(qry);
-		query.setBinding("this", getResource());
-		return query.evaluate();
-	}
-
-	private TupleQueryResult findResolvedTargetBefore(XMLGregorianCalendar xgc,
-			int limit) throws OpenRDFException {
-		String qry = TARGET_BEFORE_DATE + "\nLIMIT " + limit;
-		ObjectConnection con = getObjectConnection();
-		ValueFactory vf = con.getValueFactory();
-		TupleQuery query = con.prepareTupleQuery(qry);
-		query.setBinding("this", getResource());
-		query.setBinding("date", vf.createLiteral(xgc));
-		return query.evaluate();
-	}
-
-	private void addTo(TupleQueryResult result, Collection<Value> set)
-			throws QueryEvaluationException {
-		try {
-			String name = result.getBindingNames().get(0);
-			while (result.hasNext()) {
-				set.add(result.next().getValue(name));
-			}
-		} finally {
-			result.close();
-		}
-	}
-
-	private Map<URI, Integer> resolveTargets(List<Value> targets)
-			throws IOException {
-		Map<URI, Future<HttpResponse>> responses;
-		responses = new LinkedHashMap<URI, Future<HttpResponse>>(targets.size());
-		HTTPObjectClient client = HTTPObjectClient.getInstance();
-		for (Value target : targets) {
-			String url = target.stringValue();
-			if (!responses.containsKey(target) && target instanceof URI) {
-				HttpRequest request = new BasicHttpRequest("HEAD", url);
-				responses.put((URI) target, client.submitRequest(request));
-			}
-		}
-		Map<URI, Integer> codes = new LinkedHashMap<URI, Integer>(responses
-				.size());
-		for (Entry<URI, Future<HttpResponse>> e : responses.entrySet()) {
-			try {
-				HttpResponse resp = e.getValue().get();
+	@type("application/rdf+xml")
+	@iri("http://persistent.name/rdf/2010/purl#add-operations")
+	@transform("http://persistent.name/rdf/2010/purl#entity-graph")
+	public GraphQueryResult addOperations(final GraphQueryResult delegate) {
+		final ValueFactory vf = getObjectConnection().getValueFactory();
+		final URI mirroredBy = vf.createURI(MIRRORED_BY);
+		final URI servicedBy = vf.createURI(SERVICED_BY);
+		return new GraphQueryResult() {
+			public Statement next() throws QueryEvaluationException {
+				Statement st = delegate.next();
 				try {
-					int code = resp.getStatusLine().getStatusCode();
-					codes.put(e.getKey(), code);
-					continue;
-				} finally {
-					HttpEntity entity = resp.getEntity();
-					if (entity != null) {
-						entity.consumeContent();
+					Resource subj = st.getSubject();
+					String uri = subj.stringValue();
+					URI pred = st.getPredicate();
+					Value obj = st.getObject();
+					String server = obj.stringValue();
+					if (mirroredBy.equals(pred)) {
+						String enc = URLEncoder.encode(uri, "UTF-8");
+						String url = server + "diverted;" + enc + "?mirror";
+						URI o = vf.createURI(url);
+						return new StatementImpl(subj, mirroredBy, o);
+					} else if (servicedBy.equals(pred)) {
+						String enc = URLEncoder.encode(uri, "UTF-8");
+						String url = server + "diverted;" + enc + "?services";
+						URI o = vf.createURI(url);
+						return new StatementImpl(subj, servicedBy, o);
 					}
+				} catch (UnsupportedEncodingException e) {
+					throw new AssertionError(e);
 				}
-			} catch (InterruptedException ex) {
-				logger.info(ex.toString());
-			} catch (ExecutionException ex) {
-				logger.warn(ex.toString(), ex);
+				return st;
 			}
-			codes.put(e.getKey(), 504);
-		}
-		return codes;
+
+			public boolean hasNext() throws QueryEvaluationException {
+				return delegate.hasNext();
+			}
+
+			public void close() throws QueryEvaluationException {
+				delegate.close();
+			}
+
+			public Map<String, String> getNamespaces() {
+				return delegate.getNamespaces();
+			}
+
+			public void remove() throws QueryEvaluationException {
+				delegate.remove();
+			}
+		};
 	}
 
-	private void markResolvability(Map<URI, Integer> codes,
-			XMLGregorianCalendar today) throws RepositoryException {
-		ObjectConnection con = getObjectConnection();
-		ValueFactory vf = con.getValueFactory();
-		ObjectFactory of = con.getObjectFactory();
-		URI lastResolved = vf.createURI(NS, "last-resolved");
-		Literal now = vf.createLiteral(today);
-		boolean autoCommit = con.isAutoCommit();
-		con.setAutoCommit(false); // begin
-		try {
-			for (Entry<URI, Integer> e : codes.entrySet()) {
-				con.remove(e.getKey(), lastResolved, null);
-				if (e.getValue() < 400) {
-					con.removeDesignation(of.createObject(e.getKey()),
-							Unresolvable.class);
-				}
-				if (e.getValue() < 300) {
-					con.removeDesignation(of.createObject(e.getKey()),
-							Redirection.class);
-				}
-			}
-			for (Entry<URI, Integer> e : codes.entrySet()) {
-				con.add(e.getKey(), lastResolved, now);
-				if (e.getValue() >= 400) {
-					con.addDesignation(of.createObject(e.getKey()),
-							Unresolvable.class);
-				} else if (e.getValue() >= 300) {
-					con.addDesignation(of.createObject(e.getKey()),
-							Redirection.class);
-				}
-			}
-			if (autoCommit) {
-				con.setAutoCommit(true); // commit
-			}
-		} finally {
-			if (autoCommit && !con.isAutoCommit()) {
-				con.rollback();
-				con.setAutoCommit(false);
-			}
+	@type("message/x-response")
+	@iri("http://persistent.name/rdf/2010/purl#entity-graph")
+	public HttpResponse entityGraph(@type("application/rdf+xml") ReadableByteChannel in) {
+		HttpResponse resp = new BasicHttpResponse(HTTP11, 200, "OK");
+		purlSetEntityHeaders(resp);
+		String type = "application/rdf+xml";
+		resp.setEntity(new ReadableHttpEntityChannel(type, -1, in));
+		return resp;
+	}
+
+	@Override
+	public void purlSetEntityHeaders(HttpResponse resp) {
+		setHeader(resp, "ETag", revisionTag(0));
+		Transaction revision = getRevision();
+		if (revision != null) {
+			setHeader(resp, "Last-Modified", revision.getCommittedOn());
 		}
 	}
 
-	private HttpResponse resolveRemotePURL(String source, String qs,
-			String accept, String language, Set<String> via,
-			boolean useBlackList, HttpResponse bad) throws IOException, InterruptedException {
-		List<InetSocketAddress> blacklisted = getBlackListing(useBlackList);
-		Collection<List<Service>> records = getAllPURLServices();
-		for (List<Service> services : records) {
-			InetSocketAddress addr = pickService(services);
-			if (addr != null) {
-				HttpResponse resp = resolveRemotePURL(addr, source, qs, accept,
-						language, via);
-				if (resp == null)
-					continue;
-				StatusLine status = resp.getStatusLine();
-				if (status.getStatusCode() >= 500 && bad == null) {
-					bad = resp;
-				} else if (status.getStatusCode() >= 500 && bad != null) {
-					HttpEntity entity = resp.getEntity();
-					if (entity != null) {
-						entity.consumeContent();
-					}
-				} else {
-					if (bad != null) {
-						HttpEntity entity = bad.getEntity();
-						if (entity != null) {
-							entity.consumeContent();
-						}
-					}
-					return resp;
-				}
-			}
-		}
-		if (useBlackList && (blacklisted != null || !blackList.isEmpty())
-				&& !records.isEmpty()) {
-			if (blacklisted != null) {
-				blackList.keySet().removeAll(blacklisted);
-			}
-			return resolveRemotePURL(source, qs, accept, language, via, false, bad);
-		}
-		if (bad != null)
-			return bad;
-		throw new BadGateway("Couldn't Find Server");
-	}
-
-	private HttpResponse resolveRemotePURL(InetSocketAddress addr,
-			String source, String qs, String accept, String language,
-			Set<String> via) throws IOException, InterruptedException {
-		HTTPObjectClient client = HTTPObjectClient.getInstance();
-		String url = qs == null ? source : source + "?" + qs;
-		BasicHttpRequest req = new BasicHttpRequest("GET", url);
-		if (accept != null) {
-			req.setHeader("Accept", accept);
-		}
-		if (language != null) {
-			req.setHeader("Accept-Language", language);
-		}
-		StringBuilder sb = new StringBuilder();
-		for (String v : via) {
-			if (v.contains(VIA) && (v.endsWith(VIA) || v.contains(VIA + ",")))
-				throw new InternalServerError("Request Loop Detected\n" + via
-						+ "\n" + VIA);
-			if (sb.length() > 0) {
-				sb.append(",");
-			}
-			sb.append(v);
-		}
-		sb.append(VIA);
-		req.setHeader("Via", sb.toString());
-		try {
-			HttpResponse resp = client.service(addr, req);
-			if (!resp.containsHeader("Via")) {
-				String original = "1.1 " + addr.getHostName();
-				if (addr.getPort() != 80 && addr.getPort() != 443) {
-					original += ":" + addr.getPort();
-				}
-				resp.addHeader("Via", original);
-			}
-			StatusLine status = resp.getStatusLine();
-			if (status.getStatusCode() >= 500) {
-				ProtocolVersion ver = status.getProtocolVersion();
-				String phrase = status.getReasonPhrase();
-				resp.setStatusLine(new BasicStatusLine(ver, 502, phrase));
-				blackList.put(addr, Boolean.TRUE);
-				return resp;
-			} else {
-				return resp;
-			}
-		} catch (GatewayTimeout e) {
-			blackList.put(addr, Boolean.TRUE);
-			return null;
+	@triggeredBy( { DEFINED_BY, MIRRORED_BY, SERVICED_BY })
+	public void refreshGraphs() throws Exception {
+		Object graph = getPurlDefinedBy();
+		if (graph != null && !(graph instanceof RemoteGraph)) {
+			ObjectConnection con = getObjectConnection();
+			RemoteGraph rg = con.addDesignation(graph, RemoteGraph.class);
+			rg.load(getResource().stringValue());
 		}
 	}
 
-	private List<InetSocketAddress> getBlackListing(boolean useBlackList) {
-		if (useBlackList && !blackList.isEmpty())
-			return new ArrayList<InetSocketAddress>(blackList.keySet());
-		return null;
+	protected void setHeader(HttpResponse resp, String name, String value) {
+		if (value != null && !resp.containsHeader(name)) {
+			resp.setHeader(name, value);
+		}
 	}
 
-	private Collection<List<Service>> getAllPURLServices() {
-		Map<Number, List<Service>> map = new TreeMap<Number, List<Service>>();
-		for (Service srv : getPurlServices()) {
-			Number priority = srv.getPurlPriority();
-			if (priority == null) {
-				priority = 0;
-			}
-			List<Service> list = map.get(priority);
-			if (list == null) {
-				map.put(priority, list = new ArrayList<Service>());
-			}
-			list.add(srv);
+	protected void setHeader(HttpResponse resp, String name,
+			XMLGregorianCalendar value) {
+		if (value != null && !resp.containsHeader(name)) {
+			Date time = value.toGregorianCalendar().getTime();
+			resp.setHeader(name, dateformat.format(time));
 		}
-		return map.values();
 	}
-
-	private InetSocketAddress pickService(List<Service> services) {
-		int total = 0;
-		List<InetSocketAddress> addresses = new ArrayList<InetSocketAddress>();
-		for (int i = 0, n = services.size(); i < n; i++) {
-			addresses.add(null);
-			Service srv = services.get(i);
-			Object url = srv.getPurlServer();
-			if (url == null)
-				continue;
-			ParsedURI parsed = new ParsedURI(((RDFObject) url).getResource()
-					.stringValue());
-			int port = "https".equalsIgnoreCase(parsed.getScheme()) ? 443 : 80;
-			InetSocketAddress server = resolve(parsed.getAuthority(), port);
-			if (isBlackListed(server) || server.isUnresolved())
-				continue;
-			addresses.set(i, server);
-			Number weight = srv.getPurlWeight();
-			total += weight == null ? 1 : weight.intValue();
-		}
-		total = random(total);
-		for (int i = 0, n = services.size(); i < n; i++) {
-			Service srv = services.get(i);
-			if (addresses.get(i) == null)
-				continue;
-			Number weight = srv.getPurlWeight();
-			total -= weight == null ? 1 : weight.intValue();
-			if (total < 0) {
-				return addresses.get(i);
-			}
-		}
-		return null;
-	}
-
-	private InetSocketAddress resolve(String authority, int port) {
-		if (authority.contains("@")) {
-			authority = authority.substring(authority.indexOf('@') + 1);
-		}
-		String hostname = authority;
-		if (hostname.contains(":")) {
-			hostname = hostname.substring(0, hostname.indexOf(':'));
-		}
-		if (authority.contains(":")) {
-			int idx = authority.indexOf(':') + 1;
-			port = Integer.parseInt(authority.substring(idx));
-		}
-		return new InetSocketAddress(hostname, port);
-	}
-
-	private boolean isBlackListed(InetSocketAddress server) {
-		return blackList.containsKey(server);
-	}
-
-	private int random(int total) {
-		if (total <= 0)
-			return total;
-		return random.get().nextInt(total);
-	}
-
 }

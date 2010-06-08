@@ -15,10 +15,10 @@ import org.openrdf.repository.object.annotations.iri;
 /** Indicates that theses triples were loaded externally and need to be refreshed regularly. */
 @iri("http://persistent.name/rdf/2010/purl#RemoteGraph")
 public interface RemoteGraph {
-	/** Only this resource and resources that start with the given origin can be loaded from this remote graph. */
+	/** Only this resource and resources that start with the given URI can be loaded from this remote graph. */
 	@iri("http://persistent.name/rdf/2010/purl#allowedOrigin")
 	Set<Object> getPurlAllowedOrigins();
-	/** Only this resource and resources that start with the given origin can be loaded from this remote graph. */
+	/** Only this resource and resources that start with the given URI can be loaded from this remote graph. */
 	@iri("http://persistent.name/rdf/2010/purl#allowedOrigin")
 	void setPurlAllowedOrigins(Set<?> purlAllowedOrigins);
 
@@ -50,10 +50,10 @@ public interface RemoteGraph {
 	@iri("http://persistent.name/rdf/2010/purl#last-modified")
 	void setPurlLastModified(XMLGregorianCalendar purlLastModified);
 
-	/** Date header that was used when this graph was last validated. */
+	/** Date and time when this graph was last validated. */
 	@iri("http://persistent.name/rdf/2010/purl#last-validated")
 	XMLGregorianCalendar getPurlLastValidated();
-	/** Date header that was used when this graph was last validated. */
+	/** Date and time when this graph was last validated. */
 	@iri("http://persistent.name/rdf/2010/purl#last-validated")
 	void setPurlLastValidated(XMLGregorianCalendar purlLastValidated);
 
@@ -70,12 +70,10 @@ public interface RemoteGraph {
 
 	boolean reload(String origin) throws Exception;
 
-	void stayFresh() throws Exception;
-
-	void goStale() throws Exception;
-
 	int getFreshness();
 
 	boolean isFresh();
+
+	void removeRemoteGraph() throws Exception;
 
 }

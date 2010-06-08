@@ -12,25 +12,20 @@ import static org.openrdf.http.object.util.Accepter.parse;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.TimeZone;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 
 import name.persistent.concepts.PURL;
+import name.persistent.concepts.Partial;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -40,7 +35,6 @@ import org.apache.http.message.BasicHttpRequest;
 import org.apache.http.message.BasicHttpResponse;
 import org.openrdf.http.object.client.HTTPObjectClient;
 import org.openrdf.http.object.exceptions.InternalServerError;
-import org.openrdf.http.object.exceptions.NotFound;
 import org.openrdf.http.object.util.Accepter;
 import org.openrdf.model.Value;
 import org.openrdf.query.BindingSet;
@@ -52,8 +46,7 @@ import org.openrdf.repository.object.annotations.sparql;
  * 
  * @author James Leigh
  */
-public abstract class PURLSupport extends PartialSupport implements PURL {
-	private static final String PROTOCOL = "1.1";
+public abstract class PURLSupport extends ResolvableSupport implements PURL {
 	private static final ProtocolVersion HTTP11 = new ProtocolVersion("HTTP",
 			1, 1);
 	private static final String PREFIX = "PREFIX purl:<http://persistent.name/rdf/2010/purl#>\n";
@@ -62,33 +55,17 @@ public abstract class PURLSupport extends PartialSupport implements PURL {
 	private static final String ALTERNATIVE = "http://persistent.name/rdf/2010/purl#alternative";
 	private static final String DESCRIBED_BY = "http://persistent.name/rdf/2010/purl#describedBy";
 	private static final String REDIRECTS_TO = "http://persistent.name/rdf/2010/purl#redirectsTo";
-	/** Date format pattern used to generate the header in RFC 1123 format. */
-	public static final String PATTERN_RFC1123 = "EEE, dd MMM yyyy HH:mm:ss zzz";
-	/** The time zone to use in the date header. */
-	public static final TimeZone GMT = TimeZone.getTimeZone("GMT");
-	private static final DateFormat dateformat;
-	static {
-		dateformat = new SimpleDateFormat(PATTERN_RFC1123, Locale.US);
-		dateformat.setTimeZone(GMT);
-	}
+	private static final String PROTOCOL = "1.1";
 	private static final String VIA;
+	private static String localhost;
 	static {
-		String host = "localhost";
 		try {
-			host = InetAddress.getLocalHost().getCanonicalHostName();
+			localhost = InetAddress.getLocalHost().getHostName();
 		} catch (UnknownHostException e) {
-			// ignore
+			localhost = "localhost";
 		}
-		VIA = PROTOCOL + " " + host;
+		VIA = PROTOCOL + " " + localhost;
 	}
-	private static final Map<String, Pattern> patterns = new LinkedHashMap<String, Pattern>(
-			1024, 0.75f, true) {
-		private static final long serialVersionUID = 6748360669055961317L;
-
-		protected boolean removeEldestEntry(Map.Entry<String, Pattern> eldest) {
-			return size() > 1024;
-		};
-	};
 
 	private static class Location {
 		private MimeType type;
@@ -184,10 +161,13 @@ public abstract class PURLSupport extends PartialSupport implements PURL {
 			Map<Object, Location> map = new LinkedHashMap<Object, Location>();
 			Collection<String> locations = new LinkedHashSet<String>();
 			Map<Object, Link> links = new LinkedHashMap<Object, Link>();
+			Matcher regex = null;
 			while (result.hasNext()) {
 				BindingSet set = result.next();
-				Value pattern = set.getValue("pattern");
-				Matcher regex = compile(pattern, source);
+				if (regex == null) {
+					Value pattern = set.getValue("pattern");
+					regex = compile(pattern, source);
+				}
 				String location = readValue(set, "target", regex);
 				String rel = readValue(set, "rel", regex);
 				String type = readValue(set, "type", regex);
@@ -212,7 +192,8 @@ public abstract class PURLSupport extends PartialSupport implements PURL {
 							int ic = inter.getStatusLine().getStatusCode();
 							if (ic == 301 || ic == 302 || ic == 307 || ic == rc) {
 								loc.removeLocation(location);
-								for (Header hd : inter.getHeaders("Content-Location")) {
+								for (Header hd : inter
+										.getHeaders("Content-Location")) {
 									loc.addLocation(hd.getValue());
 								}
 								for (Header hd : inter.getHeaders("Location")) {
@@ -256,6 +237,13 @@ public abstract class PURLSupport extends PartialSupport implements PURL {
 		}
 	}
 
+	public void purlSetEntityHeaders(HttpResponse resp) {
+		Partial parent = getPurlPartOf();
+		if (parent != null) {
+			parent.purlSetEntityHeaders(resp);
+		}
+	}
+
 	@sparql(PREFIX
 			+ "SELECT REDUCED ?pattern ?pred ?rel ?target ?title ?type ?media ?lang ?chain\n"
 			+ "WHERE { $this ?pred ?target . ?pred purl:rel ?rel \n"
@@ -267,11 +255,19 @@ public abstract class PURLSupport extends PartialSupport implements PURL {
 			+ "OPTIONAL { ?target a ?unresolvable FILTER (?unresolvable = purl:Unresolvable) }\n"
 			+ "OPTIONAL { ?target a ?chain FILTER (?chain = purl:PURL) }}\n"
 			+ "ORDER BY ?unresolvable ?chain\n")
-	public abstract TupleQueryResult findTargetURL();
+	protected abstract TupleQueryResult findTargetURL();
 
-	private HttpResponse accept(Map<Object, Location> map,
-			String accept, String language, String linkHeader)
-			throws MimeTypeParseException, IOException {
+	protected Matcher compile(Value value, String source) {
+		return null;
+	}
+
+	protected String apply(Matcher m, String template) {
+		return template;
+	}
+
+	private HttpResponse accept(Map<Object, Location> map, String accept,
+			String language, String linkHeader) throws MimeTypeParseException,
+			IOException {
 		Accepter typeAccepter = new Accepter(accept);
 		Accepter langAccepter = new Accepter(language);
 		for (MimeType mtype : typeAccepter.getAcceptable()) {
@@ -297,8 +293,8 @@ public abstract class PURLSupport extends PartialSupport implements PURL {
 		return null;
 	}
 
-	private HttpResponse prepareResponse(HttpResponse resp, String linkHeader, Set<String> via)
-			throws IOException {
+	private HttpResponse prepareResponse(HttpResponse resp, String linkHeader,
+			Set<String> via) throws IOException {
 		if (resp.containsHeader("Content-Location")) {
 			String url = resp.getFirstHeader("Content-Location").getValue();
 			HttpResponse bd = getFinalResponse(url, via);
@@ -327,12 +323,13 @@ public abstract class PURLSupport extends PartialSupport implements PURL {
 			}
 		} else {
 			resp.setHeader("Link", linkHeader);
-			mirrorEntityHeaders(getPurlPartOf(), resp);
+			purlSetEntityHeaders(resp);
 		}
 		return resp;
 	}
 
-	private HttpResponse getFinalResponse(String url, Set<String> via) throws IOException {
+	private HttpResponse getFinalResponse(String url, Set<String> via)
+			throws IOException {
 		HTTPObjectClient client = HTTPObjectClient.getInstance();
 		BasicHttpRequest req = new BasicHttpRequest("GET", url);
 		StringBuilder sb = new StringBuilder();
@@ -364,26 +361,6 @@ public abstract class PURLSupport extends PartialSupport implements PURL {
 		return bd;
 	}
 
-	private Matcher compile(Value pattern, String source) {
-		if (pattern == null)
-			return null;
-		Pattern regex;
-		synchronized (patterns) {
-			regex = patterns.get(pattern.stringValue());
-		}
-		if (regex == null) {
-			try {
-				regex = Pattern.compile(pattern.stringValue());
-			} catch (PatternSyntaxException e) {
-				throw new InternalServerError(e);
-			}
-			synchronized (patterns) {
-				patterns.put(pattern.stringValue(), regex);
-			}
-		}
-		return regex.matcher(source);
-	}
-
 	private String readValue(BindingSet set, String name, Matcher regex) {
 		if (set.hasBinding(name)) {
 			return apply(regex, set.getValue(name).stringValue());
@@ -391,39 +368,10 @@ public abstract class PURLSupport extends PartialSupport implements PURL {
 		return null;
 	}
 
-	private String apply(Matcher m, String template) {
-		if (m != null && !m.matches())
-			throw new NotFound("No Matching PURL");
-		if (m == null || template.indexOf('$') < 0)
-			return template;
-		StringBuilder sb = new StringBuilder(255);
-		for (int i = 0, n = template.length(); i < n; i++) {
-			char chr = template.charAt(i);
-			switch (chr) {
-			case '$':
-				if (i + 1 < n) {
-					int idx = template.charAt(++i) - '0';
-					try {
-						sb.append(m.group(idx));
-					} catch (IndexOutOfBoundsException e) {
-						sb.append("$").append(idx);
-					}
-					break;
-				}
-			case '\\':
-				if (i + 1 < n && chr == '\\') {
-					chr = template.charAt(++i);
-				}
-			default:
-				sb.append(chr);
-			}
-		}
-		return sb.toString();
-	}
-
 	private HttpResponse response(String rel) {
 		if (COPY_OF.equals(rel))
-			return new BasicHttpResponse(HTTP11, 203, "Non-Authoritative Information");
+			return new BasicHttpResponse(HTTP11, 203,
+					"Non-Authoritative Information");
 		if (RENAMED_TO.equals(rel))
 			return new BasicHttpResponse(HTTP11, 301, "Moved Permanently");
 		if (ALTERNATIVE.equals(rel))

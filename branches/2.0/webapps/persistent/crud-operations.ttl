@@ -51,29 +51,6 @@ purl:User rdfs:subClassOf calli:Viewable, calli:Reviewable, calli:Editable, call
 	calli:delete <user/delete.xml>.
 
 ################################
-# RemoteGraph
-################################
-
-<mirror/template> a purl:MirrorTemplate;
-	calli:curator </data/user/admin>.
-
-purl:MirrorTemplate rdfs:subClassOf calli:Copyable;
-	calli:copy <mirror/create.xml>.
-
-purl:RemoteGraph rdfs:subClassOf calli:Viewable, calli:Editable, calli:Deletable;
-	calli:view <mirror/view.xml>;
-	calli:edit <mirror/edit.xml>;
-	calli:delete <mirror/delete.xml>.
-
-purl:post-delete-graph owl:intersectionOf (calli:post-delete
-		[owl:onProperty obj:target; owl:allValuesFrom purl:RemoteGraph]);
-	obj:precedes calli:post-delete;
-	obj:groovy """
-		msg.proceed()
-		removeRemoteGraph()
-	""".
-
-################################
 # Domain
 ################################
 
@@ -114,7 +91,8 @@ purl:post-domain-create rdfs:subClassOf obj:Message;
 		} else {
 			copy.calliMaintainers.addAll(findScribe(copy))
 		}
-		copy.purlDomainOf = purlDomainOf ? purlDomainOf : msg.target
+		copy.purlDomainOf.addAll(purlDomainOf)
+		copy.purlDomainOf.add(msg.target)
 		copy.purlPartOf = msg.target
 		touchRevision()
 		return copy
@@ -138,18 +116,9 @@ purl:post-domain-copy owl:intersectionOf (calli:post-copy
 	obj:precedes calli:post-copy;
 	obj:groovy """
 		def copy = msg.functionalObjectResponse
-		copy.purlDomainOf = purlDomainOf ? purlDomainOf : msg.target
+		copy.purlDomainOf = purlDomainOf
+		copy.purlPartOf = purlPartOf
 		return copy
-	""".
-
-purl:post-domain-edit owl:intersectionOf (calli:post-edit
-		[owl:onProperty obj:target; owl:allValuesFrom purl:Domain]);
-	obj:precedes calli:post-edit;
-	obj:groovy """
-		msg.proceed()
-		if (purlDomainOf) {
-			purlDomainOf.touchRevision()
-		}
 	""".
 
 ################################
@@ -218,7 +187,9 @@ purl:post-purl-edit owl:intersectionOf (calli:post-edit
 	obj:precedes calli:post-edit;
 	obj:groovy """
 		msg.proceed()
-		if (purlPartOf) {
-			purlPartOf.touchRevision()
+		def purl = msg.target
+		for (int i=0; purl.purlPartOf && i < 100; i++) {
+			purl = purl.purlPartOf
+			purl.touchRevision()
 		}
 	""".

@@ -6,8 +6,6 @@
  */
 package name.persistent.concepts;
 
-import java.net.InetSocketAddress;
-import java.util.List;
 import java.util.Set;
 
 import org.apache.http.HttpResponse;
@@ -18,9 +16,4 @@ public interface Resolvable {
 
 	HttpResponse resolvePURL(String source, String qs, String accept,
 			String language, Set<String> via) throws Exception;
-
-	List<InetSocketAddress> getOriginServices(boolean useBlackList)
-			throws Exception;
-	
-	void blackList(InetSocketAddress server, Exception reason);
 }

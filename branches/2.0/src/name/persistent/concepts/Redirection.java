@@ -8,7 +8,7 @@ package name.persistent.concepts;
 
 import org.openrdf.repository.object.annotations.iri;
 
-/** A URL that does not resolve directly and may not resolve at all. */
+/** Resource does not resolve directly and may not resolve at all. */
 @iri("http://persistent.name/rdf/2010/purl#Redirection")
 public interface Redirection {
 }
