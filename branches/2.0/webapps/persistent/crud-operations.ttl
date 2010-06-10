@@ -219,8 +219,8 @@ purl:post-purl-edit owl:intersectionOf (calli:post-edit
 	obj:precedes calli:post-edit;
 	obj:groovy """
 		msg.proceed()
-		if (purlPartOf.belongsTo) {
-			purlPartOf.belongsTo.touchRevision()
+		if (purlPartOf.purlBelongsTo) {
+			purlPartOf.purlBelongsTo.touchRevision()
 		} else {
 			purlPartOf.touchRevision()
 		}

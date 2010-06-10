@@ -15,7 +15,9 @@
    limitations under the License.
 -->
 <xsl:stylesheet version="1.0"
-	xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:calli="http://callimachusproject.org/rdf/2009/framework#">
 	<xsl:param name="this" />
 	<xsl:param name="mode" select="''" />
 	<xsl:param name="element" select="'/1'" />
@@ -23,11 +25,11 @@
 		standalone="no" media-type="text/html" />
 	<xsl:variable name="profile" select="concat($this, '?xslt&amp;mode=', $mode, '&amp;element=', $element)" />
 	<xsl:variable name="data" select="/" />
-	<xsl:variable name="etag" select="false()" /><!-- TODO -->
 	<xsl:variable name="variables"
 		select="'http://callimachusproject.org/rdf/2009/framework/variables/?'" />
 	<xsl:variable name="target"
 		select="$data/rdf:RDF/rdf:Description[1]/@rdf:about" />
+	<xsl:variable name="etag" select="$data/rdf:RDF/rdf:Description[@rdf:about=$target]/calli:etag/text()" />
 	<xsl:template match="/">
 		<xsl:variable name="html" select="document($profile)/*" />
 		<xsl:variable name="about" select="$target" />
