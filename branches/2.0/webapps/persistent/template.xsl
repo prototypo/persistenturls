@@ -34,7 +34,7 @@
 	<xsl:template match="head">
 		<xsl:copy>
 			<xsl:apply-templates select="@*" />
-			<style type="text/css">@import url("<xsl:value-of select="$xslt"/>/../style.css");</style>
+			<style type="text/css">@import url("<xsl:value-of select="$persistent"/>/style.css");</style>
 			<script type="text/javascript" src="{$callimachus}/jquery-1.3.2.js">
 			</script>
 			<script type="text/javascript" src="{$callimachus}/jquery-ui-1.7.2.js">
@@ -114,7 +114,7 @@
 						</li>
 						<li class="edit">
 							<xsl:choose>
-								<xsl:when test="$mode='edit'">
+								<xsl:when test="$mode='edit' or $mode='delete'">
 									<span class="current">Edit</span>
 								</xsl:when>
 								<xsl:otherwise>
@@ -129,16 +129,6 @@
 								</xsl:when>
 								<xsl:otherwise>
 									<a class="diverted" title="See this item's history" href="?review">History</a>
-								</xsl:otherwise>
-							</xsl:choose>
-						</li>
-						<li class="delete">
-							<xsl:choose>
-								<xsl:when test="$mode='delete'">
-									<span class="current">Delete</span>
-								</xsl:when>
-								<xsl:otherwise>
-									<a class="diverted" title="Delete this item" href="?delete">Delete</a>
 								</xsl:otherwise>
 							</xsl:choose>
 						</li>

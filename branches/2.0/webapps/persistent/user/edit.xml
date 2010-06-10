@@ -69,6 +69,7 @@
 						</tr>
 					</tbody>
 				</table>
+				<input value="Delete" type="button" onclick="location.href='?delete'" />
 				<input value="Save" type="submit" />
 				<br />
 			</fieldset>

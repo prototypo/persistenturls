@@ -35,7 +35,7 @@ public abstract class PartialSupport extends PURLSupport implements Partial {
 	}
 
 	@Override
-	protected Matcher compile(Value value, String source) {
+	protected Matcher compile(Value value, String source, String qs) {
 		if (value == null)
 			return null;
 		String pattern = value.stringValue();
@@ -58,15 +58,21 @@ public abstract class PartialSupport extends PURLSupport implements Partial {
 				patterns.put(pattern, regex);
 			}
 		}
-		if (suffix && source.startsWith(prefix))
-			return regex.matcher(source.substring(prefix.length()));
-		return regex.matcher(source);
+		if (qs != null) {
+			source = source + "?" + qs;
+		}
+		if (suffix) {
+			assert source.startsWith(prefix);
+			source = source.substring(prefix.length());
+		}
+		Matcher m = regex.matcher(source);
+		if (m.matches())
+			return m;
+		throw new NotFound("No Matching PURL");
 	}
 
 	@Override
 	protected String apply(Matcher m, String template) {
-		if (m != null && !m.matches())
-			throw new NotFound("No Matching PURL");
 		if (m == null)
 			return template;
 		int start = template.indexOf('$');

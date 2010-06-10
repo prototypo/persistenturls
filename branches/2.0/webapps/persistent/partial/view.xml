@@ -7,8 +7,6 @@
 	xmlns:purl="http://persistent.name/rdf/2010/purl#">
 	<head>
 		<title property="rdfs:label"/>
-		<script type="text/javascript" src="/persistent/purl/validate.js">
-		</script>
 	</head>
 	<body class="purl">
 		<h1 property="rdfs:label" />
@@ -28,6 +26,13 @@
 		<a id="target" rel="purl:alternative" href="?alternative">Target (Simple - HTTP 302)</a>
 		<a id="target" rel="purl:describedBy" href="?describedBy">Target (Described - HTTP 303)</a>
 		<a id="target" rel="purl:redirectsTo" href="?redirectsTo">Target (Redirect - HTTP 307)</a>
-        <p><button id="validate" type="button">Validate this PURL</button></p>
+		<div property="purl:pattern" />
+		<p><a href="?copy" class="diverted">Copy Partial</a></p>
+		<p><a href="?domain-create" class="diverted">Create Sub-Partial</a></p>
+		<h3>PURLs</h3>
+        <p><a href="?purl-create" class="diverted">Create New PURL</a></p>
+		<ul>
+			<li resource="?purl" rev="purl:partOf"><a class="diverted" property="rdfs:label" href="?purl"></a></li>
+		</ul>
 	</body>
 </html>

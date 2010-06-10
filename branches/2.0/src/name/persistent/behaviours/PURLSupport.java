@@ -166,7 +166,7 @@ public abstract class PURLSupport extends ResolvableSupport implements PURL {
 				BindingSet set = result.next();
 				if (regex == null) {
 					Value pattern = set.getValue("pattern");
-					regex = compile(pattern, source);
+					regex = compile(pattern, source, qs);
 				}
 				String location = readValue(set, "target", regex);
 				String rel = readValue(set, "rel", regex);
@@ -257,7 +257,7 @@ public abstract class PURLSupport extends ResolvableSupport implements PURL {
 			+ "ORDER BY ?unresolvable ?chain\n")
 	protected abstract TupleQueryResult findTargetURL();
 
-	protected Matcher compile(Value value, String source) {
+	protected Matcher compile(Value value, String source, String qs) {
 		return null;
 	}
 

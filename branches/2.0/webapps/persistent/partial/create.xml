@@ -6,14 +6,14 @@
 	xmlns:calli="http://callimachusproject.org/rdf/2009/framework#"
 	xmlns:purl="http://persistent.name/rdf/2010/purl#">
 	<head>
-		<title>Create a PURL</title>
+		<title>Create a Partial</title>
 		<script type="text/javascript" src="/persistent/purl/form.js">
 		</script>
 	</head>
 	<body class="purl">
-		<form action="" about="" typeof="purl:PURL" id="purl-form" class="diverted">
+		<form action="" about="" typeof="purl:Partial" id="purl-form" class="diverted">
 			<fieldset>
-				<legend>Create a New PURL</legend>
+				<legend>Create a New Partial</legend>
 				<p class="instructions">Fill in the following PURL information.</p>
 				<table class="actiontable">
 					<tbody>
@@ -24,7 +24,8 @@
 							<td class="value" data-cardinality="1">
 								<span id="domain-span"/>
 								<input id="m_label" property="rdfs:label" type="text"
-									onchange="$(form).attr('about', $('#m_domain').attr('href') + value)" />
+									onchange="$(form).attr('about', $('#m_domain').attr('href') + value + '/')" />
+								<span>/</span>
 							</td>
 						</tr>
 						<tr class="all">

@@ -77,9 +77,9 @@ purl:domain-search rdfs:subClassOf purl:search;
 	http:cache-control "must-reevaluate";
 	http:transform <domain-search-xsl>;
 	obj:sparql """
-		SELECT DISTINCT ?uri ?label
+		SELECT DISTINCT ?uri ?label ?parent
 		WHERE {
-			?uri a purl:Domain; rdfs:label ?label; calli:soundex $soundex
+			?uri a purl:Domain; rdfs:label ?label; purl:partOf ?parent; calli:soundex $soundex
 			FILTER (regex(?label, $regex, "i"))
 		}
 		ORDER BY ?label ?uri
@@ -96,12 +96,12 @@ purl:purl-search rdfs:subClassOf purl:search;
 	http:cache-control "must-reevaluate";
 	http:transform <purl-search-xsl>;
 	obj:sparql """
-		SELECT DISTINCT ?uri ?label ?redirection ?unresolvable
+		SELECT DISTINCT ?uri ?label ?type ?parent ?redirection ?unresolvable
 		WHERE {
-			?uri a purl:PURL
+			?uri a ?type; rdfs:label ?label; purl:partOf ?parent; calli:soundex $soundex
+			FILTER (?type = purl:PURL || ?type = purl:Partial || ?type = purl:Domain )
 			OPTIONAL { ?uri ?redirection [a purl:Redirection] }
 			OPTIONAL { ?uri ?unresolvable [a purl:Unresolvable] }
-			?uri rdfs:label ?label; calli:soundex $soundex
 			FILTER (regex(?label, $regex, "i"))
 		}
 		ORDER BY ?label ?uri
@@ -113,13 +113,12 @@ purl:target-search rdfs:subClassOf purl:search;
 	http:cache-control "must-reevaluate";
 	http:transform <purl-search-xsl>;
 	obj:sparql """
-		SELECT DISTINCT ?uri ?label ?redirection ?unresolvable
+		SELECT DISTINCT ?uri ?label ?type ?parent ?redirection ?unresolvable
 		WHERE {
-			{ ?uri a purl:PURL }
-			UNION { ?uri a purl:Domain }
+			?uri a ?type; ?rel $target; purl:partOf ?parent
+			FILTER (?type = purl:PURL || ?type = purl:Partial || ?type = purl:Domain )
 			OPTIONAL { ?uri ?redirection [a purl:Redirection] }
 			OPTIONAL { ?uri ?unresolvable [a purl:Unresolvable] }
-			?uri ?rel $target
 			OPTIONAL { ?uri rdfs:label ?label }
 		}
 		ORDER BY ?label ?uri

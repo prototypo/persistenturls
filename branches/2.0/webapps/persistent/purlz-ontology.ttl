@@ -98,7 +98,7 @@
 	purl:rel <#redirectsTo>.
 
 <#partOf> a owl:ObjectProperty, owl:FunctionalProperty;
-	rdfs:comment "Parent partial or domain.";
+	rdfs:comment "Parent partial or domain. This IRI should start with its parent's IRI.";
 	rdfs:domain <#PURL>;
 	rdfs:range <#Partial>.
 
@@ -108,7 +108,7 @@
 	rdfs:range xsd:string.
 
 <#belongsTo> a owl:ObjectProperty, owl:FunctionalProperty;
-	rdfs:comment "Parent domain to this partial.";
+	rdfs:comment "Parent domain to this partial. Domains always belong to themselves.";
 	rdfs:domain <#Partial>;
 	rdfs:range <#Domain>.
 

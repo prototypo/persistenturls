@@ -41,14 +41,6 @@
 								</select>
 							</td>
 						</tr>
-						<tr class="all">
-							<td class="property">
-								<label for="m_zoned">Zoned:</label>
-							</td>
-							<td class="value">
-								<input type="checkbox" value="purl:ZonedPURL" id="m_zoned" class="purl_type" name="m_zoned" />
-							</td>
-						</tr>
 						<tr class="rel renamed">
 							<td class="property">
 								<label for="m_renamedTo">Target:</label>

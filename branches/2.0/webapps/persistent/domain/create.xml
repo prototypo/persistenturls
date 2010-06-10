@@ -32,7 +32,8 @@
 							<td class="value" data-cardinality="1">
 								<span id="origin-span"/>
 								<input id="m_label" property="rdfs:label" type="text"
-									onchange="$(form).attr('about', $('#origin-span').text() + value)" />
+									onchange="$(form).attr('about', $('#origin-span').text() + value + '/')" />
+								<span>/</span>
 							</td>
 						</tr>
 						<tr>

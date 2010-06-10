@@ -30,7 +30,7 @@ purl:email a owl:DatatypeProperty, owl:FunctionalProperty;
 rdfs:label a owl:DatatypeProperty;
 	rdfs:range xsd:string;
 	http:operation "label";
-	http:type "text/plain";
+	http:type "text/plain;q=0.9";
 	http:rel "alternate".
 
 calli:get-copy http:realm <authority>.
@@ -46,7 +46,23 @@ calli:post-delete http:realm <authority>.
 purl:purl-authorize owl:equivalentClass calli:authorize-credential;
 	obj:sparql """
 		ASK {
-			$subject a purl:PURL; purl:partOf ?domain
+			$subject a purl:PURL; purl:partOf ?partial
+			{
+				?partial calli:curator $credential
+			} UNION {
+				?partial calli:maintainer $credential
+			} UNION {
+				?partial purl:belongsTo [calli:curator $credential]
+			} UNION {
+				?partial purl:belongsTo [calli:maintainer $credential]
+			}
+		}
+	""".
+
+purl:partial-authorize owl:equivalentClass calli:authorize-credential;
+	obj:sparql """
+		ASK {
+			$subject a purl:Partial; purl:belongsTo ?domain
 			{
 				?domain calli:curator $credential
 			} UNION {

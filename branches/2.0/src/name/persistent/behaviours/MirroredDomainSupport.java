@@ -154,9 +154,9 @@ public abstract class MirroredDomainSupport extends DomainSupport implements
 
 	@Override
 	public void purlSetEntityHeaders(HttpResponse resp) {
-		List<RemoteGraph> graphs = getRemoteGraphs();
-		if (!graphs.isEmpty()) {
-			RemoteGraph graph = graphs.get(0);
+		Object by = getPurlMirroredBy();
+		if (by instanceof RemoteGraph) {
+			RemoteGraph graph = (RemoteGraph) by;
 			XMLGregorianCalendar validated = graph.getPurlLastValidated();
 			long now = System.currentTimeMillis();
 			long date = validated.toGregorianCalendar().getTimeInMillis();
@@ -246,12 +246,6 @@ public abstract class MirroredDomainSupport extends DomainSupport implements
 	protected Object getReloadGraph() {
 		return getPurlMirroredBy();
 	}
-
-	@sparql(PREFIX + "SELECT REDUCED ?graph\n"
-			+ "WHERE { GRAPH ?graph { $this ?p ?o }\n"
-			+ "?graph a purl:RemoteGraph; purl:last-validated ?last }\n"
-			+ "ORDER BY desc(?last)")
-	protected abstract List<RemoteGraph> getRemoteGraphs();
 
 	private String getOrigin() {
 		ParsedURI parsed = new ParsedURI(getResource().stringValue());

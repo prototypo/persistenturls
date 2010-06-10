@@ -19,7 +19,7 @@
 			<input type="hidden" name="copy" value="purl:copyOf" />
 			<input type="hidden" name="described" value="purl:describedBy" />
 			<fieldset>
-				<legend>Modify a PURL</legend>
+				<legend>Modify a Partial</legend>
 				<p class="instructions">Modify any of the following PURL information.</p>
 				<table class="actiontable">
 					<tbody>

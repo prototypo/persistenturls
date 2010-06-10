@@ -22,7 +22,7 @@ purl:mirrored-domains rdfs:subClassOf obj:Message;
 	obj:groovy """
 		msg.proceed()
 		def graphs = objectConnection.getObjects(RemoteGraph).asList()
-		for (def domain : purlMirroredDomains) {
+		for (def domain : purlMirroredDomains()) {
 			domain.purlRefreshGraphs()
 		}
 	""".
@@ -31,7 +31,7 @@ purl:mirrored-domains rdfs:subClassOf obj:Message;
 	obj:imports purl:RemoteGraph;
 	obj:groovy """
 		def graphs = objectConnection.getObjects(RemoteGraph).asList()
-		for (def domain : purlMirroredDomains) {
+		for (def domain : purlMirroredDomains()) {
 			domain.purlStallGraphs()
 		}
 		msg.proceed()
