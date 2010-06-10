@@ -377,3 +377,13 @@ purl:reset-password rdfs:subClassOf obj:Message;
 		}
 	""".
 
+purl:remove-password rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:User];
+	rdfs:subClassOf [owl:onProperty obj:objectResponse;
+		owl:allValuesFrom owl:Nothing];
+	obj:groovy """
+		calliAlgorithm = null
+		calliEncoded = null
+	""".
+

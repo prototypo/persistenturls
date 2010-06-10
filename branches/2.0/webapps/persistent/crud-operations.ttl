@@ -50,6 +50,18 @@ purl:User rdfs:subClassOf calli:Viewable, calli:Reviewable, calli:Editable, call
 	calli:edit <user/edit.xml>;
 	calli:delete <user/delete.xml>.
 
+purl:post-user-delete owl:intersectionOf (calli:post-delete
+		[owl:onProperty obj:target; owl:allValuesFrom purl:User]);
+	obj:precedes calli:post-delete;
+	obj:imports <authority>;
+	obj:imports <java:org.openrdf.http.object.exceptions.BadRequest>;
+	obj:groovy """
+		authority.calliCredentials.remove(this)
+		purlRemovePassword()
+		calliMaintainers.clear()
+		msg.proceed()
+	""".
+
 ################################
 # Domain
 ################################

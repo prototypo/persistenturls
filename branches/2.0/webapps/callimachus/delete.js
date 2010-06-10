@@ -59,7 +59,12 @@ function readRDF(form) {
 
 function postData(url, type, data, callback) {
 	var xhr = null
-	xhr = $.ajax({ type: "POST", url: url, contentType: type, data: data, success: function(data, textStatus) {
+	xhr = $.ajax({ type: "POST", url: url, contentType: type, data: data, beforeSend: function(xhr){
+		var etag = getEntityTag()
+		if (etag) {
+			xhr.setRequestHeader("If-Match", etag)
+		}
+	}, success: function(data, textStatus) {
 		if (window.showSuccess) {
 			showSuccess()
 		}
@@ -69,4 +74,14 @@ function postData(url, type, data, callback) {
 			showError(xhr.statusText ? xhr.statusText : errorThrown ? errorThrown : textStatus, xhr.responseText)
 		}
 	}})
+}
+
+function getEntityTag() {
+	var etag = null
+	$("head>meta").each(function(){
+		if (this.attributes['http-equiv'].value == 'etag') {
+			etag = this.attributes['content'].value
+		}
+	})
+	return etag
 }
