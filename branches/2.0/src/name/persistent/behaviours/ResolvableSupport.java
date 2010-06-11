@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import name.persistent.concepts.MirroredDomain;
 import name.persistent.concepts.PURL;
 import name.persistent.concepts.Resolvable;
 
@@ -45,11 +44,6 @@ public abstract class ResolvableSupport implements RDFObject, Resolvable {
 		if (result.isEmpty())
 			throw new NotFound("Unknown PURL");
 		PURL purl = result.get(0);
-		if (reload && purl instanceof MirroredDomain) {
-			if (((MirroredDomain) purl).reload()) {
-				return resolvePURL(source, qs, accept, lang, via, false);
-			}
-		}
 		return purl.resolvePURL(source, qs, accept, lang, via);
 	}
 

@@ -88,6 +88,7 @@ public abstract class RemoteDomainSupport extends MirroredDomainSupport implemen
 	public HttpResponse resolvePURL(String source, String qs,
 			String accept, String language, Set<String> via)
 			throws IOException, InterruptedException {
+		stayFresh();
 		return resolveRemotePURL(source, qs, accept, language, via, true, null);
 	}
 

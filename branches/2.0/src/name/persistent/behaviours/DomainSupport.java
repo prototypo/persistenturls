@@ -50,7 +50,8 @@ public abstract class DomainSupport extends PartialSupport implements Domain,
 	private static final String DEFINED_BY = NS + "definedBy";
 	private static final String SERVICED_BY = NS + "servicedBy";
 	private static final String MIRRORED_BY = NS + "mirroredBy";
-	private static final String PREFIX = "PREFIX purl:<http://persistent.name/rdf/2010/purl#>\n";
+	private static final String PREFIX = "PREFIX purl:<http://persistent.name/rdf/2010/purl#>\n"
+			+ "PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>\n";
 	private static final ProtocolVersion HTTP11 = new ProtocolVersion("HTTP",
 			1, 1);
 	/** Date format pattern used to generate the header in RFC 1123 format. */
@@ -68,14 +69,16 @@ public abstract class DomainSupport extends PartialSupport implements Domain,
 	@transform("http://persistent.name/rdf/2010/purl#entity-graph")
 	@sparql(PREFIX
 			+ "CONSTRUCT {\n"
-			+ "?partial purl:belongsTo ?domain; a ?ptype; purl:partOf ?parent;\n"
+			+ "?partial rdfs:label ?dlabel; purl:belongsTo ?domain; a ?ptype; purl:partOf ?parent;\n"
 			+ "purl:pattern ?pattern; ?dpred ?dhref.\n"
-			+ "?purl purl:partOf ?partial; a ?type; ?pred ?href .\n"
+			+ "?purl rdfs:label ?label; purl:partOf ?partial; a ?type; ?pred ?href .\n"
 			+ "} WHERE { { ?partial a ?dtype FILTER (?partial = $this) }\n"
 			+ "UNION { ?partial a ?ptype; purl:belongsTo ?domain FILTER (?domain = $this) }\n"
+			+ "OPTIONAL { ?partial rdfs:label ?dlabel }\n"
 			+ "OPTIONAL { ?partial purl:partOf ?parent }\n"
 			+ "OPTIONAL { ?partial purl:pattern ?pattern }\n"
 			+ "OPTIONAL { ?purl purl:partOf ?partial; a purl:PURL, ?type\n"
+			+ "\t OPTIONAL { ?purl rdfs:label ?label }\n"
 			+ "\t OPTIONAL { ?purl ?pred ?href . ?pred purl:rel ?rel }\n"
 			+ "\t OPTIONAL { ?partial ?dpred ?dhref . ?dpred purl:rel ?drel }}}")
 	public abstract GraphQueryResult mirror();
@@ -84,9 +87,10 @@ public abstract class DomainSupport extends PartialSupport implements Domain,
 	@type("application/rdf+xml")
 	@transform("http://persistent.name/rdf/2010/purl#entity-graph")
 	@sparql(PREFIX
-			+ "CONSTRUCT { $this purl:service ?srv .\n"
+			+ "CONSTRUCT { $this rdfs:label ?label; purl:service ?srv .\n"
 			+ "?srv a purl:Service; purl:server ?server; purl:priority ?p; purl:weight ?w\n"
 			+ "} WHERE { $this purl:service ?srv . ?srv purl:server ?server\n"
+			+ "OPTIONAL { $this rdfs:label ?label }\n"
 			+ "OPTIONAL { ?srv purl:priority ?p}\n"
 			+ "OPTIONAL { ?srv purl:weight ?w }}")
 	public abstract GraphQueryResult services();

@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -122,6 +123,7 @@ public abstract class MirroredDomainSupport extends DomainSupport implements
 				ObjectConnection con = repository.getConnection();
 				try {
 					RemoteGraph graph = con.getObject(RemoteGraph.class, subj);
+					// TODO CCE
 					int freshness;
 					if (graph.reload(null)) {
 						freshness = Math.max(graph.getFreshness(), 0);
@@ -181,12 +183,10 @@ public abstract class MirroredDomainSupport extends DomainSupport implements
 	}
 
 	@Override
-	public boolean reload() throws Exception {
-		String origin = getOrigin();
-		if (reload(getPurlDefinedBy(), origin)) {
-			refresh();
-		}
-		return reload(getReloadGraph(), origin);
+	public HttpResponse resolvePURL(String source, String qs, String accept,
+			String language, Set<String> via) throws Exception {
+		stayFresh();
+		return super.resolvePURL(source, qs, accept, language, via);
 	}
 
 	@Override
@@ -243,6 +243,12 @@ public abstract class MirroredDomainSupport extends DomainSupport implements
 			+ "FILTER (!bound(?domain)) }")
 	protected abstract List<RemoteGraph> selectOrphanGraphs();
 
+	protected void stayFresh() {
+		String origin = getOrigin();
+		stayFresh(getPurlDefinedBy(), origin);
+		stayFresh(getReloadGraph(), origin);
+	}
+
 	protected Object getReloadGraph() {
 		return getPurlMirroredBy();
 	}
@@ -255,24 +261,18 @@ public abstract class MirroredDomainSupport extends DomainSupport implements
 		return new ParsedURI(scheme, auth, "/", null, null).toString();
 	}
 
-	private boolean reload(Object obj, String origin) throws Exception {
+	private void stayFresh(Object obj, String origin) {
 		if (obj == null)
-			return false;
-		if (!(obj instanceof RemoteGraph)) {
+			return;
+		if (!(obj instanceof RemoteGraph) && obj instanceof RDFObject) {
 			ObjectConnection con = getObjectConnection();
-			obj = con.addDesignation(obj, RemoteGraph.class);
+			Resource subj = ((RDFObject) obj).getResource();
+			obj = con.getObjectFactory().createObject(subj, RemoteGraph.class);
 		}
 		RemoteGraph graph = (RemoteGraph) obj;
-		boolean reload;
-		if (graph instanceof Unresolvable) {
-			reload = graph.reload(origin);
-		} else {
-			reload = graph.validate(origin);
-		}
-		if (reload && !isAlwaysFresh(graph)) {
+		if (!isAlwaysFresh(graph)) {
 			stayFresh(graph);
 		}
-		return reload;
 	}
 
 	private void loadGraph(Object graph) throws Exception {
@@ -296,7 +296,7 @@ public abstract class MirroredDomainSupport extends DomainSupport implements
 		}
 	}
 
-	private void stayFresh(RemoteGraph graph) throws Exception {
+	private void stayFresh(RemoteGraph graph) {
 		Refresher refresher = new Refresher((RDFObject) graph);
 		int freshness = Math.max(graph.getFreshness(), 0);
 		synchronized (alwaysFresh) {
