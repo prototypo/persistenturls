@@ -6,7 +6,6 @@ import java.util.Set;
 import junit.framework.TestCase;
 import name.persistent.concepts.Domain;
 import name.persistent.concepts.Resolvable;
-import name.persistent.concepts.ZonedDomain;
 
 import org.apache.http.HttpResponse;
 import org.openrdf.http.object.exceptions.InternalServerError;
@@ -99,7 +98,6 @@ public class PartialPURLTest extends TestCase {
 
 	public void testZonedPURL() throws Exception {
 		Domain purl = con.addDesignation(con.getObject(PURL0), Domain.class);
-		purl = (Domain) con.addDesignation(con.getObject(PURL0), ZonedDomain.class);
 		purl.getPurlAlternatives().add(con.getObject(PURL1));
 		HttpResponse resp = resolvePURL("http://my.test.persistent.name/test/test0/");
 		assertEquals(302, resp.getStatusLine().getStatusCode());
@@ -109,7 +107,6 @@ public class PartialPURLTest extends TestCase {
 
 	public void testZonedPartialPURL() throws Exception {
 		Domain purl = con.addDesignation(con.getObject(PURL0), Domain.class);
-		purl = (Domain) con.addDesignation(con.getObject(PURL0), ZonedDomain.class);
 		purl = con.addDesignation(purl, Domain.class);
 		purl.getPurlAlternatives().add(con.getObject(PURL1));
 		HttpResponse resp = resolvePURL("http://my.test.persistent.name/test/test0/item");
@@ -120,7 +117,6 @@ public class PartialPURLTest extends TestCase {
 
 	public void testZonedPartialPatternPURL() throws Exception {
 		Domain purl = con.addDesignation(con.getObject(PURL0), Domain.class);
-		purl = (Domain) con.addDesignation(con.getObject(PURL0), ZonedDomain.class);
 		purl.getPurlAlternatives().add(con.getObject("http://docs.$2/pages/$1/$3.html"));
 		purl.setPurlPattern("http://([^.]*)\\.test\\.([^/]*)/.*/([^/]*)");
 		HttpResponse resp = resolvePURL("http://my.test.persistent.name/test/test0/item");

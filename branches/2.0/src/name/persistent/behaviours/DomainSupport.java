@@ -96,12 +96,11 @@ public abstract class DomainSupport extends PartialSupport implements Domain,
 	@transform("http://persistent.name/rdf/2010/purl#add-operations")
 	@sparql(PREFIX
 			+ "CONSTRUCT {\n"
-			+ "?domain a purl:RemoteDomain, ?zoned; purl:servicedBy ?server; purl:domainOf ?top .\n"
+			+ "?domain a purl:RemoteDomain; purl:servicedBy ?server; purl:domainOf ?top .\n"
 			+ "} WHERE { { ?domain a ?type FILTER(?domain = $this) }\n"
 			+ "UNION { ?domain purl:domainOf $this }\n"
 			+ "{ ?server a purl:Server; purl:serves $this }\n"
 			+ "UNION { ?server a purl:Server; purl:serves ?top . $this purl:domainOf ?top }\n"
-			+ "OPTIONAL { ?domain a ?zoned FILTER (?zoned = purl:ZonedDomain) }\n"
 			+ "OPTIONAL { ?domain purl:domainOf ?top }}")
 	public abstract GraphQueryResult remoteDomains();
 
@@ -110,12 +109,11 @@ public abstract class DomainSupport extends PartialSupport implements Domain,
 	@transform("http://persistent.name/rdf/2010/purl#add-operations")
 	@sparql(PREFIX
 			+ "CONSTRUCT {\n"
-			+ "?domain a purl:MirroredDomain, ?zoned; purl:mirroredBy ?server; purl:domainOf ?top .\n"
+			+ "?domain a purl:MirroredDomain; purl:mirroredBy ?server; purl:domainOf ?top .\n"
 			+ "} WHERE { { ?domain a ?type FILTER(?domain = $this) }\n"
 			+ "UNION { ?domain purl:domainOf $this }\n"
 			+ "{ ?server a purl:Server; purl:serves $this }\n"
 			+ "UNION { ?server a purl:Server; purl:serves ?top . $this purl:domainOf ?top }\n"
-			+ "OPTIONAL { ?domain a ?zoned FILTER (?zoned = purl:ZonedDomain) }\n"
 			+ "OPTIONAL { ?domain purl:domainOf ?top }}")
 	public abstract GraphQueryResult mirrorDomains();
 

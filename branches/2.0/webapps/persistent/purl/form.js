@@ -1,12 +1,4 @@
 Purl.PURLForm = {};
-Purl.PURLForm.getTypes = function(zoned) {
-    var types = [];
-    types.push("purl:PURL");
-    if (zoned) {
-        types.push("purl:ZonedPURL");
-    }
-    return types.join(" ");
-};
 
 Purl.PURLForm.modifyForm = function(relType) {
     $('#purl-form tr.rel').hide();
@@ -68,10 +60,6 @@ Purl.PURLForm.initializeForm = function() {
         Purl.PURLForm.modifyForm($(this).val());
     });
     $('#purl-rel-type').val(frag).trigger('change');
-    $('#purl-form input.purl_type').bind('change', function() {
-        var typeofs = Purl.PURLForm.getTypes($(this).attr('checked'));
-        Purl.PURLForm.modifyType(typeofs);
-    });
     $('#purl-form input.purl_type').trigger('change');
     if ($('#m_disabled').length > 0) {
         $('#m_disabled').bind('change', function() {

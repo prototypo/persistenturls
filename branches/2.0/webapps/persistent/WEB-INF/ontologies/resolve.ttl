@@ -29,12 +29,13 @@ purl:update-resolver rdfs:subClassOf obj:Message;
 		} finally {
 			result.close()
 		}
-		result = purlUpdateResolverMatches()
+		result = purlUpdateResolverServes()
 		try {
 			while (result.hasNext()) {
 				def bindings = result.next()
-				// TODO need to check for zoned domains
-				after.add(bindings.getValue("domain").stringValue() + "*")
+				String uri = bindings.getValue("domain").stringValue()
+				after.add(uri + "*")
+				after.add(uri.replaceAll("^.*://", "*.") + "*")
 			}
 		} finally {
 			result.close()
@@ -82,7 +83,7 @@ purl:update-resolver rdfs:subClassOf obj:Message;
 		}
 	""".
 
-purl:update-resolver-matches  rdfs:subClassOf obj:Message;
+purl:update-resolver-serves  rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom purl:Server];
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;

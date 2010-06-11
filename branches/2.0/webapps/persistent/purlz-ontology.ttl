@@ -36,10 +36,6 @@
 	rdfs:comment "Domain that should use the configured services to resolve PURLs and update those services regularly from an authority.";
 	rdfs:subClassOf <#MirroredDomain>.
 
-<#ZonedDomain> a owl:Class;
-	rdfs:comment "Domain optionally missing the bottom DNS node.";
-	rdfs:subClassOf <#Domain>.
-
 <#Disabled> a owl:Class;
 	rdfs:comment "Resource is temporarily gone (404)".
 

@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 import name.persistent.concepts.MirroredDomain;
-import name.persistent.concepts.Partial;
+import name.persistent.concepts.PURL;
 import name.persistent.concepts.Resolvable;
 
 import org.apache.http.HttpResponse;
@@ -41,38 +41,40 @@ public abstract class ResolvableSupport implements RDFObject, Resolvable {
 		ObjectConnection con = getObjectConnection();
 		String sparql = createSPARQL(source);
 		ObjectQuery query = con.prepareObjectQuery(sparql);
-		List<Partial> result = query.evaluate(Partial.class).asList();
+		List<PURL> result = query.evaluate(PURL.class).asList();
 		if (result.isEmpty())
 			throw new NotFound("Unknown PURL");
-		Partial partial = result.get(0);
-		if (reload && partial instanceof MirroredDomain) {
-			if (((MirroredDomain) partial).reload()) {
+		PURL purl = result.get(0);
+		if (reload && purl instanceof MirroredDomain) {
+			if (((MirroredDomain) purl).reload()) {
 				return resolvePURL(source, qs, accept, lang, via, false);
 			}
 		}
-		return partial.resolvePURL(source, qs, accept, lang, via);
+		return purl.resolvePURL(source, qs, accept, lang, via);
 	}
 
 	private String createSPARQL(String source) {
 		ParsedURI uri = new ParsedURI(source);
 		StringBuilder sb = new StringBuilder();
 		sb.append(PREFIX);
-		sb.append("SELECT REDUCED ?domain");
+		sb.append("SELECT REDUCED ?purl");
 		sb.append("\nWHERE {{");
-		sb.append("\n\t{ ?domain a purl:Domain }");
-		sb.append("\n\tUNION {?domain a purl:MirroredDomain }");
-		sb.append("\n\tUNION {?domain a purl:RemoteDomain }");
-		sb.append("\n\tUNION {?domain a purl:Partial }");
-		sb.append("\nFILTER (?domain = <").append(source).append(">");
+		sb.append("\n\t{ ?purl a purl:Domain }");
+		sb.append("\n\tUNION {?purl a purl:Partial }");
+		sb.append("\n\tUNION {?purl a purl:MirroredDomain }");
+		sb.append("\n\tUNION {?purl a purl:RemoteDomain }");
+		sb.append("\nFILTER (?purl = <").append(source).append(">");
 		if (uri.isHierarchical()) {
 			for (String match : pathFragments(uri, new ArrayList<String>())) {
-				sb.append("\n\t|| ?domain = <").append(match).append(">");
+				sb.append("\n\t|| ?purl = <").append(match).append(">");
 			}
 		}
 		sb.append(")\n} UNION {");
-		sb.append("\n\t{ ?domain ?z purl:ZonedDomain }");
-		sb.append("\n\tUNION {?domain a purl:Partial;");
-		sb.append(" purl:belongsTo [?z purl:ZonedDomain] }");
+		sb.append("\n\t{ ?purl ?z purl:Domain }");
+		sb.append("\n\tUNION {?purl ?z purl:Partial }");
+		sb.append("\n\tUNION {?purl ?z purl:PURL }");
+		sb.append("\n\tUNION {?purl ?z purl:MirroredDomain }");
+		sb.append("\n\tUNION {?purl ?z purl:RemoteDomain }");
 		sb.append("\nFILTER(?z = rdf:type)");
 		sb.append("\nFILTER (");
 		if (uri.isHierarchical()) {
@@ -88,12 +90,12 @@ public abstract class ResolvableSupport implements RDFObject, Resolvable {
 			String path = uri.getPath();
 			ParsedURI domain = new ParsedURI(s, a, path, null, null);
 			String duri = domain.toString();
-			sb.append("?domain = <").append(duri).append(">");
+			sb.append("?purl = <").append(duri).append(">");
 			for (String match : pathFragments(domain, new ArrayList<String>())) {
-				sb.append("\n\t|| ?domain = <").append(match).append(">");
+				sb.append("\n\t|| ?purl = <").append(match).append(">");
 			}
 		}
-		sb.append(")\n}}\nORDER BY ?z desc(?domain)");
+		sb.append(")\n}}\nORDER BY ?z desc(?purl)");
 		return sb.toString();
 	}
 
