@@ -3,7 +3,7 @@
 var diverted = function(url, node) {
     var prefix = document.location.protocol + '//' + document.location.host + '/diverted;';
     if (url.indexOf(':') < 0) {
-        if (node.baseURIObject && node.baseURIObject.resolve) {
+        if (node && node.baseURIObject && node.baseURIObject.resolve) {
             url = node.baseURIObject.resolve(url);
         } else {
             var a = document.createElement('a');

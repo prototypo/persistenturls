@@ -1,9 +1,9 @@
 var validatePURL = function() {
-    var url = diverted($('#target').attr('href') + '?head');
+    var url = diverted('?validate');
     $.ajax({
-        type: "GET",
+        type: "POST",
         url: url,
-        dataTpe: "text",
+        dataType: "text",
         error: function(xhr, textStatus, thrown) {
             showError("Error:" + textStatus);
         },

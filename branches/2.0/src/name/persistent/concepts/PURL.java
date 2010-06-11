@@ -6,9 +6,14 @@
  */
 package name.persistent.concepts;
 
+import java.io.IOException;
 import java.util.Set;
 
+import javax.xml.datatype.DatatypeConfigurationException;
+
 import org.apache.http.HttpResponse;
+import org.openrdf.repository.RepositoryException;
+import org.openrdf.repository.object.RDFObject;
 import org.openrdf.repository.object.annotations.iri;
 
 /** A Persistent URL. */
@@ -62,5 +67,8 @@ public interface PURL extends Resolvable {
 	void setPurlRenamedTo(Object purlRenamedTo);
 
 	void purlSetEntityHeaders(HttpResponse resp);
+
+	Set<HttpResponse> purlValidate(Set<RDFObject> targets) throws IOException,
+			DatatypeConfigurationException, RepositoryException;
 
 }

@@ -32,7 +32,7 @@ purl:register rdfs:subClassOf obj:Message;
 		owl:allValuesFrom <java:java.io.Reader>];
 	http:operation "register";
 	http:type "text/html";
-	http:realm <anybody>;
+	http:realm <../anybody>;
 	obj:imports <java:org.openrdf.http.object.exceptions.InternalServerError>;
 	obj:groovy """
 		def template = findCopyTemplate()
@@ -49,9 +49,9 @@ purl:post-register rdfs:subClassOf obj:Message;
 	http:method "POST";
 	http:operation "register";
 	http:type "message/x-response";
-	http:realm <anybody>;
-	obj:imports <authority>;
-	obj:imports <user/password-sent.xml>;
+	http:realm <../anybody>;
+	obj:imports <../authority>;
+	obj:imports <password-sent.xml>;
 	obj:imports <java:org.apache.commons.codec.digest.DigestUtils>;
 	obj:imports <java:org.openrdf.http.object.exceptions.BadRequest>;
 	obj:imports <java:org.apache.http.ProtocolVersion>;
