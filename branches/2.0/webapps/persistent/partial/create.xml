@@ -21,11 +21,21 @@
 							<td class="property">
 								<label for="m_label">Name:</label>
 							</td>
-							<td class="value" data-cardinality="1">
+							<td class="value">
 								<span id="domain-span"/>
+								<span data-cardinality="1">
 								<input id="m_label" property="rdfs:label" type="text"
 									onchange="$(form).attr('about', $('#m_domain').attr('href') + value + '/')" />
+								</span>
 								<span>/</span>
+							</td>
+						</tr>
+						<tr class="all">
+							<td class="property">
+								<label for="m_pattern">Pattern:</label>
+							</td>
+							<td class="value" data-max-cardinality="1">
+								<input id="m_pattern" property="purl:pattern" type="text" size="40" />
 							</td>
 						</tr>
 						<tr class="all">

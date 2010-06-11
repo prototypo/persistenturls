@@ -7,17 +7,23 @@
 	xmlns:calli="http://callimachusproject.org/rdf/2009/framework#"
 	xmlns:purl="http://persistent.name/rdf/2010/purl#">
 	<head>
-		<title>Create a New SubDomain</title>
+		<title>Copy a Domain</title>
 		<script>
 			$(document).ready(function() {
-			    $('#origin-span').text($('#m_origin').attr('href'))
+				var origin = $('base').attr('href')
+				if (origin.lastIndexOf('/') == origin.length - 1) {
+					origin = origin.substring(0, origin.lastIndexOf('/', origin.length - 2) + 1)
+				} else {
+			    	origin = 'http://'
+			    }
+			    $('#origin-span').text(origin)
 			});
 		</script>
 	</head>
 	<body class="domain">
 		<form action="" about="" typeof="purl:Domain" class="diverted">
 			<fieldset>
-				<legend>Create a SubDomain</legend>
+				<legend>Copy a Domain</legend>
 				<p class="instructions">Fill in the following domain information.</p>
 				<table class="actiontable">
 					<tbody>

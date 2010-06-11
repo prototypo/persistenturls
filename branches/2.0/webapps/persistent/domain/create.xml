@@ -29,10 +29,12 @@
 							<td class="property">
 								<label for="m_label">Name:</label>
 							</td>
-							<td class="value" data-cardinality="1">
+							<td class="value">
 								<span id="origin-span"/>
+								<span data-cardinality="1">
 								<input id="m_label" property="rdfs:label" type="text"
 									onchange="$(form).attr('about', $('#origin-span').text() + value + '/')" />
+								</span>
 								<span>/</span>
 							</td>
 						</tr>

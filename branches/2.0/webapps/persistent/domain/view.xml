@@ -26,6 +26,7 @@
 		</ul>
 		<h3>PURLs</h3>
         <p><a href="?purl-create" class="diverted">Create New PURL</a></p>
+        <p><a href="?partial-create" class="diverted">Create New Partial PURL</a></p>
 		<ul>
 			<li resource="?purl" rev="purl:partOf"><a class="diverted" property="rdfs:label" href="?purl"></a></li>
 		</ul>

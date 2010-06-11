@@ -28,9 +28,10 @@
 		<a id="target" rel="purl:redirectsTo" href="?redirectsTo">Target (Redirect - HTTP 307)</a>
 		<div property="purl:pattern" />
 		<p><a href="?copy" class="diverted">Copy Partial</a></p>
-		<p><a href="?domain-create" class="diverted">Create Sub-Partial</a></p>
+		<p><a href="?domain-create" class="diverted">Create Domain</a></p>
 		<h3>PURLs</h3>
         <p><a href="?purl-create" class="diverted">Create New PURL</a></p>
+        <p><a href="?partial-create" class="diverted">Create New Partial PURL</a></p>
 		<ul>
 			<li resource="?purl" rev="purl:partOf"><a class="diverted" property="rdfs:label" href="?purl"></a></li>
 		</ul>

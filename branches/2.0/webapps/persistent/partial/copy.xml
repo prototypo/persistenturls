@@ -9,11 +9,22 @@
 		<title>Copy a Parial</title>
 		<script type="text/javascript" src="/persistent/purl/form.js">
 		</script>
+		<script>
+			$(document).ready(function() {
+				var origin = $('base').attr('href')
+				if (origin.lastIndexOf('/') == origin.length - 1) {
+					origin = origin.substring(0, origin.lastIndexOf('/', origin.length - 2) + 1)
+				} else {
+			    	origin = 'http://'
+			    }
+			    $('#domain-span').text(origin)
+			});
+		</script>
 	</head>
 	<body class="purl">
-		<form action="" about="" typeof="purl:Parial" id="purl-form" class="diverted">
+		<form action="" about="" typeof="purl:Partial" id="purl-form" class="diverted">
 			<fieldset>
-				<legend>Copy a PURL</legend>
+				<legend>Copy a Partial</legend>
 				<p class="instructions">Fill in the following PURL information.</p>
 				<table class="actiontable">
 					<tbody>
@@ -21,11 +32,21 @@
 							<td class="property">
 								<label for="m_label">Name:</label>
 							</td>
-							<td class="value" data-cardinality="1">
+							<td class="value">
 								<span id="domain-span"/>
+								<span data-cardinality="1">
 								<input id="m_label" property="rdfs:label" type="text"
 									onchange="$(form).attr('about', $('#m_domain').attr('href') + value + '/')" />
+								</span>
 								<span>/</span>
+							</td>
+						</tr>
+						<tr class="all">
+							<td class="property">
+								<label for="m_pattern">Pattern:</label>
+							</td>
+							<td class="value" data-max-cardinality="1">
+								<input id="m_pattern" property="purl:pattern" type="text" size="40" />
 							</td>
 						</tr>
 						<tr class="all">
