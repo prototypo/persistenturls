@@ -37,7 +37,6 @@ import org.openrdf.http.object.exceptions.GatewayTimeout;
 import org.openrdf.http.object.exceptions.InternalServerError;
 import org.openrdf.http.object.util.SharedExecutors;
 import org.openrdf.repository.object.RDFObject;
-import org.openrdf.repository.object.annotations.triggeredBy;
 
 /**
  * Validates local PURLs and resolves remote PURLs.
@@ -46,8 +45,6 @@ import org.openrdf.repository.object.annotations.triggeredBy;
  */
 public abstract class RemoteDomainSupport extends MirroredDomainSupport implements RemoteDomain, RDFObject {
 	private static final String PROTOCOL = "1.1";
-	private static final String NS = "http://persistent.name/rdf/2010/purl#";
-	private static final String SERVICED_BY = NS + "servicedBy";
 	private static final String VIA;
 	static {
 		String host = "localhost";
@@ -73,11 +70,6 @@ public abstract class RemoteDomainSupport extends MirroredDomainSupport implemen
 			return new Random(System.nanoTime());
 		}
 	};
-
-	@triggeredBy(SERVICED_BY)
-	public void refreshGraphs() throws Exception {
-		super.refreshGraphs();
-	}
 
 	@Override
 	protected Object getReloadGraph() {

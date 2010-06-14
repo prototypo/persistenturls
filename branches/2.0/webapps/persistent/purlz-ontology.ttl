@@ -120,18 +120,15 @@
 
 <#definedBy> a owl:ObjectProperty, owl:FunctionalProperty;
 	rdfs:comment "Graph of all domains of this domain (including itself).";
-	rdfs:domain <#Domain>;
-	rdfs:range <#RemoteGraph>.
+	rdfs:domain <#Domain>.
 
 <#mirroredBy> a owl:ObjectProperty, owl:FunctionalProperty;
 	rdfs:comment "Graph of all the purls that are part of or belong to this domain (including itself).";
-	rdfs:domain <#Domain>;
-	rdfs:range <#RemoteGraph>.
+	rdfs:domain <#Domain>.
 
 <#servicedBy> a owl:ObjectProperty, owl:FunctionalProperty;
 	rdfs:comment "Graph of all services for all domains of this domain (including itself).";
-	rdfs:domain <#Domain>;
-	rdfs:range <#RemoteGraph>.
+	rdfs:domain <#Domain>.
 
 <#service> a owl:ObjectProperty;
 	rdfs:domain <#Domain>;

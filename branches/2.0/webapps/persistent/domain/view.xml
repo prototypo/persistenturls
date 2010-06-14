@@ -42,5 +42,7 @@
 		<ul>
 			<li resource="?maintainer" rel="calli:maintainer"><a property="rdfs:label" href="?maintainer"></a></li>
 		</ul>
+        <p><a href="?remote-domains" class="diverted">Defined as a remote domain</a></p>
+        <p><a href="?mirror-domains" class="diverted">Defined as a mirrored domain</a></p>
 	</body>
 </html>

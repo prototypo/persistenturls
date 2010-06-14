@@ -1,5 +1,6 @@
 package name.persistent.behaviours;
 
+import static org.openrdf.query.QueryLanguage.SPARQL;
 import info.aduna.net.ParsedURI;
 
 import java.net.InetAddress;
@@ -24,6 +25,7 @@ import name.persistent.concepts.Unresolvable;
 import org.apache.http.HttpResponse;
 import org.openrdf.http.object.util.NamedThreadFactory;
 import org.openrdf.model.Resource;
+import org.openrdf.query.BooleanQuery;
 import org.openrdf.repository.object.ObjectConnection;
 import org.openrdf.repository.object.ObjectRepository;
 import org.openrdf.repository.object.RDFObject;
@@ -122,8 +124,24 @@ public abstract class MirroredDomainSupport extends DomainSupport implements
 			try {
 				ObjectConnection con = repository.getConnection();
 				try {
-					RemoteGraph graph = con.getObject(RemoteGraph.class, subj);
-					// TODO CCE
+					RemoteGraph graph;
+					try {
+						graph = con.getObject(RemoteGraph.class, subj);
+					} catch (ClassCastException e) {
+						BooleanQuery qry = con.prepareBooleanQuery(SPARQL, PREFIX
+								+ "ASK {{ ?domain purl:definedBy $subj }\n"
+								+ "UNION { ?domain purl:mirroredBy $subj }\n"
+								+ "UNION { ?domain purl:servicedBy $subj }}");
+						qry.setBinding("subj", subj);
+						if (qry.evaluate()) {
+							graph = con.addDesignation(con.getObject(subj), RemoteGraph.class);
+						} else {
+							synchronized (alwaysFresh) {
+								alwaysFresh.remove(key);
+								return;
+							}
+						}
+					}
 					int freshness;
 					if (graph.reload(null)) {
 						freshness = Math.max(graph.getFreshness(), 0);
@@ -239,7 +257,9 @@ public abstract class MirroredDomainSupport extends DomainSupport implements
 
 	@sparql(PREFIX + "SELECT REDUCED ?graph\n"
 			+ "WHERE { ?graph a purl:RemoteGraph .\n"
-			+ "OPTIONAL { ?domain ?pred ?graph }\n"
+			+ "OPTIONAL {{ ?domain purl:definedBy ?graph }\n"
+			+ "UNION { ?domain purl:mirroredBy ?graph }\n"
+			+ "UNION { ?domain purl:servicedBy ?graph }}\n"
 			+ "FILTER (!bound(?domain)) }")
 	protected abstract List<RemoteGraph> selectOrphanGraphs();
 
