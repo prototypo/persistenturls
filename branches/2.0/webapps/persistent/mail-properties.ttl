@@ -44,8 +44,11 @@
 
 purl:MailProperties rdfs:subClassOf <urn:mimetype:application/x-properties>.
 
-purl:get-mail-properties owl:intersectionOf (purl:get-properties
-		[owl:onProperty obj:target; owl:allValuesFrom purl:MailProperties]);
+purl:get-properties rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom <urn:mimetype:application/x-properties>];
+	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
+		owl:allValuesFrom <java:java.io.InputStream>];
 	http:method "GET";
 	http:realm <authority>;
 	http:type "application/x-properties";
@@ -175,5 +178,6 @@ purl:send-mail-arg2 a owl:DatatypeProperty, owl:FunctionalProperty;
 purl:send-mail-arg3 a owl:ObjectProperty, owl:FunctionalProperty;
 	rdfs:domain purl:send-mail;
 	rdfs:range <java:java.io.InputStream>;
+	http:type "image/png";
 	obj:name "png".
 

@@ -6,7 +6,8 @@
 	<property name="lib" location="lib" />
 	<property name="bin" location="bin" />
 	<property name="tmp" location="tmp" />
-	<property name="callimachus.url" value="callimachusproject.zip" />
+	<property name="webapps" location="webapps" />
+	<property name="callimachus.url" value="http://callimachus.googlecode.com/files/callimachus-0.1.zip" />
 	<property name="main" value="org.callimachusproject.Server" />
 	<property name="jvmargs" value="-ea -server -mx512m -Dfile.encoding=UTF-8 -Djava.library.path=${bin} -Djava.io.tmpdir=${tmp}" />
 
@@ -31,11 +32,26 @@
 			</patternset>
 			<mapper type="flatten" />
 		</unzip>
+		<unzip src="${lib}/callimachus.zip" dest="${bin}">
+			<patternset>
+				<include name="bin/*" />
+			</patternset>
+			<mapper type="flatten" />
+		</unzip>
+		<unzip src="${lib}/callimachus.zip" dest="${webapps}">
+			<patternset>
+				<include name="webapps/**" />
+				<exclude name="webapps/favicon.ico" />
+			</patternset>
+			<mapper type="glob" from="webapps/*" to="*" />
+		</unzip>
 		<delete file="${lib}/callimachus.zip" />
 	</target>
 
 	<target name="dist-clean" description="clean up everything for a new version" depends="clean">
 		<delete dir="${lib}" />
+		<delete dir="${bin}" />
+		<delete dir="${webapps}/callimachus" />
 	</target>
 
 	<target name="clean" description="clean up">

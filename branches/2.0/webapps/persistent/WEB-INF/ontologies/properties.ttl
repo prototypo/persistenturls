@@ -35,12 +35,3 @@ purl:delete-properties rdfs:subClassOf obj:Message;
 		delete()
 		objectConnection.removeDesignations(msg.target, "urn:mimetype:application/x-properties")
 	""".
-
-purl:get-properties rdfs:subClassOf obj:Message;
-	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom <urn:mimetype:application/x-properties>];
-	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
-		owl:allValuesFrom <java:java.io.InputStream>];
-	http:method "GET";
-	http:type "application/x-properties";
-	obj:groovy "return openInputStream()".

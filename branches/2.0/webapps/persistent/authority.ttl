@@ -128,6 +128,7 @@ purl:login rdfs:subClassOf obj:Message;
 		owl:allValuesFrom calli:Credential];
 	http:operation "login";
 	http:realm <authority>;
+	http:expect "303-see-other";
 	obj:groovy "return findCredential(msg.authorization)".
 
 purl:login-authorization a owl:DatatypeProperty, owl:FunctionalProperty;
@@ -143,6 +144,7 @@ purl:credential rdfs:subClassOf obj:Message;
 		owl:allValuesFrom calli:Credential];
 	http:operation "credential";
 	http:cache-control "private";
+	http:expect "303-see-other";
 	obj:groovy "return findCredential(msg.authorization)".
 
 purl:credential-authorization a owl:DatatypeProperty, owl:FunctionalProperty;
@@ -238,6 +240,7 @@ purl:post-request-password rdfs:subClassOf obj:Message;
 purl:post-request-password-email a owl:DatatypeProperty, owl:FunctionalProperty;
 	rdfs:domain purl:post-request-password;
 	rdfs:range <java:java.util.Map>;
+	http:type "application/x-www-form-urlencoded";
 	obj:name "form".
 
 purl:find-users-by-email rdfs:subClassOf obj:Message;
