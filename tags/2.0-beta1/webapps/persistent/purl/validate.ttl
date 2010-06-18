@@ -1,0 +1,75 @@
+# 
+#    Copyright(c) 2010 Zepheira LLC, Some rights reserved
+# 
+#    Licensed under the Apache License, Version 2.0 (the "License");
+#    you may not use this file except in compliance with the License.
+#    You may obtain a copy of the License at
+# 
+#        http://www.apache.org/licenses/LICENSE-2.0
+# 
+#    Unless required by applicable law or agreed to in writing, software
+#    distributed under the License is distributed on an "AS IS" BASIS,
+#    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#    See the License for the specific language governing permissions and
+#    limitations under the License.
+
+@prefix xsd:<http://www.w3.org/2001/XMLSchema#>.
+@prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs:<http://www.w3.org/2000/01/rdf-schema#>.
+@prefix owl:<http://www.w3.org/2002/07/owl#>.
+@prefix skos:<http://www.w3.org/2004/02/skos/core#>.
+@prefix dc:<http://purl.org/dc/elements/1.1/>.
+@prefix dcterms:<http://purl.org/dc/terms/>.
+@prefix obj:<http://www.openrdf.org/rdf/2009/object#>.
+@prefix http:<http://www.openrdf.org/rdf/2009/httpobject#>.
+@prefix calli:<http://callimachusproject.org/rdf/2009/framework#>.
+@prefix purl:<http://persistent.name/rdf/2010/purl#>.
+
+purl:validate rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:PURL];
+	rdfs:subClassOf [owl:onProperty obj:objectResponse;
+		owl:allValuesFrom <java:org.apache.http.HttpResponse>];
+	http:method "POST";
+	http:operation "validate";
+	http:cache-control "no-store";
+	http:realm <../authority>;
+	http:transform purl:write-http-response;
+	obj:groovy "return purlValidate(purlFindTargets())".
+
+purl:find-targets rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:PURL];
+	obj:sparql """
+		SELECT ?target
+		WHERE { $this ?pred ?target . ?pred purl:rel ?rel }
+	""".
+
+purl:write-http-response rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:PURL];
+	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
+		owl:allValuesFrom <java:java.io.ByteArrayOutputStream>];
+	http:type "application/http";
+	obj:imports <java:org.apache.http.message.BasicLineFormatter>;
+	obj:groovy """
+		ByteArrayOutputStream baos = new ByteArrayOutputStream()
+		Writer out = new OutputStreamWriter(baos, "ISO-8859-1")
+		for (def resp : msg.input) {
+			out.append(BasicLineFormatter.formatStatusLine(resp.getStatusLine(), null))
+			out.append("\\r\\n")
+			for (def hd : resp.getAllHeaders()) {
+				out.append(BasicLineFormatter.formatHeader(hd, null))
+				out.append("\\r\\n")
+			}
+			out.append("\\r\\n")
+		}
+		out.close()
+		return baos
+	""".
+
+purl:write-http-response-input a owl:ObjectProperty;
+	rdfs:domain purl:write-http-response;
+	rdfs:range <java:org.apache.http.HttpResponse>;
+	obj:name "input".
+
