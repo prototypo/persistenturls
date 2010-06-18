@@ -129,7 +129,7 @@ public class PartialPURLTest extends TestCase {
 		Domain purl = con.addDesignation(con.getObject(PURL0), Domain.class);
 		purl.getPurlAlternatives().add(con.getObject(PURL1));
 		try {
-			resolvePURL("http://my.test.persistent.name/test/test0/");
+			resolvePURL("http://my.persistent.name/test/test0/");
 			fail();
 		} catch (NotFound e) {
 		}
