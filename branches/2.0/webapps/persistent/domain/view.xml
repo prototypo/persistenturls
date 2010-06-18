@@ -16,6 +16,7 @@
 		</p>
 		<p><a href="?copy" class="diverted">Copy Domain</a></p>
 		<p><a href="?domain-create" class="diverted">Create Sub-Domain</a></p>
+		<div property="purl:pattern" />
 		<h3>Services</h3>
 		<ul>
 			<li rel="purl:service" resource="?service">
