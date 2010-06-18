@@ -97,8 +97,6 @@ purl:send-mail rdfs:subClassOf obj:Message;
 	obj:imports <java:javax.activation.DataHandler>;
 	obj:imports <java:javax.mail.util.ByteArrayDataSource>;
 	obj:imports <java:javax.mail.Transport>;
-	obj:imports <java:org.xbill.DNS.Lookup>;
-	obj:imports <java:org.xbill.DNS.Type>;
 	obj:groovy """
 		Properties properties = new Properties()
 		InputStream stream = openInputStream()
@@ -148,16 +146,14 @@ purl:send-mail rdfs:subClassOf obj:Message;
 		} else {
 			properties.setProperty("mail.transport.protocol", "smtp")
 			String domain = msg.to.substring(msg.to.indexOf('@') + 1)
-			for (def mx : new Lookup(domain, Type.MX).run()) {
-				String host = mx.target.toString().replaceAll('[.]$', '')
-				Transport tr = session.getTransport()
-				try {
-					tr.connect(host, 25, null, null)
-					tr.sendMessage(message, message.allRecipients)
-					return;
-				} finally {
-					tr.close()
-				}
+			String host = "smtp." + domain
+			Transport tr = session.getTransport()
+			try {
+				tr.connect(host, 25, null, null)
+				tr.sendMessage(message, message.allRecipients)
+				return;
+			} finally {
+				tr.close()
 			}
 			throw new NotImplemented("No Mail Server Configured")
 		}
