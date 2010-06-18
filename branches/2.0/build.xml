@@ -105,7 +105,7 @@
 			<zipfileset dir="${bin}" prefix="bin" />
 			<zipfileset dir="${lib}" prefix="lib" />
 			<zipfileset file="${jar.file}" prefix="lib" />
-			<zipfileset dir="${webapps}" prefix="webapps" />
+			<zipfileset dir="${webapps}" prefix="webapps" excludes="mail.properties" />
 		</zip>
 	</target>
 
