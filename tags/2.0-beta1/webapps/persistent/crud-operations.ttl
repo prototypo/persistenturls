@@ -86,12 +86,21 @@ purl:get-domain-create rdfs:subClassOf obj:Message;
 		return createXml.calliConstruct('copy', this)
 	""".
 
-purl:post-domain-create rdfs:subClassOf calli:post-copy;
+purl:post-domain-create rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:Partial];
+	rdfs:subClassOf [owl:onProperty obj:objectResponse;
+		owl:maxCardinality "1"^^xsd:nonNegativeInteger];
+	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
+		owl:allValuesFrom <java:org.apache.http.HttpResponse>];
 	obj:precedes calli:post-copy;
 	http:method "POST";
 	http:operation "domain-create";
 	http:realm <authority>;
 	http:expect "201-created";
+	http:type "message/x-response";
+	obj:imports <java:org.apache.http.ProtocolVersion>;
+	obj:imports <java:org.apache.http.message.BasicHttpResponse>;
 	obj:imports <domain/create.xml>;
 	obj:groovy """
 		def copy = createXml.calliCopyResource(this, msg.in, Collections.singleton(this))
@@ -108,8 +117,17 @@ purl:post-domain-create rdfs:subClassOf calli:post-copy;
 		}
 		copy.purlPartOf = msg.target
 		touchRevision()
-		return copy
+		def ver = new ProtocolVersion("HTTP", 1, 1)
+		def resp = new BasicHttpResponse(ver, 201, "Created")
+		resp.setHeader("Location", copy.toString())
+		return resp
 	""".
+
+purl:post-domain-create-in a owl:ObjectProperty, owl:FunctionalProperty;
+	rdfs:domain purl:post-domain-create;
+	rdfs:range <java:java.io.InputStream>;
+	http:type "application/rdf+xml";
+	obj:name "in".
 
 purl:Domain rdfs:subClassOf calli:Viewable, calli:Reviewable, calli:Editable, calli:Copyable, calli:Deletable;
 	calli:view <domain/view.xml>;
@@ -144,20 +162,38 @@ purl:get-partial-create rdfs:subClassOf obj:Message;
 		return createXml.calliConstruct('copy', this)
 	""".
 
-purl:post-partial-create rdfs:subClassOf calli:post-copy;
+purl:post-partial-create rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:Partial];
+	rdfs:subClassOf [owl:onProperty obj:objectResponse;
+		owl:maxCardinality "1"^^xsd:nonNegativeInteger];
+	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
+		owl:allValuesFrom <java:org.apache.http.HttpResponse>];
 	obj:precedes calli:post-copy;
 	http:method "POST";
 	http:operation "partial-create";
 	http:realm <authority>;
 	http:expect "201-created";
+	http:type "message/x-response";
+	obj:imports <java:org.apache.http.ProtocolVersion>;
+	obj:imports <java:org.apache.http.message.BasicHttpResponse>;
 	obj:imports <partial/create.xml>;
 	obj:groovy """
 		def copy = createXml.calliCopyResource(this, msg.in, Collections.singleton(this))
 		copy.purlPartOf = msg.target
 		copy.purlBelongsTo = purlBelongsTo ? purlBelongsTo : msg.target
 		touchRevision()
-		return copy
+		def ver = new ProtocolVersion("HTTP", 1, 1)
+		def resp = new BasicHttpResponse(ver, 201, "Created")
+		resp.setHeader("Location", copy.toString())
+		return resp
 	""".
+
+purl:post-partial-create-in a owl:ObjectProperty, owl:FunctionalProperty;
+	rdfs:domain purl:post-partial-create;
+	rdfs:range <java:java.io.InputStream>;
+	http:type "application/rdf+xml";
+	obj:name "in".
 
 purl:Partial rdfs:subClassOf calli:Viewable, calli:Reviewable, calli:Editable, calli:Copyable;
 	calli:view <partial/view.xml>;
@@ -191,19 +227,37 @@ purl:get-purl-create rdfs:subClassOf obj:Message;
 		return createXml.calliConstruct('copy', this)
 	""".
 
-purl:post-purl-create rdfs:subClassOf calli:post-copy;
+purl:post-purl-create rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:Partial];
+	rdfs:subClassOf [owl:onProperty obj:objectResponse;
+		owl:maxCardinality "1"^^xsd:nonNegativeInteger];
+	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
+		owl:allValuesFrom <java:org.apache.http.HttpResponse>];
 	obj:precedes calli:post-copy;
 	http:method "POST";
 	http:operation "purl-create";
 	http:realm <authority>;
 	http:expect "201-created";
+	http:type "message/x-response";
+	obj:imports <java:org.apache.http.ProtocolVersion>;
+	obj:imports <java:org.apache.http.message.BasicHttpResponse>;
 	obj:imports <purl/create.xml>;
 	obj:groovy """
 		def copy = createXml.calliCopyResource(this, msg.in, Collections.singleton(this))
 		copy.purlPartOf = msg.target
 		touchRevision()
-		return copy
+		def ver = new ProtocolVersion("HTTP", 1, 1)
+		def resp = new BasicHttpResponse(ver, 201, "Created")
+		resp.setHeader("Location", copy.toString())
+		return resp
 	""".
+
+purl:post-purl-create-in a owl:ObjectProperty, owl:FunctionalProperty;
+	rdfs:domain purl:post-purl-create;
+	rdfs:range <java:java.io.InputStream>;
+	http:type "application/rdf+xml";
+	obj:name "in".
 
 purl:PURL rdfs:subClassOf calli:Viewable, calli:Reviewable, calli:Editable, calli:Copyable;
 	calli:view <purl/view.xml>;
