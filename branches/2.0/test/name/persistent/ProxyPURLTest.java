@@ -115,7 +115,7 @@ public class ProxyPURLTest extends TestCase {
 		server.setPort(3128);
 		server.setEnvelopeType("message/x-response");
 		String uri = "http://localhost:" + server.getPort() + "/";
-		server.setIdentityPrefix(uri + "diverted;");
+		server.setIdentityPrefix(new String[] { uri + "diverted;" });
 		HTTPObjectClient.getInstance().setEnvelopeType("message/x-response");
 		server.start();
 		HTTPObjectClient.getInstance().stop();

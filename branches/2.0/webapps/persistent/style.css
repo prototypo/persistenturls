@@ -372,6 +372,17 @@ img {
     padding-right: 25px;
 }
 
+iframe {
+	border: 0px solid #ffffff;
+	width: 300pt;
+	height: 150pt;
+	background-color: white;
+}
+
+.drag-over {
+	background-color: lightgrey !important;
+}
+
 /* Inapplicable actions or breadcrumbs */
 #actions.copy,
 body.server #actions .delete,

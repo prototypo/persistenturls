@@ -8,13 +8,14 @@
 	<property name="tmp" location="tmp" />
 	<property name="webapps" location="webapps" />
 	<property file="src/META-INF/name.persistent.properties" />
-	<property name="callimachus.url" value="http://callimachus.googlecode.com/files/callimachus-0.1.zip" />
+	<property name="callimachus.url" value="http://callimachus.googlecode.com/files/callimachus-0.2.zip" />
 	<property name="captcha.jar" value="SimpleCaptcha-1.1.1.jar" />
 	<property name="captcha.url" value="http://downloads.sourceforge.net/project/simplecaptcha/SimpleCaptcha/1.1.1/SimpleCaptcha-1.1.1.jar" />
 	<property name="mail.jar" value="mail-1.4.1.jar" />
 	<property name="mail.url" value="http://mirrors.ibiblio.org/pub/mirrors/maven2/javax/mail/mail/1.4.1/mail-1.4.1.jar" />
 	<property name="main" value="org.callimachusproject.Server" />
 	<property name="jvmargs" value="-ea -server -mx512m -Dfile.encoding=UTF-8 -Djava.library.path=${bin} -Djava.io.tmpdir=${tmp}" />
+	<property name="args" value="" />
 
 	<target name="init">
 		<!-- Create the time stamp and build directory -->
@@ -35,7 +36,6 @@
 		<unzip src="${lib}/callimachus.zip" dest="${lib}">
 			<patternset>
 				<include name="lib/*.jar" />
-				<include name="dist/*.jar" />
 			</patternset>
 			<mapper type="flatten" />
 		</unzip>
@@ -47,8 +47,7 @@
 		</unzip>
 		<unzip src="${lib}/callimachus.zip" dest="${webapps}">
 			<patternset>
-				<include name="webapps/**" />
-				<exclude name="webapps/favicon.ico" />
+				<include name="webapps/callimachus.war" />
 			</patternset>
 			<mapper type="glob" from="webapps/*" to="*" />
 		</unzip>
@@ -100,12 +99,19 @@
 				<attribute name="Class-Path" value="${jar.classpath}" />
 			</manifest>
 		</jar>
+		<zip destfile="${dist}/persistent.war">
+			<zipfileset dir="${webapps}/persistent" prefix="" />
+			<zipfileset file="${jar.file}" prefix="WEB-INF/lib" />
+			<zipfileset file="lib/${captcha.jar}" prefix="WEB-INF/lib" />
+			<zipfileset file="lib/${mail.jar}" prefix="WEB-INF/lib" />
+		</zip>
 		<zip destfile="${dist}/persistent-${version}.zip">
 			<zipfileset dir="." includes="*.txt" />
 			<zipfileset dir="${bin}" prefix="bin" />
-			<zipfileset dir="${lib}" prefix="lib" />
-			<zipfileset file="${jar.file}" prefix="lib" />
-			<zipfileset dir="${webapps}" prefix="webapps" excludes="mail.properties" />
+			<zipfileset dir="${lib}" prefix="lib" excludes="${captcha.jar} ${mail.jar}" />
+			<zipfileset file="${dist}/persistent.war" prefix="webapps" />
+			<zipfileset file="${webapps}/callimachus.war" prefix="webapps" />
+			<zipfileset file="${webapps}/favicon.ico" prefix="webapps" />
 		</zip>
 	</target>
 

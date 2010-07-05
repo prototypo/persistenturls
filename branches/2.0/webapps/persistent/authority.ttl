@@ -29,6 +29,7 @@ purl:email a owl:DatatypeProperty, owl:FunctionalProperty;
 
 rdfs:label a owl:DatatypeProperty;
 	rdfs:range xsd:string;
+	http:method "GET";
 	http:operation "label";
 	http:type "text/plain;q=0.9";
 	http:rel "alternate".
