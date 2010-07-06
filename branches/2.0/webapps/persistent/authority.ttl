@@ -18,7 +18,9 @@ calli:get-graph http:realm <local>.
 <authority> a calli:DigestRealm;
 	calli:origin </>;
 	calli:authName </>;
-	calli:domain </>.
+	calli:domain </>;
+	calli:unauthorized <unauthorized.xml>;
+	calli:forbidden <forbidden.xml>.
 
 purl:User rdfs:subClassOf calli:Credential;
 	http:realm <authority>.
@@ -154,6 +156,7 @@ purl:credential-authorization a owl:DatatypeProperty, owl:FunctionalProperty;
 	http:header "Authorization";
 	obj:name "authorization".
 
+# TODO remove in Callimachus 0.3
 purl:unauthorized rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom calli:DigestRealm];
@@ -186,6 +189,7 @@ purl:unauthorized rdfs:subClassOf obj:Message;
 		}
 	""".
 
+# TODO remove in Callimachus 0.3
 purl:forbidden rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom calli:DigestRealm];

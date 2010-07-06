@@ -23,15 +23,15 @@ purl:Server rdfs:subClassOf calli:Viewable, calli:Reviewable, calli:Editable;
 # User
 ################################
 
-<user/template> a purl:UserTemplate;
+<user/template> a <#UserTemplate>;
 	calli:curator </data/user/admin>.
 
-purl:UserTemplate rdfs:subClassOf calli:Copyable;
+<#UserTemplate> rdfs:subClassOf calli:Copyable;
 	calli:withNamespace </data/user/>;
 	calli:copy <user/create.xml>.
 
 purl:post-user-copy owl:intersectionOf (calli:post-copy
-		[owl:onProperty obj:target; owl:allValuesFrom purl:UserTemplate]);
+		[owl:onProperty obj:target; owl:allValuesFrom <#UserTemplate>]);
 	obj:precedes calli:post-copy;
 	obj:imports <authority>;
 	obj:imports <java:org.openrdf.http.object.exceptions.BadRequest>;
