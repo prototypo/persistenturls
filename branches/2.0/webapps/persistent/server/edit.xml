@@ -37,7 +37,7 @@
 							<td class="property">
 								<label>Origin:</label>
 							</td>
-							<td rel="purl:serves" class="value" data-suggest="/persistent/domain/template?pre-copy">
+							<td rel="purl:serves" class="value diverted" data-suggest="/persistent/domain/template?pre-copy">
                                 <span about="?origin" typeof="purl:Domain">
                                     <span property="rdfs:label"/>
                                 </span>
