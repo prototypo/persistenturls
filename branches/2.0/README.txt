@@ -2,7 +2,7 @@ Persistent Uniform Resource Locator by Zepheira (PURLZ) Installation Instruction
 
 http://purlz.org/
 
-5 July 2010
+6 July 2010
 
 ----------------
 | Introduction |
@@ -35,7 +35,7 @@ mail.smtp.auth = true
 mail.user = system
 mail.password = secret
 
-Execute a callimachus-start script to start the server. Open your browser to the authority listed in console output. Click the register link and fill in the form using the ID "admin". Follow the instructions to register and login.
+Execute a callimachus-server script to start the server. Open your browser to the authority listed in console output. Click the register link and fill in the form using the ID "admin". Follow the instructions to register and login.
 
 Click the home link at the top and then click the edit link. In the edit screen click on the chevrons to create a new domain origin. Fill in the form to create a PURL authority that will be served by this server. Once a domain has been created assign it to the server, save the changes. This process may take a few moments, please be patient.
 

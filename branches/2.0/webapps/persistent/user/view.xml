@@ -9,7 +9,7 @@
 		<title property="rdfs:label"/>
 	</head>
 	<body class="user">
-		<h1 property="rdfs:label" />
+		<h1><a href="" property="rdfs:label" /></h1>
 		<p property="purl:email" />
 		<p property="purl:affiliation" />
 		<p property="purl:justification" />

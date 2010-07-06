@@ -9,7 +9,7 @@
 		<title property="rdfs:label"/>
 	</head>
 	<body class="domain">
-		<h1 property="rdfs:label" />
+		<h1><a href="" property="rdfs:label" /></h1>
 		<p>
 			<span resource="?origin" rel="purl:domainOf"><a href="?origin" property="rdfs:label" class="diverted"/></span>
 			<span property="rdfs:label" />

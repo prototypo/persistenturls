@@ -35,13 +35,13 @@
 		<xsl:copy>
 			<xsl:apply-templates select="@*" />
 			<style type="text/css">@import url("<xsl:value-of select="$persistent"/>/style.css");</style>
-			<script type="text/javascript" src="{$callimachus}/jquery-1.3.2.js">
+			<script type="text/javascript" src="{$callimachus}/jquery.js">
 			</script>
-			<script type="text/javascript" src="{$callimachus}/jquery-ui-1.7.2.js">
+			<script type="text/javascript" src="{$callimachus}/jquery-ui.js">
 			</script>
-			<script type="text/javascript" src="{$callimachus}/jquery.qtip-1.0.0-rc3.js">
+			<script type="text/javascript" src="{$callimachus}/jquery.qtip.js">
 			</script>
-			<script type="text/javascript" src="{$callimachus}/jquery.rdfquery.rdfa-1.0.js">
+			<script type="text/javascript" src="{$callimachus}/jquery.rdfquery.rdfa.js">
 			</script>
 			<script type="text/javascript" src="{$callimachus}/status.js">
 			</script>
