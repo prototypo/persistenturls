@@ -1,0 +1,13 @@
+name.persistent.concepts.Disabled
+name.persistent.concepts.Domain
+name.persistent.concepts.MirroredDomain
+name.persistent.concepts.Partial
+name.persistent.concepts.PURL
+name.persistent.concepts.Redirection
+name.persistent.concepts.RemoteDomain
+name.persistent.concepts.RemoteGraph
+name.persistent.concepts.Resolvable
+name.persistent.concepts.Server
+name.persistent.concepts.Service
+name.persistent.concepts.Tombstoned
+name.persistent.concepts.Unresolvable
