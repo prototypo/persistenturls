@@ -26,7 +26,7 @@
 	</xsl:template>
 	<xsl:template match="sparql:result">
 		<li>
-			<a href="{sparql:binding[@name='uri']/sparql:uri}?view" class="diverted">
+			<a href="{sparql:binding[@name='uri']/sparql:uri}" class="diverted">
 				<xsl:apply-templates select="sparql:binding[@name='label']/*" />
 			</a>
 			<xsl:text> [</xsl:text>

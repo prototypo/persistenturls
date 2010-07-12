@@ -28,9 +28,8 @@
 		<h3>PURLs</h3>
         <p><a href="?purl-create" class="diverted">Create New PURL</a></p>
         <p><a href="?partial-create" class="diverted">Create New Partial PURL</a></p>
-		<ul>
-			<li resource="?purl" rev="purl:partOf"><a class="diverted" property="rdfs:label" href="?purl"></a></li>
-		</ul>
+        <p><a href="?parts" class="diverted">View Nested PURLs</a></p>
+        <p><a href="?unresolvable" class="diverted">View Unresolvable PURLs</a></p>
 		<h3>Scribes</h3>
 		<ul>
 			<li resource="?scribe" rel="calli:scribe"><a property="rdfs:label" href="?scribe"></a></li>
@@ -43,7 +42,11 @@
 		<ul>
 			<li resource="?maintainer" rel="calli:maintainer"><a property="rdfs:label" href="?maintainer"></a></li>
 		</ul>
-        <p><a href="?remote-domains" class="diverted">Defined as a remote domain</a></p>
-        <p><a href="?mirror-domains" class="diverted">Defined as a mirrored domain</a></p>
+        <p><a id="remote-link" href="?remote-domains" class="diverted">Defined as a remote domain</a></p>
+        <p><a id="mirror-link" href="?mirror-domains" class="diverted">Defined as a mirrored domain</a></p>
+        <script>
+        	$("#remote-link").get(0).href = diverted($("#remote-link").get(0).href)
+        	$("#mirror-link").get(0).href = diverted($("#mirror-link").get(0).href)
+        </script>
 	</body>
 </html>

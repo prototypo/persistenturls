@@ -78,9 +78,9 @@ public class MirrorPURLTest extends TestCase {
 		dataDir = FileUtil.createTempDir("metadata");
 		server = new HTTPObjectServer(repository1, new File(dataDir, "www"),
 				new File(dataDir, "cache"), null);
-		server.setPort(3128);
+		server.listen(3128);
 		server.setEnvelopeType("message/x-response");
-		String uri = "http://localhost:" + server.getPort() + "/";
+		String uri = "http://localhost:3128/";
 		server.setIdentityPrefix(new String[] { uri + "diverted;" });
 		HTTPObjectClient.getInstance().setEnvelopeType("message/x-response");
 		server.start();
@@ -112,6 +112,7 @@ public class MirrorPURLTest extends TestCase {
 		con.close();
 		mirror.close();
 		server.stop();
+		server.destroy();
 		repository1.shutDown();
 		repository2.shutDown();
 		FileUtil.deltree(dataDir);
@@ -131,7 +132,7 @@ public class MirrorPURLTest extends TestCase {
 		Domain domain = mirror.addDesignation(mirror.getObject(ORIGIN), Domain.class);
 		domain.setPurlDefinedBy(mirror.getObject(url));
 		HTTPObjectClient client = HTTPObjectClient.getInstance();
-		InetSocketAddress port = new InetSocketAddress("localhost", server.getPort());
+		InetSocketAddress port = new InetSocketAddress("localhost", 3128);
 		HttpResponse resp = client.service(port, new BasicHttpRequest("GET", PURL0));
 		HttpEntity entity = resp.getEntity();
 		if (entity != null) {

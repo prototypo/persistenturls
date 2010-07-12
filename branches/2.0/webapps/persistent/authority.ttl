@@ -7,9 +7,17 @@
 @prefix calli:<http://callimachusproject.org/rdf/2009/framework#>.
 @prefix purl:<http://persistent.name/rdf/2010/purl#>.
 
-<anybody> a calli:AnybodyRealm.
+<anybody> a calli:AnybodyRealm;
+	calli:origin </>;
+	calli:domain </>;
+	calli:unauthorized <unauthorized.xml>;
+	calli:forbidden <forbidden.xml>.
 
-<local> a calli:LocalRealm.
+<local> a calli:LocalRealm;
+	calli:origin </>;
+	calli:domain </>;
+	calli:unauthorized <unauthorized.xml>;
+	calli:forbidden <forbidden.xml>.
 
 calli:SPARQLService http:realm <local>.
 calli:describe http:realm <local>.
@@ -155,72 +163,6 @@ purl:credential-authorization a owl:DatatypeProperty, owl:FunctionalProperty;
 	rdfs:range xsd:string;
 	http:header "Authorization";
 	obj:name "authorization".
-
-# TODO remove in Callimachus 0.3
-purl:unauthorized rdfs:subClassOf obj:Message;
-	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom calli:DigestRealm];
-	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
-		owl:allValuesFrom <java:org.apache.http.HttpResponse>];
-	http:type "message/http";
-	http:operation "unauthorized";
-	http:cache-control "no-store";
-	obj:name "unauthorized";
-	obj:imports <unauthorized.xml>;
-	obj:imports <java:org.apache.http.entity.StringEntity>;
-	obj:groovy """
-		Reader reader = unauthorizedXml.calliConstruct('view', this)
-		try {
-			CharArrayWriter writer = new CharArrayWriter()
-			int read
-			char[] cbuf = new char[1024]
-			while ((read = reader.read(cbuf)) >= 0) {
-				writer.write(cbuf, 0, read)
-			}
-			def resp = msg.functionalObjectResponse
-			if (resp.entity) {
-				resp.entity.consumeContent()
-			}
-			resp.entity = new StringEntity(writer.toString(), "UTF-8")
-			resp.setHeader("Content-Type", "text/html;charset=\\"UTF-8\\"")
-			return resp
-		} finally {
-			reader.close()
-		}
-	""".
-
-# TODO remove in Callimachus 0.3
-purl:forbidden rdfs:subClassOf obj:Message;
-	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom calli:DigestRealm];
-	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
-		owl:allValuesFrom <java:org.apache.http.HttpResponse>];
-	http:type "message/http";
-	http:operation "forbidden";
-	http:cache-control "no-store";
-	obj:name "forbidden";
-	obj:imports <forbidden.xml>;
-	obj:imports <java:org.apache.http.ProtocolVersion>;
-	obj:imports <java:org.apache.http.message.BasicHttpResponse>;
-	obj:imports <java:org.apache.http.entity.StringEntity>;
-	obj:groovy """
-		Reader reader = forbiddenXml.calliConstruct('view', this)
-		try {
-			CharArrayWriter writer = new CharArrayWriter()
-			int read
-			char[] cbuf = new char[1024]
-			while ((read = reader.read(cbuf)) >= 0) {
-				writer.write(cbuf, 0, read)
-			}
-			def ver = new ProtocolVersion("HTTP", 1, 1)
-			def resp = new BasicHttpResponse(ver, 403, "Forbidden")
-			resp.entity = new StringEntity(writer.toString(), "UTF-8")
-			resp.setHeader("Content-Type", "text/html;charset=\\"UTF-8\\"")
-			return resp
-		} finally {
-			reader.close()
-		}
-	""".
 
 purl:post-request-password rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;

@@ -11,7 +11,7 @@
 		</script>
 	</head>
 	<body class="purl">
-		<form action="" about="" typeof="" id="purl-form">
+		<form action="" about="" id="purl-form" class="diverted">
 			<input type="hidden" rel="rdf:type" resource="?type" name="rdf-type" />
 			<input type="hidden" name="alternate" value="purl:alternative" />
 			<input type="hidden" name="redirects" value="purl:redirectsTo" />
@@ -32,7 +32,7 @@
 									<option value="alternate">Simple (302)</option>
 									<option value="renamed">Renamed (301)</option>
 									<option value="described">Describe (303)</option>
-									<option value="redirects">Redirect (307)</option>
+									<option value="redirect">Redirect (307)</option>
 									<option value="copy">Copy (203)</option>
 								</select>
 							</td>
@@ -61,7 +61,7 @@
 								<input id="m_described_target" type="text" onchange="$(this).attr('resource', $(this).val())" rel="purl:describedBy" resource="?describedBy" value="?describedBy"/>
 							</td>
 						</tr>
-						<tr class="rel redirects">
+						<tr class="rel redirect">
 							<td class="property">
 								<label for="m_redirects_target">Target:</label>
 							</td>
@@ -79,9 +79,9 @@
 						</tr>
 					</tbody>
 				</table>
-				<input value="Enable" type="button" onclick="$.post(diverted('?purl-enable', this))" />
-				<input value="Disable" type="button" onclick="$.post(diverted('?purl-disable', this))" />
-				<input value="Tombstone" type="button" onclick="$.post(diverted('?purl-tombstone', this))" />
+				<input id="enable-button" value="Enable" type="button" onclick="$.post(diverted('?purl-enable', this), function(){location.reload()})" />
+				<input id="disable-button" value="Disable" type="button" onclick="confirm('Are you sure you want to Disable this PURL?') &amp;&amp; $.post(diverted('?purl-disable', this), function(){location.reload()})" />
+				<input id="tombstone-button" value="Tombstone" type="button" onclick="confirm('Are you sure you want to Tombstone this PURL?') &amp;&amp; $.post(diverted('?purl-tombstone', this), function(){location.reload()})" />
 				<input value="Save" type="submit" />
 			</fieldset>
 		</form>

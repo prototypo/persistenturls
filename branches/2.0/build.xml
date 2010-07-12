@@ -8,7 +8,7 @@
 	<property name="tmp" location="tmp" />
 	<property name="webapps" location="webapps" />
 	<property file="src/META-INF/name.persistent.properties" />
-	<property name="callimachus.url" value="http://callimachus.googlecode.com/files/callimachus-0.2.zip" />
+	<property name="callimachus.url" value="http://callimachus.googlecode.com/files/callimachus-0.3-SNAPSHOT.zip" />
 	<property name="captcha.jar" value="SimpleCaptcha-1.1.1.jar" />
 	<property name="captcha.url" value="http://downloads.sourceforge.net/project/simplecaptcha/SimpleCaptcha/1.1.1/SimpleCaptcha-1.1.1.jar" />
 	<property name="mail.jar" value="mail-1.4.1.jar" />
@@ -35,7 +35,7 @@
 		</parallel>
 		<unzip src="${lib}/callimachus.zip" dest="${lib}">
 			<patternset>
-				<include name="lib/*.jar" />
+				<include name="lib/*" />
 			</patternset>
 			<mapper type="flatten" />
 		</unzip>

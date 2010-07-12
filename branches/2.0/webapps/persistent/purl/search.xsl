@@ -26,7 +26,7 @@
 	</xsl:template>
 	<xsl:template match="sparql:result">
 		<li>
-			<a href="{sparql:binding[@name='uri']/sparql:uri}?view">
+			<a href="{sparql:binding[@name='uri']/sparql:uri}">
 				<xsl:attribute name="class">
 					<xsl:text>diverted</xsl:text>
 					<xsl:if test="sparql:binding[@name='redirection']">
@@ -43,8 +43,10 @@
 			<xsl:text>] </xsl:text>
 			<xsl:text> </xsl:text>
 			<xsl:value-of select="substring-after(sparql:binding[@name='type']/sparql:uri, 'http://persistent.name/rdf/2010/purl#')"/>
+			<xsl:if test="sparql:binding[@name='parent']">
 			<xsl:text> in </xsl:text>
 			<a href="{sparql:binding[@name='parent']/sparql:uri}" class="diverted"><xsl:value-of select="sparql:binding[@name='parent']/sparql:uri"/></a>
+			</xsl:if>
 		</li>
 	</xsl:template>
 </xsl:stylesheet>

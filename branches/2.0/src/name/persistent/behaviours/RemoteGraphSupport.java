@@ -35,6 +35,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.message.BasicHttpRequest;
 import org.openrdf.http.object.client.HTTPObjectClient;
 import org.openrdf.http.object.exceptions.BadGateway;
+import org.openrdf.http.object.exceptions.BadRequest;
 import org.openrdf.http.object.exceptions.GatewayTimeout;
 import org.openrdf.http.object.traits.ProxyObject;
 import org.openrdf.model.Resource;
@@ -53,6 +54,7 @@ import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.RDFHandlerException;
 import org.openrdf.rio.RDFParseException;
 import org.openrdf.rio.RDFParser;
+import org.openrdf.rio.RDFParserFactory;
 import org.openrdf.rio.RDFParserRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -382,7 +384,12 @@ public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 		}
 		RDFParserRegistry reg = RDFParserRegistry.getInstance();
 		RDFFormat format = reg.getFileFormatForMIMEType(mimeType);
-		RDFParser parser = reg.get(format).getParser();
+		if (format == null)
+			throw new BadRequest("Unknown graph type: " + mimeType);
+		RDFParserFactory factory = reg.get(format);
+		if (factory == null)
+			throw new BadRequest("Unsupported graph type: " + mimeType);
+		RDFParser parser = factory.getParser();
 		parser.setValueFactory(vf);
 		parser.setRDFHandler(handler);
 		parser.parse(in, resource);

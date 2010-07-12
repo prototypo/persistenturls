@@ -28,8 +28,12 @@
 							<td class="property">
 								<label for="m_defined">Defined By:</label>
 							</td>
-							<td class="value" data-cardinality="1">
-								<input id="m_defined" rel="purl:definedBy" type="text" resource="?definedBy" value="?definedBy" size="60" onchange="$(this).attr('resource', $(this).val())"/>
+							<td id="defined-existing-td" class="value" rel="purl:definedBy" resource="?definedBy">
+								<input id="m_defined" type="text" size="60" value="?definedBy" onchange="$(this).parent().attr('resource', $(this).val())"/>
+							</td>
+							<td id="defined-additional-td" class="value" rel="purl:definedBy" data-cardinality="1">
+								<input id="m_defined" type="text" size="60" onchange="$(this).attr('about', $(this).val())"/>
+								<script>if ($("#defined-existing-td").size()) { $("#defined-additional-td").remove() }</script> 
 							</td>
 						</tr>
 						<tr>

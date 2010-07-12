@@ -24,63 +24,38 @@ Purl.PURLForm.initializeForm = function() {
     } else {
         frag = $('#purl-form tr.rel input').filter(function() {
             return $(this).val() !== '';
-        }).parents('tr.rel').attr('class').replace('rel ','');
-        var types = [];
+        }).parents('tr.rel').attr('class');
+        if (frag) {
+        	frag = frag.replace('rel ','');
+        }
         var isDisabled = false;
         var isTombstoned = false;
-        var isUnresolvable = false;
         $('input[name=rdf-type]').each(function() {
-            var type = $(this).attr('resource').replace('http://persistent.name/rdf/2010/purl#', 'purl:')
-            if (type === "purl:Unresolvable") {
-                isUnresolvable = true;
-            } else if (type === "purl:DisabledPURL") {
-                isDisabled = true;
-            } else if (type === "purl:TombstonedPURL") {
-                isTombstoned = true;
-            } else {
-                types.push(type);
+            var type = $(this).attr('resource').replace('http://persistent.name/rdf/2010/purl#', 'purl:');
+            if (type == "purl:Disabled") {
+                $('#purl-rel-type').empty();
+                $('#purl-rel-type').append("<option value='disabled'>Disabled (404)</option>");
+                $('#disable-button').remove();
+                frag = "disabled";
+            } else if (type == "purl:Tombstoned") {
+                $('#purl-rel-type').empty();
+                $('#purl-rel-type').append("<option value='tombstoned'>Tombstoned (410)</option>");
+                $('#enable-button').remove();
+                $('#disable-button').remove();
+                $('#tombstone-button').remove();
+                frag = "tombstoned";
             }
         });
-        if (types.length === 1) {
-            $('input[value='+types[0]+']').attr('checked', 'checked');
-        } else if (types.length === 2) {
-            $('input[value~='+types[0]+'][value~='+types[1]+']').attr('checked', 'checked');
-        }
-        if (isUnresolvable) {
-            // @@@denote near target
-        }
-        if (isDisabled) {
-            $('#m_disabled').attr('checked', 'checked');
-        }
-        if (isTombstoned) {
-            $('#m_tombstoned').attr('checked', 'checked');
-        }
+    }
+    if (frag != "disabled") {
+        $('#enable-button').remove();
     }
     $('#purl-rel-type').bind('change', function() {
         Purl.PURLForm.modifyForm($(this).val());
     });
-    $('#purl-rel-type').val(frag).trigger('change');
+    $('#purl-rel-type').val(frag);
+    $('#purl-rel-type').trigger('change');
     $('#purl-form input.purl_type').trigger('change');
-    if ($('#m_disabled').length > 0) {
-        $('#m_disabled').bind('change', function() {
-            var types = $('#purl-form').attr('typeof');
-            if ($(this).attr('checked')) {
-                $('#purl-form').attr('typeof', types + ' purl:DisabledPURL');
-            } else {
-                $('#purl-form').attr('typeof', types.replace('purl:DisabledPURL', ''));
-            }
-        });
-    }
-    if ($('#m_tombstoned').length > 0) {
-        $('#m_tombstoned').bind('change', function() {
-            var types = $('#purl-form').attr('typeof');
-            if ($(this).attr('checked')) {
-                $('#purl-form').attr('typeof', types + ' purl:TombstonedPURL');
-            } else {
-                $('#purl-form').attr('typeof', types.replace('purl:TombstonedPURL', ''));
-            }
-        });
-    }
     $('#purl-form').bind('submit', function() {
         $('#purl-form tr:hidden input').each(function() {
             $(this).removeAttr('about').removeAttr('resource').remove('content').val('');

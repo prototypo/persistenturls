@@ -112,9 +112,9 @@ public class ProxyPURLTest extends TestCase {
 		dataDir = FileUtil.createTempDir("metadata");
 		server = new HTTPObjectServer(repository1, new File(dataDir, "www"),
 				new File(dataDir, "cache"), null);
-		server.setPort(3128);
+		server.listen(3128);
 		server.setEnvelopeType("message/x-response");
-		String uri = "http://localhost:" + server.getPort() + "/";
+		String uri = "http://localhost:3128/";
 		server.setIdentityPrefix(new String[] { uri + "diverted;" });
 		HTTPObjectClient.getInstance().setEnvelopeType("message/x-response");
 		server.start();
@@ -137,6 +137,7 @@ public class ProxyPURLTest extends TestCase {
 		con.close();
 		proxy.close();
 		server.stop();
+		server.destroy();
 		repository1.shutDown();
 		repository2.shutDown();
 		FileUtil.deltree(dataDir);
