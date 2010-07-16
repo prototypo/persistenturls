@@ -7,16 +7,10 @@
 	xmlns:calli="http://callimachusproject.org/rdf/2009/framework#"
 	xmlns:purl="http://persistent.name/rdf/2010/purl#">
 	<head>
-		<title>Create a New Domain</title>
-		<script>
-			$(document).ready(function() {
-				var origin = $('base').attr('href')
-			    $('#origin-span').text(origin)
-			});
-		</script>
+		<title>Create a New Top Level Domain</title>
 	</head>
 	<body class="domain">
-		<form action="" about="" typeof="purl:Domain" class="diverted">
+		<form action="" about="" typeof="purl:Domain purl:Zoned" class="diverted">
 			<fieldset>
 				<legend>Create a New Domain</legend>
 				<p class="instructions">Fill in the following domain information.</p>
@@ -27,12 +21,21 @@
 								<label for="m_label">Name:</label>
 							</td>
 							<td class="value">
-								<span id="origin-span"/>
+								<span>http://</span>
 								<span data-cardinality="1">
 								<input id="m_label" property="rdfs:label" type="text"
-									onchange="$(form).attr('about', $('#origin-span').text() + value + '/')" />
+									onchange="$(form).attr('about', 'http://' + value + '/')" />
 								</span>
 								<span>/</span>
+							</td>
+						</tr>
+						<tr>
+							<td class="property">
+								<label for="m_zoned">Zoned:</label>
+							</td>
+							<td class="value">
+								<input id="m_zoned" type="checkbox" checked="checked"
+									onchange="$(form).attr('typeof', checked?'purl:Domain purl:Zoned':'purl:Domain')"/>
 							</td>
 						</tr>
 						<tr>

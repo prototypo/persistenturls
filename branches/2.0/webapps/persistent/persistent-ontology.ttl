@@ -36,6 +36,9 @@
 	rdfs:comment "Domain that should use the configured services to resolve PURLs and update those services regularly from an authority.";
 	rdfs:subClassOf <#MirroredDomain>.
 
+<#Zoned> a owl:Class;
+	rdfs:comment "Indicates all paths of the PURLs in this top level domain also apply to direct DNS sub-domain authorities.".
+
 <#Disabled> a owl:Class;
 	rdfs:comment "Resource is temporarily gone (404)".
 

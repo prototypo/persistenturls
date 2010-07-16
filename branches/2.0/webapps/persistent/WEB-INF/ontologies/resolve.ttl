@@ -35,7 +35,9 @@ purl:update-resolver rdfs:subClassOf obj:Message;
 				def bindings = result.next()
 				String uri = bindings.getValue("domain").stringValue()
 				after.add(uri + "*")
-				after.add(uri.replaceAll("^.*://", "*.") + "*")
+				if (bindings.hasBinding("zoned")) {
+					after.add(uri.replaceAll("^.*://", "*.") + "*")
+				}
 			}
 		} finally {
 			result.close()
@@ -89,9 +91,10 @@ purl:update-resolver-serves  rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
 		owl:allValuesFrom obj:TupleResult];
 	obj:sparql """
-		SELECT ?domain
+		SELECT ?domain ?zoned
 		WHERE {
 			[a purl:Server] purl:serves ?domain
+			OPTIONAL { ?domain a ?zoned FILTER (?zoned = purl:Zoned) }
 		}
 	""".
 

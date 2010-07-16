@@ -71,7 +71,7 @@ purl:post-user-delete owl:intersectionOf (calli:post-delete
 	calli:curator </data/user/admin>.
 
 purl:DomainTemplate rdfs:subClassOf calli:Copyable;
-	calli:copy <domain/create.xml>.
+	calli:copy <domain/create-top.xml>.
 
 purl:get-domain-create rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;

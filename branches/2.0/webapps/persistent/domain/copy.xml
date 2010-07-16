@@ -31,10 +31,12 @@
 							<td class="property">
 								<label for="m_label">Name:</label>
 							</td>
-							<td class="value" data-cardinality="1">
+							<td class="value">
 								<span id="origin-span"/>
+								<span data-cardinality="1">
 								<input id="m_label" property="rdfs:label" type="text"
-									onchange="$(form).attr('about', $('#m_origin').attr('href') + value + '/')" />
+									onchange="$(form).attr('about', $('#origin-span').text() + value + '/')" />
+								</span>
 								<span>/</span>
 							</td>
 						</tr>
@@ -51,17 +53,24 @@
 								<label>Service:</label>
 							</td>
 							<td rel="purl:service" class="value">
-								<span typeof="purl:Service">
-									<p data-cardinality="1">
-										<label for="m_server">Server:</label> <input id="m_server" rel="purl:server" type="text" onchange="$(this).attr('resource', $(this).val())"/>
+								<div typeof="purl:Service">
+									<p>
+										<label for="m_server">Server:</label>
+										<span data-cardinality="1">
+											<input id="m_server" rel="purl:server" type="text" resource="?server" value="?server" size="40" onchange="$(this).attr('resource', $(this).val())"/>
+										</span>
 									</p>
-									<p data-cardinality="1">
-										<label for="m_priority">Priority:</label> <input property="purl:priority" datatype="xsd:byte" type="text" id="m_priority" value="" />
+									<p>
+										<label for="m_priority">Priority:</label>
+										<span data-cardinality="1">
+											<input property="purl:priority" datatype="xsd:byte" type="text" size="2" id="m_priority" value="" />
+										</span>
+										<label for="m_weight">Weight:</label>
+										<span data-cardinality="1">
+											<input property="purl:weight" datatype="xsd:byte" type="text" size="2" id="m_weight" value="" />
+										</span>
 									</p>
-									<p data-cardinality="1">
-										<label for="m_weight">Weight:</label> <input property="purl:weight" datatype="xsd:byte" type="text" id="m_weight" value="" />
-									</p>
-								</span>
+								</div>
 							</td>
 						</tr>
 						<tr class="all">
@@ -92,12 +101,6 @@
 								<span about="?maintainer" typeof="purl:User">
 									<span property="rdfs:label"/>
 								</span>
-							</td>
-						</tr>
-						<tr class="hidden">
-							<td class="property"></td>
-							<td class="value">
-								<a id="m_origin" rel="purl:domainOf" href="?origin" />
 							</td>
 						</tr>
 					</tbody>

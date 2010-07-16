@@ -380,7 +380,16 @@ iframe {
 }
 
 .drag-over {
+	cursor: copy;
 	background-color: lightgrey !important;
+}
+
+.wait * {
+	cursor: wait;
+}
+
+a.diverted {
+	cursor: alias;
 }
 
 /* Inapplicable actions or breadcrumbs */
