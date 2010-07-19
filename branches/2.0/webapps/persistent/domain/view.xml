@@ -17,14 +17,6 @@
 		<p><a href="?copy" class="diverted">Copy Domain</a></p>
 		<p><a href="?domain-create" class="diverted">Create Sub-Domain</a></p>
 		<div property="purl:pattern" />
-		<h3>Services</h3>
-		<ul>
-			<li rel="purl:service" resource="?service">
-				<p property="purl:weight"/>
-				<p property="purl:priority"/>
-				<p><a rel="purl:server" href="?server">Server</a></p>
-			</li>
-		</ul>
 		<h3>PURLs</h3>
         <p><a href="?purl-create" class="diverted">Create New PURL</a></p>
         <p><a href="?partial-create" class="diverted">Create New Partial PURL</a></p>
@@ -42,7 +34,6 @@
 		<ul>
 			<li resource="?maintainer" rel="calli:maintainer"><a property="rdfs:label" href="?maintainer"></a></li>
 		</ul>
-        <p><a id="remote-link" href="?remote-domains" class="diverted">Defined as a remote domain</a></p>
         <p><a id="mirror-link" href="?mirror-domains" class="diverted">Defined as a mirrored domain</a></p>
         <script>
         	$("#remote-link").get(0).href = diverted($("#remote-link").get(0).href)

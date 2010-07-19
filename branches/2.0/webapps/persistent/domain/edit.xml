@@ -28,12 +28,12 @@
 							<td class="property">
 								<label for="m_defined">Defined By:</label>
 							</td>
-							<td id="defined-existing-td" class="value" rel="purl:definedBy" resource="?definedBy">
-								<input id="m_defined" type="text" size="60" value="?definedBy" onchange="$(this).parent().attr('resource', $(this).val())"/>
-							</td>
 							<td id="defined-additional-td" class="value" rel="purl:definedBy" data-cardinality="1">
 								<input id="m_defined" type="text" size="60" onchange="$(this).attr('about', $(this).val())"/>
-								<script>if ($("#defined-existing-td").size()) { $("#defined-additional-td").remove() }</script> 
+							</td>
+							<td id="defined-existing-td" class="value" rel="purl:definedBy" resource="?definedBy">
+								<input id="m_defined" type="text" size="60" value="?definedBy" onchange="$(this).parent().attr('resource', $(this).val())"/>
+								<script>$("#defined-additional-td").remove()</script> 
 							</td>
 						</tr>
 						<tr>
@@ -42,31 +42,6 @@
 							</td>
 							<td class="value" data-cardinality="1">
 								<input id="m_days" property="purl:max-unresolved-days" datatype="xsd:int" type="text" />
-							</td>
-						</tr>
-						<tr>
-							<td class="property">
-								<label>Service:</label>
-							</td>
-							<td rel="purl:service" class="value">
-								<div typeof="purl:Service">
-									<p>
-										<label for="m_server">Server:</label>
-										<span data-cardinality="1">
-											<input id="m_server" rel="purl:server" type="text" resource="?server" value="?server" size="40" onchange="$(this).attr('resource', $(this).val())"/>
-										</span>
-									</p>
-									<p>
-										<label for="m_priority">Priority:</label>
-										<span data-cardinality="1">
-											<input property="purl:priority" datatype="xsd:byte" type="text" size="2" id="m_priority" value="" />
-										</span>
-										<label for="m_weight">Weight:</label>
-										<span data-cardinality="1">
-											<input property="purl:weight" datatype="xsd:byte" type="text" size="2" id="m_weight" value="" />
-										</span>
-									</p>
-								</div>
 							</td>
 						</tr>
 						<tr class="all">
