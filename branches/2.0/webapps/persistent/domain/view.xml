@@ -36,7 +36,6 @@
 		</ul>
         <p><a id="mirror-link" href="?mirror-domains" class="diverted">Defined as a mirrored domain</a></p>
         <script>
-        	$("#remote-link").get(0).href = diverted($("#remote-link").get(0).href)
         	$("#mirror-link").get(0).href = diverted($("#mirror-link").get(0).href)
         </script>
 	</body>
