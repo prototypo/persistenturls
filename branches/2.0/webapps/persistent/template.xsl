@@ -34,6 +34,7 @@
 	<xsl:template match="head">
 		<xsl:copy>
 			<xsl:apply-templates select="@*" />
+			<meta http-equiv="X-UA-Compatible" content="IE=8" />
 			<style type="text/css">@import url("<xsl:value-of select="$persistent"/>/style.css");</style>
 			<script type="text/javascript" src="{$callimachus}/jquery.js">
 			</script>

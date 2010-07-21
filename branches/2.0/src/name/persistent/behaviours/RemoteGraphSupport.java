@@ -300,10 +300,13 @@ public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 				String type = getHeader(resp, "Content-Type");
 				con.removeDesignation(this, Unresolvable.class);
 				con.clear(ctx);
+				logger.info("Loading {}", this);
 				if (!parse(type, in, origin))
 					return false;
 				store(type, resp, origin);
+				logger.info("Updating {}", getResource());
 				con.commit();
+				logger.info("Loaded {}", this);
 				return true;
 			} catch (RDFHandlerException e) {
 				throw cause(e);
@@ -356,7 +359,6 @@ public abstract class RemoteGraphSupport implements RDFObject, RemoteGraph,
 				con.addDesignation(this, Unresolvable.class);
 			}
 		}
-		logger.info("Updating {}", getResource());
 	}
 
 	private boolean parse(String type, InputStream in, String... origin)

@@ -72,4 +72,6 @@ public interface Domain extends Partial {
 
 	void validatePURLs(XMLGregorianCalendar before, int min, int max,
 			XMLGregorianCalendar today) throws OpenRDFException, IOException;
+
+	void refreshGraphs() throws Exception;
 }

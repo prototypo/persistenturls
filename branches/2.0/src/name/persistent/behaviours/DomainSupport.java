@@ -15,6 +15,9 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
@@ -30,6 +33,7 @@ import org.openrdf.http.object.annotations.type;
 import org.openrdf.http.object.concepts.Transaction;
 import org.openrdf.http.object.model.ReadableHttpEntityChannel;
 import org.openrdf.http.object.traits.VersionedObject;
+import org.openrdf.http.object.util.NamedThreadFactory;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
@@ -39,10 +43,13 @@ import org.openrdf.model.impl.StatementImpl;
 import org.openrdf.query.GraphQueryResult;
 import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.repository.object.ObjectConnection;
+import org.openrdf.repository.object.ObjectRepository;
 import org.openrdf.repository.object.RDFObject;
 import org.openrdf.repository.object.annotations.iri;
 import org.openrdf.repository.object.annotations.sparql;
 import org.openrdf.repository.object.annotations.triggeredBy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class DomainSupport extends PartialSupport implements Domain,
 		RDFObject, VersionedObject {
@@ -63,6 +70,9 @@ public abstract class DomainSupport extends PartialSupport implements Domain,
 		dateformat = new SimpleDateFormat(PATTERN_RFC1123, Locale.US);
 		dateformat.setTimeZone(GMT);
 	}
+	private static final ScheduledExecutorService executor = Executors
+	.newSingleThreadScheduledExecutor(new NamedThreadFactory(
+			"Denfine Domain", true));
 
 	@operation("mirror")
 	@type("application/rdf+xml")
@@ -192,6 +202,30 @@ public abstract class DomainSupport extends PartialSupport implements Domain,
 	}
 
 	@triggeredBy( { DEFINED_BY, MIRRORED_BY, SERVICED_BY })
+	public void definitionChanged() throws Exception {
+		ObjectConnection active = getObjectConnection();
+		final Logger logger = LoggerFactory.getLogger(DomainSupport.class);
+		final ObjectRepository repository = active.getRepository();
+		final Resource resource = getResource();
+		executor.schedule(new Runnable() {
+			public void run() {
+				try {
+					logger.info("Refreshing {}", resource);
+					ObjectConnection con = repository.getConnection();
+					try {
+						Domain domain = con.getObject(Domain.class, resource);
+						domain.refreshGraphs();
+					} finally {
+						con.close();
+					}
+				} catch (Exception e) {
+					logger.warn("Could not refresh " + resource, e);
+					executor.schedule(this, 5, TimeUnit.MINUTES);
+				}
+			}
+		}, 1, TimeUnit.MINUTES);
+	}
+
 	public void refreshGraphs() throws Exception {
 		Object graph = getPurlDefinedBy();
 		if (graph != null && !(graph instanceof RemoteGraph)) {
