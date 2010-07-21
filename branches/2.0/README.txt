@@ -2,7 +2,7 @@ Persistent Uniform Resource Locator by Zepheira (PURLZ) Installation Instruction
 
 http://purlz.org/
 
-6 July 2010
+21 July 2010
 
 ----------------
 | Introduction |
@@ -14,7 +14,7 @@ Please consider joining the mailing lists and participating in the
 online community so we can serve you better.
 
 Version-specific information is contained in the file RELEASENOTES.txt.
-There are no releasenotes for the first release.
+There are no release notes for the first release.
 
 This software is licensed as defined in the accompanying files
 LICENSE.txt and LEGAL.txt.  These files may be found in the
@@ -35,7 +35,9 @@ mail.smtp.auth = true
 mail.user = system
 mail.password = secret
 
-Execute a callimachus-server script to start the server. Open your browser to the authority listed in console output. Click the register link and fill in the form using the ID "admin". Follow the instructions to register and login.
+Stop any other servers listening on port 80. To change the port the PURL server listens on edit the etc/persistent.conf file.
+
+Execute a start script to start the server. Open your browser to http://localhost/ listed in console output. Click the register link and fill in the form using the ID "admin". Follow the instructions to register and login.
 
 Click the home link at the top and then click the edit link. In the edit screen click on the chevrons to create a new domain origin. Fill in the form to create a PURL authority that will be served by this server. Once a domain has been created assign it to the server, save the changes. This process may take a few moments, please be patient.
 
