@@ -40,18 +40,6 @@
 						</tr>
 						<tr>
 							<td class="property">
-								<label for="m_defined">Defined By:</label>
-							</td>
-							<td id="defined-additional-td" class="value" rel="purl:definedBy" data-cardinality="1">
-								<input id="m_defined" type="text" size="60" onchange="$(this).attr('about', $(this).val())"/>
-							</td>
-							<td id="defined-existing-td" class="value" rel="purl:definedBy" resource="?definedBy">
-								<input id="m_defined" type="text" size="60" value="?definedBy" onchange="$(this).parent().attr('resource', $(this).val())"/>
-								<script>$("#defined-additional-td").remove()</script> 
-							</td>
-						</tr>
-						<tr>
-							<td class="property">
 								<label for="m_days">Max Unresolved Days:</label>
 							</td>
 							<td class="value" data-cardinality="1">

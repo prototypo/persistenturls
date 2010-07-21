@@ -55,8 +55,6 @@ public abstract class ResolvableSupport implements RDFObject, Resolvable {
 		sb.append("\nWHERE {{");
 		sb.append("\n\t{ ?purl a purl:Domain }");
 		sb.append("\n\tUNION {?purl a purl:Partial }");
-		sb.append("\n\tUNION {?purl a purl:MirroredDomain }");
-		sb.append("\n\tUNION {?purl a purl:RemoteDomain }");
 		sb.append("\nFILTER (?purl = <").append(source).append(">");
 		if (uri.isHierarchical()) {
 			for (String match : pathFragments(uri, new ArrayList<String>())) {
@@ -67,8 +65,6 @@ public abstract class ResolvableSupport implements RDFObject, Resolvable {
 		sb.append("\n\t{ ?purl ?z purl:Domain }");
 		sb.append("\n\tUNION {?purl ?z purl:Partial }");
 		sb.append("\n\tUNION {?purl ?z purl:PURL }");
-		sb.append("\n\tUNION {?purl ?z purl:MirroredDomain }");
-		sb.append("\n\tUNION {?purl ?z purl:RemoteDomain }");
 		sb.append("\nFILTER(?z = rdf:type)");
 		sb.append("\nFILTER (");
 		if (uri.isHierarchical()) {
