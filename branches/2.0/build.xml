@@ -15,7 +15,7 @@
 	<property name="mail.jar" value="mail-1.4.1.jar" />
 	<property name="mail.url" value="http://mirrors.ibiblio.org/pub/mirrors/maven2/javax/mail/mail/1.4.1/mail-1.4.1.jar" />
 	<property name="main" value="org.callimachusproject.Server" />
-	<property name="jvmargs" value="-ea -server -mx512m -Dfile.encoding=UTF-8 -Djava.library.path=${bin} -Djava.io.tmpdir=${tmp}" />
+	<property name="jvmargs" value="-ea -server -mx512m -Dfile.encoding=UTF-8 -Djava.library.path=${lib} -Djava.io.tmpdir=${tmp}" />
 	<property name="args" value="" />
 
 	<target name="init">
