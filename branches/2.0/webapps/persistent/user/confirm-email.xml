@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../template.xsl"?>
+<html>
+	<head>
+		<title>Confirm Email Address</title>
+	</head>
+	<body class="user">
+		<form method="POST" action="">
+			<p><label>Email Address</label><input name="email" id="email" /></p>
+			<button type="submit">Send Confirmation Email</button>
+		</form>
+	</body>
+</html>

@@ -27,6 +27,7 @@
 	rdfs:domain <template-xsl>;
 	rdfs:range <java:java.io.InputStream>.
 
+# Abstract label prefix search method
 purl:search rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom purl:Server];
@@ -52,6 +53,8 @@ purl:search-regex a owl:DatatypeProperty, owl:FunctionalProperty;
 	http:transform <template-xsl>;
 	obj:xslt <user/search.xsl>.
 
+# Lists all users by label prefix
+# Called from user search form
 purl:user-search rdfs:subClassOf purl:search;
 	http:operation "user";
 	http:type "application/sparql-results+xml";
@@ -71,6 +74,8 @@ purl:user-search rdfs:subClassOf purl:search;
 	http:transform <template-xsl>;
 	obj:xslt <domain/search.xsl>.
 
+# Lists all domains by label prefix
+# Called from domain search form
 purl:domain-search rdfs:subClassOf purl:search;
 	http:operation "domain";
 	http:type "application/sparql-results+xml";
@@ -90,6 +95,8 @@ purl:domain-search rdfs:subClassOf purl:search;
 	http:transform <template-xsl>;
 	obj:xslt <purl/search.xsl>.
 
+# Lists all PURLs by label prefix
+# Called from PURL form
 purl:purl-search rdfs:subClassOf purl:search;
 	http:operation "purl";
 	http:type "application/sparql-results+xml";
@@ -107,6 +114,8 @@ purl:purl-search rdfs:subClassOf purl:search;
 		ORDER BY ?label ?uri
 	""".
 
+# Finds PURLs with a particular target
+# TODO call from PURL form if q contains ":"
 purl:target-search rdfs:subClassOf purl:search;
 	http:operation "target";
 	http:type "application/sparql-results+xml";

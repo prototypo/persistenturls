@@ -7,6 +7,8 @@
 @prefix calli:<http://callimachusproject.org/rdf/2009/framework#>.
 @prefix purl:<http://persistent.name/rdf/2010/purl#>.
 
+# Lists all member PURLs
+# Linked from a domain or partial view page
 purl:list-parts rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom purl:Partial];
@@ -25,6 +27,8 @@ purl:list-parts rdfs:subClassOf obj:Message;
 		}
 	""".
 
+# Lists all PURLs that are known to be unresolvable
+# Linked from a domain view page
 purl:unresolvable-purls rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom purl:Domain];
@@ -64,6 +68,8 @@ purl:unresolvable-purls rdfs:subClassOf obj:Message;
 		ORDER BY ?uri
 	""".
 
+# Lists all domains that this user can maintain or curate
+# Linked from the user's view page
 purl:list-domains-for-user rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom purl:User];

@@ -25,6 +25,7 @@
 @prefix calli:<http://callimachusproject.org/rdf/2009/framework#>.
 @prefix purl:<http://persistent.name/rdf/2010/purl#>.
 
+# Linked from home page
 purl:register rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom purl:UserTemplate];
@@ -41,6 +42,7 @@ purl:register rdfs:subClassOf obj:Message;
 		return template.calliConstruct('copy', this)
 	""".
 
+# Creates new user and resets their password
 purl:post-register rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom purl:UserTemplate];

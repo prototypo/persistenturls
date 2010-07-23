@@ -26,14 +26,6 @@
 						</tr>
 						<tr>
 							<td class="property">
-								<label for="m_email">E-mail address:</label>
-							</td>
-							<td class="value" data-cardinality="1">
-								<input id="m_email" property="purl:email" type="text" />
-							</td>
-						</tr>
-						<tr>
-							<td class="property">
 								<label for="m_affiliation">Affiliation:</label>
 							</td>
 							<td class="value">
@@ -61,15 +53,11 @@
 								</span>
 							</td>
 						</tr>
-						<tr class="hidden">
-							<td class="property"/>
-							<td class="value" data-cardinality="1">
-								<input id="m_username" property="calli:name" type="hidden" />
-							</td>
-						</tr>
 					</tbody>
 				</table>
 				<input value="Delete" type="button" onclick="location.href='?delete'" />
+				<input value="Reset Password" type="button" onclick="location.href='?reset-password'" />
+				<input value="Change Email" type="button" onclick="location.href='?confirm-email'" />
 				<input value="Save" type="submit" />
 				<br />
 			</fieldset>

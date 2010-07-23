@@ -23,13 +23,14 @@ purl:Server rdfs:subClassOf calli:Viewable, calli:Reviewable, calli:Editable;
 # User
 ################################
 
-<user/template> a purl:UserTemplate;
-	calli:curator </data/user/admin>.
+<user/template> a purl:UserTemplate.
 
 purl:UserTemplate rdfs:subClassOf calli:Copyable;
 	calli:withNamespace </data/user/>;
-	calli:copy <user/create.xml>.
+	calli:copy <user/register.xml>.
 
+# Adds user to authority realm and initializes their password
+# Use in user registration
 purl:post-user-copy owl:intersectionOf (calli:post-copy
 		[owl:onProperty obj:target; owl:allValuesFrom purl:UserTemplate]);
 	obj:precedes calli:post-copy;
@@ -50,6 +51,8 @@ purl:User rdfs:subClassOf calli:Viewable, calli:Reviewable, calli:Editable, call
 	calli:edit <user/edit.xml>;
 	calli:delete <user/delete.xml>.
 
+# Removes the user from the authority realm, and removes their password.
+# Called in user delete
 purl:post-user-delete owl:intersectionOf (calli:post-delete
 		[owl:onProperty obj:target; owl:allValuesFrom purl:User]);
 	obj:precedes calli:post-delete;
@@ -57,8 +60,8 @@ purl:post-user-delete owl:intersectionOf (calli:post-delete
 	obj:imports <java:org.openrdf.http.object.exceptions.BadRequest>;
 	obj:groovy """
 		authority.calliCredentials.remove(this)
-		purlRemovePassword()
-		calliMaintainers.clear()
+		calliAlgorithm = null
+		calliEncoded = null
 		msg.proceed()
 	""".
 
@@ -86,6 +89,8 @@ purl:get-domain-create rdfs:subClassOf obj:Message;
 		return createXml.calliConstruct('copy', this)
 	""".
 
+# Sets up purl:domainOf, purl:partOf, and increments the parent timestamp
+# Called when creating a sub domain
 purl:post-domain-create rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom purl:Partial];
@@ -128,6 +133,8 @@ purl:Domain rdfs:subClassOf calli:Viewable, calli:Reviewable, calli:Editable, ca
 	calli:copy <domain/copy.xml>;
 	calli:delete <domain/delete.xml>.
 
+# Sets up the purl:domainOf property
+# Called when copying a domain
 purl:post-domain-copy owl:intersectionOf (calli:post-copy
 		[owl:onProperty obj:target; owl:allValuesFrom purl:Domain]);
 	obj:precedes calli:post-copy;
@@ -154,6 +161,8 @@ purl:get-partial-create rdfs:subClassOf obj:Message;
 		return createXml.calliConstruct('copy', this)
 	""".
 
+# Sets up purl:partOf and purl:belongsTo properties
+# Called when creating a partial PURL
 purl:post-partial-create rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom purl:Partial];
@@ -185,6 +194,8 @@ purl:Partial rdfs:subClassOf calli:Viewable, calli:Reviewable, calli:Editable, c
 	calli:edit <partial/edit.xml>;
 	calli:copy <partial/copy.xml>.
 
+# Sets up purl:belongsTo properties
+# Called when copying a partial PURL
 purl:post-partial-copy owl:intersectionOf (calli:post-copy
 		[owl:onProperty obj:target; owl:allValuesFrom purl:Partial]);
 	obj:precedes calli:post-copy;
@@ -211,6 +222,8 @@ purl:get-purl-create rdfs:subClassOf obj:Message;
 		return createXml.calliConstruct('copy', this)
 	""".
 
+# Sets up the purl:partOf property and incements the parent's timestamp
+# Called when creating a PURL
 purl:post-purl-create rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom purl:Partial];
@@ -241,12 +254,16 @@ purl:PURL rdfs:subClassOf calli:Viewable, calli:Reviewable, calli:Editable, call
 	calli:edit <purl/edit.xml>;
 	calli:copy <purl/copy.xml>.
 
+# Ensures any PURL copied has the same parent
+# Called when copying a PURL
 purl:find-purl-prefix owl:intersectionOf ( calli:find-copy-prefix
 		[owl:onProperty obj:target; owl:allValuesFrom purl:PURL]);
 	rdfs:comment "On purl copy, the result must start with the same domain";
 	obj:precedes calli:find-copy-prefix;
 	obj:java "return Collections.singleton(purlPartOf)".
 
+# Sets up purl:partOf property
+# Called when copying a PURL
 purl:post-purl-copy owl:intersectionOf (calli:post-copy
 		[owl:onProperty obj:target; owl:allValuesFrom purl:PURL]);
 	obj:precedes calli:post-copy;
@@ -256,6 +273,8 @@ purl:post-purl-copy owl:intersectionOf (calli:post-copy
 		return copy
 	""".
 
+# Updates the parent's timestamp
+# Called when editing a PURL
 purl:post-purl-edit owl:intersectionOf (calli:post-edit
 		[owl:onProperty obj:target; owl:allValuesFrom purl:PURL]);
 	obj:precedes calli:post-edit;
@@ -268,6 +287,8 @@ purl:post-purl-edit owl:intersectionOf (calli:post-edit
 		}
 	""".
 
+# Marks a PURL as disabled
+# Called from the PURL edit page
 purl:purl-disable rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom purl:PURL];
@@ -281,6 +302,8 @@ purl:purl-disable rdfs:subClassOf obj:Message;
 		objectConnection.addDesignation(this, Disabled)
 	""".
 
+# Enables a disabled PURL
+# Called from the PURL edit page
 purl:purl-enable rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom purl:PURL];
@@ -294,6 +317,8 @@ purl:purl-enable rdfs:subClassOf obj:Message;
 		objectConnection.removeDesignation(this, Disabled)
 	""".
 
+# Marks a PURL as tombstoned
+# Called from a PURL edit page
 purl:purl-tombstone rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom purl:PURL];

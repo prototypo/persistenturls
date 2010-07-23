@@ -23,15 +23,3 @@
 @prefix purl:<http://persistent.name/rdf/2010/purl#>.
 
 calli:put-file-body http:type "application/x-properties".
-
-purl:delete-properties rdfs:subClassOf obj:Message;
-	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom <urn:mimetype:application/x-properties>];
-	rdfs:subClassOf [owl:onProperty obj:objectResponse;
-		owl:allValuesFrom owl:Nothing];
-	http:method "DELETE";
-	http:realm calli:upload-realm;
-	obj:groovy """
-		delete()
-		objectConnection.removeDesignations(msg.target, "urn:mimetype:application/x-properties")
-	""".
