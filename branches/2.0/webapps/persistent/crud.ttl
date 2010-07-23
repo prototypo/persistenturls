@@ -23,7 +23,8 @@ purl:Server rdfs:subClassOf calli:Viewable, calli:Reviewable, calli:Editable;
 # User
 ################################
 
-<user/template> a purl:UserTemplate.
+<user/template> a purl:UserTemplate;
+	calli:curator </data/user/admin>.
 
 purl:UserTemplate rdfs:subClassOf calli:Copyable;
 	calli:withNamespace </data/user/>;

@@ -8,6 +8,7 @@
 	xmlns:purl="http://persistent.name/rdf/2010/purl#">
 	<head>
 		<title>Create a New Top Level Domain</title>
+		<link rel="help" title="Help" target="_blank" href="/persistent/docs/" type="text/html" />
 	</head>
 	<body class="domain">
 		<form action="" about="" typeof="purl:Domain purl:Zoned" class="diverted">

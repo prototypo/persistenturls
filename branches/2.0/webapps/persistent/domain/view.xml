@@ -7,13 +7,13 @@
 	xmlns:purl="http://persistent.name/rdf/2010/purl#">
 	<head>
 		<title property="rdfs:label"/>
+		<link rel="view" title="View" target="_self" href="" type="text/html" />
+		<link rel="edit" title="Edit" target="_self" href="?edit" type="text/html" />
+		<link rel="review" title="History" target="_self" href="?review" type="text/html" />
+		<link rel="help" title="Help" target="_blank" href="/persistent/docs/" type="text/html" />
 	</head>
 	<body class="domain">
 		<h1><a href="" property="rdfs:label" /></h1>
-		<p>
-			<span resource="?origin" rel="purl:domainOf"><a href="?origin" property="rdfs:label" class="diverted"/></span>
-			<span property="rdfs:label" />
-		</p>
 		<p><a href="?copy" class="diverted">Copy Domain</a></p>
 		<p><a href="?domain-create" class="diverted">Create Sub-Domain</a></p>
 		<div property="purl:pattern" />

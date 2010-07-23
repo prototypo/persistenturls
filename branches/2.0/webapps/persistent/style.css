@@ -248,24 +248,15 @@ form img.submit:hover {
     opacity: 1.0;
 }
 
-#breadcrumbs li {
-    background: transparent url(images/breadcrumb.png) center left no-repeat;
-    float: left;
-    list-style: none;
+#breadcrumbs > a {
     margin: 0 10px 0 0;
-    padding: 0 0 0 20px;
+    padding: 10px 0 10px 20px;
 }
 
-#breadcrumbs li.home {
-    background: transparent;
-    padding: 0 0 0 0;
-}
-
-#breadcrumbs li > a,
-#breadcrumbs li > span {
-    display: block;
-    padding: 10px 0;
-    width: 100%;
+#breadcrumbs .crumb {
+    background: transparent url(images/breadcrumb.png) center left no-repeat;
+    margin: 0 10px 0 0;
+    padding: 10px 0 10px 20px;
 }
 
 body.home h1 {
@@ -393,10 +384,6 @@ a.diverted {
 }
 
 /* Inapplicable actions or breadcrumbs */
-#actions.copy,
-body.server #actions .delete,
-body.home #breadcrumbs .home,
-body.purl #actions .delete,
-body.search #actions {
+body.home #breadcrumbs {
     display: none;
 }

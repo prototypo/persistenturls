@@ -8,6 +8,7 @@
 	xmlns:purl="http://persistent.name/rdf/2010/purl#">
 	<head>
 		<title>Request a New User</title>
+		<link rel="help" title="Help" target="_blank" href="/persistent/docs/" type="text/html" />
 		<script>
 			function confirm() {
 				var email = document.getElementById("m_email")

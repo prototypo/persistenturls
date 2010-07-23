@@ -7,6 +7,7 @@
 		<html>
 			<head>
 				<title>User Search Results</title>
+				<link rel="help" title="Help" target="_blank" href="/persistent/docs/" type="text/html" />
 			</head>
 			<body class="user search">
 				<h1>User Search Results</h1>

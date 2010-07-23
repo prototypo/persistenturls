@@ -6,6 +6,7 @@
 		<html>
 			<head>
 				<title>Search Results</title>
+				<link rel="help" href="/persistent/docs/" />
 			</head>
 			<body class="search">
 				<xsl:apply-templates />

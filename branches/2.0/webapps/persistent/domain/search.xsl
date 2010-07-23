@@ -7,6 +7,7 @@
 		<html>
 			<head>
 				<title>Domain Search Results</title>
+				<link rel="help" title="Help" target="_blank" href="/persistent/docs/" type="text/html" />
 			</head>
 			<body class="search domain">
 				<h1>Domain Search Results</h1>

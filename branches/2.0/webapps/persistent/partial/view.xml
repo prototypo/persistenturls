@@ -7,18 +7,13 @@
 	xmlns:purl="http://persistent.name/rdf/2010/purl#">
 	<head>
 		<title property="rdfs:label"/>
+		<link rel="view" title="View" target="_self" href="" type="text/html" />
+		<link rel="edit" title="Edit" target="_self" href="?edit" type="text/html" />
+		<link rel="review" title="History" target="_self" href="?review" type="text/html" />
+		<link rel="help" title="Help" target="_blank" href="/persistent/docs/" type="text/html" />
 	</head>
 	<body class="purl">
 		<h1><a href="" property="rdfs:label" /></h1>
-		<p>
-			<span rel="purl:partOf" resource="?domain">
-				<span resource="?origin" rel="purl:domainOf">
-					<a href="?origin" property="rdfs:label" class="diverted"/>
-				</span>
-				<a href="?domain" property="rdfs:label" class="diverted" />
-			</span>
-			<span property="rdfs:label" />
-		</p>
         <p><a href="?copy" class="diverted">Clone this PURL</a></p>
 		<span rel="rdf:type" resource="?type"><div property="rdfs:comment"/></span>
 		<div property="purl:pattern" />

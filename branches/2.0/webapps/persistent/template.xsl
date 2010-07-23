@@ -3,12 +3,12 @@
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:param name="xslt" select="'/persistent/template.xsl'" />
 	<xsl:param name="mode" />
-	<xsl:variable name="origin" select="substring-before($xslt, '/persistent')" />
+	<xsl:variable name="persistent" select="substring-before($xslt, '/template.xsl')" />
+	<xsl:variable name="origin" select="substring-before($persistent, '/persistent')" />
 	<xsl:variable name="callimachus" select="concat($origin, '/callimachus')" />
-	<xsl:variable name="persistent" select="concat($origin, '/persistent')" />
-	<xsl:variable name="server" select="concat($origin, '/persistent/server')" />
-	<xsl:variable name="user" select="concat($origin, '/persistent/user')" />
-	<xsl:variable name="images" select="concat($origin, '/persistent/images')" />
+	<xsl:variable name="server" select="concat($persistent, '/server')" />
+	<xsl:variable name="user" select="concat($persistent, '/user')" />
+	<xsl:variable name="images" select="concat($persistent, '/images')" />
 	<xsl:variable name="section" select="/html/body/@class" />
 	<xsl:template match="*">
 		<xsl:copy>
@@ -18,6 +18,10 @@
 	<xsl:template match="@*">
 		<xsl:attribute name="{name()}">
 			<xsl:choose>
+				<xsl:when test="starts-with(., '/persistent/')">
+					<xsl:value-of select="$persistent"/>
+					<xsl:value-of select="substring-after(., '/persistent')" />
+				</xsl:when>
 				<xsl:when test="starts-with(., '/')">
 					<xsl:value-of select="$origin"/>
 					<xsl:value-of select="." />
@@ -35,7 +39,7 @@
 		<xsl:copy>
 			<xsl:apply-templates select="@*" />
 			<meta http-equiv="X-UA-Compatible" content="IE=8" />
-			<style type="text/css">@import url("<xsl:value-of select="$persistent"/>/style.css");</style>
+			<link rel="stylesheet" href="{$persistent}/style.css" />
 			<script type="text/javascript" src="{$callimachus}/jquery.js">
 			</script>
 			<script type="text/javascript" src="{$callimachus}/jquery-ui.js">
@@ -103,42 +107,26 @@
 				</div>
 				<div id="header">
 					<ul id="actions" class="{$mode}">
-						<li class="view">
+						<xsl:for-each select="/html/head/link[@target='_self']">
 							<xsl:choose>
-								<xsl:when test="$mode='view'">
-									<span class="current">View</span>
+								<xsl:when test="@href=''">
+									<li>
+										<span class="current"><xsl:value-of select="@title" /></span>
+									</li>
 								</xsl:when>
-								<xsl:otherwise>
-									<a class="diverted" title="View this item" href="?view">View</a>
-								</xsl:otherwise>
-							</xsl:choose>
-						</li>
-						<li class="edit">
-							<xsl:choose>
-								<xsl:when test="$mode='edit' or $mode='delete'">
-									<span class="current">Edit</span>
+								<xsl:when test="@href">
+									<li>
+										<a class="diverted" target="_self" href="{@href}"><xsl:value-of select="@title" /></a>
+									</li>
 								</xsl:when>
-								<xsl:otherwise>
-									<a class="diverted" title="Edit this item" href="?edit">Edit</a>
-								</xsl:otherwise>
 							</xsl:choose>
-						</li>
-						<li class="history">
-							<xsl:choose>
-								<xsl:when test="$mode='review'">
-									<span class="current">History</span>
-								</xsl:when>
-								<xsl:otherwise>
-									<a class="diverted" title="See this item's history" href="?review">History</a>
-								</xsl:otherwise>
-							</xsl:choose>
-						</li>
+						</xsl:for-each>
 					</ul>
 					<div id="account">
-						<strong><a id="username" href="{$origin}/persistent/authority?credential"></a></strong>
-						<a id="login" href="{$origin}/persistent/authority?login">Login</a>
+						<strong><a id="username" href="{$persistent}/authority?credential"></a></strong>
+						<a id="login" href="{$persistent}/authority?login">Login</a>
 						<span class="logout">&#160;&#183;&#160;</span>
-						<a class="logout" href="{$origin}/persistent/authority?logout">Logout</a>
+						<a class="logout" href="{$persistent}/authority?logout">Logout</a>
 					</div>
 					<div class="clear">&#160;</div>
 				</div>
@@ -156,10 +144,10 @@
 							</xsl:choose>
 						</xsl:attribute>
 						<a href="{$origin}/?purl">PURLs</a>
-						<form action="{$origin}/" method="get" title="Search PURL maintainers and curators" class="search">
+						<form action="{$origin}/" method="get" title="Search PURL maintainers and curators" class="search" onsubmit="if(elements['q'].value.indexOf(':')>0)elements['purl'].name='target'">
 							<input name="purl" type="hidden" class="profile" />
 							<input id="purl_menu_q" name="q" type="text" value="" />
-							<img class="submit" src="{$origin}/persistent/images/search-button.png" alt="Search" title="Click to search" />
+							<img class="submit" src="{$persistent}/images/search-button.png" alt="Search" title="Click to search" />
 						</form>
 					</li>
 					<li>
@@ -177,7 +165,7 @@
 						<form action="{$origin}/" method="get" title="Search usernames" class="search">
 							<input name="user" type="hidden" class="profile" />
 							<input id="user_menu_q" name="q" type="text" />
-							<img class="submit" src="{$origin}/persistent/images/search-button.png" alt="Search" title="Click to search" />
+							<img class="submit" src="{$persistent}/images/search-button.png" alt="Search" title="Click to search" />
 						</form>
 					</li>
 					<li>
@@ -195,36 +183,49 @@
 						<form action="{$origin}/" method="get" title="Search maintainers and curators" class="search">
 							<input name="domain" type="hidden" class="profile" />
 							<input id="domain_form_q" name="q" type="text" />
-							<img class="submit" src="{$origin}/persistent/images/search-button.png" alt="Search" title="Click to search" />
+							<img class="submit" src="{$persistent}/images/search-button.png" alt="Search" title="Click to search" />
 						</form>
 					</li>
-					<li class="inactive">
-						<a href="{$origin}/docs/help.html#{$section}">Help</a>
-					</li>
+					<xsl:for-each select="/html/head/link[@target='_blank']">
+						<li class="inactive">
+							<a target="_blank" href="{@href}"><xsl:value-of select="@title" /></a>
+						</li>
+					</xsl:for-each>
 				</ul>
 			</xsl:if>
 
 			<div id="content">
-				<ul id="breadcrumbs">
-					<li class="home"><a href="{$origin}/">Home</a></li>
+				<div id="breadcrumbs">
+					<a href="{$origin}/">Server</a>
 					<xsl:choose>
 						<xsl:when test="contains($section, 'user')">
-							<li><span>Users</span></li>
-						</xsl:when>
-						<xsl:when test="contains($section, 'domain') and not(contains($section, 'search'))">
-							<li><a rel="purl:domainOf" href="?origin" class="diverted"><span property="rdfs:label"/> (Origin)</a></li>
-							<li><span>Domains</span></li>
-						</xsl:when>
-						<xsl:when test="contains($section, 'purl') and not(contains($section, 'search'))">
-							<li><span rev="purl:partOf" resource="?domain"><a rel="purl:domainOf" href="?origin" class="diverted"><span property="rdfs:label"/> (Origin)</a></span></li>
-							<li><a rev="purl:partOf" href="?domain" class="diverted"><span property="rdfs:label"/> (Domain)</a></li>
-							<li><span>PURLs</span></li>
+						<span><span class="crumb">Users</span></span>
 						</xsl:when>
 						<xsl:when test="contains($section, 'search')">
-							<li><span>Search</span></li>
+						<span><span class="crumb">Search</span></span>
+						</xsl:when>
+						<xsl:when test="contains($section, 'purl') or contains($section, 'domain')">
+						<span>
+						<span rel="purl:partOf" resource="?bc_partial">
+						<span rel="purl:partOf" resource="?bc_subsubdomain">
+						<span rel="purl:partOf" resource="?bc_subdomain">
+						<span rel="purl:partOf" resource="?bc_domain">
+						<span rel="purl:partOf" resource="?bc_origin">
+						<a href="?bc_origin" class="crumb diverted" property="rdfs:label"/>
+						</span>
+						<a href="?bc_domain" class="crumb diverted" property="rdfs:label"/>
+						</span>
+						<a href="?bc_subdomain" class="crumb diverted" property="rdfs:label"/>
+						</span>
+						<a href="?bc_subsubdomain" class="crumb diverted" property="rdfs:label"/>
+						</span>
+						<a href="?bc_partial" class="crumb diverted" property="rdfs:label"/>
+						</span>
+						<span class="crumb" property="rdfs:label"/>
+						</span>
 						</xsl:when>
 					</xsl:choose>
-				</ul>
+				</div>
 				<div id="message-container">
 					<p id="message" />
 				</div>
