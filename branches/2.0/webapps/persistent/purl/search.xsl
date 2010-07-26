@@ -11,7 +11,7 @@
 			</head>
 			<body class="search purl">
 				<h1>PURL Search Results</h1>
-				<form action="/" method="get" class="search">
+				<form action="/" method="get" class="search" onsubmit="if(elements['q'].value.indexOf(':')>0)elements['purl'].name='target'">
 					<input type="hidden" class="profile" name="purl" />
 					<input type="text" id="q" name="q" value="" />
 					<img class="submit" src="/persistent/images/search-button.png" alt="Search" title="Click to search" />

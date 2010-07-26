@@ -116,7 +116,10 @@
 								</xsl:when>
 								<xsl:when test="@href">
 									<li>
-										<a class="diverted" target="_self" href="{@href}"><xsl:value-of select="@title" /></a>
+										<a class="diverted" target="_self">
+											<xsl:apply-templates select="@href"/>
+											<xsl:value-of select="@title" />
+										</a>
 									</li>
 								</xsl:when>
 							</xsl:choose>
@@ -153,24 +156,6 @@
 					<li>
 						<xsl:attribute name="class">
 							<xsl:choose>
-								<xsl:when test="contains($section, 'user')">
-									<xsl:text>active</xsl:text>
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:text>inactive</xsl:text>
-								</xsl:otherwise>
-							</xsl:choose>
-						</xsl:attribute>
-						<a href="{$origin}/?user">Users</a>
-						<form action="{$origin}/" method="get" title="Search usernames" class="search">
-							<input name="user" type="hidden" class="profile" />
-							<input id="user_menu_q" name="q" type="text" />
-							<img class="submit" src="{$persistent}/images/search-button.png" alt="Search" title="Click to search" />
-						</form>
-					</li>
-					<li>
-						<xsl:attribute name="class">
-							<xsl:choose>
 								<xsl:when test="contains($section, 'domain')">
 									<xsl:text>active</xsl:text>
 								</xsl:when>
@@ -186,9 +171,30 @@
 							<img class="submit" src="{$persistent}/images/search-button.png" alt="Search" title="Click to search" />
 						</form>
 					</li>
-					<xsl:for-each select="/html/head/link[@target='_blank']">
+					<li>
+						<xsl:attribute name="class">
+							<xsl:choose>
+								<xsl:when test="contains($section, 'user')">
+									<xsl:text>active</xsl:text>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:text>inactive</xsl:text>
+								</xsl:otherwise>
+							</xsl:choose>
+						</xsl:attribute>
+						<a href="{$origin}/?user">Users</a>
+						<form action="{$origin}/" method="get" title="Search usernames" class="search">
+							<input name="user" type="hidden" class="profile" />
+							<input id="user_menu_q" name="q" type="text" />
+							<img class="submit" src="{$persistent}/images/search-button.png" alt="Search" title="Click to search" />
+						</form>
+					</li>
+					<xsl:for-each select="/html/head/link[@target!='_self']">
 						<li class="inactive">
-							<a target="_blank" href="{@href}"><xsl:value-of select="@title" /></a>
+							<a target="{@target}" onclick="var win=open(this.href, '{@target}', 'scrollbars=yes, resizable=yes, width=550, height=550, dialog=yes, alwaysRaised=yes, dependent=yes');win.focus()" >
+								<xsl:apply-templates select="@href"/>
+								<xsl:value-of select="@title" />
+								</a>
 						</li>
 					</xsl:for-each>
 				</ul>
