@@ -1,0 +1,135 @@
+<document>
+
+	<name>Login</name>
+	
+	<reference>login</reference>
+	
+	<!--	
+	<url></url>
+	-->
+	
+	<!--
+	<depiction>	
+		<url>images/choose.jpg</url>
+		<alt>Screenshot of Template page</alt>
+		<width>640px</width> 
+		<height>585px</height>	
+	</depiction>
+	-->
+
+	<history>Exists in PURL 1.0, but requires modification.</history>
+  
+	<!-- items may have rel="new" or "todo" -->
+	<functionality>
+		<item rel="new">Use HTTP Auth login across all UI screens.</item>
+	</functionality>
+
+	<graphics>
+		
+		<item>
+			<url>http://www.oclc.org/common/images/logos/oclclogo_gray.gif</url>
+			<label>OCLC Logo</label>
+			<linksto>http://www.oclc.org/</linksto>
+		</item>
+	
+	</graphics>
+		
+	<assumptions>This page is served by a Web server and is URL addressable.</assumptions>
+	
+	<preconditions>A user must have an account or be presented with the ability to get one.</preconditions>
+	
+	<postconditions>A user is authenticated.</postconditions>
+
+	<linksto>
+		
+		<!--
+		<parentof></parentof>
+		<parentoflink></parentoflink>
+		-->
+	
+		<!--
+		<childof></childof>
+		<childoflink>modify_user</childoflink>
+		<childoflink>delete_user</childoflink>
+		<childoflink>choose</childoflink>
+		<childoflink>choose_redirect</childoflink>
+		<childoflink>modify</childoflink>
+		<childoflink>rename</childoflink>
+		<childoflink>clone</childoflink>
+		<childoflink>batch_add</childoflink>
+		<childoflink>batch_modify</childoflink>
+		<childoflink>create_group</childoflink>
+		<childoflink>create_domain</childoflink>
+		<childoflink>request_domain</childoflink>
+		<childoflink>validate</childoflink>
+		-->
+		
+	
+		<!--
+		<external></external>
+		<externallink>
+			<url>http://purl.oclc.org/OCLC/PURL/FAQ</url>
+			<description>FAQ</description>
+		</externallink>
+		<externallink>
+			<url>http://purl.org/maint/first_time_note.html</url>
+			<description>Note for first time users</description>
+		</externallink>
+		
+		-->
+	
+	</linksto>
+	
+	<formerlylinkedto>
+		
+		<!--
+		<parentof></parentof>
+		<parentoflink></parentoflink>
+		-->
+	
+		<!--
+		<childof></childof>
+		-->
+		<childoflink>modify_user</childoflink>
+		<childoflink>delete_user</childoflink>
+		<childoflink>choose</childoflink>
+		<childoflink>choose_redirect</childoflink>
+		<childoflink>modify</childoflink>
+		<childoflink>rename</childoflink>
+		<childoflink>clone</childoflink>
+		<childoflink>batch_add</childoflink>
+		<childoflink>batch_modify</childoflink>
+		<childoflink>create_group</childoflink>
+		<childoflink>create_domain</childoflink>
+		<childoflink>request_domain</childoflink>
+		<childoflink>validate</childoflink>
+		
+	
+		<!--
+		<external></external>
+		<externallink>
+			<url>http://purl.oclc.org/OCLC/PURL/FAQ</url>
+			<description>FAQ</description>
+		</externallink>
+		<externallink>
+			<url>http://purl.org/maint/first_time_note.html</url>
+			<description>Note for first time users</description>
+		</externallink>
+		
+		-->
+	
+	</formerlylinkedto>
+	
+	<assignedto>
+		<name></name>
+		<url></url>
+	</assignedto>
+	
+	<status>Not started.</status>
+	
+	<definedby>
+		<name>David Wood</name>
+		<url>http://zepheira.com/team/dave/</url>
+	</definedby>
+	
+</document>

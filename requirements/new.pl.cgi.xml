@@ -1,0 +1,102 @@
+<document>
+
+	<name>New PURL CGI</name>
+	
+	<reference>new.pl.cgi</reference>
+		
+	<formerurl>http://purl.org/maint/new.pl.cgi</formerurl>
+	
+	<depiction>
+		
+		<url>images/new.pl.cgi.jpg</url>
+		<alt>Flow Diagram of New PURL CGI</alt>
+		
+	</depiction>
+
+	<history>Exists in PURL 1.0, but requires modification.</history>
+
+  
+	<!-- items may have rel='new' or 'todo' -->
+	<functionality>
+		<item>Accept a new PURL form (from choose) and store details in database.</item>
+		<item rel="new">Return a confirmation page inclusive of the PURL and result (PURL-URL or HTTP Response Code).</item>
+		<item>Return an error page on error.</item>
+		<item rel="new">Accept new options for HTTP return codes.</item>
+	</functionality>
+
+	<graphics>
+		
+		<item>
+			<url>http://www.oclc.org/common/images/logos/oclclogo_gray.gif</url>
+			<label>OCLC Logo</label>
+			<linksto>http://www.oclc.org/</linksto>
+		</item>
+		
+	</graphics>
+		
+	<assumptions>This page is served by a Web server and is URL addressable.  It is a dynamic script.</assumptions>
+	
+	<preconditions>The PURL does not exist.</preconditions>
+	
+	<postconditions>The PURL exists.</postconditions>
+
+	<linksto>
+		
+		<!--
+		<parentof>Dynamically generated confirmation page.</parentof>
+		<parentof>Dynamically generated error page (on error condition).</parentof>
+		<parentoflink></parentoflink>
+		-->
+	
+		<!--
+		<childof></childof>
+		<childoflink>choose</childoflink>
+		-->
+	
+		<!--
+		<external>Community links (TBD)</external>
+		<externallink>
+			<url></url>
+			<description></description>
+		</externallink>
+	-->
+	
+	</linksto>
+	
+	<formerlylinkedto>
+		
+		<parentof>Dynamically generated confirmation page.</parentof>
+		<parentof>Dynamically generated error page (on error condition).</parentof>
+		<!--
+		<parentoflink></parentoflink>
+		-->
+	
+		<!--
+		<childof></childof>
+		-->
+		<childoflink>choose</childoflink>
+		
+	
+		<!--
+		<external>Community links (TBD)</external>
+		<externallink>
+			<url></url>
+			<description></description>
+		</externallink>
+	-->
+	
+	</formerlylinkedto>
+	
+	<assignedto>
+		<name></name>
+		<url></url>
+	</assignedto>
+	
+	<status>Not started.</status>
+	
+	<definedby>
+		<name>David Wood</name>
+		<url>http://zepheira.com/team/dave/</url>
+	</definedby>
+	
+</document>
