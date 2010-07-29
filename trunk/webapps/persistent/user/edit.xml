@@ -63,7 +63,6 @@
 				<input value="Reset Password" type="button" onclick="location.href='?reset-password'" />
 				<input value="Change Email" type="button" onclick="location.href='?confirm-email'" />
 				<input value="Save" type="submit" />
-				<br />
 			</fieldset>
 		</form>
 	</body>

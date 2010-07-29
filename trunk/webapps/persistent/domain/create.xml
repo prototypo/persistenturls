@@ -82,7 +82,6 @@
 					</tbody>
 				</table>
 				<input value="Create" type="submit" />
-				<br />
 			</fieldset>
 		</form>
 	</body>

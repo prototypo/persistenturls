@@ -82,7 +82,7 @@
 	purl:rel "canonical".
 
 <#alternative> a owl:ObjectProperty;
-	rdfs:comment "Simple redirection (302)";
+	rdfs:comment "Found (302)";
 	rdfs:domain <#PURL>;
 	purl:rel "alternate".
 
@@ -92,7 +92,7 @@
 	purl:rel "describedby".
 
 <#redirectsTo> a owl:ObjectProperty, owl:FunctionalProperty;
-	rdfs:comment "Temporary redirection (307)";
+	rdfs:comment "Temporary redirect (307)";
 	rdfs:domain <#PURL>;
 	purl:rel <#redirectsTo>.
 
