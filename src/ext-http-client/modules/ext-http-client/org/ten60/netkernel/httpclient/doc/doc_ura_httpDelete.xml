@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+<title>httpDelete</title>
+<!--***************Cascading Style Sheets***************-->
+<csslist>
+	<css>/xlib/styles/css_ten60_lnf.css</css>
+	<css>/xlib/styles/xmlverbatim.css</css>
+</csslist>
+<!--***************Table of Contents***************-->
+<toc>
+	<section name="definition"/>
+	<section name="purpose"/>
+</toc>
+
+<section name="title" styleuri="/xusr/share/doc/styles_1060/style_title.xsl">
+	<content>
+			<name>httpDelete</name>
+			<text>HTTP DELETE client requests</text>
+	</content>
+	<includes>
+	</includes>
+</section>
+
+<section name="definition" styleuri="/xusr/share/doc/styles_1060/style_definition.xsl">
+	<content>
+		<module>urn:org:ten60:netkernel:ext:http:client</module>
+		<format>
+			<sub name="format"/>
+		</format>
+		<syntax>
+			<type><b>httpDelete</b></type>
+			<url req="true">the URL to issue the request to</url>
+			<config>an optional config resource</config>
+			<state>an optional state resource</state>
+		</syntax>
+	</content>
+	<includes>
+<include name="format" type="xml">
+<instr>
+	<type>httpDelete</type>
+	<url>http://www.someserver.com/myresource.xml</url>
+	<state>var:mystate</state>
+</instr>
+</include>
+	</includes>
+</section>
+
+<section name="purpose" styleuri="/xusr/share/doc/styles_1060/style_basic.xsl">
+	<content>
+		<p>
+		  Issues an HTTP <b>DELETE</b> request to the specified URL.
+		</p>
+    <p>
+      The optional <code>state</code> argument is used to store client-side state information.</p>
+
+		<h3>Client-Side State</h3>
+		<p>
+		  Interactions with the remote server are stateless unless a resource is provided as the optional
+		  <code>state</code> argument.
+		  Please refer to the <link name="doc_ura_httpState">httpState</link>
+  		guide for details.
+	  </p>
+		<h3>Header field interpretation</h3>
+		<p>See <link name="doc_ura_httpGet">httpGet</link> for more details.</p>
+		<h3>Config</h3>
+		<p>
+		  Configuration information is provided as the <code>config</code> argument.
+		  If this is missing the service will request configuration information from
+		  the address <code>ffcpl:/etc/HTTPClientConfig.xml</code>.
+		  If this is missing the following default is used:
+	  </p>
+		<sub name="config"/>
+		<p>
+		Each configuration element is optional, if not specified the default values (above) will be used.
+		The parameters are as follows:
+		</p>
+		<table>
+		  <tr>
+		    <td><b>proxyHost</b></td>
+		    <td>hostname of proxy server</td>
+	    </tr>
+		  <tr>
+		    <td><b>proxyPort</b></td>
+		    <td>port of proxy server</td>
+	    </tr>
+		  <tr>
+		    <td><b>followRedirects</b></td>
+		    <td>follow HTTP redirect response codes</td>
+	    </tr>
+		  <tr>
+		    <td><b>retryAttempts</b></td>
+		    <td>number of attempts to make connection before failing</td>
+	    </tr>
+		  <tr>
+		    <td><b>maxConnectionsPerHost</b></td>
+		    <td> maximum simultaneous connections to make to a single host</td>
+	    </tr>
+		  <tr>
+		    <td><b>maxTotalConneciton</b></td>
+		    <td>max total connections</td>
+	    </tr>
+		  <tr>
+		    <td><b>maxAcceptableConentLength</b></td>
+		    <td>largest resource to handle in response, -1 indicates accept any size.</td>
+	    </tr>
+		  <tr>
+		    <td><b>stateExpirationTime</b></td>
+		    <td>time for client side state to be valid.</td>
+	    </tr>
+		  <tr>
+		    <td><b>connectTimeout</b></td>
+		    <td>time to allow for a connection to be established with server before failing</td>
+	    </tr>
+		  <tr>
+		    <td><b>timeout</b></td>
+		    <td>time to allow an established connection to remain idle before failing</td>
+	    </tr>
+	  </table>
+		<p>
+		Proxy settings will be taken from the global system proxy settings if they are not specified in the config.
+		</p>
+		<h3>Requesting an HTTPResponseCode</h3>
+		<p>
+			If the accessor is requested to return an <link name="doc_aspect_HTTPResponseCodeAspect">HTTPResponseCodeAspect</link> aspect (see NKFRequest)
+			then the accessor will always return a HTTPResponseCodeAspect containing the HTTP code and body response - this can be valuable for testing purposes.
+		</p>
+		<h3>Example</h3>
+		<sub name="eg1"/>
+		
+    </content>
+	<includes>
+<include name="eg1" type="xml">
+<instr>
+<type>httpDelete</type>
+<url>http://www.someserver.com/server/path/myresource.doc</url>
+<target>this:response</target>
+</instr>
+</include>
+<include name="config" type="xml">
+<config>
+	<proxyHost>proxy.mydomain.com</proxyHost>
+	<proxyPort>80</proxyPort>
+	<followRedirects>true</followRedirects>
+	<retryAttempts>3</retryAttempts>
+	<maxConnectionsPerHost>4</maxConnectionsPerHost>
+	<maxTotalConnections>10</maxTotalConnections>
+	<maxAcceptableContentLength>-1</maxAcceptableContentLength>
+	<stateExpirationTime>600</stateExpirationTime>
+	<connectTimeout>2000</connectTimeout>
+	<timeout>5000</timeout>
+</config>
+</include>
+	</includes>
+</section>
+<section name="copyright" styleuri="/xusr/share/doc/styles_1060/style_footer.xsl"/>	
+
+</document>

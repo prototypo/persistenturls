@@ -1,0 +1,3 @@
+<sql>
+	SELECT @@MAINTAINER_LABEL@@ from @@TABLE_NAME@@ where z_id = @@ZID@@;
+</sql>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<purls>
+
+    <!-- Type chain.  Chain an existing PURL -->
+		<!-- PURL /testdomain/test301-1 must exist first! -->
+		<purl id="/testdomain/testChain-1" type="chain">
+      <maintainers>
+      	<uid>testuser</uid>
+    	</maintainers>
+			<basepurl path="/testdomain/test301-1"/>
+    </purl>
+
+    <!-- Type chain.  Chain an existing PURL -->
+		<!-- PURL /testdomain/test301-2 must exist first! -->
+		<purl id="/testdomain/testChain-2" type="chain">
+      <maintainers>
+      	<uid>testuser</uid>
+    	</maintainers>
+			<basepurl path="/testdomain/test301-2"/>
+    </purl>
+
+</purls>
+

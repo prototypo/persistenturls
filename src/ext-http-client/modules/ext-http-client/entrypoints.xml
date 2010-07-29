@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entrypoints>
+  <entrypoint>
+    <name>doc_ura_httpGet</name>
+    <uri>active:doc-generate+operand@ffcpl:/org/ten60/netkernel/httpclient/doc/doc_ura_httpGet.xml</uri>
+    <indexable>
+      <title>httpGet</title>
+      <desc>HTTP Client to perform GET requests</desc>
+      <keywords/>
+    </indexable>
+	<fullTextIndex/>
+    <categories>doc URA</categories>
+    <group>Accessors</group>
+    <icon/>
+  </entrypoint>
+  <entrypoint>
+    <name>doc_ura_httpPost</name>
+    <uri>active:doc-generate+operand@ffcpl:/org/ten60/netkernel/httpclient/doc/doc_ura_httpPost.xml</uri>
+    <indexable>
+      <title>httpPost</title>
+      <desc>HTTP Client to perform POST requests</desc>
+      <keywords/>
+    </indexable>
+	<fullTextIndex/>
+    <categories>doc URA</categories>
+    <group>Accessors</group>
+    <icon/>
+  </entrypoint>
+  <entrypoint>
+    <name>doc_ura_httpPut</name>
+    <uri>active:doc-generate+operand@ffcpl:/org/ten60/netkernel/httpclient/doc/doc_ura_httpPut.xml</uri>
+    <indexable>
+      <title>httpPut</title>
+      <desc>HTTP Client to perform PUT requests</desc>
+      <keywords/>
+    </indexable>
+	<fullTextIndex/>
+    <categories>doc URA</categories>
+    <group>Accessors</group>
+    <icon/>
+  </entrypoint>
+  <entrypoint>
+    <name>doc_ura_httpDelete</name>
+    <uri>active:doc-generate+operand@ffcpl:/org/ten60/netkernel/httpclient/doc/doc_ura_httpDelete.xml</uri>
+    <indexable>
+      <title>httpDelete</title>
+      <desc>HTTP Client to perform DELETE requests</desc>
+      <keywords/>
+    </indexable>
+	<fullTextIndex/>
+    <categories>doc URA</categories>
+    <group>Accessors</group>
+    <icon/>
+  </entrypoint>
+  <entrypoint>
+    <name>doc_ura_httpState</name>
+    <uri>active:doc-generate+operand@ffcpl:/org/ten60/netkernel/httpclient/doc/doc_ura_httpState.xml</uri>
+    <indexable>
+      <title>httpState</title>
+      <desc>httpState Data Accessor - used to manage HTTP session state (cookies, credentials etc).</desc>
+      <keywords/>
+    </indexable>
+	<fullTextIndex/>
+    <categories>doc URA</categories>
+    <group>Accessors</group>
+    <icon/>
+  </entrypoint>
+  <entrypoint>
+    <name>doc_ura_httpResponseCodeFilter</name>
+    <uri>active:doc-generate+operand@ffcpl:/org/ten60/netkernel/httpclient/doc/doc_ura_httpResponseCodeFilter.xml</uri>
+    <indexable>
+      <title>httpResponseCodeFilter</title>
+      <desc>Filter the result of an httpXXXX accessor and throw exception if not 200</desc>
+      <keywords/>
+    </indexable>
+	<fullTextIndex/>
+    <categories>doc URA</categories>
+    <group>Accessors</group>
+    <icon/>
+  </entrypoint>
+  <entrypoint>
+    <name>doc_aspect_HTTPResponseCodeAspect</name>
+    <uri>active:doc-generate+operand@ffcpl:/org/ten60/netkernel/httpclient/doc/doc_aspect_HttpResponseCode.xml</uri>
+    <indexable>
+      <title>HTTPResponseCodeAspect</title>
+      <desc>An aspect to process HTTP Response Codes</desc>
+      <keywords/>
+    </indexable>
+	<fullTextIndex/>
+    <categories>doc aspect</categories>
+    <group>Aspects</group>
+    <icon/>
+  </entrypoint>
+</entrypoints>

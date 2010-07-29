@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GateKeeperPolicy>
+	<zone>
+		<match>.*/(template|purl|group|domain|user|admin)/(?!login/).*</match>
+		<isValidURI>active:beanshell+operator@ffcpl:/resources/sessionvalidator.bsh</isValidURI>
+		<loginURI>ffcpl:/resources/static/login.html</loginURI>
+	</zone>
+</GateKeeperPolicy>

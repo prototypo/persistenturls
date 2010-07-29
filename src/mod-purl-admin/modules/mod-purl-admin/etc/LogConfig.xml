@@ -1,0 +1,6 @@
+<log>
+	<name>purls-admin-log</name>
+	<destination>log/purls-admin-%g.log</destination>
+	<limit>10000000</limit>
+	<count>3</count>
+</log>

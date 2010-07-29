@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+<title></title>
+<!--***************Cascading Style Sheets***************-->
+<csslist>
+	<css>/xlib/styles/css_ten60_lnf.css</css>
+	<css>/xlib/styles/xmlverbatim.css</css>
+</csslist>
+<!--***************Table of Contents***************-->
+<toc>
+	<section name="title"/>
+	<!--<section name="definition"/>-->
+	<section name="purpose"/>
+	<section name="copyright"/>
+</toc>
+
+<section name="title" styleuri="/xusr/share/doc/styles_1060/style_title.xsl">
+	<content>
+		<name>HttpResponseCodeAspect</name>
+		<text>An aspect for an HttpResponseCode</text>
+	</content>
+	<includes>
+	</includes>
+</section>
+
+
+<section name="purpose" styleuri="/xusr/share/doc/styles_1060/style_basic.xsl">
+	<content>
+		<h2>Module</h2>
+		<b>urn:org:ten60:netkernel:ext:http:client</b>
+		<h2>Class</h2>
+		org.ten60.netkernel.httpclient.representation.HttpResponseCodeAspect
+		<h2>Purpose</h2>
+		<p>
+		An aspect to return HttpResponse code from a httpXXX accessor.
+		</p>
+		<sub name="java"/>
+    </content>
+	<includes>
+<include type="java" name="java">
+<java>
+<![CDATA[
+public class HttpResponseCodeAspect implements IURAspect
+{
+	private int mCode;
+	private String mMessage;
+	
+	/** Creates a new instance of HttpClientConfigAspect */
+	public HttpResponseCodeAspect(int aCode, String aMessage)
+	{	mCode=aCode; mMessage=aMessage;
+	}
+	
+	public int getCode()
+	{	return mCode;
+	}
+	
+	public String getMessage()
+	{	return mMessage;		
+	}
+}
+]]>
+</java>
+</include>
+	</includes>
+</section>
+
+<section name="copyright" styleuri="/xusr/share/doc/styles_1060/style_footer.xsl"/>	
+
+</document>

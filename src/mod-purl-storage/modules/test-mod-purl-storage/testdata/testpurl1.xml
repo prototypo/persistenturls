@@ -1,0 +1,6 @@
+<purl>
+	<id>/net/foo/brian/foaf</id>
+	<type>302</type>
+	<target><url>http://www.bosatsu.net/foaf/brian.rdf</url></target>
+	<maintainers><uid>brian-test</uid></maintainers>
+</purl>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="modules/mod-purl-admin"/>
+	<classpathentry kind="src" path="modules/test-mod-purl-admin"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/common"/>
+	<classpathentry kind="var" path="NETKERNEL_HOME/modules/ext-xml-core-1.5.2.jar"/>
+	<classpathentry kind="lib" path="modules/mod-purl-admin/lib/commons-lang-2.4.jar"/>
+	<classpathentry kind="output" path="modules/mod-purl-admin"/>
+</classpath>

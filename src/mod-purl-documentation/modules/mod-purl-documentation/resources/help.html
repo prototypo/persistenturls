@@ -1,0 +1,795 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>
+			PURL Help
+		</title>
+		<meta name="Author" content="David Wood">
+		<link type="text/css" rel="stylesheet" href="style.css"><!--[if lt IE 7]>
+	<script defer type="text/javascript" src="javascripts/pngfix.js"></script>
+	<![endif]-->
+
+<script type="text/javascript" src="javascripts/utilajax.js">
+</script>
+<script type="text/javascript" src="javascripts/ajaxCaller.js">
+</script><!-- http://ajaxify.com/run/Lib/js/ -->
+
+<script type="text/javascript" src="javascripts/xmlsax.js">
+</script>
+<script type="text/javascript" src="javascripts/SaxEventHandler.js">
+</script><!-- http://xmljs.sourceforge.net -->
+
+<script type="text/javascript" src="javascripts/utilpurl.js">
+</script>
+<script type="text/javascript">
+//<![CDATA[
+	// Number of forms on this page that need to be locked out
+	// when the user is not logged in.
+	var numNeedsAuth = 0;
+//]]>
+</script>
+	</head>
+	<body onload="load('/docs/help.html')">
+		<div id="loginstatus">
+			<p>
+				Login status not determined. Do you have Javascript and cookies enabled?
+			</p>
+		</div>
+		<div id="header">
+			<h1>
+				PURL Help
+			</h1>
+			<ul id="tabmenu">
+				<li>
+					<a class="inactive" href="index.html">Home</a>
+				</li>
+				<li>
+					<a class="inactive" href="purl.html">PURLs</a>
+				</li>
+				<li>
+					<a class="inactive" href="user.html">Users</a>
+				</li>
+				<li>
+					<a class="inactive" href="group.html">Groups</a>
+				</li>
+				<li>
+					<a class="inactive" href="domain.html">Domains</a>
+				</li>
+				<li>
+					<a class="inactive" href="pending/index.html">Admin</a>
+				</li>
+				<li>
+					<a class="active" href="help.html">Help</a>
+				</li>
+			</ul>
+		</div>
+		<div id="content">
+			<h2>
+				Contents
+			</h2>
+			<ol>
+				<li>
+					<a href="#overview">Overview of PURLs</a>
+				</li>
+				<li>
+					<a href="#purl">Administering PURLs</a>
+				</li>
+				<li style="list-style: none">
+					<dl>
+						<dt>
+							2.1 <a href="#purlcreate">Create a New PURL</a>
+						</dt>
+						<dt>
+							2.2 <a href="#purladvcreate">Create an Advanced PURL</a>
+						</dt>
+						<dt>
+							2.3 <a href="#purlmodify">Modify an Existing PURL</a>
+						</dt>
+						<dt>
+							2.4 <a href="#purlsearch">Search for PURL Information</a>
+						</dt>
+						<dt>
+							2.5 <a href="#purlhistory">Search for a PURL's History</a>
+						</dt>
+						<dt>
+							2.6 <a href="#purlvalidate">Validate a PURL</a>
+						</dt>
+						<dt>
+							2.7 <a href="#purldelete">Delete a PURL</a>
+						</dt>
+					</dl>
+				</li>
+				<li>
+					<a href="#purls">Administering Batches of PURLs</a>
+				</li>
+				<li style="list-style: none">
+					<dl>
+						<dt>
+							3.1 <a href="#purlscreate">Create a Batch of PURLs</a>
+						</dt>
+						<dt>
+							3.2 <a href="#purlsmodify">Modify a Batch of PURLs</a>
+						</dt>
+						<dt>
+							3.3 <a href="#purlsdelete">Delete a Batch of PURLs</a>
+						</dt>
+					</dl>
+				</li>
+				<li>
+					<a href="#user">Administering Users</a>
+				</li>
+				<li style="list-style: none">
+					<dl>
+						<dt>
+							4.1 <a href="#usercreate">Register a New User</a>
+						</dt>
+						<dt>
+							4.2 <a href="#usermodify">Modify an Existing User</a>
+						</dt>
+						<dt>
+							4.3 <a href="#usersearch">Search for User Information</a>
+						</dt>
+						<dt>
+							4.4 <a href="#userdelete">Delete a User</a>
+						</dt>
+						<dt>
+							4.5 <a href="#login">Logging into a PURL Server</a>
+						</dt>
+					</dl>
+				</li>
+				<li>
+					<a href="#group">Administering Groups of Users</a>
+				</li>
+				<li style="list-style: none">
+					<dl>
+						<dt>
+							5.1 <a href="#groupcreate">Create a New Group</a>
+						</dt>
+						<dt>
+							5.2 <a href="#groupmodify">Modify an Existing Group</a>
+						</dt>
+						<dt>
+							5.3 <a href="#groupsearch">Search for Group Information</a>
+						</dt>
+						<dt>
+							5.4 <a href="#groupdelete">Delete a Group</a>
+						</dt>
+					</dl>
+				</li>
+				<li>
+					<a href="#domain">Administering PURL Domains</a>
+				</li>
+				<li style="list-style: none">
+					<dl>
+						<dt>
+							6.1 <a href="#domaincreate">Create a New Domain</a>
+						</dt>
+						<dt>
+							6.2 <a href="#domainmodify">Modify an Existing Domain</a>
+						</dt>
+						<dt>
+							6.3 <a href="#domainsearch">Search for Domain Information</a>
+						</dt>
+						<dt>
+							6.4 <a href="#domaindelete">Delete a Domain</a>
+						</dt>
+					</dl>
+				</li>
+				<li>
+					<a href="#rest">Creating RESTful PURL Clients</a>
+				</li>
+			</ol>
+			<hr>
+			<a name="overview" id="overview"></a>
+			<h2>
+				1. Overview of PURLs
+			</h2>
+			<p>
+				PURLs are Persistent Uniform Resource Locators (URLs). A URL is simply an address on the World Wide Web. A <i>Persistent</i> URL is an address on the World Wide Web that points to other Web resources. If a Web resource changes location (and hence URL), a PURL pointing to it can be updated. A user of a PURL always uses the same Web address, even though the resource in question may have moved.
+			</p>
+			<p>
+				More information about PURLs may be found in a <a href="brief_intro.html">Brief Introduction</a> to PURLs, a <a href="long_intro.html">Long Introduction</a> to PURLs, the PURL <a href="faq.html">FAQ</a> or <a href="http://en.wikipedia.org/wiki/PURL">Wikipedia</a>. More information about URLs may be found at <a href="http://en.wikipedia.org/wiki/URL">Wikipedia</a> and in <a href="http://www.ietf.org/rfc/rfc3986.txt">RFC 3986</a> from the Internet Engineering Task Force (IETF).
+			</p>
+			<p>
+				PURLs are themselves valid URLs. Figure 1 shows the parts of a PURL. The scheme part tells a computer program, such as a Web browser, which protocol to use when resolving the address. The host part tells which machine to connect to. The next part, the PURL domain, is analogous to a path in a URL. The domain is a hierarchical information space that separates PURLs and allows for PURLs to have different maintainers. Each domain may be administered by one or more designated maintainers. Finally, the PURL name is the name of the PURL itself. The domain and name together constitute the PURL's "id".
+			</p>
+			<p align="center">
+				<img src="images/purlparts.png"><br>
+				<b>Figure 1. Parts of a PURL</b>
+			</p>
+			<p>
+				PURLs are categorized into different types depending on how they respond to a request. Most PURLs simply redirect to a another URL (the "target" URL): Those are PURLs of type 302, because they respond to a request with an HTTP response code of 302, meaning that the object of the request was found elsewhere. PURLs may also respond with other HTTP response codes. <a href="#table1">Table 1</a> summarizes the different types of PURLs.
+			</p>
+			<p>
+				It is worth noting that there are some differing interpretations of the HTTP specification and hence some decisions were made in the implementation of PURLs. For example, an HTTP server may respond with a 404 response code if a resource is not found, if it is temporarily not present or if it simply does not want to provide it to a requester. We have chosen to think of a 404 as representing a temporarily gone status and using a 410 for those resources which are permanently not resolvable. Similarly, we have noted the need for a way to ground non-information resources into the World Wide Web and supported that concept with PURLs by suggesting that any resource addressed by a 303 PURL and returning a "See also URL" be explicitly considered <b>not</b> to be an information resource. This decision allows physical resources (such as your car) or conceptual resources (such as the idea of a car) to be given a PURL and referred to in a sharable manner (as when using Semantic Web techniques). Where a particular interpretation of the <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html">HTTP status code definitions</a> differs from the way an HTTP response code is used by a PURL server, we suggest interpreting the intent of PURLs via the <b>Meaning</b> column in <a href="#table1">Table 1</a>.
+			</p><a name="table1" id="table1"></a>
+			<p align="center">
+				<b>Table 1. Types of PURLs</b>
+			</p>
+			<table id="purltypestable" summary="Table of PURL Types" align="center" border="0">
+				<tbody>
+					<tr>
+						<th>
+							PURL Type
+						</th>
+						<th>
+							Meaning
+						</th>
+						<th>
+							HTTP Shorthand
+						</th>
+					</tr>
+					<tr>
+						<td>
+							301
+						</td>
+						<td>
+							Moved permanently to a target URL
+						</td>
+						<td>
+							Moved Permanently
+						</td>
+					</tr>
+					<tr>
+						<td>
+							302
+						</td>
+						<td>
+							Simple redirection to a target URL
+						</td>
+						<td>
+							Found
+						</td>
+					</tr>
+					<tr>
+						<td>
+							303
+						</td>
+						<td>
+							See other URLs (use for Semantic Web resources)
+						</td>
+						<td>
+							See Other
+						</td>
+					</tr>
+					<tr>
+						<td>
+							307
+						</td>
+						<td>
+							Temporary redirect to a target URL
+						</td>
+						<td>
+							Temporary Redirect
+						</td>
+					</tr>
+					<tr>
+						<td>
+							404
+						</td>
+						<td>
+							Temporarily gone
+						</td>
+						<td>
+							Not Found
+						</td>
+					</tr>
+					<tr>
+						<td>
+							410
+						</td>
+						<td>
+							Permanently gone
+						</td>
+						<td>
+							Gone
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<p>
+				PURL servers may be accessed either by a Web user interface or a public API. PURLs and their associated domains, users, groups of users and documentation may be reached by either method. Figure 2 shows the tabbed navigation options in the Web user interface.
+			</p>
+			<p align="center">
+				<img src="images/purltabs.png"><br>
+				<b>Figure 2. Tabbed Navigation in the Web User Interface</b>
+			</p><a name="purl" id="purl"></a>
+			<h2>
+				2. Administering PURLs
+			</h2>
+			<p>
+				The single most important task that one can accomplish on a PURL server is the creation of a new PURL. Other administrative actions, from user, group or domain maintenance to the other operations on the PURLs themselves are secondary to that main task. This section addresses the creation of simple (HTTP redirection) PURLs and advanced PURLs, along with the other things that may be done to a PURL.
+			</p>
+			<p>
+				A &quot;maintainer&quot; is someone who can modify a PURL.  A maintainer of a PURL may modify the record for that PURL.  A user who creates a PURL is automatically added as a maintainer.
+			</p>
+			<p>
+				Six actions may be taken on a PURL: Creation, Advanced Creation, Modification, Searching, Validation or Deletion. These six actions may be accessed in the PURL Web user interface as shown in Figure 3. The same six actions may be taken by other PURL clients. See <a href="#rest">Creating RESTful PURL Clients</a> for details.
+			</p>
+			<p>
+				Creating a simple or advanced PURL creates a record for that PURL on a PURL server. A simple PURL merely redirects to a given URL. An advanced PURL may return any of the HTTP response codes listed in <a href="#table1">Table 1</a>, including the 303 response code used to return information about physical or conceptual resources. Modification allows the group record to be updated. Group records may be searched by the general public. Finally, group records may be deleted. These six actions are described in detail below.
+			</p>
+			<p align="center">
+				<img src="images/purlselect.png"><br>
+				<b>Figure 3. Actions on PURLs</b>
+			</p><a name="purlcreate" id="purlcreate"></a>
+			<h3>
+				2.1 Create a New PURL
+			</h3>
+			<h4>
+				Web User Interface
+			</h4>
+			<p>
+				PURLs require a Domain to hold them. Domains have to be created before PURLs may be placed in them (see <a href="domaincreate">6.1 Create a New Domain</a>). Some PURL servers may automatically create domains for you when you create a PURL and others may require domains to be created separately.
+			</p>
+			<p>
+				Simple PURLs are always of type 302 (see <a href="#table1">Table 1</a> for information on PURL types). That is, resolving a simple PURL will always return an HTTP response code of 302 (Found) with a Location header specifying where the requester should seek the requested resource. Simple PURLs are thus a handy simplification of advanced PURLs to account for a common use case.
+			</p>
+			<p>
+				Simple PURLs may be created via the <a href="purl.html#create">PURL Creation Form</a>.
+			</p>
+			<p>
+				Figure 4(a) shows the creation of an example simple PURL. A target URL is the URL to which the PURL will redirect. A maintainer is a user or group authorized to administer a PURL. A user who creates a PURL is automatically added as a maintainer.  Figure 4(b) shows a typical response upon success. Search results may be "torn off" for later use by selecting the icon labeled <b>A</b> in Figure 4(b). Individual records may be brought into the <a href="purl.html#modify">PURL Modification Form</a> by selecting any of the icons labeled <b>B</b> in Figure 4(b).
+			</p>
+			<p>
+				In this case, a PURL will be created on a PURL server with the path "/zepheira/examples/BBC". If the PURL server was running on a machine called purlz.org, then the resolution of http://purlz.org/zepheira/examples/BBC would result in an HTTP 302 response directing the user (or Web browser, or other computer application) to look for the desired resource at http://bbc.co.uk/, the British Broadcasting Service's Web site. Three maintainers are listed for this PURL; the users "david" and "brian" and the group "examplegroup".
+			</p>
+			<p align="center">
+				<img src="images/purlcreate.png">&nbsp;<img src="images/purlcreateresults.png"><br>
+				<b>Figures 4(a) and 4(b). Creating a PURL</b>
+			</p><a name="purladvcreate" id="purladvcreate"></a>
+			<h3>
+				2.2 Create an Advanced PURL
+			</h3>
+			<h4>
+				Web User Interface
+			</h4>
+			<p>
+				PURLs require a Domain to hold them. Domains have to be created before PURLs may be placed in them (see <a href="domaincreate">6.1 Create a New Domain</a>). Some PURL servers may automatically create domains for you when you create a PURL and others may require domains to be created separately.
+			</p>
+			<p>
+				Advanced PURLs may be created via the <a href="purl.html#advancedcreate">PURL Advanced Creation Form</a>. Note that this form will adjust itself to gather the information required for the type of PURL that you select. Since simple (302) PURLs were covered in <a href="purlcreate">2.1 Create a New PURL</a>, the example given below illustrates a PURL of type 303.
+			</p>
+			<p>
+				Advanced PURLs may return any HTTP response code listed in <a href="#table1">Table 1</a>. Of those, PURLs of types 302 (simple redirections) and 303 (information about non-informational resources) are the most common. Figure 5 shows the PURL type being selected in the Web user interface. The first six types are the entries from <a href="#table1">Table 1</a>, as previously discussed. The last three (Clone, Chain or Partial-redirect) are special actions that require some additional information but eventually result in a PURL of one of the six types listed in <a href="#table1">Table 1</a>. Cloning a PURL allows one to create a new PURL based on the record of an existing PURL. Chaining allows a PURL of type 302 to refer to another PURL (of any type) without the network overhead of a separate redirection. </p>
+			<p>
+				Partial-redirect PURLs allow PURLs of type 302 to be created which refer to a directory level portion of a URL; any path information appended to a partial redirect PURL is in turn appended to its target URL. That allows a single PURL to redirect to a hierarchy on a target Web server.</p>
+			<p>
+				There are four (4) types of partial-redirect PURLs:  Partial, Partial-append-extension, Partial-ignore-extension and Partial-replace-extension.  The plain Partial is simplest.  Any string added to the end of a Partial PURL is appended to its target prior to redirection.  For example, suppose we have a PURL with an id of 'http://localhost:8080/net/partialexample/' that redirects to a target of 'http://example.com/partialtest/'.  If we then try to resolve the URL 'http://localhost:8080/net/partialexample/foo/bar/baz' we will find that an HTTP 302 message is returned that redirects us to the location 'http://example.com/partialtest/foo/bar/baz'.  The "extra" path information added the end of the Partial PURL was added to the end of the target URL.  Partial PURLs are treated as simple strings of characters, so any attempt to resolve a URL with a Query String on the end will also get appended verbatim to the target, like so:  'http://localhost:8080/net/partialexample/foo?bar=baz' will be redirected to 'http://example.com/partialtest/foo?bar=baz'.
+			</p>
+			<p>
+				A Partial-append-extension PURL is a type of partial-redirect a PURL that allows a file extension to be appended to the target URL at the time of the PURL's resolution.  This is occasionally useful when creating partial-redirects to target systems that use file extensions to separate content types.  The file extension to append to the target is given immediately after the PURL id.  For example, consider a PURL of type partial-append-extension called 'http://localhost:8080/net/partialappendextension/' that has a target of 'http://example.com/partialappendtest/'.  If you resolve the partial with some added path, say 'http://localhost:8080/net/partialappendextension/foo/bar/bam?id=fizzle', it will redirect to 'http://example.com/partialappendtest/bar/bam.foo?id=fizzle'.  The file extension 'foo' is added to the PURL immediately after the PURL id and immediately before any additional path information.  The file extension ('foo') is then stripped from the path and added to the end of the target URL after the path extension but before any Query String.  Any Query String is appended to the end of the newly created target URL.
+			</p>
+			<p>
+				A Partial-ignore-extension PURL is a type of partial-redirect PURL that removes any file extensions from the path information used to create the target URL.  For example, a PURL 'http://localhost:8080/net/partialignoreextension/' with a target of 'http://example.com/partialignoretest/' when called as 'http://localhost:8080/net/partialignoreextension/foo.html' would redirect to 'http://example.com/partialignoretest/foo'.
+			</p>
+			<p>
+				A Partial-replace-extension PURL is a type of partial-redirect PURL combines the functionality of the Partial-append-extension PURL and Partial-ignore-extension types.  It ignores any file extension given in the PURL and appends a file extension provided in the PURL path.  For example, a PURL called 'http://localhost:8080/record/' and a target of 'http://example.com/records/' when called as 'http://localhost:8080/record/htm/foo/bar.html' would redirect to a target of 'http://example.com/records/foo/bar.htm'.
+			</p>
+			<p align="center">
+				<img src="images/purladvselect.png"><br>
+				<b>Figure 5. Selecting the Type of an Advanced PURL</b>
+			</p>
+			<p>
+				Figure 6(a) shows the creation of an example advanced PURL. The PURL path shown is meant to suggest the form of deep hierarchy often found in real-world data. The example PURL is of type 303 (labeled in the pulldown menu as "See also URLs", which are used for resources which may not be directly accessible on the World Wide Web. Two maintainers are listed; a maintainer is a user or group authorized to administer a PURL. Finally, the "See also URL" itself is provided, which gives information about the addressed resource without it actually pretending to <i>be</i> the addressed resource, as would a response to a 301, 302 or 307 PURL. Figure 6(b) shows a typical response upon success.
+			</p>
+			<p align="center">
+				<img src="images/purladvcreate.png">&nbsp;<img src="images/purladvcreateresults.png"><br>
+				<b>Figures 6(a) and 6(b). Creating an Advanced PURL</b>
+			</p>
+			<p>
+				It is a common (and best) practice for PURLs of type 303 to refer to a document providing structured metadata about a physical or conceptual resource in Resource Description Format (<a href="http://www.w3.org/RDF/">RDF</a>) syntax. The combined use of a PURL of type 303 and an RDF description assures the user that the addressed resource is truly not an information resource that may be represented on the World Wide Web, but instead something existing in the real world. Figure 6(c) shows the same example as Figure 6(a) but with a "See also URL" pointing to an RDF resource.
+			</p>
+			<p align="center">
+				<img src="images/purladvcreateRDF.png"><br>
+				<b>Figure 6(c). Directing a "See Also" (303) PURL to an RDF Document</b>
+			</p><a name="purlmodify" id="purlmodify"></a>
+			<h3>
+				2.3 Modify an Existing PURL
+			</h3>
+			<h4>
+				Web User Interface
+			</h4>
+			<p>
+				Records for existing PURLs may be modified by completing the <a href="purl.html#modify">PURL Modification Form</a>, which is much like the form for creating a new PURL. Figure 7(a) shows the PURL record created in <a href="#purlcreate">2.1 Create a New PURL</a> being updated to remove the user "brian" and the group "examplegroup" as maintainers. Figure 7(b) shows a typical response upon success.
+			</p>
+			<p>
+				It may be tedious or even impossible to complete a modification form by hand. To reduce the need to do so, PURL records may be discovered by a search and the modification form automatically filled in with data from the current record. See <a href="#purlsearch">2.4 Search for PURL Information</a> for more information.
+			</p>
+			<p align="center">
+				<img src="images/purlmodify.png">&nbsp;<img src="images/purlmodifyresults.png"><br>
+				<b>Figures 7(a) and 7(b). Modifying a PURL</b>
+			</p><a name="purlsearch" id="purlsearch"></a>
+			<h3>
+				2.4 Search for PURL Information
+			</h3>
+			<h4>
+				Web User Interface
+			</h4>
+			<p>
+				PURL records may be searched using the <a href="purl.html#search">PURL Search Form</a>, an example of which is shown in Figure 8(a). Records may be searched by PURL path (see Figure 1 for the definition of a PURL path), target URL, See Also URL or maintainer IDs. A target URL is a URL that a PURL of type 301, 302 or 307 redirects to (see the list of PURL types in <a href="#overview">1. Overview of PURLs</a>). A See Also URL is a URL that a PURL of type 303 refers to. A maintainer is a user or group authorized to administer a PURL. Two types of maintainer fields are used: "Maintainer IDs" expands groups into lists of users and "Explicit Maintainers" does not.
+			</p>
+			<p>
+				Figure 8(a) shows a sample search for PURLs maintained by the user "david" and Figure 8(b) shows a typical response. Search results may be "torn off" for later use by selecting the icon labeled <b>A</b> in Figure 8(b). Individual records may be brought into the <a href="purl.html#modify">PURL Modification Form</a> by selecting the icon labeled <b>B</b> in Figure 8(b).
+			</p>
+			<p>
+				Tombstoned PURL records may be searched by selecting the checkbox labeled "Search tombstoned PURLs" in the <a href="purl.html#search">PURL Search Form</a> as shown in Figure 8(a). PURL records become tombstoned if they are deleted via the <a href="purl.html#delete">PURL Deletion Form</a>. More information about tombstoning may be found under <a href="#purldelete">1.6 Delete a PURL</a>.
+			</p>
+			<p align="center">
+				<img src="images/purlsearch.png">&nbsp;<img src="images/purlsearchresults.png"><br>
+				<b>Figures 8(a) and 8(b). Searching for PURLs</b>
+			</p><a name="purlhistory" id="purlhistory"></a>
+			<h3>
+				2.5 Search for PURL's History
+			</h3>
+			<h4>
+				Web User Interface
+			</h4>
+			<p>
+				Information regarding the changes to a PURL may be found using results from the <a href="purl.html#search">PURL  Form</a>. Clicking on the history icon near each PURL record will launch a new window containing the history of changes for that PURL.
+			</p><a name="purlvalidate" id="purlvalidate"></a>
+			<h3>
+				2.6 Validate a PURL
+			</h3>
+			<h4>
+				Web User Interface
+			</h4>
+			<p>
+				A PURL validation service is provided to help you find PURLs which may be stale or no longer acting in the way that you intended. A PURL is validated by entering its PURL path into the <a href="purl.html#validate">PURL Validation Form</a> as shown in Figure 9(a). Figure 9(b) shows a typical response upon success.
+			</p>
+			<p>
+				PURLs of type 301, 302, 303 and 307 either redirect or refer to other URLs (see the list of PURL types in <a href="#overview">1. Overview of PURLs</a>). When PURLs of those types are validated, the URL to which they refer will be resolved and the status code noted. A status code of 200 (OK) will result in a successful validation. Any other results (e.g. a 404, Not Found) will result in a failure of the validation and an error message will be returned.
+			</p>
+			<p>
+				Attempting to validate a PURL of type 404 or 410 will always return a successful validation indication baring server error.
+			</p>
+			<p align="center">
+				<img src="images/purlvalidate.png">&nbsp;<img src="images/purlvalidateresults.png"><br>
+				<b>Figures 9(a) and 9(b). Validating a PURL</b>
+			</p><a name="purldelete" id="purldelete"></a>
+			<h3>
+				2.7 Delete a PURL
+			</h3>
+			<h4>
+				Web User Interface
+			</h4>
+			<p>
+				PURLs may be deleted by providing their PURL IDs to the <a href="purl.html#delete">PURL Deletion Form</a>. PURLs may only be deleted if their PURL IDs are known. Please note that deleting PURL records actually results in them being "tombstoned" so that they do not become inaccessible. Instead, deleted PURLs will continue to exist on a PURL server but will be modified to return an HTTP 410 status code (Gone). Tombstoned PURL records may be searched by selecting the checkbox labeled "Search tombstoned PURLs" in the <a href="purl.html#search">PURL Search Form</a> as shown in Figure 10(a).
+			</p>
+			<p>
+				Figure 10(a) shows an example deletion request and Figure 10(b) shows a typical response upon success.
+			</p>
+			<p align="center">
+				<img src="images/purldelete.png">&nbsp;<img src="images/purldeleteresults.png"><br>
+				<b>Figures 10(a) and 10(b). Deleting a PURL</b>
+			</p><a name="purls" id="purls"></a>
+			<h2>
+				3. Administering Batches of PURLs
+			</h2>
+			<p>
+				It is sometimes convenient to administer many PURLs at one time, especially if one is doing that programmatically or has a large number of PURLs under management. Batches of PURLs may be created or modified by submitting an XML document to a PURL server. XML documents submitted must comply with a RELAX-NG schema available from <a href="http://purlz.org/project/purl/documentation/batchPurls.rng">http://purlz.org/project/purl/documentation/batchPurls.rng</a>. An example XML document is provided at <a href="http://purlz.org/project/purl/documentation/batchPurlsExample.xml">http://purlz.org/project/purl/documentation/batchPurlsExample.xml</a>.
+			</p>
+			<p>
+				No batch operations for searching or deletion are supported. This is due to the limitations of the Hypertext Transfer Protocol (HTTP) specification. It is not possible to provide an XML document in the body of an HTTP GET request (used for searches) nor in an HTTP DELETE request (used for deletion).
+			</p>
+			<p>
+				Similarly, no Web user interface has been provided for batch operations since AJAX techniques are prohibited from reading local filesystems for security reasons. The use of Javascript would be necessary to support HTTP PUT (used for modifications) because most Web browsers do not natively support that method. Those requiring the bulk deletion of PURLs are therefore encouraged to do so programmatically within an HTTP 1.1 session to minimize network overhead.
+			</p><a name="purlscreate" id="purlscreate"></a>
+			<h3>
+				3.1 Create a Batch of PURLs
+			</h3>
+			<p>
+				Batches of PURLs may be created by send an HTTP POST request to the RESTful API at http://$PURL_SERVER$/admin/purls. The input needs to be an XML document (see an <a href="http://purlz.org/project/purl/documentation/batchPurlsExample.xml">example</a>) using a <a href="http://purlz.org/project/purl/documentation/batchPurls.rng">RELAX NG Schema</a>. The input XML file will be validated against the schema before processing by the PURL server.
+			</p><a name="purlsmodify" id="purlsmodify"></a>
+			<h3>
+				3.2 Modify a Batch of PURLs
+			</h3>
+			<p>
+				Batches of PURLs may be modified by send an HTTP POST request to the RESTful API at http://$PURL_SERVER$/admin/purls. The input needs to be an XML document (see an <a href="http://purlz.org/project/purl/documentation/batchPurlsExample.xml">example</a>) using a <a href="http://purlz.org/project/purl/documentation/batchPurls.rng">RELAX NG Schema</a>. The input XML file will be validated against the schema before processing by the PURL server.
+			</p>
+			<p>
+				The input schema for batch modifications is the same as for batch creation.</p>
+			<p>
+				Note that if you create a PURL using the type Clone you will be creating a new PURL that has the features of an existing PURL, so any attempt to modify the new PURL after creation will be possible but the PURL will show up with its type inherited from the cloned original (that is, it will not have the type "clone").
+			</p><a name="user" id="user"></a>
+			<h2>
+				4. Administering Users
+			</h2>
+			<p>
+				Four actions may be taken on a user: Registration, Modification, Searching or Deletion. These four actions may be accessed in the PURL Web user interface as shown in Figure 11. The same four actions may be taken by other PURL clients. See <a href="#rest">Creating RESTful PURL Clients</a> for details.
+			</p>
+			<p>
+				Registering a user creates a record for that user on a PURL server and allows the user to create PURLs (subject to the security limitations of the PURL server and any restrictions on writing to specific domains). Modification allows the user record to be updated. User records may be searched by the general public, although private information is naturally withheld. Finally, user records may be deleted. These four actions are described in detail below.
+			</p>
+			<p align="center">
+				<img src="images/userselect.png"><br>
+				<b>Figure 11. Actions on Users</b>
+			</p><a name="usercreate" id="usercreate"></a>
+			<h3>
+				4.1 Register a New User
+			</h3>
+			<h4>
+				Web User Interface
+			</h4>
+			<p>
+				Users have to be registered with a PURL server before they will be allowed to create or otherwise administer PURLs, participate in groups or administer domains. Individual PURL servers may have differing requirements for registering users. Some may allow users to register immediately and others may require a review process by a human being. Thus, sometimes a user registration request will complete immediately and in other cases experience a delay or a continuation to the process of registering that is separate to the PURL software (such as an email callback).
+			</p>
+			<p>
+				User registration may be requested via the <a href="user.html#create">User Registration Form</a>.
+			</p>
+			<p>
+				Figure 12(a) shows an example user in the act of registration. Some PURL servers will require all fields to be completed and others may not care; that is a policy decision for the individual PURL server administrator.
+			</p>
+			<p>
+				Figure 12(b) shows a successful result for a user registration that completed immediately. Only public information is returned; the password, password hint and justification for registration are withheld. Note that for PURL servers that manually check user registration or rely on a callback mechanism (e.g. via email) that the message returned will be different. In those cases, the message returned might say something like "Your registration request has been sent to an administrator for review" or "A confirmation email has been sent to david@example.com. Please complete your registration by following the directions in that message."
+			</p>
+			<p align="center">
+				<img src="images/usercreate.png">&nbsp;<img src="images/usercreateresults.png"><br>
+				<b>Figures 12(a) and 12(b). Registering a User</b>
+			</p><a name="usermodify" id="usermodify"></a>
+			<h3>
+				4.2 Modify an Existing User
+			</h3>
+			<h4>
+				Web User Interface
+			</h4>
+			<p>
+				Records for existing users may be modified by completing the <a href="user.html#modify">User Modification Form</a>, which is much like the form for registering a new user. Figure 13(a) shows the user record created in <a href="#usercreate">4.1 Register a New User</a> being updated with a new password. Figure 13(b) shows a typical response upon success.
+			</p>
+			<p>
+				It may be tedious or even impossible to complete a modification form by hand. To reduce the need to do so, user records may be discovered by a search and the modification form automatically filled in with data from the current record. See <a href="#usersearch">4.3 Search for User Information</a> for more information.
+			</p>
+			<p align="center">
+				<img src="images/usermodify.png">&nbsp;<img src="images/usermodifyresults.png"><br>
+				<b>Figures 13(a) and 13(b). Modifying a User</b>
+			</p><a name="usersearch" id="usersearch"></a>
+			<h3>
+				4.3 Search for User Information
+			</h3>
+			<h4>
+				Web User Interface
+			</h4>
+			<p>
+				User records may be searched using the <a href="user.html#search">User Search Form</a>, an example of which is shown in Figure 14(a). Records may be searched by user name, affiliation (if collected upon user registration), email address or user ID.
+			</p>
+			<p>
+				Figure 14(a) shows a sample search for registered users affiliated with Zepheira and Figure 14(b) shows a typical response. Search results may be "torn off" for later use by selecting the icon labeled <b>A</b> in Figure 14(b). Individual records may be brought into the <a href="user.html#modify">User Modification Form</a> by selecting any of the icons labeled <b>B</b> in Figure 14(b).
+			</p>
+			<p>
+				Tombstoned user records may be searched by selecting the checkbox labeled "Search tombstoned users" in the <a href="user.html#search">User Search Form</a> as shown in Figure 14(a). User records become tombstoned if they are deleted via the <a href="user.html#delete">User Deletion Form</a>. More information about tombstoning may be found under <a href="#userdelete">4.4 Delete a User</a>.
+			</p>
+			<p align="center">
+				<img src="images/usersearch.png">&nbsp;<img src="images/usersearchresults.png"><br>
+				<b>Figures 14(a) and 14(b). Searching User Records</b>
+			</p><a name="userdelete" id="userdelete"></a>
+			<h3>
+				4.4 Delete a User
+			</h3>
+			<h4>
+				Web User Interface
+			</h4>
+			<p>
+				Users may be deleted by providing their user IDs to the <a href="user.html#delete">User Deletion Form</a>. Users may only be deleted if their user IDs are known. Please note that deleting user records actually results in them being "tombstoned" so that any PURLs they administer do not become inaccessible. Tombstoned user records may be searched by selecting the checkbox labeled "Search tombstoned users" in the <a href="user.html#search">User Search Form</a> as shown in Figure 14(a).
+			</p>
+			<p>
+				Figure 15(a) shows an example deletion request and Figure 15(b) shows a typical response upon success.
+			</p>
+			<p align="center">
+				<img src="images/userdelete.png">&nbsp;<img src="images/userdeleteresults.png"><br>
+				<b>Figures 15(a) and 15(b). Deleting a User</b>
+			</p><a name="login" id="login"></a>
+			<h3>
+				4.5 Logging into a PURL Server
+			</h3>
+			<h4>
+				Web User Interface
+			</h4>
+			<p>
+				Users may perform some public actions (such as searching, validating and resolving) without being authenticated to the server. Administrative actions (such as creating or deleting PURLs, groups and domains) require a user to log into an previously created account.
+			</p>
+			<p>
+				A new PURL server is installed with a default user account called 'admin' with a password of 'password'. Administrators are naturally encouraged to change the default password immediately after installation.
+			</p>
+			<p>
+				New users may be registered by the public, but may have to be approved by an administrator prior to being used (if the server was so configured). Auto user registration (that is, without approval) can be turned on or off by commenting or uncommenting the term &lt;allowUserAutoCreation&gt; in the configuration file INSTALL_DIR/modules/mod-purl-admin/etc/PURLConfig.xml.
+			</p>
+			<p>
+				New users and top-level domains must be approved by an administrator if the &lt;allowUserAutoCreation&gt; option is not set. New users and top-level domains may be approved by logging in as an administrator and accessing the <a href="pending/user.html">User Approval</a> and <a href="pending/domain.html">Domain Approval</a> pages.
+			</p><a name="group" id="group"></a>
+			<h2>
+				5. Administering Groups of Users
+			</h2>
+			<p>
+				It can be convenient to create groups of users to facilitate administration. For example, if you create a large number of PURLs and each PURL may be changed by the same list of people, it will be easier to create a single group to represent those people than to individually list all people as maintainers.  A user who creates a group is automatically added as a maintainer.
+			</p>
+			<p>
+				Four actions may be taken on a group: Creation, Modification, Searching or Deletion. These four actions may be accessed in the PURL Web user interface as shown in Figure 16. The same four actions may be taken by other PURL clients. See <a href="#rest">Creating RESTful PURL Clients</a> for details.
+			</p>
+			<p>
+				Creating a group creates a record for that user on a PURL server. Modification allows the group record to be updated. Group records may be searched by the general public. Finally, group records may be deleted. These four actions are described in detail below.
+			</p>
+			<p align="center">
+				<img src="images/groupselect.png"><br>
+				<b>Figure 16. Actions on Groups</b>
+			</p><a name="groupcreate" id="groupcreate"></a>
+			<h3>
+				5.1 Create a New Group
+			</h3>
+			<h4>
+				Web User Interface
+			</h4>
+			<p>
+				Groups may be created via the <a href="group.html#create">Group Creation Form</a>.
+			</p>
+			<p>
+				Figure 17(a) shows the creation of a sample group. A maintainer is a user or group authorized to administer a group and a member is a user or group that is a member of this group. Figure 17(b) shows a typical response upon success.
+			</p>
+			<p align="center">
+				<img src="images/groupcreate.png">&nbsp;<img src="images/groupcreateresults.png"><br>
+				<b>Figures 17(a) and 17(b). Creating a Group</b>
+			</p><a name="groupmodify" id="groupmodify"></a>
+			<h3>
+				5.2 Modify an Existing Group
+			</h3>
+			<h4>
+				Web User Interface
+			</h4>
+			<p>
+				Records for existing groups may be modified by completing the <a href="group.html#modify">Group Modification Form</a>, which is much like the form for creating a new group. Figure 18(a) shows the group record created in <a href="#groupcreate">5.1 Create a New Group</a> being updated to remove the user "david" as a maintainer. Figure 18(b) shows a typical response upon success.
+			</p>
+			<p>
+				It may be tedious or even impossible to complete a modification form by hand. To reduce the need to do so, group records may be discovered by a search and the modification form automatically filled in with data from the current record. See <a href="#groupsearch">5.3 Search for Group Information</a> for more information.
+			</p>
+			<p align="center">
+				<img src="images/groupmodify.png">&nbsp;<img src="images/groupmodifyresults.png"><br>
+				<b>Figures 18(a) and 18(b). Modifying a Group</b>
+			</p><a name="groupsearch" id="groupsearch"></a>
+			<h3>
+				5.3 Search for Group Information
+			</h3>
+			<h4>
+				Web User Interface
+			</h4>
+			<p>
+				Group records may be searched using the <a href="group.html#search">Group Search Form</a>, an example of which is shown in Figure 19(a). Records may be searched by group name, group ID, maintainer ID or member ID. A maintainer is a user or group authorized to administer a group and a member is a user or group that is a member of the group.
+			</p>
+			<p>
+				Figure 19(a) shows a sample search for domains with a maintainer of "brian" and Figure 19(b) shows a typical response. Search results may be "torn off" for later use by selecting the icon labeled <b>A</b> in Figure 19(b). Individual records may be brought into the <a href="group.html#modify">Group Modification Form</a> by selecting the icon labeled <b>B</b> in Figure 19(b).
+			</p>
+			<p>
+				Tombstoned group records may be searched by selecting the checkbox labeled "Search tombstoned groups" in the <a href="group.html#search">Group Search Form</a> as shown in Figure 19(a). Group records become tombstoned if they are deleted via the <a href="group.html#delete">Group Deletion Form</a>. More information about tombstoning may be found under <a href="#groupdelete">5.4 Delete a Group</a>.
+			</p>
+			<p align="center">
+				<img src="images/groupsearch.png">&nbsp;<img src="images/groupsearchresults.png"><br>
+				<b>Figures 19(a) and 19(b). Searching for Group Information</b>
+			</p><a name="groupdelete" id="groupdelete"></a>
+			<h3>
+				5.4 Delete a Group
+			</h3>
+			<p>
+				Groups may be deleted by providing their group IDs to the <a href="group.html#delete">Group Deletion Form</a>. Groups may only be deleted if their group IDs are known. Please note that deleting group records actually results in them being "tombstoned" so that any PURLs they administer do not become inaccessible. Tombstoned group records may be searched by selecting the checkbox labeled "Search tombstoned groups" in the <a href="group.html#search">Group Search Form</a> as shown in Figure 19(a).
+			</p>
+			<p>
+				Figure 20(a) shows an example deletion request and Figure 20(b) shows a typical response upon success.
+			</p>
+			<p>
+				TODO: Web UI
+			</p>
+			<p align="center">
+				<img src="images/groupdelete.png">&nbsp;<img src="images/groupdeleteresults.png"><br>
+				<b>Figures 20(a) and 20(b). Deleting a Group</b>
+			</p><a name="domain" id="domain"></a>
+			<h2>
+				6. Administering PURL Domains
+			</h2>
+			<p>
+				PURLs are created within domains. A domain is the path portion of the PURL URL form, as shown in Figure 1. PURLs may not be created unless they are within a domain; that helps to ensure order and security on a PURL server.
+			</p>
+			<p>
+				A &quot;maintainer&quot; is someone who can modify a domain.  A maintainer of a domain may modify the record for that domain.  A &quot;writer&quot; is someone who may create a new PURL under a domain.  A user who creates a domain is automatically added as a maintainer.
+			</p>
+			<p>
+				Some PURL servers allow one or more domains to act as public spaces. This is the case with the /NET domain on the oldest PURL server at <a href="http://purl.org/">http://purl.org/</a>. Public domains allow for subdomains and PURLs to be created within them by the general public. Most domains, however, will be private and writing to them requires that you are either a maintainer or a writer of those domains.
+			</p>
+			<p>
+				Four actions may be taken on a domain: Creation, Modification, Searching or Deletion. These four actions may be accessed in the PURL Web user interface as shown in Figure 21. The same four actions may be taken by other PURL clients. See <a href="#rest">Creating RESTful PURL Clients</a> for details.
+			</p>
+			<p>
+				Creating a domain creates a record for that domain on a PURL server. Note that the creation of top-level domains generally requires permission from a PURL server administrator and may not complete immediately. Modification allows the domain record to be updated. Domain records may be searched by the general public. Finally, domain records may be deleted. These four actions are described in detail below.
+			</p>
+			<p align="center">
+				<img src="images/domainselect.png"><br>
+				<b>Figure 21. Actions on Domains</b>
+			</p><a name="domaincreate" id="domaincreate"></a>
+			<h3>
+				6.1 Create a New Domain
+			</h3>
+			<h4>
+				Web User Interface
+			</h4>
+			<p>
+				Domains have to be created before PURLs may be placed in them. Some PURL servers may automatically create domains for you when you create a PURL and others may require domains to be created separately.
+			</p>
+			<p>
+				Domains may be created via the <a href="domain.html#create">Domain Creation Form</a>.
+			</p>
+			<p>
+				Figure 22(a) shows the creation of a sample domain. A maintainer is a user or group authorized to administer a domain and a writer is a user or group authorized to create PURLs within a domain. Figure 22(b) shows a typical response upon success.
+			</p>
+			<p align="center">
+				<img src="images/domaincreate.png">&nbsp;<img src="images/domaincreateresults.png"><br>
+				<b>Figures 22(a) and 22(b). Creating a Domain</b>
+			</p><a name="domainmodify" id="domainmodify"></a>
+			<h3>
+				6.2 Modify an Existing Domain
+			</h3>
+			<h4>
+				Web User Interface
+			</h4>
+			<p>
+				Records for existing domains may be modified by completing the <a href="domain.html#modify">Domain Modification Form</a>, which is much like the form for creating a new domain. Figure 23(a) shows the domain record created in <a href="#domaincreate">6.1 Create a New Domain</a> being updated to remove the user "david" as a maintainer. Figure 23(b) shows a typical response upon success.
+			</p>
+			<p>
+				It may be tedious or even impossible to complete a modification form by hand. To reduce the need to do so, domain records may be discovered by a search and the modification form automatically filled in with data from the current record. See <a href="#domainsearch">6.3 Search for Domain Information</a> for more information.
+			</p>
+			<p align="center">
+				<img src="images/domainmodify.png">&nbsp;<img src="images/domainmodifyresults.png"><br>
+				<b>Figures 23(a) and 23(b). Modifying a Domain</b>
+			</p><a name="domainsearch" id="domainsearch"></a>
+			<h3>
+				6.3 Search for Domain Information
+			</h3>
+			<h4>
+				Web User Interface
+			</h4>
+			<p>
+				Domain records may be searched using the <a href="domain.html#search">Domain Search Form</a>, an example of which is shown in Figure 24(a). Records may be searched by domain name, domain ID, maintainer ID or writer ID. A maintainer is a user or group authorized to administer a domain and a writer is a user or group authorized to create PURLs within a domain.
+			</p>
+			<p>
+				Figure 24(a) shows a sample search for an existing domain with the ID "examples" and Figure 24(b) shows a typical response. Search results may be "torn off" for later use by selecting the icon labeled <b>A</b> in Figure 14(b). Individual records may be brought into the <a href="domain.html#modify">Domain Modification Form</a> by selecting the icon labeled <b>B</b> in Figure 24(b).
+			</p>
+			<p>
+				Tombstoned domain records may be searched by selecting the checkbox labeled "Search tombstoned domains" in the <a href="domain.html#search">Domain Search Form</a> as shown in Figure 24(a). Domain records become tombstoned if they are deleted via the <a href="domain.html#delete">Domain Deletion Form</a>. More information about tombstoning may be found under <a href="#domaindelete">6.4 Delete a Domain</a>.
+			</p>
+			<p align="center">
+				<img src="images/domainsearch.png">&nbsp;<img src="images/domainsearchresults.png"><br>
+				<b>Figures 24(a) and 24(b). Searching for Domain Information</b>
+			</p><a name="domaindelete" id="domaindelete"></a>
+			<h3>
+				6.4 Delete a Domain
+			</h3>
+			<h4>
+				Web User Interface
+			</h4>
+			<p>
+				Domains may be deleted by providing their domain IDs to the <a href="domain.html#delete">Domain Deletion Form</a>. Domains may only be deleted if their domain IDs are known. Please note that deleting domain records actually results in them being "tombstoned" so that any PURLs they contain do not become inaccessible. Tombstoned domain records may be searched by selecting the checkbox labeled "Search tombstoned domains" in the <a href="domain.html#search">Domain Search Form</a> as shown in Figure 24(a).
+			</p>
+			<p>
+				Figure 25(a) shows an example deletion request and Figure 25(b) shows a typical response upon success.
+			</p>
+			<p align="center">
+				<img src="images/domaindelete.png">&nbsp;<img src="images/domaindeleteresults.png"><br>
+				<b>Figures 25(a) and 25(b). Deleting a Domain</b>
+			</p><a name="rest" id="rest"></a>
+			<h2>
+				7. RESTful PURL Clients
+			</h2>
+			<p>
+				Clients for PURL servers may be easily created using the available API. PURL servers expose services with an interface based on Representational State Transfer (<a href="http://en.wikipedia.org/wiki/REST">REST</a>) architecture. Examples of code in the Java programming language are provided for all PURL actions in the unit tests of the source code distribution. See particularly the file <u>src/test/org/purl/test/simplePurlClient.java</u>. That file used the <a href="http://www.restlet.org/">RESTlet</a> API to make calls to PURL servers. Additional illustrative code may be found in the <a href="http://www.junit.org/">JUnit</a> tests located in <u>src/test/org/purl/test/simplePurlClientTest.java</u> and called from <u>src/test/org/purl/test/purlClientTestRunner.java</u>.
+			</p>
+		</div>
+		<div id="footer">
+			<table width="100%" summary="supporters">
+				<tr>
+					<td>
+						<a href="http://www.oclc.org/"><img align="left" src="images/oclclogo.png" alt="oclc"></a>
+					</td>
+					<td>
+						<a href="http://zepheira.com/"><img align="right" src="images/zepheiralogo.png" alt="zepheira"></a>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sql>
+	<comment>
+	****************
+	(C) 2003-2007, 1060 Research Limited. All rights reserved.
+	Licensed under the 1060 Public License v1.0 - You may modifiy and
+	use this software in any manner provided that any derivative work
+	is licensed in compliance with the terms of the 1060 Public License.
+	For commercial licenses visit: http://www.1060research.com/license
+	1060 is a registered trademark of 1060 Research Ltd.
+	**********
+	</comment>
+
+	SELECT * from users;
+</sql>

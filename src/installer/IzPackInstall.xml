@@ -1,0 +1,209 @@
+<installation version="1.0">
+
+<info>
+	<appname>PURLZ-Server-1.6.3</appname>
+	<appversion>1.6.3</appversion>
+	<url>http://purlz.org/</url>
+	<authors>
+		<author name="Zepheira, LLC" email="contact@zepheira.com"/>
+	</authors>	
+	<javaversion>1.5</javaversion>
+</info>
+
+<guiprefs resizable="no" width="800" height="500"/>
+
+<locale>
+ <langpack iso3="eng"/>
+</locale>
+
+<resources>
+ <res id="HTMLLicencePanel.licence" src="Apache2.0License.html"/>
+ <res id="Installer.image" src="images/installer_image.jpg" />
+ <res id="InfoPanel.info" src="finish.txt"/>
+ <res id="HTMLInfoPanel.info" src="README.html"/>
+ <res id="installer.langsel.img" src="images/installer_splash.jpg" />
+ <res id="userInputSpec.xml" src="userInputSpec.xml" />
+ <res id="userInputLang.xml_eng" src="userInputLang.xml_eng" />
+ <res id="conditions.xml" src="conditions.xml" />
+</resources>
+
+<variables>
+  <variable name="JARVERSION" value="1.6.3"/>
+	<!-- Most variables moved to userInputSpec.xml -->
+</variables>
+
+<panels>
+ <panel classname="HTMLInfoPanel"/>
+ <panel classname="HTMLLicencePanel"/>
+ <panel classname="TargetPanel"/>
+ <panel order="0" classname="UserInputPanel"/>
+ <panel order="1" classname="UserInputPanel"/>
+ <panel order="2" classname="UserInputPanel" id="mysqlauth"/>
+ <panel order="3" classname="UserInputPanel"/>
+ <panel classname="PacksPanel"/>
+ <panel classname="InstallPanel"/>
+ <panel classname="InfoPanel"/>
+ <panel classname="FinishPanel"/>
+</panels>
+
+<packs>
+   <!-- The core files -->
+   <pack name="Core" id="Core" required="yes">
+       <description>Main distribution.  Contains 1060 NetKernel with PURL server modules and documentation.</description>	
+		<!-- NetKernel installation. -->
+		<file targetdir="$INSTALL_PATH" src="NetKernel-Base/bin"/>
+		<file targetdir="$INSTALL_PATH" src="NetKernel-Base/etc"/>
+		<file targetdir="$INSTALL_PATH" src="NetKernel-Base/lib"/>
+		<file targetdir="$INSTALL_PATH" src="NetKernel-Base/licenses"/>
+		<file targetdir="$INSTALL_PATH" src="NetKernel-Base/log"/>
+		<file targetdir="$INSTALL_PATH" src="NetKernel-Base/scratch"/>
+		<file targetdir="$INSTALL_PATH" src="NetKernel-Base/security"/>
+		<file targetdir="$INSTALL_PATH" src="NetKernel-Base/tests"/>
+		<file targetdir="$INSTALL_PATH" src="NetKernel-Base/modules"/>
+		<!-- PURL top-level documentation files. -->
+		<file targetdir="$INSTALL_PATH" src="../README.txt"/>
+		<file targetdir="$INSTALL_PATH" src="../LEGAL.txt"/>
+		<file targetdir="$INSTALL_PATH" src="../LICENSE.txt"/>
+		<!-- PURL JARs. -->
+		<file targetdir="$INSTALL_PATH/modules" src="../deploy/mod-purl-documentation-1.6.3.jar"/>
+		<file targetdir="$INSTALL_PATH/modules" src="../deploy/mod-purl-search-1.6.3.jar"/>
+		<file targetdir="$INSTALL_PATH/modules" src="../deploy/mod-session-1.6.3.jar"/>
+        <!-- <file targetdir="$INSTALL_PATH/modules" src="../deploy/mod-template-1.6.3.jar"/> -->
+		<file targetdir="$INSTALL_PATH/modules" src="../deploy/test-mod-purl-search-1.6.3.jar"/>
+		<file targetdir="$INSTALL_PATH/modules" src="../deploy/ext-http-client-1.2.1.jar"/>
+        <!-- <file targetdir="$INSTALL_PATH/modules" src="../deploy/test-mod-template-1.6.3.jar"/> -->
+		<!-- NB: Cannot use JAR files for these because we need to parse files within them. -->
+		<fileset targetdir="$INSTALL_PATH/modules/" dir="../mod-purl-storage/modules/">
+			<include name="mod-purl-storage/**/*"/>
+			<exclude name="**/.svn"/>
+			<exclude name="**/.svn/**"/>
+		</fileset>
+		<fileset targetdir="$INSTALL_PATH/modules/" dir="../mod-purl-storage/modules/">
+			<include name="test-mod-purl-storage/**/*"/>
+			<exclude name="**/.svn"/>
+			<exclude name="**/.svn/**"/>
+		</fileset>
+		<fileset targetdir="$INSTALL_PATH/modules/" dir="../mod-purl-virtualhost/modules/">
+			<include name="mod-purl-virtualhost/**/*"/>
+			<exclude name="**/.svn"/>
+			<exclude name="**/.svn/**"/>
+		</fileset>
+		<fileset targetdir="$INSTALL_PATH/modules/" dir="../mod-purl-admin/modules/">
+			<include name="mod-purl-admin/**/*"/>
+			<exclude name="**/.svn"/>
+			<exclude name="**/.svn/**"/>
+		</fileset>
+		<fileset targetdir="$INSTALL_PATH/modules/" dir="../mod-purl-admin/modules/">
+			<include name="test-mod-purl-admin/**/*"/>
+			<exclude name="**/.svn"/>
+			<exclude name="**/.svn/**"/>
+		</fileset>
+		<fileset targetdir="$INSTALL_PATH/modules" dir="../mod-purl-gatekeeper/modules/">
+			<include name="mod-purl-gatekeeper/**/*"/>
+			<exclude name="**/.svn"/>
+			<exclude name="**/.svn/**"/>
+		</fileset>
+		<!-- Overwrite the NetKernel files that point to the PURL modules. -->
+		<singlefile src="options/deployedModules.xml" target="$INSTALL_PATH/etc/deployedModules.xml" override="true"/>
+		<singlefile src="options/mod-fulcrum-frontend/module.xml" target="$INSTALL_PATH/modules/mod-fulcrum-frontend/module.xml" override="true"/>
+		<!-- Overwrite the files that define installer options,
+		     so we can set them later by parsing. -->
+		<singlefile src="options/PURLConfig.xml" target="$INSTALL_PATH/modules/mod-purl-admin/etc/PURLConfig.xml" override="true"/>
+		<singlefile src="options/mod-purl-virtualhost/module.xml" target="$INSTALL_PATH/modules/mod-purl-virtualhost/module.xml" override="true"/>
+		<singlefile src="options/mod-fulcrum-frontend/etc/TransportJettyConfig.xml" target="$INSTALL_PATH/modules/mod-fulcrum-frontend/etc/TransportJettyConfig.xml" override="true"/>
+		<!-- PURL files with variable substitution upon installation. -->
+		<parsable targetfile="$INSTALL_PATH/etc/deployedModules.xml"/>
+		<parsable targetfile="$INSTALL_PATH/modules/mod-purl-admin/etc/PURLConfig.xml"/>
+		<parsable targetfile="$INSTALL_PATH/README.txt"/>
+		<parsable targetfile="$INSTALL_PATH/modules/mod-purl-virtualhost/module.xml"/>
+		<parsable targetfile="$INSTALL_PATH/modules/mod-fulcrum-frontend/etc/TransportJettyConfig.xml"/>
+		<!-- NetKernel files with variable substitution upon installation. -->
+		<parsable targetfile="$INSTALL_PATH/etc/bootloader.cfg"/>
+		<parsable targetfile="$INSTALL_PATH/bin/start.sh"/>
+		<executable targetfile="$INSTALL_PATH/bin/start.sh" stage="never"/>
+		<parsable targetfile="$INSTALL_PATH/bin/dexter.sh"/>
+		<executable targetfile="$INSTALL_PATH/bin/dexter.sh" stage="never"/>
+		<parsable targetfile="$INSTALL_PATH/bin/netkernel"/>
+		<executable targetfile="$INSTALL_PATH/bin/netkernel" stage="never"/>
+		<parsable targetfile="$INSTALL_PATH/bin/startup.bat"/>
+		<parsable targetfile="$INSTALL_PATH/bin/dexter.bat"/>
+		<parsable targetfile="$INSTALL_PATH/bin/win32-service/wrapper.conf"/>
+	</pack>
+	
+	<pack name="HSQLDB" id="HSQLDB" required="yes" conditionid="use.hsqldb">
+        <description>Contains configuration files for the HSQLDB database.</description>
+        <singlefile src="options/hsqldb/ConfigPURLSDB.xml" target="$INSTALL_PATH/modules/mod-purl-storage/etc/ConfigPURLSDB.xml" override="true"/>
+        <singlefile src="options/hsqldb/ConfigRDBMS.xml" target="$INSTALL_PATH/modules/test-mod-purl-storage/etc/ConfigRDBMS.xml" override="true"/>
+        <singlefile src="options/hsqldb/ConfigRDBMS.xml" target="$INSTALL_PATH/modules/mod-purl-admin/etc/ConfigRDBMS.xml" override="true"/>
+    </pack>
+
+    <pack name="MySQL" id="MySQL" required="yes" conditionid="use.mysql">
+        <description> Contains configuration files the MySQL database.</description>
+        <singlefile src="options/mysql/ConfigPURLSDB.xml" target="$INSTALL_PATH/modules/mod-purl-storage/etc/ConfigPURLSDB.xml" override="true"/>
+        <singlefile src="options/mysql/ConfigRDBMS.xml" target="$INSTALL_PATH/modules/test-mod-purl-storage/etc/ConfigRDBMS.xml" override="true"/>
+        <singlefile src="options/mysql/ConfigRDBMS.xml" target="$INSTALL_PATH/modules/mod-purl-admin/etc/ConfigRDBMS.xml" override="true"/>
+		<parsable targetfile="$INSTALL_PATH/modules/test-mod-purl-storage/etc/ConfigRDBMS.xml"/>
+		<parsable targetfile="$INSTALL_PATH/modules/mod-purl-admin/etc/ConfigRDBMS.xml"/>
+    </pack>
+
+	<pack name="Javadoc" id="Javadoc" required="no" preselected="no">
+	    <description>Javadoc documentation for developers.</description>
+	    <fileset targetdir="$INSTALL_PATH/" dir="..">
+		<include name="javadoc/**/*"/>
+		<exclude name="**/.svn"/>
+		<exclude name="**/.svn/**"/>
+		</fileset>
+	</pack>
+	
+	<pack name="Source Code" id="Source Code" required="no" preselected="no">
+	    <description>Source code for the PURL server.</description>
+	    <fileset targetdir="$INSTALL_PATH" dir="NetKernel-Base">
+			<include name="build/**/*"/>
+			<exclude name="**/.svn"/>
+			<exclude name="**/.svn/**"/>
+		</fileset>
+	    <fileset targetdir="$INSTALL_PATH/src/1060-NetKernel/" dir="NetKernel-Base">
+			<include name="src/**/*"/>
+			<exclude name="**/.svn"/>
+			<exclude name="**/.svn/**"/>
+		</fileset>
+	    <fileset targetdir="$INSTALL_PATH/src/purl" dir="..">
+			<include name="mod-purl-admin/**/*"/>
+			<exclude name="**/.svn"/>
+			<exclude name="**/.svn/**"/>
+		</fileset>
+	    <fileset targetdir="$INSTALL_PATH/src/purl" dir="..">
+			<include name="mod-purl-documentation/**/*"/>
+			<exclude name="**/.svn"/>
+			<exclude name="**/.svn/**"/>
+		</fileset>
+	    <fileset targetdir="$INSTALL_PATH/src/purl" dir="..">
+			<include name="mod-purl-search/**/*"/>
+			<exclude name="**/.svn"/>
+			<exclude name="**/.svn/**"/>
+		</fileset>
+	    <fileset targetdir="$INSTALL_PATH/src/purl" dir="..">
+			<include name="mod-purl-storage/**/*"/>
+			<exclude name="**/.svn"/>
+			<exclude name="**/.svn/**"/>
+		</fileset>
+	    <fileset targetdir="$INSTALL_PATH/src/purl" dir="..">
+			<include name="mod-purl-virtualhost/**/*"/>
+			<exclude name="**/.svn"/>
+			<exclude name="**/.svn/**"/>
+		</fileset>
+	    <fileset targetdir="$INSTALL_PATH/src/purl" dir="..">
+			<include name="mod-session/**/*"/>
+			<exclude name="**/.svn"/>
+			<exclude name="**/.svn/**"/>
+		</fileset>
+        <!-- <fileset targetdir="$INSTALL_PATH/src/purl" dir="..">
+            <include name="mod-template/**/*"/>
+            <exclude name="**/.svn"/>
+            <exclude name="**/.svn/**"/>
+        </fileset> -->
+	</pack>
+
+</packs>
+
+</installation>
