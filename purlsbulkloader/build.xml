@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="dist" name="OCLC Legacy Loader">
+	
+	<target name="clean" depends="init">
+		<delete dir="${dst}"/>
+		<delete dir="${dist}"/>
+	</target>
+		
+	<target name="init">
+		<property name="dst" value="build"/>
+		<property name="dist" value="dist"/>
+		<property name="src" value="."/>
+		
+		<mkdir dir="${dst}"/>
+		<mkdir dir="${dist}"/>
+        <copy todir="${dst}">
+            <fileset dir="${src}" includes="**/*.properties"/>
+        </copy>
+    </target>
+	
+	<target name="compile" depends="init">
+        <javac debug="true" deprecation="true" destdir="${dst}" srcdir="${src}">
+            <classpath>
+				<fileset dir="./lib">
+					<include name="**/*.jar"/>
+				</fileset>
+            </classpath>
+        </javac>		
+	</target>
+	
+	<target name="dist" depends="compile">
+        <jar basedir="${dst}" compress="true" destfile="${dist}/legacyloader.jar">
+
+		    <include name="**/*"/>
+		    <exclude name="**/.svn"/>		    
+	        <exclude name="**/*.java"/>
+            <exclude  name="out/**"/>
+            <exclude  name="build/**"/>
+        </jar>		
+	</target>
+</project>
