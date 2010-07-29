@@ -43,7 +43,7 @@ purl:register rdfs:subClassOf obj:Message;
 	""".
 
 # Loads in maintainer/curator/scribe popup
-purl:register rdfs:subClassOf obj:Message;
+purl:pre-register rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom purl:UserTemplate];
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
