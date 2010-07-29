@@ -89,8 +89,8 @@ public abstract class DomainSupport extends PartialSupport implements Domain,
 			+ "OPTIONAL { ?partial purl:pattern ?pattern }\n"
 			+ "OPTIONAL { ?purl purl:partOf ?partial; a purl:PURL, ?type\n"
 			+ "\t OPTIONAL { ?purl rdfs:label ?label }\n"
-			+ "\t OPTIONAL { ?purl ?pred ?href . ?pred purl:rel ?rel }\n"
-			+ "\t OPTIONAL { ?partial ?dpred ?dhref . ?dpred purl:rel ?drel }}}")
+			+ "\t OPTIONAL { ?purl ?pred ?href . ?pred purl:rel ?rel }}\n"
+			+ "OPTIONAL { ?partial ?dpred ?dhref . ?dpred purl:rel ?drel }}")
 	public abstract GraphQueryResult mirror();
 
 	@operation("services")
