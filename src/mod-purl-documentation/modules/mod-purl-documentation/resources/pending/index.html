@@ -1,0 +1,113 @@
+<!--                                                                            ==
+==  @(#)homepage.html.in  1.10  12/29/97 ==
+==  Copyright (c) 1996, 2007 OCLC Online Computer Library Center, Inc.          ==
+==  6565 Frantz Road, Dublin, Ohio 43017-0702.                                  ==
+==  OCLC is a registered trademark of OCLC Online Computer Library Center, Inc. ==
+==  Some rights reserved under the copyright laws of the United States.         ==
+==                                                                              -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>
+			PURL Home Page
+		</title>
+		<link type="text/css" rel="stylesheet" href="../style.css"><!--[if lt IE 7]>
+	<script defer type="text/javascript" src="../javascripts/pngfix.js"></script>
+	<![endif]-->
+
+<script type="text/javascript" src="../javascripts/utilajax.js">
+</script>
+<script type="text/javascript" src="../javascripts/ajaxCaller.js">
+</script><!-- http://ajaxify.com/run/Lib/js/ -->
+
+<script type="text/javascript" src="../javascripts/xmlsax.js">
+</script>
+<script type="text/javascript" src="../javascripts/SaxEventHandler.js">
+</script><!-- http://xmljs.sourceforge.net -->
+
+<script type="text/javascript" src="../javascripts/utilpurl.js">
+</script>
+<script type="text/javascript">
+	//<![CDATA[
+		// Number of forms on this page that need to be locked out
+		// when the user is not logged in.
+		var numNeedsAuth = 0;
+	//]]>
+</script>
+	</head>
+	<body onload="load('/docs/pending/index.html')">
+		<div id="loginstatus">
+			<p>
+				Login status not determined. Do you have Javascript and cookies enabled?
+			</p>
+		</div>
+		<div id="header">
+			<h1>
+				PURL Administrative Approvals
+			</h1>
+			<ul id="tabmenu">
+				<li>
+					<a class="inactive" href="../index.html">Home</a>
+				</li>
+				<li>
+					<a class="inactive" href="../purl.html">PURLs</a>
+				</li>
+				<li>
+					<a class="inactive" href="../user.html">Users</a>
+				</li>
+				<li>
+					<a class="inactive" href="../group.html">Groups</a>
+				</li>
+				<li>
+					<a class="inactive" href="../domain.html">Domains</a>
+				</li>
+				<li>
+					<a class="active" href="index.html">Admin</a>
+				</li>
+				<li>
+					<a class="inactive" href="../help.html">Help</a>
+				</li>
+			</ul>
+		</div>
+		<div id="content">
+			<p>
+				New users and top-level domains must be approved by an administrator if the &lt;allowUserAutoCreation&gt; option is not set. You will <b>not</b> need to use these functions if your PURL server is configured for automatic user/domain approval.
+			</p>
+			<p>
+				You must log in and have <b>administration privileges</b> on this PURL server to approve users and domains.
+			</p>
+			<table class="display" summary="purl information" width="70%" align="center">
+				<tr valign="top">
+					<th class="row">
+						Approving Pending Requests
+					</th>
+				</tr>
+				<tr valign="top">
+					<td>
+						<ul>
+							<li>
+								<a href="user.html">Approve pending user requests</a>
+							</li>
+							<li>
+								<a href="domain.html">Approve pending top-level domain requests</a>
+							</li>
+						</ul>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div id="footer">
+			<table width="100%" summary="supporters">
+				<tr>
+					<td>
+						<a href="http://www.oclc.org/"><img align="left" src="../images/oclclogo.png" alt="oclc"></a>
+					</td>
+					<td>
+						<a href="http://zepheira.com/"><img align="right" src="../images/zepheiralogo.png" alt="zepheira"></a>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</body>
+</html>

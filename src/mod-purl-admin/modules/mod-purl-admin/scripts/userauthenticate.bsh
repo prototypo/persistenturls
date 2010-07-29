@@ -1,0 +1,40 @@
+import org.ten60.netkernel.layer1.representation.*;
+import org.ten60.netkernel.xml.representation.*;
+import com.ten60.netkernel.urii.aspect.*;
+import org.purl.accessor.*;
+import org.purl.accessor.util.Crypt;
+import org.purl.accessor.util.NKHelper;
+
+main() {
+	user = context.sourceAspect("this:param:user",IAspectString.class);
+	password = context.sourceAspect("this:param:password", IAspectString.class);
+	
+	b = false;
+	
+	if(NKHelper.validUser(context, user.getString())) {
+		req = context.createSubRequest("active:purl-storage-query-user");
+		req.addArgument("uri", "ffcpl:/user/" + user.getString());
+		req.setAspectClass(IAspectXDA.class);
+		userXDA = context.issueSubRequestForAspect(req);
+		existingHashedPassword = userXDA.getXDA().getText("/user/password", true);
+		
+		// Legacy Passwords are DES-based and are tagged as such when they come in
+		// TODO: Convert to a common password scheme using AES-256 or something
+		
+		if(existingHashedPassword.startsWith("des:")) {
+			existingHashedPassword = existingHashedPassword.substring(4);
+			salt = existingHashedPassword.substring(0,2);
+			desHash = Crypt.crypt(salt, password.getString());
+			b = desHash.equals(existingHashedPassword);
+		} else {
+			hashedPassword = NKHelper.getMD5Value(context, password.getString());			
+			b = existingHashedPassword.equals(hashedPassword);
+		}
+		
+	} else {
+		// TODO: Send back a message?
+	}
+	
+	resp=context.createResponseFrom(new BooleanAspect(b));
+	resp.setMimeType("text/plain");
+}

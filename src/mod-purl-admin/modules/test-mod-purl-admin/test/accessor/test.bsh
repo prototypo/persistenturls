@@ -1,0 +1,10 @@
+import org.ten60.netkernel.layer1.representation.*;
+import org.ten60.netkernel.xml.representation.*;
+import com.ten60.netkernel.urii.aspect.*;
+
+main() {
+  System.out.println("HELLO, TEST");
+  response = context.createResponseFrom(new StringAspect("<hello>world</hello>"));
+  response.setMimeType("text/xml");
+  context.setResponse(response);
+}

@@ -1,0 +1,112 @@
+<document>
+
+	<name>Request Domain Form</name>
+	
+	<reference>request_domain</reference>
+	
+	<formerurl>http://purl.org/maint/request_domain.html</formerurl>
+	
+	<depiction>
+		
+		<url>images/request_domain.jpg</url>
+		<alt>Screenshot of Request Domain page</alt>
+		<width>640px</width> 
+		<height>545px</height>
+		
+	</depiction>
+
+	<history>Exists in PURL 1.0</history>
+
+  
+	<!-- items may have rel='new' or 'todo' -->
+	<functionality>
+		<item>Collect domain information via a form for registration with the local PURL service.</item>
+		<item>Email-based confirmation.</item>
+	</functionality>
+
+	<graphics>
+		
+		<item>
+			<url>http://www.oclc.org/common/images/logos/oclclogo_gray.gif</url>
+			<label>OCLC Logo</label>
+			<linksto>http://www.oclc.org/</linksto>
+		</item>
+	
+	</graphics>
+		
+	<assumptions>This page is served by a Web server and is URL addressable.</assumptions>
+	
+	<preconditions>None</preconditions>
+	
+	<postconditions>A top-level domain has been requested, but is not guaranteed.</postconditions>
+
+	<linksto>
+		
+		<!--
+		<parentof></parentof>
+		<parentoflink>request_domain.pl.cgi</parentoflink>	
+		<parentoflink>create_subdomain</parentoflink>
+		-->
+	
+		<!--
+		<childof></childof>
+		<childoflink>power</childoflink>
+		<childoflink>create_all</childoflink>
+		-->
+	
+		<!--
+		<external>Community links (TBD)</external>
+		<externallink>
+			<url>http://purl.oclc.org/OCLC/PURL/FAQ</url>
+			<description>FAQ</description>
+		</externallink>
+			<externallink>
+				<url>http://www.internic.net/</url>
+				<description>Internic</description>
+			</externallink>
+		-->
+	
+	</linksto>
+	
+	<formerlylinkedto>
+		
+		<!--
+		<parentof></parentof>
+			-->
+		<parentoflink>request_domain.pl.cgi</parentoflink>	
+		<parentoflink>create_subdomain</parentoflink>
+	
+		<!--
+		<childof></childof>
+		-->
+		<childoflink>power</childoflink>
+		<childoflink>create_all</childoflink>
+		
+	
+		<!--
+		<external>Community links (TBD)</external>
+		-->
+		<externallink>
+			<url>http://purl.oclc.org/OCLC/PURL/FAQ</url>
+			<description>FAQ</description>
+		</externallink>
+			<externallink>
+				<url>http://www.internic.net/</url>
+				<description>Internic</description>
+			</externallink>
+	
+	</formerlylinkedto>
+	
+	<assignedto>
+		<name></name>
+		<url></url>
+	</assignedto>
+	
+	<status>Not started.</status>
+	
+	<definedby>
+		<name>David Wood</name>
+		<url>http://zepheira.com/team/dave/</url>
+	</definedby>
+	
+</document>

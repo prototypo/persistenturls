@@ -1,0 +1,12 @@
+<domain>
+	<public>false</public>
+	<id>/zoo</id>
+	<name>My Private Domain</name>
+	<maintainers>
+		<uid>brian-test</uid>
+		<uid>david-test</uid>		
+	</maintainers>
+	<writers>
+		<uid>brian-test</uid>
+	</writers>
+</domain>

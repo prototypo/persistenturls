@@ -1,0 +1,792 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<!-- 
+
+purl.html - Provides a Web UI for the administration of PURLs.
+
+version 1.0, 16 August 2007
+David Wood (david at http://zepheira.com/)
+
+=========================================================================
+
+Copyright (C) 2007 OCLC (http://oclc.org)
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+=========================================================================
+
+MAINTENANCE HINTS:
+1)  There are six HTML forms on this page: 'naviform' is used to choose
+at most ONE of the other forms to show at any moment.  Showing one of four
+others (create, modify, search, delete or advancedcreate) will hide the others.
+2)  Any of the actionable forms (create, modify, search, delete or advancedcreate)
+may be directly accessed by appending its id as a URL fragment (e.g. purl.html#create). 
+3)  HTML forms are submitted via the functions createSubmit(), modifySubmit(),
+searchSubmit() and deleteSubmit() via AJAX (all defined on this page).  The
+remainder of the Javascript functions are in external Javascript files.
+Importantly, look for the callback function onResponse() in utilpurl.js, which
+handles results from the server in response to form submissions.
+
+-->
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link type="text/css" rel="stylesheet" href="style.css" />
+		<title>
+			PURL Administration
+		</title><!--[if lt IE 7]>
+	<script defer type="text/javascript" src="javascripts/pngfix.js"></script>
+	<![endif]-->
+
+		<script type="text/javascript" src="javascripts/utilajax.js">
+</script>
+		<script type="text/javascript" src="javascripts/ajaxCaller.js">
+</script><!-- http://ajaxify.com/run/Lib/js/ -->
+
+		<script type="text/javascript" src="javascripts/xmlsax.js">
+</script>
+		<script type="text/javascript" src="javascripts/SaxEventHandler.js">
+</script><!-- http://xmljs.sourceforge.net -->
+
+		<script type="text/javascript" src="javascripts/utilpurl.js">
+</script>
+		<script type="text/javascript">
+//<![CDATA[
+
+		var debugThisPage = false;
+
+		var context = "purl";
+
+		// Number of forms on this page that need to be locked out
+		// when the user is not logged in.
+		var numNeedsAuth = 4;
+
+		// NB: This array contains the names of each element that represents a label for an HTML form item.  If you add a new form item and want it highlighted upon a "bad parameter" error, you MUST add it's id to this array.
+		var labelElements = ["c_id_label", "c_target_label", "c_maintainers_label", "a_id_label", "a_maintainers_label", "a_type_label", "a_target_label", "a_seealso_label", "a_basepurl_label", "m_id_label", "m_type_label", "m_target_label", "m_seealso_label", "m_maintainers_label", "s_id_label", "s_target_label", "s_seealso_label", "s_maintainers_label", "s_explicitmaintainers_label", "s_tombstone_label", "v_id_label", "d_id_label"];
+
+		// Send a Create command via HTTP POST.
+		function createSubmit() {
+		var my_id = $('c_id').value;
+		if ( my_id == "" | my_id == null ) {
+			alert("You must provide a path to identify the PURL you wish to create.  Please enter a path.");
+		} else if ( my_id.indexOf("/") != 0 ) {
+			alert("A PURL path always starts with a forward slash (/) character.  Please provide the full path.");
+		} else {
+			signalLoadingResults();
+			maintainers = scrubTextareaInput($('c_maintainers').value);
+			urlVars = {}
+			bodyVars = {
+				type: "302",
+				target: escape($('c_target').value),
+				maintainers: escape(maintainers)
+			}
+			ajaxCaller.postVars("/admin/purl" + my_id, bodyVars, urlVars, onResponse, false, "Create");
+		}
+		clearErrorIndications();
+		return false;
+		}
+
+		// Send a Create command via HTTP POST for "advanced" PURL features.
+		function createAdvSubmit() {
+		var my_id = $('a_id').value;
+		if ( my_id == "" | my_id == null ) {
+			alert("You must provide a path to identify the PURL you wish to create.  Please enter a path.");
+		} else if ( my_id.indexOf("/") != 0 ) {
+			alert("A PURL path always starts with a forward slash (/) character.  Please provide the full path.");
+		} else {
+			signalLoadingResults();
+			maintainers = scrubTextareaInput($('a_maintainers').value);
+			urlVars = {}
+			bodyVars = {
+				type: $('a_type').value,
+				target: escape($('a_target').value),
+				seealso: escape($('a_seealso').value),
+				maintainers: escape(maintainers),
+				basepurl: escape($('a_basepurl').value)
+			}
+			ajaxCaller.postVars("/admin/purl" + my_id, bodyVars, urlVars, onResponse, false, "Create");
+		}
+		clearErrorIndications();
+		return false;
+		}
+
+		// Send a Modify command via HTTP PUT.
+		function modifySubmit() {       
+		var my_id = $('m_id').value;
+		if ( my_id == "" | my_id == null ) {
+			alert("You must provide a path to identify the PURL you wish to modify.  Please enter a path.");
+		} else if ( my_id.indexOf("/") != 0 ) {
+			alert("A PURL path always starts with a forward slash (/) character.  Please provide the full path.");
+		} else {
+			signalLoadingResults();
+			maintainers = scrubTextareaInput($('m_maintainers').value);
+			urlVars = {
+				type: $('m_type').value,
+				seealso: escape($('m_seealso').value),
+				maintainers: escape(maintainers)
+			}
+            if (urlVars.type == 'chain') {
+                urlVars.basepurl = escape($('m_target').value);
+            } else {
+                urlVars.target = escape($('m_target').value);
+            }
+			bodyType = "text/html";
+			body = "";
+			parameters = {
+				urlVars: urlVars,
+				bodyType: bodyType,
+				body: body
+			};
+			ajaxCaller.putBody("/admin/purl" + my_id, parameters.urlVars, onResponse, false, "Modify", parameters.bodyType, parameters.body);
+		}
+		clearErrorIndications();
+		return false;
+		}
+
+		// Send a Search command via HTTP GET.
+		function searchSubmit() {
+		var my_id = $('s_id').value;
+		signalLoadingResults();
+		bodyVars =  {
+			p_id: $('s_id').value,
+			target: escape($('s_target').value),
+			seealso: escape($('s_seealso').value),
+			maintainers: escape($('s_maintainers').value),
+			explicitmaintainers: escape($('s_explicitmaintainers').value),
+			tombstone: $('s_tombstone').checked
+		}
+		if ( my_id.indexOf("/") != 0 && my_id.length > 0 ) {
+			alert("A PURL path always starts with a forward slash (/) character.  Please provide the full path.");
+		} else {
+			ajaxCaller.get("/admin/purl/", bodyVars, onResponse, false, "Search");
+		}
+		clearErrorIndications();
+		return false;
+		}
+
+		// Send a Validate command via HTTP GET.
+		function validateSubmit() {
+		var my_id = $('v_id').value;
+		if ( my_id == "" | my_id == null ) {
+			alert("You must provide a path to identify the PURL you wish to validate.  Please enter a path.");
+		} else if ( my_id.indexOf("/") != 0 ) {
+			alert("A PURL path always starts with a forward slash (/) character.  Please provide the full path.");
+		} else {
+			signalLoadingResults();
+			bodyVars =  {}
+			ajaxCaller.get("/admin/targeturl" + my_id, bodyVars, onResponse, false, "Validate");
+		}
+		clearErrorIndications();
+		return false;
+		}
+
+		// Send a Delete command via HTTP DELETE.
+		function deleteSubmit() {
+		var my_id = $('d_id').value;
+		if ( my_id == "" | my_id == null ) {
+			alert("You must provide a path to identify the PURL you wish to delete.  Please enter a path.");
+		} else if ( my_id.indexOf("/") != 0 ) {
+			alert("A PURL path always starts with a forward slash (/) character.  Please provide the full path.");
+		} else {
+			signalLoadingResults();
+			bodyVars =  {}
+			ajaxCaller.deleteIt("/admin/purl" + my_id, bodyVars, onResponse, false, "Delete");
+		}
+		clearErrorIndications();
+		return false;
+		}
+
+		function showAdvancedPURLFields() {
+		var purlType = document.getElementById('a_type').value;
+		if ( purlType == "301" || purlType == "302" || purlType == "307" || purlType.indexOf("partial") === 0) {
+			setVisibility('maintainerstable', 'inline');
+			setVisibility('seealsourltable', 'none');
+			setVisibility('targeturltable', 'inline');
+			setVisibility('basepurltable', 'none');
+		} else if ( purlType == "303" ) {
+			setVisibility('maintainerstable', 'inline');
+			setVisibility('seealsourltable', 'inline');
+			setVisibility('targeturltable', 'none');
+			setVisibility('basepurltable', 'none');
+		} else if ( purlType == "clone" ) {
+			setVisibility('maintainerstable', 'none');
+			setVisibility('seealsourltable', 'none');
+			setVisibility('targeturltable', 'none');
+			setVisibility('basepurltable', 'inline');
+		} else if ( purlType == "chain" ) {
+			setVisibility('maintainerstable', 'inline');
+			setVisibility('seealsourltable', 'none');
+			setVisibility('targeturltable', 'none');
+			setVisibility('basepurltable', 'inline');
+		} else {
+			// The types are expected to be: 404, 410
+			setVisibility('maintainerstable', 'inline');
+			setVisibility('seealsourltable', 'none');
+			setVisibility('targeturltable', 'none');
+			setVisibility('basepurltable', 'none');
+		}
+		}
+
+		//]]>
+		</script>
+	</head>
+	<body onload="load('/docs/purl.html')">
+		<div id="loginstatus">
+			<p>
+				Login status not determined. Do you have Javascript and cookies enabled?
+			</p>
+		</div>
+		<div id="header">
+			<h1>
+				PURL Administration
+			</h1>
+			<ul id="tabmenu">
+				<li>
+					<a class="inactive" href="index.html">Home</a>
+				</li>
+				<li>
+					<a class="active" href="purl.html">PURLs</a>
+				</li>
+				<li>
+					<a class="inactive" href="user.html">Users</a>
+				</li>
+				<li>
+					<a class="inactive" href="group.html">Groups</a>
+				</li>
+				<li>
+					<a class="inactive" href="domain.html">Domains</a>
+				</li>
+				<li>
+					<a class="inactive" href="pending/index.html">Admin</a>
+				</li>
+				<li>
+					<a class="inactive" href="help.html#purl">Help</a>
+				</li>
+			</ul>
+		</div>
+		<div id="content">
+			<table class="navtable" summary="purl interface" width="100%">
+				<tr valign="top">
+					<td class="navtable_action" width="35%">
+						<div id="navigation">
+							<form name="naviform" id="naviform">
+								<fieldset>
+									<legend>1) Choose an action to take on PURLs</legend>
+									<div class="instructions">
+										PURL administration options.
+									</div><select name="naviselect" onchange="showAction()">
+										<option value="">
+											--- Select your action ---
+										</option>
+										<option value="create">
+											Create a new PURL
+										</option>
+										<option value="advancedcreate">
+											Create an advanced PURL
+										</option>
+										<option value="modify">
+											Modify an existing PURL
+										</option>
+										<option value="search">
+											Search for a PURL
+										</option>
+										<option value="validate">
+											Validate a PURL
+										</option>
+										<option value="delete">
+											Delete a PURL
+										</option>
+									</select>
+								</fieldset>
+							</form><img src="./images/purl-96.png" alt="a PURL" />
+						</div>
+					</td>
+					<td class="navtable_form">
+						<div id="create" style="display: none;">
+							<form action="#" name="createForm" onsubmit="return createSubmit()" id="createForm">
+								<fieldset>
+									<legend>2) Create a new PURL</legend>
+									<div class="instructions">
+										Fill in the following information to create a new PURL.
+									</div>
+									<div id="needAuth_0">
+										<table class="actiontable" summary="action table">
+											<tbody>
+												<tr>
+													<td class="property" id="c_id_label">
+														Path:
+													</td>
+													<td class="value">
+														<input id="c_id" name="c_id" type="text" size="40" />
+													</td>
+												</tr>
+												<tr>
+													<td class="property" id="c_target_label">
+														Target URL:
+													</td>
+													<td class="value">
+														<input id="c_target" name="c_target" type="text" size="40" />
+													</td>
+												</tr>
+												<tr>
+													<td class="property" id="c_maintainers_label">
+														Maintainers IDs<br />
+														(one per line):
+													</td>
+													<td class="value">
+														<textarea rows="5" cols="40" id="c_maintainers" name="c_maintainers">
+</textarea>
+													</td>
+												</tr>
+											</tbody>
+										</table><input value="Submit" type="submit" /><br />
+									</div>
+									<div id="needAuthDiv_0"></div>
+									<table class="docstable" summary="documentation table">
+										<tbody>
+											<tr>
+												<td align="right">
+													<a href="javascript:showAction('AdvancedCreate')">Advanced</a>
+												</td>
+												<td align="right">
+													<a href="help.html#purlcreate">Help</a>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</fieldset>
+							</form>
+						</div><!-- create -->
+						<div id="advancedcreate" style="display: none;">
+							<form action="#" name="advancedCreateForm" onsubmit="return createAdvSubmit()" id="advancedCreateForm">
+								<fieldset>
+									<legend>2) Create an advanced PURL</legend>
+									<div class="instructions">
+										Fill in the following information to create a new PURL.
+									</div>
+									<table class="actiontable" summary="action table" width="100%">
+										<tbody>
+											<tr>
+												<td class="property" id="a_id_label" width="120">
+													Path:
+												</td>
+												<td class="value">
+													<input id="a_id" name="a_id" type="text" size="40" />
+												</td>
+											</tr>
+											<tr>
+												<td class="property" id="a_type_label" width="120">
+													Type of PURL:
+												</td>
+												<td class="value">
+													<select id="a_type" name="a_type" onchange="showAdvancedPURLFields()">
+														<option value="">
+															--- Select your type ---
+														</option>
+														<option value="302">
+															Simple redirection to a target URL (302)
+														</option>
+														<option value="301">
+															Moved permanently to a target URL (301)
+														</option>
+														<option value="303">
+															See other URLs (use for Semantic Web resources) (303)
+														</option>
+														<option value="307">
+															Temporary redirect to a target URL (307)
+														</option>
+														<option value="404">
+															Temporarily gone (404)
+														</option>
+														<option value="410">
+															Permanently gone (410)
+														</option>
+														<option value="clone">
+															Clone an existing PURL
+														</option>
+														<option value="chain">
+															Chain an existing PURL
+														</option>
+														<option value="partial">
+															Partial-redirect PURL
+														</option>
+                                                        <option value="partial-append-extension">
+                                                            Partial-redirect PURL with appended file extension(s)
+                                                        </option>
+                                                        <option value="partial-ignore-extension">
+                                                            Partial-redirect PURL with ignored file extension(s)
+                                                        </option>
+                                                        <option value="partial-replace-extension">
+                                                            Partial-redirect PURL with replaced file extension(s)
+                                                        </option>
+													</select>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+									<table id="targeturltable" summary="target URL table" width="100%" style="display: none;">
+										<tbody>
+											<tr>
+												<td class="property" id="a_target_label" width="120">
+													Target URL:
+												</td>
+												<td class="value">
+													<input id="a_target" name="a_target" type="text" size="40" />
+												</td>
+											</tr>
+										</tbody>
+									</table>
+									<table id="maintainerstable" summary="maintainers table" width="100%" style="display: none;">
+										<tbody>
+											<tr>
+												<td class="property" id="a_maintainers_label" width="120">
+													Maintainers IDs<br />
+													(one per line):
+												</td>
+												<td class="value">
+													<textarea rows="5" cols="40" id="a_maintainers" name="a_maintainers">
+</textarea>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+									<table id="seealsourltable" summary="see also URL table" width="100%" style="display: none;">
+										<tbody>
+											<tr>
+												<td class="property" id="a_seealso_label" width="120">
+													See Also URL:
+												</td>
+												<td class="value">
+													<input type="text" size="40" id="a_seealso" name="a_seealso" />
+												</td>
+											</tr>
+										</tbody>
+									</table>
+									<div id="needAuth_1">
+										<table id="basepurltable" summary="existing PURL table" width="100%" style="display: none;">
+											<tbody>
+												<tr>
+													<td class="property" id="a_basepurl_label" width="120">
+														Existing PURL path:
+													</td>
+													<td class="value">
+														<input id="a_basepurl" name="a_basepurl" type="text" size="40" />
+													</td>
+												</tr>
+											</tbody>
+										</table><br />
+										<input value="Submit" type="submit" /><br />
+									</div>
+									<div id="needAuthDiv_1"></div>
+									<table class="docstable" summary="documentation table">
+										<tbody>
+											<tr>
+												<td align="right">
+													<a href="javascript:showAction('Create')">Simple PURL Creation</a>
+												</td>
+												<td align="right">
+													<a href="help.html#purladvcreate">Help</a>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</fieldset>
+							</form>
+						</div><!-- advancedcreate -->
+						<div id="modify" style="display: none;">
+							<form action="#" name="modifyForm" onsubmit="return modifySubmit()" id="modifyForm">
+								<fieldset>
+									<legend>2) Modify a PURL</legend>
+									<div class="instructions">
+										Modify any of the following information.
+									</div>
+									<div id="needAuth_2">
+										<table class="actiontable" summary="action table">
+											<tbody>
+												<tr>
+													<td class="property" id="m_id_label">
+														Path:
+													</td>
+													<td class="value">
+														<input id="m_id" name="m_id" type="text" size="40" />
+													</td>
+												</tr>
+												<tr>
+													<td class="property" id="m_type_label" width="120">
+														Type of PURL:
+													</td>
+													<td class="value">
+														<select id="m_type" name="m_type" onchange="showAdvancedPURLFields()">
+															<option value="">
+																--- Select your type ---
+															</option>
+															<option value="302">
+																Simple redirection to a target URL (302)
+															</option>
+															<option value="301">
+																Moved permanently to a target URL (301)
+															</option>
+															<option value="303">
+																See other URLs (use for Semantic Web resources) (303)
+															</option>
+															<option value="307">
+																Temporary redirect to a target URL (307)
+															</option>
+															<option value="404">
+																Temporarily gone (404)
+															</option>
+															<option value="410">
+																Permanently gone (410)
+															</option>
+															<option value="chain">
+																Chain an existing PURL
+															</option>
+															<option value="partial">
+																Partial-redirect PURL
+															</option>
+															<option value="partial-append-extension">
+																Partial-redirect PURL with appended file extension(s)
+															</option>
+                                                            <option value="partial-ignore-extension">
+																Partial-redirect PURL with ignored file extension(s)
+															</option>
+                                                            <option value="partial-replace-extension">
+																Partial-redirect PURL with replaced file extension(s)
+															</option>
+														</select>
+													</td>
+												</tr>
+												<tr>
+													<td class="property" id="m_maintainers_label">
+														Maintainers IDs<br />
+														(one per line):
+													</td>
+													<td class="value">
+														<textarea rows="5" cols="40" id="m_maintainers" name="m_maintainers">
+</textarea>
+													</td>
+												</tr>
+												<tr>
+													<td>
+														<hr />
+													</td>
+												</tr>
+												<tr>
+													<td class="property" id="m_target_label">
+														Target URL:
+													</td>
+													<td class="value">
+														<input id="m_target" name="m_target" type="text" size="40" />
+													</td>
+												</tr>
+												<tr>
+													<td colspan="2">
+														<b>or</b>
+													</td>
+												</tr>
+												<tr>
+													<td class="property" id="m_seealso_label">
+														SeeAlso URL:
+													</td>
+													<td class="value">
+														<input id="m_seealso" name="m_seealso" type="text" size="40" />
+													</td>
+												</tr>
+											</tbody>
+										</table><input value="Submit" type="submit" /><br />
+									</div>
+									<div id="needAuthDiv_2"></div>
+									<table class="docstable" summary="documentation table">
+										<tbody>
+											<tr>
+												<td align="right">
+													<a href="help.html#purlmodify">Help</a>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</fieldset>
+							</form>
+						</div><!-- modify -->
+						<div id="search" style="display: none;">
+							<form action="#" name="searchForm" onsubmit="return searchSubmit()" id="searchForm">
+								<fieldset>
+									<legend>2) Search for a PURL</legend>
+									<div class="instructions">
+										Search PURLs based on any of the following characteristics.
+									</div>
+									<table class="actiontable" summary="action table">
+										<tbody>
+											<tr>
+												<td class="property" id="s_id_label">
+													Path:
+												</td>
+												<td class="value">
+													<input id="s_id" name="s_id" type="text" size="40" />
+												</td>
+											</tr>
+											<tr>
+												<td align="center">
+													<b>or</b>
+												</td>
+											</tr>
+											<tr>
+												<td class="property" id="s_target_label">
+													Target URL:
+												</td>
+												<td class="value">
+													<input id="s_target" name="s_target" type="text" size="40" />
+												</td>
+											</tr>
+											<tr>
+												<td align="center">
+													<b>or</b>
+												</td>
+											</tr>
+											<tr>
+												<td class="property" id="s_seealso_label">
+													See Also URL:
+												</td>
+												<td class="value">
+													<input id="s_seealso" name="s_seealso" type="text" size="40" />
+												</td>
+											</tr>
+											<tr>
+												<td align="center">
+													<b>or</b>
+												</td>
+											</tr>
+											<tr>
+												<td class="property" id="s_maintainers_label">
+													Maintainers IDs (expands groups):
+												</td>
+												<td class="value">
+													<input id="s_maintainers" name="s_maintainers" type="text" />
+												</td>
+											</tr>
+											<tr>
+												<td align="center">
+													<b>or</b>
+												</td>
+											</tr>
+											<tr>
+												<td class="property" id="s_explicitmaintainers_label">
+													Explicit Maintainers IDs (does not expand groups):
+												</td>
+												<td class="value">
+													<input id="s_explicitmaintainers" name="s_explicitmaintainers" type="text" />
+												</td>
+											</tr>
+											<tr>
+												<td class="property" id="s_tombstone_label">
+													Search tombstoned PURLs:
+												</td>
+												<td class="value">
+													<input id="s_tombstone" name="s_tombstone" type="checkbox" value="true" />
+												</td>
+											</tr>
+										</tbody>
+									</table><input value="Submit" type="submit" />
+									<table class="docstable" summary="documentation table">
+										<tbody>
+											<tr>
+												<td align="right">
+													<a href="help.html#purlsearch">Help</a>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</fieldset>
+							</form>
+						</div><!-- search -->
+						<div id="validate" style="display: none;">
+							<form action="#" name="validateForm" onsubmit="return validateSubmit()" id="validateForm">
+								<fieldset>
+									<legend>2) Validate a PURL</legend>
+									<div class="instructions">
+										Validate a PURL based on its path.
+									</div>
+									<table class="actiontable" summary="action table">
+										<tbody>
+											<tr>
+												<td class="property" id="v_id_label">
+													Path:
+												</td>
+												<td class="value">
+													<input id="v_id" name="v_id" type="text" size="40" />
+												</td>
+											</tr>
+										</tbody>
+									</table><input value="Submit" type="submit" />
+									<table class="docstable" summary="documentation table">
+										<tbody>
+											<tr>
+												<td align="right">
+													<a href="help.html#purlvalidate">Help</a>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</fieldset>
+							</form>
+						</div><!-- validate -->
+						<div id="delete" style="display: none;">
+							<form action="#" name="deleteForm" onsubmit="return checkDeleteSubmit('PURL', 'd_id')" id="deleteForm">
+								<fieldset>
+									<legend>2) Delete a PURL</legend>
+									<div class="instructions">
+										Delete a PURL based on its path. You will be prompted for confirmation to complete this action.
+									</div>
+									<div id="needAuth_3">
+										<table class="actiontable" summary="action table">
+											<tbody>
+												<tr>
+													<td class="property" id="d_id_label">
+														Path:
+													</td>
+													<td class="value">
+														<input id="d_id" name="d_id" type="text" size="40" />
+													</td>
+												</tr>
+											</tbody>
+										</table><input value="Submit" type="submit" /><br />
+									</div>
+									<div id="needAuthDiv_3"></div>
+									<table class="docstable" summary="documentation table">
+										<tbody>
+											<tr>
+												<td align="right">
+													<a href="help.html#purldelete">Help</a>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</fieldset>
+							</form>
+						</div><!-- delete -->
+					</td>
+				</tr>
+			</table>
+		</div><!-- content -->
+		<div id="results" class="noresults"></div>
+		<div id="footer">
+			<table width="100%" summary="supporters">
+				<tr>
+					<td>
+						<a href="http://www.oclc.org/"><img align="left" src="images/oclclogo.png" alt="oclc" /></a>
+					</td>
+					<td>
+						<a href="http://zepheira.com/"><img align="right" src="images/zepheiralogo.png" alt="zepheira" /></a>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</body>
+</html>

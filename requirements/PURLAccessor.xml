@@ -1,0 +1,78 @@
+<document>
+
+	<name>PURL Accessor</name>
+	
+	<reference>PURLAccessor</reference>
+			
+	<url>http://purlz.org/admin/purl/</url>
+	
+	<depiction>
+		<!--
+		<url></url>
+		<alt></alt>
+		-->
+	</depiction>
+
+	<history>Created for PURL 2.0</history>
+
+  
+	<!-- items may have rel='new' or 'todo' -->
+	<functionality>
+		<item>Accept a PURL-related form (from purlKEY.html, where KEY is one of 'create, modify, search, delete') via  a matching HTTP verb (POST, PUT, GET, DELETE) and takes appropriate action.  This script is a state machine.</item>
+		<item>Return a confirmation page as appropriate.</item>
+		<item>Return an error page on error.</item>
+	</functionality>
+
+	<graphics>
+		<!--
+		<item>
+			<url>http://www.oclc.org/common/images/logos/oclclogo_gray.gif</url>
+			<label>OCLC Logo</label>
+			<linksto>http://www.oclc.org/</linksto>
+		</item>
+		-->
+	</graphics>
+		
+	<assumptions>This is a NetKernel Accessor.  It is served by a NetKernel and is URL addressable.  It is a dynamic script.</assumptions>
+	
+	<preconditions>Expects a form appropriate to the calling HTTP verb.</preconditions>
+
+	<postconditions>The requested action has been completed unless an error is reported.</postconditions>
+	
+	<linksto>
+		
+		<parentof>Dynamically generated confirmation page.</parentof>
+		<parentof>Dynamically generated error page (on error condition).</parentof>
+		<!--
+		<parentoflink></parentoflink>
+		-->
+	
+		<!--
+		<childof></childof>
+		-->
+		<childoflink>purl</childoflink>
+		
+	
+		<!--
+		<external>Community links (TBD)</external>
+		<externallink>
+			<url></url>
+			<description></description>
+		</externallink>
+	-->
+	
+	</linksto>
+	
+	<assignedto>
+		<name></name>
+		<url></url>
+	</assignedto>
+	
+	<status>Template complete.</status>
+	
+	<definedby>
+		<name>Brian Sletten</name>
+		<url>http://zepheira.com/team/dave/</url>
+	</definedby>
+	
+</document>

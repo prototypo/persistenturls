@@ -1,0 +1,15 @@
+import org.ten60.netkernel.layer1.representation.*;
+import org.ten60.netkernel.xml.representation.*;
+import com.ten60.netkernel.urii.aspect.*;
+
+main() {
+  req = context.createSubRequest("active:purl-index");
+  req.addArgument("path", "ffcpl:/purl/something" );
+  req.addArgument("index", "ffcpl:/index/purls");
+  req.addArgument("operand", new StringAspect("<doc><foo>bar</foo><bar>foo</bar></doc>"));
+  req.setAspectClass(IAspectXDA.class);
+  r=context.issueSubRequest(req);
+  response = context.createResponseFrom(r);
+  response.setMimeType("text/xml");
+  context.setResponse(response);
+}
