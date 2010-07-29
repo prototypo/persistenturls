@@ -84,8 +84,8 @@
 					</tbody>
 				</table>
 				<input id="enable-button" value="Enable" type="button" onclick="$.post(diverted('?purl-enable', this), function(){location.reload()})" />
-				<input id="disable-button" value="Disable" type="button" onclick="confirm('Are you sure you want to Disable this PURL?') &amp;&amp; $.post(diverted('?purl-disable', this), function(){location.reload()})" />
-				<input id="tombstone-button" value="Tombstone" type="button" onclick="confirm('Are you sure you want to Tombstone this PURL?') &amp;&amp; $.post(diverted('?purl-tombstone', this), function(){location.reload()})" />
+				<input id="disable-button" value="Disable" type="button" onclick="confirm('Are you sure you want to Disable this PURL?') &amp;&amp; $.post(diverted('?purl-disable', this), function(){location=diverted('?view', this)})" />
+				<input id="tombstone-button" value="Tombstone" type="button" onclick="confirm('Are you sure you want to Tombstone this PURL?') &amp;&amp; $.post(diverted('?purl-tombstone', this), function(){location=diverted('?view', this)})" />
 				<input id="save-button" value="Save" type="submit" />
 			</fieldset>
 		</form>
