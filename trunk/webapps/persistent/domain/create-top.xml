@@ -8,7 +8,7 @@
 	xmlns:purl="http://persistent.name/rdf/2010/purl#">
 	<head>
 		<title>Create a New Top Level Domain</title>
-		<link rel="help" title="Help" target="help" href="/persistent/docs/" type="text/html" />
+		<link rel="help" title="Help" target="help" href="/persistent/docs/domain.html#domaincreate" />
 	</head>
 	<body class="domain">
 		<form action="" about="" typeof="purl:Domain purl:Zoned" class="diverted">
@@ -51,7 +51,7 @@
 							<td class="property">
 								<label for="m_curator">Scribes:</label>
 							</td>
-							<td rel="calli:scribe" class="value" data-suggest="/persistent/user/template?pre-copy">
+							<td rel="calli:scribe" class="value" data-suggest="/persistent/user/template?pre-register">
 								<span about="?scribe" typeof="purl:User">
 									<span property="rdfs:label"/>
 								</span>
@@ -61,7 +61,7 @@
 							<td class="property">
 								<label for="m_curator">Curators:</label>
 							</td>
-							<td rel="calli:curator" class="value" data-suggest="/persistent/user/template?pre-copy">
+							<td rel="calli:curator" class="value" data-suggest="/persistent/user/template?pre-register">
 								<span about="?curator" typeof="purl:User">
 									<span property="rdfs:label"/>
 								</span>
@@ -71,7 +71,7 @@
 							<td class="property">
 								<label for="m_maintainer">Maintainers:</label>
 							</td>
-							<td rel="calli:maintainer" class="value" data-suggest="/persistent/user/template?pre-copy">
+							<td rel="calli:maintainer" class="value" data-suggest="/persistent/user/template?pre-register">
 								<span about="?maintainer" typeof="purl:User">
 									<span property="rdfs:label"/>
 								</span>

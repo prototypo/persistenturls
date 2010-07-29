@@ -30,22 +30,6 @@ purl:UserTemplate rdfs:subClassOf calli:Copyable;
 	calli:withNamespace </data/user/>;
 	calli:copy <user/register.xml>.
 
-# Adds user to authority realm and initializes their password
-# Use in user registration
-purl:post-user-copy owl:intersectionOf (calli:post-copy
-		[owl:onProperty obj:target; owl:allValuesFrom purl:UserTemplate]);
-	obj:precedes calli:post-copy;
-	obj:imports <authority>;
-	obj:imports <java:org.openrdf.http.object.exceptions.BadRequest>;
-	obj:groovy """
-		def copy = msg.functionalObjectResponse
-		if (!copy.purlEmail)
-			throw new BadRequest("Missing Email Address")
-		authority.calliCredentials.add(copy)
-		copy.purlResetPassword()
-		return copy
-	""".
-
 purl:User rdfs:subClassOf calli:Viewable, calli:Reviewable, calli:Editable, calli:Deletable;
 	calli:view <user/view.xml>;
 	calli:review <user/review.xml>;
@@ -103,13 +87,11 @@ purl:post-domain-create rdfs:subClassOf obj:Message;
 	http:realm <authority>;
 	http:expect "201-created";
 	obj:imports <domain/create.xml>;
+	obj:imports <java:org.openrdf.http.object.exceptions.BadRequest>;
 	obj:groovy """
 		def copy = createXml.calliCopyResource(this, msg.in, Collections.singleton(this))
-		if (calliCurators) {
-			copy.calliMaintainers.addAll(calliCurators)
-		} else {
-			copy.calliMaintainers.addAll(findScribe(copy))
-		}
+		if (copy.calliMaintainers.empty)
+			throw new BadRequest("Missing Maintainers")
 		if (purlBelongsTo) {
 			copy.purlDomainOf.addAll(purlBelongsTo.purlDomainOf)
 		} else {
@@ -127,12 +109,10 @@ purl:post-domain-create-in a owl:ObjectProperty, owl:FunctionalProperty;
 	http:type "application/rdf+xml";
 	obj:name "in".
 
-purl:Domain rdfs:subClassOf calli:Viewable, calli:Reviewable, calli:Editable, calli:Copyable, calli:Deletable;
+purl:Domain rdfs:subClassOf calli:Viewable, calli:Reviewable, calli:Editable;
 	calli:view <domain/view.xml>;
 	calli:review <domain/review.xml>;
-	calli:edit <domain/edit.xml>;
-	calli:copy <domain/copy.xml>;
-	calli:delete <domain/delete.xml>.
+	calli:edit <domain/edit.xml>.
 
 # Sets up the purl:domainOf property
 # Called when copying a domain
@@ -280,12 +260,12 @@ purl:post-purl-edit owl:intersectionOf (calli:post-edit
 		[owl:onProperty obj:target; owl:allValuesFrom purl:PURL]);
 	obj:precedes calli:post-edit;
 	obj:groovy """
-		msg.proceed()
 		if (purlPartOf && purlPartOf.purlBelongsTo) {
 			purlPartOf.purlBelongsTo.touchRevision()
 		} else if (purlPartOf) {
 			purlPartOf.touchRevision()
 		}
+		return msg.functionalObjectResponse
 	""".
 
 # Marks a PURL as disabled
@@ -293,14 +273,22 @@ purl:post-purl-edit owl:intersectionOf (calli:post-edit
 purl:purl-disable rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom purl:PURL];
-	rdfs:subClassOf [owl:onProperty obj:objectResponse;
-		owl:allValuesFrom owl:Nothing];
+	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
+		owl:allValuesFrom <java:org.apache.http.HttpResponse>];
 	http:method "POST";
 	http:operation "purl-disable";
 	http:realm <authority>;
+	http:type "message/x-response";
+	obj:imports <java:org.apache.http.ProtocolVersion>;
+	obj:imports <java:org.apache.http.message.BasicHttpResponse>;
 	obj:imports purl:Disabled;
 	obj:groovy """
 		objectConnection.addDesignation(this, Disabled)
+		def ver = new ProtocolVersion("HTTP", 1, 1)
+		def resp = new BasicHttpResponse(ver, 204, "No Content")
+		resp.addHeader("Location", "$this?view")
+		resp.addHeader("Location", "$this?pre-view")
+		return resp
 	""".
 
 # Enables a disabled PURL
@@ -308,14 +296,22 @@ purl:purl-disable rdfs:subClassOf obj:Message;
 purl:purl-enable rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom purl:PURL];
-	rdfs:subClassOf [owl:onProperty obj:objectResponse;
-		owl:allValuesFrom owl:Nothing];
+	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
+		owl:allValuesFrom <java:org.apache.http.HttpResponse>];
 	http:method "POST";
 	http:operation "purl-enable";
 	http:realm <authority>;
+	http:type "message/x-response";
+	obj:imports <java:org.apache.http.ProtocolVersion>;
+	obj:imports <java:org.apache.http.message.BasicHttpResponse>;
 	obj:imports purl:Disabled;
 	obj:groovy """
 		objectConnection.removeDesignation(this, Disabled)
+		def ver = new ProtocolVersion("HTTP", 1, 1)
+		def resp = new BasicHttpResponse(ver, 204, "No Content")
+		resp.addHeader("Location", "$this?view")
+		resp.addHeader("Location", "$this?pre-view")
+		return resp
 	""".
 
 # Marks a PURL as tombstoned
@@ -323,13 +319,21 @@ purl:purl-enable rdfs:subClassOf obj:Message;
 purl:purl-tombstone rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom purl:PURL];
-	rdfs:subClassOf [owl:onProperty obj:objectResponse;
-		owl:allValuesFrom owl:Nothing];
+	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
+		owl:allValuesFrom <java:org.apache.http.HttpResponse>];
 	http:method "POST";
 	http:operation "purl-tombstone";
 	http:realm <authority>;
+	http:type "message/x-response";
+	obj:imports <java:org.apache.http.ProtocolVersion>;
+	obj:imports <java:org.apache.http.message.BasicHttpResponse>;
 	obj:imports purl:Tombstoned;
 	obj:groovy """
 		objectConnection.addDesignation(this, Tombstoned)
+		def ver = new ProtocolVersion("HTTP", 1, 1)
+		def resp = new BasicHttpResponse(ver, 204, "No Content")
+		resp.addHeader("Location", "$this?view")
+		resp.addHeader("Location", "$this?pre-view")
+		return resp
 	""".
 

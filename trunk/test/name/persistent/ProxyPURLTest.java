@@ -18,7 +18,6 @@ import name.persistent.behaviours.MirroredDomainSupport;
 import name.persistent.behaviours.RemoteGraphSupport;
 import name.persistent.concepts.Domain;
 import name.persistent.concepts.PURL;
-import name.persistent.concepts.RemoteDomain;
 import name.persistent.concepts.Resolvable;
 import name.persistent.concepts.Server;
 import name.persistent.concepts.Service;
@@ -32,7 +31,6 @@ import org.openrdf.http.object.annotations.method;
 import org.openrdf.http.object.annotations.parameter;
 import org.openrdf.http.object.annotations.type;
 import org.openrdf.http.object.client.HTTPObjectClient;
-import org.openrdf.http.object.exceptions.BadGateway;
 import org.openrdf.http.object.exceptions.NotFound;
 import org.openrdf.model.URI;
 import org.openrdf.model.ValueFactory;
@@ -150,27 +148,6 @@ public class ProxyPURLTest extends TestCase {
 		repo.initialize();
 		ObjectRepositoryFactory factory = new ObjectRepositoryFactory();
 		return factory.createRepository(config, repo);
-	}
-
-	public void testLoopDetection() throws Exception {
-		Service service = con.addDesignation(of.createObject(), Service.class);
-		service.setPurlServer(root);
-		Domain domain = con.addDesignation(con.getObject(DOMAIN), RemoteDomain.class);
-		domain.getPurlServices().add(service);
-		Domain origin = con.addDesignation(con.getObject(ORIGIN), Domain.class);
-		domain.getPurlDomainOf().add(origin);
-		root.getPurlServes().add(origin);
-		try {
-			HttpResponse resp = resolvePURL(PURL0);
-			HttpEntity entity = resp.getEntity();
-			if (entity != null) {
-				entity.consumeContent();
-			}
-			assertEquals(502, resp.getStatusLine().getStatusCode());
-			assertEquals(0, resp.getHeaders("Location").length);
-		} catch (BadGateway e) {
-			// exception is okay too
-		}
 	}
 
 	public void testProxy() throws Exception {

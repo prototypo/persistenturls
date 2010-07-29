@@ -136,7 +136,6 @@ purl:update-resolver-add  rdfs:subClassOf obj:Message;
 				http:method "GET";
 				http:operation "";
 				http:type "message/x-response";
-				http:cache-control "max-age=3600";
 				obj:groovy "return resolvePURL(toString(), msg.qs, msg.accept, msg.lang, msg.via)".
 
 			purl:resolve-qs a owl:DatatypeProperty, owl:FunctionalProperty;

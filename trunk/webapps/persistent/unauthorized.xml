@@ -3,7 +3,7 @@
 <html>
 	<head>
 		<title>Unauthorized</title>
-		<link rel="help" title="Help" target="help" href="/persistent/docs/" type="text/html" />
+		<link rel="help" title="Help" target="help" href="/persistent/docs/" />
 	</head>
 	<body>
 		<h1>Forget Your Password?</h1>

@@ -7,10 +7,10 @@
 	xmlns:purl="http://persistent.name/rdf/2010/purl#">
 	<head>
 		<title property="rdfs:label"/>
-		<link rel="view" title="View" target="_self" href="?view" type="text/html" />
-		<link rel="edit" title="Edit" target="_self" href="" type="text/html" />
-		<link rel="review" title="History" target="_self" href="?review" type="text/html" />
-		<link rel="help" title="Help" target="help" href="/persistent/docs/" type="text/html" />
+		<link rel="view" title="View" target="_self" href="?view" />
+		<link rel="edit" title="Edit" target="_self" href="" />
+		<link rel="review" title="History" target="_self" href="?review" />
+		<link rel="help" title="Help" target="help" href="/persistent/docs/purl.html#purlmodify" />
 		<script type="text/javascript" src="/persistent/purl/form.js">
 		</script>
 	</head>
@@ -86,7 +86,7 @@
 				<input id="enable-button" value="Enable" type="button" onclick="$.post(diverted('?purl-enable', this), function(){location.reload()})" />
 				<input id="disable-button" value="Disable" type="button" onclick="confirm('Are you sure you want to Disable this PURL?') &amp;&amp; $.post(diverted('?purl-disable', this), function(){location.reload()})" />
 				<input id="tombstone-button" value="Tombstone" type="button" onclick="confirm('Are you sure you want to Tombstone this PURL?') &amp;&amp; $.post(diverted('?purl-tombstone', this), function(){location.reload()})" />
-				<input value="Save" type="submit" />
+				<input id="save-button" value="Save" type="submit" />
 			</fieldset>
 		</form>
 	</body>

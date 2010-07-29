@@ -1,0 +1,69 @@
+<html>
+  <head>
+    <meta http-equiv="CONTENT-TYPE" content="text/html; charset=utf-8"/>
+    <title/>
+    <meta name="GENERATOR" content="OpenOffice.org 3.2  (Linux)"/>
+    <meta name="AUTHOR" content="james "/>
+    <meta name="CREATED" content="20100709;16440800"/>
+    <meta name="CHANGEDBY" content="james "/>
+    <meta name="CHANGED" content="20100721;17104900"/>
+    <style type="text/css"><![CDATA[
+	<!--
+		@page { margin: 2cm }
+		P { margin-bottom: 0.21cm }
+		H1 { margin-bottom: 0.21cm }
+		H1.western { font-family: "Liberation Sans", sans-serif; font-size: 16pt }
+		H1.cjk { font-family: "DejaVu Sans"; font-size: 16pt }
+		H1.ctl { font-family: "DejaVu Sans"; font-size: 16pt }
+		H2 { margin-bottom: 0.21cm }
+		H2.western { font-family: "Liberation Sans", sans-serif; font-size: 14pt; font-style: italic }
+		H2.cjk { font-size: 14pt; font-style: italic }
+		H2.ctl { font-size: 14pt; font-style: italic }
+		A:link { so-language: zxx }
+	-->
+	]]></style>
+  </head>
+  <body lang="en-GB" dir="LTR">
+    <h1 class="western">PURL 2.0 Beta Setup</h1>
+    <p style="margin-bottom: 0cm">James Leigh</p>
+    <p style="margin-bottom: 0cm">July 2010</p>
+    <h2 class="western">Installation</h2>
+    <p>Download a 2.0 beta release from <a href="http://purlz.org/">http://purlz.org/</a></p>
+    <p><img src="setup_html_m2a136ecf.png" name="graphics2" align="RIGHT" width="609" height="276" border="0"/>Extract
+the ZIP file into its own working directory. Create a mail.properties
+file in the webapps directory as described in the README.txt file.
+Change the bin/* files to be executable (if applicable) and launch
+the start script to start the server.</p>
+    <p>The AUTHORITY value in the etc/persistence.conf file is the only
+web authority that can be used to access the PURL server
+administration interface. Any authority other than the one in the
+conf file can be used for PURL domains.</p>
+    <p>Once the server is ready (the start script will exit successfully
+or after about one minute) open the latest version of a popular
+browser to the administration authority, which is http://localhost/.</p>
+    <h2 class="western">Registration</h2>
+    <p>Click on the register link and fill in the form using the “admin”
+ID and an email address you can receive emails from. It may take a
+few moments for the server to contact the configured SMTP server. An
+email will be sent with a image of the password for the admin user;
+use this to login.</p>
+    <h2 class="western"><img src="setup_html_6e0b12a3.png" name="graphics4" align="LEFT" width="778" height="503" border="0"/><br clear="LEFT"/>Setup</h2>
+    <p><img src="setup_html_m72cba531.png" name="graphics1" align="RIGHT" width="552" height="448" border="0"/>Once
+you have logged in as admin, click on the Home link then the Edit
+link. Enter a label for the server and click on the chevrons near the
+origin field. Fill in the PURL authority using a DNS name that will
+resolve to this server, but is not the PURL administration authority.</p>
+    <p>Drag the authority heading to the origin of the parent form. Then
+click the Save button. This process may take some time to complete,
+so please be patient.</p>
+    <p>Once it has completed the browser will be redirected to the server
+home page with the new domain shown as a link. Click on the link to
+begin creating new PURLs.</p>
+    <p>Congratulations! You have successfully installed a PURL server.</p>
+    <p>
+      <img src="setup_html_m71e10fda.png" name="graphics3" align="RIGHT" width="400" height="267" border="0"/>
+      <br/>
+      <br/>
+    </p>
+  </body>
+</html>

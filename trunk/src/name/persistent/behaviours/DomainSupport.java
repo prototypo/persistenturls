@@ -194,6 +194,7 @@ public abstract class DomainSupport extends PartialSupport implements Domain,
 
 	@Override
 	public void purlSetEntityHeaders(HttpResponse resp) {
+		setHeader(resp, "Cache-Control", "max-age=3600");
 		setHeader(resp, "ETag", revisionTag(0));
 		Transaction revision = getRevision();
 		if (revision != null) {
@@ -223,7 +224,7 @@ public abstract class DomainSupport extends PartialSupport implements Domain,
 					executor.schedule(this, 5, TimeUnit.MINUTES);
 				}
 			}
-		}, 1, TimeUnit.MINUTES);
+		}, 30, TimeUnit.SECONDS);
 	}
 
 	public void refreshGraphs() throws Exception {

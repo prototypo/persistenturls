@@ -43,6 +43,7 @@ Purl.PURLForm.initializeForm = function() {
                 $('#enable-button').remove();
                 $('#disable-button').remove();
                 $('#tombstone-button').remove();
+                $('#save-button').remove();
                 frag = "tombstoned";
             }
         });

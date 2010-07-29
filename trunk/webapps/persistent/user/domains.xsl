@@ -6,18 +6,17 @@
 	<xsl:template match="/">
 		<html>
 			<head>
-				<title>Domain Search Results</title>
-				<link rel="help" title="Help" target="_blank" href="/persistent/docs/domain.html#domainsearch" />
+				<title>User Domains</title>
+				<link rel="view" title="View" target="_self" href="?view" />
+				<link rel="edit" title="Edit" target="_self" href="?edit" />
+				<link rel="review" title="History" target="_self" href="?review" />
+				<link rel="domains" title="Domains" target="_self" href="" />
+				<link rel="help" title="Help" target="help" href="/persistent/docs/user.html" />
 			</head>
 			<body class="search domain">
-				<h1>Domain Search Results</h1>
-				<form action="/" method="get" class="search">
-					<input type="hidden" class="profile" name="domain" />
-					<input type="text" id="q" name="q" value="" />
-					<img class="submit" src="/persistent/images/search-button.png" alt="Search" title="Click to search" />
-				</form>
+				<h1>User Domains</h1>
 				<xsl:if test="not(/sparql:sparql/sparql:results/sparql:result)">
-					<p>No results found.</p>
+					<p>No domains found.</p>
 				</xsl:if>
 				<xsl:if test="/sparql:sparql/sparql:results/sparql:result">
 					<ul id="results">
