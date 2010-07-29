@@ -40,7 +40,6 @@
 					</tbody>
 				</table>
 				<input value="Save" type="submit" />
-				<br />
 			</fieldset>
 		</form>
 	</body>

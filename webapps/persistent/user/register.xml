@@ -93,7 +93,6 @@
 					</tbody>
 				</table>
 				<input value="Register" type="submit" />
-				<br />
 			</fieldset>
 		</form>
 	</body>

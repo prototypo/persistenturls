@@ -78,6 +78,15 @@ purl:purl-authorize owl:equivalentClass calli:authorize-credential;
 			} UNION {
 				?partial purl:belongsTo [calli:maintainer $credential]
 			}
+			OPTIONAL {
+				{
+					?partial a ?mirror
+				} UNION {
+					?partial purl:belongsTo [a ?mirror]
+				}
+				FILTER (?mirror = purl:MirroredDomain)
+			}
+			FILTER (!bound(?mirror))
 		}
 	""".
 
@@ -94,6 +103,8 @@ purl:partial-authorize owl:equivalentClass calli:authorize-credential;
 			} UNION {
 				?domain calli:maintainer $credential
 			}
+			OPTIONAL { ?domain a ?mirror FILTER (?mirror = purl:MirroredDomain) }
+			FILTER (!bound(?mirror))
 		}
 	""".
 
@@ -101,12 +112,14 @@ purl:domain-authorize owl:equivalentClass calli:authorize-credential;
 	obj:sparql """
 		ASK {
 			$subject a purl:Domain
-			FILTER ($qs = "purl-create" || $qs = "partial-create")
 			{
 				$subject calli:scribe $credential
 			} UNION {
 				$subject calli:curator $credential
 			}
+			FILTER ($qs = "purl-create" || $qs = "partial-create")
+			OPTIONAL { $subject a ?mirror FILTER (?mirror = purl:MirroredDomain) }
+			FILTER (!bound(?mirror))
 		}
 	""".
 
