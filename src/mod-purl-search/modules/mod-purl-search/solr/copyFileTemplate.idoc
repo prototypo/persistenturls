@@ -1,9 +1,0 @@
-<idoc>
-    <seq>
-        <instr>
-            <type>copy</type>
-            <operand>ffcpl:/solr/src-file</operand>
-            <target>ffcpl:/solr/conf/src-file</target>
-        </instr>
-	</seq>
-</idoc>

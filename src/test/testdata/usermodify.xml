@@ -1,8 +1,0 @@
-<user>
-	<name>Test User Modified</name>
-	<affiliation>Zepheira LLC</affiliation>
-	<email>tuser@example.com</email>
-	<passwd>testing</passwd>
-	<hint>Removed the hint.</hint>
-	<justification>Because we still like unit tests.</justification>
-</user>

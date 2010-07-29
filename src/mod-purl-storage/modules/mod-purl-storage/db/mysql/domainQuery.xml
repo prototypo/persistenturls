@@ -1,3 +1,0 @@
-<sql>
-	SELECT * from domains where d_id = '@@DOMAIN@@';
-</sql>

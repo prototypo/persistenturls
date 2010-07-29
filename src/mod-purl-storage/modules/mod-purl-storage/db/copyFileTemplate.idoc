@@ -1,9 +1,0 @@
-<idoc>
-    <seq>
-        <instr>
-            <type>copy</type>
-            <operand>ffcpl:/src-dir/src-file</operand>
-            <target>ffcpl:/sql/db/src-file</target>
-        </instr>
-	</seq>
-</idoc>

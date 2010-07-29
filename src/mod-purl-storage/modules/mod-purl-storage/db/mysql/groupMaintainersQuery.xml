@@ -1,3 +1,0 @@
-<sql>
-	SELECT * from groupmaintainers where g_id = @@GID@@;
-</sql>

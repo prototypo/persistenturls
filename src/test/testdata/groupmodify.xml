@@ -1,6 +1,0 @@
-<group>
-	<name>Test Group Modified Again</name>
-	<maintainers>testuser</maintainers>
-	<members>testuser</members>
-	<comments>Because we like lots of unit tests.</comments>
-</group>
