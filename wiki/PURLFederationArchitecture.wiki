@@ -87,7 +87,7 @@ Disadvantages:
 
  * The use of proxies may cause difficulty with certificate validation for any PURL servers using the HTTPS protocol, depending on the detailed implementation.  This is not considered an important scenario for this project, but should be kept in mind if the goals or presumptions change.
 
-[/images/PURL_Federation_Architecture.pdf PURL Federation architecture diagram]
+http://4061505783508689599-a-1802744773732722657-s-sites.googlegroups.com/site/persistenturls/purl-federation-architecture-diagram/DRAFT_PURL_Federation_Architecture.png?attachauth=ANoY7cpka8NTf7MYhbmD7NrTKRgWUYgioFWR_Rr8BpDcxtDwUHKZDS1g-lMazZi5ib4sC2NpTLqhGmxPhNl6B2JASIYPSkfsDAb_mq0Bh9kMaPIFB9ke1sx3tvpE38Xq1pg3_-Hqv7sCqPo5LLw1Y4D-9OosegtE58Vie04CMakt5XlA8DZDlQhctZKHUzpxkqP161ZYZyS9NysIi8WBhJ4OSPL2COEKDU_tJHd3KAkOWLtbKP-nvA-qajETPH5wWUnK-YAmkA3Qd6WuQ-UkOz5yPo7iFemrJQ%3D%3D&attredirects=0
 
 
 == REQUIRED CHANGES TO THE PURL SERVER API ==
