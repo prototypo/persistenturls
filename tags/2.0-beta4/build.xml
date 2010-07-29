@@ -1,0 +1,175 @@
+<project name="project" default="dist" basedir=".">
+	<!-- set global properties for this build -->
+	<property name="src" location="src" />
+	<property name="build" location="build" />
+	<property name="dist" location="dist" />
+	<property name="lib" location="lib" />
+	<property name="bin" location="bin" />
+	<property name="etc" location="etc" />
+	<property name="tmp" location="tmp" />
+	<property name="webapps" location="webapps" />
+	<property name="home" location="." />
+	<property name="pid" location="run/persistent.pid" />
+	<property name="logging" location="etc/persistent.properties" />
+	<property name="tools.jar" location="${java.home}/../lib/tools.jar" />
+	<property file="src/META-INF/name.persistent.properties" />
+	<property name="callimachus.url" value="http://callimachus.googlecode.com/files/callimachus-0.3-SNAPSHOT.zip" />
+	<property name="captcha.jar" value="SimpleCaptcha-1.1.1.jar" />
+	<property name="captcha.url" value="http://downloads.sourceforge.net/project/simplecaptcha/SimpleCaptcha/1.1.1/SimpleCaptcha-1.1.1.jar" />
+	<property name="mail.jar" value="mail-1.4.1.jar" />
+	<property name="mail.url" value="http://mirrors.ibiblio.org/pub/mirrors/maven2/javax/mail/mail/1.4.1/mail-1.4.1.jar" />
+	<property name="main" value="org.callimachusproject.Server" />
+	<property name="jvmargs" value="-ea -server -mx512m -Dfile.encoding=UTF-8 -Djava.library.path=${lib} -Djava.io.tmpdir=${tmp} -Duser.home=${home}" />
+	<property name="args" value="" />
+
+	<target name="init">
+		<!-- Create the time stamp and build directory -->
+		<tstamp />
+		<mkdir dir="${build}" />
+		<mkdir dir="${tmp}" />
+		<available file="lib" property="lib.present" />
+		<property file="build.properties" />
+	</target>
+
+	<target name="dependencies" unless="lib.present">
+		<mkdir dir="${lib}" />
+		<parallel>
+			<get src="${callimachus.url}" dest="${lib}/callimachus.zip" />
+			<get src="${captcha.url}" dest="${lib}/${captcha.jar}" />
+			<get src="${mail.url}" dest="${lib}/${mail.jar}" />
+		</parallel>
+		<unzip src="${lib}/callimachus.zip" dest="${lib}">
+			<patternset>
+				<include name="lib/*" />
+			</patternset>
+			<mapper type="flatten" />
+		</unzip>
+		<unzip src="${lib}/callimachus.zip" dest="${webapps}">
+			<patternset>
+				<include name="webapps/callimachus.war" />
+			</patternset>
+			<mapper type="glob" from="webapps/*" to="*" />
+		</unzip>
+		<unzip src="${lib}/callimachus.zip" dest="${bin}">
+			<patternset>
+				<include name="bin/jsvc*" />
+			</patternset>
+			<mapper type="flatten" />
+		</unzip>
+		<unzip src="${lib}/callimachus.zip" dest="${bin}">
+			<patternset>
+				<include name="bin/callimachus*" />
+			</patternset>
+			<mapper type="glob" from="bin/callimachus*" to="persistent*" />
+		</unzip>
+		<delete file="${lib}/callimachus.zip" />
+	</target>
+
+	<target name="dist-clean" description="clean up everything for a new version" depends="clean">
+		<delete dir="${lib}" />
+		<delete dir="${bin}" />
+		<delete dir="${webapps}/callimachus" />
+	</target>
+
+	<target name="clean" description="clean up">
+		<!-- Delete the directory trees -->
+		<delete dir="${build}" />
+		<delete dir="${dist}" />
+		<delete dir="${tmp}" />
+	</target>
+
+	<target name="compile" depends="init,dependencies" description="compile the source ">
+		<!-- Compile the java code from ${src} into ${build} -->
+		<javac srcdir="${src}" destdir="${build}">
+			<classpath>
+				<fileset dir="${lib}">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</javac>
+		<copy todir="${build}">
+			<fileset dir="${src}" excludes="**/*.java *.sh *.bat *.conf *.properties"/>
+		</copy>
+		<copy todir="${bin}">
+			<fileset dir="${src}" includes="*.sh *.bat"/>
+		</copy>
+		<copy todir="${etc}">
+			<fileset dir="${src}" includes="*.conf *.properties"/>
+		</copy>
+	</target>
+
+	<target name="dist" depends="compile" description="generate the distribution">
+		<!-- Create the distribution directory and create the jar -->
+		<mkdir dir="${dist}" />
+		<property name="jar.file" value="${dist}/persistent-${version}.jar" />
+		<manifestclasspath property="jar.classpath" jarfile="${jar.file}">
+			<classpath>
+				<fileset dir="${lib}">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</manifestclasspath>
+		<jar jarfile="${jar.file}">
+			<fileset dir="${build}" />
+			<manifest>
+				<attribute name="Main-Class" value="${main}" />
+				<attribute name="Class-Path" value="${jar.classpath}" />
+			</manifest>
+		</jar>
+		<war needxmlfile="false" destfile="${dist}/persistent.war">
+			<zipfileset dir="${webapps}/persistent" prefix="" />
+			<zipfileset file="${jar.file}" prefix="WEB-INF/lib" />
+			<zipfileset file="lib/${captcha.jar}" prefix="WEB-INF/lib" />
+			<zipfileset file="lib/${mail.jar}" prefix="WEB-INF/lib" />
+		</war>
+		<zip destfile="${dist}/persistent-${version}.zip">
+			<zipfileset dir="." includes="*.txt" />
+			<zipfileset dir="${bin}" prefix="bin" />
+			<zipfileset dir="${etc}" prefix="etc" />
+			<zipfileset dir="${lib}" prefix="lib" excludes="${captcha.jar} ${mail.jar}" />
+			<zipfileset file="${dist}/persistent.war" prefix="webapps" />
+			<zipfileset file="${webapps}/callimachus.war" prefix="webapps" />
+			<zipfileset file="${webapps}/favicon.ico" prefix="webapps" />
+		</zip>
+	</target>
+
+	<target name="start" depends="compile">
+		<java classname="${main}" fork="true" spawn="true">
+			<jvmarg line="${jvmargs} -Djava.util.logging.config.file=${logging}" />
+			<arg line="${args} -q --pid ${pid}" />
+			<classpath>
+				<pathelement location="${build}/" />
+				<fileset dir="${lib}">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</java>
+	</target>
+
+	<target name="stop" depends="compile">
+		<java classname="${main}" fork="true">
+			<jvmarg line="${jvmargs}" />
+			<arg line="--stop --pid ${pid}" />
+			<classpath>
+				<pathelement location="${build}/" />
+				<pathelement location="${tools.jar}" />
+				<fileset dir="${lib}">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</java>
+	</target>
+
+	<target name="run" depends="compile">
+		<java classname="${main}" fork="true">
+			<jvmarg line="${jvmargs}" />
+			<arg line="${args}" />
+			<classpath>
+				<pathelement location="${build}/" />
+				<fileset dir="${lib}">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</java>
+	</target>
+</project>

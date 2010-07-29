@@ -1,0 +1,140 @@
+# 
+#    Copyright (c) 2010 Zepheira LLC, Some rights reserved
+# 
+#    Licensed under the Apache License, Version 2.0 (the "License");
+#    you may not use this file except in compliance with the License.
+#    You may obtain a copy of the License at
+# 
+#        http://www.apache.org/licenses/LICENSE-2.0
+# 
+#    Unless required by applicable law or agreed to in writing, software
+#    distributed under the License is distributed on an "AS IS" BASIS,
+#    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#    See the License for the specific language governing permissions and
+#    limitations under the License.
+
+@prefix xsd:<http://www.w3.org/2001/XMLSchema#>.
+@prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs:<http://www.w3.org/2000/01/rdf-schema#>.
+@prefix owl:<http://www.w3.org/2002/07/owl#>.
+@prefix obj:<http://www.openrdf.org/rdf/2009/object#>.
+@prefix http:<http://www.openrdf.org/rdf/2009/httpobject#>.
+@prefix calli:<http://callimachusproject.org/rdf/2009/framework#>.
+@prefix purl:<http://persistent.name/rdf/2010/purl#>.
+
+# mail.properties
+#
+# Comments begin with a '#'
+# The format is mail.<property> = <value>
+#
+# A typical file might contain the following:
+# mail.transport.protocol = smtp
+# mail.from = system@example.com
+# mail.smtp.host = example.com
+# mail.smtp.port = 25
+# mail.smtp.auth = true
+# mail.user = system
+# mail.password = secret
+#
+# See http://java.sun.com/javaee/5/docs/api/javax/mail/package-summary.html
+# See http://java.sun.com/products/javamail/javadocs/com/sun/mail/smtp/package-summary.html
+#
+</mail.properties> a purl:MailProperties.
+
+purl:send-mail rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:MailProperties];
+	rdfs:subClassOf [owl:onProperty obj:objectResponse;
+		owl:allValuesFrom owl:Nothing];
+	http:method "POST";
+	http:operation "send-mail";
+	http:realm <local>;
+	obj:imports <java:org.openrdf.http.object.exceptions.NotImplemented>;
+	obj:imports <java:javax.mail.Session>;
+	obj:imports <java:javax.mail.internet.MimeMessage>;
+	obj:imports <java:javax.mail.Message.RecipientType>;
+	obj:imports <java:javax.mail.internet.MimeBodyPart>;
+	obj:imports <java:javax.mail.internet.MimeMultipart>;
+	obj:imports <java:javax.activation.DataHandler>;
+	obj:imports <java:javax.mail.util.ByteArrayDataSource>;
+	obj:imports <java:javax.mail.Transport>;
+	obj:groovy """
+		Properties properties = new Properties()
+		InputStream stream = openInputStream()
+		if (stream) {
+			try {
+				properties.load(stream)
+			} finally {
+				stream.close()
+			}
+		}
+		Session session = Session.getInstance(properties)
+		MimeMessage message = new MimeMessage(session)
+		message.setFrom()
+		message.setSentDate(new Date())
+		message.addRecipients(RecipientType.TO, msg.to)
+		message.subject = (msg.html =~ /<title>\\s*([^<]*)\\s*<.title>/)[0][1]
+		if (msg.png) {
+			MimeMultipart multipart = new MimeMultipart()
+
+			// html body
+			MimeBodyPart part1 = new MimeBodyPart()
+			part1.setText(msg.html, "UTF-8", "html")
+			multipart.addBodyPart(part1)
+
+			// png attachment
+			MimeBodyPart part2 = new MimeBodyPart()
+			ByteArrayDataSource source = new ByteArrayDataSource(msg.png, "image/png")
+			part2.setDataHandler(new DataHandler(source))
+			part2.disposition = "inline; filename=image.png"
+			multipart.addBodyPart(part2)
+
+			message.setContent(multipart)
+		} else {
+			message.setText(msg.html, "UTF-8", "html")
+		}
+		message.saveChanges()
+		if (stream) {
+			String user = session.getProperty("mail.user")
+			String password = session.getProperty("mail.password")
+			Transport tr = session.getTransport()
+			try {
+				tr.connect(user, password)
+				tr.sendMessage(message, message.allRecipients)
+			} finally {
+				tr.close()
+			}
+		} else {
+			properties.setProperty("mail.transport.protocol", "smtp")
+			String domain = msg.to.substring(msg.to.indexOf('@') + 1)
+			String host = "smtp." + domain
+			Transport tr = session.getTransport()
+			try {
+				tr.connect(host, 25, null, null)
+				tr.sendMessage(message, message.allRecipients)
+				return;
+			} finally {
+				tr.close()
+			}
+			throw new NotImplemented("No Mail Server Configured")
+		}
+	""".
+
+purl:send-mail-arg1 a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:domain purl:send-mail;
+	rdfs:range xsd:string;
+	http:parameter "to";
+	obj:name "to".
+
+purl:send-mail-arg2 a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:domain purl:send-mail;
+	rdfs:range xsd:string;
+	http:parameter "body";
+	obj:name "html".
+
+purl:send-mail-arg3 a owl:ObjectProperty, owl:FunctionalProperty;
+	rdfs:domain purl:send-mail;
+	rdfs:range <java:java.io.InputStream>;
+	http:type "image/png";
+	obj:name "png".
+
