@@ -18,27 +18,22 @@
 	<body class="purl">
 		<form action="" about="" typeof="" id="purl-form">
 			<input type="hidden" rel="rdf:type" resource="?type" name="rdf-type" />
-			<input type="hidden" name="alternate" value="purl:alternative" />
-			<input type="hidden" name="redirects" value="purl:redirectsTo" />
-			<input type="hidden" name="renamed" value="purl:renamedTo" />
-			<input type="hidden" name="copy" value="purl:copyOf" />
-			<input type="hidden" name="described" value="purl:describedBy" />
 			<fieldset>
 				<legend>Modify a Partial</legend>
 				<p class="instructions">Modify any of the following PURL information.</p>
-				<table class="actiontable">
+				<table class="actiontable" id="purl-table">
 					<tbody>
 						<tr class="all">
 							<td class="property">
 								<label for="purl-rel-type">Redirect Type:</label>
 							</td>
 							<td class="value">
-								<select id="purl-rel-type">
-									<option value="alternate">Simple (302)</option>
-									<option value="renamed">Renamed (301)</option>
-									<option value="described">Describe (303)</option>
-									<option value="redirects">Redirect (307)</option>
-									<option value="copy">Copy (203)</option>
+								<select id="purl-rel-type" onchange="$('#m_target').attr('rel', value)">
+									<option value="purl:alternative">Simple (302)</option>
+									<option value="purl:renamedTo">Renamed (301)</option>
+									<option value="purl:describedBy">Describe (303)</option>
+									<option value="purl:redirectsTo">Redirect (307)</option>
+									<option value="purl:copyOf">Copy (203)</option>
 								</select>
 							</td>
 						</tr>
@@ -50,52 +45,24 @@
 								<input id="m_pattern" property="purl:pattern" type="text" size="40" />
 							</td>
 						</tr>
-						<tr class="rel alternate">
+						<tr class="rel">
 							<td class="property">
-								<label for="m_alternate_target">Target:</label>
+								<label for="m_target">Target:</label>
 							</td>
-							<td class="value">
-								<input id="m_alternate_target" type="text" onchange="$(this).attr('resource', $(this).val())" rel="purl:alternative" resource="?alternative" value="?alternative" />
-							</td>
-						</tr>
-						<tr class="rel renamed">
-							<td class="property">
-								<label for="m_renamed_target">Target:</label>
-							</td>
-							<td class="value">
-								<input id="m_renamed_target" type="text" onchange="$(this).attr('resource', $(this).val())" rel="purl:renamedTo" resource="?renamedTo" value="?renamedTo" />
-							</td>
-						</tr>
-						<tr class="rel described">
-							<td class="property">
-								<label for="m_described_target">Target:</label>
-							</td>
-							<td class="value">
-								<input id="m_described_target" type="text" onchange="$(this).attr('resource', $(this).val())" rel="purl:describedBy" resource="?describedBy" value="?describedBy"/>
-							</td>
-						</tr>
-						<tr class="rel redirects">
-							<td class="property">
-								<label for="m_redirects_target">Target:</label>
-							</td>
-							<td class="value">
-								<input id="m_redirects_target" type="text" onchange="$(this).attr('resource', $(this).val())" rel="purl:redirectsTo" resource="?redirectsTo" value="?redirectsTo"/>
-							</td>
-						</tr>
-						<tr class="rel copy">
-							<td class="property">
-								<label for="m_copy_target">Target:</label>
-							</td>
-							<td class="value">
-								<input id="m_copy_target" type="text" onchange="$(this).attr('resource', $(this).val())" rel="purl:copyOf" resource="?copyOf" value="?copyOf"/>
+							<td class="value" id="target-td">
+								<input id="m_target" onchange="$(this).attr('resource', value)" rel="purl:alternative" resource="?alternative" value="?alternative" />
+								<input id="m_target" onchange="$(this).attr('resource', value)" rel="purl:renamedTo" resource="?renamedTo" value="?renamedTo" />
+								<input id="m_target" onchange="$(this).attr('resource', value)" rel="purl:describedBy" resource="?describedBy" value="?describedBy"/>
+								<input id="m_target" onchange="$(this).attr('resource', value)" rel="purl:redirectsTo" resource="?redirectsTo" value="?redirectsTo"/>
+								<input id="m_target" onchange="$(this).attr('resource', value)" rel="purl:copyOf" resource="?copyOf" value="?copyOf"/>
 							</td>
 						</tr>
 					</tbody>
 				</table>
-				<input id="enable-button" value="Enable" type="button" onclick="$.post(diverted('?purl-enable', this), function(){location.reload()})" />
-				<input id="disable-button" value="Disable" type="button" onclick="confirm('Are you sure you want to Disable this PURL?') &amp;&amp; $.post(diverted('?purl-disable', this), function(){location=diverted('?view', this)})" />
-				<input id="tombstone-button" value="Tombstone" type="button" onclick="confirm('Are you sure you want to Tombstone this PURL?') &amp;&amp; $.post(diverted('?purl-tombstone', this), function(){location=diverted('?view', this)})" />
-				<input id="save-button" value="Save" type="submit" />
+				<button id="enable-button" type="button" onclick="enable(this)">Enable</button>
+				<button id="disable-button" type="button" onclick="disable(this)">Disable</button>
+				<button id="tombstone-button" type="button" onclick="tombstone(this)">Tombstone</button>
+				<button id="save-button" type="submit">Save</button>
 			</fieldset>
 		</form>
 	</body>

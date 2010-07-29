@@ -329,6 +329,7 @@ purl:purl-tombstone rdfs:subClassOf obj:Message;
 	obj:imports <java:org.apache.http.message.BasicHttpResponse>;
 	obj:imports purl:Tombstoned;
 	obj:groovy """
+		objectConnection.removeDesignation(this, Disabled)
 		objectConnection.addDesignation(this, Tombstoned)
 		def ver = new ProtocolVersion("HTTP", 1, 1)
 		def resp = new BasicHttpResponse(ver, 204, "No Content")
