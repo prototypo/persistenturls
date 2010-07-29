@@ -26,7 +26,9 @@
 								<label for="m_label">Name:</label>
 							</td>
 							<td class="value">
-								<span id="domain-span" rel="purl:partOf" resource="?partOf" />
+								<span>
+									<span id="domain-span" rel="purl:partOf" resource="?partOf" />
+								</span>
 								<span data-cardinality="1">
 									<input id="m_label" property="rdfs:label" type="text"
 										onchange="$(form).attr('about', $('#domain-span').text() + value)" />
@@ -39,11 +41,11 @@
 							</td>
 							<td class="value">
 								<select id="purl-rel-type" onchange="$('#m_target').attr('rel', value)">
-									<option value="purl:alternative">Simple (302)</option>
-									<option value="purl:renamedTo">Renamed (301)</option>
+									<option value="purl:copyOf">Copy (203)</option>
+									<option value="purl:renamedTo">Rename (301)</option>
+									<option value="purl:alternative">Substitute (302)</option>
 									<option value="purl:describedBy">Describe (303)</option>
 									<option value="purl:redirectsTo">Redirect (307)</option>
-									<option value="purl:copyOf">Copy (203)</option>
 								</select>
 							</td>
 						</tr>
