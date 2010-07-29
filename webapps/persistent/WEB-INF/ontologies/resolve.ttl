@@ -134,7 +134,6 @@ purl:update-resolver-add  rdfs:subClassOf obj:Message;
 		CONSTRUCT {
 			purl:resolve rdfs:subClassOf obj:Message;
 				http:method "GET";
-				http:operation "";
 				http:type "message/x-response";
 				obj:groovy "return resolvePURL(toString(), msg.qs, msg.accept, msg.lang, msg.via)".
 
