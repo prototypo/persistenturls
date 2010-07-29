@@ -12,6 +12,7 @@ $(document).ready(function() {
             enabled = false
         } else if (type == "purl:Tombstoned") {
             $('#purl-table').replaceWith("<p>This PURL has been tombstoned.</p>");
+        	$('#enable-button').remove();
             $('#disable-button').remove();
             $('#tombstone-button').remove();
             $('#save-button').remove();
