@@ -29,11 +29,11 @@
 							</td>
 							<td class="value">
 								<select id="purl-rel-type" onchange="$('#m_target').attr('rel', value)">
-									<option value="purl:alternative">Simple (302)</option>
-									<option value="purl:renamedTo">Renamed (301)</option>
+									<option value="purl:copyOf">Copy (203)</option>
+									<option value="purl:renamedTo">Rename (301)</option>
+									<option value="purl:alternative">Substitute (302)</option>
 									<option value="purl:describedBy">Describe (303)</option>
 									<option value="purl:redirectsTo">Redirect (307)</option>
-									<option value="purl:copyOf">Copy (203)</option>
 								</select>
 							</td>
 						</tr>

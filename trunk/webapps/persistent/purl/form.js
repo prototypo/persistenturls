@@ -21,7 +21,9 @@ $(document).ready(function() {
     });
     if (enabled) {
         $('#enable-button').remove();
-		if (!$("#m_target").length) {
+		if ($("#m_target").length) {
+			$("#purl-rel-type").val($("#m_target").attr("rel"))
+		} else {
 			var input = $("<input id='m_target' />")
 			input.attr('rel', $("#purl-rel-type").val())
 			input.change(function() {
