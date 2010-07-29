@@ -1,0 +1,43 @@
+#summary PURL REST API for version 1.0-1.6.x servers
+
+= PURL REST API for version 1.0-1.6.x servers =
+
+This document describes Uniform Resource Locators (URLs) and HTTP verbs for each public-facing requirement.  See the list of requirements given in the subversion checkout of the code for more detailed information.
+	
+== Account Creation and Maintenance ==
+
+|| *Requirement* || *Public URL || *HTTP Verb* || *Parameters* || *Auth required* ||
+|| Log in an existing user || $PURL_SERVER$/admin/login/login-submit.bsh || POST || Username (id)<br>Password (passwd)<br>Optional referrer page (referrer, defaults to '/docs/index.html') || no ||
+|| Register a new user || $PURL_SERVER$/admin/user/`<id>` || POST || Full name (name)<br>Affiliation (affiliation)<br>E-mail address (email)<br>Password (passwd)<br>Hint (hint)<br>Justification (justification) || no ||
+|| Modify user information || $PURL_SERVER$/admin/user/`<id>` || PUT || Full name (name)<br>Affiliation (affiliation)<br>E-mail address (email)<br>Password (passwd)<br>Hint (hint)<br>Justification (justification) || yes ||
+|| Search user information || $PURL_SERVER$/admin/user/ or $PURL_SERVER$/admin/user/`<id>` || GET || Full name (name) or<br>Affiliation (affiliation)<br>E-mail address (email)<br>User ID (id)<br>Search tombstoned (tombstone) || no ||
+|| Delete a user || $PURL_SERVER$/admin/user/`<id>` || DELETE||  || yes ||
+
+
+== PURL Creation and Maintenance ==
+
+|| *Requirement* || *Public URL || *HTTP Verb* || *Parameters* || *Auth required* ||
+|| Create a PURL<br>Create a partial redirect PURL<br>Chain a PURL<br>Clone a PURL || $PURL_SERVER$/admin/purl/`<id>` || POST || Target URL (target)<br>User/Group IDs (maintainers)<br>Type (type)<br>See Also URLs (seealso) || yes ||
+|| Populate the creation form for a simple (302) PURL from a Javascript bookmarklet || $PURL_SERVER$/docs/simplepurl.html || GET || URL-encoded Target URL (referrer) || yes ||
+|| Modify a PURL || $PURL_SERVER$/admin/purl/`<id>` || PUT || Target URL (target)<br>User/Group IDs (maintainers)<br>Type (type)<br>See Also URLs (seealso) || yes ||
+|| Search PURL metadata || $PURL_SERVER$/admin/purl/ or $PURL_SERVER$/admin/purl/`<id>` || GET || Target URL (target) or<br>See Also URLs (seealso) or<br>User/Group IDs (maintainers) or<br>Explicit User/Group ID (explicitmaintainers)<br>Search tombstoned (tombstone) || no ||
+|| Delete PURLs || $PURL_SERVER$/admin/purl/`<id>` || DELETE || || yes ||
+|| Batch add PURLs || $PURL_SERVER$/admin/purls || POST || XML (see [PURLBatchUploadingVersionOne PURL batch documentation]) || yes ||
+|| PURL Validation || $PURL_SERVER$/admin/targeturl/`<id>` || GET || || no ||
+|| Batch PURL Validation || $PURL_SERVER$/admin/targeturls<br/>NB: Not implemented in PURLz v1.x || POST || XML (see [PURLBatchUploadingVersionOne PURL batch documentation]) || no ||
+
+== Group Creation and Maintenance ==
+
+|| *Requirement* || *Public URL || *HTTP Verb* || *Parameters* || *Auth required* ||
+|| Create a new group || $PURL_SERVER$/admin/group/`<id>` || POST || Group name (name)<br>Group maintainers (maintainers)<br>Group members (members)<br>Public comments (comments) || yes ||
+|| Modify group information || $PURL_SERVER$/admin/group/`<id>` || PUT || Group name (name)<br>Group maintainers (maintainers)<br>Group members (members)<br>Public comments (comments) || yes ||
+|| Search group information || $PURL_SERVER$/admin/group/ or $PURL_SERVER$/admin/group/`<id>` || GET || Group name (name) or<br>Group maintainers (maintainers) or<br>Group members (members)<br>Search tombstoned (tombstone) || no ||
+|| Delete a group || $PURL_SERVER$/admin/group/`<id>` || DELETE || || yes ||
+
+== Domain Creation and Maintenance ==
+
+|| *Requirement* || *Public URL || *HTTP Verb* || *Parameters* || *Auth required* ||
+|| Request a top-level domain<br>Create a subdomain in an existing domain || $PURL_SERVER$/admin/domain/`<id>` || POST || Domain name (name)<br>Domain maintainers (maintainers)<br>Domain writers (writers)<br>Public (public) || yes ||
+|| Modify existing domain information || $PURL_SERVER$/admin/domain/`<id>` || PUT || Domain name (name)<br>Domain maintainers (maintainers)<br>Domain writers (writers)<br>Public (public) || yes ||
+|| Search domain information || $PURL_SERVER$/admin/domain/ or $PURL_SERVER$/admin/domain/`<id>` || GET || Domain name (name) or<br>Domain maintainer (maintainers) or<br>Domain writer (writers)<br>Search tombstoned (tombstone) || no ||
+|| Delete a domain || $PURL_SERVER$/admin/domain/`<id>` || DELETE || || yes ||
