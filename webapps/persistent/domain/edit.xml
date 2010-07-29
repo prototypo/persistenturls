@@ -8,10 +8,12 @@
 	xmlns:purl="http://persistent.name/rdf/2010/purl#">
 	<head>
 		<title property="rdfs:label" />
-		<link rel="view" title="View" target="_self" href="?view" type="text/html" />
-		<link rel="edit" title="Edit" target="_self" href="" type="text/html" />
-		<link rel="review" title="History" target="_self" href="?review" type="text/html" />
-		<link rel="help" title="Help" target="help" href="/persistent/docs/" type="text/html" />
+		<link rel="view" title="View" target="_self" href="?view" />
+		<link rel="edit" title="Edit" target="_self" href="" />
+		<link rel="review" title="History" target="_self" href="?review" />
+		<link rel="parts" title="Parts" target="_self" href="?parts" />
+		<link rel="unresolvable" title="Unresolvable" target="_self" href="?unresolvable" />
+		<link rel="help" title="Help" target="help" href="/persistent/docs/" />
 	</head>
 	<body class="domain">
 		<form action="" about="">
@@ -22,22 +24,10 @@
 					<tbody>
 						<tr>
 							<td class="property">
-								<label for="m_label">Name:</label>
+								<label>Defined By:</label>
 							</td>
-							<td class="value" data-cardinality="1">
-								<input id="m_label" property="rdfs:label" type="text" />
-							</td>
-						</tr>
-						<tr>
-							<td class="property">
-								<label for="m_defined">Defined By:</label>
-							</td>
-							<td id="defined-additional-td" class="value" rel="purl:definedBy" data-cardinality="1">
-								<input id="m_defined" type="text" size="60" onchange="$(this).attr('about', $(this).val())"/>
-							</td>
-							<td id="defined-existing-td" class="value" rel="purl:definedBy" resource="?definedBy">
-								<input id="m_defined" type="text" size="60" value="?definedBy" onchange="$(this).parent().attr('resource', $(this).val())"/>
-								<script>$("#defined-additional-td").remove()</script> 
+							<td class="value" data-cardinality="1" rel="purl:definedBy">
+								<span about="?definedBy">Domain Mirror</span>
 							</td>
 						</tr>
 						<tr>
@@ -52,7 +42,7 @@
 							<td class="property">
 								<label for="m_curator">Scribes:</label>
 							</td>
-							<td rel="calli:scribe" class="value" data-suggest="/persistent/user/template?pre-copy">
+							<td rel="calli:scribe" class="value" data-suggest="/persistent/user/template?pre-register">
 								<span about="?scribe" typeof="purl:User">
 									<span property="rdfs:label"/>
 								</span>
@@ -62,7 +52,7 @@
 							<td class="property">
 								<label for="m_curator">Curators:</label>
 							</td>
-							<td rel="calli:curator" class="value" data-suggest="/persistent/user/template?pre-copy">
+							<td rel="calli:curator" class="value" data-suggest="/persistent/user/template?pre-register">
 								<span about="?curator" typeof="purl:User">
 									<span property="rdfs:label"/>
 								</span>
@@ -72,7 +62,7 @@
 							<td class="property">
 								<label for="m_maintainer">Maintainers:</label>
 							</td>
-							<td rel="calli:maintainer" class="value" data-suggest="/persistent/user/template?pre-copy">
+							<td rel="calli:maintainer" class="value" data-suggest="/persistent/user/template?pre-register">
 								<span about="?maintainer" typeof="purl:User">
 									<span property="rdfs:label"/>
 								</span>
@@ -80,9 +70,6 @@
 						</tr>
 					</tbody>
 				</table>
-				<input value="Enable" type="button" onclick="$.post(diverted('?purl-enable', this))" />
-				<input value="Disable" type="button" onclick="$.post(diverted('?purl-disable', this))" />
-				<input value="Tombstone" type="button" onclick="$.post(diverted('?purl-tombstone', this))" />
 				<input value="Save" type="submit" />
 				<br />
 			</fieldset>

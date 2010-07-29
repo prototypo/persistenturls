@@ -8,7 +8,7 @@
 	xmlns:purl="http://persistent.name/rdf/2010/purl#">
 	<head>
 		<title>Request a New User</title>
-		<link rel="help" title="Help" target="help" href="/persistent/docs/" type="text/html" />
+		<link rel="help" title="Help" target="help" href="/persistent/docs/user.html#usercreate" />
 		<script>
 			function confirm() {
 				var email = document.getElementById("m_email")
@@ -50,7 +50,7 @@
 								<label for="m_email">E-mail address:</label>
 							</td>
 							<td class="value" data-cardinality="1">
-								<input id="m_email" property="purl:email" type="text" onchange="confirm()" />
+								<input id="m_email" property="purl:email" type="text" onchange="confirm()" onkeyup="setTimeout(confirm, 100)" />
 							</td>
 						</tr>
 						<tr>
@@ -58,7 +58,7 @@
 								<label for="m_email">Confirm address:</label>
 							</td>
 							<td class="value" data-cardinality="1">
-								<input id="m_confirm" type="text" onchange="confirm()" />
+								<input id="m_confirm" type="text" onchange="confirm()" onkeyup="setTimeout(confirm, 100)" />
 							</td>
 						</tr>
 						<tr>
@@ -84,7 +84,7 @@
 							<td class="property">
 								<label for="m_reviewer">Reviewers:</label>
 							</td>
-							<td rel="calli:reviewer" class="value" data-suggest="/persistent/user/template?pre-copy">
+							<td rel="calli:reviewer" class="value" data-suggest="/persistent/user/template?pre-register">
 								<span about="?reviewer" typeof="purl:User">
 									<span property="rdfs:label"/>
 								</span>

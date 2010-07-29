@@ -7,21 +7,35 @@
 	xmlns:purl="http://persistent.name/rdf/2010/purl#">
 	<head>
 		<title property="rdfs:label"/>
-		<link rel="view" title="View" target="_self" href="" type="text/html" />
-		<link rel="edit" title="Edit" target="_self" href="?edit" type="text/html" />
-		<link rel="review" title="History" target="_self" href="?review" type="text/html" />
-		<link rel="help" title="Help" target="help" href="/persistent/docs/" type="text/html" />
+		<link rel="view" title="View" target="_self" href="" />
+		<link rel="edit" title="Edit" target="_self" href="?edit" />
+		<link rel="review" title="History" target="_self" href="?review" />
+		<link rel="parts" title="Parts" target="_self" href="?nested" />
+		<link rel="help" title="Help" target="help" href="/persistent/docs/purl.html" />
+		<script type="text/javascript">
+			function init() {
+				var size = $("span[rel='rdf:type'][resource='http://persistent.name/rdf/2010/purl#Disabled']").size() + $("span[rel='rdf:type'][resource='http://persistent.name/rdf/2010/purl#Tombstoned']").size()
+				if (size > 0) {
+					$("#pattern").remove()
+					$("#target").remove()
+				} else {
+					$("#target").text($("#target").attr("resource"))
+				}
+			}
+		</script>
 	</head>
-	<body class="purl">
+	<body class="purl" onload="init()">
 		<h1><a href="" property="rdfs:label" /></h1>
-        <p><a href="?copy" class="diverted">Clone this PURL</a></p>
+        <p><a href="?copy" class="diverted">Clone this Partial</a></p>
+        <p><a href="?purl-create" class="diverted">Create Nested PURL</a></p>
+        <p><a href="?partial-create" class="diverted">Create Nested Partial</a></p>
+		<p><a href="?domain-create" class="diverted">Create Nested Domain</a></p>
 		<span rel="rdf:type" resource="?type"><div property="rdfs:comment"/></span>
-		<div property="purl:pattern" />
-		<p><a href="?copy" class="diverted">Copy Partial</a></p>
-		<p><a href="?domain-create" class="diverted">Create Domain</a></p>
-		<h3>PURLs</h3>
-        <p><a href="?purl-create" class="diverted">Create New PURL</a></p>
-        <p><a href="?partial-create" class="diverted">Create New Partial PURL</a></p>
-        <p><a href="?parts" class="diverted">View Nested PURLs</a></p>
+		<div id="pattern" property="purl:pattern" />
+		<div id="target" rel="purl:copyOf" resource="?copyOf" />
+		<div id="target" rel="purl:renamedTo" resource="?renamedTo" />
+		<div id="target" rel="purl:alternative" resource="?alternative" />
+		<div id="target" rel="purl:describedBy" resource="?describedBy" />
+		<div id="target" rel="purl:redirectsTo" resource="?redirectsTo" />
 	</body>
 </html>

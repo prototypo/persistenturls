@@ -16,6 +16,7 @@ import name.persistent.concepts.Partial;
 import name.persistent.concepts.Resolvable;
 import name.persistent.concepts.Server;
 
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.message.BasicHttpRequest;
@@ -131,6 +132,8 @@ public class MirrorPURLTest extends TestCase {
 		String url = root.toString() + "diverted;" + ORIGIN + "?mirror-domains";
 		Domain domain = mirror.addDesignation(mirror.getObject(ORIGIN), Domain.class);
 		domain.setPurlDefinedBy(mirror.getObject(url));
+		mirror.getObject(Domain.class, ORIGIN).refreshGraphs();
+		mirror.getObject(Domain.class, ORIGIN).refreshGraphs();
 		HTTPObjectClient client = HTTPObjectClient.getInstance();
 		InetSocketAddress port = new InetSocketAddress("localhost", 3128);
 		HttpResponse resp = client.service(port, new BasicHttpRequest("GET", PURL0));
@@ -149,7 +152,10 @@ public class MirrorPURLTest extends TestCase {
 		if (entity != null) {
 			entity.consumeContent();
 		}
-		return resp.getFirstHeader("ETag").getValue();
+		Header hd = resp.getFirstHeader("ETag");
+		if (hd == null)
+			return null;
+		return hd.getValue();
 	}
 
 }

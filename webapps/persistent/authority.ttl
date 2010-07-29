@@ -64,9 +64,15 @@ purl:purl-authorize owl:equivalentClass calli:authorize-credential;
 		ASK {
 			$subject a purl:PURL; purl:partOf ?partial
 			{
+				?partial calli:scribe $credential
+				FILTER ($qs = "copy")
+			} UNION {
 				?partial calli:curator $credential
 			} UNION {
 				?partial calli:maintainer $credential
+			} UNION {
+				?partial purl:belongsTo [calli:scribe $credential]
+				FILTER ($qs = "copy")
 			} UNION {
 				?partial purl:belongsTo [calli:curator $credential]
 			} UNION {
@@ -79,10 +85,27 @@ purl:partial-authorize owl:equivalentClass calli:authorize-credential;
 	obj:sparql """
 		ASK {
 			$subject a purl:Partial; purl:belongsTo ?domain
+			FILTER ($qs = "edit" || $qs = "copy" || $qs = "purl-create" || $qs = "partial-create" || $qs = "purl-disable" || $qs = "purl-enable" || $qs = "purl-tombstone")
 			{
+				?domain calli:scribe $credential
+				FILTER ($qs = "copy" || $qs = "purl-create" || $qs = "partial-create")
+			} UNION {
 				?domain calli:curator $credential
 			} UNION {
 				?domain calli:maintainer $credential
+			}
+		}
+	""".
+
+purl:domain-authorize owl:equivalentClass calli:authorize-credential;
+	obj:sparql """
+		ASK {
+			$subject a purl:Domain
+			FILTER ($qs = "purl-create" || $qs = "partial-create")
+			{
+				$subject calli:scribe $credential
+			} UNION {
+				$subject calli:curator $credential
 			}
 		}
 	""".

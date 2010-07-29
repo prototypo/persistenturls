@@ -7,21 +7,19 @@
 	xmlns:purl="http://persistent.name/rdf/2010/purl#">
 	<head>
 		<title property="rdfs:label"/>
-		<link rel="view" title="View" target="_self" href="" type="text/html" />
-		<link rel="edit" title="Edit" target="_self" href="?edit" type="text/html" />
-		<link rel="review" title="History" target="_self" href="?review" type="text/html" />
-		<link rel="help" title="Help" target="help" href="/persistent/docs/" type="text/html" />
+		<link rel="view" title="View" target="_self" href="" />
+		<link rel="edit" title="Edit" target="_self" href="?edit" />
+		<link rel="review" title="History" target="_self" href="?review" />
+		<link rel="parts" title="Parts" target="_self" href="?parts" />
+		<link rel="unresolvable" title="Unresolvable" target="_self" href="?unresolvable" />
+		<link rel="help" title="Help" target="help" href="/persistent/docs/domain.html" />
 	</head>
 	<body class="domain">
-		<h1><a href="" property="rdfs:label" /></h1>
-		<p><a href="?copy" class="diverted">Copy Domain</a></p>
-		<p><a href="?domain-create" class="diverted">Create Sub-Domain</a></p>
-		<div property="purl:pattern" />
-		<h3>PURLs</h3>
+		<h1><a href="" property="rdfs:label" />
+			<a rel="purl:definedBy" href="?definedBy">(Domain Mirror)</a></h1>
         <p><a href="?purl-create" class="diverted">Create New PURL</a></p>
-        <p><a href="?partial-create" class="diverted">Create New Partial PURL</a></p>
-        <p><a href="?parts" class="diverted">View Nested PURLs</a></p>
-        <p><a href="?unresolvable" class="diverted">View Unresolvable PURLs</a></p>
+        <p><a href="?partial-create" class="diverted">Create New Partial</a></p>
+		<p><a href="?domain-create" class="diverted">Create Sub-Domain</a></p>
 		<h3>Scribes</h3>
 		<ul>
 			<li resource="?scribe" rel="calli:scribe"><a property="rdfs:label" href="?scribe"></a></li>

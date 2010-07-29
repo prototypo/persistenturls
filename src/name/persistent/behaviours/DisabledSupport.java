@@ -20,15 +20,18 @@ import org.openrdf.repository.object.annotations.precedes;
  * 
  * @author James Leigh
  */
-@precedes( { PURLSupport.class, ResolvableSupport.class })
-public abstract class DisabledSupport implements Disabled {
+@precedes( { PURLSupport.class, ResolvableSupport.class, DomainSupport.class,
+		MirroredDomainSupport.class })
+public abstract class DisabledSupport extends PURLSupport implements Disabled {
 	private static final ProtocolVersion HTTP11 = new ProtocolVersion("HTTP",
 			1, 1);
 
 	@Override
 	public HttpResponse resolvePURL(String source, String qs, String accept,
 			String language, Set<String> via) {
-		return new BasicHttpResponse(HTTP11, 404, "Temporarily Gone");
+		BasicHttpResponse resp;
+		resp = new BasicHttpResponse(HTTP11, 404, "Temporarily Gone");
+		purlSetEntityHeaders(resp);
+		return resp;
 	}
-
 }

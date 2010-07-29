@@ -106,6 +106,12 @@
 					</a>
 				</div>
 				<div id="header">
+					<div id="account">
+						<strong><a id="username" href="{$persistent}/authority?credential"></a></strong>
+						<a id="login" href="{$persistent}/authority?login">Login</a>
+						<span class="logout">&#160;&#183;&#160;</span>
+						<a class="logout" href="{$persistent}/authority?logout">Logout</a>
+					</div>
 					<ul id="actions" class="{$mode}">
 						<xsl:for-each select="/html/head/link[@target='_self']">
 							<xsl:choose>
@@ -125,12 +131,6 @@
 							</xsl:choose>
 						</xsl:for-each>
 					</ul>
-					<div id="account">
-						<strong><a id="username" href="{$persistent}/authority?credential"></a></strong>
-						<a id="login" href="{$persistent}/authority?login">Login</a>
-						<span class="logout">&#160;&#183;&#160;</span>
-						<a class="logout" href="{$persistent}/authority?logout">Logout</a>
-					</div>
 					<div class="clear">&#160;</div>
 				</div>
 
@@ -191,27 +191,20 @@
 					</li>
 					<xsl:for-each select="/html/head/link[@target!='_self']">
 						<li class="inactive">
-							<a target="{@target}" onclick="var win=open(this.href, '{@target}', 'scrollbars=yes, resizable=yes, width=550, height=550, dialog=yes, alwaysRaised=yes, dependent=yes');win.focus()" >
+							<a target="{@target}" onclick="var win=open(this.href, '{@target}', 'scrollbars=yes, resizable=yes, width=550, height=550, dialog=yes, alwaysRaised=yes, dependent=yes');win.focus();return false" >
 								<xsl:apply-templates select="@href"/>
 								<xsl:value-of select="@title" />
-								</a>
+							</a>
 						</li>
 					</xsl:for-each>
 				</ul>
 			</xsl:if>
 
 			<div id="content">
+			<xsl:if test="not(starts-with($mode, 'pre-')) and not(contains($section, 'search')) and (contains($section, 'purl') or contains($section, 'domain'))">
 				<div id="breadcrumbs">
 					<a href="{$origin}/">Server</a>
-					<xsl:choose>
-						<xsl:when test="contains($section, 'user')">
-						<span><span class="crumb">Users</span></span>
-						</xsl:when>
-						<xsl:when test="contains($section, 'search')">
-						<span><span class="crumb">Search</span></span>
-						</xsl:when>
-						<xsl:when test="contains($section, 'purl') or contains($section, 'domain')">
-						<span>
+					<span>
 						<span rel="purl:partOf" resource="?bc_partial">
 						<span rel="purl:partOf" resource="?bc_subsubdomain">
 						<span rel="purl:partOf" resource="?bc_subdomain">
@@ -228,10 +221,9 @@
 						<a href="?bc_partial" class="crumb diverted" property="rdfs:label"/>
 						</span>
 						<span class="crumb" property="rdfs:label"/>
-						</span>
-						</xsl:when>
-					</xsl:choose>
+					</span>
 				</div>
+			</xsl:if>
 				<div id="message-container">
 					<p id="message" />
 				</div>
@@ -240,10 +232,12 @@
 			</div>
 
 			<xsl:if test="not(starts-with($mode, 'pre-'))">
-				<div class="clear">&#160;</div>
 				<div id="footer">
 					<a href="http://zepheira.com/" title="Zepheira">
 						<img src="{$images}/zepheiralogo.png" alt="Zepheira logo" />
+					</a>
+					<a href="http://callimachusproject.org/" title="Callimachus">
+						<img src="{$callimachus}/callimachus-powered.png" alt="Callimachus logo" />
 					</a>
 				</div>
 			</xsl:if>

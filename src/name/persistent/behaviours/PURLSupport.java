@@ -219,16 +219,16 @@ public abstract class PURLSupport extends ResolvableSupport implements PURL {
 				sb.append(link).append(", ");
 			}
 			String linkHeader = sb.substring(0, sb.length() - 2);
+			HttpResponse resp;
 			if (map.isEmpty()) {
-				HttpResponse resp = new BasicHttpResponse(HTTP11, 300,
-						"Multiple Choices");
+				resp = new BasicHttpResponse(HTTP11, 300, "Multiple Choices");
 				for (String location : locations) {
 					resp.addHeader("Location", location);
 				}
 				resp.setHeader("Link", linkHeader);
-				return resp;
+			} else {
+				resp = accept(map, accept, language, linkHeader);
 			}
-			HttpResponse resp = accept(map, accept, language, linkHeader);
 			if (resp == null)
 				return new BasicHttpResponse(HTTP11, 406, "Not Acceptable");
 			return prepareResponse(resp, linkHeader, via);

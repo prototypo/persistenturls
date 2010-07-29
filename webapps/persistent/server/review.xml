@@ -9,10 +9,10 @@
 	xmlns:purl="http://persistent.name/rdf/2010/purl#">
 	<head>
 		<title property="rdfs:label"/>
-		<link rel="view" title="View" target="_self" href="?view" type="text/html" />
-		<link rel="edit" title="Edit" target="_self" href="?edit" type="text/html" />
-		<link rel="review" title="History" target="_self" href="" type="text/html" />
-		<link rel="help" title="Help" target="help" href="/persistent/docs/" type="text/html" />
+		<link rel="view" title="View" target="_self" href="?view" />
+		<link rel="edit" title="Edit" target="_self" href="?edit" />
+		<link rel="review" title="History" target="_self" href="" />
+		<link rel="help" title="Help" target="help" href="/persistent/docs/" />
 	</head>
 	<body class="home server">
 		<h1 property="rdfs:label" />

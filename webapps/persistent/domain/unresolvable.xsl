@@ -6,18 +6,18 @@
 	<xsl:template match="/">
 		<html>
 			<head>
-				<title>PURL Search Results</title>
-				<link rel="help" title="Help" target="_blank" href="/persistent/docs/purl.html#purlsearch" />
+				<title>Unresolvable PURLs</title>
+				<link rel="view" title="View" target="_self" href="?view" />
+				<link rel="edit" title="Edit" target="_self" href="?edit" />
+				<link rel="review" title="History" target="_self" href="?review" />
+				<link rel="parts" title="Parts" target="_self" href="?parts" />
+				<link rel="unresolvable" title="Unresolvable" target="_self" href="" />
+				<link rel="help" title="Help" target="help" href="/persistent/docs/domain.html" />
 			</head>
-			<body class="search purl">
-				<h1>PURL Search Results</h1>
-				<form action="/" method="get" class="search" onsubmit="if(elements['q'].value.indexOf(':')>0)elements['purl'].name='target'">
-					<input type="hidden" class="profile" name="purl" />
-					<input type="text" id="q" name="q" value="" />
-					<img class="submit" src="/persistent/images/search-button.png" alt="Search" title="Click to search" />
-				</form>
+			<body class="search domain">
+				<h1>Unresolvable PURLs</h1>
 				<xsl:if test="not(/sparql:sparql/sparql:results/sparql:result)">
-					<p>No results found.</p>
+					<p>No known unresolvable PURLs.</p>
 				</xsl:if>
 				<xsl:if test="/sparql:sparql/sparql:results/sparql:result">
 					<ul id="results">

@@ -58,7 +58,7 @@ body {
 	font-size: 0.85em;
 	line-height: 1.4em;
     margin: 0;
-	min-width: 800px;
+	min-width: 400pt;
     padding: 0;
 }
 
@@ -107,6 +107,7 @@ li, p {
     float: right;
     font-size: 0.9em;
     padding: 0.5em 2em 0 0;
+	margin: 1em 0px 0px 0px;
 }
 
 #login, .logout {
@@ -238,7 +239,7 @@ form img.submit:hover {
     clear: both;
     float: left;
     font-size: 0.85em;
-    margin: 0 0 1em -5.5%;
+    margin: 1em 0 1em -5.5%;
     opacity: 0.7;
     padding: 0;
     width: 105.5%;
@@ -359,8 +360,9 @@ img {
     width: 81%;
 }
 
-#footer a {
+#footer img {
     padding-right: 25px;
+	vertical-align: top;
 }
 
 iframe {

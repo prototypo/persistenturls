@@ -7,7 +7,7 @@
 		<html>
 			<head>
 				<title>User Search Results</title>
-				<link rel="help" title="Help" target="_blank" href="/persistent/docs/" type="text/html" />
+				<link rel="help" title="Help" target="_blank" href="/persistent/docs/user.html#usersearch" />
 			</head>
 			<body class="user search">
 				<h1>User Search Results</h1>
@@ -16,12 +16,14 @@
 					<input type="text" id="q" name="q" value="" />
 					<img class="submit" src="/persistent/images/search-button.png" alt="Search" title="Click to search" />
 				</form>
-				<ul id="results">
-					<xsl:apply-templates />
-					<xsl:if test="count(/sparql:sparql/sparql:results/sparql:result)=0">
-						<p>No results found.</p>
-					</xsl:if>
-				</ul>
+				<xsl:if test="not(/sparql:sparql/sparql:results/sparql:result)">
+					<p>No results found.</p>
+				</xsl:if>
+				<xsl:if test="/sparql:sparql/sparql:results/sparql:result">
+					<ul id="results">
+						<xsl:apply-templates />
+					</ul>
+				</xsl:if>
 			</body>
 		</html>
 	</xsl:template>

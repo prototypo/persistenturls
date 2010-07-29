@@ -8,10 +8,12 @@
 	xmlns:purl="http://persistent.name/rdf/2010/purl#">
 	<head>
 		<title>Create a New Domain</title>
-		<link rel="view" title="View" target="_self" href="?view" type="text/html" />
-		<link rel="edit" title="Edit" target="_self" href="?edit" type="text/html" />
-		<link rel="review" title="History" target="_self" href="?review" type="text/html" />
-		<link rel="help" title="Help" target="help" href="/persistent/docs/" type="text/html" />
+		<link rel="view" title="View" target="_self" href="?view" />
+		<link rel="edit" title="Edit" target="_self" href="?edit" />
+		<link rel="review" title="History" target="_self" href="?review" />
+		<link rel="parts" title="Parts" target="_self" href="?parts" />
+		<link rel="unresolvable" title="Unresolvable" target="_self" href="?unresolvable" />
+		<link rel="help" title="Help" target="help" href="/persistent/docs/domain.html#domaincreate" />
 		<script>
 			$(document).ready(function() {
 				var origin = $('base').attr('href')
@@ -51,7 +53,7 @@
 							<td class="property">
 								<label for="m_curator">Scribes:</label>
 							</td>
-							<td rel="calli:scribe" class="value" data-suggest="/persistent/user/template?pre-copy">
+							<td rel="calli:scribe" class="value" data-suggest="/persistent/user/template?pre-register">
 								<span about="?scribe" typeof="purl:User">
 									<span property="rdfs:label"/>
 								</span>
@@ -61,7 +63,7 @@
 							<td class="property">
 								<label for="m_curator">Curators:</label>
 							</td>
-							<td rel="calli:curator" class="value" data-suggest="/persistent/user/template?pre-copy">
+							<td rel="calli:curator" class="value" data-suggest="/persistent/user/template?pre-register">
 								<span about="?curator" typeof="purl:User">
 									<span property="rdfs:label"/>
 								</span>
@@ -71,7 +73,7 @@
 							<td class="property">
 								<label for="m_maintainer">Maintainers:</label>
 							</td>
-							<td rel="calli:maintainer" class="value" data-suggest="/persistent/user/template?pre-copy">
+							<td rel="calli:maintainer" class="value" data-suggest="/persistent/user/template?pre-register">
 								<span about="?maintainer" typeof="purl:User">
 									<span property="rdfs:label"/>
 								</span>

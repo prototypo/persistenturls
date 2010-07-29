@@ -7,16 +7,16 @@
 	xmlns:purl="http://persistent.name/rdf/2010/purl#">
 	<head>
 		<title property="rdfs:label"/>
-		<link rel="view" title="View" target="_self" href="" type="text/html" />
-		<link rel="edit" title="Edit" target="_self" href="?edit" type="text/html" />
-		<link rel="review" title="History" target="_self" href="?review" type="text/html" />
-		<link rel="help" title="Help" target="help" href="/persistent/docs/" type="text/html" />
+		<link rel="view" title="View" target="_self" href="" />
+		<link rel="edit" title="Edit" target="_self" href="?edit" />
+		<link rel="review" title="History" target="_self" href="?review" />
+		<link rel="domains" title="Domains" target="_self" href="?domains" />
+		<link rel="help" title="Help" target="help" href="/persistent/docs/user.html" />
 	</head>
 	<body class="user">
 		<h1><a href="" property="rdfs:label" /></h1>
 		<p property="purl:email" />
 		<p property="purl:affiliation" />
 		<p property="purl:justification" />
-        <div><a href="?domains">View PURL Domains</a></div>
 	</body>
 </html>

@@ -7,10 +7,10 @@
 	xmlns:purl="http://persistent.name/rdf/2010/purl#">
 	<head>
 		<title property="rdfs:label"/>
-		<link rel="view" title="View" target="_self" href="?view" type="text/html" />
-		<link rel="edit" title="Edit" target="_self" href="" type="text/html" />
-		<link rel="review" title="History" target="_self" href="?review" type="text/html" />
-		<link rel="help" title="Help" target="help" href="/persistent/docs/" type="text/html" />
+		<link rel="view" title="View" target="_self" href="?view" />
+		<link rel="edit" title="Edit" target="_self" href="" />
+		<link rel="review" title="History" target="_self" href="?review" />
+		<link rel="help" title="Help" target="help" href="/persistent/docs/setup.html" />
 	</head>
 	<body class="server">
 		<form action="" about="">
@@ -29,17 +29,7 @@
 						</tr>
 						<tr>
 							<td class="property">
-								<label>Maintainer:</label>
-							</td>
-							<td rel="calli:maintainer" class="value" data-suggest="/persistent/user/template?pre-copy">
-                                <span about="?maintainer" typeof="purl:User">
-                                    <span property="rdfs:label"/>
-                                </span>
-							</td>
-						</tr>
-						<tr>
-							<td class="property">
-								<label>Origin:</label>
+								<label>Serve:</label>
 							</td>
 							<td rel="purl:serves" class="value diverted" data-suggest="/persistent/domain/template?pre-copy">
                                 <span about="?origin" typeof="purl:Domain">

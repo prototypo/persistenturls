@@ -1,157 +1,92 @@
 <html>
-	<head>
-		<title>
-			PURL Help
-		</title>
-	</head>
-	<body>
-			<h2>
-
-				Contents
-			</h2>
-			<ol>
-				<li>
-					<a href="#overview">Overview of PURLs</a>
-				</li>
-				<li>
-					<a href="setup.html">Installation and setup of a PURL server</a>
-
-				</li>
-				<li>
-					<a href="purls.html">Administering PURLs</a>
-
-				</li>
-			</ol>
-			<hr>
-			<a name="overview" id="overview"></a>
-			<h2>
-				1. Overview of PURLs
-			</h2>
-			<p>
-				PURLs are Persistent Uniform Resource Locators (URLs). A URL is simply an address on the World Wide Web. A <i>Persistent</i> URL is an address on the World Wide Web that points to other Web resources. If a Web resource changes location (and hence URL), a PURL pointing to it can be updated. A user of a PURL always uses the same Web address, even though the resource in question may have moved.
-			</p>
-
-			<p>
-				More information about PURLs may be found in a <a href="brief_intro.html">Brief Introduction</a> to PURLs, a <a href="long_intro.html">Long Introduction</a> to PURLs, the PURL <a href="faq.html">FAQ</a> or <a href="http://en.wikipedia.org/wiki/PURL">Wikipedia</a>. More information about URLs may be found at <a href="http://en.wikipedia.org/wiki/URL">Wikipedia</a> and in <a href="http://www.ietf.org/rfc/rfc3986.txt">RFC 3986</a> from the Internet Engineering Task Force (IETF).
-			</p>
-
-			<p>
-				PURLs are themselves valid URLs. Figure 1 shows the parts of a PURL. The scheme part tells a computer program, such as a Web browser, which protocol to use when resolving the address. The host part tells which machine to connect to. The next part, the PURL domain, is analogous to a path in a URL. The domain is a hierarchical information space that separates PURLs and allows for PURLs to have different maintainers. Each domain may be administered by one or more designated maintainers. Finally, the PURL name is the name of the PURL itself. The domain and name together constitute the PURL's "id".
-			</p>
-			<p align="center">
-				<img src="purlparts.png"><br>
-				<b>Figure 1. Parts of a PURL</b>
-			</p>
-			<p>
-				PURLs are categorized into different types depending on how they respond to a request. Most PURLs simply redirect to a another URL (the "target" URL): Those are PURLs of type 302, because they respond to a request with an HTTP response code of 302, meaning that the object of the request was found elsewhere. PURLs may also respond with other HTTP response codes. <a href="#table1">Table 1</a> summarizes the different types of PURLs.
-			</p>
-
-			<p>
-				It is worth noting that there are some differing interpretations of the HTTP specification and hence some decisions were made in the implementation of PURLs. For example, an HTTP server may respond with a 404 response code if a resource is not found, if it is temporarily not present or if it simply does not want to provide it to a requester. We have chosen to think of a 404 as representing a temporarily gone status and using a 410 for those resources which are permanently not resolvable. Similarly, we have noted the need for a way to ground non-information resources into the World Wide Web and supported that concept with PURLs by suggesting that any resource addressed by a 303 PURL and returning a "See also URL" be explicitly considered <b>not</b> to be an information resource. This decision allows physical resources (such as your car) or conceptual resources (such as the idea of a car) to be given a PURL and referred to in a sharable manner (as when using Semantic Web techniques). Where a particular interpretation of the <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html">HTTP status code definitions</a> differs from the way an HTTP response code is used by a PURL server, we suggest interpreting the intent of PURLs via the <b>Meaning</b> column in <a href="#table1">Table 1</a>.
-			</p><a name="table1" id="table1"></a>
-			<p align="center">
-
-				<b>Table 1. Types of PURLs</b>
-			</p>
-			<table id="purltypestable" summary="Table of PURL Types" align="center" border="0">
-				<tbody>
-					<tr>
-						<th>
-							PURL Type
-						</th>
-						<th>
-
-							Meaning
-						</th>
-						<th>
-							HTTP Shorthand
-						</th>
-					</tr>
-					<tr>
-						<td>
-							203
-						</td>
-
-						<td>
-							Copy of a target Web document
-						</td>
-						<td>
-							Non-Authoritative Information
-						</td>
-					</tr>
-					<tr>
-						<td>
-							301
-						</td>
-
-						<td>
-							Moved permanently to a target URL
-						</td>
-						<td>
-							Moved Permanently
-						</td>
-					</tr>
-					<tr>
-						<td>
-							302
-						</td>
-
-						<td>
-							Simple redirection to a target URL
-						</td>
-						<td>
-							Found
-						</td>
-					</tr>
-					<tr>
-						<td>
-							303
-						</td>
-
-						<td>
-							See other URLs (use for Semantic Web resources)
-						</td>
-						<td>
-							See Other
-						</td>
-					</tr>
-					<tr>
-						<td>
-							307
-						</td>
-
-						<td>
-							Temporary redirect to a target URL
-						</td>
-						<td>
-							Temporary Redirect
-						</td>
-					</tr>
-					<tr>
-						<td>
-							404
-						</td>
-
-						<td>
-							Temporarily gone
-						</td>
-						<td>
-							Not Found
-						</td>
-					</tr>
-					<tr>
-						<td>
-							410
-						</td>
-
-						<td>
-							Permanently gone
-						</td>
-						<td>
-							Gone
-						</td>
-					</tr>
-				</tbody>
-			</table>
-	</body>
+  <head>
+    <title>PURL Help</title>
+  </head>
+  <body>
+    <h2>Contents</h2>
+    <ol>
+      <li>
+        <a href="#overview">Overview of PURLs</a>
+      </li>
+      <li>
+        <a href="setup.html">Installation and setup of a PURL server</a>
+      </li>
+      <li>
+        <a href="purl.html">Administering PURLs</a>
+      </li>
+      <li>
+        <a href="purls.html">Administering Batches of PURLs</a>
+      </li>
+      <li>
+        <a href="user.html">Administering Users </a>
+      </li>
+      <li>
+        <a href="domain.html">Administering PURL Domains</a>
+      </li>
+      <li>
+        <a href="mirror.html">PURL Server Mirror</a>
+      </li>
+    </ol>
+    <hr/>
+    <a name="overview" id="overview"/>
+    <h2>1. Overview of PURLs</h2>
+    <p>PURLs are Persistent Uniform Resource Locators (URLs). A URL is simply an address on the World Wide Web. A <i>Persistent</i> URL is an address on the World Wide Web that points to other Web resources. If a Web resource changes location (and hence URL), a PURL pointing to it can be updated. A user of a PURL always uses the same Web address, even though the resource in question may have moved.</p>
+    <p>More information about PURLs may be found in a <a href="brief_intro.html">Brief Introduction</a> to PURLs, a <a href="long_intro.html">Long Introduction</a> to PURLs, the PURL <a href="faq.html">FAQ</a> or <a href="http://en.wikipedia.org/wiki/PURL">Wikipedia</a>. More information about URLs may be found at <a href="http://en.wikipedia.org/wiki/URL">Wikipedia</a> and in <a href="http://www.ietf.org/rfc/rfc3986.txt">RFC 3986</a> from the Internet Engineering Task Force (IETF).</p>
+    <p>PURLs are themselves valid URLs. Figure 1 shows the parts of a PURL. The scheme part tells a computer program, such as a Web browser, which protocol to use when resolving the address. The host part tells which machine to connect to. The next part, the PURL domain, is analogous to a path in a URL. The domain is a hierarchical information space that separates PURLs and allows for PURLs to have different maintainers. Each domain may be administered by one or more designated maintainers. Finally, the PURL name is the name of the PURL itself. The domain and name together constitute the PURL's "id".</p>
+    <p align="center">
+      <img src="purlparts.png"/>
+      <br/>
+      <b>Figure 1. Parts of a PURL</b>
+    </p>
+    <p>PURLs are categorized into different types depending on how they respond to a request. Most PURLs simply redirect to a another URL (the "target" URL): Those are PURLs of type 302, because they respond to a request with an HTTP response code of 302, meaning that the object of the request was found elsewhere. PURLs may also respond with other HTTP response codes. <a href="#table1">Table 1</a> summarizes the different types of PURLs.</p>
+    <p>It is worth noting that there are some differing interpretations of the HTTP specification and hence some decisions were made in the implementation of PURLs. For example, an HTTP server may respond with a 404 response code if a resource is not found, if it is temporarily not present or if it simply does not want to provide it to a requester. We have chosen to think of a 404 as representing a temporarily gone status and using a 410 for those resources which are permanently not resolvable. Similarly, we have noted the need for a way to ground non-information resources into the World Wide Web and supported that concept with PURLs by suggesting that any resource addressed by a 303 PURL and returning a "See also URL" be explicitly considered <b>not</b> to be an information resource. This decision allows physical resources (such as your car) or conceptual resources (such as the idea of a car) to be given a PURL and referred to in a sharable manner (as when using Semantic Web techniques). Where a particular interpretation of the <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html">HTTP status code definitions</a> differs from the way an HTTP response code is used by a PURL server, we suggest interpreting the intent of PURLs via the <b>Meaning</b> column in <a href="#table1">Table 1</a>.</p>
+    <a name="table1" id="table1"/>
+    <p align="center">
+      <b>Table 1. Types of PURLs</b>
+    </p>
+    <table id="purltypestable" summary="Table of PURL Types" align="center" border="0">
+      <tbody>
+        <tr>
+          <th>PURL Type</th>
+          <th>Meaning</th>
+          <th>HTTP Shorthand</th>
+        </tr>
+        <tr>
+          <td>203</td>
+          <td>Copy of a target Web document</td>
+          <td>Non-Authoritative Information</td>
+        </tr>
+        <tr>
+          <td>301</td>
+          <td>Moved permanently to a target URL</td>
+          <td>Moved Permanently</td>
+        </tr>
+        <tr>
+          <td>302</td>
+          <td>Simple redirection to a target URL</td>
+          <td>Found</td>
+        </tr>
+        <tr>
+          <td>303</td>
+          <td>See other URLs (use for Semantic Web resources)</td>
+          <td>See Other</td>
+        </tr>
+        <tr>
+          <td>307</td>
+          <td>Temporary redirect to a target URL</td>
+          <td>Temporary Redirect</td>
+        </tr>
+        <tr>
+          <td>404</td>
+          <td>Temporarily gone</td>
+          <td>Not Found</td>
+        </tr>
+        <tr>
+          <td>410</td>
+          <td>Permanently gone</td>
+          <td>Gone</td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
 </html>
