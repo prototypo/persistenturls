@@ -1,0 +1,229 @@
+@prefix xsd:<http://www.w3.org/2001/XMLSchema#>.
+@prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs:<http://www.w3.org/2000/01/rdf-schema#>.
+@prefix owl:<http://www.w3.org/2002/07/owl#>.
+@prefix obj:<http://www.openrdf.org/rdf/2009/object#>.
+@prefix http:<http://www.openrdf.org/rdf/2009/httpobject#>.
+@prefix calli:<http://callimachusproject.org/rdf/2009/framework#>.
+@prefix purl:<http://persistent.name/rdf/2010/purl#>.
+
+################################
+# Realm
+################################
+
+<anybody> a calli:AnybodyRealm;
+	calli:origin </>;
+	calli:domain </>.
+
+<local> a calli:LocalRealm;
+	calli:origin </>;
+	calli:domain </>;
+	calli:forbidden <forbidden.xml>.
+
+<authority> a calli:DigestRealm;
+	calli:origin </>;
+	calli:authName </>;
+	calli:domain </>;
+	calli:unauthorized <unauthorized.xml>;
+	calli:forbidden <forbidden.xml>.
+
+calli:SPARQLService http:realm <local>.
+calli:describe http:realm <local>.
+calli:get-graph http:realm <local>.
+
+calli:get-copy http:realm <authority>.
+calli:pre-copy http:realm <authority>.
+calli:post-copy http:realm <authority>.
+calli:get-edit http:realm <authority>.
+calli:pre-edit http:realm <authority>.
+calli:post-edit http:realm <authority>.
+calli:get-delete http:realm <authority>.
+calli:pre-delete http:realm <authority>.
+calli:post-delete http:realm <authority>.
+
+################################
+# User
+################################
+
+purl:User rdfs:subClassOf calli:Credential;
+	http:realm <authority>.
+
+purl:email a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:domain purl:User;
+	rdfs:range xsd:string.
+
+rdfs:label a owl:DatatypeProperty;
+	rdfs:range xsd:string;
+	http:method "GET";
+	http:operation "label";
+	http:type "text/plain;q=0.9";
+	http:rel "alternate".
+
+purl:purl-authorize owl:equivalentClass calli:authorize-credential;
+	obj:sparql """
+		ASK {
+			$subject a purl:PURL; purl:partOf ?partial
+			{
+				?partial calli:curator $credential
+			} UNION {
+				?partial calli:maintainer $credential
+			} UNION {
+				?partial purl:belongsTo [calli:curator $credential]
+			} UNION {
+				?partial purl:belongsTo [calli:maintainer $credential]
+			}
+		}
+	""".
+
+purl:partial-authorize owl:equivalentClass calli:authorize-credential;
+	obj:sparql """
+		ASK {
+			$subject a purl:Partial; purl:belongsTo ?domain
+			{
+				?domain calli:curator $credential
+			} UNION {
+				?domain calli:maintainer $credential
+			}
+		}
+	""".
+
+purl:login-authorize owl:equivalentClass calli:authorize-credential;
+	obj:sparql """
+		ASK {
+			$subject calli:credential $credential
+			FILTER ($method = "GET" || $method = "HEAD")
+			FILTER ($qs = "login")
+		}
+	""".
+
+# Prompts the browser to login using different credentials
+# Available to user when logged in
+purl:logout rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom calli:DigestRealm];
+	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
+		owl:allValuesFrom <java:org.apache.http.HttpResponse>];
+	http:operation "logout";
+	http:cache-control "private";
+	http:type "message/x-response";
+	obj:imports <java:org.apache.http.ProtocolVersion>;
+	obj:imports <java:org.apache.http.message.BasicHttpResponse>;
+	obj:groovy """
+		def ver = new ProtocolVersion("HTTP", 1, 1)
+		def resp = new BasicHttpResponse(ver, 303, "See Other")
+		def credential = findCredential(msg.authorization)
+		if (credential == null) {
+			resp.setHeader("Location", toString() + "?login")
+			return resp
+		}
+		if (msg.user != null && msg.user == credential)
+			return unauthorized()
+		if (msg.user == null) {
+			resp.setHeader("Location", toString() + "?logout&from=" + credential.toString())
+		} else {
+			resp.setHeader("Location", credential.toString())
+		}
+		return resp
+	""".
+
+purl:logout-authorization a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:domain purl:logout;
+	rdfs:range xsd:string;
+	http:header "Authorization";
+	obj:name "authorization".
+
+purl:logout-user a owl:ObjectProperty, owl:FunctionalProperty;
+	rdfs:domain purl:logout;
+	rdfs:range calli:Credential;
+	http:parameter "from";
+	http:type "text/uri-list";
+	obj:name "user".
+
+# A generic URL that requires authorization
+# Available to user when not logged in
+purl:login rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom calli:DigestRealm];
+	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
+		owl:allValuesFrom calli:Credential];
+	http:operation "login";
+	http:realm <authority>;
+	http:expect "303-see-other";
+	obj:groovy "return findCredential(msg.authorization)".
+
+purl:login-authorization a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:domain purl:login;
+	rdfs:range xsd:string;
+	http:header "Authorization";
+	obj:name "authorization".
+
+# Redirection to the authorized user
+# Used to display the authorized users
+purl:credential rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom calli:DigestRealm];
+	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
+		owl:allValuesFrom calli:Credential];
+	http:operation "credential";
+	http:cache-control "private";
+	http:expect "303-see-other";
+	obj:groovy "return findCredential(msg.authorization)".
+
+purl:credential-authorization a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:domain purl:credential;
+	rdfs:range xsd:string;
+	http:header "Authorization";
+	obj:name "authorization".
+
+# Sends request for password reset emails
+# Submitted by form in the authorized page
+purl:post-request-password rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom calli:DigestRealm];
+	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
+		owl:allValuesFrom <java:java.io.Reader>];
+	http:method "POST";
+	http:operation "request-password";
+	http:type "text/html";
+	obj:imports <java:org.openrdf.http.object.exceptions.BadRequest>;
+	obj:imports <user/request-password-sent.xml>;
+	obj:imports purl:User;
+	obj:groovy """
+		if (!msg.form || !msg.form.get("email") || !msg.form.get("email")[0])
+			throw new BadRequest("Missing Email")
+		for (User user : purlFindUsersByEmail(msg.form.get("email")[0])) {
+			user.purlRequestPassword()
+		}
+		return requestPasswordSentXml.calliConstruct('view', null)
+	""".
+
+purl:post-request-password-email a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:domain purl:post-request-password;
+	rdfs:range <java:java.util.Map>;
+	http:type "application/x-www-form-urlencoded";
+	obj:name "form".
+
+# Looks up user by email address
+# Used to request password reset
+purl:find-users-by-email rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom calli:DigestRealm];
+	rdfs:subClassOf [owl:onProperty obj:objectResponse;
+		owl:allValuesFrom purl:User];
+	obj:sparql """
+		SELECT REDUCED ?user
+		WHERE {
+			{
+				$this calli:credential [calli:member ?user]
+			} UNION {
+				$this calli:credential ?user
+			}
+			?user purl:email $email
+		}
+	""".
+
+purl:find-users-by-email-arg a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:domain purl:find-users-by-email;
+	rdfs:range xsd:string;
+	obj:name "email".
+

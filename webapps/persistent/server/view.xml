@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../template.xsl"?>
+<!-- Copyright (c) 2010 Zepheira LLC, Some Rights Reserved. -->
+<html xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:calli="http://callimachusproject.org/rdf/2009/framework#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:purl="http://persistent.name/rdf/2010/purl#">
+	<head>
+		<title property="rdfs:label"/>
+		<link rel="view" title="View" target="_self" href="" type="text/html" />
+		<link rel="edit" title="Edit" target="_self" href="?edit" type="text/html" />
+		<link rel="review" title="History" target="_self" href="?review" type="text/html" />
+		<link rel="help" title="Help" target="help" href="/persistent/docs/" type="text/html" />
+	</head>
+  <body class="home server">
+    <h1>PURL Server</h1>
+    <p><acronym title="Persistent Uniform Resource Locator">PURL</acronym>s are Web addresses that act as permanent identifiers in the face of a dynamic and changing Web infrastructure. Instead of resolving directly to Web resources, PURLs provide a level of indirection that allows the underlying Web addresses of resources to change over time without negatively affecting systems that depend on them. This capability provides continuity of references to network resources that may migrate from machine to machine for business, social or technical reasons.</p>
+
+    <h3>Quick Links</h3>
+    <ul>
+      <li><strong><a href="/persistent/user/template?register">Register</a></strong> as a new user</li>
+      <li><strong><a href="/persistent/authority?logout">Login</a></strong> with your existing account</li>
+      <li><strong><a href="/persistent/authority?login">Maintain</a></strong> your domains</li>
+      <li resource="?origin" rel="purl:serves">Browse <strong><a class="diverted" property="rdfs:label" href="?origin"></a></strong> domains and PURLs</li>
+    </ul>
+
+    <p>For more about the software that runs this PURL Server, see the <a href="http://www.purlz.org/">PURL community site</a> for documentation, downloads, background information, mailing lists, and other community resources.</p>
+  </body>
+</html>

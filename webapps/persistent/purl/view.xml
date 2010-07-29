@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../template.xsl"?>
+<!-- Copyright (c) 2010 Zepheira LLC, Some Rights Reserved. -->
+<html xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:calli="http://callimachusproject.org/rdf/2009/framework#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:purl="http://persistent.name/rdf/2010/purl#">
+	<head>
+		<title property="rdfs:label"/>
+		<link rel="view" title="View" target="_self" href="" type="text/html" />
+		<link rel="edit" title="Edit" target="_self" href="?edit" type="text/html" />
+		<link rel="review" title="History" target="_self" href="?review" type="text/html" />
+		<link rel="help" title="Help" target="help" href="/persistent/docs/" type="text/html" />
+		<script type="text/javascript" src="/persistent/purl/validate.js">
+		</script>
+	</head>
+	<body class="purl">
+		<h1><a href="" property="rdfs:label" /></h1>
+        <p><a href="?copy" class="diverted">Clone this PURL</a></p>
+		<span rel="rdf:type" resource="?type"><div property="rdfs:comment"/></span>
+		<a id="target" rel="purl:copyOf" href="?copyOf">Target (Copy - HTTP 203)</a>
+		<a id="target" rel="purl:renamedTo" href="?renamedTo">Target (Renamed - HTTP 301)</a>
+		<a id="target" rel="purl:alternative" href="?alternative">Target (Simple - HTTP 302)</a>
+		<a id="target" rel="purl:describedBy" href="?describedBy">Target (Described - HTTP 303)</a>
+		<a id="target" rel="purl:redirectsTo" href="?redirectsTo">Target (Redirect - HTTP 307)</a>
+        <p><button id="validate" type="button">Validate this PURL</button></p>
+	</body>
+</html>

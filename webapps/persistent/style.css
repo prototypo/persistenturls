@@ -1,0 +1,389 @@
+@import url(reset.css);
+
+/**
+ * Restore normal elements
+ */
+
+h1, h2, h3, h4, h5, h6, legend {
+    font-weight: bold;
+    margin: 0.5em 0;
+}
+
+h1 {
+    font-size: 2.0em;
+}
+
+h2, legend {
+    font-size: 1.8em;
+}
+
+h3 {
+    font-size: 1.5em;
+}
+
+h4 {
+    font-size: 1.3em;
+}
+
+h5 {
+    font-size: 1.2em;
+}
+
+h6 {
+    font-size: 1.1em;
+}
+
+th, td {
+    padding: 2px;
+}
+
+input:focus,
+textarea:focus,
+button:focus {
+    outline: 0;
+}
+
+ul {
+    list-style-type: disc;
+    margin: 0 0 0 1em;
+}
+
+li {
+    display: list-item;
+}
+
+body {
+	background: #eee;
+	font-family: sans-serif;
+	font-size: 0.85em;
+	line-height: 1.4em;
+    margin: 0;
+	min-width: 800px;
+    padding: 0;
+}
+
+strong {
+    font-weight: bold;
+}
+
+a {
+    color: #07d;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+a:visited {
+    color: #059;
+}
+
+a.redirection {
+    color: purple;
+}
+
+a.unresolvable {
+    color: red;
+}
+
+input[type="text"] {
+    background: #fefefe url(images/input-bg.png) top left repeat-x;
+    border: 1px solid #ddd;
+    padding: 0.25em;
+}
+
+acronym {
+    border-bottom: 1px dashed;
+    cursor: help;
+}
+
+li, p {
+    margin-bottom: 0.5em;
+}
+
+#account {
+    clear: right;
+    float: right;
+    font-size: 0.9em;
+    padding: 0.5em 2em 0 0;
+}
+
+#login, .logout {
+    display: none;
+}
+
+#content {
+    background: #fff url(images/content-bg.png) top left repeat-y;
+    border-bottom: 1px solid #ddd;
+    clear: right;
+    float: left;
+    min-height: 348px;
+	padding: 0 0 10px 6%;
+	text-align: left;
+    width: 76.8%;
+    z-index: 0;
+}
+
+#content p {
+    padding-right: 10em;
+}
+
+#home {
+    padding: 1em 0 0.25em 7%;
+}
+
+#header {
+    border-bottom: 1px solid #ccc;
+    margin: -2em 0 0 2%;
+    min-height: 2em;
+    padding: 0 0 0 17%;
+}
+
+#menu {
+    background: #efefef url(images/menu-bg.png) top right repeat-y;
+    border-bottom: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    float: left;
+    margin: 0 0 0 2%;
+    padding: 0;
+    position: relative;
+    width: 15%;
+    z-index: 10;
+}
+
+#menu li {
+    list-style: none;
+    margin: 0;
+}
+
+#menu li a {
+    display: block;
+    height: 32px;
+    line-height: 28px;
+    padding: 10px 2% 10px 8%;
+    width: 100%;
+}
+
+#menu li.active {
+    background: #f9f9f9 url(images/menu-bg.png) top right repeat-y;
+    padding: 0;
+}
+
+#menu li.active > a {
+    background: transparent url(images/menu-item-bg.png) top right no-repeat;
+    font-weight: bold;
+}
+
+#menu a.new {
+    display: inline;
+    background: transparent url(images/add.png) center left no-repeat;
+    margin: 0 0 0 8%;
+    padding: 7px 0 7px 30px;
+}
+
+#menu li form {
+    font-size: 0.9em;
+    margin: 0;
+    opacity: 0.7;
+    padding: 0.75em;
+}
+
+#menu li.inactive form,
+#menu li.inactive ul {
+    display: none;
+}
+
+#menu li form label {
+    margin-left: 5%;
+}
+
+#menu li form input {
+    background: transparent url(images/search-bg.png) top left no-repeat;
+    margin-left: 2%;
+    padding: 3px 3px 3px 16px;
+    width: 50%;
+}
+
+.search #content form.search input {
+    background: transparent url(images/search-bg.png) top left no-repeat;
+    padding: 3px 3px 3px 16px;
+}
+
+form img.submit {
+     margin: 0 5px;
+    vertical-align: middle;
+}
+
+form img.submit:hover {
+    cursor: pointer;
+}
+
+#menu ul {
+    font-size: 0.9em;
+    margin: 0;
+}
+
+#menu ul li {
+    padding: 7px 0;
+}
+
+#menu ul li a {
+    height: auto;
+    line-height: 1;
+}
+
+#breadcrumbs {
+    background: transparent;
+    clear: both;
+    float: left;
+    font-size: 0.85em;
+    margin: 0 0 1em -5.5%;
+    opacity: 0.7;
+    padding: 0;
+    width: 105.5%;
+}
+
+#breadcrumbs:hover {
+    opacity: 1.0;
+}
+
+#breadcrumbs > a {
+    margin: 0 10px 0 0;
+    padding: 10px 0 10px 20px;
+}
+
+#breadcrumbs .crumb {
+    background: transparent url(images/breadcrumb.png) center left no-repeat;
+    margin: 0 10px 0 0;
+    padding: 10px 0 10px 20px;
+}
+
+body.home h1 {
+    margin-top: 2em;
+}
+
+#actions {
+    border-left: 1px solid #ccc;
+    clear: left;
+    float: left;
+    font-size: 0.9em;
+    list-style: none;
+    margin: 1em 0 0;
+}
+
+#actions li {
+    display: block;
+    float: left;
+    margin: 0 21px 0 0;
+    text-align: center;
+    width: 65px;
+}
+
+#actions li a,
+#actions li span {
+    background: #efefef url(images/menu-region.png) bottom left repeat-x;
+    border-right: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    display: block;
+    margin-bottom: -1px;
+    padding: 3px 10px;
+    width: 100%;
+}
+
+#actions .current {
+    background: #fff;
+    border-bottom: 0;
+    font-weight: bold;
+}
+
+.clear:after {
+    clear: both;
+    content: " ";
+    display: block;
+    font-size: 0;
+    height: 0;
+    visibility: hidden;
+}
+
+.hidden {
+    display: none;
+}
+
+h3.error {
+	font-weight: bold;
+	color: red;
+}
+
+p.error {
+	font-size: 1.1em;
+	font-weight: bold;
+	color: red;
+	margin-left: 2.5em;
+}
+
+form .instructions {
+    padding: 0.5em 0;
+}
+
+fieldset {
+    border: 0;
+    clear: both;
+    display: block;
+}
+
+legend {
+    clear: both;
+    display: block;
+}
+
+table {
+	table-layout: fixed;
+	padding: 0;
+}
+
+td.property,
+td.value {
+    vertical-align: top;
+}
+
+img {
+    border: 0;
+}
+
+#footer {
+    clear: both;
+    margin: 0 0 0 17%;
+    padding: 3em 1% 10px 1%;
+    text-align: right;
+    width: 81%;
+}
+
+#footer a {
+    padding-right: 25px;
+}
+
+iframe {
+	border: 0px solid #ffffff;
+	width: 300pt;
+	height: 150pt;
+	background-color: white;
+}
+
+.drag-over {
+	cursor: copy;
+	background-color: lightgrey !important;
+}
+
+.wait * {
+	cursor: wait;
+}
+
+a.diverted {
+	cursor: alias;
+}
+
+/* Inapplicable actions or breadcrumbs */
+body.home #breadcrumbs {
+    display: none;
+}

@@ -1,0 +1,173 @@
+@prefix xsd:<http://www.w3.org/2001/XMLSchema#>.
+@prefix rdfs:<http://www.w3.org/2000/01/rdf-schema#>.
+@prefix owl:<http://www.w3.org/2002/07/owl#>.
+@prefix obj:<http://www.openrdf.org/rdf/2009/object#>.
+@prefix http:<http://www.openrdf.org/rdf/2009/httpobject#>.
+@prefix calli:<http://callimachusproject.org/rdf/2009/framework#>.
+@prefix purl:<http://persistent.name/rdf/2010/purl#>.
+
+purl:update-resolver rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:Server];
+	rdfs:subClassOf [owl:onProperty obj:objectResponse;
+		owl:allValuesFrom owl:Nothing];
+	obj:triggeredBy purl:serves;
+	obj:groovy """
+		msg.proceed()
+		Set before = new HashSet()
+		Set after = new HashSet()
+		def vf = objectConnection.valueFactory
+		def matches = vf.createURI("http://www.openrdf.org/rdf/2009/object#", "matches")
+		def result = purlUpdateResolverRemove()
+		try {
+			while (result.hasNext()) {
+				def st = result.next()
+				if (matches == st.predicate) {
+					before.add(st.object.stringValue())
+				}
+			}
+		} finally {
+			result.close()
+		}
+		result = purlUpdateResolverServes()
+		try {
+			while (result.hasNext()) {
+				def bindings = result.next()
+				String uri = bindings.getValue("domain").stringValue()
+				after.add(uri + "*")
+				if (bindings.hasBinding("zoned")) {
+					after.add(uri.replaceAll("^.*://", "*.") + "*")
+				}
+			}
+		} finally {
+			result.close()
+		}
+		if (before != after) {
+			result = purlUpdateResolverAdd()
+			try {
+				while (result.hasNext()) {
+					def st = result.next()
+					objectConnection.add(st.subject, st.predicate, st.object)
+				}
+			} finally {
+				result.close()
+			}
+			result = purlUpdateResolverRemove()
+			try {
+				while (result.hasNext()) {
+					def st = result.next()
+					objectConnection.remove(st.subject, st.predicate, st.object)
+				}
+			} finally {
+				result.close()
+			}
+			def resolve = vf.createURI("http://persistent.name/rdf/2010/purl#", "resolve")
+			def subClassOf = vf.createURI("http://www.w3.org/2000/01/rdf-schema#", "subClassOf")
+			def onProperty = vf.createURI("http://www.w3.org/2002/07/owl#", "onProperty")
+			def allValuesFrom = vf.createURI("http://www.w3.org/2002/07/owl#", "allValuesFrom")
+			def target = vf.createURI("http://www.openrdf.org/rdf/2009/object#", "target")
+			def functionalObjectResponse = vf.createURI("http://www.openrdf.org/rdf/2009/object#", "functionalObjectResponse")
+			def HttpResponse = vf.createURI("java:", "org.apache.http.HttpResponse")
+
+			def _target = vf.createBNode()
+			def _purls = vf.createBNode()
+			def _response = vf.createBNode()
+
+			objectConnection.add(resolve, subClassOf, _response)
+			objectConnection.add(_response, onProperty, functionalObjectResponse)
+			objectConnection.add(_response, allValuesFrom, HttpResponse)
+			objectConnection.add(resolve, subClassOf, _target)
+			objectConnection.add(_target, onProperty, target)
+			objectConnection.add(_target, allValuesFrom, _purls)
+			for (String pre : after) {
+				objectConnection.add(_purls, matches, vf.createLiteral(pre))
+			}
+		}
+	""".
+
+purl:update-resolver-serves  rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:Server];
+	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
+		owl:allValuesFrom obj:TupleResult];
+	obj:sparql """
+		SELECT ?domain ?zoned
+		WHERE {
+			[a purl:Server] purl:serves ?domain
+			OPTIONAL { ?domain a ?zoned FILTER (?zoned = purl:Zoned) }
+		}
+	""".
+
+purl:update-resolver-remove  rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:Server];
+	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
+		owl:allValuesFrom obj:GraphResult];
+	obj:sparql """
+		CONSTRUCT {
+			purl:resolve rdfs:subClassOf ?response;
+				rdfs:subClassOf ?target.
+
+			?target owl:onProperty obj:target;
+					owl:allValuesFrom ?purls.
+			?purls obj:matches ?matches.
+			?response owl:onProperty obj:functionalObjectResponse;
+					owl:allValuesFrom <java:org.apache.http.HttpResponse>.
+		} WHERE {
+			purl:resolve rdfs:subClassOf ?response;
+				rdfs:subClassOf ?target.
+
+			?target owl:onProperty obj:target;
+					owl:allValuesFrom ?purls.
+			?purls obj:matches ?matches.
+			?response owl:onProperty obj:functionalObjectResponse;
+					owl:allValuesFrom <java:org.apache.http.HttpResponse>.
+		}
+	""".
+
+purl:update-resolver-add  rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:Server];
+	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
+		owl:allValuesFrom obj:GraphResult];
+	obj:sparql """
+		CONSTRUCT {
+			purl:resolve rdfs:subClassOf obj:Message;
+				http:method "GET";
+				http:operation "";
+				http:type "message/x-response";
+				http:cache-control "max-age=3600";
+				obj:groovy "return resolvePURL(toString(), msg.qs, msg.accept, msg.lang, msg.via)".
+
+			purl:resolve-qs a owl:DatatypeProperty, owl:FunctionalProperty;
+				rdfs:domain purl:resolve;
+				rdfs:range xsd:string;
+				http:parameter "*";
+				obj:name "qs".
+
+			purl:resolve-accept a owl:DatatypeProperty, owl:FunctionalProperty;
+				rdfs:domain purl:resolve;
+				rdfs:range xsd:string;
+				http:header "Accept";
+				obj:name "accept".
+
+			purl:resolve-language a owl:DatatypeProperty, owl:FunctionalProperty;
+				rdfs:domain purl:resolve;
+				rdfs:range xsd:string;
+				http:header "Accept-Language";
+				obj:name "lang".
+
+			purl:resolve-via a owl:DatatypeProperty;
+				rdfs:domain purl:resolve;
+				rdfs:range xsd:string;
+				http:header "Via";
+				obj:name "via".
+		} WHERE {
+			$this a purl:Server
+			OPTIONAL {
+				purl:resolve rdfs:subClassOf ?message
+			}
+			FILTER (!bound(?message))
+		}
+	""".
+

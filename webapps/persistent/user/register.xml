@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../template.xsl"?>
+<!-- Copyright (c) 2010 Zepheira LLC, Some Rights Reserved. -->
+<html xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:calli="http://callimachusproject.org/rdf/2009/framework#"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+	xmlns:purl="http://persistent.name/rdf/2010/purl#">
+	<head>
+		<title>Request a New User</title>
+		<link rel="help" title="Help" target="help" href="/persistent/docs/" type="text/html" />
+		<script>
+			function confirm() {
+				var email = document.getElementById("m_email")
+				var confirm = document.getElementById("m_confirm")
+				if (email.value == confirm.value) {
+					confirm.style.backgroundColor = "white"
+				} else {
+					confirm.style.backgroundColor = "red"
+				}
+			}
+		</script>
+	</head>
+	<body class="user">
+		<form action="" about="" typeof="purl:User">
+			<fieldset>
+				<legend>Request a New User</legend>
+				<p class="instructions">Fill in the following user information.</p>
+				<table class="actiontable">
+					<tbody>
+						<tr>
+							<td class="property">
+								<label for="m_username">ID:</label>
+							</td>
+							<td class="value" data-cardinality="1">
+								<input id="m_username" type="text"
+									onchange="$(form).attr('about', '/data/user/' + value)" property="calli:name" />
+							</td>
+						</tr>
+						<tr>
+							<td class="property">
+								<label for="m_name">Full name:</label>
+							</td>
+							<td class="value" data-cardinality="1">
+								<input id="m_name" property="rdfs:label" type="text" />
+							</td>
+						</tr>
+						<tr>
+							<td class="property">
+								<label for="m_email">E-mail address:</label>
+							</td>
+							<td class="value" data-cardinality="1">
+								<input id="m_email" property="purl:email" type="text" onchange="confirm()" />
+							</td>
+						</tr>
+						<tr>
+							<td class="property">
+								<label for="m_email">Confirm address:</label>
+							</td>
+							<td class="value" data-cardinality="1">
+								<input id="m_confirm" type="text" onchange="confirm()" />
+							</td>
+						</tr>
+						<tr>
+							<td class="property">
+								<label for="m_affiliation">Affiliation:</label>
+							</td>
+							<td class="value">
+								<input id="m_affiliation" property="purl:affiliation"
+									type="text" />
+							</td>
+						</tr>
+						<tr>
+							<td class="property">
+								<label for="m_justification">Justification:</label>
+							</td>
+							<td class="value">
+								<textarea rows="5" cols="40" id="m_justification"
+									property="purl:justification">
+								</textarea>
+							</td>
+						</tr>
+						<tr>
+							<td class="property">
+								<label for="m_reviewer">Reviewers:</label>
+							</td>
+							<td rel="calli:reviewer" class="value" data-suggest="/persistent/user/template?pre-copy">
+								<span about="?reviewer" typeof="purl:User">
+									<span property="rdfs:label"/>
+								</span>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<input value="Register" type="submit" />
+				<br />
+			</fieldset>
+		</form>
+	</body>
+</html>

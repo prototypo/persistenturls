@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../template.xsl"?>
+<html>
+	<head>
+		<title>Change Email Address</title>
+		<link rel="view" title="View" target="_self" href="?view" type="text/html" />
+		<link rel="edit" title="Edit" target="_self" href="?edit" type="text/html" />
+		<link rel="review" title="History" target="_self" href="?review" type="text/html" />
+		<link rel="help" title="Help" target="help" href="/persistent/docs/" type="text/html" />
+		<script>
+			// <![CDATA[
+			function parameter(name) {
+				var regex = new RegExp("[\\?&]"+name+"=([^&#]*)")
+				return regex.exec(location.href)[1];
+			}
+			function init() {
+				document.getElementById("nonce").value = parameter("nonce")
+				document.getElementById("token").value = parameter("token")
+				document.getElementById("email").value = parameter("email")
+			}
+			// ]]>
+		</script>
+	</head>
+	<body class="user" onload="init()">
+		<form method="POST" action="?change-email">
+			<input type="hidden" name="nonce" id="nonce" />
+			<input type="hidden" name="token" id="token" />
+			<p><label>Email Address</label><input name="email" id="email" readonly="readonly" /></p>
+			<button type="submit">Change Address</button>
+		</form>
+	</body>
+</html>

@@ -1,0 +1,335 @@
+@prefix xsd:<http://www.w3.org/2001/XMLSchema#>.
+@prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs:<http://www.w3.org/2000/01/rdf-schema#>.
+@prefix owl:<http://www.w3.org/2002/07/owl#>.
+@prefix obj:<http://www.openrdf.org/rdf/2009/object#>.
+@prefix http:<http://www.openrdf.org/rdf/2009/httpobject#>.
+@prefix calli:<http://callimachusproject.org/rdf/2009/framework#>.
+@prefix purl:<http://persistent.name/rdf/2010/purl#>.
+
+################################
+# Server
+################################
+
+</> a purl:Server;
+	calli:maintainer </data/user/admin>.
+
+purl:Server rdfs:subClassOf calli:Viewable, calli:Reviewable, calli:Editable;
+	calli:view <server/view.xml>;
+	calli:review <server/review.xml>;
+	calli:edit <server/edit.xml>.
+
+################################
+# User
+################################
+
+<user/template> a purl:UserTemplate;
+	calli:curator </data/user/admin>.
+
+purl:UserTemplate rdfs:subClassOf calli:Copyable;
+	calli:withNamespace </data/user/>;
+	calli:copy <user/register.xml>.
+
+# Adds user to authority realm and initializes their password
+# Use in user registration
+purl:post-user-copy owl:intersectionOf (calli:post-copy
+		[owl:onProperty obj:target; owl:allValuesFrom purl:UserTemplate]);
+	obj:precedes calli:post-copy;
+	obj:imports <authority>;
+	obj:imports <java:org.openrdf.http.object.exceptions.BadRequest>;
+	obj:groovy """
+		def copy = msg.functionalObjectResponse
+		if (!copy.purlEmail)
+			throw new BadRequest("Missing Email Address")
+		authority.calliCredentials.add(copy)
+		copy.purlResetPassword()
+		return copy
+	""".
+
+purl:User rdfs:subClassOf calli:Viewable, calli:Reviewable, calli:Editable, calli:Deletable;
+	calli:view <user/view.xml>;
+	calli:review <user/review.xml>;
+	calli:edit <user/edit.xml>;
+	calli:delete <user/delete.xml>.
+
+# Removes the user from the authority realm, and removes their password.
+# Called in user delete
+purl:post-user-delete owl:intersectionOf (calli:post-delete
+		[owl:onProperty obj:target; owl:allValuesFrom purl:User]);
+	obj:precedes calli:post-delete;
+	obj:imports <authority>;
+	obj:imports <java:org.openrdf.http.object.exceptions.BadRequest>;
+	obj:groovy """
+		authority.calliCredentials.remove(this)
+		calliAlgorithm = null
+		calliEncoded = null
+		msg.proceed()
+	""".
+
+################################
+# Domain
+################################
+
+<domain/template> a purl:DomainTemplate;
+	calli:withNamespace "http://";
+	calli:curator </data/user/admin>.
+
+purl:DomainTemplate rdfs:subClassOf calli:Copyable;
+	calli:copy <domain/create-top.xml>.
+
+purl:get-domain-create rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:Partial];
+	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
+		owl:allValuesFrom <java:java.io.Reader>];
+	http:operation "domain-create";
+	http:type "text/html";
+	http:realm <authority>;
+	obj:imports <domain/create.xml>;
+	obj:groovy """
+		return createXml.calliConstruct('copy', this)
+	""".
+
+# Sets up purl:domainOf, purl:partOf, and increments the parent timestamp
+# Called when creating a sub domain
+purl:post-domain-create rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:Partial];
+	rdfs:subClassOf [owl:onProperty obj:objectResponse;
+		owl:maxCardinality "1"^^xsd:nonNegativeInteger];
+	obj:precedes calli:post-copy;
+	http:method "POST";
+	http:operation "domain-create";
+	http:realm <authority>;
+	http:expect "201-created";
+	obj:imports <domain/create.xml>;
+	obj:groovy """
+		def copy = createXml.calliCopyResource(this, msg.in, Collections.singleton(this))
+		if (calliCurators) {
+			copy.calliMaintainers.addAll(calliCurators)
+		} else {
+			copy.calliMaintainers.addAll(findScribe(copy))
+		}
+		if (purlBelongsTo) {
+			copy.purlDomainOf.addAll(purlBelongsTo.purlDomainOf)
+		} else {
+			copy.purlDomainOf.addAll(purlDomainOf)
+			copy.purlDomainOf.add(msg.target)
+		}
+		copy.purlPartOf = msg.target
+		touchRevision()
+		return copy
+	""".
+
+purl:post-domain-create-in a owl:ObjectProperty, owl:FunctionalProperty;
+	rdfs:domain purl:post-domain-create;
+	rdfs:range <java:java.io.InputStream>;
+	http:type "application/rdf+xml";
+	obj:name "in".
+
+purl:Domain rdfs:subClassOf calli:Viewable, calli:Reviewable, calli:Editable, calli:Copyable, calli:Deletable;
+	calli:view <domain/view.xml>;
+	calli:review <domain/review.xml>;
+	calli:edit <domain/edit.xml>;
+	calli:copy <domain/copy.xml>;
+	calli:delete <domain/delete.xml>.
+
+# Sets up the purl:domainOf property
+# Called when copying a domain
+purl:post-domain-copy owl:intersectionOf (calli:post-copy
+		[owl:onProperty obj:target; owl:allValuesFrom purl:Domain]);
+	obj:precedes calli:post-copy;
+	obj:groovy """
+		def copy = msg.functionalObjectResponse
+		copy.purlDomainOf.addAll(purlDomainOf)
+		return copy
+	""".
+
+################################
+# Partial
+################################
+
+purl:get-partial-create rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:Partial];
+	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
+		owl:allValuesFrom <java:java.io.Reader>];
+	http:operation "partial-create";
+	http:realm <authority>;
+	http:type "text/html";
+	obj:imports <partial/create.xml>;
+	obj:groovy """
+		return createXml.calliConstruct('copy', this)
+	""".
+
+# Sets up purl:partOf and purl:belongsTo properties
+# Called when creating a partial PURL
+purl:post-partial-create rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:Partial];
+	rdfs:subClassOf [owl:onProperty obj:objectResponse;
+		owl:maxCardinality "1"^^xsd:nonNegativeInteger];
+	obj:precedes calli:post-copy;
+	http:method "POST";
+	http:operation "partial-create";
+	http:realm <authority>;
+	http:expect "201-created";
+	obj:imports <partial/create.xml>;
+	obj:groovy """
+		def copy = createXml.calliCopyResource(this, msg.in, Collections.singleton(this))
+		copy.purlPartOf = msg.target
+		copy.purlBelongsTo = purlBelongsTo ? purlBelongsTo : msg.target
+		touchRevision()
+		return copy
+	""".
+
+purl:post-partial-create-in a owl:ObjectProperty, owl:FunctionalProperty;
+	rdfs:domain purl:post-partial-create;
+	rdfs:range <java:java.io.InputStream>;
+	http:type "application/rdf+xml";
+	obj:name "in".
+
+purl:Partial rdfs:subClassOf calli:Viewable, calli:Reviewable, calli:Editable, calli:Copyable;
+	calli:view <partial/view.xml>;
+	calli:review <partial/review.xml>;
+	calli:edit <partial/edit.xml>;
+	calli:copy <partial/copy.xml>.
+
+# Sets up purl:belongsTo properties
+# Called when copying a partial PURL
+purl:post-partial-copy owl:intersectionOf (calli:post-copy
+		[owl:onProperty obj:target; owl:allValuesFrom purl:Partial]);
+	obj:precedes calli:post-copy;
+	obj:groovy """
+		def copy = msg.functionalObjectResponse
+		copy.purlBelongsTo = purlBelongsTo
+		return copy
+	""".
+
+################################
+# PURL
+################################
+
+purl:get-purl-create rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:Partial];
+	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
+		owl:allValuesFrom <java:java.io.Reader>];
+	http:operation "purl-create";
+	http:realm <authority>;
+	http:type "text/html";
+	obj:imports <purl/create.xml>;
+	obj:groovy """
+		return createXml.calliConstruct('copy', this)
+	""".
+
+# Sets up the purl:partOf property and incements the parent's timestamp
+# Called when creating a PURL
+purl:post-purl-create rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:Partial];
+	rdfs:subClassOf [owl:onProperty obj:objectResponse;
+		owl:maxCardinality "1"^^xsd:nonNegativeInteger];
+	obj:precedes calli:post-copy;
+	http:method "POST";
+	http:operation "purl-create";
+	http:realm <authority>;
+	http:expect "201-created";
+	obj:imports <purl/create.xml>;
+	obj:groovy """
+		def copy = createXml.calliCopyResource(this, msg.in, Collections.singleton(this))
+		copy.purlPartOf = msg.target
+		touchRevision()
+		return copy
+	""".
+
+purl:post-purl-create-in a owl:ObjectProperty, owl:FunctionalProperty;
+	rdfs:domain purl:post-purl-create;
+	rdfs:range <java:java.io.InputStream>;
+	http:type "application/rdf+xml";
+	obj:name "in".
+
+purl:PURL rdfs:subClassOf calli:Viewable, calli:Reviewable, calli:Editable, calli:Copyable;
+	calli:view <purl/view.xml>;
+	calli:review <purl/review.xml>;
+	calli:edit <purl/edit.xml>;
+	calli:copy <purl/copy.xml>.
+
+# Ensures any PURL copied has the same parent
+# Called when copying a PURL
+purl:find-purl-prefix owl:intersectionOf ( calli:find-copy-prefix
+		[owl:onProperty obj:target; owl:allValuesFrom purl:PURL]);
+	rdfs:comment "On purl copy, the result must start with the same domain";
+	obj:precedes calli:find-copy-prefix;
+	obj:java "return Collections.singleton(purlPartOf)".
+
+# Sets up purl:partOf property
+# Called when copying a PURL
+purl:post-purl-copy owl:intersectionOf (calli:post-copy
+		[owl:onProperty obj:target; owl:allValuesFrom purl:PURL]);
+	obj:precedes calli:post-copy;
+	obj:groovy """
+		def copy = msg.functionalObjectResponse
+		copy.purlPartOf = purlPartOf
+		return copy
+	""".
+
+# Updates the parent's timestamp
+# Called when editing a PURL
+purl:post-purl-edit owl:intersectionOf (calli:post-edit
+		[owl:onProperty obj:target; owl:allValuesFrom purl:PURL]);
+	obj:precedes calli:post-edit;
+	obj:groovy """
+		msg.proceed()
+		if (purlPartOf && purlPartOf.purlBelongsTo) {
+			purlPartOf.purlBelongsTo.touchRevision()
+		} else if (purlPartOf) {
+			purlPartOf.touchRevision()
+		}
+	""".
+
+# Marks a PURL as disabled
+# Called from the PURL edit page
+purl:purl-disable rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:PURL];
+	rdfs:subClassOf [owl:onProperty obj:objectResponse;
+		owl:allValuesFrom owl:Nothing];
+	http:method "POST";
+	http:operation "purl-disable";
+	http:realm <authority>;
+	obj:imports purl:Disabled;
+	obj:groovy """
+		objectConnection.addDesignation(this, Disabled)
+	""".
+
+# Enables a disabled PURL
+# Called from the PURL edit page
+purl:purl-enable rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:PURL];
+	rdfs:subClassOf [owl:onProperty obj:objectResponse;
+		owl:allValuesFrom owl:Nothing];
+	http:method "POST";
+	http:operation "purl-enable";
+	http:realm <authority>;
+	obj:imports purl:Disabled;
+	obj:groovy """
+		objectConnection.removeDesignation(this, Disabled)
+	""".
+
+# Marks a PURL as tombstoned
+# Called from a PURL edit page
+purl:purl-tombstone rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:PURL];
+	rdfs:subClassOf [owl:onProperty obj:objectResponse;
+		owl:allValuesFrom owl:Nothing];
+	http:method "POST";
+	http:operation "purl-tombstone";
+	http:realm <authority>;
+	obj:imports purl:Tombstoned;
+	obj:groovy """
+		objectConnection.addDesignation(this, Tombstoned)
+	""".
+

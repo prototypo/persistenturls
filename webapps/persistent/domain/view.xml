@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../template.xsl"?>
+<!-- Copyright (c) 2010 Zepheira LLC, Some Rights Reserved. -->
+<html xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:calli="http://callimachusproject.org/rdf/2009/framework#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:purl="http://persistent.name/rdf/2010/purl#">
+	<head>
+		<title property="rdfs:label"/>
+		<link rel="view" title="View" target="_self" href="" type="text/html" />
+		<link rel="edit" title="Edit" target="_self" href="?edit" type="text/html" />
+		<link rel="review" title="History" target="_self" href="?review" type="text/html" />
+		<link rel="help" title="Help" target="help" href="/persistent/docs/" type="text/html" />
+	</head>
+	<body class="domain">
+		<h1><a href="" property="rdfs:label" /></h1>
+		<p><a href="?copy" class="diverted">Copy Domain</a></p>
+		<p><a href="?domain-create" class="diverted">Create Sub-Domain</a></p>
+		<div property="purl:pattern" />
+		<h3>PURLs</h3>
+        <p><a href="?purl-create" class="diverted">Create New PURL</a></p>
+        <p><a href="?partial-create" class="diverted">Create New Partial PURL</a></p>
+        <p><a href="?parts" class="diverted">View Nested PURLs</a></p>
+        <p><a href="?unresolvable" class="diverted">View Unresolvable PURLs</a></p>
+		<h3>Scribes</h3>
+		<ul>
+			<li resource="?scribe" rel="calli:scribe"><a property="rdfs:label" href="?scribe"></a></li>
+		</ul>
+		<h3>Curators</h3>
+		<ul>
+			<li resource="?curator" rel="calli:curator"><a property="rdfs:label" href="?curator"></a></li>
+		</ul>
+		<h3>Maintainers</h3>
+		<ul>
+			<li resource="?maintainer" rel="calli:maintainer"><a property="rdfs:label" href="?maintainer"></a></li>
+		</ul>
+        <p><a id="mirror-link" href="?mirror-domains" class="diverted">Defined as a mirrored domain</a></p>
+        <script>
+        	$("#mirror-link").get(0).href = diverted($("#mirror-link").get(0).href)
+        </script>
+	</body>
+</html>

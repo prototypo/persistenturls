@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../template.xsl"?>
+<!-- Copyright (c) 2010 Zepheira LLC, Some Rights Reserved. -->
+<html xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:calli="http://callimachusproject.org/rdf/2009/framework#"
+	xmlns:purl="http://persistent.name/rdf/2010/purl#">
+	<head>
+		<title property="rdfs:label"/>
+		<link rel="view" title="View" target="_self" href="?view" type="text/html" />
+		<link rel="edit" title="Edit" target="_self" href="" type="text/html" />
+		<link rel="review" title="History" target="_self" href="?review" type="text/html" />
+		<link rel="help" title="Help" target="help" href="/persistent/docs/" type="text/html" />
+		<script type="text/javascript" src="/persistent/purl/form.js">
+		</script>
+	</head>
+	<body class="purl">
+		<form action="" about="" id="purl-form" class="diverted">
+			<input type="hidden" rel="rdf:type" resource="?type" name="rdf-type" />
+			<input type="hidden" name="alternate" value="purl:alternative" />
+			<input type="hidden" name="redirects" value="purl:redirectsTo" />
+			<input type="hidden" name="renamed" value="purl:renamedTo" />
+			<input type="hidden" name="copy" value="purl:copyOf" />
+			<input type="hidden" name="described" value="purl:describedBy" />
+			<fieldset>
+				<legend>Modify a PURL</legend>
+				<p class="instructions">Modify any of the following PURL information.</p>
+				<table class="actiontable">
+					<tbody>
+						<tr class="all">
+							<td class="property">
+								<label for="purl-rel-type">Redirect Type:</label>
+							</td>
+							<td class="value">
+								<select id="purl-rel-type">
+									<option value="alternate">Simple (302)</option>
+									<option value="renamed">Renamed (301)</option>
+									<option value="described">Describe (303)</option>
+									<option value="redirect">Redirect (307)</option>
+									<option value="copy">Copy (203)</option>
+								</select>
+							</td>
+						</tr>
+						<tr class="rel alternate">
+							<td class="property">
+								<label for="m_alternate_target">Target:</label>
+							</td>
+							<td class="value">
+								<input id="m_alternate_target" type="text" onchange="$(this).attr('resource', $(this).val())" rel="purl:alternative" resource="?alternative" value="?alternative" />
+							</td>
+						</tr>
+						<tr class="rel renamed">
+							<td class="property">
+								<label for="m_renamed_target">Target:</label>
+							</td>
+							<td class="value">
+								<input id="m_renamed_target" type="text" onchange="$(this).attr('resource', $(this).val())" rel="purl:renamedTo" resource="?renamedTo" value="?renamedTo" />
+							</td>
+						</tr>
+						<tr class="rel described">
+							<td class="property">
+								<label for="m_described_target">Target:</label>
+							</td>
+							<td class="value">
+								<input id="m_described_target" type="text" onchange="$(this).attr('resource', $(this).val())" rel="purl:describedBy" resource="?describedBy" value="?describedBy"/>
+							</td>
+						</tr>
+						<tr class="rel redirect">
+							<td class="property">
+								<label for="m_redirects_target">Target:</label>
+							</td>
+							<td class="value">
+								<input id="m_redirects_target" type="text" onchange="$(this).attr('resource', $(this).val())" rel="purl:redirectsTo" resource="?redirectsTo" value="?redirectsTo"/>
+							</td>
+						</tr>
+						<tr class="rel copy">
+							<td class="property">
+								<label for="m_copy_target">Target:</label>
+							</td>
+							<td class="value">
+								<input id="m_copy_target" type="text" onchange="$(this).attr('resource', $(this).val())" rel="purl:copyOf" resource="?copyOf" value="?copyOf"/>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<input id="enable-button" value="Enable" type="button" onclick="$.post(diverted('?purl-enable', this), function(){location.reload()})" />
+				<input id="disable-button" value="Disable" type="button" onclick="confirm('Are you sure you want to Disable this PURL?') &amp;&amp; $.post(diverted('?purl-disable', this), function(){location.reload()})" />
+				<input id="tombstone-button" value="Tombstone" type="button" onclick="confirm('Are you sure you want to Tombstone this PURL?') &amp;&amp; $.post(diverted('?purl-tombstone', this), function(){location.reload()})" />
+				<input value="Save" type="submit" />
+			</fieldset>
+		</form>
+	</body>
+</html>

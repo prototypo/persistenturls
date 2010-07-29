@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../template.xsl"?>
+<!-- Copyright (c) 2010 Zepheira LLC, Some Rights Reserved. -->
+<html xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:calli="http://callimachusproject.org/rdf/2009/framework#"
+	xmlns:purl="http://persistent.name/rdf/2010/purl#">
+	<head>
+		<title>Copy a PURL</title>
+		<link rel="view" title="View" target="_self" href="?view" type="text/html" />
+		<link rel="edit" title="Edit" target="_self" href="?edit" type="text/html" />
+		<link rel="review" title="History" target="_self" href="?review" type="text/html" />
+		<link rel="help" title="Help" target="help" href="/persistent/docs/" type="text/html" />
+		<script type="text/javascript" src="/persistent/purl/form.js">
+		</script>
+	</head>
+	<body class="purl">
+		<form action="" about="" typeof="purl:PURL" id="purl-form" class="diverted">
+			<fieldset>
+				<legend>Copy a PURL</legend>
+				<p class="instructions">Fill in the following PURL information.</p>
+				<table class="actiontable">
+					<tbody>
+						<tr class="all">
+							<td class="property">
+								<label for="m_label">Name:</label>
+							</td>
+							<td class="value" data-cardinality="1">
+								<span id="domain-span"/>
+								<input id="m_label" property="rdfs:label" type="text"
+									onchange="$(form).attr('about', $('#m_domain').attr('href') + value)" />
+							</td>
+						</tr>
+						<tr class="all">
+							<td class="property">
+								<label for="purl-rel-type">Redirect Type:</label>
+							</td>
+							<td class="value">
+								<select id="purl-rel-type">
+									<option value="alternate">Simple (302)</option>
+									<option value="renamed">Renamed (301)</option>
+									<option value="described">Describe (303)</option>
+									<option value="redirect">Redirect (307)</option>
+									<option value="copy">Copy (203)</option>
+								</select>
+							</td>
+						</tr>
+						<tr class="rel renamed">
+							<td class="property">
+								<label for="m_renamedTo">Target:</label>
+							</td>
+							<td class="value" data-cardinality="1" rel="purl:renamedTo">
+								<input id="m_renamedTo" type="text" onchange="$(this).attr('about', $(this).val())"/>
+								<span typeof="rdf:Resource" href="?target"/>
+							</td>
+						</tr>
+						<tr class="rel redirect">
+							<td class="property">
+								<label for="m_redirectsTo">Target:</label>
+							</td>
+							<td class="value" data-cardinality="1" rel="purl:redirectsTo">
+								<input id="m_redirectsTo" type="text" onchange="$(this).attr('about', $(this).val())"/>
+								<span typeof="rdf:Resource" href="?target"/>
+							</td>
+						</tr>
+						<tr class="rel alternate">
+							<td class="property">
+								<label for="m_alternate">Target:</label>
+							</td>
+							<td class="value" data-cardinality="1" rel="purl:alternative">
+								<input id="m_alternate" type="text" onchange="$(this).attr('about', $(this).val())"/>
+								<span typeof="rdf:Resource" href="?target"/>
+							</td>
+						</tr>
+						<tr class="rel copy">
+							<td class="property">
+								<label for="m_copyOf">Target:</label>
+							</td>
+							<td class="value" data-cardinality="1" rel="purl:copyOf">
+								<input id="m_copyOf" type="text" onchange="$(this).attr('about', $(this).val())"/>
+								<span typeof="rdf:Resource" href="?target"/>
+							</td>
+						</tr>
+						<tr class="rel described">
+							<td class="property">
+								<label for="m_describedBy">Target:</label>
+							</td>
+							<td class="value" data-cardinality="1" rel="purl:describedBy">
+								<input id="m_describedBy" type="text" onchange="$(this).attr('about', $(this).val())"/>
+								<span typeof="rdf:Resource" href="?target"/>
+							</td>
+						</tr>
+						<tr class="hidden">
+							<td class="property"></td>
+							<td class="value">
+								<a id="m_domain" rel="purl:partOf" href="?domain" />
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<input value="Copy" type="submit" />
+				<br />
+			</fieldset>
+		</form>
+	</body>
+</html>

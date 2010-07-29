@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../template.xsl"?>
+<!-- Copyright (c) 2010 Zepheira LLC, Some Rights Reserved. -->
+<html xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+	xmlns:calli="http://callimachusproject.org/rdf/2009/framework#"
+	xmlns:purl="http://persistent.name/rdf/2010/purl#">
+	<head>
+		<title>Create a New Domain</title>
+		<link rel="view" title="View" target="_self" href="?view" type="text/html" />
+		<link rel="edit" title="Edit" target="_self" href="?edit" type="text/html" />
+		<link rel="review" title="History" target="_self" href="?review" type="text/html" />
+		<link rel="help" title="Help" target="help" href="/persistent/docs/" type="text/html" />
+		<script>
+			$(document).ready(function() {
+				var origin = $('base').attr('href')
+			    $('#origin-span').text(origin)
+			});
+		</script>
+	</head>
+	<body class="domain">
+		<form action="" about="" typeof="purl:Domain" class="diverted">
+			<fieldset>
+				<legend>Create a New Domain</legend>
+				<p class="instructions">Fill in the following domain information.</p>
+				<table class="actiontable">
+					<tbody>
+						<tr>
+							<td class="property">
+								<label for="m_label">Name:</label>
+							</td>
+							<td class="value">
+								<span id="origin-span"/>
+								<span data-cardinality="1">
+								<input id="m_label" property="rdfs:label" type="text"
+									onchange="$(form).attr('about', $('#origin-span').text() + value + '/')" />
+								</span>
+								<span>/</span>
+							</td>
+						</tr>
+						<tr>
+							<td class="property">
+								<label for="m_days">Max Unresolved Days:</label>
+							</td>
+							<td class="value" data-cardinality="1">
+								<input id="m_days" property="purl:max-unresolved-days" datatype="xsd:int" type="text" />
+							</td>
+						</tr>
+						<tr class="all">
+							<td class="property">
+								<label for="m_curator">Scribes:</label>
+							</td>
+							<td rel="calli:scribe" class="value" data-suggest="/persistent/user/template?pre-copy">
+								<span about="?scribe" typeof="purl:User">
+									<span property="rdfs:label"/>
+								</span>
+							</td>
+						</tr>
+						<tr class="all">
+							<td class="property">
+								<label for="m_curator">Curators:</label>
+							</td>
+							<td rel="calli:curator" class="value" data-suggest="/persistent/user/template?pre-copy">
+								<span about="?curator" typeof="purl:User">
+									<span property="rdfs:label"/>
+								</span>
+							</td>
+						</tr>
+						<tr>
+							<td class="property">
+								<label for="m_maintainer">Maintainers:</label>
+							</td>
+							<td rel="calli:maintainer" class="value" data-suggest="/persistent/user/template?pre-copy">
+								<span about="?maintainer" typeof="purl:User">
+									<span property="rdfs:label"/>
+								</span>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<input value="Create" type="submit" />
+				<br />
+			</fieldset>
+		</form>
+	</body>
+</html>

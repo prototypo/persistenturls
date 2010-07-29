@@ -1,0 +1,93 @@
+@prefix xsd:<http://www.w3.org/2001/XMLSchema#>.
+@prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs:<http://www.w3.org/2000/01/rdf-schema#>.
+@prefix owl:<http://www.w3.org/2002/07/owl#>.
+@prefix obj:<http://www.openrdf.org/rdf/2009/object#>.
+@prefix http:<http://www.openrdf.org/rdf/2009/httpobject#>.
+@prefix calli:<http://callimachusproject.org/rdf/2009/framework#>.
+@prefix purl:<http://persistent.name/rdf/2010/purl#>.
+
+# Lists all member PURLs
+# Linked from a domain or partial view page
+purl:list-parts rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:Partial];
+	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
+		owl:allValuesFrom obj:TupleResult];
+	http:operation "parts";
+	http:type "application/sparql-results+xml";
+	http:transform <purl-search-xsl>;
+	obj:sparql """
+		SELECT REDUCED ?uri ?label ?type ?parent ?redirection ?unresolvable
+		WHERE {
+			?uri a ?type; rdfs:label ?label; purl:partOf $this
+			FILTER (?type = purl:PURL || ?type = purl:Partial || ?type = purl:Domain)
+			OPTIONAL { ?uri ?redirection [a purl:Redirection] }
+			OPTIONAL { ?uri ?unresolvable [a purl:Unresolvable] }
+		}
+	""".
+
+# Lists all PURLs that are known to be unresolvable
+# Linked from a domain view page
+purl:unresolvable-purls rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:Domain];
+	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
+		owl:allValuesFrom obj:TupleResult];
+	http:operation "unresolvable";
+	http:realm <authority>;
+	http:type "application/sparql-results+xml";
+	http:cache-control "must-reevaluate";
+	http:transform <purl-search-xsl>;
+	obj:sparql """
+		SELECT DISTINCT ?uri ?label ?type ?parent ?redirection ?unresolvable
+		WHERE {
+			?uri a ?type; rdfs:label ?label; ?unresolvable [a purl:Unresolvable]
+			{
+				?uri purl:partOf ?parent
+				FILTER (?parent = $this)
+			} UNION {
+				?parent purl:belongsTo $this .
+				?uri purl:partOf ?parent .
+			} UNION {
+				?parent purl:domainOf $this .
+				?uri purl:partOf ?parent .
+			} UNION {
+				?domain purl:domainOf $this .
+				?parent purl:belongsTo ?domain .
+				?uri purl:partOf ?parent .
+			}
+			?unresolvable purl:rel ?rel
+			OPTIONAL { ?uri ?redirection [a purl:Redirection] }
+			OPTIONAL {
+				?uri a ?disabled
+				FILTER (?disabled = purl:Disabled || ?disabled = purl:Tombstoned)
+			}
+			FILTER (!bound(?disabled))
+		}
+		ORDER BY ?uri
+	""".
+
+# Lists all domains that this user can maintain or curate
+# Linked from the user's view page
+purl:list-domains-for-user rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:User];
+	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
+		owl:allValuesFrom obj:TupleResult];
+	http:operation "domains";
+	http:realm <authority>;
+	http:type "application/sparql-results+xml";
+	http:cache-control "must-reevaluate";
+	http:transform <domain-search-xsl>;
+	obj:sparql """
+		SELECT DISTINCT ?uri ?label
+		WHERE {
+			?uri a purl:Domain; rdfs:label ?label
+			{ ?uri calli:maintainer $this }
+			UNION { ?uri calli:curator $this }
+			UNION { ?uri calli:scribe $this }
+		}
+		ORDER BY ?label ?uri
+	""".
+
