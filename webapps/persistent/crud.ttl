@@ -328,6 +328,7 @@ purl:purl-tombstone rdfs:subClassOf obj:Message;
 	obj:imports <java:org.apache.http.ProtocolVersion>;
 	obj:imports <java:org.apache.http.message.BasicHttpResponse>;
 	obj:imports purl:Tombstoned;
+	obj:imports purl:Disabled;
 	obj:groovy """
 		objectConnection.removeDesignation(this, Disabled)
 		objectConnection.addDesignation(this, Tombstoned)
