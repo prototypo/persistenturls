@@ -68,9 +68,9 @@ modules/mod-purl-admin/pub/410-gone.html
 
 == PURLZ Community ==
 
-=== Where can bugs be submitted?  I don't see a 'new ticket' button on the trac instance at http://purlz.org/project/purl/development/ ===
+=== Where can bugs be submitted?  I don't see a 'new ticket' button on the issues tracker at http://code.google.com/p/persistenturls/issues/ ===
 
-In order to submit bugs on the PURLZ trac, you will have to log in.  Please request an account by sending e-mail to systems at zepheira dot com, which will processed by the site administrator as soon as possible.
+In order to submit bugs on the PURLs issue tracker, you will have to log in using a Google account.
 
 
 == PURLs ==
