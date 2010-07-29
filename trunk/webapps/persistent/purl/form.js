@@ -24,7 +24,7 @@ $(document).ready(function() {
 		if ($("#m_target").length) {
 			$("#purl-rel-type").val($("#m_target").attr("rel"))
 		} else {
-			var input = $("<input id='m_target' />")
+			var input = $("<input id='m_target' size='40' />")
 			input.attr('rel', $("#purl-rel-type").val())
 			input.change(function() {
 				 $(this).attr('resource', $(this).val())
