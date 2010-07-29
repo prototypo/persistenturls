@@ -41,11 +41,11 @@
 								<label for="m_target">Target:</label>
 							</td>
 							<td class="value" id="target-td">
-								<input id="m_target" onchange="$(this).attr('resource', value)" rel="purl:alternative" resource="?alternative" value="?alternative" />
-								<input id="m_target" onchange="$(this).attr('resource', value)" rel="purl:renamedTo" resource="?renamedTo" value="?renamedTo" />
-								<input id="m_target" onchange="$(this).attr('resource', value)" rel="purl:describedBy" resource="?describedBy" value="?describedBy"/>
-								<input id="m_target" onchange="$(this).attr('resource', value)" rel="purl:redirectsTo" resource="?redirectsTo" value="?redirectsTo"/>
-								<input id="m_target" onchange="$(this).attr('resource', value)" rel="purl:copyOf" resource="?copyOf" value="?copyOf"/>
+								<input id="m_target" size="40" onchange="$(this).attr('resource', value)" rel="purl:alternative" resource="?alternative" value="?alternative" />
+								<input id="m_target" size="40" onchange="$(this).attr('resource', value)" rel="purl:renamedTo" resource="?renamedTo" value="?renamedTo" />
+								<input id="m_target" size="40" onchange="$(this).attr('resource', value)" rel="purl:describedBy" resource="?describedBy" value="?describedBy"/>
+								<input id="m_target" size="40" onchange="$(this).attr('resource', value)" rel="purl:redirectsTo" resource="?redirectsTo" value="?redirectsTo"/>
+								<input id="m_target" size="40" onchange="$(this).attr('resource', value)" rel="purl:copyOf" resource="?copyOf" value="?copyOf"/>
 							</td>
 						</tr>
 					</tbody>
