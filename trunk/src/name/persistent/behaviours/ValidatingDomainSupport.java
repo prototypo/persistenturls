@@ -19,7 +19,6 @@ import java.util.Random;
 import java.util.TimeZone;
 import java.util.Map.Entry;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -39,7 +38,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.message.BasicHttpRequest;
 import org.openrdf.OpenRDFException;
 import org.openrdf.http.object.client.HTTPObjectClient;
-import org.openrdf.http.object.util.NamedThreadFactory;
+import org.openrdf.http.object.threads.ManagedExecutors;
 import org.openrdf.model.Literal;
 import org.openrdf.model.Resource;
 import org.openrdf.model.URI;
@@ -97,9 +96,8 @@ public abstract class ValidatingDomainSupport implements Domain, RDFObject {
 		}
 	};
 
-	private static final ScheduledExecutorService executor = Executors
-			.newSingleThreadScheduledExecutor(new NamedThreadFactory(
-					"URL Resolver", true));
+	private static final ScheduledExecutorService executor = ManagedExecutors
+			.newSingleScheduler("URL Resolver");
 	private static final Map<Object, Resolver> resolvers = new HashMap<Object, Resolver>();
 
 	private final static class Resolver implements Runnable {

@@ -15,7 +15,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -32,8 +31,8 @@ import org.openrdf.http.object.annotations.transform;
 import org.openrdf.http.object.annotations.type;
 import org.openrdf.http.object.concepts.Transaction;
 import org.openrdf.http.object.model.ReadableHttpEntityChannel;
+import org.openrdf.http.object.threads.ManagedExecutors;
 import org.openrdf.http.object.traits.VersionedObject;
-import org.openrdf.http.object.util.NamedThreadFactory;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
@@ -70,9 +69,8 @@ public abstract class DomainSupport extends PartialSupport implements Domain,
 		dateformat = new SimpleDateFormat(PATTERN_RFC1123, Locale.US);
 		dateformat.setTimeZone(GMT);
 	}
-	private static final ScheduledExecutorService executor = Executors
-	.newSingleThreadScheduledExecutor(new NamedThreadFactory(
-			"Denfine Domain", true));
+	private static final ScheduledExecutorService executor = ManagedExecutors
+			.newSingleScheduler("Denfine Domain");
 
 	@operation("mirror")
 	@type("application/rdf+xml")

@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -23,7 +22,7 @@ import name.persistent.concepts.RemoteGraph;
 import name.persistent.concepts.Unresolvable;
 
 import org.apache.http.HttpResponse;
-import org.openrdf.http.object.util.NamedThreadFactory;
+import org.openrdf.http.object.threads.ManagedExecutors;
 import org.openrdf.model.Resource;
 import org.openrdf.query.BooleanQuery;
 import org.openrdf.repository.object.ObjectConnection;
@@ -55,9 +54,8 @@ public abstract class MirroredDomainSupport extends DomainSupport implements
 	private static String WARN_199 = "199 " + localhost
 			+ " \"Mirrored response\"";
 
-	private static final ScheduledExecutorService executor = Executors
-			.newSingleThreadScheduledExecutor(new NamedThreadFactory(
-					"RemoteGraph", true));
+	private static final ScheduledExecutorService executor = ManagedExecutors
+			.newSingleScheduler("RemoteGraph");
 	private static final Map<Object, Refresher> alwaysFresh = new HashMap<Object, Refresher>();
 
 	public static void canacelAllValidation() throws InterruptedException {
