@@ -6,6 +6,7 @@
 	<property name="lib" location="lib" />
 	<property name="bin" location="bin" />
 	<property name="etc" location="etc" />
+	<property name="log" location="log" />
 	<property name="tmp" location="tmp" />
 	<property name="webapps" location="webapps" />
 	<property name="home" location="." />
@@ -20,7 +21,7 @@
 	<property name="mail.url" value="http://mirrors.ibiblio.org/pub/mirrors/maven2/javax/mail/mail/1.4.1/mail-1.4.1.jar" />
 	<property name="main" value="org.callimachusproject.Server" />
 	<property name="jvmargs" value="-ea -server -mx512m -Dfile.encoding=UTF-8 -Djava.library.path=${lib} -Djava.io.tmpdir=${tmp} -Duser.home=${home}" />
-	<property name="args" value="" />
+	<property name="args" value="-p 8080 -a localhost:8080" />
 
 	<target name="init">
 		<!-- Create the time stamp and build directory -->
@@ -134,6 +135,7 @@
 	</target>
 
 	<target name="start" depends="compile">
+		<mkdir dir="${log}" />
 		<java classname="${main}" fork="true" spawn="true">
 			<jvmarg line="${jvmargs} -Djava.util.logging.config.file=${logging}" />
 			<arg line="${args} -q --pid ${pid}" />
