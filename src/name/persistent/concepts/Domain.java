@@ -12,8 +12,6 @@ import java.util.Set;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.openrdf.OpenRDFException;
-import org.openrdf.http.object.annotations.operation;
-import org.openrdf.http.object.annotations.type;
 import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.repository.object.annotations.iri;
 
@@ -60,8 +58,6 @@ public interface Domain extends Partial {
 	@iri("http://persistent.name/rdf/2010/purl#servicedBy")
 	void setPurlServicedBy(Object purlServicedBy);
 
-	@type("text/plain")
-	@operation("count-targets")
 	int countTargets() throws QueryEvaluationException;
 
 	boolean startResolving() throws QueryEvaluationException;
