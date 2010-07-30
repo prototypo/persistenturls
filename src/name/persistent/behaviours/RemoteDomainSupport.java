@@ -35,7 +35,7 @@ import org.openrdf.http.object.client.HTTPObjectClient;
 import org.openrdf.http.object.exceptions.BadGateway;
 import org.openrdf.http.object.exceptions.GatewayTimeout;
 import org.openrdf.http.object.exceptions.InternalServerError;
-import org.openrdf.http.object.util.SharedExecutors;
+import org.openrdf.http.object.threads.ManagedExecutors;
 import org.openrdf.repository.object.RDFObject;
 
 /**
@@ -57,7 +57,7 @@ public abstract class RemoteDomainSupport extends MirroredDomainSupport implemen
 	}
 	private static Map<InetSocketAddress, Boolean> blackList = new ConcurrentHashMap<InetSocketAddress, Boolean>();
 	static {
-		SharedExecutors.getTimeoutThreadPool().scheduleWithFixedDelay(
+		ManagedExecutors.getTimeoutThreadPool().scheduleWithFixedDelay(
 				new Runnable() {
 					public void run() {
 						blackList.clear();
