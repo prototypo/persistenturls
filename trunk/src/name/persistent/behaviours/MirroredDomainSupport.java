@@ -87,6 +87,10 @@ public abstract class MirroredDomainSupport extends DomainSupport implements
 			key = Arrays.asList(new Object[] { repository, subj });
 		}
 
+		public String toString() {
+			return "refresh " + subj;
+		}
+
 		public void schedule(int freshness) {
 			Refresher pre;
 			synchronized (alwaysFresh) {
