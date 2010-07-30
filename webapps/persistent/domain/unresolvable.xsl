@@ -11,7 +11,6 @@
 				<link rel="edit" title="Edit" target="_self" href="?edit" />
 				<link rel="review" title="History" target="_self" href="?review" />
 				<link rel="parts" title="Parts" target="_self" href="?parts" />
-				<link rel="unresolvable" title="Unresolvable" target="_self" href="" />
 				<link rel="help" title="Help" target="help" href="/persistent/docs/domain.html" />
 			</head>
 			<body class="search domain">

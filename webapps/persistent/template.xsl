@@ -201,34 +201,10 @@
 			</xsl:if>
 
 			<div id="content">
-			<xsl:if test="not(starts-with($mode, 'pre-')) and not(contains($section, 'search')) and (contains($section, 'purl') or contains($section, 'domain'))">
-				<div id="breadcrumbs">
-					<a href="{$origin}/">Server</a>
-					<span>
-						<span rel="purl:partOf" resource="?bc_partial">
-						<span rel="purl:partOf" resource="?bc_subsubdomain">
-						<span rel="purl:partOf" resource="?bc_subdomain">
-						<span rel="purl:partOf" resource="?bc_domain">
-						<span rel="purl:partOf" resource="?bc_origin">
-						<a href="?bc_origin" class="crumb diverted" property="rdfs:label"/>
-						</span>
-						<a href="?bc_domain" class="crumb diverted" property="rdfs:label"/>
-						</span>
-						<a href="?bc_subdomain" class="crumb diverted" property="rdfs:label"/>
-						</span>
-						<a href="?bc_subsubdomain" class="crumb diverted" property="rdfs:label"/>
-						</span>
-						<a href="?bc_partial" class="crumb diverted" property="rdfs:label"/>
-						</span>
-						<span class="crumb" property="rdfs:label"/>
-					</span>
-				</div>
-			</xsl:if>
 				<div id="message-container">
 					<p id="message" />
 				</div>
 				<xsl:apply-templates select="*|comment()|text()" />
-				<div class="clear">&#160;</div>
 			</div>
 
 			<xsl:if test="not(starts-with($mode, 'pre-'))">

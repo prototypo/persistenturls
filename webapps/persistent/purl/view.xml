@@ -24,6 +24,27 @@
 		</script>
 	</head>
 	<body class="purl" onload="init()">
+		<div id="breadcrumbs">
+			<a href="/">Server</a>
+			<span>
+				<span rel="purl:partOf" resource="?bc_partial">
+				<span rel="purl:partOf" resource="?bc_subsubdomain">
+				<span rel="purl:partOf" resource="?bc_subdomain">
+				<span rel="purl:partOf" resource="?bc_domain">
+				<span rel="purl:partOf" resource="?bc_origin">
+				<a href="?bc_origin" class="crumb diverted" property="rdfs:label"/>
+				</span>
+				<a href="?bc_domain" class="crumb diverted" property="rdfs:label"/>
+				</span>
+				<a href="?bc_subdomain" class="crumb diverted" property="rdfs:label"/>
+				</span>
+				<a href="?bc_subsubdomain" class="crumb diverted" property="rdfs:label"/>
+				</span>
+				<a href="?bc_partial" class="crumb diverted" property="rdfs:label"/>
+				</span>
+				<span class="crumb" property="rdfs:label"/>
+			</span>
+		</div>
 		<h1><a href="" property="rdfs:label" /></h1>
         <p><a href="?copy" class="diverted">Clone this PURL</a></p>
 		<span rel="rdf:type" resource="?type"><div property="rdfs:comment"/></span>
