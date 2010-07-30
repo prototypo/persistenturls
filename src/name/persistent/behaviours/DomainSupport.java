@@ -207,6 +207,10 @@ public abstract class DomainSupport extends PartialSupport implements Domain,
 		final ObjectRepository repository = active.getRepository();
 		final Resource resource = getResource();
 		executor.schedule(new Runnable() {
+			public String toString() {
+				return "refresh " + resource;
+			}
+
 			public void run() {
 				try {
 					logger.info("Refreshing {}", resource);

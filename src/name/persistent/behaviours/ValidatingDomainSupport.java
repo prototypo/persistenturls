@@ -124,6 +124,11 @@ public abstract class ValidatingDomainSupport implements Domain, RDFObject {
 			key = Arrays.asList(new Object[] { repository, subj });
 		}
 
+		@Override
+		public String toString() {
+			return "resolve " + subj + " targets";
+		}
+
 		public void schedule(int period, TimeUnit unit, int maxCount) {
 			assert period > 0;
 			assert maxCount > 0;
