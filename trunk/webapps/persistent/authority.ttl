@@ -94,14 +94,15 @@ purl:partial-authorize owl:equivalentClass calli:authorize-credential;
 	obj:sparql """
 		ASK {
 			$subject a purl:Partial; purl:belongsTo ?domain
-			FILTER ($qs = "edit" || $qs = "copy" || $qs = "purl-create" || $qs = "partial-create" || $qs = "purl-disable" || $qs = "purl-enable" || $qs = "purl-tombstone")
 			{
 				?domain calli:scribe $credential
 				FILTER ($qs = "copy" || $qs = "purl-create" || $qs = "partial-create")
 			} UNION {
 				?domain calli:curator $credential
+				FILTER ($qs = "edit" || $qs = "copy" || $qs = "purl-create" || $qs = "partial-create" || $qs = "purl-disable" || $qs = "purl-enable" || $qs = "purl-tombstone")
 			} UNION {
 				?domain calli:maintainer $credential
+				FILTER ($qs = "edit" || $qs = "copy" || $qs = "purl-create" || $qs = "partial-create" || $qs = "domain-create" || $qs = "purl-disable" || $qs = "purl-enable" || $qs = "purl-tombstone")
 			}
 			OPTIONAL { ?domain a ?mirror FILTER (?mirror = purl:MirroredDomain) }
 			FILTER (!bound(?mirror))

@@ -10,6 +10,7 @@
 		<link rel="view" title="View" target="_self" href="?view" />
 		<link rel="edit" title="Edit" target="_self" href="?edit" />
 		<link rel="review" title="History" target="_self" href="?review" />
+		<link rel="parts" title="Parts" target="_self" href="?parts" />
 		<link rel="help" title="Help" target="help" href="/persistent/docs/purl.html#purlcreate" />
 		<script type="text/javascript" src="/persistent/purl/form.js">
 		</script>

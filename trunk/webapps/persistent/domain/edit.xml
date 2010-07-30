@@ -12,10 +12,30 @@
 		<link rel="edit" title="Edit" target="_self" href="" />
 		<link rel="review" title="History" target="_self" href="?review" />
 		<link rel="parts" title="Parts" target="_self" href="?parts" />
-		<link rel="unresolvable" title="Unresolvable" target="_self" href="?unresolvable" />
 		<link rel="help" title="Help" target="help" href="/persistent/docs/" />
 	</head>
 	<body class="domain">
+		<div id="breadcrumbs">
+			<a href="/">Server</a>
+			<span>
+				<span rel="purl:partOf" resource="?bc_partial">
+				<span rel="purl:partOf" resource="?bc_subsubdomain">
+				<span rel="purl:partOf" resource="?bc_subdomain">
+				<span rel="purl:partOf" resource="?bc_domain">
+				<span rel="purl:partOf" resource="?bc_origin">
+				<a href="?bc_origin" class="crumb diverted" property="rdfs:label"/>
+				</span>
+				<a href="?bc_domain" class="crumb diverted" property="rdfs:label"/>
+				</span>
+				<a href="?bc_subdomain" class="crumb diverted" property="rdfs:label"/>
+				</span>
+				<a href="?bc_subsubdomain" class="crumb diverted" property="rdfs:label"/>
+				</span>
+				<a href="?bc_partial" class="crumb diverted" property="rdfs:label"/>
+				</span>
+				<span class="crumb" property="rdfs:label"/>
+			</span>
+		</div>
 		<form action="" about="">
 			<fieldset>
 				<legend>Modify a Domain</legend>

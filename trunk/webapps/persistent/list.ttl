@@ -25,48 +25,22 @@
 	http:transform <template-xsl>;
 	obj:xslt <partial/parts.xsl>.
 
-<domain-parts-xsl> rdfs:subClassOf <list-xsl>;
-	http:type "application/xml";
-	http:transform <template-xsl>;
-	obj:xslt <domain/parts.xsl>.
-
 <domain-unresolvable-xsl> rdfs:subClassOf <list-xsl>;
 	http:type "application/xml";
 	http:transform <template-xsl>;
 	obj:xslt <domain/unresolvable.xsl>.
 
 # Lists all member PURLs
-# Linked from a partial view page
-purl:list-nested rdfs:subClassOf obj:Message;
-	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom purl:Partial];
-	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
-		owl:allValuesFrom obj:TupleResult];
-	http:operation "nested";
-	http:type "application/sparql-results+xml";
-	http:cache-control "no-store";
-	http:transform <partial-parts-xsl>;
-	obj:sparql """
-		SELECT REDUCED ?uri ?label ?type ?parent ?redirection ?unresolvable
-		WHERE {
-			?uri a ?type; rdfs:label ?label; purl:partOf $this
-			FILTER (?type = purl:PURL || ?type = purl:Partial || ?type = purl:Domain)
-			OPTIONAL { ?uri ?redirection [a purl:Redirection] }
-			OPTIONAL { ?uri ?unresolvable [a purl:Unresolvable] }
-		}
-	""".
-
-# Lists all member PURLs
-# Linked from a partial view page
+# Linked from a partial or domain view page
 purl:list-parts rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom purl:Domain];
+		owl:allValuesFrom purl:Partial];
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
 		owl:allValuesFrom obj:TupleResult];
 	http:operation "parts";
 	http:type "application/sparql-results+xml";
 	http:cache-control "no-store";
-	http:transform <domain-parts-xsl>;
+	http:transform <partial-parts-xsl>;
 	obj:sparql """
 		SELECT REDUCED ?uri ?label ?type ?parent ?redirection ?unresolvable
 		WHERE {
