@@ -65,6 +65,14 @@ import org.slf4j.LoggerFactory;
 public abstract class ValidatingDomainSupport implements Domain, RDFObject {
 	private static final String NS = "http://persistent.name/rdf/2010/purl#";
 	private static final String PREFIX = "PREFIX purl:<http://persistent.name/rdf/2010/purl#>\n";
+	private static final String ALL_TARGETS = PREFIX
+			+ "SELECT REDUCED ?target\n"
+			+ "WHERE { { ?purl purl:partOf $this }\n"
+			+ "UNION { ?purl purl:partOf [purl:belongsTo $this] }\n"
+			+ "UNION { ?purl a ?type FILTER (?purl = $this) }\n"
+			+ "?purl ?pred ?target . ?pred purl:rel ?rel .\n"
+			+ "OPTIONAL { ?purl purl:pattern ?pattern } FILTER (!bound(?pattern))\n"
+			+ "}";
 	private static final String TARGET_BY_DATE = PREFIX
 			+ "SELECT REDUCED ?target\n"
 			+ "WHERE { { ?purl purl:partOf $this }\n"
@@ -145,6 +153,12 @@ public abstract class ValidatingDomainSupport implements Domain, RDFObject {
 		public boolean cancel(boolean mayInterruptIfRunning) {
 			logger.info("Stopped validating {}", subj);
 			cancelled = true;
+			synchronized (resolvers) {
+				Resolver pre = resolvers.get(key);
+				if (pre.cancelled) {
+					resolvers.remove(key);
+				}
+			}
 			if (schedule == null)
 				return false;
 			return schedule.cancel(mayInterruptIfRunning);
@@ -254,9 +268,7 @@ public abstract class ValidatingDomainSupport implements Domain, RDFObject {
 		markResolvability(resolveTargets(targets), today);
 	}
 
-	@sparql(PREFIX
-			+ "SELECT REDUCED ?target\n"
-			+ "WHERE { ?purl purl:partOf $this; ?pred ?target . ?pred purl:rel ?rel }")
+	@sparql(ALL_TARGETS)
 	protected abstract TupleQueryResult findTargets();
 
 	private boolean startResolving(Integer days)
