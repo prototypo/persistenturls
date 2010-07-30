@@ -21,7 +21,7 @@
 					<tbody>
 						<tr>
 							<td class="property">
-								<label for="m_name">Name:</label>
+								<label for="m_name">Title of Page:</label>
 							</td>
 							<td class="value" data-cardinality="1">
 								<input id="m_name" property="rdfs:label" type="text" />
