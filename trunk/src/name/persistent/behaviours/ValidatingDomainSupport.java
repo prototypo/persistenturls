@@ -113,10 +113,10 @@ public abstract class ValidatingDomainSupport implements Domain, RDFObject {
 		private final ObjectRepository repository;
 		private final Resource subj;
 		private ScheduledFuture<?> schedule;
-		private volatile boolean running;
 		private volatile boolean cancelled;
 		private Object key;
 		private int interval;
+		private int maxCount;
 
 		private Resolver(RDFObject object) {
 			this.repository = object.getObjectConnection().getRepository();
@@ -124,8 +124,9 @@ public abstract class ValidatingDomainSupport implements Domain, RDFObject {
 			key = Arrays.asList(new Object[] { repository, subj });
 		}
 
-		public void schedule(int period, TimeUnit unit) {
+		public void schedule(int period, TimeUnit unit, int maxCount) {
 			assert period > 0;
+			assert maxCount > 0;
 			Resolver pre;
 			synchronized (resolvers) {
 				pre = resolvers.remove(key);
@@ -135,6 +136,7 @@ public abstract class ValidatingDomainSupport implements Domain, RDFObject {
 				pre.cancel(false);
 			}
 			cancelled = false;
+			this.maxCount = maxCount;
 			interval = (int) unit.toSeconds(period);
 			int delay = random.get().nextInt(interval) + 60;
 			TimeUnit sec = TimeUnit.SECONDS;
@@ -142,12 +144,6 @@ public abstract class ValidatingDomainSupport implements Domain, RDFObject {
 			logger.info("Validating {} in {} hours and every {} hours",
 					new Object[] { subj, sec.toHours(delay),
 							sec.toHours(interval) });
-		}
-
-		public synchronized void await() throws InterruptedException {
-			while (running) {
-				wait();
-			}
 		}
 
 		public boolean cancel(boolean mayInterruptIfRunning) {
@@ -168,7 +164,6 @@ public abstract class ValidatingDomainSupport implements Domain, RDFObject {
 		public synchronized void run() {
 			if (cancelled)
 				return;
-			running = true;
 			try {
 				ObjectConnection con = repository.getConnection();
 				try {
@@ -177,9 +172,7 @@ public abstract class ValidatingDomainSupport implements Domain, RDFObject {
 					Integer days = domain.getPurlMaxUnresolvedDays();
 					if (days == null || days < 1) {
 						cancel(false);
-					} else if ((count = domain.countTargets()) < 1) {
-						cancel(false);
-					} else {
+					} else if ((count = domain.countTargets()) > 0) {
 						GregorianCalendar cal;
 						XMLGregorianCalendar xgc, now;
 						int n = DatatypeConstants.FIELD_UNDEFINED;
@@ -193,18 +186,20 @@ public abstract class ValidatingDomainSupport implements Domain, RDFObject {
 						int periods = Math.max(1, (int) TimeUnit.DAYS
 								.toSeconds(days)
 								/ interval);
-						int min = Math.max(1, count / periods);
-						int max = (count + periods - 1) / periods;
+						int size = Math.min(maxCount, count);
+						int min = Math.max(1, size / periods);
+						int max = (size + periods - 1) / periods;
 						domain.validatePURLs(xgc, min, max, now);
+						if (!cancelled && maxCount < count) {
+							domain.stopResolving();
+							domain.startResolving();
+						}
 					}
 				} finally {
 					con.close();
 				}
 			} catch (Exception e) {
 				logger.error(e.toString(), e);
-			} finally {
-				running = false;
-				notifyAll();
 			}
 		}
 	}
@@ -243,7 +238,6 @@ public abstract class ValidatingDomainSupport implements Domain, RDFObject {
 		if (resolver == null)
 			return false;
 		resolver.cancel(false);
-		resolver.await();
 		return true;
 	}
 
@@ -275,9 +269,7 @@ public abstract class ValidatingDomainSupport implements Domain, RDFObject {
 			throws QueryEvaluationException {
 		if (days == null || days < 1)
 			return false;
-		int count = countTargets();
-		if (count < 1)
-			return false;
+		int count = Math.max(1, countTargets());
 		Resolver resolver = new Resolver(this);
 		synchronized (resolvers) {
 			if (resolvers.containsKey(resolver.key)) {
@@ -289,7 +281,7 @@ public abstract class ValidatingDomainSupport implements Domain, RDFObject {
 		int periods = (count + 99) / 100; // check 100 targets at a time
 		long maxHours = TimeUnit.DAYS.toHours(days);
 		int interval = Math.max(1, (int) maxHours / periods);
-		resolver.schedule(interval, TimeUnit.HOURS);
+		resolver.schedule(interval, TimeUnit.HOURS, Math.max(100, count * 2));
 		return true;
 	}
 
