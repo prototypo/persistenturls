@@ -42,36 +42,19 @@ purl:register rdfs:subClassOf obj:Message;
 		return template.calliConstruct('copy', this)
 	""".
 
-# Loads in maintainer/curator/scribe popup
-purl:pre-register rdfs:subClassOf obj:Message;
-	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom purl:UserTemplate];
-	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
-		owl:allValuesFrom <java:java.io.Reader>];
-	http:operation "pre-register";
-	http:type "text/html";
-	http:realm <../anybody>;
-	obj:imports <java:org.openrdf.http.object.exceptions.InternalServerError>;
-	obj:groovy """
-		def template = findCopyTemplate()
-		if (template == null)
-			throw new InternalServerError("Missing Copy Template")
-		return template.calliConstruct('pre-copy', this)
-	""".
-
 # Creates new user and resets their password
+# Called from the registration page
 purl:post-register rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom purl:UserTemplate];
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
 		owl:allValuesFrom <java:org.apache.http.HttpResponse>];
 	http:method "POST";
-	http:operation "register", "pre-register";
+	http:operation "register";
 	http:type "message/x-response";
 	http:realm <../anybody>;
 	obj:imports <../authority>;
 	obj:imports <password-sent.xml>;
-	obj:imports <java:org.apache.commons.codec.digest.DigestUtils>;
 	obj:imports <java:org.openrdf.http.object.exceptions.BadRequest>;
 	obj:imports <java:org.apache.http.ProtocolVersion>;
 	obj:imports <java:org.apache.http.message.BasicHttpResponse>;
@@ -98,6 +81,60 @@ purl:post-register rdfs:subClassOf obj:Message;
 
 purl:post-register-in a owl:ObjectProperty, owl:FunctionalProperty;
 	rdfs:domain purl:post-register;
+	rdfs:range <java:java.io.InputStream>;
+	http:type "application/rdf+xml";
+	obj:name "in".
+
+# Loads in maintainer/curator/scribe popup
+purl:pre-register rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:UserTemplate];
+	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
+		owl:allValuesFrom <java:java.io.Reader>];
+	http:operation "pre-register";
+	http:type "text/html";
+	http:realm <../anybody>;
+	obj:imports <java:org.openrdf.http.object.exceptions.InternalServerError>;
+	obj:groovy """
+		def template = findCopyTemplate()
+		if (template == null)
+			throw new InternalServerError("Missing Copy Template")
+		return template.calliConstruct('pre-copy', this)
+	""".
+
+# Creates new user and resets their password
+# Called from the registration popup
+purl:post-pre-register rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:UserTemplate];
+	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
+		owl:allValuesFrom purl:User];
+	http:method "POST";
+	http:operation "pre-register";
+	http:expect "201-created";
+	http:realm <../anybody>;
+	obj:imports <../authority>;
+	obj:imports <java:org.openrdf.http.object.exceptions.BadRequest>;
+	obj:imports <java:org.openrdf.http.object.exceptions.InternalServerError>;
+	obj:groovy """
+		def template = findCopyTemplate()
+		if (template == null)
+			throw new InternalServerError("Missing Copy Template")
+		def user = template.calliCopyResource(this, msg.in, findCopyNamespaces())
+		if (!user.purlEmail)
+			throw new BadRequest("Missing Email Address")
+		if (calliCurators) {
+			user.calliMaintainers.addAll(calliCurators)
+		} else {
+			user.calliMaintainers.addAll(findScribe(user))
+		}
+		authority.calliCredentials.add(user)
+		user.purlResetPassword()
+		return user
+	""".
+
+purl:post-pre-register-in a owl:ObjectProperty, owl:FunctionalProperty;
+	rdfs:domain purl:post-pre-register;
 	rdfs:range <java:java.io.InputStream>;
 	http:type "application/rdf+xml";
 	obj:name "in".

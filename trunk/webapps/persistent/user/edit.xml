@@ -11,6 +11,7 @@
 		<link rel="view" title="View" target="_self" href="?view" />
 		<link rel="edit" title="Edit" target="_self" href="" />
 		<link rel="review" title="History" target="_self" href="?review" />
+		<link rel="domains" title="Domains" target="_self" href="?domains" />
 		<link rel="help" title="Help" target="help" href="/persistent/docs/user.html#usermodify" />
 	</head>
 	<body class="user">
