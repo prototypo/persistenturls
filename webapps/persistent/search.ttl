@@ -58,7 +58,7 @@ purl:search-regex a owl:DatatypeProperty, owl:FunctionalProperty;
 purl:user-search rdfs:subClassOf purl:search;
 	http:operation "user";
 	http:type "application/sparql-results+xml";
-	http:cache-control "must-reevaluate";
+	http:cache-control "no-store";
 	http:transform <user-search-xsl>;
 	obj:sparql """
 		SELECT DISTINCT ?uri ?label
@@ -79,7 +79,7 @@ purl:user-search rdfs:subClassOf purl:search;
 purl:domain-search rdfs:subClassOf purl:search;
 	http:operation "domain";
 	http:type "application/sparql-results+xml";
-	http:cache-control "must-reevaluate";
+	http:cache-control "no-store";
 	http:transform <domain-search-xsl>;
 	obj:sparql """
 		SELECT DISTINCT ?uri ?label ?parent
@@ -101,7 +101,7 @@ purl:domain-search rdfs:subClassOf purl:search;
 purl:purl-search rdfs:subClassOf purl:search;
 	http:operation "purl";
 	http:type "application/sparql-results+xml";
-	http:cache-control "must-reevaluate";
+	http:cache-control "no-store";
 	http:transform <purl-search-xsl>;
 	obj:sparql """
 		SELECT DISTINCT ?uri ?label ?type ?parent ?redirection ?unresolvable
@@ -121,7 +121,7 @@ purl:purl-search rdfs:subClassOf purl:search;
 purl:target-search rdfs:subClassOf purl:search;
 	http:operation "target";
 	http:type "application/sparql-results+xml";
-	http:cache-control "must-reevaluate";
+	http:cache-control "no-store";
 	http:transform <purl-search-xsl>;
 	obj:sparql """
 		SELECT DISTINCT ?uri ?label ?type ?parent ?redirection ?unresolvable

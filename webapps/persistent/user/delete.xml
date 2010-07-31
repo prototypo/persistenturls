@@ -19,12 +19,11 @@
 			<div property="purl:email" />
 			<div property="purl:affiliation" />
 			<p property="purl:justification" />
-			<h2>Reviewers</h2>
-			<ul rel="calli:reviewer">
-				<li about="?reviewer" typeof="purl:User">
-					<span property="rdfs:label"/>
-				</li>
-			</ul>
+			<div rel="calli:reviewer" resource="?reviewer" />
+			<div rel="calli:maintainer" resource="?maintainer" />
+			<div rev="calli:scribe" resource="?scribes" />
+			<div rev="calli:curator" resource="?curates" />
+			<div rev="calli:maintainer" resource="?maintains" />
 			<input value="Delete" type="submit" />
 		</form>
 	</body>
