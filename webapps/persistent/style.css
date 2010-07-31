@@ -40,7 +40,7 @@ th, td {
 input:focus,
 textarea:focus,
 button:focus {
-    outline: 0;
+    outline-style: none;
 }
 
 ul {
@@ -200,9 +200,8 @@ li, p {
 }
 
 #menu li form input {
-    background: transparent url(images/search-bg.png) top left no-repeat;
     margin-left: 2%;
-    padding: 3px 3px 3px 16px;
+    padding: 3px;
     width: 50%;
 }
 
@@ -383,9 +382,4 @@ iframe {
 
 a.diverted {
 	cursor: alias;
-}
-
-/* Inapplicable actions or breadcrumbs */
-body.home #breadcrumbs {
-    display: none;
 }
