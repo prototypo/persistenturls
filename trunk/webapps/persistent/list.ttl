@@ -102,7 +102,7 @@ purl:list-domains-for-user rdfs:subClassOf obj:Message;
 	http:operation "domains";
 	http:realm <authority>;
 	http:type "application/sparql-results+xml";
-	http:cache-control "must-reevaluate";
+	http:cache-control "no-store";
 	http:transform <user-domains-xsl>;
 	obj:sparql """
 		SELECT DISTINCT ?uri ?label
