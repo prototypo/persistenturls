@@ -32,7 +32,7 @@
 								</span>
 								<span data-cardinality="1">
 									<input id="m_label" property="rdfs:label" type="text"
-										onchange="$(form).attr('about', $('#domain-span').text() + value + '/')" />
+										onchange="$(form).attr('about', '../' + value + '/')" />
 								</span>
 								<span>/</span>
 							</td>
