@@ -51,6 +51,7 @@
         <p><a href="?purl-create" class="diverted">Create Nested PURL</a></p>
         <p><a href="?partial-create" class="diverted">Create Nested Partial</a></p>
 		<p><a href="?domain-create" class="diverted">Create Nested Domain</a></p>
+		<p><a href="?mirror-create" class="diverted">Create Nested Domain Mirror</a></p>
 		<span rel="rdf:type" resource="?type"><div property="rdfs:comment"/></span>
 		<div id="pattern" property="purl:pattern" />
 		<div id="target" rel="purl:copyOf" resource="?copyOf" />

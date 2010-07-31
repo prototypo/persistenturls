@@ -51,6 +51,83 @@ purl:post-user-delete owl:intersectionOf (calli:post-delete
 	""".
 
 ################################
+# Mirror
+################################
+
+<mirror/template> a purl:MirrorTemplate;
+	calli:withNamespace "http://";
+	calli:scribe </data/user/admin>.
+
+purl:MirrorTemplate rdfs:subClassOf calli:Copyable;
+	calli:copy <mirror/create-top.xml>.
+
+# Sets up the purl:domainOf property
+# Called when copying a domain
+purl:post-mirror-copy owl:intersectionOf (calli:post-copy
+		[owl:onProperty obj:target; owl:allValuesFrom purl:MirrorTemplate]);
+	obj:precedes calli:post-copy;
+	obj:imports <java:org.openrdf.http.object.exceptions.BadRequest>;
+	obj:groovy """
+		def copy = msg.functionalObjectResponse
+		if (!copy.purlDefinedBy)
+			throw new BadRequest("Missing Defined By Mirror Source")
+		return copy
+	""".
+
+purl:get-mirror-create rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:Partial];
+	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
+		owl:allValuesFrom <java:java.io.Reader>];
+	http:operation "mirror-create";
+	http:type "text/html";
+	http:realm <authority>;
+	obj:imports <mirror/create.xml>;
+	obj:groovy """
+		return createXml.calliConstruct('copy', this)
+	""".
+
+# Sets up purl:domainOf, purl:partOf, and increments the parent timestamp
+# Called when creating a sub mirror
+purl:post-mirror-create rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:target;
+		owl:allValuesFrom purl:Partial];
+	rdfs:subClassOf [owl:onProperty obj:objectResponse;
+		owl:maxCardinality "1"^^xsd:nonNegativeInteger];
+	obj:precedes calli:post-copy;
+	http:method "POST";
+	http:operation "mirror-create";
+	http:realm <authority>;
+	http:expect "201-created";
+	obj:imports <mirror/create.xml>;
+	obj:imports <java:org.openrdf.http.object.exceptions.BadRequest>;
+	obj:groovy """
+		def copy = createXml.calliCopyResource(this, msg.in, Collections.singleton(this))
+		if (!copy.purlDefinedBy)
+			throw new BadRequest("Missing Defined By Mirror Source")
+		if (purlBelongsTo) {
+			copy.purlDomainOf.addAll(purlBelongsTo.purlDomainOf)
+		} else {
+			copy.purlDomainOf.addAll(purlDomainOf)
+			copy.purlDomainOf.add(msg.target)
+		}
+		copy.purlPartOf = msg.target
+		touchRevision()
+		return copy
+	""".
+
+purl:post-mirror-create-in a owl:ObjectProperty, owl:FunctionalProperty;
+	rdfs:domain purl:post-mirror-create;
+	rdfs:range <java:java.io.InputStream>;
+	http:type "application/rdf+xml";
+	obj:name "in".
+
+purl:MirroredDomain rdfs:subClassOf calli:Viewable;
+	calli:view <mirror/view.xml>;
+	calli:review <domain/review.xml>;
+	calli:edit <forbidden.xml>.
+
+################################
 # Domain
 ################################
 

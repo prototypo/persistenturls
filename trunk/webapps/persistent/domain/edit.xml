@@ -44,14 +44,6 @@
 					<tbody>
 						<tr>
 							<td class="property">
-								<label>Defined By:</label>
-							</td>
-							<td class="value" data-cardinality="1" rel="purl:definedBy">
-								<span about="?definedBy">Domain Mirror</span>
-							</td>
-						</tr>
-						<tr>
-							<td class="property">
 								<label for="m_days">Max Unresolved Days:</label>
 							</td>
 							<td class="value" data-cardinality="1">

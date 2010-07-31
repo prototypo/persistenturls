@@ -54,6 +54,7 @@ public abstract class ResolvableSupport implements RDFObject, Resolvable {
 		sb.append("SELECT REDUCED ?purl");
 		sb.append("\nWHERE {{");
 		sb.append("\n\t{ ?purl a purl:Domain }");
+		sb.append("\n\tUNION {?purl a purl:MirroredDomain }");
 		sb.append("\n\tUNION {?purl a purl:Partial }");
 		sb.append("\nFILTER (?purl = <").append(source).append(">");
 		if (uri.isHierarchical()) {
@@ -63,6 +64,7 @@ public abstract class ResolvableSupport implements RDFObject, Resolvable {
 		}
 		sb.append(")\n} UNION {");
 		sb.append("\n\t{ ?purl ?z purl:Domain }");
+		sb.append("\n\tUNION {?purl ?z purl:MirroredDomain }");
 		sb.append("\n\tUNION {?purl ?z purl:Partial }");
 		sb.append("\n\tUNION {?purl ?z purl:PURL }");
 		sb.append("\nFILTER(?z = rdf:type)");
