@@ -32,7 +32,17 @@
 								<label>Serve:</label>
 							</td>
 							<td rel="purl:serves" class="value diverted" data-suggest="/persistent/domain/template?pre-copy">
-                                <span about="?origin" typeof="purl:Domain">
+                                <span about="?domain" typeof="purl:Domain">
+                                    <span property="rdfs:label"/>
+                                </span>
+							</td>
+						</tr>
+						<tr>
+							<td class="property">
+								<label>Mirror:</label>
+							</td>
+							<td rel="purl:serves" class="value diverted" data-suggest="/persistent/mirror/template?pre-copy">
+                                <span about="?mirror" typeof="purl:MirroredDomain">
                                     <span property="rdfs:label"/>
                                 </span>
 							</td>

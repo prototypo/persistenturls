@@ -35,27 +35,7 @@
 				<span class="crumb" property="rdfs:label"/>
 			</span>
 		</div>
-		<h1><a href="" property="rdfs:label" /></h1>
-        <p><a href="?purl-create" class="diverted">Create New PURL</a></p>
-        <p><a href="?partial-create" class="diverted">Create New Partial</a></p>
-		<p><a href="?domain-create" class="diverted">Create Sub-Domain</a></p>
-		<p><a href="?mirror-create" class="diverted">Create Sub-Domain Mirror</a></p>
-		<p><a href="?unresolvable" class="diverted">View Unresolvable PURLs</a></p>
-		<h3>Scribes</h3>
-		<ul>
-			<li resource="?scribe" rel="calli:scribe"><a property="rdfs:label" href="?scribe"></a></li>
-		</ul>
-		<h3>Curators</h3>
-		<ul>
-			<li resource="?curator" rel="calli:curator"><a property="rdfs:label" href="?curator"></a></li>
-		</ul>
-		<h3>Maintainers</h3>
-		<ul>
-			<li resource="?maintainer" rel="calli:maintainer"><a property="rdfs:label" href="?maintainer"></a></li>
-		</ul>
-        <p><a id="mirror-link" href="?mirror-domains" class="diverted">Defined as a mirrored domain</a></p>
-        <script>
-        	$("#mirror-link").get(0).href = diverted($("#mirror-link").get(0).href)
-        </script>
+		<h1><a href="" property="rdfs:label" />
+			<a rel="purl:definedBy" href="?definedBy">(Mirror)</a></h1>
 	</body>
 </html>

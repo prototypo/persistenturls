@@ -118,7 +118,7 @@ public abstract class DomainSupport extends PartialSupport implements Domain,
 	@transform("http://persistent.name/rdf/2010/purl#add-operations")
 	@sparql(PREFIX
 			+ "CONSTRUCT {\n"
-			+ "?domain a purl:RemoteDomain, purl:Domain; purl:servicedBy ?server; purl:domainOf ?top .\n"
+			+ "?domain a purl:RemoteDomain; purl:servicedBy ?server; purl:domainOf ?top .\n"
 			+ "} WHERE { { ?domain a ?type FILTER(?domain = $this) }\n"
 			+ "UNION { ?domain purl:domainOf $this }\n"
 			+ "{ ?server a purl:Server; purl:serves $this }\n"
@@ -131,7 +131,7 @@ public abstract class DomainSupport extends PartialSupport implements Domain,
 	@transform("http://persistent.name/rdf/2010/purl#add-operations")
 	@sparql(PREFIX
 			+ "CONSTRUCT {\n"
-			+ "?domain a purl:MirroredDomain, purl:Domain; purl:mirroredBy ?server; purl:domainOf ?top .\n"
+			+ "?domain a purl:MirroredDomain; purl:mirroredBy ?server; purl:domainOf ?top .\n"
 			+ "} WHERE { { ?domain a ?type FILTER(?domain = $this) }\n"
 			+ "UNION { ?domain purl:domainOf $this }\n"
 			+ "{ ?server a purl:Server; purl:serves $this }\n"

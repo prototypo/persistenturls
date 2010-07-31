@@ -84,7 +84,8 @@ purl:domain-search rdfs:subClassOf purl:search;
 	obj:sparql """
 		SELECT DISTINCT ?uri ?label ?parent
 		WHERE {
-			?uri a purl:Domain; rdfs:label ?label; calli:soundex $soundex
+			{ ?uri a purl:Domain } UNION { ?uri a purl:MirroredDomain }
+			?uri rdfs:label ?label; calli:soundex $soundex
 			OPTIONAL { ?uri purl:partOf ?parent }
 			FILTER (regex(?label, $regex, "i"))
 		}
@@ -108,7 +109,7 @@ purl:purl-search rdfs:subClassOf purl:search;
 		WHERE {
 			?uri a ?type; rdfs:label ?label; calli:soundex $soundex
 			OPTIONAL { ?uri purl:partOf ?parent }
-			FILTER (?type = purl:PURL || ?type = purl:Partial || ?type = purl:Domain)
+			FILTER (?type = purl:PURL || ?type = purl:Partial || ?type = purl:Domain || ?type = purl:MirroredDomain)
 			OPTIONAL { ?uri ?redirection [a purl:Redirection] }
 			OPTIONAL { ?uri ?unresolvable [a purl:Unresolvable] }
 			FILTER (regex(?label, $regex, "i"))
@@ -128,7 +129,7 @@ purl:target-search rdfs:subClassOf purl:search;
 		WHERE {
 			?uri a ?type; ?rel $target
 			OPTIONAL { ?uri purl:partOf ?parent }
-			FILTER (?type = purl:PURL || ?type = purl:Partial || ?type = purl:Domain)
+			FILTER (?type = purl:PURL || ?type = purl:Partial || ?type = purl:Domain || ?type = purl:MirroredDomain)
 			OPTIONAL { ?uri ?redirection [a purl:Redirection] }
 			OPTIONAL { ?uri ?unresolvable [a purl:Unresolvable] }
 			OPTIONAL { ?uri rdfs:label ?label }

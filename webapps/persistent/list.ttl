@@ -45,7 +45,7 @@ purl:list-parts rdfs:subClassOf obj:Message;
 		SELECT REDUCED ?uri ?label ?type ?parent ?redirection ?unresolvable
 		WHERE {
 			?uri a ?type; rdfs:label ?label; purl:partOf $this
-			FILTER (?type = purl:PURL || ?type = purl:Partial || ?type = purl:Domain)
+			FILTER (?type = purl:PURL || ?type = purl:Partial || ?type = purl:Domain || ?type = purl:MirroredDomain)
 			OPTIONAL { ?uri ?redirection [a purl:Redirection] }
 			OPTIONAL { ?uri ?unresolvable [a purl:Unresolvable] }
 		}
