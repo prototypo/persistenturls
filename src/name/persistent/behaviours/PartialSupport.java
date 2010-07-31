@@ -12,9 +12,10 @@ import name.persistent.concepts.Partial;
 import org.apache.http.HttpResponse;
 import org.openrdf.http.object.exceptions.InternalServerError;
 import org.openrdf.http.object.exceptions.NotFound;
+import org.openrdf.http.object.traits.VersionedObject;
 import org.openrdf.model.Value;
 
-public abstract class PartialSupport extends PURLSupport implements Partial {
+public abstract class PartialSupport extends PURLSupport implements Partial, VersionedObject {
 	private static final Map<String, Pattern> patterns = new LinkedHashMap<String, Pattern>(
 			1024, 0.75f, true) {
 		private static final long serialVersionUID = 6748360669055961317L;
@@ -23,6 +24,14 @@ public abstract class PartialSupport extends PURLSupport implements Partial {
 			return size() > 1024;
 		};
 	};
+
+	@Override
+	public void touchRevision() {
+		Domain domain = getPurlBelongsTo();
+		if (domain instanceof VersionedObject) {
+			((VersionedObject) domain).touchRevision();
+		}
+	}
 
 	@Override
 	public void purlSetEntityHeaders(HttpResponse resp) {

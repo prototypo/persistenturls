@@ -72,6 +72,16 @@ public abstract class DomainSupport extends PartialSupport implements Domain,
 	private static final ScheduledExecutorService executor = ManagedExecutors
 			.newSingleScheduler("Denfine Domain");
 
+	@Override
+	public void touchRevision() {
+		super.touchRevision();
+		for (Domain domain : getPurlDomainOf()) {
+			if (domain instanceof VersionedObject) {
+				((VersionedObject) domain).touchRevision();
+			}
+		}
+	}
+
 	@operation("mirror")
 	@type("application/rdf+xml")
 	@transform("http://persistent.name/rdf/2010/purl#entity-graph")

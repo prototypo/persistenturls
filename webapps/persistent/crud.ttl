@@ -251,20 +251,17 @@ purl:post-purl-copy owl:intersectionOf (calli:post-copy
 	obj:groovy """
 		def copy = msg.functionalObjectResponse
 		copy.purlPartOf = purlPartOf
+		purlPartOf?.touchRevision()
 		return copy
 	""".
 
 # Updates the parent's timestamp
-# Called when editing a PURL
+# Called when editing a PURL or Domain
 purl:post-purl-edit owl:intersectionOf (calli:post-edit
 		[owl:onProperty obj:target; owl:allValuesFrom purl:PURL]);
 	obj:precedes calli:post-edit;
 	obj:groovy """
-		if (purlPartOf && purlPartOf.purlBelongsTo) {
-			purlPartOf.purlBelongsTo.touchRevision()
-		} else if (purlPartOf) {
-			purlPartOf.touchRevision()
-		}
+		purlPartOf?.touchRevision()
 		return msg.functionalObjectResponse
 	""".
 
@@ -288,6 +285,7 @@ purl:purl-disable rdfs:subClassOf obj:Message;
 		def resp = new BasicHttpResponse(ver, 204, "No Content")
 		resp.addHeader("Location", "$this?view")
 		resp.addHeader("Location", "$this?pre-view")
+		purlPartOf?.touchRevision()
 		return resp
 	""".
 
@@ -311,6 +309,7 @@ purl:purl-enable rdfs:subClassOf obj:Message;
 		def resp = new BasicHttpResponse(ver, 204, "No Content")
 		resp.addHeader("Location", "$this?view")
 		resp.addHeader("Location", "$this?pre-view")
+		purlPartOf?.touchRevision()
 		return resp
 	""".
 
@@ -336,6 +335,7 @@ purl:purl-tombstone rdfs:subClassOf obj:Message;
 		def resp = new BasicHttpResponse(ver, 204, "No Content")
 		resp.addHeader("Location", "$this?view")
 		resp.addHeader("Location", "$this?pre-view")
+		purlPartOf?.touchRevision()
 		return resp
 	""".
 
