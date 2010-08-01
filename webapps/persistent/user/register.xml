@@ -76,8 +76,7 @@
 							</td>
 							<td class="value">
 								<textarea rows="5" cols="40" id="m_justification"
-									property="purl:justification">
-								</textarea>
+									property="purl:justification"></textarea>
 							</td>
 						</tr>
 						<tr>
