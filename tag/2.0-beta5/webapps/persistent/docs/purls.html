@@ -1,0 +1,30 @@
+<html>
+  <head>
+    <title>Administering Batches of PURLs</title>
+    <meta name="Author" content="David Wood"/>
+  </head>
+  <body>
+    <a name="purls" id="purls"/>
+    <h2>3. Administering Batches of PURLs</h2>
+    <p>It is sometimes convenient to administer many PURLs at one time, especially if one is doing that programmatically or has a large number of PURLs under management. Batches of PURLs may be created or modified by submitting an XML document to a PURL server. XML documents submitted must comply with a RELAX-NG schema available from <a href="http://purlz.org/project/purl/documentation/batchPurls.rng">http://purlz.org/project/purl/documentation/batchPurls.rng</a>. An example XML document is provided at <a href="http://purlz.org/project/purl/documentation/batchPurlsExample.xml">http://purlz.org/project/purl/documentation/batchPurlsExample.xml</a>.</p>
+    <p>No batch operations for searching or deletion are supported. This is due to the limitations of the Hypertext Transfer Protocol (HTTP) specification. It is not possible to provide an XML document in the body of an HTTP GET request (used for searches) nor in an HTTP DELETE request (used for deletion).</p>
+    <p>Similarly, no Web user interface has been provided for batch operations since AJAX techniques are prohibited from reading local filesystems for security reasons. The use of Javascript would be necessary to support HTTP PUT (used for modifications) because most Web browsers do not natively support that method. Those requiring the bulk deletion of PURLs are therefore encouraged to do so programmatically within an HTTP 1.1 session to minimize network overhead.</p>
+    <a name="purlscreate" id="purlscreate"/>
+    <h3>3.1 Create a Batch of PURLs</h3>
+    <p>Batches of PURLs may be created by send an HTTP POST request to the RESTful API at http://$PURL_SERVER$/admin/purls. The input needs to be an XML document (see an <a href="http://purlz.org/project/purl/documentation/batchPurlsExample.xml">example</a>) using a <a href="http://purlz.org/project/purl/documentation/batchPurls.rng">RELAX NG Schema</a>. The input XML file will be validated against the schema before processing by the PURL server.</p>
+    <a name="purlsmodify" id="purlsmodify"/>
+    <h3>3.2 Modify a Batch of PURLs</h3>
+    <p>Batches of PURLs may be modified by send an HTTP POST request to the RESTful API at http://$PURL_SERVER$/admin/purls. The input needs to be an XML document (see an <a href="http://purlz.org/project/purl/documentation/batchPurlsExample.xml">example</a>) using a <a href="http://purlz.org/project/purl/documentation/batchPurls.rng">RELAX NG Schema</a>. The input XML file will be validated against the schema before processing by the PURL server.</p>
+    <p>The input schema for batch modifications is the same as for batch creation.</p>
+    <p>Note that if you create a PURL using the type Clone you will be creating a new PURL that has the features of an existing PURL, so any attempt to modify the new PURL after creation will be possible but the PURL will show up with its type inherited from the cloned original (that is, it will not have the type "clone").</p>
+    <a name="user" id="user"/>
+    <h2>4. Administering Users</h2>
+    <p>Four actions may be taken on a user: Registration, Modification, Searching or Deletion. These four actions may be accessed in the PURL Web user interface as shown in Figure 11. The same four actions may be taken by other PURL clients. See <a href="#rest">Creating RESTful PURL Clients</a> for details.</p>
+    <p>Registering a user creates a record for that user on a PURL server and allows the user to create PURLs (subject to the security limitations of the PURL server and any restrictions on writing to specific domains). Modification allows the user record to be updated. User records may be searched by the general public, although private information is naturally withheld. Finally, user records may be deleted. These four actions are described in detail below.</p>
+    <p align="center">
+      <img src="images/userselect.png"/>
+      <br/>
+      <b>Figure 11. Actions on Users</b>
+    </p>
+  </body>
+</html>

@@ -1,0 +1,46 @@
+<html>
+  <head>
+    <title>Administering PURL Domains</title>
+    <meta name="Author" content="David Wood"/>
+  </head>
+  <body>
+    <a name="domain" id="domain"/>
+    <h2>6. Administering PURL Domains</h2>
+    <p>PURLs are created within domains. A domain is the path portion of the PURL URL form, as shown in Figure 1. PURLs may not be created unless they are within a domain; that helps to ensure order and security on a PURL server.</p>
+    <p>A "maintainer" is someone who can modify a domain.  A maintainer of a domain may modify the record for that domain.  A "writer" is someone who may create a new PURL under a domain.  A user who creates a domain is automatically added as a maintainer.</p>
+    <p>Some PURL servers allow one or more domains to act as public spaces. This is the case with the /NET domain on the oldest PURL server at <a href="http://purl.org/">http://purl.org/</a>. Public domains allow for subdomains and PURLs to be created within them by the general public. Most domains, however, will be private and writing to them requires that you are either a maintainer or a writer of those domains.</p>
+    <p>Four actions may be taken on a domain: Creation, Modification, Searching or Deletion. These four actions may be accessed in the PURL Web user interface as shown in Figure 21. The same four actions may be taken by other PURL clients. See <a href="#rest">Creating RESTful PURL Clients</a> for details.</p>
+    <p>Creating a domain creates a record for that domain on a PURL server. Note that the creation of top-level domains generally requires permission from a PURL server administrator and may not complete immediately. Modification allows the domain record to be updated. Domain records may be searched by the general public. Finally, domain records may be deleted. These four actions are described in detail below.</p>
+    <p align="center">
+      <img src="images/domainselect.png"/>
+      <br/>
+      <b>Figure 21. Actions on Domains</b>
+    </p>
+    <a name="domaincreate" id="domaincreate"/>
+    <h3>6.1 Create a New Domain</h3>
+    <h4>Web User Interface</h4>
+    <p>Domains have to be created before PURLs may be placed in them. Some PURL servers may automatically create domains for you when you create a PURL and others may require domains to be created separately.</p>
+    <p>Domains may be created via the <a href="domain.html#create">Domain Creation Form</a>.</p>
+    <p>Figure 22(a) shows the creation of a sample domain. A maintainer is a user or group authorized to administer a domain and a writer is a user or group authorized to create PURLs within a domain. Figure 22(b) shows a typical response upon success.</p>
+    <p align="center"><img src="images/domaincreate.png"/>&#xA0;<img src="images/domaincreateresults.png"/><br/><b>Figures 22(a) and 22(b). Creating a Domain</b></p>
+    <a name="domainmodify" id="domainmodify"/>
+    <h3>6.2 Modify an Existing Domain</h3>
+    <h4>Web User Interface</h4>
+    <p>Records for existing domains may be modified by completing the <a href="domain.html#modify">Domain Modification Form</a>, which is much like the form for creating a new domain. Figure 23(a) shows the domain record created in <a href="#domaincreate">6.1 Create a New Domain</a> being updated to remove the user "david" as a maintainer. Figure 23(b) shows a typical response upon success.</p>
+    <p>It may be tedious or even impossible to complete a modification form by hand. To reduce the need to do so, domain records may be discovered by a search and the modification form automatically filled in with data from the current record. See <a href="#domainsearch">6.3 Search for Domain Information</a> for more information.</p>
+    <p align="center"><img src="images/domainmodify.png"/>&#xA0;<img src="images/domainmodifyresults.png"/><br/><b>Figures 23(a) and 23(b). Modifying a Domain</b></p>
+    <a name="domainsearch" id="domainsearch"/>
+    <h3>6.3 Search for Domain Information</h3>
+    <h4>Web User Interface</h4>
+    <p>Domain records may be searched using the <a href="domain.html#search">Domain Search Form</a>, an example of which is shown in Figure 24(a). Records may be searched by domain name, domain ID, maintainer ID or writer ID. A maintainer is a user or group authorized to administer a domain and a writer is a user or group authorized to create PURLs within a domain.</p>
+    <p>Figure 24(a) shows a sample search for an existing domain with the ID "examples" and Figure 24(b) shows a typical response. Search results may be "torn off" for later use by selecting the icon labeled <b>A</b> in Figure 14(b). Individual records may be brought into the <a href="domain.html#modify">Domain Modification Form</a> by selecting the icon labeled <b>B</b> in Figure 24(b).</p>
+    <p>Tombstoned domain records may be searched by selecting the checkbox labeled "Search tombstoned domains" in the <a href="domain.html#search">Domain Search Form</a> as shown in Figure 24(a). Domain records become tombstoned if they are deleted via the <a href="domain.html#delete">Domain Deletion Form</a>. More information about tombstoning may be found under <a href="#domaindelete">6.4 Delete a Domain</a>.</p>
+    <p align="center"><img src="images/domainsearch.png"/>&#xA0;<img src="images/domainsearchresults.png"/><br/><b>Figures 24(a) and 24(b). Searching for Domain Information</b></p>
+    <a name="domaindelete" id="domaindelete"/>
+    <h3>6.4 Delete a Domain</h3>
+    <h4>Web User Interface</h4>
+    <p>Domains may be deleted by providing their domain IDs to the <a href="domain.html#delete">Domain Deletion Form</a>. Domains may only be deleted if their domain IDs are known. Please note that deleting domain records actually results in them being "tombstoned" so that any PURLs they contain do not become inaccessible. Tombstoned domain records may be searched by selecting the checkbox labeled "Search tombstoned domains" in the <a href="domain.html#search">Domain Search Form</a> as shown in Figure 24(a).</p>
+    <p>Figure 25(a) shows an example deletion request and Figure 25(b) shows a typical response upon success.</p>
+    <p align="center"><img src="images/domaindelete.png"/>&#xA0;<img src="images/domaindeleteresults.png"/><br/><b>Figures 25(a) and 25(b). Deleting a Domain</b></p>
+  </body>
+</html>

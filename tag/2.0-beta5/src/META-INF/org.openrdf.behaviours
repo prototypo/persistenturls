@@ -1,0 +1,11 @@
+name.persistent.behaviours.DisabledSupport
+name.persistent.behaviours.DomainSupport
+name.persistent.behaviours.MirroredDomainSupport
+name.persistent.behaviours.PartialSupport
+name.persistent.behaviours.PURLSupport
+name.persistent.behaviours.PURLValidationSupport
+name.persistent.behaviours.RemoteDomainSupport
+name.persistent.behaviours.RemoteGraphSupport
+name.persistent.behaviours.ResolvableSupport
+name.persistent.behaviours.TombstonedSupport
+name.persistent.behaviours.ValidatingDomainSupport

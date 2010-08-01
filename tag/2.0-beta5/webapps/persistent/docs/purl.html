@@ -1,0 +1,82 @@
+<html>
+  <head>
+    <title>Administering PURLs</title>
+    <meta name="Author" content="David Wood"/>
+  </head>
+  <body>
+    <a name="purl" id="purl"/>
+    <h2>2. Administering PURLs</h2>
+    <p>The single most important task that one can accomplish on a PURL server is the creation of a new PURL. Other administrative actions, from user, group or domain maintenance to the other operations on the PURLs themselves are secondary to that main task. This section addresses the creation of simple (HTTP redirection) PURLs and advanced PURLs, along with the other things that may be done to a PURL.</p>
+    <p>A "maintainer" is someone who can modify a PURL.  A maintainer of a PURL may modify the record for that PURL.  A user who creates a PURL is automatically added as a maintainer.</p>
+    <p>Six actions may be taken on a PURL: Creation, Advanced Creation, Modification, Searching, Validation or Deletion. These six actions may be accessed in the PURL Web user interface as shown in Figure 3. The same six actions may be taken by other PURL clients. See <a href="#rest">Creating RESTful PURL Clients</a> for details.</p>
+    <p>Creating a simple or advanced PURL creates a record for that PURL on a PURL server. A simple PURL merely redirects to a given URL. An advanced PURL may return any of the HTTP response codes listed in <a href="#table1">Table 1</a>, including the 303 response code used to return information about physical or conceptual resources. Modification allows the group record to be updated. Group records may be searched by the general public. Finally, group records may be deleted. These six actions are described in detail below.</p>
+    <p align="center">
+      <img src="images/purlselect.png"/>
+      <br/>
+      <b>Figure 3. Actions on PURLs</b>
+    </p>
+    <a name="purlcreate" id="purlcreate"/>
+    <h3>2.1 Create a New PURL</h3>
+    <h4>Web User Interface</h4>
+    <p>PURLs require a Domain to hold them. Domains have to be created before PURLs may be placed in them (see <a href="domaincreate">6.1 Create a New Domain</a>). Some PURL servers may automatically create domains for you when you create a PURL and others may require domains to be created separately.</p>
+    <p>Simple PURLs are always of type 302 (see <a href="#table1">Table 1</a> for information on PURL types). That is, resolving a simple PURL will always return an HTTP response code of 302 (Found) with a Location header specifying where the requester should seek the requested resource. Simple PURLs are thus a handy simplification of advanced PURLs to account for a common use case.</p>
+    <p>Simple PURLs may be created via the <a href="purl.html#create">PURL Creation Form</a>.</p>
+    <p>Figure 4(a) shows the creation of an example simple PURL. A target URL is the URL to which the PURL will redirect. A maintainer is a user or group authorized to administer a PURL. A user who creates a PURL is automatically added as a maintainer.  Figure 4(b) shows a typical response upon success. Search results may be "torn off" for later use by selecting the icon labeled <b>A</b> in Figure 4(b). Individual records may be brought into the <a href="purl.html#modify">PURL Modification Form</a> by selecting any of the icons labeled <b>B</b> in Figure 4(b).</p>
+    <p>In this case, a PURL will be created on a PURL server with the path "/zepheira/examples/BBC". If the PURL server was running on a machine called purlz.org, then the resolution of http://purlz.org/zepheira/examples/BBC would result in an HTTP 302 response directing the user (or Web browser, or other computer application) to look for the desired resource at http://bbc.co.uk/, the British Broadcasting Service's Web site. Three maintainers are listed for this PURL; the users "david" and "brian" and the group "examplegroup".</p>
+    <p align="center"><img src="images/purlcreate.png"/>&#xA0;<img src="images/purlcreateresults.png"/><br/><b>Figures 4(a) and 4(b). Creating a PURL</b></p>
+    <a name="purladvcreate" id="purladvcreate"/>
+    <h3>2.2 Create an Advanced PURL</h3>
+    <h4>Web User Interface</h4>
+    <p>PURLs require a Domain to hold them. Domains have to be created before PURLs may be placed in them (see <a href="domaincreate">6.1 Create a New Domain</a>). Some PURL servers may automatically create domains for you when you create a PURL and others may require domains to be created separately.</p>
+    <p>Advanced PURLs may be created via the <a href="purl.html#advancedcreate">PURL Advanced Creation Form</a>. Note that this form will adjust itself to gather the information required for the type of PURL that you select. Since simple (302) PURLs were covered in <a href="purlcreate">2.1 Create a New PURL</a>, the example given below illustrates a PURL of type 303.</p>
+    <p>Advanced PURLs may return any HTTP response code listed in <a href="#table1">Table 1</a>. Of those, PURLs of types 302 (simple redirections) and 303 (information about non-informational resources) are the most common. Figure 5 shows the PURL type being selected in the Web user interface. The first six types are the entries from <a href="#table1">Table 1</a>, as previously discussed. The last three (Clone, Chain or Partial-redirect) are special actions that require some additional information but eventually result in a PURL of one of the six types listed in <a href="#table1">Table 1</a>. Cloning a PURL allows one to create a new PURL based on the record of an existing PURL. Chaining allows a PURL of type 302 to refer to another PURL (of any type) without the network overhead of a separate redirection. </p>
+    <p>Partial-redirect PURLs allow PURLs of type 302 to be created which refer to a directory level portion of a URL; any path information appended to a partial redirect PURL is in turn appended to its target URL. That allows a single PURL to redirect to a hierarchy on a target Web server.</p>
+    <p>There are four (4) types of partial-redirect PURLs:  Partial, Partial-append-extension, Partial-ignore-extension and Partial-replace-extension.  The plain Partial is simplest.  Any string added to the end of a Partial PURL is appended to its target prior to redirection.  For example, suppose we have a PURL with an id of 'http://localhost:8080/net/partialexample/' that redirects to a target of 'http://example.com/partialtest/'.  If we then try to resolve the URL 'http://localhost:8080/net/partialexample/foo/bar/baz' we will find that an HTTP 302 message is returned that redirects us to the location 'http://example.com/partialtest/foo/bar/baz'.  The "extra" path information added the end of the Partial PURL was added to the end of the target URL.  Partial PURLs are treated as simple strings of characters, so any attempt to resolve a URL with a Query String on the end will also get appended verbatim to the target, like so:  'http://localhost:8080/net/partialexample/foo?bar=baz' will be redirected to 'http://example.com/partialtest/foo?bar=baz'.</p>
+    <p>A Partial-append-extension PURL is a type of partial-redirect a PURL that allows a file extension to be appended to the target URL at the time of the PURL's resolution.  This is occasionally useful when creating partial-redirects to target systems that use file extensions to separate content types.  The file extension to append to the target is given immediately after the PURL id.  For example, consider a PURL of type partial-append-extension called 'http://localhost:8080/net/partialappendextension/' that has a target of 'http://example.com/partialappendtest/'.  If you resolve the partial with some added path, say 'http://localhost:8080/net/partialappendextension/foo/bar/bam?id=fizzle', it will redirect to 'http://example.com/partialappendtest/bar/bam.foo?id=fizzle'.  The file extension 'foo' is added to the PURL immediately after the PURL id and immediately before any additional path information.  The file extension ('foo') is then stripped from the path and added to the end of the target URL after the path extension but before any Query String.  Any Query String is appended to the end of the newly created target URL.</p>
+    <p>A Partial-ignore-extension PURL is a type of partial-redirect PURL that removes any file extensions from the path information used to create the target URL.  For example, a PURL 'http://localhost:8080/net/partialignoreextension/' with a target of 'http://example.com/partialignoretest/' when called as 'http://localhost:8080/net/partialignoreextension/foo.html' would redirect to 'http://example.com/partialignoretest/foo'.</p>
+    <p>A Partial-replace-extension PURL is a type of partial-redirect PURL combines the functionality of the Partial-append-extension PURL and Partial-ignore-extension types.  It ignores any file extension given in the PURL and appends a file extension provided in the PURL path.  For example, a PURL called 'http://localhost:8080/record/' and a target of 'http://example.com/records/' when called as 'http://localhost:8080/record/htm/foo/bar.html' would redirect to a target of 'http://example.com/records/foo/bar.htm'.</p>
+    <p align="center">
+      <img src="images/purladvselect.png"/>
+      <br/>
+      <b>Figure 5. Selecting the Type of an Advanced PURL</b>
+    </p>
+    <p>Figure 6(a) shows the creation of an example advanced PURL. The PURL path shown is meant to suggest the form of deep hierarchy often found in real-world data. The example PURL is of type 303 (labeled in the pulldown menu as "See also URLs", which are used for resources which may not be directly accessible on the World Wide Web. Two maintainers are listed; a maintainer is a user or group authorized to administer a PURL. Finally, the "See also URL" itself is provided, which gives information about the addressed resource without it actually pretending to <i>be</i> the addressed resource, as would a response to a 301, 302 or 307 PURL. Figure 6(b) shows a typical response upon success.</p>
+    <p align="center"><img src="images/purladvcreate.png"/>&#xA0;<img src="images/purladvcreateresults.png"/><br/><b>Figures 6(a) and 6(b). Creating an Advanced PURL</b></p>
+    <p>It is a common (and best) practice for PURLs of type 303 to refer to a document providing structured metadata about a physical or conceptual resource in Resource Description Format (<a href="http://www.w3.org/RDF/">RDF</a>) syntax. The combined use of a PURL of type 303 and an RDF description assures the user that the addressed resource is truly not an information resource that may be represented on the World Wide Web, but instead something existing in the real world. Figure 6(c) shows the same example as Figure 6(a) but with a "See also URL" pointing to an RDF resource.</p>
+    <p align="center">
+      <img src="images/purladvcreateRDF.png"/>
+      <br/>
+      <b>Figure 6(c). Directing a "See Also" (303) PURL to an RDF Document</b>
+    </p>
+    <a name="purlmodify" id="purlmodify"/>
+    <h3>2.3 Modify an Existing PURL</h3>
+    <h4>Web User Interface</h4>
+    <p>Records for existing PURLs may be modified by completing the <a href="purl.html#modify">PURL Modification Form</a>, which is much like the form for creating a new PURL. Figure 7(a) shows the PURL record created in <a href="#purlcreate">2.1 Create a New PURL</a> being updated to remove the user "brian" and the group "examplegroup" as maintainers. Figure 7(b) shows a typical response upon success.</p>
+    <p>It may be tedious or even impossible to complete a modification form by hand. To reduce the need to do so, PURL records may be discovered by a search and the modification form automatically filled in with data from the current record. See <a href="#purlsearch">2.4 Search for PURL Information</a> for more information.</p>
+    <p align="center"><img src="images/purlmodify.png"/>&#xA0;<img src="images/purlmodifyresults.png"/><br/><b>Figures 7(a) and 7(b). Modifying a PURL</b></p>
+    <a name="purlsearch" id="purlsearch"/>
+    <h3>2.4 Search for PURL Information</h3>
+    <h4>Web User Interface</h4>
+    <p>PURL records may be searched using the <a href="purl.html#search">PURL Search Form</a>, an example of which is shown in Figure 8(a). Records may be searched by PURL path (see Figure 1 for the definition of a PURL path), target URL, See Also URL or maintainer IDs. A target URL is a URL that a PURL of type 301, 302 or 307 redirects to (see the list of PURL types in <a href="#overview">1. Overview of PURLs</a>). A See Also URL is a URL that a PURL of type 303 refers to. A maintainer is a user or group authorized to administer a PURL. Two types of maintainer fields are used: "Maintainer IDs" expands groups into lists of users and "Explicit Maintainers" does not.</p>
+    <p>Figure 8(a) shows a sample search for PURLs maintained by the user "david" and Figure 8(b) shows a typical response. Search results may be "torn off" for later use by selecting the icon labeled <b>A</b> in Figure 8(b). Individual records may be brought into the <a href="purl.html#modify">PURL Modification Form</a> by selecting the icon labeled <b>B</b> in Figure 8(b).</p>
+    <p>Tombstoned PURL records may be searched by selecting the checkbox labeled "Search tombstoned PURLs" in the <a href="purl.html#search">PURL Search Form</a> as shown in Figure 8(a). PURL records become tombstoned if they are deleted via the <a href="purl.html#delete">PURL Deletion Form</a>. More information about tombstoning may be found under <a href="#purldelete">1.6 Delete a PURL</a>.</p>
+    <p align="center"><img src="images/purlsearch.png"/>&#xA0;<img src="images/purlsearchresults.png"/><br/><b>Figures 8(a) and 8(b). Searching for PURLs</b></p>
+    <a name="purlhistory" id="purlhistory"/>
+    <h3>2.5 Search for PURL's History</h3>
+    <h4>Web User Interface</h4>
+    <p>Information regarding the changes to a PURL may be found using results from the <a href="purl.html#search">PURL  Form</a>. Clicking on the history icon near each PURL record will launch a new window containing the history of changes for that PURL.</p>
+    <a name="purlvalidate" id="purlvalidate"/>
+    <h3>2.6 Validate a PURL</h3>
+    <h4>Web User Interface</h4>
+    <p>A PURL validation service is provided to help you find PURLs which may be stale or no longer acting in the way that you intended. A PURL is validated by entering its PURL path into the <a href="purl.html#validate">PURL Validation Form</a> as shown in Figure 9(a). Figure 9(b) shows a typical response upon success.</p>
+    <p>PURLs of type 301, 302, 303 and 307 either redirect or refer to other URLs (see the list of PURL types in <a href="#overview">1. Overview of PURLs</a>). When PURLs of those types are validated, the URL to which they refer will be resolved and the status code noted. A status code of 200 (OK) will result in a successful validation. Any other results (e.g. a 404, Not Found) will result in a failure of the validation and an error message will be returned.</p>
+    <p>Attempting to validate a PURL of type 404 or 410 will always return a successful validation indication baring server error.</p>
+    <p align="center"><img src="images/purlvalidate.png"/>&#xA0;<img src="images/purlvalidateresults.png"/><br/><b>Figures 9(a) and 9(b). Validating a PURL</b></p>
+    <a name="purldelete" id="purldelete"/>
+    <h3>2.7 Delete a PURL</h3>
+    <h4>Web User Interface</h4>
+    <p>PURLs may be deleted by providing their PURL IDs to the <a href="purl.html#delete">PURL Deletion Form</a>. PURLs may only be deleted if their PURL IDs are known. Please note that deleting PURL records actually results in them being "tombstoned" so that they do not become inaccessible. Instead, deleted PURLs will continue to exist on a PURL server but will be modified to return an HTTP 410 status code (Gone). Tombstoned PURL records may be searched by selecting the checkbox labeled "Search tombstoned PURLs" in the <a href="purl.html#search">PURL Search Form</a> as shown in Figure 10(a).</p>
+    <p>Figure 10(a) shows an example deletion request and Figure 10(b) shows a typical response upon success.</p>
+    <p align="center"><img src="images/purldelete.png"/>&#xA0;<img src="images/purldeleteresults.png"/><br/><b>Figures 10(a) and 10(b). Deleting a PURL</b></p>
+  </body>
+</html>
