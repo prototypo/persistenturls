@@ -31,7 +31,7 @@
 							<td class="property">
 								<label>Serve:</label>
 							</td>
-							<td rel="purl:serves" class="value diverted" data-suggest="/persistent/domain/template?pre-copy">
+							<td rel="purl:serves" class="value diverted" data-prompt="/persistent/domain/template?copy">
                                 <span about="?domain" typeof="purl:Domain">
                                     <span property="rdfs:label"/>
                                 </span>
@@ -41,7 +41,7 @@
 							<td class="property">
 								<label>Mirror:</label>
 							</td>
-							<td rel="purl:serves" class="value diverted" data-suggest="/persistent/mirror/template?pre-copy">
+							<td rel="purl:serves" class="value diverted" data-prompt="/persistent/mirror/template?copy">
                                 <span about="?mirror" typeof="purl:MirroredDomain">
                                     <span property="rdfs:label"/>
                                 </span>

@@ -83,7 +83,7 @@
 							<td class="property">
 								<label for="m_reviewer">Reviewers:</label>
 							</td>
-							<td rel="calli:reviewer" class="value" data-suggest="/persistent/user/template?pre-register">
+							<td rel="calli:reviewer" class="value" data-prompt="/persistent/user/template?pre-register">
 								<span about="?reviewer" typeof="purl:User">
 									<span property="rdfs:label"/>
 								</span>

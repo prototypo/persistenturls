@@ -32,13 +32,10 @@ calli:describe http:realm <local>.
 calli:get-graph http:realm <local>.
 
 calli:get-copy http:realm <authority>.
-calli:pre-copy http:realm <authority>.
 calli:post-copy http:realm <authority>.
 calli:get-edit http:realm <authority>.
-calli:pre-edit http:realm <authority>.
 calli:post-edit http:realm <authority>.
 calli:get-delete http:realm <authority>.
-calli:pre-delete http:realm <authority>.
 calli:post-delete http:realm <authority>.
 
 ################################

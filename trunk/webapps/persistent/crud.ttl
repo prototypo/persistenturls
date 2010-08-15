@@ -361,7 +361,6 @@ purl:purl-disable rdfs:subClassOf obj:Message;
 		def ver = new ProtocolVersion("HTTP", 1, 1)
 		def resp = new BasicHttpResponse(ver, 204, "No Content")
 		resp.addHeader("Location", "$this?view")
-		resp.addHeader("Location", "$this?pre-view")
 		purlPartOf?.touchRevision()
 		return resp
 	""".
@@ -385,7 +384,6 @@ purl:purl-enable rdfs:subClassOf obj:Message;
 		def ver = new ProtocolVersion("HTTP", 1, 1)
 		def resp = new BasicHttpResponse(ver, 204, "No Content")
 		resp.addHeader("Location", "$this?view")
-		resp.addHeader("Location", "$this?pre-view")
 		purlPartOf?.touchRevision()
 		return resp
 	""".
@@ -411,7 +409,6 @@ purl:purl-tombstone rdfs:subClassOf obj:Message;
 		def ver = new ProtocolVersion("HTTP", 1, 1)
 		def resp = new BasicHttpResponse(ver, 204, "No Content")
 		resp.addHeader("Location", "$this?view")
-		resp.addHeader("Location", "$this?pre-view")
 		purlPartOf?.touchRevision()
 		return resp
 	""".

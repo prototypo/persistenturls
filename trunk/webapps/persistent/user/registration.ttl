@@ -99,7 +99,7 @@ purl:pre-register rdfs:subClassOf obj:Message;
 		def template = findCopyTemplate()
 		if (template == null)
 			throw new InternalServerError("Missing Copy Template")
-		return template.calliConstruct('pre-copy', this)
+		return template.calliConstruct('copy', this)
 	""".
 
 # Creates new user and resets their password
