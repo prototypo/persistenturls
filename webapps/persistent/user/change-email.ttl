@@ -47,7 +47,7 @@ purl:post-confirm-email rdfs:subClassOf obj:Message;
 		String ha2 = DigestUtils.md5Hex(toUri().toString())
 		String token = DigestUtils.md5Hex("${ha1}:${nonce}:${ha2}")
 		String qs = "?change-email&amp;email=${email}&amp;nonce=${nonce}&amp;token=${token}"
-		Reader reader = mailConfirmationXml.calliConstruct('pre-view', this)
+		Reader reader = mailConfirmationXml.calliConstruct('view', this)
 		try {
 			CharArrayWriter writer = new CharArrayWriter()
 			int read
