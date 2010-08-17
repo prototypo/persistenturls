@@ -151,7 +151,7 @@ purl:logout rdfs:subClassOf obj:Message;
 			return resp
 		}
 		if (msg.user != null && msg.user == credential)
-			return unauthorized()
+			return unauthorized(credential)
 		if (msg.user == null) {
 			resp.setHeader("Location", toString() + "?logout&from=" + credential.toString())
 		} else {
