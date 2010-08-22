@@ -33,7 +33,6 @@ purl:post-confirm-email rdfs:subClassOf obj:Message;
 	http:operation "confirm-email";
 	http:type "text/html";
 	http:cache-control "no-store";
-	obj:imports </mail.properties>;
 	obj:imports <mail-confirmation.xml>;
 	obj:imports <confirmation-sent.xml>;
 	obj:imports <java:org.openrdf.http.object.exceptions.BadRequest>;
@@ -58,7 +57,7 @@ purl:post-confirm-email rdfs:subClassOf obj:Message;
 			String body = writer.toString()
 			body = (body =~ /"\\?change-email"/).replaceAll("${toUri()}?change-email")
 			body = (body =~ /\\?change-email/).replaceAll(qs)
-			mailProperties.purlSendMail(email, body, null)
+			sendMessage(body, email)
 		} finally {
 			reader.close()
 		}

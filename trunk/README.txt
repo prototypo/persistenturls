@@ -26,7 +26,7 @@ installation directory.
 
 Download a release archive from http://purlz.org/ and extract it into a new directory.
 
-Create the file "webapps/mail.properties" and include your local SMTP credentials. A typical file might contain the following:
+Edit the file "etc/mail.properties" and include your local SMTP credentials. A typical file might contain the following:
 mail.transport.protocol = smtp
 mail.from = system@example.com
 mail.smtp.host = example.com

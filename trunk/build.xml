@@ -11,14 +11,12 @@
 	<property name="webapps" location="webapps" />
 	<property name="home" location="." />
 	<property name="pid" location="run/persistent.pid" />
-	<property name="logging" location="etc/persistent.properties" />
+	<property name="logging" location="etc/logging.properties" />
 	<property name="tools.jar" location="${java.home}/../lib/tools.jar" />
 	<property file="src/META-INF/name.persistent.properties" />
 	<property name="callimachus.url" value="http://callimachus.googlecode.com/files/callimachus-0.3-SNAPSHOT.zip" />
 	<property name="captcha.jar" value="SimpleCaptcha-1.1.1.jar" />
 	<property name="captcha.url" value="http://downloads.sourceforge.net/project/simplecaptcha/SimpleCaptcha/1.1.1/SimpleCaptcha-1.1.1.jar" />
-	<property name="mail.jar" value="mail-1.4.1.jar" />
-	<property name="mail.url" value="http://mirrors.ibiblio.org/pub/mirrors/maven2/javax/mail/mail/1.4.1/mail-1.4.1.jar" />
 	<property name="main" value="org.callimachusproject.Server" />
 	<property name="jvmargs" value="-ea -server -mx512m -Dfile.encoding=UTF-8 -Djava.library.path=${lib} -Djava.io.tmpdir=${tmp} -Duser.home=${home}" />
 	<property name="args" value="-p 8080 -a localhost:8080" />
@@ -37,7 +35,6 @@
 		<parallel>
 			<get src="${callimachus.url}" dest="${lib}/callimachus.zip" />
 			<get src="${captcha.url}" dest="${lib}/${captcha.jar}" />
-			<get src="${mail.url}" dest="${lib}/${mail.jar}" />
 		</parallel>
 		<unzip src="${lib}/callimachus.zip" dest="${lib}">
 			<patternset>
@@ -121,13 +118,12 @@
 			<zipfileset dir="${webapps}/persistent" prefix="" />
 			<zipfileset file="${jar.file}" prefix="WEB-INF/lib" />
 			<zipfileset file="lib/${captcha.jar}" prefix="WEB-INF/lib" />
-			<zipfileset file="lib/${mail.jar}" prefix="WEB-INF/lib" />
 		</war>
 		<zip destfile="${dist}/persistent-${version}.zip">
 			<zipfileset dir="." includes="*.txt" />
 			<zipfileset dir="${bin}" prefix="bin" />
 			<zipfileset dir="${etc}" prefix="etc" />
-			<zipfileset dir="${lib}" prefix="lib" excludes="${captcha.jar} ${mail.jar}" />
+			<zipfileset dir="${lib}" prefix="lib" excludes="${captcha.jar}" />
 			<zipfileset file="${dist}/persistent.war" prefix="webapps" />
 			<zipfileset file="${webapps}/callimachus.war" prefix="webapps" />
 			<zipfileset file="${webapps}/favicon.ico" prefix="webapps" />

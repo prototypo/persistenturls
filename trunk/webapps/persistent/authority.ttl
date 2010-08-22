@@ -20,12 +20,13 @@
 	calli:domain </>;
 	calli:forbidden <forbidden.xml>.
 
-<authority> a calli:DigestRealm;
+<authority> a calli:DigestRealm, calli:Group;
 	calli:origin </>;
 	calli:authName </>;
 	calli:domain </>;
 	calli:unauthorized <unauthorized.xml>;
-	calli:forbidden <forbidden.xml>.
+	calli:forbidden <forbidden.xml>;
+	calli:authenticates <authority>.
 
 calli:SPARQLService http:realm <local>.
 calli:describe http:realm <local>.
@@ -42,7 +43,7 @@ calli:post-delete http:realm <authority>.
 # User
 ################################
 
-purl:User rdfs:subClassOf calli:Credential;
+purl:User rdfs:subClassOf calli:Credential, calli:MailSubmitter;
 	http:realm <authority>.
 
 purl:email a owl:DatatypeProperty, owl:FunctionalProperty;

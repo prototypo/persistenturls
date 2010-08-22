@@ -44,7 +44,7 @@ purl:post-user-delete owl:intersectionOf (calli:post-delete
 	obj:imports <authority>;
 	obj:imports <java:org.openrdf.http.object.exceptions.BadRequest>;
 	obj:groovy """
-		authority.calliCredentials.remove(this)
+		authority.calliMembers.remove(this)
 		calliAlgorithm = null
 		calliEncoded = null
 		msg.proceed()

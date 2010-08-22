@@ -71,7 +71,7 @@ purl:post-register rdfs:subClassOf obj:Message;
 		} else {
 			user.calliMaintainers.addAll(findScribe(user))
 		}
-		authority.calliCredentials.add(user)
+		authority.calliMembers.add(user)
 		def ver = new ProtocolVersion("HTTP", 1, 1)
 		def resp = new BasicHttpResponse(ver, 202, "Accepted")
 		resp.setHeader("Location", passwordSentXml.toString() + "?construct")
@@ -128,7 +128,7 @@ purl:post-pre-register rdfs:subClassOf obj:Message;
 		} else {
 			user.calliMaintainers.addAll(findScribe(user))
 		}
-		authority.calliCredentials.add(user)
+		authority.calliMembers.add(user)
 		user.purlResetPassword()
 		return user
 	""".
