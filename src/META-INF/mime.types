@@ -1,8 +1,0 @@
-# META-INF/mime.types
-#
-# Comments begin with a '#'
-# The format is <mime type> <space separated file extensions>
-#
-# See http://java.sun.com/j2ee/1.4/docs/api/javax/activation/MimetypesFileTypeMap.html
-#
-application/x-properties properties
