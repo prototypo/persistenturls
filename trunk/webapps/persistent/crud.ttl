@@ -55,10 +55,10 @@ purl:post-user-delete owl:intersectionOf (calli:post-delete
 ################################
 
 <mirror/template> a purl:MirrorTemplate;
-	calli:withNamespace "http://";
 	calli:scribe </data/user/admin>.
 
 purl:MirrorTemplate rdfs:subClassOf calli:Copyable;
+	calli:withNamespace "http://";
 	calli:copy <mirror/create-top.xml>.
 
 # Sets up the purl:domainOf property

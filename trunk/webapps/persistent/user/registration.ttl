@@ -64,7 +64,7 @@ purl:post-register rdfs:subClassOf obj:Message;
 		if (template == null)
 			throw new InternalServerError("Missing Copy Template")
 		def user = template.calliCopyResource(this, msg.in, findCopyNamespaces())
-		if (!user.purlEmail)
+		if (!user.calliEmail)
 			throw new BadRequest("Missing Email Address")
 		if (calliCurators) {
 			user.calliMaintainers.addAll(calliCurators)
@@ -121,7 +121,7 @@ purl:post-pre-register rdfs:subClassOf obj:Message;
 		if (template == null)
 			throw new InternalServerError("Missing Copy Template")
 		def user = template.calliCopyResource(this, msg.in, findCopyNamespaces())
-		if (!user.purlEmail)
+		if (!user.calliEmail)
 			throw new BadRequest("Missing Email Address")
 		if (calliCurators) {
 			user.calliMaintainers.addAll(calliCurators)

@@ -41,7 +41,7 @@ purl:post-confirm-email rdfs:subClassOf obj:Message;
 		String email = msg.form.get('email')[0]
 		if (!email || email.indexOf('@') < 1)
 			throw new BadRequest("Invalid Email Address")
-		String ha1 = DigestUtils.md5Hex(purlEmail)
+		String ha1 = DigestUtils.md5Hex(calliEmail)
 		String nonce = Integer.toHexString(new Random(System.nanoTime()).nextInt())
 		String ha2 = DigestUtils.md5Hex(toUri().toString())
 		String token = DigestUtils.md5Hex("${ha1}:${nonce}:${ha2}")
@@ -106,11 +106,11 @@ purl:post-change-email rdfs:subClassOf obj:Message;
 			throw new BadRequest("Invalid Email Address")
 		String nonce = msg.form.get('nonce')[0]
 		String token = msg.form.get('token')[0]
-		String ha1 = DigestUtils.md5Hex(purlEmail)
+		String ha1 = DigestUtils.md5Hex(calliEmail)
 		String ha2 = DigestUtils.md5Hex(toUri().toString())
 		if (token != DigestUtils.md5Hex("${ha1}:${nonce}:${ha2}"))
 			throw new BadRequest("Request is No Longer Valid")
-		purlEmail = email
+		calliEmail = email
 		return this
 	""".
 

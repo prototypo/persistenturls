@@ -16,7 +16,7 @@
 		<form action="" about="" typeof="purl:User">
 			<h1 property="rdfs:label" />
 			<div property="calli:name" />
-			<div property="purl:email" />
+			<div property="calli:email" />
 			<div property="purl:affiliation" />
 			<p property="purl:justification" />
 			<div rel="calli:reviewer" resource="?reviewer" />
