@@ -43,19 +43,8 @@ calli:post-delete http:realm <authority>.
 # User
 ################################
 
-purl:User rdfs:subClassOf calli:Credential, calli:MailSubmitter;
+purl:User rdfs:subClassOf calli:User, calli:MailSubmitter;
 	http:realm <authority>.
-
-purl:email a owl:DatatypeProperty, owl:FunctionalProperty;
-	rdfs:domain purl:User;
-	rdfs:range xsd:string.
-
-rdfs:label a owl:DatatypeProperty;
-	rdfs:range xsd:string;
-	http:method "GET";
-	http:operation "label";
-	http:type "text/plain;q=0.9";
-	http:rel "alternate".
 
 purl:purl-authorize owl:equivalentClass calli:authorize-credential;
 	obj:sparql """
@@ -253,7 +242,7 @@ purl:find-users-by-email rdfs:subClassOf obj:Message;
 			} UNION {
 				$this calli:credential ?user
 			}
-			?user purl:email $email
+			?user calli:email $email
 		}
 	""".
 

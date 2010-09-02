@@ -50,7 +50,7 @@
 								<label for="m_email">E-mail address:</label>
 							</td>
 							<td class="value" data-cardinality="1">
-								<input id="m_email" property="purl:email" type="text" onchange="confirm()" onkeyup="setTimeout(confirm, 100)" />
+								<input id="m_email" property="calli:email" type="text" onchange="confirm()" onkeyup="setTimeout(confirm, 100)" />
 							</td>
 						</tr>
 						<tr>

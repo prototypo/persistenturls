@@ -15,7 +15,7 @@
 	</head>
 	<body class="user">
 		<h1><a href="" property="rdfs:label" /></h1>
-		<p property="purl:email" />
+		<p property="calli:email" />
 		<p property="purl:affiliation" />
 		<p property="purl:justification" />
 	</body>

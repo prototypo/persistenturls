@@ -69,7 +69,6 @@ Purl.UI.init = function() {
     $.ajax({
         url: $('#username').attr('href'),
         type: "GET",
-        dataType: "text",
         success: function(data, status) {
         	var label = data;
         	if (data.match(/^</)) {
