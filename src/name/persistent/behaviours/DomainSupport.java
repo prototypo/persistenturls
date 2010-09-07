@@ -50,6 +50,12 @@ import org.openrdf.repository.object.annotations.triggeredBy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * PURL domain contains PURLs and authorises and mirrors them as a set,
+ * 
+ * @author James Leigh
+ *
+ */
 public abstract class DomainSupport extends PartialSupport implements Domain,
 		RDFObject, VersionedObject {
 	private static final String NS = "http://persistent.name/rdf/2010/purl#";

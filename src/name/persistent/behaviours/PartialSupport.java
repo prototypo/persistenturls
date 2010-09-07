@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2010 Zepheira LLC, Some rights reserved.
+ * 
+ * Source code developed for this project is licensed under the Apache
+ * License, Version 2.0. See the file LICENSE.txt for details.
+ */
 package name.persistent.behaviours;
 
 import java.util.LinkedHashMap;
@@ -15,6 +21,12 @@ import org.openrdf.http.object.exceptions.NotFound;
 import org.openrdf.http.object.traits.VersionedObject;
 import org.openrdf.model.Value;
 
+/**
+ * Partial PURL that matches on prefix.
+ * 
+ * @author James Leigh
+ *
+ */
 public abstract class PartialSupport extends PURLSupport implements Partial, VersionedObject {
 	private static final Map<String, Pattern> patterns = new LinkedHashMap<String, Pattern>(
 			1024, 0.75f, true) {
