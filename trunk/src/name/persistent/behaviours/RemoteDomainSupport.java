@@ -39,7 +39,7 @@ import org.openrdf.http.object.threads.ManagedExecutors;
 import org.openrdf.repository.object.RDFObject;
 
 /**
- * Validates local PURLs and resolves remote PURLs.
+ * Proxies PURL request to a remote PURL server.
  * 
  * @author James Leigh
  */

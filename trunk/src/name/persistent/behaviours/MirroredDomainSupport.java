@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2010 Zepheira LLC, Some rights reserved.
+ * 
+ * Source code developed for this project is licensed under the Apache
+ * License, Version 2.0. See the file LICENSE.txt for details.
+ */
 package name.persistent.behaviours;
 
 import static org.openrdf.query.QueryLanguage.SPARQL;
@@ -33,6 +39,12 @@ import org.openrdf.repository.object.traits.Refreshable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * PURL domain copied from a remote PURL server.
+ * 
+ * @author James Leigh
+ *
+ */
 public abstract class MirroredDomainSupport extends DomainSupport implements
 		MirroredDomain, RDFObject, Refreshable {
 	private static final String PREFIX = "PREFIX purl:<http://persistent.name/rdf/2010/purl#>\n";

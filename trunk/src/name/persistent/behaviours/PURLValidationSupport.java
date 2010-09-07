@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2010 Zepheira LLC, Some rights reserved.
+ * 
+ * Source code developed for this project is licensed under the Apache
+ * License, Version 2.0. See the file LICENSE.txt for details.
+ */
 package name.persistent.behaviours;
 
 import java.io.IOException;
@@ -31,6 +37,12 @@ import org.openrdf.repository.object.ObjectConnection;
 import org.openrdf.repository.object.ObjectRepository;
 import org.openrdf.repository.object.RDFObject;
 
+/**
+ * Resolves PURL and checks the response state.
+ * 
+ * @author James Leigh
+ *
+ */
 public abstract class PURLValidationSupport implements RDFObject, PURL {
 	private static final ProtocolVersion HTTP11 = new ProtocolVersion("HTTP",
 			1, 1);
