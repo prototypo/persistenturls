@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../template.xsl"?>
+<!-- Copyright (c) 2010 Zepheira LLC, Some Rights Reserved. -->
+<html xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:calli="http://callimachusproject.org/rdf/2009/framework#"
+	xmlns:purl="http://persistent.name/rdf/2010/purl#">
+	<head>
+		<title property="rdfs:label"/>
+		<link rel="view" title="View" target="_self" href="?view" />
+		<link rel="edit" title="Edit" target="_self" href="" />
+		<link rel="review" title="History" target="_self" href="?review" />
+		<link rel="help" title="Help" target="help" href="/persistent/docs/purl.html#purlmodify" />
+		<script type="text/javascript" src="/persistent/purl/form.js">
+		</script>
+	</head>
+	<body class="purl">
+		<div id="breadcrumbs">
+			<a href="/">Server</a>
+			<span>
+				<span rel="purl:partOf" resource="?bc_partial">
+				<span rel="purl:partOf" resource="?bc_subsubdomain">
+				<span rel="purl:partOf" resource="?bc_subdomain">
+				<span rel="purl:partOf" resource="?bc_domain">
+				<span rel="purl:partOf" resource="?bc_origin">
+				<a href="?bc_origin" class="crumb diverted" property="rdfs:label"/>
+				</span>
+				<a href="?bc_domain" class="crumb diverted" property="rdfs:label"/>
+				</span>
+				<a href="?bc_subdomain" class="crumb diverted" property="rdfs:label"/>
+				</span>
+				<a href="?bc_subsubdomain" class="crumb diverted" property="rdfs:label"/>
+				</span>
+				<a href="?bc_partial" class="crumb diverted" property="rdfs:label"/>
+				</span>
+				<span class="crumb" property="rdfs:label"/>
+			</span>
+		</div>
+		<form action="" about="" id="purl-form" class="diverted">
+			<input type="hidden" rel="rdf:type" resource="?type" name="rdf-type" />
+			<fieldset>
+				<legend>Modify a PURL</legend>
+				<p class="instructions">Modify any of the following PURL information.</p>
+				<table class="actiontable" id="purl-table">
+					<tbody>
+						<tr class="all">
+							<td class="property">
+								<label for="purl-rel-type">Redirect Type:</label>
+							</td>
+							<td class="value">
+								<select id="purl-rel-type" onchange="$('#m_target').attr('rel', value)">
+									<option value="purl:copyOf">Copy (203)</option>
+									<option value="purl:renamedTo">Rename (301)</option>
+									<option value="purl:alternative">Substitute (302)</option>
+									<option value="purl:describedBy">Describe (303)</option>
+									<option value="purl:redirectsTo">Redirect (307)</option>
+								</select>
+							</td>
+						</tr>
+						<tr class="rel">
+							<td class="property">
+								<label for="m_target">Target:</label>
+							</td>
+							<td class="value" id="target-td">
+								<input id="m_target" size="40" onchange="$(this).attr('resource', value)" rel="purl:alternative" resource="?alternative" value="?alternative" />
+								<input id="m_target" size="40" onchange="$(this).attr('resource', value)" rel="purl:renamedTo" resource="?renamedTo" value="?renamedTo" />
+								<input id="m_target" size="40" onchange="$(this).attr('resource', value)" rel="purl:describedBy" resource="?describedBy" value="?describedBy"/>
+								<input id="m_target" size="40" onchange="$(this).attr('resource', value)" rel="purl:redirectsTo" resource="?redirectsTo" value="?redirectsTo"/>
+								<input id="m_target" size="40" onchange="$(this).attr('resource', value)" rel="purl:copyOf" resource="?copyOf" value="?copyOf"/>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<button id="enable-button" type="button" onclick="enable(this)">Enable</button>
+				<button id="disable-button" type="button" onclick="disable(this)">Disable</button>
+				<button id="tombstone-button" type="button" onclick="tombstone(this)">Tombstone</button>
+				<button id="save-button" type="submit">Save</button>
+			</fieldset>
+		</form>
+	</body>
+</html>

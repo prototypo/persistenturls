@@ -1,0 +1,51 @@
+<html>
+  <head>
+    <title>Administering Users</title>
+    <meta name="Author" content="David Wood"/>
+  </head>
+  <body>
+    <a name="user" id="user"/>
+    <h2>4. Administering Users</h2>
+    <p>Four actions may be taken on a user: Registration, Modification, Searching or Deletion. These four actions may be accessed in the PURL Web user interface as shown in Figure 11. The same four actions may be taken by other PURL clients. See <a href="#rest">Creating RESTful PURL Clients</a> for details.</p>
+    <p>Registering a user creates a record for that user on a PURL server and allows the user to create PURLs (subject to the security limitations of the PURL server and any restrictions on writing to specific domains). Modification allows the user record to be updated. User records may be searched by the general public, although private information is naturally withheld. Finally, user records may be deleted. These four actions are described in detail below.</p>
+    <p align="center">
+      <img src="images/userselect.png"/>
+      <br/>
+      <b>Figure 11. Actions on Users</b>
+    </p>
+    <a name="usercreate" id="usercreate"/>
+    <h3>4.1 Register a New User</h3>
+    <h4>Web User Interface</h4>
+    <p>Users have to be registered with a PURL server before they will be allowed to create or otherwise administer PURLs, participate in groups or administer domains. Individual PURL servers may have differing requirements for registering users. Some may allow users to register immediately and others may require a review process by a human being. Thus, sometimes a user registration request will complete immediately and in other cases experience a delay or a continuation to the process of registering that is separate to the PURL software (such as an email callback).</p>
+    <p>User registration may be requested via the <a href="user.html#create">User Registration Form</a>.</p>
+    <p>Figure 12(a) shows an example user in the act of registration. Some PURL servers will require all fields to be completed and others may not care; that is a policy decision for the individual PURL server administrator.</p>
+    <p>Figure 12(b) shows a successful result for a user registration that completed immediately. Only public information is returned; the password, password hint and justification for registration are withheld. Note that for PURL servers that manually check user registration or rely on a callback mechanism (e.g. via email) that the message returned will be different. In those cases, the message returned might say something like "Your registration request has been sent to an administrator for review" or "A confirmation email has been sent to david@example.com. Please complete your registration by following the directions in that message."</p>
+    <p align="center"><img src="images/usercreate.png"/>&#xA0;<img src="images/usercreateresults.png"/><br/><b>Figures 12(a) and 12(b). Registering a User</b></p>
+    <a name="usermodify" id="usermodify"/>
+    <h3>4.2 Modify an Existing User</h3>
+    <h4>Web User Interface</h4>
+    <p>Records for existing users may be modified by completing the <a href="user.html#modify">User Modification Form</a>, which is much like the form for registering a new user. Figure 13(a) shows the user record created in <a href="#usercreate">4.1 Register a New User</a> being updated with a new password. Figure 13(b) shows a typical response upon success.</p>
+    <p>It may be tedious or even impossible to complete a modification form by hand. To reduce the need to do so, user records may be discovered by a search and the modification form automatically filled in with data from the current record. See <a href="#usersearch">4.3 Search for User Information</a> for more information.</p>
+    <p align="center"><img src="images/usermodify.png"/>&#xA0;<img src="images/usermodifyresults.png"/><br/><b>Figures 13(a) and 13(b). Modifying a User</b></p>
+    <a name="usersearch" id="usersearch"/>
+    <h3>4.3 Search for User Information</h3>
+    <h4>Web User Interface</h4>
+    <p>User records may be searched using the <a href="user.html#search">User Search Form</a>, an example of which is shown in Figure 14(a). Records may be searched by user name, affiliation (if collected upon user registration), email address or user ID.</p>
+    <p>Figure 14(a) shows a sample search for registered users affiliated with Zepheira and Figure 14(b) shows a typical response. Search results may be "torn off" for later use by selecting the icon labeled <b>A</b> in Figure 14(b). Individual records may be brought into the <a href="user.html#modify">User Modification Form</a> by selecting any of the icons labeled <b>B</b> in Figure 14(b).</p>
+    <p>Tombstoned user records may be searched by selecting the checkbox labeled "Search tombstoned users" in the <a href="user.html#search">User Search Form</a> as shown in Figure 14(a). User records become tombstoned if they are deleted via the <a href="user.html#delete">User Deletion Form</a>. More information about tombstoning may be found under <a href="#userdelete">4.4 Delete a User</a>.</p>
+    <p align="center"><img src="images/usersearch.png"/>&#xA0;<img src="images/usersearchresults.png"/><br/><b>Figures 14(a) and 14(b). Searching User Records</b></p>
+    <a name="userdelete" id="userdelete"/>
+    <h3>4.4 Delete a User</h3>
+    <h4>Web User Interface</h4>
+    <p>Users may be deleted by providing their user IDs to the <a href="user.html#delete">User Deletion Form</a>. Users may only be deleted if their user IDs are known. Please note that deleting user records actually results in them being "tombstoned" so that any PURLs they administer do not become inaccessible. Tombstoned user records may be searched by selecting the checkbox labeled "Search tombstoned users" in the <a href="user.html#search">User Search Form</a> as shown in Figure 14(a).</p>
+    <p>Figure 15(a) shows an example deletion request and Figure 15(b) shows a typical response upon success.</p>
+    <p align="center"><img src="images/userdelete.png"/>&#xA0;<img src="images/userdeleteresults.png"/><br/><b>Figures 15(a) and 15(b). Deleting a User</b></p>
+    <a name="login" id="login"/>
+    <h3>4.5 Logging into a PURL Server</h3>
+    <h4>Web User Interface</h4>
+    <p>Users may perform some public actions (such as searching, validating and resolving) without being authenticated to the server. Administrative actions (such as creating or deleting PURLs, groups and domains) require a user to log into an previously created account.</p>
+    <p>A new PURL server is installed with a default user account called 'admin' with a password of 'password'. Administrators are naturally encouraged to change the default password immediately after installation.</p>
+    <p>New users may be registered by the public, but may have to be approved by an administrator prior to being used (if the server was so configured). Auto user registration (that is, without approval) can be turned on or off by commenting or uncommenting the term &lt;allowUserAutoCreation&gt; in the configuration file INSTALL_DIR/modules/mod-purl-admin/etc/PURLConfig.xml.</p>
+    <p>New users and top-level domains must be approved by an administrator if the &lt;allowUserAutoCreation&gt; option is not set. New users and top-level domains may be approved by logging in as an administrator and accessing the <a href="admin/user.html">User Approval</a> and <a href="admin/domain.html">Domain Approval</a> pages.</p>
+  </body>
+</html>

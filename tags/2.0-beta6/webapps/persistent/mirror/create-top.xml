@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../template.xsl"?>
+<!-- Copyright (c) 2010 Zepheira LLC, Some Rights Reserved. -->
+<html xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+	xmlns:calli="http://callimachusproject.org/rdf/2009/framework#"
+	xmlns:purl="http://persistent.name/rdf/2010/purl#">
+	<head>
+		<title>Create a New Top Level Domain</title>
+		<link rel="help" title="Help" target="help" href="/persistent/docs/domain.html#domaincreate" />
+	</head>
+	<body class="domain">
+		<form action="" about="" typeof="purl:MirroredDomain purl:Zoned" class="diverted">
+			<fieldset>
+				<legend>Create a New Domain Mirror</legend>
+				<p class="instructions">Fill in the following domain information.</p>
+				<table class="actiontable">
+					<tbody>
+						<tr>
+							<td class="property">
+								<label for="m_label">Name:</label>
+							</td>
+							<td class="value">
+								<span>http://</span>
+								<span data-cardinality="1">
+								<input id="m_label" property="rdfs:label" type="text"
+									onchange="$(form).attr('about', 'http://' + value + '/')" />
+								</span>
+								<span>/</span>
+							</td>
+						</tr>
+						<tr>
+							<td class="property">
+								<label for="m_zoned">Zoned:</label>
+							</td>
+							<td class="value">
+								<input id="m_zoned" type="checkbox" checked="checked"
+									onchange="$(form).attr('typeof', checked?'purl:MirroredDomain purl:Zoned':'purl:MirroredDomain')"/>
+							</td>
+						</tr>
+						<tr>
+							<td class="property">
+								<label>Defined By:</label>
+							</td>
+							<td class="value" data-cardinality="1" rel="purl:definedBy">
+								<span about="?definedBy">Domain Mirror</span>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<input value="Create" type="submit" />
+			</fieldset>
+		</form>
+	</body>
+</html>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	  xmlns:calli="http://callimachusproject.org/rdf/2009/framework#">
+	<head>
+		<title>Please Confirm This Address</title>
+	</head>
+	<body>
+		<p>Thank you <span property="rdfs:label"/>.</p>
+		<p>To change your email please <a href="?change-email">click here</a>.</p>
+		<p>If you did request an address change, please ignore this email.</p>
+	</body>
+</html>
