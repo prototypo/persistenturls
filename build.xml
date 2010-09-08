@@ -50,12 +50,6 @@
 		</unzip>
 		<unzip src="${lib}/callimachus.zip" dest="${bin}">
 			<patternset>
-				<include name="bin/jsvc*" />
-			</patternset>
-			<mapper type="flatten" />
-		</unzip>
-		<unzip src="${lib}/callimachus.zip" dest="${bin}">
-			<patternset>
 				<include name="bin/callimachus*" />
 			</patternset>
 			<mapper type="glob" from="bin/callimachus*" to="persistent*" />
