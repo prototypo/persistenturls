@@ -13,7 +13,7 @@
 		<link rel="help" title="Help" target="help" href="/persistent/docs/user.html#userdelete" />
 	</head>
 	<body class="user">
-		<form action="" about="" typeof="purl:User">
+		<form action="" about="" typeof="purl:User" data-redirect="/persistent/user/deleted.xml?construct">
 			<h1 property="rdfs:label" />
 			<div property="calli:name" />
 			<div property="calli:email" />
