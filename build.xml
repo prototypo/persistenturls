@@ -14,7 +14,7 @@
 	<property name="logging" location="etc/logging.properties" />
 	<property name="tools.jar" location="${java.home}/../lib/tools.jar" />
 	<property file="src/META-INF/name.persistent.properties" />
-	<property name="callimachus.url" value="http://callimachus.googlecode.com/files/callimachus-0.3-SNAPSHOT.zip" />
+	<property name="callimachus.url" value="http://callimachus.googlecode.com/files/callimachus-0.4.zip" />
 	<property name="captcha.jar" value="SimpleCaptcha-1.1.1.jar" />
 	<property name="captcha.url" value="http://downloads.sourceforge.net/project/simplecaptcha/SimpleCaptcha/1.1.1/SimpleCaptcha-1.1.1.jar" />
 	<property name="main" value="org.callimachusproject.Server" />

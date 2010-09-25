@@ -71,8 +71,6 @@
 			<xsl:if test="contains($mode, 'delete')">
 				<script type="text/javascript" src="{$callimachus}/delete.js">
 				</script>
-				<script type="text/javascript" src="{$persistent}/delete.js">
-				</script>
 			</xsl:if>
 			<xsl:apply-templates select="*|text()|comment()" />
 		</xsl:copy>
