@@ -1,4 +1,4 @@
-#summary PURL client code in various languages
+#summary PURL client code in various languages to add PURLs
 
 = Client Code Samples =
 
@@ -99,7 +99,7 @@ print $response->as_string;
 }}}
 
 
-This script is a modification of the one above, but provides batch loading of XML files from a directory.
+This script is a modification of the one above, but provides batch loading of XML files from a directory.  See [PURLBatchUploadingVersionOne] for details of the input format.
 
 {{{
 #!/usr/bin/perl -w
