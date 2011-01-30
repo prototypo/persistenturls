@@ -16,7 +16,7 @@
 	<property file="src/META-INF/name.persistent.properties" />
 	<property name="callimachus.url" value="http://callimachus.googlecode.com/files/callimachus-0.4.zip" />
 	<property name="captcha.jar" value="SimpleCaptcha-1.1.1.jar" />
-	<property name="captcha.url" value="http://downloads.sourceforge.net/project/simplecaptcha/SimpleCaptcha/1.1.1/SimpleCaptcha-1.1.1.jar" />
+	<property name="captcha.url" value="http://sourceforge.net/projects/simplecaptcha/files/simplecaptcha-1.1.1.jar" />
 	<property name="main" value="org.callimachusproject.Server" />
 	<property name="jvmargs" value="-ea -server -mx512m -Dfile.encoding=UTF-8 -Djava.library.path=${lib} -Djava.io.tmpdir=${tmp} -Duser.home=${home}" />
 	<property name="args" value="-p 8080 -a localhost:8080" />
