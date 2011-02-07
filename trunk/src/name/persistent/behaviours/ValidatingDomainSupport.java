@@ -18,8 +18,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.TimeZone;
 import java.util.Map.Entry;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -209,8 +207,6 @@ public abstract class ValidatingDomainSupport implements Domain, RDFObject {
 		}
 	}
 
-	private Logger logger = LoggerFactory.getLogger(ValidatingDomainSupport.class);
-
 	@triggeredBy("http://persistent.name/rdf/2010/purl#max-unresolved-days")
 	public void changePurlMaxUnresolvedDays(Integer days)
 			throws QueryEvaluationException {
@@ -350,37 +346,23 @@ public abstract class ValidatingDomainSupport implements Domain, RDFObject {
 
 	private Map<URI, Integer> resolveTargets(List<Value> targets)
 			throws IOException {
-		Map<URI, Future<HttpResponse>> responses;
-		responses = new LinkedHashMap<URI, Future<HttpResponse>>(targets.size());
+		Map<URI, Integer> codes = new LinkedHashMap<URI, Integer>();
 		HTTPObjectClient client = HTTPObjectClient.getInstance();
 		for (Value target : targets) {
 			String url = target.stringValue();
-			if (!responses.containsKey(target) && target instanceof URI) {
+			if (!codes.containsKey(target) && target instanceof URI) {
 				HttpRequest request = new BasicHttpRequest("HEAD", url);
-				responses.put((URI) target, client.submitRequest(request));
-			}
-		}
-		Map<URI, Integer> codes = new LinkedHashMap<URI, Integer>(responses
-				.size());
-		for (Entry<URI, Future<HttpResponse>> e : responses.entrySet()) {
-			try {
-				HttpResponse resp = e.getValue().get();
+				HttpResponse resp = client.service(request);
 				try {
 					int code = resp.getStatusLine().getStatusCode();
-					codes.put(e.getKey(), code);
-					continue;
+					codes.put((URI) target, code);
 				} finally {
 					HttpEntity entity = resp.getEntity();
 					if (entity != null) {
 						entity.consumeContent();
 					}
 				}
-			} catch (InterruptedException ex) {
-				logger.info(ex.toString());
-			} catch (ExecutionException ex) {
-				logger.warn(ex.toString(), ex);
 			}
-			codes.put(e.getKey(), 504);
 		}
 		return codes;
 	}

@@ -13,10 +13,10 @@ import org.openrdf.repository.object.annotations.iri;
 public interface Partial extends PURL {
 	/** Parent domain to this partial. */
 	@iri("http://persistent.name/rdf/2010/purl#belongsTo")
-	Domain getPurlBelongsTo();
+	Domain getBelongsTo();
 	/** Parent domain to this partial. */
 	@iri("http://persistent.name/rdf/2010/purl#belongsTo")
-	void setPurlBelongsTo(Domain purlBelongsTo);
+	void setBelongsTo(Domain purlBelongsTo);
 
 	/** Regular Expression of a source URI, used to populate URI target templates */
 	@iri("http://persistent.name/rdf/2010/purl#pattern")

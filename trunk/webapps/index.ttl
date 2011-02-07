@@ -1,0 +1,5 @@
+@prefix calli:<http://callimachusproject.org/rdf/2009/framework#>.
+
+<.> a calli:Alias; calli:copyOf <index.xhtml?construct>.
+
+

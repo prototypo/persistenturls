@@ -156,7 +156,7 @@ public class ProxyPURLTest extends TestCase {
 		Service service = con.addDesignation(of.createObject(), Service.class);
 		service.setPurlServer(root);
 		Domain domain = con.addDesignation(con.getObject(DOMAIN), Domain.class);
-		purl.setPurlPartOf(domain);
+		purl.setPartOf(domain);
 		domain.getPurlServices().add(service);
 		Domain origin = con.addDesignation(con.getObject(ORIGIN), Domain.class);
 		domain.getPurlDomainOf().add(origin);
@@ -194,7 +194,7 @@ public class ProxyPURLTest extends TestCase {
 		Service service = con.addDesignation(of.createObject(), Service.class);
 		PURL purl = con.addDesignation(con.getObject(PURL0), PURL.class);
 		purl.getPurlAlternatives().add(con.getObject(PURL1));
-		purl.setPurlPartOf(domain);
+		purl.setPartOf(domain);
 		domain.getPurlServices().add(service);
 		service.setPurlServer(root);
 		domain.getPurlDomainOf().add(origin);
@@ -231,9 +231,9 @@ public class ProxyPURLTest extends TestCase {
 		PURL purl1 = con.addDesignation(con.getObject(PURL1), PURL.class);
 		PURL purl2 = con.addDesignation(con.getObject(PURL2), PURL.class);
 		purl1.setPurlRenamedTo(con.getObject(PURL0));
-		purl1.setPurlPartOf(domain);
+		purl1.setPartOf(domain);
 		purl2.setPurlRenamedTo(con.getObject(PURL0));
-		purl2.setPurlPartOf(domain);
+		purl2.setPartOf(domain);
 		domain.getPurlServices().add(service);
 		service.setPurlServer(root);
 		domain.getPurlDomainOf().add(origin);

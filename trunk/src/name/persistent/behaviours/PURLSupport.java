@@ -238,7 +238,7 @@ public abstract class PURLSupport extends ResolvableSupport implements PURL {
 	}
 
 	public void purlSetEntityHeaders(HttpResponse resp) {
-		Partial parent = getPurlPartOf();
+		Partial parent = getPartOf();
 		if (parent != null) {
 			parent.purlSetEntityHeaders(resp);
 		}

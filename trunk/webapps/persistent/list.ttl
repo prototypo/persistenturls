@@ -17,17 +17,17 @@
 
 <user-domains-xsl> rdfs:subClassOf <list-xsl>;
 	http:type "application/xml";
-	http:transform <template-xsl>;
+	http:transform </callimachus/layout.ttl#TransformLayout>;
 	obj:xslt <user/domains.xsl>.
 
 <partial-parts-xsl> rdfs:subClassOf <list-xsl>;
 	http:type "application/xml";
-	http:transform <template-xsl>;
+	http:transform </callimachus/layout.ttl#TransformLayout>;
 	obj:xslt <partial/parts.xsl>.
 
 <domain-unresolvable-xsl> rdfs:subClassOf <list-xsl>;
 	http:type "application/xml";
-	http:transform <template-xsl>;
+	http:transform </callimachus/layout.ttl#TransformLayout>;
 	obj:xslt <domain/unresolvable.xsl>.
 
 # Lists all member PURLs
@@ -59,7 +59,7 @@ purl:unresolvable-purls rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
 		owl:allValuesFrom obj:TupleResult];
 	http:operation "unresolvable";
-	http:realm <authority>;
+	http:realm </accounts>;
 	http:type "application/sparql-results+xml";
 	http:cache-control "no-store";
 	http:transform <domain-unresolvable-xsl>;
@@ -90,28 +90,5 @@ purl:unresolvable-purls rdfs:subClassOf obj:Message;
 			FILTER (!bound(?disabled))
 		}
 		ORDER BY ?uri
-	""".
-
-# Lists all domains that this user can maintain or curate
-# Linked from the user's view page
-purl:list-domains-for-user rdfs:subClassOf obj:Message;
-	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom purl:User];
-	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
-		owl:allValuesFrom obj:TupleResult];
-	http:operation "domains";
-	http:realm <authority>;
-	http:type "application/sparql-results+xml";
-	http:cache-control "no-store";
-	http:transform <user-domains-xsl>;
-	obj:sparql """
-		SELECT DISTINCT ?uri ?label
-		WHERE {
-			?uri a purl:Domain; rdfs:label ?label
-			{ ?uri calli:maintainer $this }
-			UNION { ?uri calli:curator $this }
-			UNION { ?uri calli:scribe $this }
-		}
-		ORDER BY ?label ?uri
 	""".
 

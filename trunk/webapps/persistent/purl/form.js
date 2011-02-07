@@ -3,7 +3,7 @@
  */
 
 $(document).ready(function() {
-	var enabled = true
+	var enabled = true;
     $('input[name=rdf-type]').each(function() {
         var type = $(this).attr('resource').replace('http://persistent.name/rdf/2010/purl#', 'purl:');
         if (type == "purl:Disabled") {
@@ -16,44 +16,47 @@ $(document).ready(function() {
             $('#disable-button').remove();
             $('#tombstone-button').remove();
             $('#save-button').remove();
-            enabled = false
+            enabled = false;
         }
     });
     if (enabled) {
         $('#enable-button').remove();
 		if ($("#m_target").length) {
-			$("#purl-rel-type").val($("#m_target").attr("rel"))
+			$("#purl-rel-type").val($("#m_target").attr("rel"));
 		} else {
-			var input = $("<input id='m_target' size='40' />")
-			input.attr('rel', $("#purl-rel-type").val())
+			var input = $("<input id='m_target' size='40' />");
+			input.attr('rel', $("#purl-rel-type").val());
 			input.change(function() {
-				 $(this).attr('resource', $(this).val())
+				 $(this).attr('resource', $(this).val());
 			})
-			$("#target-td").append(input)
+			$("#target-td").append(input);
 		}
     }
-    $("#domain-span[resource]").text($("#domain-span").attr("resource"))
-    $("#domain-span:not([resource])").text($("base").attr("href"))
+    $("#domain-span[resource]").text($("#domain-span").attr("resource"));
+    $("#domain-span:not([resource])").text($("body").attr("about"));
 })
 
 function enable(node) {
-	$.post(diverted('?purl-enable', node), function(){
-		location.reload()
+    var href = location.href;
+	$.post(href.substring(0, href.indexOf('?')) + '?purl-enable', function(){
+		location.reload();
 	})
 }
 
 function disable(node) {
+    var href = location.href;
 	if (confirm('Are you sure you want to disable this PURL?')) {
-		$.post(diverted('?purl-disable', node), function(){
-			location = diverted('?view', node)
+		$.post(href.substring(0, href.indexOf('?')) + '?purl-disable', function(){
+			location = href.substring(0, href.indexOf('?')) + '?view';
 		})
 	}
 }
 
 function tombstone(node) {
+    var href = location.href;
 	if (confirm('Are you sure you want to tombstone this PURL?')) {
-		$.post(diverted('?purl-tombstone', node), function(){
-			location = diverted('?view', node)
+		$.post(href.substring(0, href.indexOf('?')) + '?purl-tombstone', function(){
+			location = href.substring(0, href.indexOf('?')) + '?view';
 		})
 	}
 }

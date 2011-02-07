@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" href="../template.xsl"?>
+<?xml-stylesheet type="text/xsl" href="/layout/template.xsl"?>
 <!-- Copyright (c) 2010 Zepheira LLC, Some Rights Reserved. -->
 <html xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
@@ -7,14 +7,14 @@
 	xmlns:calli="http://callimachusproject.org/rdf/2009/framework#"
 	xmlns:purl="http://persistent.name/rdf/2010/purl#">
 	<head>
-		<title property="rdfs:label" />
+		<title about="?this" property="rdfs:label" />
 		<link rel="view" title="View" target="_self" href="?view" />
 		<link rel="edit" title="Edit" target="_self" href="" />
 		<link rel="review" title="History" target="_self" href="?review" />
 		<link rel="parts" title="Parts" target="_self" href="?parts" />
 		<link rel="help" title="Help" target="help" href="/persistent/docs/" />
 	</head>
-	<body class="domain">
+	<body about="?this" class="domain">
 		<div id="breadcrumbs">
 			<a href="/">Server</a>
 			<span>
@@ -36,7 +36,7 @@
 				<span class="crumb" property="rdfs:label"/>
 			</span>
 		</div>
-		<form action="" about="">
+		<form action="" about="?this">
 			<fieldset>
 				<legend>Modify a Domain</legend>
 				<p class="instructions">Modify any of the following domain information.</p>
@@ -54,8 +54,8 @@
 							<td class="property">
 								<label for="m_curator">Scribes:</label>
 							</td>
-							<td rel="calli:scribe" class="value" data-prompt="/persistent/user/template?pre-register">
-								<span about="?scribe" typeof="purl:User">
+							<td rel="calli:scribe" class="value" data-prompt="/accounts">
+								<span about="?scribe">
 									<span property="rdfs:label"/>
 								</span>
 							</td>
@@ -64,8 +64,8 @@
 							<td class="property">
 								<label for="m_curator">Curators:</label>
 							</td>
-							<td rel="calli:curator" class="value" data-prompt="/persistent/user/template?pre-register">
-								<span about="?curator" typeof="purl:User">
+							<td rel="calli:curator" class="value" data-prompt="/accounts">
+								<span about="?curator">
 									<span property="rdfs:label"/>
 								</span>
 							</td>
@@ -74,8 +74,8 @@
 							<td class="property">
 								<label for="m_maintainer">Maintainers:</label>
 							</td>
-							<td rel="calli:maintainer" class="value" data-prompt="/persistent/user/template?pre-register">
-								<span about="?maintainer" typeof="purl:User">
+							<td rel="calli:maintainer" class="value" data-prompt="/accounts">
+								<span about="?maintainer">
 									<span property="rdfs:label"/>
 								</span>
 							</td>

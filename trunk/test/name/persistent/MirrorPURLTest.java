@@ -104,8 +104,8 @@ public class MirrorPURLTest extends TestCase {
 		Partial partial = con.addDesignation(con.getObject(PARTIAL), Partial.class);
 		PURL purl = con.addDesignation(con.getObject(PURL0), PURL.class);
 		purl.setPurlRenamedTo(con.getObject(PURL1));
-		purl.setPurlPartOf(partial);
-		partial.setPurlBelongsTo(origin);
+		purl.setPartOf(partial);
+		partial.setBelongsTo(origin);
 	}
 
 	@Override

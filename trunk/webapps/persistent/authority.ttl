@@ -7,64 +7,27 @@
 @prefix calli:<http://callimachusproject.org/rdf/2009/framework#>.
 @prefix purl:<http://persistent.name/rdf/2010/purl#>.
 
-################################
-# Realm
-################################
-
-<anybody> a calli:AnybodyRealm;
-	calli:origin </>;
-	calli:domain </>.
-
-<local> a calli:LocalRealm;
-	calli:origin </>;
-	calli:domain </>;
-	calli:forbidden <forbidden.xml>.
-
-<authority> a calli:DigestRealm, calli:Group;
-	calli:origin </>;
-	calli:authName </>;
-	calli:domain </>;
-	calli:unauthorized <unauthorized.xml>;
-	calli:forbidden <forbidden.xml>;
-	calli:authenticates <authority>.
-
-calli:SPARQLService http:realm <local>.
-calli:describe http:realm <local>.
-calli:get-graph http:realm <local>.
-
-calli:get-copy http:realm <authority>.
-calli:post-copy http:realm <authority>.
-calli:get-edit http:realm <authority>.
-calli:post-edit http:realm <authority>.
-calli:get-delete http:realm <authority>.
-calli:post-delete http:realm <authority>.
-
-################################
-# User
-################################
-
-purl:User rdfs:subClassOf calli:User, calli:MailSubmitter;
-	http:realm <authority>.
-
-purl:purl-authorize owl:equivalentClass calli:authorize-credential;
+purl:purl-authorize owl:equivalentClass </accounts/authorization.ttl#AuthorizeCredential>;
 	obj:sparql """
 		ASK {
-			$subject a purl:PURL; purl:partOf ?partial
+			$object a purl:PURL; purl:partOf ?partial
 			{
-				?partial calli:scribe $credential
-				FILTER ($qs = "copy")
+				?partial calli:scribe ?group
+				FILTER ($query = "copy")
 			} UNION {
-				?partial calli:curator $credential
+				?partial calli:curator ?group
 			} UNION {
-				?partial calli:maintainer $credential
+				?partial calli:maintainer ?group
 			} UNION {
-				?partial purl:belongsTo [calli:scribe $credential]
-				FILTER ($qs = "copy")
+				?partial purl:belongsTo [calli:scribe ?group]
+				FILTER ($query = "copy")
 			} UNION {
-				?partial purl:belongsTo [calli:curator $credential]
+				?partial purl:belongsTo [calli:curator ?group]
 			} UNION {
-				?partial purl:belongsTo [calli:maintainer $credential]
+				?partial purl:belongsTo [calli:maintainer ?group]
 			}
+			OPTIONAL { ?group calli:member ?user FILTER (?user = $credential) }
+			FILTER (?group = $credential || ?user = $credential)
 			OPTIONAL {
 				{
 					?partial a ?mirror
@@ -77,177 +40,43 @@ purl:purl-authorize owl:equivalentClass calli:authorize-credential;
 		}
 	""".
 
-purl:partial-authorize owl:equivalentClass calli:authorize-credential;
+purl:partial-authorize owl:equivalentClass </accounts/authorization.ttl#AuthorizeCredential>;
 	obj:sparql """
 		ASK {
-			$subject a purl:Partial; purl:belongsTo ?domain
+			$object a purl:Partial; purl:belongsTo ?domain
 			{
-				?domain calli:scribe $credential
-				FILTER ($qs = "copy" || $qs = "purl-create" || $qs = "partial-create")
+				?domain calli:scribe ?group
+				FILTER ($query = "copy" || $query = "purl-create" || $query = "partial-create")
 			} UNION {
-				?domain calli:curator $credential
-				FILTER ($qs = "edit" || $qs = "copy" || $qs = "purl-create" || $qs = "partial-create" || $qs = "purl-disable" || $qs = "purl-enable" || $qs = "purl-tombstone")
+				?domain calli:curator ?group
+				FILTER ($query = "edit" || $query = "copy" || $query = "purl-create" || $query = "partial-create" || 
+						$query = "purl-disable" || $query = "purl-enable" || $query = "purl-tombstone")
 			} UNION {
-				?domain calli:maintainer $credential
-				FILTER ($qs = "edit" || $qs = "copy" || $qs = "purl-create" || $qs = "partial-create" || $qs = "domain-create" || $qs = "purl-disable" || $qs = "purl-enable" || $qs = "purl-tombstone")
+				?domain calli:maintainer ?group
+				FILTER ($query = "edit" || $query = "copy" || $query = "purl-create" || $query = "partial-create" || 
+						$query = "domain-create" || $query = "purl-disable" || $query = "purl-enable" || $query = "purl-tombstone")
 			}
+			OPTIONAL { ?group calli:member ?user FILTER (?user = $credential) }
+			FILTER (?group = $credential || ?user = $credential)
 			OPTIONAL { ?domain a ?mirror FILTER (?mirror = purl:MirroredDomain) }
 			FILTER (!bound(?mirror))
 		}
 	""".
 
-purl:domain-authorize owl:equivalentClass calli:authorize-credential;
+purl:domain-authorize owl:equivalentClass </accounts/authorization.ttl#AuthorizeCredential>;
 	obj:sparql """
 		ASK {
-			$subject a purl:Domain
+			$object a purl:Domain
 			{
-				$subject calli:scribe $credential
+				$object calli:scribe ?group
 			} UNION {
-				$subject calli:curator $credential
+				$object calli:curator ?group
 			}
-			FILTER ($qs = "purl-create" || $qs = "partial-create")
-			OPTIONAL { $subject a ?mirror FILTER (?mirror = purl:MirroredDomain) }
+			OPTIONAL { ?group calli:member ?user FILTER (?user = $credential) }
+			FILTER (?group = $credential || ?user = $credential)
+			FILTER ($query = "purl-create" || $query = "partial-create")
+			OPTIONAL { $object a ?mirror FILTER (?mirror = purl:MirroredDomain) }
 			FILTER (!bound(?mirror))
 		}
 	""".
-
-purl:login-authorize owl:equivalentClass calli:authorize-credential;
-	obj:sparql """
-		ASK {
-			$subject calli:credential $credential
-			FILTER ($method = "GET" || $method = "HEAD")
-			FILTER ($qs = "login")
-		}
-	""".
-
-# Prompts the browser to login using different credentials
-# Available to user when logged in
-purl:logout rdfs:subClassOf obj:Message;
-	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom calli:DigestRealm];
-	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
-		owl:allValuesFrom <java:org.apache.http.HttpResponse>];
-	http:operation "logout";
-	http:cache-control "private";
-	http:type "message/x-response";
-	obj:imports <java:org.apache.http.ProtocolVersion>;
-	obj:imports <java:org.apache.http.message.BasicHttpResponse>;
-	obj:groovy """
-		def ver = new ProtocolVersion("HTTP", 1, 1)
-		def resp = new BasicHttpResponse(ver, 303, "See Other")
-		def credential = findCredential(msg.authorization)
-		if (credential == null) {
-			resp.setHeader("Location", toString() + "?login")
-			return resp
-		}
-		if (msg.user != null && msg.user == credential)
-			return unauthorized(credential)
-		if (msg.user == null) {
-			resp.setHeader("Location", toString() + "?logout&from=" + credential.toString())
-		} else {
-			resp.setHeader("Location", credential.toString())
-		}
-		return resp
-	""".
-
-purl:logout-authorization a owl:DatatypeProperty, owl:FunctionalProperty;
-	rdfs:domain purl:logout;
-	rdfs:range xsd:string;
-	http:header "Authorization";
-	obj:name "authorization".
-
-purl:logout-user a owl:ObjectProperty, owl:FunctionalProperty;
-	rdfs:domain purl:logout;
-	rdfs:range calli:Credential;
-	http:parameter "from";
-	http:type "text/uri-list";
-	obj:name "user".
-
-# A generic URL that requires authorization
-# Available to user when not logged in
-purl:login rdfs:subClassOf obj:Message;
-	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom calli:DigestRealm];
-	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
-		owl:allValuesFrom calli:Credential];
-	http:operation "login";
-	http:realm <authority>;
-	http:expect "303-see-other";
-	obj:groovy "return findCredential(msg.authorization)".
-
-purl:login-authorization a owl:DatatypeProperty, owl:FunctionalProperty;
-	rdfs:domain purl:login;
-	rdfs:range xsd:string;
-	http:header "Authorization";
-	obj:name "authorization".
-
-# Redirection to the authorized user
-# Used to display the authorized users
-purl:credential rdfs:subClassOf obj:Message;
-	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom calli:DigestRealm];
-	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
-		owl:allValuesFrom calli:Credential];
-	http:operation "credential";
-	http:cache-control "private";
-	http:expect "303-see-other";
-	obj:groovy "return findCredential(msg.authorization)".
-
-purl:credential-authorization a owl:DatatypeProperty, owl:FunctionalProperty;
-	rdfs:domain purl:credential;
-	rdfs:range xsd:string;
-	http:header "Authorization";
-	obj:name "authorization".
-
-# Sends request for password reset emails
-# Submitted by form in the authorized page
-purl:post-request-password rdfs:subClassOf obj:Message;
-	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom calli:DigestRealm];
-	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
-		owl:allValuesFrom <java:java.io.Reader>];
-	http:method "POST";
-	http:operation "request-password";
-	http:type "text/html";
-	obj:imports <java:org.openrdf.http.object.exceptions.BadRequest>;
-	obj:imports <user/request-password-sent.xml>;
-	obj:imports purl:User;
-	obj:groovy """
-		if (!msg.form || !msg.form.get("email") || !msg.form.get("email")[0])
-			throw new BadRequest("Missing Email")
-		for (User user : purlFindUsersByEmail(msg.form.get("email")[0])) {
-			user.purlRequestPassword()
-		}
-		return requestPasswordSentXml.calliConstruct('view', null)
-	""".
-
-purl:post-request-password-email a owl:DatatypeProperty, owl:FunctionalProperty;
-	rdfs:domain purl:post-request-password;
-	rdfs:range <java:java.util.Map>;
-	http:type "application/x-www-form-urlencoded";
-	obj:name "form".
-
-# Looks up user by email address
-# Used to request password reset
-purl:find-users-by-email rdfs:subClassOf obj:Message;
-	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom calli:DigestRealm];
-	rdfs:subClassOf [owl:onProperty obj:objectResponse;
-		owl:allValuesFrom purl:User];
-	obj:sparql """
-		SELECT REDUCED ?user
-		WHERE {
-			{
-				$this calli:credential [calli:member ?user]
-			} UNION {
-				$this calli:credential ?user
-			}
-			?user calli:email $email
-		}
-	""".
-
-purl:find-users-by-email-arg a owl:DatatypeProperty, owl:FunctionalProperty;
-	rdfs:domain purl:find-users-by-email;
-	rdfs:range xsd:string;
-	obj:name "email".
 

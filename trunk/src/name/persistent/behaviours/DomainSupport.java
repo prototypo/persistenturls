@@ -6,6 +6,8 @@
  */
 package name.persistent.behaviours;
 
+import info.aduna.net.ParsedURI;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.channels.ReadableByteChannel;
@@ -160,16 +162,16 @@ public abstract class DomainSupport extends PartialSupport implements Domain,
 					String uri = subj.stringValue();
 					URI pred = st.getPredicate();
 					Value obj = st.getObject();
-					String server = obj.stringValue();
+					ParsedURI server = new ParsedURI(obj.stringValue());
 					if (mirroredBy.equals(pred)) {
 						String enc = URLEncoder.encode(uri, "UTF-8");
-						String url = server + "diverted;" + enc + "?mirror";
-						URI o = vf.createURI(url);
+						ParsedURI url = server.resolve("/diverted;" + enc + "?mirror");
+						URI o = vf.createURI(url.toString());
 						return new StatementImpl(subj, mirroredBy, o);
 					} else if (servicedBy.equals(pred)) {
 						String enc = URLEncoder.encode(uri, "UTF-8");
-						String url = server + "diverted;" + enc + "?services";
-						URI o = vf.createURI(url);
+						ParsedURI url = server.resolve("/diverted;" + enc + "?services");
+						URI o = vf.createURI(url.toString());
 						return new StatementImpl(subj, servicedBy, o);
 					}
 				} catch (UnsupportedEncodingException e) {
