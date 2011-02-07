@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" href="../template.xsl"?>
+<?xml-stylesheet type="text/xsl" href="/layout/template.xsl"?>
 <!-- Copyright (c) 2010 Zepheira LLC, Some Rights Reserved. -->
 <html xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
 	xmlns:calli="http://callimachusproject.org/rdf/2009/framework#"
 	xmlns:purl="http://persistent.name/rdf/2010/purl#">
 	<head>
-		<title property="rdfs:label"/>
+		<title about="?this" property="rdfs:label"/>
 		<link rel="view" title="View" target="_self" href="?view" />
 		<link rel="edit" title="Edit" target="_self" href="" />
 		<link rel="review" title="History" target="_self" href="?review" />
@@ -15,7 +15,7 @@
 		<script type="text/javascript" src="/persistent/purl/form.js">
 		</script>
 	</head>
-	<body class="purl">
+	<body about="?this" class="purl">
 		<div id="breadcrumbs">
 			<a href="/">Server</a>
 			<span>
@@ -37,7 +37,7 @@
 				<span class="crumb" property="rdfs:label"/>
 			</span>
 		</div>
-		<form action="" about="" typeof="" id="purl-form">
+		<form action="" about="?this" typeof="" id="purl-form">
 			<input type="hidden" rel="rdf:type" resource="?type" name="rdf-type" />
 			<fieldset>
 				<legend>Modify a Partial</legend>

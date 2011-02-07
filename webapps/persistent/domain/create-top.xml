@@ -1,86 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" href="../template.xsl"?>
+<?xml-stylesheet type="text/xsl" href="/layout/template.xsl"?>
 <!-- Copyright (c) 2010 Zepheira LLC, Some Rights Reserved. -->
 <html xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
 	xmlns:calli="http://callimachusproject.org/rdf/2009/framework#"
 	xmlns:purl="http://persistent.name/rdf/2010/purl#">
-	<head>
-		<title>Create a New Top Level Domain</title>
-		<link rel="help" title="Help" target="help" href="/persistent/docs/domain.html#domaincreate" />
-	</head>
-	<body class="domain">
-		<form action="" about="" typeof="purl:Domain purl:Zoned" class="diverted">
-			<fieldset>
-				<legend>Create a New Domain</legend>
-				<p class="instructions">Fill in the following domain information.</p>
-				<table class="actiontable">
-					<tbody>
-						<tr>
-							<td class="property">
-								<label for="m_label">Name:</label>
-							</td>
-							<td class="value">
-								<span>http://</span>
-								<span data-cardinality="1">
-								<input id="m_label" property="rdfs:label" type="text"
-									onchange="$(form).attr('about', 'http://' + value + '/')" />
-								</span>
-								<span>/</span>
-							</td>
-						</tr>
-						<tr>
-							<td class="property">
-								<label for="m_zoned">Zoned:</label>
-							</td>
-							<td class="value">
-								<input id="m_zoned" type="checkbox" checked="checked"
-									onchange="$(form).attr('typeof', checked?'purl:Domain purl:Zoned':'purl:Domain')"/>
-							</td>
-						</tr>
-						<tr>
-							<td class="property">
-								<label for="m_days">Max Unresolved Days:</label>
-							</td>
-							<td class="value" data-cardinality="1">
-								<input id="m_days" property="purl:max-unresolved-days" datatype="xsd:int" type="text" />
-							</td>
-						</tr>
-						<tr class="all">
-							<td class="property">
-								<label for="m_curator">Scribes:</label>
-							</td>
-							<td rel="calli:scribe" class="value" data-prompt="/persistent/user/template?pre-register">
-								<span about="?scribe" typeof="purl:User">
-									<span property="rdfs:label"/>
-								</span>
-							</td>
-						</tr>
-						<tr class="all">
-							<td class="property">
-								<label for="m_curator">Curators:</label>
-							</td>
-							<td rel="calli:curator" class="value" data-prompt="/persistent/user/template?pre-register">
-								<span about="?curator" typeof="purl:User">
-									<span property="rdfs:label"/>
-								</span>
-							</td>
-						</tr>
-						<tr>
-							<td class="property">
-								<label for="m_maintainer">Maintainers:</label>
-							</td>
-							<td rel="calli:maintainer" class="value" data-prompt="/persistent/user/template?pre-register">
-								<span about="?maintainer" typeof="purl:User">
-									<span property="rdfs:label"/>
-								</span>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-				<input value="Create" type="submit" />
-			</fieldset>
-		</form>
-	</body>
+<head>
+	<title>Create a New Top Level Domain</title>
+	<link rel="help" title="Help" target="help" href="/persistent/docs/domain.html#domaincreate" />
+</head>
+<body class="domain">
+	<p class="aside">Fill in the following domain information.</p>
+	<form action="" about="?this" typeof="purl:Domain purl:Zoned" class="diverted">
+		<label for="m_label">Name</label>
+		<div>
+			<span>http://</span>
+			<span data-cardinality="1">
+			<input id="m_label" property="rdfs:label" type="text"
+				onchange="$(form).attr('about', 'http://' + value + '/')" />
+			</span>
+			<span>/</span>
+		</div>
+		<label for="m_zoned">Zoned</label>
+		<div>
+			<input id="m_zoned" type="checkbox" checked="checked"
+				onchange="$(form).attr('typeof', checked?'purl:Domain purl:Zoned':'purl:Domain')"/>
+		</div>
+		<label for="m_days">Max Unresolved Days</label>
+		<div data-cardinality="1">
+			<input id="m_days" property="purl:max-unresolved-days" datatype="xsd:int" type="text" />
+		</div>
+		<button id="submit" type="submit">Create</button>
+	</form>
+</body>
 </html>

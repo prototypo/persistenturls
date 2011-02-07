@@ -6,9 +6,9 @@
 @prefix calli:<http://callimachusproject.org/rdf/2009/framework#>.
 @prefix purl:<http://persistent.name/rdf/2010/purl#>.
 
-purl:mirrored-domains rdfs:subClassOf obj:Message;
+purl:MirroredDomains rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom [owl:oneOf (calli:boot)]];
+		owl:hasValue calli:boot];
 	rdfs:subClassOf [owl:onProperty obj:objectResponse;
 		owl:allValuesFrom purl:Domain];
 	obj:sparql """
@@ -17,27 +17,27 @@ purl:mirrored-domains rdfs:subClassOf obj:Message;
 		UNION { ?domain a purl:RemoteDomain } }
 	""".
 
-<#setUp-mirrors> owl:equivalentClass calli:started;
+<#setUp-mirrors> owl:equivalentClass calli:Started;
 	obj:imports purl:RemoteGraph;
-	obj:groovy """
-		msg.proceed()
-		def graphs = objectConnection.getObjects(RemoteGraph).asList()
-		for (def domain : purlMirroredDomains()) {
-			domain.purlRefreshGraphs()
+	obj:script """
+		proceed();
+		var iter = purlMirroredDomains().iterator();
+		while (iter.hasNext()) {
+			iter.next().purlRefreshGraphs()
 		}
 	""".
 
-<#tearDown-mirrors> owl:equivalentClass calli:stopping;
+<#tearDown-mirrors> owl:equivalentClass calli:Stopping;
 	obj:imports purl:RemoteGraph;
-	obj:groovy """
-		def graphs = objectConnection.getObjects(RemoteGraph).asList()
-		for (def domain : purlMirroredDomains()) {
-			domain.purlStallGraphs()
+	obj:script """
+		var iter = purlMirroredDomains().iterator();
+		while (iter.hasNext()) {
+			iter.next().purlStallGraphs();
 		}
-		msg.proceed()
+		proceed();
 	""".
 
-purl:validating-domains rdfs:subClassOf obj:Message;
+purl:ValidatingDomains rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom [owl:oneOf (calli:boot)]];
 	rdfs:subClassOf [owl:onProperty obj:objectResponse;
@@ -47,20 +47,22 @@ purl:validating-domains rdfs:subClassOf obj:Message;
 		WHERE { ?domain purl:max-unresolved-days ?days }
 	""".
 
-<#setUp-validation> owl:equivalentClass calli:started;
+<#setUp-validation> owl:equivalentClass calli:Started;
 	obj:imports purl:Domain;
-	obj:groovy """
-		msg.proceed()
-		for (def domain : purlValidatingDomains()) {
-			domain.startResolving()
+	obj:script """
+		proceed();
+		var iter = purlValidatingDomains().iterator();
+		while (iter.hasNext()) {
+			iter.next().startResolving()
 		}
 	""".
 
-<#tearDown-validation> owl:equivalentClass calli:stopping;
+<#tearDown-validation> owl:equivalentClass calli:Stopping;
 	obj:imports purl:Domain;
-	obj:groovy """
-		for (def domain : purlValidatingDomains()) {
-			domain.stopResolving()
+	obj:script """
+		var iter = purlValidatingDomains().iterator();
+		while (iter.hasNext()) {
+			iter.next().stopResolving();
 		}
-		msg.proceed()
+		proceed();
 	""".

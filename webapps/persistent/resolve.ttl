@@ -1,0 +1,39 @@
+@prefix xsd:<http://www.w3.org/2001/XMLSchema#>.
+@prefix rdfs:<http://www.w3.org/2000/01/rdf-schema#>.
+@prefix owl:<http://www.w3.org/2002/07/owl#>.
+@prefix obj:<http://www.openrdf.org/rdf/2009/object#>.
+@prefix http:<http://www.openrdf.org/rdf/2009/httpobject#>.
+@prefix calli:<http://callimachusproject.org/rdf/2009/framework#>.
+@prefix purl:<http://persistent.name/rdf/2010/purl#>.
+
+purl:resolve rdfs:subClassOf obj:Message;
+	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse; owl:allValuesFrom <java:org.apache.http.HttpResponse>];
+	rdfs:subClassOf [owl:onProperty obj:target; owl:allValuesFrom [owl:complementOf [obj:matches </*>]]];
+	http:method "GET";
+	http:type "message/x-response";
+	obj:script "return this.resolvePURL(this.toString(), qs, accept, lang, via);".
+
+purl:resolve-qs a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:domain purl:resolve;
+	rdfs:range xsd:string;
+	http:parameter "*";
+	obj:name "qs".
+
+purl:resolve-accept a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:domain purl:resolve;
+	rdfs:range xsd:string;
+	http:header "Accept";
+	obj:name "accept".
+
+purl:resolve-language a owl:DatatypeProperty, owl:FunctionalProperty;
+	rdfs:domain purl:resolve;
+	rdfs:range xsd:string;
+	http:header "Accept-Language";
+	obj:name "lang".
+
+purl:resolve-via a owl:DatatypeProperty;
+	rdfs:domain purl:resolve;
+	rdfs:range xsd:string;
+	http:header "Via";
+	obj:name "via".
+

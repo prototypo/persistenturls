@@ -1,56 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" href="../template.xsl"?>
+<?xml-stylesheet type="text/xsl" href="/layout/template.xsl"?>
 <!-- Copyright (c) 2010 Zepheira LLC, Some Rights Reserved. -->
 <html xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
 	xmlns:calli="http://callimachusproject.org/rdf/2009/framework#"
 	xmlns:purl="http://persistent.name/rdf/2010/purl#">
-	<head>
-		<title property="rdfs:label"/>
-		<link rel="view" title="View" target="_self" href="?view" />
-		<link rel="edit" title="Edit" target="_self" href="" />
-		<link rel="review" title="History" target="_self" href="?review" />
-		<link rel="help" title="Help" target="help" href="/persistent/docs/setup.html" />
-	</head>
-	<body class="server">
-		<form action="" about="">
-			<fieldset>
-				<legend>Modify this server</legend>
-				<p class="instructions">Modify any of the following server information.</p>
-				<table class="actiontable">
-					<tbody>
-						<tr>
-							<td class="property">
-								<label for="m_name">Title of Page:</label>
-							</td>
-							<td class="value" data-cardinality="1">
-								<input id="m_name" property="rdfs:label" type="text" />
-							</td>
-						</tr>
-						<tr>
-							<td class="property">
-								<label>Serve:</label>
-							</td>
-							<td rel="purl:serves" class="value diverted" data-prompt="/persistent/domain/template?copy">
-                                <span about="?domain" typeof="purl:Domain">
-                                    <span property="rdfs:label"/>
-                                </span>
-							</td>
-						</tr>
-						<tr>
-							<td class="property">
-								<label>Mirror:</label>
-							</td>
-							<td rel="purl:serves" class="value diverted" data-prompt="/persistent/mirror/template?copy">
-                                <span about="?mirror" typeof="purl:MirroredDomain">
-                                    <span property="rdfs:label"/>
-                                </span>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-				<input value="Save" type="submit" />
-			</fieldset>
-		</form>
-	</body>
+<head>
+	<title about="?this" property="rdfs:label"/>
+	<link rel="help" title="Help" target="help" href="/persistent/docs/setup.html" />
+</head>
+<body class="server">
+	<p class="aside">Modify any of the following server information.</p>
+	<form action="" about="?this">
+		<label for="m_name">Title of Page</label>
+		<div data-cardinality="1">
+			<input id="m_name" property="rdfs:label" type="text" />
+		</div>
+		<label for="serves">Serve</label>
+		<div id="serves" rel="purl:serves" data-prompt="/persistent/domain/template?copy">
+            <span about="?domain" typeof="purl:Domain">
+                <span property="rdfs:label"/>
+            </span>
+		</div>
+		<label for="mirror">Mirror</label>
+		<div id="mirror" rel="purl:serves" data-prompt="/persistent/mirror/template?copy">
+            <span about="?mirror" typeof="purl:MirroredDomain">
+                <span property="rdfs:label"/>
+            </span>
+		</div>
+		<button id="submit" type="submit">Save</button>
+		<button id="cancel" type="button" onclick="location.replace('?view')">Cancel</button>
+	</form>
+</body>
 </html>

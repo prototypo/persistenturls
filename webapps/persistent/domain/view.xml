@@ -1,19 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" href="../template.xsl"?>
+<?xml-stylesheet type="text/xsl" href="/layout/template.xsl"?>
 <!-- Copyright (c) 2010 Zepheira LLC, Some Rights Reserved. -->
 <html xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 	xmlns:calli="http://callimachusproject.org/rdf/2009/framework#"
 	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
 	xmlns:purl="http://persistent.name/rdf/2010/purl#">
 	<head>
-		<title property="rdfs:label"/>
+		<title about="?this" property="rdfs:label"/>
 		<link rel="view" title="View" target="_self" href="" />
 		<link rel="edit" title="Edit" target="_self" href="?edit" />
 		<link rel="review" title="History" target="_self" href="?review" />
 		<link rel="parts" title="Parts" target="_self" href="?parts" />
 		<link rel="help" title="Help" target="help" href="/persistent/docs/domain.html" />
 	</head>
-	<body class="domain">
+	<body about="?this" class="domain">
+		<ul class="aside">
+		    <li><a href="?this" data-diverted="?purl-create">Create New PURL</a></li>
+		    <li><a href="?this" data-diverted="?partial-create">Create New Partial</a></li>
+			<li><a href="?this" data-diverted="?domain-create">Create Sub-Domain</a></li>
+			<li><a href="?this" data-diverted="?mirror-create">Create Sub-Domain Mirror</a></li>
+			<li><a href="?this" data-diverted="?unresolvable">View Unresolvable PURLs</a></li>
+			<li><a href="?this" data-diverted="?parts">View PURLs</a></li>
+		</ul>
 		<div id="breadcrumbs">
 			<a href="/">Server</a>
 			<span>
@@ -22,25 +30,20 @@
 				<span rel="purl:partOf" resource="?bc_subdomain">
 				<span rel="purl:partOf" resource="?bc_domain">
 				<span rel="purl:partOf" resource="?bc_origin">
-				<a href="?bc_origin" class="crumb diverted" property="rdfs:label"/>
+				<a href="?bc_origin" class="crumb" data-diverted="?view" property="rdfs:label"/>
 				</span>
-				<a href="?bc_domain" class="crumb diverted" property="rdfs:label"/>
+				<a href="?bc_domain" class="crumb" data-diverted="?view" property="rdfs:label"/>
 				</span>
-				<a href="?bc_subdomain" class="crumb diverted" property="rdfs:label"/>
+				<a href="?bc_subdomain" class="crumb" data-diverted="?view" property="rdfs:label"/>
 				</span>
-				<a href="?bc_subsubdomain" class="crumb diverted" property="rdfs:label"/>
+				<a href="?bc_subsubdomain" class="crumb" data-diverted="?view" property="rdfs:label"/>
 				</span>
-				<a href="?bc_partial" class="crumb diverted" property="rdfs:label"/>
+				<a href="?bc_partial" class="crumb" data-diverted="?view" property="rdfs:label"/>
 				</span>
 				<span class="crumb" property="rdfs:label"/>
 			</span>
 		</div>
-		<h1><a href="" property="rdfs:label" /></h1>
-        <p><a href="?purl-create" class="diverted">Create New PURL</a></p>
-        <p><a href="?partial-create" class="diverted">Create New Partial</a></p>
-		<p><a href="?domain-create" class="diverted">Create Sub-Domain</a></p>
-		<p><a href="?mirror-create" class="diverted">Create Sub-Domain Mirror</a></p>
-		<p><a href="?unresolvable" class="diverted">View Unresolvable PURLs</a></p>
+		<h1><a href="?this" property="rdfs:label" /></h1>
 		<h3>Scribes</h3>
 		<ul>
 			<li resource="?scribe" rel="calli:scribe"><a property="rdfs:label" href="?scribe"></a></li>
@@ -53,7 +56,7 @@
 		<ul>
 			<li resource="?maintainer" rel="calli:maintainer"><a property="rdfs:label" href="?maintainer"></a></li>
 		</ul>
-        <p><a id="mirror-link" href="?mirror-domains" class="diverted">Defined as a mirrored domain</a></p>
+        <p><a id="mirror-link" href="?this" data-diverted="?mirror-domains">Defined as a mirrored domain</a></p>
         <script>
         	$("#mirror-link").get(0).href = diverted($("#mirror-link").get(0).href)
         </script>

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" href="../template.xsl"?>
+<?xml-stylesheet type="text/xsl" href="/layout/template.xsl"?>
 <!-- Copyright (c) 2010 Zepheira LLC, Some Rights Reserved. -->
 <html xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 	xmlns:calli="http://callimachusproject.org/rdf/2009/framework#"
 	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
 	xmlns:purl="http://persistent.name/rdf/2010/purl#">
 	<head>
-		<title property="rdfs:label"/>
+		<title about="?this" property="rdfs:label"/>
 		<link rel="view" title="View" target="_self" href="" />
 		<link rel="edit" title="Edit" target="_self" href="?edit" />
 		<link rel="review" title="History" target="_self" href="?review" />
@@ -24,7 +24,15 @@
 			}
 		</script>
 	</head>
-	<body class="purl" onload="init()">
+	<body about="?this" class="purl" onload="init()">
+		<ul class="aside">
+		    <li><a href="?this" data-diverted="?copy">Clone this Partial</a></li>
+		    <li><a href="?this" data-diverted="?purl-create">Create Nested PURL</a></li>
+		    <li><a href="?this" data-diverted="?partial-create">Create Nested Partial</a></li>
+			<li><a href="?this" data-diverted="?domain-create">Create Nested Domain</a></li>
+			<li><a href="?this" data-diverted="?mirror-create">Create Nested Domain Mirror</a></li>
+			<li><a href="?this" data-diverted="?parts">View PURLs</a></li>
+		</ul>
 		<div id="breadcrumbs">
 			<a href="/">Server</a>
 			<span>
@@ -33,25 +41,20 @@
 				<span rel="purl:partOf" resource="?bc_subdomain">
 				<span rel="purl:partOf" resource="?bc_domain">
 				<span rel="purl:partOf" resource="?bc_origin">
-				<a href="?bc_origin" class="crumb diverted" property="rdfs:label"/>
+				<a href="?bc_origin" class="crumb" data-diverted="?view" property="rdfs:label"/>
 				</span>
-				<a href="?bc_domain" class="crumb diverted" property="rdfs:label"/>
+				<a href="?bc_domain" class="crumb" data-diverted="?view" property="rdfs:label"/>
 				</span>
-				<a href="?bc_subdomain" class="crumb diverted" property="rdfs:label"/>
+				<a href="?bc_subdomain" class="crumb" data-diverted="?view" property="rdfs:label"/>
 				</span>
-				<a href="?bc_subsubdomain" class="crumb diverted" property="rdfs:label"/>
+				<a href="?bc_subsubdomain" class="crumb" data-diverted="?view" property="rdfs:label"/>
 				</span>
-				<a href="?bc_partial" class="crumb diverted" property="rdfs:label"/>
+				<a href="?bc_partial" class="crumb" data-diverted="?view" property="rdfs:label"/>
 				</span>
 				<span class="crumb" property="rdfs:label"/>
 			</span>
 		</div>
-		<h1><a href="" property="rdfs:label" /></h1>
-        <p><a href="?copy" class="diverted">Clone this Partial</a></p>
-        <p><a href="?purl-create" class="diverted">Create Nested PURL</a></p>
-        <p><a href="?partial-create" class="diverted">Create Nested Partial</a></p>
-		<p><a href="?domain-create" class="diverted">Create Nested Domain</a></p>
-		<p><a href="?mirror-create" class="diverted">Create Nested Domain Mirror</a></p>
+		<h1><a href="?this" property="rdfs:label" /></h1>
 		<span rel="rdf:type" resource="?type"><div property="rdfs:comment"/></span>
 		<div id="pattern" property="purl:pattern" />
 		<div id="target" rel="purl:copyOf" resource="?copyOf" />

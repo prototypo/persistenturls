@@ -79,7 +79,7 @@ public class ValidationTest extends TestCase {
 		domain.getPurlServices().add(service);
 		purl0 = con.addDesignation(con.getObject(PURL0), PURL.class);
 		purl0.setPurlRenamedTo(con.getObject(PURL1));
-		purl0.setPurlPartOf(domain);
+		purl0.setPartOf(domain);
 		GregorianCalendar cal;
 		int n = DatatypeConstants.FIELD_UNDEFINED;
 		DatatypeFactory f = DatatypeFactory.newInstance();

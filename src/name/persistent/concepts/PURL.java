@@ -45,10 +45,10 @@ public interface PURL extends Resolvable {
 
 	/** Parent partial or domain. */
 	@iri("http://persistent.name/rdf/2010/purl#partOf")
-	Partial getPurlPartOf();
+	Partial getPartOf();
 	/** Parent partial or domain. */
 	@iri("http://persistent.name/rdf/2010/purl#partOf")
-	void setPurlPartOf(Partial purlPartOf);
+	void setPartOf(Partial purlPartOf);
 
 	/** Temporary redirection (307) */
 	@iri("http://persistent.name/rdf/2010/purl#redirectsTo")

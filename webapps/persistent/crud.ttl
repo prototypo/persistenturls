@@ -7,12 +7,15 @@
 @prefix calli:<http://callimachusproject.org/rdf/2009/framework#>.
 @prefix purl:<http://persistent.name/rdf/2010/purl#>.
 
+</callimachus/menu>
+	calli:item [calli:position 6; rdfs:label "Persistent URLs"; calli:link <../persistenturls>].
+
 ################################
 # Server
 ################################
 
-</> a purl:Server;
-	calli:maintainer </data/user/admin>.
+<../persistenturls> a purl:Server;
+	calli:maintainer </group/admin>.
 
 purl:Server rdfs:subClassOf calli:Viewable, calli:Reviewable, calli:Editable;
 	calli:view <server/view.xml>;
@@ -20,42 +23,11 @@ purl:Server rdfs:subClassOf calli:Viewable, calli:Reviewable, calli:Editable;
 	calli:edit <server/edit.xml>.
 
 ################################
-# User
-################################
-
-<user/template> a purl:UserTemplate;
-	calli:curator </data/user/admin>.
-
-purl:UserTemplate rdfs:subClassOf calli:Copyable;
-	calli:withNamespace </data/user/>;
-	calli:copy <user/register.xml>.
-
-purl:User rdfs:subClassOf calli:Viewable, calli:Reviewable, calli:Editable, calli:Deletable;
-	calli:view <user/view.xml>;
-	calli:review <user/review.xml>;
-	calli:edit <user/edit.xml>;
-	calli:delete <user/delete.xml>.
-
-# Removes the user from the authority realm, and removes their password.
-# Called in user delete
-purl:post-user-delete owl:intersectionOf (calli:post-delete
-		[owl:onProperty obj:target; owl:allValuesFrom purl:User]);
-	obj:precedes calli:post-delete;
-	obj:imports <authority>;
-	obj:imports <java:org.openrdf.http.object.exceptions.BadRequest>;
-	obj:groovy """
-		authority.calliMembers.remove(this)
-		calliAlgorithm = null
-		calliEncoded = null
-		msg.proceed()
-	""".
-
-################################
 # Mirror
 ################################
 
 <mirror/template> a purl:MirrorTemplate;
-	calli:scribe </data/user/admin>.
+	calli:scribe </group/admin>.
 
 purl:MirrorTemplate rdfs:subClassOf calli:Copyable;
 	calli:withNamespace "http://";
@@ -63,28 +35,27 @@ purl:MirrorTemplate rdfs:subClassOf calli:Copyable;
 
 # Sets up the purl:domainOf property
 # Called when copying a domain
-purl:post-mirror-copy owl:intersectionOf (calli:post-copy
+purl:post-mirror-copy owl:intersectionOf (</callimachus/operations/copy.ttl#PostCopy>
 		[owl:onProperty obj:target; owl:allValuesFrom purl:MirrorTemplate]);
-	obj:precedes calli:post-copy;
 	obj:imports <java:org.openrdf.http.object.exceptions.BadRequest>;
-	obj:groovy """
-		def copy = msg.functionalObjectResponse
+	obj:script """
+		var copy = proceed();
 		if (!copy.purlDefinedBy)
-			throw new BadRequest("Missing Defined By Mirror Source")
-		return copy
+			throw new BadRequest("Missing Defined By Mirror Source");
+		return copy;
 	""".
 
 purl:get-mirror-create rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom purl:Partial];
-	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
-		owl:allValuesFrom <java:java.io.Reader>];
+	rdfs:subClassOf [owl:onProperty obj:functionalLiteralResponse;
+		owl:allValuesFrom xsd:string];
 	http:operation "mirror-create";
 	http:type "text/html";
-	http:realm <authority>;
+	http:realm </accounts>;
 	obj:imports <mirror/create.xml>;
-	obj:groovy """
-		return createXml.calliConstruct('copy', this)
+	obj:script """
+		return create_xml.calliConstructHTML(this, 'copy');
 	""".
 
 # Sets up purl:domainOf, purl:partOf, and increments the parent timestamp
@@ -94,33 +65,33 @@ purl:post-mirror-create rdfs:subClassOf obj:Message;
 		owl:allValuesFrom purl:Partial];
 	rdfs:subClassOf [owl:onProperty obj:objectResponse;
 		owl:maxCardinality "1"^^xsd:nonNegativeInteger];
-	obj:precedes calli:post-copy;
 	http:method "POST";
 	http:operation "mirror-create";
-	http:realm <authority>;
+	http:realm </accounts>;
 	http:expect "201-created";
+	http:type "text/uri-list";
 	obj:imports <mirror/create.xml>;
 	obj:imports <java:org.openrdf.http.object.exceptions.BadRequest>;
-	obj:groovy """
-		def copy = createXml.calliCopyResource(this, msg.in, Collections.singleton(this))
+	obj:script """
+		var copy = create_xml.calliCopyResource(this, input, java.util.Collections.singleton(this));
 		if (!copy.purlDefinedBy)
-			throw new BadRequest("Missing Defined By Mirror Source")
-		if (purlBelongsTo) {
-			copy.purlDomainOf.addAll(purlBelongsTo.purlDomainOf)
+			throw new BadRequest("Missing Defined By Mirror Source");
+		if (this.purlBelongsTo) {
+			copy.purlDomainOf.addAll(this.purlBelongsTo.purlDomainOf);
 		} else {
-			copy.purlDomainOf.addAll(purlDomainOf)
-			copy.purlDomainOf.add(msg.target)
+			copy.purlDomainOf.addAll(this.purlDomainOf);
+			copy.purlDomainOf.add(this);
 		}
-		copy.purlPartOf = msg.target
-		touchRevision()
-		return copy
+		copy.purlPartOf = this;
+		this.touchRevision();
+		return copy;
 	""".
 
-purl:post-mirror-create-in a owl:ObjectProperty, owl:FunctionalProperty;
+purl:post-mirror-create-input a owl:ObjectProperty, owl:FunctionalProperty;
 	rdfs:domain purl:post-mirror-create;
 	rdfs:range <java:java.io.InputStream>;
 	http:type "application/rdf+xml";
-	obj:name "in".
+	obj:name "input".
 
 purl:MirroredDomain rdfs:subClassOf calli:Viewable;
 	calli:view <mirror/view.xml>;
@@ -133,7 +104,7 @@ purl:MirroredDomain rdfs:subClassOf calli:Viewable;
 
 <domain/template> a purl:DomainTemplate;
 	calli:withNamespace "http://";
-	calli:curator </data/user/admin>.
+	calli:curator </group/admin>.
 
 purl:DomainTemplate rdfs:subClassOf calli:Copyable;
 	calli:copy <domain/create-top.xml>.
@@ -141,14 +112,14 @@ purl:DomainTemplate rdfs:subClassOf calli:Copyable;
 purl:get-domain-create rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom purl:Partial];
-	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
-		owl:allValuesFrom <java:java.io.Reader>];
+	rdfs:subClassOf [owl:onProperty obj:functionalLiteralResponse;
+		owl:allValuesFrom xsd:string];
 	http:operation "domain-create";
 	http:type "text/html";
-	http:realm <authority>;
+	http:realm </accounts>;
 	obj:imports <domain/create.xml>;
-	obj:groovy """
-		return createXml.calliConstruct('copy', this)
+	obj:script """
+		return create_xml.calliConstructHTML(this, 'copy');
 	""".
 
 # Sets up purl:domainOf, purl:partOf, and increments the parent timestamp
@@ -158,33 +129,33 @@ purl:post-domain-create rdfs:subClassOf obj:Message;
 		owl:allValuesFrom purl:Partial];
 	rdfs:subClassOf [owl:onProperty obj:objectResponse;
 		owl:maxCardinality "1"^^xsd:nonNegativeInteger];
-	obj:precedes calli:post-copy;
 	http:method "POST";
 	http:operation "domain-create";
-	http:realm <authority>;
+	http:realm </accounts>;
 	http:expect "201-created";
+	http:type "text/uri-list";
 	obj:imports <domain/create.xml>;
 	obj:imports <java:org.openrdf.http.object.exceptions.BadRequest>;
-	obj:groovy """
-		def copy = createXml.calliCopyResource(this, msg.in, Collections.singleton(this))
+	obj:script """
+		var copy = create_xml.calliCopyResource(this, input, java.util.Collections.singleton(this));
 		if (copy.calliMaintainers.empty)
-			throw new BadRequest("Missing Maintainers")
-		if (purlBelongsTo) {
-			copy.purlDomainOf.addAll(purlBelongsTo.purlDomainOf)
+			throw new BadRequest("Missing Maintainers");
+		if (this.purlBelongsTo) {
+			copy.purlDomainOf.addAll(this.purlBelongsTo.purlDomainOf);
 		} else {
-			copy.purlDomainOf.addAll(purlDomainOf)
-			copy.purlDomainOf.add(msg.target)
+			copy.purlDomainOf.addAll(this.purlDomainOf);
+			copy.purlDomainOf.add(this);
 		}
-		copy.purlPartOf = msg.target
-		touchRevision()
-		return copy
+		copy.purlPartOf = this;
+		this.touchRevision();
+		return copy;
 	""".
 
-purl:post-domain-create-in a owl:ObjectProperty, owl:FunctionalProperty;
+purl:post-domain-create-input a owl:ObjectProperty, owl:FunctionalProperty;
 	rdfs:domain purl:post-domain-create;
 	rdfs:range <java:java.io.InputStream>;
 	http:type "application/rdf+xml";
-	obj:name "in".
+	obj:name "input".
 
 purl:Domain rdfs:subClassOf calli:Viewable, calli:Reviewable, calli:Editable;
 	calli:view <domain/view.xml>;
@@ -193,13 +164,12 @@ purl:Domain rdfs:subClassOf calli:Viewable, calli:Reviewable, calli:Editable;
 
 # Sets up the purl:domainOf property
 # Called when copying a domain
-purl:post-domain-copy owl:intersectionOf (calli:post-copy
+purl:post-domain-copy owl:intersectionOf (</callimachus/operations/copy.ttl#PostCopy>
 		[owl:onProperty obj:target; owl:allValuesFrom purl:Domain]);
-	obj:precedes calli:post-copy;
-	obj:groovy """
-		def copy = msg.functionalObjectResponse
-		copy.purlDomainOf.addAll(purlDomainOf)
-		return copy
+	obj:script """
+		var copy = proceed();
+		copy.purlDomainOf.addAll(this.purlDomainOf);
+		return copy;
 	""".
 
 ################################
@@ -209,14 +179,14 @@ purl:post-domain-copy owl:intersectionOf (calli:post-copy
 purl:get-partial-create rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom purl:Partial];
-	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
-		owl:allValuesFrom <java:java.io.Reader>];
+	rdfs:subClassOf [owl:onProperty obj:functionalLiteralResponse;
+		owl:allValuesFrom xsd:string];
 	http:operation "partial-create";
-	http:realm <authority>;
+	http:realm </accounts>;
 	http:type "text/html";
 	obj:imports <partial/create.xml>;
-	obj:groovy """
-		return createXml.calliConstruct('copy', this)
+	obj:script """
+		return create_xml.calliConstructHTML(this, 'copy');
 	""".
 
 # Sets up purl:partOf and purl:belongsTo properties
@@ -226,25 +196,25 @@ purl:post-partial-create rdfs:subClassOf obj:Message;
 		owl:allValuesFrom purl:Partial];
 	rdfs:subClassOf [owl:onProperty obj:objectResponse;
 		owl:maxCardinality "1"^^xsd:nonNegativeInteger];
-	obj:precedes calli:post-copy;
 	http:method "POST";
 	http:operation "partial-create";
-	http:realm <authority>;
+	http:realm </accounts>;
 	http:expect "201-created";
+	http:type "text/uri-list";
 	obj:imports <partial/create.xml>;
-	obj:groovy """
-		def copy = createXml.calliCopyResource(this, msg.in, Collections.singleton(this))
-		copy.purlPartOf = msg.target
-		copy.purlBelongsTo = purlBelongsTo ? purlBelongsTo : msg.target
-		touchRevision()
-		return copy
+	obj:script """
+		var copy = create_xml.calliCopyResource(this, input, java.util.Collections.singleton(this));
+		copy.purlPartOf = this;
+		copy.purlBelongsTo = this.purlBelongsTo ? this.purlBelongsTo : this;
+		this.touchRevision();
+		return copy;
 	""".
 
-purl:post-partial-create-in a owl:ObjectProperty, owl:FunctionalProperty;
+purl:post-partial-create-input a owl:ObjectProperty, owl:FunctionalProperty;
 	rdfs:domain purl:post-partial-create;
 	rdfs:range <java:java.io.InputStream>;
 	http:type "application/rdf+xml";
-	obj:name "in".
+	obj:name "input".
 
 purl:Partial rdfs:subClassOf calli:Viewable, calli:Reviewable, calli:Editable, calli:Copyable;
 	calli:view <partial/view.xml>;
@@ -254,13 +224,12 @@ purl:Partial rdfs:subClassOf calli:Viewable, calli:Reviewable, calli:Editable, c
 
 # Sets up purl:belongsTo properties
 # Called when copying a partial PURL
-purl:post-partial-copy owl:intersectionOf (calli:post-copy
+purl:post-partial-copy owl:intersectionOf (</callimachus/operations/copy.ttl#PostCopy>
 		[owl:onProperty obj:target; owl:allValuesFrom purl:Partial]);
-	obj:precedes calli:post-copy;
-	obj:groovy """
-		def copy = msg.functionalObjectResponse
-		copy.purlBelongsTo = purlBelongsTo
-		return copy
+	obj:script """
+		var copy = proceed();
+		copy.purlBelongsTo = this.purlBelongsTo;
+		return copy;
 	""".
 
 ################################
@@ -270,14 +239,14 @@ purl:post-partial-copy owl:intersectionOf (calli:post-copy
 purl:get-purl-create rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
 		owl:allValuesFrom purl:Partial];
-	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
-		owl:allValuesFrom <java:java.io.Reader>];
+	rdfs:subClassOf [owl:onProperty obj:functionalLiteralResponse;
+		owl:allValuesFrom xsd:string];
 	http:operation "purl-create";
-	http:realm <authority>;
+	http:realm </accounts>;
 	http:type "text/html";
 	obj:imports <purl/create.xml>;
-	obj:groovy """
-		return createXml.calliConstruct('copy', this)
+	obj:script """
+		return create_xml.calliConstructHTML(this, 'copy');
 	""".
 
 # Sets up the purl:partOf property and incements the parent's timestamp
@@ -287,24 +256,24 @@ purl:post-purl-create rdfs:subClassOf obj:Message;
 		owl:allValuesFrom purl:Partial];
 	rdfs:subClassOf [owl:onProperty obj:objectResponse;
 		owl:maxCardinality "1"^^xsd:nonNegativeInteger];
-	obj:precedes calli:post-copy;
 	http:method "POST";
 	http:operation "purl-create";
-	http:realm <authority>;
+	http:realm </accounts>;
 	http:expect "201-created";
+	http:type "text/uri-list";
 	obj:imports <purl/create.xml>;
-	obj:groovy """
-		def copy = createXml.calliCopyResource(this, msg.in, Collections.singleton(this))
-		copy.purlPartOf = msg.target
-		touchRevision()
-		return copy
+	obj:script """
+		var copy = create_xml.calliCopyResource(this, input, java.util.Collections.singleton(this));
+		copy.purlPartOf = this;
+		this.touchRevision();
+		return copy;
 	""".
 
-purl:post-purl-create-in a owl:ObjectProperty, owl:FunctionalProperty;
+purl:post-purl-create-input a owl:ObjectProperty, owl:FunctionalProperty;
 	rdfs:domain purl:post-purl-create;
 	rdfs:range <java:java.io.InputStream>;
 	http:type "application/rdf+xml";
-	obj:name "in".
+	obj:name "input".
 
 purl:PURL rdfs:subClassOf calli:Viewable, calli:Reviewable, calli:Editable, calli:Copyable;
 	calli:view <purl/view.xml>;
@@ -314,32 +283,33 @@ purl:PURL rdfs:subClassOf calli:Viewable, calli:Reviewable, calli:Editable, call
 
 # Ensures any PURL copied has the same parent
 # Called when copying a PURL
-purl:find-purl-prefix owl:intersectionOf ( calli:find-copy-prefix
+purl:find-purl-prefix owl:intersectionOf ( </callimachus/operations/copy.ttl#FindCopyNamespaces>
 		[owl:onProperty obj:target; owl:allValuesFrom purl:PURL]);
 	rdfs:comment "On purl copy, the result must start with the same domain";
-	obj:precedes calli:find-copy-prefix;
-	obj:java "return Collections.singleton(purlPartOf)".
+	obj:script "return java.util.Collections.singleton(this.purlPartOf);".
 
 # Sets up purl:partOf property
 # Called when copying a PURL
-purl:post-purl-copy owl:intersectionOf (calli:post-copy
+purl:post-purl-copy owl:intersectionOf (</callimachus/operations/copy.ttl#PostCopy>
 		[owl:onProperty obj:target; owl:allValuesFrom purl:PURL]);
-	obj:precedes calli:post-copy;
-	obj:groovy """
-		def copy = msg.functionalObjectResponse
-		copy.purlPartOf = purlPartOf
-		purlPartOf?.touchRevision()
-		return copy
+	obj:script """
+		var copy = proceed();
+		copy.purlPartOf = this.purlPartOf;
+		if (this.purlPartOf) {
+			this.purlPartOf.touchRevision();
+		}
+		return copy;
 	""".
 
 # Updates the parent's timestamp
 # Called when editing a PURL or Domain
-purl:post-purl-edit owl:intersectionOf (calli:post-edit
+purl:post-purl-edit owl:intersectionOf (</callimachus/operations/edit.ttl#PostEdit>
 		[owl:onProperty obj:target; owl:allValuesFrom purl:PURL]);
-	obj:precedes calli:post-edit;
-	obj:groovy """
-		purlPartOf?.touchRevision()
-		return msg.functionalObjectResponse
+	obj:script """
+		if (this.purlPartOf) {
+			this.purlPartOf.touchRevision();
+		}
+		return proceed();
 	""".
 
 # Marks a PURL as disabled
@@ -351,18 +321,20 @@ purl:purl-disable rdfs:subClassOf obj:Message;
 		owl:allValuesFrom <java:org.apache.http.HttpResponse>];
 	http:method "POST";
 	http:operation "purl-disable";
-	http:realm <authority>;
+	http:realm </accounts>;
 	http:type "message/x-response";
 	obj:imports <java:org.apache.http.ProtocolVersion>;
 	obj:imports <java:org.apache.http.message.BasicHttpResponse>;
 	obj:imports purl:Disabled;
-	obj:groovy """
-		objectConnection.addDesignation(this, Disabled)
-		def ver = new ProtocolVersion("HTTP", 1, 1)
-		def resp = new BasicHttpResponse(ver, 204, "No Content")
-		resp.addHeader("Location", "$this?view")
-		purlPartOf?.touchRevision()
-		return resp
+	obj:script """
+		objectConnection.addDesignation(this, Disabled);
+		var ver = new ProtocolVersion("HTTP", 1, 1);
+		var resp = new BasicHttpResponse(ver, 204, "No Content");
+		resp.addHeader("Location", this + "?view");
+		if (this.purlPartOf) {
+			this.purlPartOf.touchRevision();
+		}
+		return resp;
 	""".
 
 # Enables a disabled PURL
@@ -374,18 +346,20 @@ purl:purl-enable rdfs:subClassOf obj:Message;
 		owl:allValuesFrom <java:org.apache.http.HttpResponse>];
 	http:method "POST";
 	http:operation "purl-enable";
-	http:realm <authority>;
+	http:realm </accounts>;
 	http:type "message/x-response";
 	obj:imports <java:org.apache.http.ProtocolVersion>;
 	obj:imports <java:org.apache.http.message.BasicHttpResponse>;
 	obj:imports purl:Disabled;
-	obj:groovy """
-		objectConnection.removeDesignation(this, Disabled)
-		def ver = new ProtocolVersion("HTTP", 1, 1)
-		def resp = new BasicHttpResponse(ver, 204, "No Content")
-		resp.addHeader("Location", "$this?view")
-		purlPartOf?.touchRevision()
-		return resp
+	obj:script """
+		objectConnection.removeDesignation(this, Disabled);
+		var ver = new ProtocolVersion("HTTP", 1, 1);
+		var resp = new BasicHttpResponse(ver, 204, "No Content");
+		resp.addHeader("Location", this + "?view");
+		if (this.purlPartOf) {
+			this.purlPartOf.touchRevision();
+		}
+		return resp;
 	""".
 
 # Marks a PURL as tombstoned
@@ -397,19 +371,21 @@ purl:purl-tombstone rdfs:subClassOf obj:Message;
 		owl:allValuesFrom <java:org.apache.http.HttpResponse>];
 	http:method "POST";
 	http:operation "purl-tombstone";
-	http:realm <authority>;
+	http:realm </accounts>;
 	http:type "message/x-response";
 	obj:imports <java:org.apache.http.ProtocolVersion>;
 	obj:imports <java:org.apache.http.message.BasicHttpResponse>;
 	obj:imports purl:Tombstoned;
 	obj:imports purl:Disabled;
-	obj:groovy """
-		objectConnection.removeDesignation(this, Disabled)
-		objectConnection.addDesignation(this, Tombstoned)
-		def ver = new ProtocolVersion("HTTP", 1, 1)
-		def resp = new BasicHttpResponse(ver, 204, "No Content")
-		resp.addHeader("Location", "$this?view")
-		purlPartOf?.touchRevision()
-		return resp
+	obj:script """
+		objectConnection.removeDesignation(this, Disabled);
+		objectConnection.addDesignation(this, Tombstoned);
+		var ver = new ProtocolVersion("HTTP", 1, 1)
+		var resp = new BasicHttpResponse(ver, 204, "No Content");
+		resp.addHeader("Location", this + "?view")
+		if (this.purlPartOf) {
+			this.purlPartOf.touchRevision();
+		}
+		return resp;
 	""".
 

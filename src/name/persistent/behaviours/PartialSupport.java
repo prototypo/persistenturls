@@ -39,7 +39,7 @@ public abstract class PartialSupport extends PURLSupport implements Partial, Ver
 
 	@Override
 	public void touchRevision() {
-		Domain domain = getPurlBelongsTo();
+		Domain domain = getBelongsTo();
 		if (domain instanceof VersionedObject) {
 			((VersionedObject) domain).touchRevision();
 		}
@@ -47,7 +47,7 @@ public abstract class PartialSupport extends PURLSupport implements Partial, Ver
 
 	@Override
 	public void purlSetEntityHeaders(HttpResponse resp) {
-		Domain domain = getPurlBelongsTo();
+		Domain domain = getBelongsTo();
 		if (domain == null) {
 			super.purlSetEntityHeaders(resp);
 		} else {

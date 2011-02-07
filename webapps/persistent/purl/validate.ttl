@@ -34,8 +34,8 @@ purl:validate rdfs:subClassOf obj:Message;
 	http:operation "validate";
 	http:cache-control "no-store";
 	http:realm <../authority>;
-	http:transform purl:write-http-response;
-	obj:groovy "return purlValidate(purlFindTargets())".
+	http:type "application/http";
+	obj:script "return this.purlValidate(this.purlFindTargets())".
 
 purl:find-targets rdfs:subClassOf obj:Message;
 	rdfs:subClassOf [owl:onProperty obj:target;
@@ -44,32 +44,4 @@ purl:find-targets rdfs:subClassOf obj:Message;
 		SELECT ?target
 		WHERE { $this ?pred ?target . ?pred purl:rel ?rel }
 	""".
-
-purl:write-http-response rdfs:subClassOf obj:Message;
-	rdfs:subClassOf [owl:onProperty obj:target;
-		owl:allValuesFrom purl:PURL];
-	rdfs:subClassOf [owl:onProperty obj:functionalObjectResponse;
-		owl:allValuesFrom <java:java.io.ByteArrayOutputStream>];
-	http:type "application/http";
-	obj:imports <java:org.apache.http.message.BasicLineFormatter>;
-	obj:groovy """
-		ByteArrayOutputStream baos = new ByteArrayOutputStream()
-		Writer out = new OutputStreamWriter(baos, "ISO-8859-1")
-		for (def resp : msg.input) {
-			out.append(BasicLineFormatter.formatStatusLine(resp.getStatusLine(), null))
-			out.append("\\r\\n")
-			for (def hd : resp.getAllHeaders()) {
-				out.append(BasicLineFormatter.formatHeader(hd, null))
-				out.append("\\r\\n")
-			}
-			out.append("\\r\\n")
-		}
-		out.close()
-		return baos
-	""".
-
-purl:write-http-response-input a owl:ObjectProperty;
-	rdfs:domain purl:write-http-response;
-	rdfs:range <java:org.apache.http.HttpResponse>;
-	obj:name "input".
 
