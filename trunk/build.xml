@@ -15,7 +15,7 @@
 	<property name="mail" location="etc/mail.properties" />
 	<property name="tools.jar" location="${java.home}/../lib/tools.jar" />
 	<property file="src/META-INF/name.persistent.properties" />
-	<property name="callimachus.url" value="http://callimachus.googlecode.com/files/callimachus-0.7-SNAPSHOT.zip" />
+	<property name="callimachus.url" value="http://callimachus.googlecode.com/files/callimachus-0.7.zip" />
 	<property name="main" value="org.callimachusproject.Server" />
 	<property name="jvmargs" value="-ea -server -mx512m -Dfile.encoding=UTF-8 -Djava.library.path=${lib} -Duser.home=${home} -Djava.mail.properties=${mail} -Djava.awt.headless=true -Dcom.sun.management.jmxremote" />
 	<property name="args" value="-p 8080 -a localhost:8080" />
