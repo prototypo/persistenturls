@@ -39,7 +39,7 @@ Stop any other servers listening on port 80. To change the port the PURL server 
 
 Execute a start script to start the server. Open your browser to http://localhost/ listed in console output. Click the register link and fill in the form using the ID "admin". Follow the instructions to register and login.
 
-Click the home link at the top and then click the edit link. In the edit screen click on the chevrons to create a new domain origin. Fill in the form to create a PURL authority that will be served by this server. Once a domain has been created assign it to the server, save the changes. This process may take a few moments, please be patient.
+Click the Persistent URLs link at the left and then click the edit tab. In the edit screen click on the chevrons to create a new domain origin. Fill in the form to create a PURL authority that will be served by this server. Once a domain has been created assign it to the server, save the changes. This process may take a few moments, please be patient.
 
 Click on the top level domain to continue to create the PURL hierarchy.
 
