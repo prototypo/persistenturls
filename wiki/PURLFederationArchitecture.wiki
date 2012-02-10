@@ -14,7 +14,7 @@ Original Version 12 March 2010
 
 Architecture for the development of a PURL federation is proposed in order to meet the goals outlined in the section GOALS.  Presumptions made in the architectural scenarios are provided in the section PRESUMPTIONS.
 
-A DRAFT architectural scenario is presented in which dynamic DNS resolution is used to allow PURLs to be resolved by proxies to a federation.  A third party service is required to both operate the dynamic DNS resolution service and to monitor (in near real time) the availability of PURL members.  The functions of and requirements for that service are discussed along with the architectural scenarios.
+An architectural scenario is presented in which dynamic DNS resolution is used to allow PURLs to be resolved by proxies to a federation.  A third party service is required to both operate the dynamic DNS resolution service and to monitor (in near real time) the availability of PURL members.  The functions of and requirements for that service are discussed along with the architectural scenarios.
 
 Changes to the PURL server software and anticipated costs are discussed following the architecture.
 
