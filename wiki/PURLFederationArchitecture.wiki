@@ -6,7 +6,7 @@ Version 12 March 2010
 
 == LICENSE ==
 
-<a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/us/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-nd/3.0/us/88x31.png" /></a><br />PURL Federation Architecture by <a href="http://zepheira.com">Zepheira</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/us/">Creative Commons Attribution-Noncommercial-No Derivative Works 3.0 United States License</a> and also under under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/2.5/au/">Creative Commons Attribution-Noncommercial-No Derivative Works 2.5 Australia License</a>.
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/us/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-nd/3.0/us/88x31.png" /></a><br />PURL Federation Architecture by <a href="http://3roundstones.com">3 Round Stones</a> and <a href="http://zepheira.com">Zepheira</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/us/">Creative Commons Attribution-Noncommercial-No Derivative Works 3.0 United States License</a> and also under under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/2.5/au/">Creative Commons Attribution-Noncommercial-No Derivative Works 2.5 Australia License</a>.
 
 
 == OVERVIEW ==
