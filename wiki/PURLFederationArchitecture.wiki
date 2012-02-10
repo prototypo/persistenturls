@@ -2,7 +2,8 @@
 
 = PURL FEDERATION ARCHITECTURE =
 
-Version 12 March 2010
+Version 10 February 2012
+Original Version 12 March 2010
 
 == LICENSE ==
 
