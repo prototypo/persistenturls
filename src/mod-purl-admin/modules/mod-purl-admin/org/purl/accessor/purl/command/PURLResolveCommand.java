@@ -109,7 +109,7 @@ abstract public class PURLResolveCommand {
             req.addArgument("operator", new StringAspect(sed.toString()));
             retValue = context.issueSubRequest(req);
         } catch (NKFException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         
         return retValue;

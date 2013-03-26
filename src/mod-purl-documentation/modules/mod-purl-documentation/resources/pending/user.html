@@ -33,6 +33,8 @@ limitations under the License.
 	<script defer type="text/javascript" src="../javascripts/pngfix.js"></script>
 	<![endif]-->
 
+<script type="text/javascript" src="../javascripts/jquery-1.9.1.min.js">
+</script>
 <script type="text/javascript" src="../javascripts/utilajax.js">
 </script>
 <script type="text/javascript" src="../javascripts/ajaxCaller.js">
@@ -47,6 +49,9 @@ limitations under the License.
 </script>
 <script type="text/javascript">
 //<![CDATA[
+	jQuery(document).ready(function () {
+		  loadPendingUsers();
+	});
 
 	var debugThisPage = false;
 	
@@ -94,7 +99,7 @@ limitations under the License.
 //]]>
 </script>
 	</head>
-	<body onload="loadPendingUsers()">
+	<body>
 		<div id="loginstatus">
 			<p>
 				Login status not determined. Do you have Javascript and cookies enabled?

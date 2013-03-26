@@ -16,6 +16,8 @@
 	<script defer type="text/javascript" src="../javascripts/pngfix.js"></script>
 	<![endif]-->
 
+<script type="text/javascript" src="../javascripts/jquery-1.9.1.min.js">
+</script>
 <script type="text/javascript" src="../javascripts/utilajax.js">
 </script>
 <script type="text/javascript" src="../javascripts/ajaxCaller.js">
@@ -30,13 +32,16 @@
 </script>
 <script type="text/javascript">
 	//<![CDATA[
+		jQuery(document).ready(function () {
+			  load('/docs/pending/index.html');
+		});
 		// Number of forms on this page that need to be locked out
 		// when the user is not logged in.
 		var numNeedsAuth = 0;
 	//]]>
 </script>
 	</head>
-	<body onload="load('/docs/pending/index.html')">
+	<body>
 		<div id="loginstatus">
 			<p>
 				Login status not determined. Do you have Javascript and cookies enabled?
