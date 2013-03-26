@@ -100,9 +100,12 @@ function onLoginStatusResponse (message, headers, referrer) {
 	resultBlock = $("loginstatus");
 	resultBlock.innerHTML = "<p>Getting login status...<\/p>";
 	
-	if (getContentType(headers) == "text/xml" ||
-				getContentType(headers) == "application/xml" ) {
-
+	// Cannot reliably check HTTP headers on Chrome browers (March 2013): headers object undefined.
+	//if (contentType == "text/xml" || contentType == "application/xml" ) {
+	var firstChar = message.substr(0,1);
+	var lastChar = message.substr(-1,1);
+    if ( firstChar == "<" && lastChar == ">" ) {
+        
 		// Parse the XML
 		if ( message.indexOf("logged out") > -1 ) {
 			// The user is logged out or does not have an account.
@@ -407,7 +410,7 @@ function getHTMLFromXMLArray(xmlArray) {
 					htmlList += "<dd><br>" + xmlArray[outerKey][innerKey][0] + ": " + idValue +
 							 	" <a href='#modify' class='tooltip' onClick='return loadModify(\"" + 
 								dataString +
-								"\")'><img src='http://purlz.org/images/edit.png' alt='Modify record'>" +
+								"\")'><img src='/docs/images/edit.png' alt='Modify record'>" +
 								"<span>Modify record</span></a>";
 					// Nasty hack to insert a clickable icon for *PURL* history.
 					// TODO: This should be refactored so the test for a PURL id is more robust.
@@ -416,7 +419,7 @@ function getHTMLFromXMLArray(xmlArray) {
 					if ( idValue.indexOf("/") == 0 && dataString.indexOf("public") == -1  && dataString.indexOf("writers") == -1 ) {
 						htmlList += " <a href='#history' class='tooltip' onClick='return loadHistory(\"" + 
 						idValue +
-						"\")'><img src='http://purlz.org/images/history.png' alt='Show history'>" +
+						"\")'><img src='/docs/images/history.png' alt='Show history'>" +
 						"<span>Show history</span></a>";
 					}
 					htmlList += "<\/dd>";
@@ -540,9 +543,18 @@ function onPendingResponse(message, headers, callingContext) {
 	// pending approval.
 	var pendingBlock = $("pending");
 	
-	if ( getContentType(headers) == "text/xml" ||
-				getContentType(headers) == "application/xml" ) {
-		
+	// Cannot reliably check HTTP headers on Chrome browers (March 2013): headers object undefined.
+	//if (contentType == "text/xml" || contentType == "application/xml" ) {
+	var first6Chars = message.substr(0,6);
+	var firstChar = message.substr(0,1);
+	var lastChar = message.substr(-1,1);
+    if ( first6Chars == "<html>" ) {
+		// This is probably an HTML response.
+    	// Write the results to the results area.
+    	pendingBlock.innerHTML = message;
+    	
+	} else if ( firstChar == "<" && lastChar == ">" ) {
+		// This is probably an XML response.
 		// Parse the XML
 		startParserForPending(message);
 		// Format the results into an HTML form.
@@ -550,11 +562,7 @@ function onPendingResponse(message, headers, callingContext) {
 				
 		// Write the results to the results area.
 		pendingBlock.innerHTML = htmlResults;
-	
-	} else if ( getContentType(headers).indexOf("text/html") != -1 ) {
-		// Write the results to the results area.
-		pendingBlock.innerHTML = message;
-		
+        
 	} else {
 		pendingBlock.innerHTML = "<p class='error'>ERROR: Content-Type of results not supported.  Expected an XML or HTML message from the PURL server.  Received: " + message + "<\/p>";
 	}
@@ -568,8 +576,11 @@ function onPendingResultsResponse(message, headers, callingContext) {
 	var submitBlock = $(submitBlockId);
 	var resultsBlock = $(callingContext + "_results");
 	
-	if ( getContentType(headers) == "text/xml" ||
-				getContentType(headers) == "application/xml" ) {
+	// Cannot reliably check HTTP headers on Chrome browers (March 2013): headers object undefined.
+	//if (contentType == "text/xml" || contentType == "application/xml" ) {
+	var firstChar = message.substr(0,1);
+	var lastChar = message.substr(-1,1);
+    if ( firstChar == "<" && lastChar == ">" ) {
 
 		// "Parse" the XML
 		if ( message.indexOf("rejected") > -1 ) {
@@ -595,11 +606,13 @@ function onPendingResultsResponse(message, headers, callingContext) {
 // Callback for Create/Modify/Search/Delete (POST/PUT/GET/DELETE) actions.
 function onResponse(message, headers, callingContext) {
 	
-	// DBG
-	//alert("Received message from server:\n\nHeaders:\n" + headers + "\n\nBody:\n" + message);
+	// TODO DBG REMOVE
+	//alert("Received message from server:\n\nHeaders:\n" + headers + "\n\nBody:\n" + message + "\n\ncallingContext:\n" + callingContext);
 	
+	// Cannot reliably check HTTP headers on Chrome browers (March 2013): headers object undefined.
+	// THIS STATUS CHECK WILL FAIL ON CHROME.
 	// If bad parameters were passed, highlight them via CSS.
-	if ( headers["Status"] == "400" && headers["X-bad-params"] ) {
+	if ( httpStatus != undefined && headers["Status"] == "400" && headers["X-bad-params"] ) {
 		var badParams = headers["X-bad-params"].split(",");
 		for ( i=0 ; i < badParams.length ; i++ ) {
 			setClass(contextMap[callingContext][1] + badParams[i] + "_label", "error");
@@ -611,10 +624,12 @@ function onResponse(message, headers, callingContext) {
 	var resultHeader = callingContext + " Successful";
 	var resultClass = "response";
 	var explanation = "";
-	if ( headers["Status"] != "200" && headers["Status"] != "201" ) {
-		if ( headers["Status"] ) {
-			explanation = HttpResponseCodes[headers["Status"]];
-		}
+	
+	// Cannot reliably check HTTP headers on Chrome browers (March 2013): headers object undefined.
+	// THIS STATUS CHECK WILL FAIL ON CHROME.
+	var httpStatus = headers["Status"];
+	if ( httpStatus != undefined && httpStatus != "200" && httpStatus != "201" ) {
+		explanation = HttpResponseCodes[headers["Status"]];
 		resultHeader = callingContext + " Failed: " + explanation + " (" + headers["Status"] + ")";
 		resultClass = "error";
 	}
@@ -622,26 +637,28 @@ function onResponse(message, headers, callingContext) {
 	// Show the result header and allow results to be duplicated in a new window.
 	var resultsTop = "<h3 class='" + resultClass + "'>" +
 						"<a href='#' class='tooltip' onClick='return showResultsWindow()'>" +
-						"<img src='http://purlz.org/images/tearoff_icon.png' alt='Open results in a new window' />" +
+						"<img src='/docs/images/tearoff_icon.png' alt='Open results in a new window' />" +
 						"<span>Open results in a new window</span></a>" +
 						" " + resultHeader + "<\/h3>";
 
     var contentType = getContentType(headers);
-    
     if (contentType) {
         contentType = contentType.split(";")[0];
     }
+    
 	// Style the results based on their Content-Type.
-	if ( contentType == "text/plain" || contentType == "text/html") {
-		resultBlock.innerHTML = resultsTop;
-		resultBlock.innerHTML += "<p class='" + resultClass + "'>" + message + "<\/p>";
-		
-	} else if ( contentType == "text/xml" ||
-				contentType == "application/xml" ) {
-		
+	// Cannot reliably check HTTP headers on Chrome browers (March 2013): headers object undefined.
+	//if (contentType == "text/xml" || contentType == "application/xml" ) {
+	message = trim(message);
+	var first6Chars = message.substr(0,6);
+	var firstChar = message.substr(0,1);
+	var lastChar = message.substr(-1,1);
+	
+    if ( first6Chars != "<html>" && firstChar == "<" && lastChar == ">" ) {
+        
+		// This is probably an XML document.
 		// Parse the XML
-		startParser(message);
-		// TODO: Check this.  The var htmlResults was out of scope and causing problems with the tear-off results page.		
+		startParser(message);	
 		htmlResults = getHTMLFromXMLArray(resultsMap);  // resultsMap is in SaxEventHandler.js.
 				
 		if ( callingContext == "History" ) {
@@ -663,23 +680,21 @@ function onResponse(message, headers, callingContext) {
 				alert("You seem to have blocked pop-up windows.  The history window could not be opened.");
 			}
 		} else {
+                
 			// Write the results to the results area on the current page.
 			resultBlock.innerHTML = resultsTop;
 			resultBlock.innerHTML += htmlResults;
 		}
-
-	} else if ( contentType == "text/html" || contentType == "text/plain") {
-		
-		// Display the HTML directly.
-		resultBlock.innerHTML = resultsTop;
-		resultBlock.innerHTML += message;
-    } else if ( contentType == "text/plain") {
-                                         
+	
+	} else if ( first6Chars == "<html>" ) {
+        
+	    // This is probably an HTML document.
 		resultBlock.innerHTML = resultsTop;
 		resultBlock.innerHTML += "<p class='" + resultClass + "'>" + message + "<\/p>";
 	} else {
+        
+	    // This may be a text/plain document or some other unknown type.  Try anyway.
 		resultBlock.innerHTML = resultsTop;
-		resultBlock.innerHTML += "<p class='error'>Warning: Content-Type of results not supported.  Trying anyway:<\/p>";
 		resultBlock.innerHTML += "<p class='" + resultClass + "'>" + message + "<\/p>";
 	}
 	
@@ -709,4 +724,11 @@ function getContentType(headers) {
         contentType = contentType.split(";")[0]
     }
     return contentType;
+}
+
+// remove trailing whitespace
+function trim(s) { 
+    s = s.replace(/\s+$/,"");
+    s = s.replace(/\n+$/,"");
+    return s;
 }

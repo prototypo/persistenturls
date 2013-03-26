@@ -1,10 +1,27 @@
 PURL Server Release Notes
-Version 1.6.2
-February 12, 2010
+Version 1.6.4
+March 26, 2013
 http://purlz.org
 
 
 This file contains release notes for the PURL server.
+
+------------------------- 
+| Version 1.6.4 Changes |
+-------------------------
+Minor:
+* Adjusts Javascript for Chrome browser vagaries.  Versions of PURLz
+  prior to 1.6.4 will not allow users to log in using modern versions
+  of Chrome.
+* Adds three image files and Javascript to reference them.  These files
+  were previously referenced from the purlz.org site.
+* Reduces extraneous logging of exceptions upon HTTP HEAD requests on
+  PURLs.
+
+------------------------- 
+| Version 1.6.3 Changes |
+-------------------------
+Minor bug fixes.
 
 ------------------------- 
 | Version 1.6.2 Changes |

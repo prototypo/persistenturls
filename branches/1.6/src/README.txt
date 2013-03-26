@@ -1,9 +1,7 @@
 PURL Server Installation Instructions
-Version 1.6.2
-February 12, 2010
-purlz@zepheira.com
-purl-interest@purlz.org
-purl-dev@purlz.org
+Version 1.6.4
+March 26, 2013
+persistenturls@googlegroups.com
 
 ----------------
 | Introduction |
@@ -14,6 +12,10 @@ Thank you for your interest in the Persistent Uniform Resource Locator
 software may be found at http://purlz.org.  Please consider joining
 the mailing lists and participating in the online community so we can
 serve you better.
+
+THIS SOFTWARE IS IN THE PROCESS OF BEING DEPRECATED.  PLEASE SEE
+callimachusproject.org as an alternative and more up-to-date PURL
+server.
 
 This software is licensed as defined in the accompanying files
 LICENSE.txt and LEGAL.txt.  These files may be found in the
@@ -95,7 +97,7 @@ and 1060 for the Back End Fulcrum).  Note that Option A (Installing
 from a JAR Installer) allows you to install a new NetKernel and
 manually set the port numbers.
 
-1) Install NetKernel 3.3.1, available from:
+1) Install NetKernel 3.3.1 or later, available from:
 
   http://www.1060.org/download/
 

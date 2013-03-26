@@ -39,6 +39,8 @@ MAINTENANCE HINTS:
 	<script defer type="text/javascript" src="javascripts/pngfix.js"></script>
 	<![endif]-->
 
+	<script type="text/javascript" src="javascripts/jquery-1.9.1.min.js">
+	</script>
 		<script type="text/javascript" src="javascripts/utilajax.js">
 </script>
 		<script type="text/javascript" src="javascripts/ajaxCaller.js">
@@ -53,6 +55,11 @@ MAINTENANCE HINTS:
 </script>
 		<script type="text/javascript">
 //<![CDATA[
+		jQuery(document).ready(function () {
+			  var target = self.location.href.substring(self.location.href.lastIndexOf('?referrer=') + 10);
+			$('c_target').value = unescape(target);
+			load('/docs/simplepurl.html?referrer=' + target);
+		});
 
 		var debugThisPage = false;
 
@@ -89,7 +96,7 @@ MAINTENANCE HINTS:
 		//]]>
 		</script>
 	</head>
-	<body onload="var target = self.location.href.substring(self.location.href.lastIndexOf('?referrer=') + 10); $('c_target').value = unescape(target); load('/docs/simplepurl.html?referrer=' + target)">
+	<body>
 		<div id="loginstatus">
 			<p>
 				Login status not determined. Do you have Javascript and cookies enabled?

@@ -45,6 +45,8 @@ handles results from the server in response to form submissions.
 	<script defer type="text/javascript" src="javascripts/pngfix.js"></script>
 	<![endif]-->
 
+<script type="text/javascript" src="javascripts/jquery-1.9.1.min.js">
+</script>
 		<script type="text/javascript" src="javascripts/utilajax.js">
 </script>
 		<script type="text/javascript" src="javascripts/ajaxCaller.js">
@@ -59,6 +61,9 @@ handles results from the server in response to form submissions.
 </script>
 		<script type="text/javascript">
 //<![CDATA[
+		jQuery(document).ready(function () {
+			  load('/docs/purl.html');
+		});
 
 		var debugThisPage = false;
 
@@ -237,7 +242,7 @@ handles results from the server in response to form submissions.
 		//]]>
 		</script>
 	</head>
-	<body onload="load('/docs/purl.html')">
+	<body>
 		<div id="loginstatus">
 			<p>
 				Login status not determined. Do you have Javascript and cookies enabled?
